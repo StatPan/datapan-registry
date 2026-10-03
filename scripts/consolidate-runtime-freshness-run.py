@@ -14,6 +14,9 @@ from typing import Any
 
 import jsonschema
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from runtime_evidence_projection import bind_result_to_plan
+
 
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-run-receipt.v1.schema.json")
 FORBIDDEN_KEYS = {"url", "request_url", "request_urls", "response_body", "response_bodies", "body", "credential_value", "credential_hash", "authorization", "authorization_header", "servicekey", "service_key", "apikey", "api_key", "secret", "token"}
@@ -113,6 +116,7 @@ def build(root: pathlib.Path, combined_path: pathlib.Path, *, expected_shards: i
 
     planned_identities: set[str] = set()
     planned_by_result_key: dict[tuple[str, str], str] = {}
+    planned_operations: dict[str, tuple[dict[str, Any], pathlib.Path, str]] = {}
     shard_inputs: list[tuple[pathlib.Path, pathlib.Path, int, set[str], list[Any]]] = []
     shard_indices: list[int] = []
     for plan_path in plans:
@@ -152,6 +156,12 @@ def build(root: pathlib.Path, combined_path: pathlib.Path, *, expected_shards: i
                 )
             planned_identities.add(identity)
             planned_by_result_key[key] = identity
+            plan_binding = operation.get("contract_binding")
+            if plan_binding is not None:
+                if not isinstance(plan_binding, dict) or plan_binding.get("identity_key") != identity:
+                    raise ValueError(f"{label}: contract binding identity does not match batch plan")
+                plan_digest = file_record(plan_path, root)["sha256"]
+                planned_operations[identity] = (plan_binding, plan_path, plan_digest)
             shard_planned.add(identity)
         shard_inputs.append((verification_path, exit_path, shard_index, shard_planned, results))
 
@@ -197,7 +207,14 @@ def build(root: pathlib.Path, combined_path: pathlib.Path, *, expected_shards: i
             raise ValueError(f"{label}: duplicate reported identity {identity!r}")
         combined_identities.add(identity)
         assert isinstance(result, dict)
-        enriched_results.append({**result, "identity_key": identity})
+        if result.get("contract_binding") is not None:
+            raise ValueError(f"{label}: verifier result may not supply its own contract binding")
+        enriched = {**result, "identity_key": identity}
+        planned = planned_operations.get(identity)
+        if planned is not None:
+            plan_binding, _plan_path, plan_digest = planned
+            enriched["contract_binding"] = bind_result_to_plan(plan_binding, run_id=run_id, plan_sha256=plan_digest)
+        enriched_results.append(enriched)
     missing = sorted(planned_identities - combined_identities)
     if missing:
         raise ValueError(f"{combined_path}: planned identities missing results: {missing[:5]}")

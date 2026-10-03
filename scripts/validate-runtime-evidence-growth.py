@@ -55,6 +55,8 @@ def validate_consistency(path: pathlib.Path, report: dict[str, object]) -> None:
     coverage_path = pathlib.Path(str(generation_inputs.get("coverage")))
     latest_path = pathlib.Path(str(generation_inputs.get("latest_verification")))
     latest_summary_path = pathlib.Path(str(generation_inputs.get("latest_verification_summary")))
+    projection_path = pathlib.Path(str(generation_inputs.get("current_runtime_evidence_projection")))
+    dependencies_path = pathlib.Path(str(generation_inputs.get("dependencies")))
     verification_plan_path = pathlib.Path(str(generation_inputs.get("verification_plan")))
     provider_index_path = pathlib.Path(str(generation_inputs.get("provider_index")))
 
@@ -62,6 +64,8 @@ def validate_consistency(path: pathlib.Path, report: dict[str, object]) -> None:
     coverage_summary = as_dict(coverage.get("summary"), coverage_path)
     latest = as_dict(load_json(latest_path), latest_path)
     latest_summary = as_dict(load_json(latest_summary_path), latest_summary_path)
+    projection = as_dict(load_json(projection_path), projection_path)
+    dependencies = as_dict(load_json(dependencies_path), dependencies_path)
     verification_plan = as_dict(load_json(verification_plan_path), verification_plan_path)
     provider_index = as_dict(load_json(provider_index_path), provider_index_path)
 
@@ -80,25 +84,47 @@ def validate_consistency(path: pathlib.Path, report: dict[str, object]) -> None:
 
     latest_summary_counts = as_dict(latest_summary.get("summary"), latest_summary_path)
     report_evidence = as_dict(report.get("evidence"), path)
-    for key in ["total", "verified", "failed", "skipped", "unknown"]:
-        if report_evidence.get(key) != latest_summary_counts.get(key):
-            raise ValueError(f"evidence.{key} expected {latest_summary_counts.get(key)}, got {report_evidence.get(key)}")
-
     results = latest.get("results")
     if not isinstance(results, list):
         raise ValueError("latest verification results must be an array")
-    if len(results) != report_evidence.get("total"):
-        raise ValueError(f"evidence.total expected {len(results)} latest verification results")
+    current_rows = [
+        row for row in projection.get("current_evidence", [])
+        if isinstance(row, dict) and row.get("disposition") in {"eligible", "stale", "recent_non_verified"}
+    ]
+    current_statuses = collections.Counter(str(row.get("status") or "unknown") for row in current_rows)
+    if report_evidence.get("scope") != "current_contract_bound_within_expiry":
+        raise ValueError("evidence.scope must describe exact-contract evidence inside the expiry window")
+    if report_evidence.get("total") != len(current_rows):
+        raise ValueError(f"evidence.total expected {len(current_rows)} current bound rows")
+    if report_evidence.get("current_bound_observations") != len(current_rows):
+        raise ValueError(
+            f"evidence.current_bound_observations expected {len(current_rows)} current bound rows"
+        )
+    for key in ["verified", "failed", "skipped", "unknown"]:
+        if report_evidence.get(key) != current_statuses[key]:
+            raise ValueError(f"evidence.{key} expected {current_statuses[key]}, got {report_evidence.get(key)}")
+    if sum(int(row["count"]) for row in report_evidence.get("by_kind", []) if isinstance(row, dict)) != len(current_rows):
+        raise ValueError("evidence.by_kind must account only for current bound rows")
 
-    by_kind: collections.Counter[str] = collections.Counter()
+    historical_evidence = as_dict(report.get("historical_evidence"), path)
+    for key in ["total", "verified", "failed", "skipped", "unknown"]:
+        expected = len(results) if key == "total" else latest_summary_counts.get(key)
+        if historical_evidence.get(key) != expected:
+            raise ValueError(f"historical_evidence.{key} expected {expected}, got {historical_evidence.get(key)}")
+    historical_by_kind: collections.Counter[str] = collections.Counter()
     for result in results:
         if isinstance(result, dict):
             kind = result.get("dependency_class")
             if isinstance(kind, str):
-                by_kind[kind] += 1
-    expected_by_kind = key_counts(by_kind)
-    if report_evidence.get("by_kind") != expected_by_kind:
-        raise ValueError("evidence.by_kind does not match latest verification results")
+                historical_by_kind[kind] += 1
+    if historical_evidence.get("by_kind") != key_counts(historical_by_kind):
+        raise ValueError("historical_evidence.by_kind does not match latest verification results")
+
+    projection_summary = as_dict(projection.get("summary"), projection_path)
+    dispositions = as_dict(report.get("evidence_dispositions"), path)
+    for key in ["unbound", "contract_changed", "ambiguous", "historical"]:
+        if dispositions.get(key) != projection_summary.get(key):
+            raise ValueError(f"evidence_dispositions.{key} does not match current projection")
 
     operations = int(report_coverage["operations"])
     evidence_total = int(report_evidence["total"])
@@ -108,15 +134,32 @@ def validate_consistency(path: pathlib.Path, report: dict[str, object]) -> None:
             f"evidence.coverage_percent expected {expected_percent}, got {report_evidence.get('coverage_percent')}"
         )
 
+    fresh_verified = sum(
+        row.get("disposition") == "eligible" and row.get("status") == "verified"
+        for row in current_rows
+    )
+    expected_success_percent = round((fresh_verified / operations) * 100, 1)
+    if report_evidence.get("fresh_verified") != fresh_verified:
+        raise ValueError(
+            f"evidence.fresh_verified expected {fresh_verified}, got {report_evidence.get('fresh_verified')}"
+        )
+    if report_evidence.get("success_coverage_percent") != expected_success_percent:
+        raise ValueError(
+            "evidence.success_coverage_percent expected "
+            f"{expected_success_percent}, got {report_evidence.get('success_coverage_percent')}"
+        )
+
     growth_target = as_dict(report.get("growth_target"), path)
     target_total = math.ceil(operations * (TARGET_PERCENT / 100))
-    remaining = max(0, target_total - evidence_total)
+    remaining = max(0, target_total - fresh_verified)
     status = "below_target" if remaining else "at_target"
-    if evidence_total > target_total:
+    if fresh_verified > target_total:
         status = "above_target"
     expected_growth = {
         "target_percent": TARGET_PERCENT,
+        "target_basis": "fresh_verified_current_contract",
         "target_evidence_total": target_total,
+        "fresh_verified_total": fresh_verified,
         "remaining_to_target": remaining,
         "status": status,
     }

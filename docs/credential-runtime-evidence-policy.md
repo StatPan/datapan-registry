@@ -2,7 +2,7 @@
 
 This document defines the secret-safe runtime evidence boundary for #344, #364,
 #366, #369, #371, #373, #375, #379, #389, #391, #411, #413, #417, #419,
-#421, and #423.
+#421, #423, and #661.
 
 Default registry CI is secret-free. It validates source profiles, runtime plans, remediation evidence, `reports/credential-runtime-evidence-policy.json`, `reports/credential-runtime-receipt-collection-queue.json`, and the redacted receipt contract without requiring API keys. CI must not fail because a data.go.kr, ECOS, KOSIS, Open Assembly, or Seoul Open Data credential is absent.
 
@@ -18,7 +18,9 @@ Source runtime remediation findings link back to reviewed receipt paths. `report
 
 Credential runtime collection has a local runner. `scripts/run-credential-runtime-collection.py` reads the checked-in queue, verifies candidate paths and credential environment presence without printing secret values, and can run selected bounded source checks only when the operator explicitly passes `--run`. `reports/credential-runtime-runner-readiness.json` is the checked-in default-CI readiness view for that runner: it records candidate batch presence, reviewed/staged receipt presence, missing credential environment names, redacted collection commands, and the next operator action without reading credential values. Batch runs emit `datapan.credential-runtime-collection-session.v1` JSON, validated against `schemas/datapan.credential-runtime-collection-session.v1.schema.json`, so skipped, failed, and succeeded source results can be reviewed without exposing credential values. Operators can also pass `--session-output .datapan/runtime-evidence/credential-runtime-collection-session.json` to save the same secret-free batch session as a local reviewer handoff artifact. Reviewers validate that attachment with `scripts/validate-credential-runtime-collection-session.py` before inspecting staged receipts or promotion decisions. After validation, `scripts/generate-credential-runtime-session-review-plan.py` turns the session into a local review plan that lists staged receipt validation commands, promotion commands, skipped-source readiness blockers, and failed-source follow-up. Reviewers can validate that local review plan independently with `scripts/validate-credential-runtime-session-review-plan.py`, which binds the plan to the current checked-in credential receipt collection queue before anyone acts on promotion commands.
 
-Manual-review release acceptance has a checked-in decision intake. `reports/credential-runtime-manual-review-decision.json` currently records `accepted=false` / `not_asserted`; `scripts/validate-credential-runtime-manual-review-decision.py` rejects accepted decisions unless they include reviewer identity, the current credential review handoff digest, the current consumer compatibility digest, a reason, expiry or revalidation triggers, and no secret-like values. `reports/credential-runtime-manual-review-acceptance.json` is generated from that decision record and remains `not_accepted` until the decision intake is explicitly updated and validated.
+Manual-review release acceptance has a checked-in decision intake. An accepted decision records a historical human assertion; it is effective only while its review scope still matches and its expiry has not arrived. `scripts/manual_review_scope.py` verifies the archived source, compatibility, handoff, and Health-selection evidence, then reports current scope drift and expiry. The checked-in acceptance report keeps `decision_status` as the historical fact while `summary.acceptance_status` and `summary.accepted` describe current effectiveness. Expired or changed decisions remain valid history but produce a blocked `revalidation_required` or `unproven` state.
+
+A newly asserted decision must include `review_scope_version: datapan.manual-review-scope.v1` and the `review_scope_sha256` shown in the operator packet. That versioned digest binds the source registry, full stable compatibility semantics, exact handoff, and Health observation selection; it excludes only the six derived acceptance fields to avoid a self-referential digest. Artifact-only rebinding does not update the human decision or make a changed source/risk scope effective. The decision validator, acceptance generator, and compatibility validator re-evaluate the current UTC expiry at each run.
 
 Checked-in registry releases remain canonical-registry compatible while live credentialed receipts are absent. The remaining `credential_required`, `metadata_only_verification`, and `non_data_runtime_evidence_not_collected` findings stay manual-review boundaries until reviewed receipts are linked from source runtime remediation evidence.
 
@@ -37,6 +39,7 @@ python3 scripts/generate-credential-runtime-runner-readiness.py --check
 python3 scripts/generate-credential-runtime-review-handoff.py --check
 python3 scripts/validate-credential-runtime-manual-review-decision.py
 python3 scripts/generate-credential-runtime-manual-review-acceptance.py --check
+python3 -m unittest tests/test_manual_review_scope.py tests/test_manual_review_rebinding_acceptance_paths.py tests/test_manual_review_technical_rebinding.py
 python3 -m py_compile scripts/promote-credential-runtime-receipt.py
 python3 scripts/run-credential-runtime-collection.py --self-test
 python3 scripts/run-credential-runtime-collection.py --check

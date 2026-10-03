@@ -1,0 +1,62 @@
+{
+  "schema_version": "datapan.upstream-catalogue-health-policy.v1",
+  "policy_id": "datapan-registry-upstream-catalogue-health",
+  "health_workflow": {
+    "path": ".github/workflows/upstream-catalogue-health.yml",
+    "collector_workflow_path": ".github/workflows/upstream-catalog-refresh.yml",
+    "watchdog_cron": "23 * * * *"
+  },
+  "processor_state": {
+    "branch": "automation/upstream-catalogue-state",
+    "root": ".datapan/upstream-catalogue-state",
+    "max_bytes_per_file": 262144,
+    "workflow_run_limit": 100
+  },
+  "health_state": {
+    "branch": "automation/upstream-catalogue-health-state",
+    "root": "health/upstream-catalogue",
+    "ownership_marker": "health/upstream-catalogue/ownership.json",
+    "push_attempts": 3,
+    "receipt_retention_days": 90,
+    "maximum_retained_receipts": 2500
+  },
+  "promotion_state": {
+    "branch": "automation/canonical-update-state",
+    "receipt_path": "reports/canonical-update-promotion-receipt.json",
+    "promotion_workflow_path": ".github/workflows/canonical-update-promotion.yml",
+    "publication_ack_workflow_path": ".github/workflows/canonical-update-publication-ack.yml"
+  },
+  "clock": {
+    "maximum_future_skew_seconds": 300
+  },
+  "sources": [
+    {
+      "source_id": "data_go_kr",
+      "owner_ticket": 659,
+      "expected_interval_seconds": 604800,
+      "observation_grace_seconds": 86400,
+      "max_observation_age_seconds": 691200,
+      "max_attempts": 24,
+      "retries_per_detail": 2,
+      "heartbeat_timeout_seconds": 2700,
+      "provider_failure_threshold": 3,
+      "stage_deadlines_seconds": {
+        "collector": 3600,
+        "queued": 3600,
+        "validating": 1800,
+        "enriching": 3600,
+        "composing": 1800,
+        "retry": 86400,
+        "pending-review": 604800,
+        "publication-pending": 86400
+      },
+      "recovery_commands": {
+        "schedule_missing": "Review the collector schedule and the independent health receipt; do not synthesize an observation.",
+        "processor_stalled": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+        "provider_failure": "Inspect the redacted refresh evidence and configured credential boundary before retrying the collector.",
+        "promotion_wait": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+        "publication_failure": "Verify the immutable public pointer and consumer read-back before recording recovery."
+      }
+    }
+  ]
+}

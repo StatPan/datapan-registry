@@ -25,6 +25,7 @@ INPUT_PATHS = {
     "source_contract_rollup": pathlib.Path("reports/source-contract-rollup.json"),
     "source_runtime_evidence_rollup": pathlib.Path("reports/source-runtime-evidence-rollup.json"),
     "latest_verification": pathlib.Path("reports/latest-verification.json"),
+    "current_runtime_evidence_projection": pathlib.Path("reports/current-runtime-evidence-projection.json"),
     "credential_runtime_runner_readiness": pathlib.Path("reports/credential-runtime-runner-readiness.json"),
     "release_consumer_compatibility": pathlib.Path("reports/release-consumer-compatibility.json"),
     "failure_recovery_rollup": pathlib.Path("reports/failure-recovery-rollup.json"),
@@ -193,23 +194,27 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
         raise ValueError("at least one operation denominator with operations is required")
 
     freshness_queue = inputs["runtime_freshness_queue"]
+    evidence_projection = inputs["current_runtime_evidence_projection"]
     freshness_metadata = freshness_queue.get("freshness")
     if not isinstance(freshness_metadata, dict):
         raise ValueError("runtime freshness queue freshness must be an object")
     if freshness_metadata.get("as_of") != as_of_text:
         raise ValueError("runtime freshness queue and latest verification evaluation times differ")
+    if evidence_projection.get("freshness", {}).get("as_of") != as_of_text:
+        raise ValueError("current runtime evidence projection and latest verification evaluation times differ")
     freshness_summary = freshness_queue.get("summary")
     if not isinstance(freshness_summary, dict):
         raise ValueError("runtime freshness queue summary must be an object")
     if int(freshness_summary.get("supported_operations", 0)) != operations:
         raise ValueError("runtime freshness queue denominator does not match operation denominator")
-    evidenced_operation_count = operations - int(freshness_summary.get("never_evidenced", 0))
-    fresh_verified_operation_count = int(freshness_summary.get("fresh_verified", 0))
+    projection_summary = objects([evidence_projection.get("summary")], "current runtime evidence projection summary")[0]
+    evidenced_operation_count = int(projection_summary.get("current_operations_with_bound_evidence", 0))
+    fresh_verified_operation_count = int(projection_summary.get("current_operations_with_fresh_verified_evidence", 0))
     freshness = {
-        "fresh": fresh_verified_operation_count + int(freshness_summary.get("recent_non_verified", 0)),
-        "stale": int(freshness_summary.get("stale", 0)),
-        "expired": int(freshness_summary.get("expired", 0)),
-        "unknown_timestamp": int(freshness_summary.get("unknown_timestamp", 0)),
+        "fresh": int(projection_summary.get("bound_current_eligible_operations", 0)) + int(projection_summary.get("bound_current_non_verified_operations", 0)),
+        "stale": int(projection_summary.get("bound_current_stale_operations", 0)),
+        "expired": int(projection_summary.get("bound_current_expired_operations", 0)),
+        "unknown_timestamp": int(projection_summary.get("bound_current_unknown_timestamp_operations", 0)),
         "fresh_verified": fresh_verified_operation_count,
     }
 
@@ -229,13 +234,18 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
         runtime = runtime_by_id[source_id]
         runner = runner_by_id[source_id]
         capabilities = contract.get("adapter", {}).get("capabilities", [])
+        runtime_evidence = int(runtime.get("evidence_total", 0))
+        if source_id == "data_go_kr":
+            # For this source, historical rows count only after the current
+            # projection proves their exact operation contract.
+            runtime_evidence = int(projection_summary.get("current_operations_with_bound_evidence", 0))
         source_status.append({
             "source_id": source_id,
             "profile_present": pathlib.Path(str(item["profile"])).is_file(),
             "catalog_denominator": item.get("catalog_scope") == "operation_denominator",
             "call_capability": isinstance(capabilities, list) and "call" in capabilities,
             "reviewed_runtime_receipt": bool(runner.get("reviewed_receipt_present")),
-            "runtime_evidence": int(runtime.get("evidence_total", 0)),
+            "runtime_evidence": runtime_evidence,
             "active_recovery_failures": active_recovery_by_source[source_id],
             "recovered_failures": recovered_by_source[source_id],
         })
@@ -260,7 +270,7 @@ def build_report(policy: dict[str, Any], inputs: dict[str, dict[str, Any]]) -> d
         "generated_at": as_of_text,
         "policy": {"path": POLICY_PATH.as_posix(), "policy_id": policy["policy_id"], "supported_source_count": source_count, "required_consumer_count": len(required_consumers)},
         "inputs": {name: path.as_posix() for name, path in INPUT_PATHS.items()},
-        "summary": {"decision": "sustainable" if met == len(layers) else "coverage_gaps", "layers_total": len(layers), "layers_meeting_target": met, "layers_below_target": len(layers) - met, "unknown_timestamp_records": freshness["unknown_timestamp"], "stale_records": freshness["stale"], "expired_records": freshness["expired"]},
+        "summary": {"decision": "sustainable" if met == len(layers) else "coverage_gaps", "layers_total": len(layers), "layers_meeting_target": met, "layers_below_target": len(layers) - met, "unknown_timestamp_records": freshness["unknown_timestamp"], "stale_records": freshness["stale"], "expired_records": freshness["expired"], "unbound_evidence_records": int(projection_summary.get("unbound", 0)), "contract_changed_evidence_records": int(projection_summary.get("contract_changed", 0)), "ambiguous_evidence_records": int(projection_summary.get("ambiguous", 0)), "historical_evidence_records": int(projection_summary.get("historical", 0)), "unsupported_current_binding_operations": int(freshness_summary.get("unsupported_current_binding", 0))},
         "layers": layers,
         "freshness": {"as_of": as_of_text, "fresh_days": freshness_policy["fresh_days"], "expire_days": freshness_policy["expire_days"], **freshness},
         "failure_recovery": {key: int(recovery_summary.get(key, 0)) for key in ("active", "persistent", "recovered", "unowned", "overdue", "durable_work_items")},

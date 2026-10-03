@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-state.v1.schema.json",
+  "title": "Datapan Upstream Catalogue Durable Health State v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "repository", "branch", "root", "updated_at", "latest_receipt", "faults", "last_good_by_source", "observations_by_source", "state_status", "state_sha256"],
+  "properties": {
+    "schema_version": {"const": "datapan.upstream-catalogue-health-state.v1"},
+    "repository": {"type": "string", "minLength": 3},
+    "branch": {"type": "string", "minLength": 1},
+    "root": {"type": "string", "minLength": 1},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "latest_receipt": {"$ref": "#/$defs/receipt_ref"},
+    "faults": {"type": "array", "maxItems": 5000, "items": {"$ref": "#/$defs/fault_record"}},
+    "last_good_by_source": {"type": "object", "additionalProperties": {"$ref": "#/$defs/last_good"}},
+    "observations_by_source": {"type": "object", "additionalProperties": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/observation_record"}}},
+    "state_status": {"enum": ["healthy", "degraded", "blocked"]},
+    "state_sha256": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "last_good": {
+      "type": "object",
+      "required": ["status", "source_id", "generation_id", "publication_revision", "publication_pointer_revision", "artifact_identity", "verified", "publication_run_jobs_completed_at", "publication_run_completion_basis", "publication_run_id", "publication_run_attempt"],
+      "properties": {
+        "status": {"const": "read-back-confirmed"},
+        "source_id": {"type": "string", "minLength": 1},
+        "generation_id": {"$ref": "#/$defs/digest"},
+        "publication_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "publication_pointer_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "artifact_identity": {
+          "type": "object", "additionalProperties": false,
+          "required": ["path", "bytes", "sha256"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "bytes": {"type": "integer", "minimum": 1},
+            "sha256": {"$ref": "#/$defs/digest"}
+          }
+        },
+        "verified": {"const": true},
+        "publication_run_jobs_completed_at": {"type": "string", "format": "date-time"},
+        "publication_run_completion_basis": {"const": "max_completed_at_all_jobs_exact_run_attempt"},
+        "publication_run_id": {"type": "integer", "minimum": 1},
+        "publication_run_attempt": {"type": "integer", "minimum": 1}
+      }
+    },
+    "receipt_ref": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/digest"}}
+    },
+    "fault_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "stage", "reason", "severity", "owner_ticket", "fault_key", "recommended_action", "status", "first_seen_at", "last_seen_at", "observation_count", "last_receipt_sha256", "generation_id", "producer_run_id", "recovery_evidence"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1}, "stage": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}, "severity": {"enum": ["info", "warning", "error"]},
+        "owner_ticket": {"type": "integer", "minimum": 1}, "fault_key": {"$ref": "#/$defs/digest"},
+        "recommended_action": {"type": "string", "minLength": 1},
+        "status": {"enum": ["open", "recovery_pending_verification", "recovered"]},
+        "first_seen_at": {"type": "string", "format": "date-time"}, "last_seen_at": {"type": "string", "format": "date-time"},
+        "observation_count": {"type": "integer", "minimum": 1}, "last_receipt_sha256": {"$ref": "#/$defs/digest"},
+        "generation_id": {"type": ["string", "null"]}, "producer_run_id": {"type": ["string", "null"]},
+        "recovery_evidence": {"type": ["object", "null"]}
+      }
+    },
+    "observation_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observed_at", "producer_run_id", "refresh_evidence_sha256", "generation_id", "candidate_sha256", "processor_status", "composer_status", "pending_count", "health_receipt_sha256"],
+      "properties": {
+        "observed_at": {"type": "string", "format": "date-time"}, "producer_run_id": {"type": "string", "minLength": 1},
+        "refresh_evidence_sha256": {"$ref": "#/$defs/digest"}, "generation_id": {"type": ["string", "null"]},
+        "candidate_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "processor_status": {"type": "string", "minLength": 1}, "composer_status": {"type": ["string", "null"]},
+        "pending_count": {"type": "integer", "minimum": 0}, "health_receipt_sha256": {"$ref": "#/$defs/digest"}
+      }
+    }
+  }
+}

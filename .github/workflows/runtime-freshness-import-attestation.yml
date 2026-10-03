@@ -55,6 +55,7 @@ jobs:
             --output "reports/runtime-freshness-import-attestations/${RUN_ID}.json"
 
       - name: Commit, merge, and dispatch final main verification
+        id: handoff
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -78,25 +79,11 @@ jobs:
               pr="${url##*/}"
             fi
           fi
-          state="$(gh pr view "${pr}" --repo "${GITHUB_REPOSITORY}" --json state --jq .state)"
-          if [ "${state}" = "OPEN" ]; then
-            gh pr merge "${pr}" --repo "${GITHUB_REPOSITORY}" --auto --squash
-            for _ in $(seq 1 180); do
-              state="$(gh pr view "${pr}" --repo "${GITHUB_REPOSITORY}" --json state --jq .state)"
-              if [ "${state}" = "MERGED" ] || [ "${state}" = "CLOSED" ]; then
-                break
-              fi
-              sleep 10
-            done
-          fi
-          jq -n \
-            --arg run_id "${RUN_ID}" \
-            --arg pr_number "${pr}" \
-            '{event_type:"runtime-freshness-import-attestation-verify",client_payload:{run_id:$run_id,pr_number:$pr_number}}' \
-            > .datapan/runtime-freshness/verify-dispatch.json
-          gh api --method POST "repos/${GITHUB_REPOSITORY}/dispatches" \
-            --input .datapan/runtime-freshness/verify-dispatch.json
-          test "${state}" = "MERGED"
+          python3 scripts/runtime-freshness-pr-handoff.py \
+            --repo "${GITHUB_REPOSITORY}" \
+            --run-id "${RUN_ID}" \
+            --pr "${pr}" \
+            --resume-event runtime-freshness-import-attestation-verify
 
   verify:
     if: github.event.action == 'runtime-freshness-import-attestation-verify'

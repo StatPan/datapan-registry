@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-state-owner.v1.schema.json",
+  "title": "Datapan Upstream Catalogue Health State Ownership Marker v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "repository", "branch", "root", "policy_id", "created_at", "ownership_sha256"],
+  "properties": {
+    "schema_version": {"const": "datapan.upstream-catalogue-health-state-owner.v1"},
+    "repository": {"type": "string", "minLength": 3},
+    "branch": {"type": "string", "pattern": "^automation/[a-z0-9-]+$"},
+    "root": {"type": "string", "pattern": "^[a-z0-9/-]+$"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "ownership_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

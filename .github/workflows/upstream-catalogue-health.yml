@@ -1,0 +1,187 @@
+name: Upstream catalogue health
+
+on:
+  # This independent clock detects a collector that never starts.
+  schedule:
+    - cron: "23 * * * *"
+  # Inspect collector, processor, and promotion transitions promptly; the hourly clock remains independent.
+  workflow_run:
+    workflows:
+      - "Upstream catalog refresh"
+      - "Process upstream catalogue"
+      - "Canonical update promotion"
+      - "Canonical update publication acknowledgement"
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: upstream-catalogue-health-state
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    if: >-
+      github.repository == 'StatPan/datapan-registry' &&
+      (github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.head_branch == 'main'))
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      HEALTH_POLICY: policy/upstream-catalogue-health.json
+      HEALTH_INPUTS: .datapan/ci/upstream-catalogue-health
+    steps:
+      - name: Checkout the trusted default branch
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          path: datapan-registry
+          lfs: false
+          persist-credentials: true
+
+      - name: Set up explicit UTC evaluation time and dependencies
+        working-directory: datapan-registry
+        run: |
+          set -euo pipefail
+          mkdir -p "${HEALTH_INPUTS}"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' > "${HEALTH_INPUTS}/as-of.txt"
+          python3 -m venv .datapan/ci/upstream-health-venv
+          . .datapan/ci/upstream-health-venv/bin/activate
+          python -m pip install --disable-pip-version-check jsonschema
+
+      - name: Read processor, promotion, and prior health state branches
+        id: state_inputs
+        working-directory: datapan-registry
+        run: |
+          set -euo pipefail
+          policy="${HEALTH_POLICY}"
+          processor_branch="$(jq -r '.processor_state.branch' "${policy}")"
+          processor_root="$(jq -r '.processor_state.root' "${policy}")"
+          promotion_branch="$(jq -r '.promotion_state.branch' "${policy}")"
+          promotion_path="$(jq -r '.promotion_state.receipt_path' "${policy}")"
+          health_branch="$(jq -r '.health_state.branch' "${policy}")"
+          health_root="$(jq -r '.health_state.root' "${policy}")"
+          branch_exists() {
+            local branch="$1" output="$2" rc
+            if git ls-remote --exit-code origin "refs/heads/${branch}" > "${output}"; then
+              return 0
+            else
+              rc=$?
+            fi
+            if [ "${rc}" -eq 2 ]; then
+              return 1
+            fi
+            echo "Unable to inspect durable branch ${branch} (git ls-remote exit ${rc})" >&2
+            exit "${rc}"
+          }
+
+          mkdir -p "${HEALTH_INPUTS}/processor" "${HEALTH_INPUTS}/promotion" "${HEALTH_INPUTS}/health-state"
+          if branch_exists "${processor_branch}" "${HEALTH_INPUTS}/processor-ref"; then
+            git fetch --no-tags origin "refs/heads/${processor_branch}:refs/remotes/origin/${processor_branch}"
+            processor_ref="refs/remotes/origin/${processor_branch}"
+            if git cat-file -e "${processor_ref}:${processor_root}/sources" 2>/dev/null; then
+              git archive "${processor_ref}" "${processor_root}" | tar -x -C "${HEALTH_INPUTS}/processor"
+            fi
+          fi
+          if branch_exists "${promotion_branch}" "${HEALTH_INPUTS}/promotion-ref"; then
+            git fetch --no-tags origin "refs/heads/${promotion_branch}:refs/remotes/origin/${promotion_branch}"
+            promotion_ref="refs/remotes/origin/${promotion_branch}"
+            if git cat-file -e "${promotion_ref}:${promotion_path}" 2>/dev/null; then
+              mkdir -p "${HEALTH_INPUTS}/promotion/$(dirname "${promotion_path}")"
+              git show "${promotion_ref}:${promotion_path}" > "${HEALTH_INPUTS}/promotion/${promotion_path}"
+            fi
+          fi
+          if branch_exists "${health_branch}" "${HEALTH_INPUTS}/health-ref"; then
+            git fetch --no-tags origin "refs/heads/${health_branch}:refs/remotes/origin/${health_branch}"
+            health_ref="refs/remotes/origin/${health_branch}"
+            if git cat-file -e "${health_ref}:${health_root}/state.json" 2>/dev/null; then
+              git show "${health_ref}:${health_root}/state.json" > "${HEALTH_INPUTS}/health-state/state.json"
+            fi
+            echo "exists=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "exists=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Evaluate GitHub observations and durable checkpoints
+        id: health
+        working-directory: datapan-registry
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          . .datapan/ci/upstream-health-venv/bin/activate
+          python scripts/check-upstream-catalogue-health.py \
+            --as-of "$(cat "${HEALTH_INPUTS}/as-of.txt")" \
+            --repository "${GITHUB_REPOSITORY}" \
+            --processor-state-dir "${HEALTH_INPUTS}/processor/.datapan/upstream-catalogue-state" \
+            --promotion-ack "${HEALTH_INPUTS}/promotion/reports/canonical-update-promotion-receipt.json" \
+            --health-state "${HEALTH_INPUTS}/health-state/state.json" \
+            --main-revision "$(git rev-parse HEAD)" \
+            --workflow-run-id "${GITHUB_RUN_ID}" \
+            --workflow-run-attempt "${GITHUB_RUN_ATTEMPT}" \
+            --output "${HEALTH_INPUTS}/health-receipt.json" \
+            | tee "${HEALTH_INPUTS}/checker-result.json"
+
+      - name: Persist receipt and fault state with bounded fast-forward retries
+        if: ${{ steps.health.outcome == 'success' }}
+        working-directory: datapan-registry
+        run: |
+          set -euo pipefail
+          policy="${HEALTH_POLICY}"
+          state_branch="$(jq -r '.health_state.branch' "${policy}")"
+          state_root="$(jq -r '.health_state.root' "${policy}")"
+          attempts="$(jq -r '.health_state.push_attempts' "${policy}")"
+          state_worktree="${RUNNER_TEMP}/upstream-catalogue-health-state"
+
+          for attempt in $(seq 1 "${attempts}"); do
+            bash scripts/prepare-upstream-catalogue-health-state-worktree.sh "${PWD}" "${state_branch}" "${state_worktree}"
+
+            . .datapan/ci/upstream-health-venv/bin/activate
+            python scripts/persist-upstream-catalogue-health.py \
+              --receipt "${HEALTH_INPUTS}/health-receipt.json" \
+              --state-root "${state_worktree}/${state_root}" \
+              --policy "${policy}" \
+              --repository "${GITHUB_REPOSITORY}"
+            git -C "${state_worktree}" config user.name "github-actions[bot]"
+            git -C "${state_worktree}" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git -C "${state_worktree}" add -- "${state_root}"
+            if git -C "${state_worktree}" diff --cached --quiet; then
+              echo "Health receipt already archived and durable state is newer; no branch update required"
+              break
+            fi
+            git -C "${state_worktree}" commit -m "Record upstream catalogue health run ${GITHUB_RUN_ID}"
+            if git -C "${state_worktree}" push origin "HEAD:refs/heads/${state_branch}"; then
+              echo "Durable health state updated on attempt ${attempt}"
+              break
+            fi
+            if [ "${attempt}" -eq "${attempts}" ]; then
+              echo "Health state compare-and-swap exhausted ${attempts} attempts" >&2
+              exit 1
+            fi
+            echo "Health state push raced; reload current branch and retry (${attempt}/${attempts})"
+          done
+
+      - name: Upload immutable health evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: upstream-catalogue-health-${{ github.run_id }}-${{ github.run_attempt }}
+          path: datapan-registry/.datapan/ci/upstream-catalogue-health/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Add workflow summary
+        if: always()
+        working-directory: datapan-registry
+        run: |
+          set -euo pipefail
+          if [ -f "${HEALTH_INPUTS}/health-receipt.json" ]; then
+            jq -r '"## Upstream catalogue health\n\n- mode: `\(.execution_mode)`\n- status: `healthy=\(.summary.healthy), degraded=\(.summary.degraded), blocked=\(.summary.blocked)`\n- distinct live fresh observations in this evaluation: `\(.summary.live_fresh_observation_count)`\n- faults: `\(.summary.fault_count)`\n- receipt SHA-256: `\(.receipt_sha256)`"' "${HEALTH_INPUTS}/health-receipt.json" >> "${GITHUB_STEP_SUMMARY}"
+          else
+            echo "## Upstream catalogue health\n\nThe checker failed before producing a receipt; inspect the workflow logs and durable input branches." >> "${GITHUB_STEP_SUMMARY}"
+          fi
