@@ -12,7 +12,8 @@
     "provider_index_sha256": {"$ref": "#/$defs/sha256"},
     "adapter_revision": {"$ref": "#/$defs/sha256"},
     "extractor_revision": {"$ref": "#/$defs/sha256"},
-    "records": {"type": "array", "items": {"$ref": "#/$defs/record"}}
+    "records": {"type": "array", "items": {"$ref": "#/$defs/record"}},
+    "worker_outcomes": {"type": "array", "items": {"$ref": "#/$defs/workerOutcome"}}
   },
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
@@ -30,6 +31,15 @@
       "properties": {
         "provider": {"const": "data.go.kr"},
         "id": {"type": "string", "pattern": "^[0-9]+$"}
+      }
+    },
+    "worker_api_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "id"],
+      "properties": {
+        "provider": {"const": "data.go.kr"},
+        "id": {"type": "string", "minLength": 1, "maxLength": 128}
       }
     },
     "source_provenance": {
@@ -58,6 +68,17 @@
         "operations_sha256": {"$ref": "#/$defs/sha256"},
         "status": {"const": "enriched"},
         "source_provenance": {"$ref": "#/$defs/source_provenance"}
+      }
+    },
+    "workerOutcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_key", "source_sha256", "guide_sha256", "status"],
+      "properties": {
+        "api_key": {"$ref": "#/$defs/worker_api_key"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "guide_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "status": {"enum": ["retry", "quarantined"]}
       }
     }
   }

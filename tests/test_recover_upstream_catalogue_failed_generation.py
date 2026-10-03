@@ -10,9 +10,11 @@ import sys
 import tempfile
 import unittest
 from datetime import datetime, timezone
+from unittest import mock
 
 
 ROOT = pathlib.Path(__file__).parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
 SCRIPT = ROOT / "scripts" / "recover_upstream_catalogue_failed_generation.py"
 SPEC = importlib.util.spec_from_file_location("recover_failed_generation", SCRIPT)
 assert SPEC and SPEC.loader
@@ -275,6 +277,99 @@ class RecoverFailedGenerationTest(unittest.TestCase):
         self.assertEqual(updated_index["detail_retry_state"], original_index["detail_retry_state"])
         row = next(row for row in updated_index["generations"] if row["generation_id"] == RECOVERY.GENERATION_ID)
         self.assertEqual(row["status"], "quarantined")
+
+    def test_processor_recovery_adapter_persists_only_the_current_result_marker(self) -> None:
+        state, checkpoint, run, artifact, payload, current_run = frozen_inputs()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            state_dir = root / "state"
+            source_dir = state_dir / "sources" / "data_go_kr"
+            generation_dir = source_dir / "generations"
+            output_dir = root / "output"
+            evidence_dir = root / "failed-artifact"
+            generation_dir.mkdir(parents=True)
+            evidence_dir.mkdir()
+            (source_dir / "index.json").write_text(json.dumps(state["index"]), encoding="utf-8")
+            checkpoint_path = generation_dir / f"{checkpoint['generation_id']}.json"
+            checkpoint_path.write_text(json.dumps(checkpoint), encoding="utf-8")
+            run_path = root / "failed-run.json"
+            run_path.write_text(json.dumps(run), encoding="utf-8")
+            artifact_metadata_path = root / "failed-artifact.json"
+            artifact_metadata_path.write_text(json.dumps(artifact), encoding="utf-8")
+            for name, body in payload.items():
+                (evidence_dir / name).write_bytes(body)
+
+            args = PROCESSOR.build_parser().parse_args([])
+            args.source = "data_go_kr"
+            args.state_dir = state_dir
+            args.output_dir = output_dir
+            args.checkpoint_schema = ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+            args.repository = "StatPan/datapan-registry"
+            args.producer_run_id = str(checkpoint["last_observation"]["producer_run_id"])
+            args.processor_run_id = current_run["processor_run_id"]
+            args.processor_artifact_run_id = current_run["processor_artifact_run_id"]
+            args.output_artifact_expires_at = current_run["expires_at"]
+            args.current_head_sha = current_run["head_sha"]
+            args.recover_failed_processor_run_id = str(run["id"])
+            args.recover_failed_generation_id = checkpoint["generation_id"]
+            args.failed_run_metadata = run_path
+            args.failed_artifact_metadata = artifact_metadata_path
+            args.failed_artifact_dir = evidence_dir
+            args.expected_checkpoint_sha256 = RECOVERY.GENERATION_CHECKPOINT_SHA256
+            args.expected_state_head_sha = RECOVERY.STATE_BRANCH_SHA
+            args.now = "2026-10-03T04:00:00Z"
+
+            checkpoint_bytes = checkpoint_path.read_bytes()
+            index_path = source_dir / "index.json"
+            index_bytes = index_path.read_bytes()
+            args.recover_failed_processor_run_id = "37000000000"
+            with self.assertRaisesRegex(ValueError, "failed_processor_recovery_target_mismatch"):
+                PROCESSOR.recover_failed_processor_generation(args)
+            self.assertEqual(checkpoint_path.read_bytes(), checkpoint_bytes)
+            self.assertEqual(index_path.read_bytes(), index_bytes)
+            self.assertFalse(output_dir.exists())
+            args.recover_failed_processor_run_id = str(run["id"])
+
+            with mock.patch.object(PROCESSOR, "fetch_public_detail") as provider_call:
+                status, sealed = PROCESSOR.recover_failed_processor_generation(args)
+                provider_call.assert_not_called()
+
+            self.assertEqual(status, 3)
+            self.assertEqual(PROCESSOR.verify_checkpoint(
+                json.loads(checkpoint_path.read_text(encoding="utf-8")),
+                json.loads(args.checkpoint_schema.read_text(encoding="utf-8")),
+            ), sealed)
+            self.assertEqual(sealed["status"], "quarantined")
+            self.assertEqual(sealed["outcome"]["reason"], RECOVERY.RECOVERY_REASON)
+            self.assertEqual(sealed["fencing_token"], 2)
+            self.assertEqual(sealed["output_artifact"]["run_id"], current_run["processor_artifact_run_id"])
+            self.assertIsNone(sealed["output_artifact"]["artifact_id"])
+            self.assertEqual([row["path"] for row in sealed["output_digests"]], ["upstream-catalogue-processing-result.json"])
+            result = json.loads((output_dir / "upstream-catalogue-processing-result.json").read_text(encoding="utf-8"))
+            self.assertEqual(result["status"], "quarantined")
+            self.assertEqual(result["reason"], RECOVERY.RECOVERY_REASON)
+            self.assertFalse(result["candidate_available"])
+            self.assertFalse((output_dir / "composed-candidate.registry.json").exists())
+            self.assertFalse((output_dir / "upstream-catalogue-enrichment-evidence.json").exists())
+            updated_index = json.loads((source_dir / "index.json").read_text(encoding="utf-8"))
+            self.assertEqual(updated_index["detail_queue_cursor"], state["index"]["detail_queue_cursor"])
+            self.assertEqual(updated_index["detail_retry_state"], state["index"]["detail_retry_state"])
+            generation_row = next(row for row in updated_index["generations"] if row["generation_id"] == checkpoint["generation_id"])
+            self.assertEqual(generation_row["status"], "quarantined")
+
+    def test_terminalized_generation_rejects_a_repeated_recovery(self) -> None:
+        values = frozen_inputs()
+        plan = self.plan(values=values)
+        terminal = PROCESSOR.seal_checkpoint(plan.checkpoint)
+        state = copy.deepcopy(values[0])
+        state["index"]["generations"][0].update(
+            status="quarantined",
+            updated_at=terminal["last_heartbeat_at"],
+        )
+        repeated = (state, terminal, *values[2:])
+        with self.assertRaises(RECOVERY.RecoveryRejected) as error:
+            self.plan(values=repeated)
+        self.assertEqual(error.exception.reason, "recovery_expected_checkpoint_sha_mismatch")
 
     def test_active_lease_is_rejected(self) -> None:
         with self.assertRaises(RECOVERY.RecoveryRejected) as error:

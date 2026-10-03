@@ -829,13 +829,45 @@ def validated_resume_records(
         "adapter_revision", "extractor_revision", "records",
     }
     if (
-        not isinstance(evidence, dict) or set(evidence) != expected_top
+        not isinstance(evidence, dict)
+        or frozenset(evidence) not in {frozenset(expected_top), frozenset(expected_top | {"worker_outcomes"})}
         or evidence.get("schema_version") != ENRICHMENT_SCHEMA
         or evidence.get("original_candidate_sha256") != owner.get("generation_inputs", {}).get("candidate_sha256")
         or evidence.get("provider_index_sha256") != owner.get("generation_inputs", {}).get("adapter_revision")
         or not isinstance(evidence.get("records"), list)
     ):
         raise ValueError("resume_enrichment_binding_mismatch")
+    if "worker_outcomes" in evidence:
+        outcomes = evidence["worker_outcomes"]
+        if not isinstance(outcomes, list):
+            raise ValueError("resume_worker_outcomes_invalid")
+        successful_ids = {
+            str(record.get("api_key", {}).get("id") or "")
+            for record in evidence["records"] if isinstance(record, dict) and isinstance(record.get("api_key"), dict)
+        }
+        outcome_ids: set[str] = set()
+        for outcome in outcomes:
+            if (
+                not isinstance(outcome, dict)
+                or set(outcome) != {"api_key", "status", "source_sha256", "guide_sha256"}
+                or not isinstance(outcome.get("api_key"), dict)
+                or outcome["api_key"].get("provider") != "data.go.kr"
+                or outcome.get("status") not in {"retry", "quarantined"}
+                or not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("source_sha256") or ""))
+                or (outcome.get("guide_sha256") is not None and not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("guide_sha256"))))
+            ):
+                raise ValueError("resume_worker_outcome_invalid")
+            identity = str(outcome["api_key"].get("id") or "")
+            if not identity or identity in outcome_ids or identity in successful_ids:
+                raise ValueError("resume_worker_outcome_identity_invalid")
+            row = candidate_by_id.get(identity)
+            if (
+                row is None or not row_is_link(row)
+                or outcome["source_sha256"] != source_fingerprint(row)
+                or outcome["guide_sha256"] != guide_fingerprint(row)
+            ):
+                raise ValueError("resume_worker_outcome_binding_mismatch")
+            outcome_ids.add(identity)
     if (
         evidence.get("provider_index_sha256") != provider_index_sha256
         or evidence.get("adapter_revision") != provider_index_sha256
@@ -951,6 +983,104 @@ def persist_result_only_checkpoint(
     atomic_output(args.output_dir, "upstream-catalogue-checkpoint-receipt.json", sealed)
     append_generation_index(index_path, checkpoint_path, sealed)
     return sealed
+
+
+def recover_failed_processor_generation(args: argparse.Namespace) -> tuple[int, dict[str, Any]]:
+    """Seal a verified old processor scope failure without reprocessing inputs."""
+    required_paths = (args.failed_run_metadata, args.failed_artifact_metadata, args.failed_artifact_dir)
+    if any(path is None for path in required_paths):
+        raise ValueError("failed_processor_recovery_evidence_required")
+    if (
+        not args.expected_checkpoint_sha256
+        or not args.expected_state_head_sha
+        or not args.recover_failed_processor_run_id
+        or not args.processor_run_id
+        or not args.processor_artifact_run_id
+        or not args.output_artifact_expires_at
+        or not args.current_head_sha
+    ):
+        raise ValueError("failed_processor_recovery_identity_required")
+    if not re.fullmatch(r"[a-f0-9]{64}", args.expected_checkpoint_sha256):
+        raise ValueError("failed_processor_expected_checkpoint_digest_invalid")
+    if not re.fullmatch(r"[a-f0-9]{40}", args.expected_state_head_sha) or not re.fullmatch(r"[a-f0-9]{40}", args.current_head_sha):
+        raise ValueError("failed_processor_recovery_git_identity_invalid")
+    processor_parts = str(args.processor_run_id).rsplit("-", 1)
+    if len(processor_parts) != 2 or processor_parts[0] != str(args.processor_artifact_run_id) or not processor_parts[1].isdigit():
+        raise ValueError("failed_processor_recovery_current_run_invalid")
+    run_attempt = int(processor_parts[1])
+    artifact_dir = args.failed_artifact_dir
+    if not artifact_dir.is_dir() or artifact_dir.is_symlink():
+        raise ValueError("failed_processor_artifact_directory_invalid")
+    required_members = (
+        "upstream-catalogue-checkpoint-receipt.json",
+        "upstream-catalogue-processing-result.json",
+    )
+    members: dict[str, bytes] = {}
+    for name in required_members:
+        path = artifact_dir / name
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("failed_processor_artifact_member_invalid")
+        if path.stat().st_size > MAX_INPUT_BYTES:
+            raise ValueError("failed_processor_artifact_too_large")
+        members[name] = path.read_bytes()
+    state_index_path = args.state_dir / "sources" / args.source / "index.json"
+    checkpoint_path = args.state_dir / "sources" / args.source / "generations" / f"{args.recover_failed_generation_id}.json"
+    index = load_json(state_index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+    schema = load_json(args.checkpoint_schema, maximum_bytes=1024 * 1024)
+    checkpoint = verify_checkpoint(load_json(checkpoint_path, maximum_bytes=STATE_FILE_LIMIT), schema)
+    failed_run_metadata = load_json(args.failed_run_metadata, maximum_bytes=1024 * 1024)
+    failed_artifact_metadata = load_json(args.failed_artifact_metadata, maximum_bytes=1024 * 1024)
+    if (
+        not isinstance(failed_run_metadata, dict)
+        or str(failed_run_metadata.get("id") or "") != str(args.recover_failed_processor_run_id)
+        or checkpoint.get("generation_id") != args.recover_failed_generation_id
+    ):
+        raise ValueError("failed_processor_recovery_target_mismatch")
+    now = utc_now() if not args.now else parse_timestamp(args.now)
+    current_run = {
+        "repository": args.repository,
+        "processor_run_id": args.processor_run_id,
+        "processor_artifact_run_id": args.processor_artifact_run_id,
+        "run_attempt": run_attempt,
+        "head_sha": args.current_head_sha,
+        "artifact_name": f"upstream-catalogue-processing-{args.processor_run_id}",
+        "expires_at": args.output_artifact_expires_at,
+    }
+    from recover_upstream_catalogue_failed_generation import recover_failed_generation
+    plan = recover_failed_generation(
+        durable_state={"state_branch_sha": args.expected_state_head_sha, "index": index},
+        checkpoint=checkpoint,
+        failed_run_metadata=failed_run_metadata,
+        failed_artifact_metadata=failed_artifact_metadata,
+        failed_artifact_dir_or_payload=members,
+        expected_checkpoint_sha256=args.expected_checkpoint_sha256,
+        current_run=current_run,
+        now=now,
+    )
+    if plan.expected_state_head_sha != args.expected_state_head_sha:
+        raise ValueError("failed_processor_recovery_state_head_mismatch")
+    output_expiry = args.output_artifact_expires_at
+    if parse_timestamp(output_expiry) <= now:
+        raise ValueError("output_artifact_expired")
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    for name in (
+        "composed-candidate.registry.json", "ready-scope.registry.json", "semantic-diff.json",
+        "regeneration-queue.json", "quarantine.json", "composition-receipt.json",
+        "upstream-catalogue-enrichment-evidence.json", "upstream-catalogue-processing-result.json",
+        "upstream-catalogue-checkpoint-receipt.json",
+    ):
+        path = args.output_dir / name
+        if path.is_symlink():
+            raise ValueError("failed_processor_output_path_invalid")
+        path.unlink(missing_ok=True)
+    sealed = persist_result_only_checkpoint(
+        plan.checkpoint,
+        args,
+        checkpoint_path=checkpoint_path,
+        index_path=state_index_path,
+        output_expires_at=output_expiry,
+    )
+    return 3, sealed
 
 
 def call_composer(
@@ -1661,6 +1791,23 @@ def process(
         "adapter_revision": adapter_sha,
         "extractor_revision": extractor_revision(),
         "records": enriched_records,
+        "worker_outcomes": [
+            {
+                "api_key": {"provider": "data.go.kr", "id": row["id"]},
+                "status": row["status"],
+                "source_sha256": row["source_sha256"],
+                "guide_sha256": row["guide_sha256"],
+            }
+            for row in worker_records if row.get("status") in {"retry", "quarantined"}
+        ] + [
+            {
+                "api_key": {"provider": "data.go.kr", "id": row["id"]},
+                "status": "retry",
+                "source_sha256": row["source_sha256"],
+                "guide_sha256": row["guide_sha256"],
+            }
+            for row in unqueued
+        ],
     }
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1742,10 +1889,20 @@ def process(
     if not worker_scope_ok:
         checkpoint.update({"status": "quarantined", "outcome": {"reason": scope_error}, "lease": None})
         checkpoint["last_heartbeat_at"] = timestamp(now_fn())
-        atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
-        atomic_write_json(output_dir / "upstream-catalogue-checkpoint-receipt.json", checkpoint)
-        append_generation_index(index_path, checkpoint_path, checkpoint)
-        return 3, checkpoint
+        for name in (
+            "composed-candidate.registry.json", "ready-scope.registry.json", "semantic-diff.json",
+            "regeneration-queue.json", "quarantine.json", "composition-receipt.json",
+            "upstream-catalogue-enrichment-evidence.json",
+        ):
+            (output_dir / name).unlink(missing_ok=True)
+        sealed = persist_result_only_checkpoint(
+            checkpoint,
+            args,
+            checkpoint_path=checkpoint_path,
+            index_path=index_path,
+            output_expires_at=output_artifact_expires_at,
+        )
+        return 3, sealed
     pending_count = int(
         (receipt or {}).get("pending_count")
         or (receipt or {}).get("summary", {}).get("pending", 0)
@@ -1834,6 +1991,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--bind-output-artifact-expires-at")
     parser.add_argument("--bind-generation-id")
     parser.add_argument("--target-generation-id", help="mark an existing generation quarantined when its exact input artifact is unavailable")
+    parser.add_argument("--recover-failed-processor-run-id")
+    parser.add_argument("--recover-failed-generation-id")
+    parser.add_argument("--failed-run-metadata", type=pathlib.Path)
+    parser.add_argument("--failed-artifact-metadata", type=pathlib.Path)
+    parser.add_argument("--failed-artifact-dir", type=pathlib.Path)
+    parser.add_argument("--expected-checkpoint-sha256")
+    parser.add_argument("--expected-state-head-sha")
+    parser.add_argument("--current-head-sha")
     parser.add_argument("--claim-only", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--require-durable-reservation", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--input-error", choices=["artifact_missing", "candidate_artifact_missing", "input_expired", "observation_failure", "collection_failure"])
@@ -1870,7 +2035,22 @@ def main(argv: list[str] | None = None) -> int:
                 artifact_expires_at=args.bind_output_artifact_expires_at,
             )
             return 0
-        status, checkpoint = process(args)
+        if args.recover_failed_processor_run_id:
+            if (
+                not args.recover_failed_generation_id
+                or args.target_generation_id or args.candidate or args.diff
+                or args.refresh_evidence or args.claim_only or args.require_durable_reservation
+            ):
+                raise ValueError("failed_processor_recovery_arguments_conflict")
+            status, checkpoint = recover_failed_processor_generation(args)
+        else:
+            if any((
+                args.recover_failed_generation_id, args.failed_run_metadata, args.failed_artifact_metadata,
+                args.failed_artifact_dir, args.expected_checkpoint_sha256, args.expected_state_head_sha,
+                args.current_head_sha,
+            )):
+                raise ValueError("failed_processor_recovery_arguments_incomplete")
+            status, checkpoint = process(args)
         exact_delivery_replay = bool(getattr(args, "exact_delivery_replay", False))
         result = processing_result(
             checkpoint,
