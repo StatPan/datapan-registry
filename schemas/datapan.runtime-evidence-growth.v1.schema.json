@@ -14,6 +14,8 @@
     "generation_inputs",
     "coverage",
     "evidence",
+    "historical_evidence",
+    "evidence_dispositions",
     "growth_target",
     "verification_plan",
     "provider_split_readiness",
@@ -51,6 +53,12 @@
     "evidence": {
       "$ref": "#/$defs/evidence"
     },
+    "historical_evidence": {
+      "$ref": "#/$defs/historical_evidence"
+    },
+    "evidence_dispositions": {
+      "$ref": "#/$defs/evidence_dispositions"
+    },
     "growth_target": {
       "$ref": "#/$defs/growth_target"
     },
@@ -87,6 +95,8 @@
         "coverage",
         "latest_verification",
         "latest_verification_summary",
+        "current_runtime_evidence_projection",
+        "dependencies",
         "verification_plan",
         "provider_index"
       ],
@@ -98,6 +108,12 @@
           "type": "string"
         },
         "latest_verification_summary": {
+          "type": "string"
+        },
+        "current_runtime_evidence_projection": {
+          "type": "string"
+        },
+        "dependencies": {
           "type": "string"
         },
         "verification_plan": {
@@ -144,16 +160,29 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "scope",
         "total",
+        "current_bound_observations",
+        "fresh_verified",
         "verified",
         "failed",
         "skipped",
         "unknown",
         "coverage_percent",
+        "success_coverage_percent",
         "by_kind"
       ],
       "properties": {
+        "scope": {
+          "const": "current_contract_bound_within_expiry"
+        },
         "total": {
+          "$ref": "#/$defs/count"
+        },
+        "current_bound_observations": {
+          "$ref": "#/$defs/count"
+        },
+        "fresh_verified": {
           "$ref": "#/$defs/count"
         },
         "verified": {
@@ -171,6 +200,9 @@
         "coverage_percent": {
           "$ref": "#/$defs/percent"
         },
+        "success_coverage_percent": {
+          "$ref": "#/$defs/percent"
+        },
         "by_kind": {
           "type": "array",
           "items": {
@@ -179,12 +211,38 @@
         }
       }
     },
+    "historical_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "verified", "failed", "skipped", "unknown", "by_kind"],
+      "properties": {
+        "total": {"$ref": "#/$defs/count"},
+        "verified": {"$ref": "#/$defs/count"},
+        "failed": {"$ref": "#/$defs/count"},
+        "skipped": {"$ref": "#/$defs/count"},
+        "unknown": {"$ref": "#/$defs/count"},
+        "by_kind": {"type": "array", "items": {"$ref": "#/$defs/key_count"}}
+      }
+    },
+    "evidence_dispositions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unbound", "contract_changed", "ambiguous", "historical"],
+      "properties": {
+        "unbound": {"$ref": "#/$defs/count"},
+        "contract_changed": {"$ref": "#/$defs/count"},
+        "ambiguous": {"$ref": "#/$defs/count"},
+        "historical": {"$ref": "#/$defs/count"}
+      }
+    },
     "growth_target": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "target_percent",
+        "target_basis",
         "target_evidence_total",
+        "fresh_verified_total",
         "remaining_to_target",
         "status"
       ],
@@ -192,7 +250,13 @@
         "target_percent": {
           "$ref": "#/$defs/percent"
         },
+        "target_basis": {
+          "const": "fresh_verified_current_contract"
+        },
         "target_evidence_total": {
+          "$ref": "#/$defs/count"
+        },
+        "fresh_verified_total": {
           "$ref": "#/$defs/count"
         },
         "remaining_to_target": {

@@ -81,6 +81,26 @@ class ProjectRuntimeFreshnessRecoveryTest(unittest.TestCase):
             self.assertEqual(receipt["results"][0]["disposition"], "unclassified_failure")
             self.assertEqual(observations["observations"], [])
 
+    def test_import_receipt_hashes_the_exact_sanitized_result_and_binding(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            observations = {"schema_version": "datapan.failure-observations.v1", "generated_at": "2026-07-11T10:00:00Z", "observations": []}
+            binding = {"schema_version": "datapan.runtime-evidence-contract-binding.v1", "identity_key": "data_go_kr:d:o", "contract_sha256": "a" * 64}
+            result = {"dataset_id": "d", "operation": "o", "dependency_class": "data_go_kr_gateway", "status": "verified", "verified_at": "2026-07-11T12:00:00Z", "checked_at": "2026-07-11T12:00:00Z", "duration_ms": 17, "contract_binding": binding}
+            receipt, _ = self.run_fixture(root, result, observations, "bound")
+            sanitized_result = json.loads((root / "bound-report.json").read_text(encoding="utf-8"))["results"][0]
+            importable_result = MODULE.importer_module().importable_result(sanitized_result)
+            expected_result_sha = hashlib.sha256(json.dumps(importable_result, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+            raw_result_sha = hashlib.sha256(json.dumps(sanitized_result, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+            expected_binding_sha = hashlib.sha256(json.dumps(binding, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+            self.assertEqual(receipt["results"][0]["identity_key"], "data_go_kr:d:o")
+            self.assertEqual(receipt["results"][0]["result_sha256"], expected_result_sha)
+            self.assertNotEqual(receipt["results"][0]["result_sha256"], raw_result_sha)
+            self.assertNotIn("checked_at", importable_result)
+            self.assertNotIn("duration_ms", importable_result)
+            self.assertEqual(receipt["results"][0]["contract_binding_sha256"], expected_binding_sha)
+
 
 if __name__ == "__main__":
     unittest.main()

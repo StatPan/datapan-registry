@@ -6,6 +6,7 @@ import json
 import os
 import pathlib
 import shutil
+import subprocess
 import tempfile
 import unittest
 import urllib.error
@@ -455,6 +456,154 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         rebound = json.loads((self.output_dir / enrichment_name).read_text())
         self.assertEqual(rebound["original_candidate_sha256"], MODULE.file_sha256(self.candidate_path))
         self.assertEqual(rebound["records"][0]["source_provenance"]["observed_at"], first_at)
+
+    @unittest.skipUnless(ACTUAL_COMPOSER.is_file(), "bootstrap regression requires the reviewed #656 composer")
+    def test_bootstrap_processor_resumes_old_producer_without_producer_code_or_schema(self) -> None:
+        observed_at = "2026-10-03T10:00:00Z"
+        self.write_real_composer_inputs([], [self.real_link_row()], observed_at)
+        bootstrap = self.root / "bootstrap"
+        bootstrap.symlink_to(ROOT, target_is_directory=True)
+        producer = self.root / "datapan-registry"
+        producer.mkdir()
+        state_repo = self.root / "state-repo"
+
+        data = producer / "data"
+        data.mkdir()
+        shutil.copy2(self.baseline_path, data / "data-go-kr.registry.json")
+        shutil.copy2(self.provider_index_path, data / "provider-index.json")
+        policy_dir = producer / "policy"
+        policy_dir.mkdir()
+        shutil.copy2(self.policy_path, policy_dir / "source-refresh.json")
+        artifact_dir = producer / ".datapan/ci/upstream-refresh"
+        artifact_dir.mkdir(parents=True)
+        shutil.copy2(self.candidate_path, artifact_dir / "candidate.registry.json")
+        shutil.copy2(self.diff_path, artifact_dir / "catalog-diff.json")
+        shutil.copy2(self.evidence_path, artifact_dir / "upstream-refresh-evidence.json")
+
+        self.assertFalse((producer / "scripts/process-upstream-catalogue-candidate.py").exists())
+        self.assertFalse((producer / "scripts/compose-upstream-catalogue-candidate.py").exists())
+        self.assertFalse((producer / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").exists())
+
+        page_bytes = (
+            b'<a href="https://www.data.go.kr/guide/2.pdf">API Guide</a>'
+            b'<a href="https://openapi.airport.co.kr/detail" onclick="fn_LinkApiRequest()">API</a>'
+        )
+        (producer / "sitecustomize.py").write_text(
+            "import urllib.request\n"
+            "BODY = " + repr(page_bytes) + "\n"
+            "class Response:\n"
+            "    def __init__(self, request):\n"
+            "        self.url = request.full_url\n"
+            "        self.headers = {'Content-Length': str(len(BODY))}\n"
+            "    def __enter__(self): return self\n"
+            "    def __exit__(self, *_args): return False\n"
+            "    def geturl(self): return self.url\n"
+            "    def read(self, size=-1): return BODY[:size]\n"
+            "class Opener:\n"
+            "    def open(self, request, timeout): return Response(request)\n"
+            "urllib.request.build_opener = lambda *_args, **_kwargs: Opener()\n",
+            encoding="utf-8",
+        )
+
+        processor = "../bootstrap/scripts/process-upstream-catalogue-candidate.py"
+        checkpoint_schema = "../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+        composer = "../bootstrap/scripts/compose-upstream-catalogue-candidate.py"
+        state_dir = "../state-repo/.datapan/upstream-catalogue-state"
+        common = [
+            "--baseline", "data/data-go-kr.registry.json",
+            "--candidate", ".datapan/ci/upstream-refresh/candidate.registry.json",
+            "--diff", ".datapan/ci/upstream-refresh/catalog-diff.json",
+            "--refresh-evidence", ".datapan/ci/upstream-refresh/upstream-refresh-evidence.json",
+            "--source-policy", "policy/source-refresh.json",
+            "--provider-index", "data/provider-index.json",
+            "--checkpoint-schema", checkpoint_schema,
+            "--composer", composer,
+            "--state-dir", state_dir,
+            "--output-dir", ".datapan/ci/upstream-catalogue-processing",
+            "--producer-run-id", "123456789",
+            "--producer-run-url", "https://github.com/StatPan/datapan-registry/actions/runs/123456789",
+            "--processor-run-id", "777-1",
+            "--processor-artifact-run-id", "777",
+            "--repository", "StatPan/datapan-registry",
+            "--execution-mode", "fixture",
+            "--artifact-name", "upstream-catalog-refresh-123456789",
+            "--input-artifact-id", "654321",
+            "--artifact-expires-at", "2099-03-04T05:06:07Z",
+            "--output-artifact-expires-at", "2099-03-04T05:06:07Z",
+            "--max-attempts", "24", "--max-queue", "48", "--retries-per-detail", "2", "--timeout", "20",
+            "--now", "2026-10-03T10:00:01Z",
+        ]
+        env = {
+            **os.environ,
+            "PYTHONPATH": str(producer) + os.pathsep + os.environ.get("PYTHONPATH", ""),
+            "PYTHONDONTWRITEBYTECODE": "1",
+        }
+
+        def run_processor(*arguments: str) -> subprocess.CompletedProcess[str]:
+            return subprocess.run(
+                ["python3", processor, *arguments], cwd=producer, env=env,
+                text=True, capture_output=True, check=False,
+            )
+
+        producer_inputs = (
+            data / "data-go-kr.registry.json",
+            data / "provider-index.json",
+            policy_dir / "source-refresh.json",
+            artifact_dir / "candidate.registry.json",
+            artifact_dir / "catalog-diff.json",
+            artifact_dir / "upstream-refresh-evidence.json",
+        )
+        input_digests = {path.name: MODULE.file_sha256(path) for path in producer_inputs}
+        claim = run_processor(*common, "--claim-only")
+        self.assertEqual(claim.returncode, 0, claim.stderr or claim.stdout)
+        claim_result = json.loads(claim.stdout)
+        generation_id = claim_result["generation_id"]
+        self.assertRegex(generation_id, r"^[a-f0-9]{64}$")
+        checkpoint_path = state_repo / ".datapan/upstream-catalogue-state/sources/data_go_kr/generations" / f"{generation_id}.json"
+        reserved = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        self.assertEqual(reserved["request_reservation"]["owner_run_id"], "777-1")
+
+        worker = run_processor(*common, "--require-durable-reservation")
+        self.assertEqual(worker.returncode, 0, worker.stderr or worker.stdout)
+        completed = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        self.assertEqual(completed["status"], "ready")
+        self.assertEqual(
+            {path.name: MODULE.file_sha256(path) for path in producer_inputs},
+            input_digests,
+            "processor must leave the immutable producer baseline, policy, adapter and artifact bytes untouched",
+        )
+
+        generation_inputs = completed["generation_inputs"]
+        self.assertEqual(generation_inputs["baseline_sha256"], input_digests["data-go-kr.registry.json"])
+        self.assertEqual(generation_inputs["policy_sha256"], input_digests["source-refresh.json"])
+        self.assertEqual(generation_inputs["adapter_revision"], input_digests["provider-index.json"])
+        self.assertEqual(
+            generation_inputs["generator_revision"],
+            MODULE.file_sha256(bootstrap / "scripts/process-upstream-catalogue-candidate.py"),
+        )
+        self.assertEqual(
+            generation_inputs["extractor_revision"],
+            MODULE.file_sha256(bootstrap / "scripts/generate-batch-link-detail-registry-patches.py"),
+        )
+        composition = json.loads(
+            (producer / ".datapan/ci/upstream-catalogue-processing/composition-receipt.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(composition["input_digests"]["composer"]["sha256"], MODULE.file_sha256(bootstrap / "scripts/compose-upstream-catalogue-candidate.py"))
+        self.assertEqual(composition["input_digests"]["baseline"]["sha256"], input_digests["data-go-kr.registry.json"])
+        self.assertEqual(composition["input_digests"]["source_policy"]["sha256"], input_digests["source-refresh.json"])
+        self.assertEqual(composition["input_digests"]["provider_index"]["sha256"], input_digests["provider-index.json"])
+
+        bind = run_processor(
+            "--source", "data_go_kr", "--state-dir", state_dir,
+            "--checkpoint-schema", checkpoint_schema,
+            "--processor-run-id", "777-1", "--processor-artifact-run-id", "777",
+            "--bind-output-artifact-id", "998877",
+            "--bind-output-artifact-expires-at", "2099-03-04T05:06:07Z",
+            "--bind-generation-id", generation_id,
+        )
+        self.assertEqual(bind.returncode, 0, bind.stderr or bind.stdout)
+        bound = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        self.assertEqual(bound["output_artifact"]["artifact_id"], "998877")
 
     @unittest.skipUnless(ACTUAL_COMPOSER.is_file(), "actual composer integration requires the reviewed #656 CLI")
     def test_real_composer_keeps_failed_link_pending_while_admitting_safe_rest_addition(self) -> None:

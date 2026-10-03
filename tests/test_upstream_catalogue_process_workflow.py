@@ -241,7 +241,43 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("--expected-old-sha", push)
         self.assertIn("steps.claim_push.outputs.claim_sha", steps[worker_position]["if"])
         self.assertIn("--require-durable-reservation", worker)
-        self.assertIn("python3 scripts/process-upstream-catalogue-candidate.py", worker)
+        self.assertIn("python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py", worker)
+
+    def test_trusted_bootstrap_code_uses_exact_producer_worktree_inputs(self) -> None:
+        job = self.workflow["jobs"]["process"]
+        steps = job["steps"]
+        by_id = {step.get("id"): step for step in steps if step.get("id")}
+        checkout = next(step for step in steps if step.get("name") == "Checkout workflow source")
+        self.assertEqual(checkout["with"]["path"], "bootstrap")
+        producer = by_id["producer"]["run"]
+        self.assertIn('git worktree add --detach ../datapan-registry "${source_sha}"', producer)
+        materialize = next(step for step in steps if step.get("name") == "Materialize canonical registry and install validators")["run"]
+        self.assertIn("python3 ../bootstrap/scripts/materialize-canonical-registry.py", materialize)
+        self.assertIn("python3 ../bootstrap/scripts/validate-source-refresh-policy.py", materialize)
+        self.assertIn("--schema ../bootstrap/schemas/datapan.source-refresh-policy.v1.schema.json", materialize)
+
+        processor_path = "../bootstrap/scripts/process-upstream-catalogue-candidate.py"
+        composer_path = "../bootstrap/scripts/compose-upstream-catalogue-candidate.py"
+        checkpoint_path = "../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+        for step_id in ("claim", "run_processor"):
+            run = by_id[step_id]["run"]
+            self.assertIn(f"python3 {processor_path}", run)
+            self.assertIn(f"--composer {composer_path}", run)
+            self.assertIn(f"--checkpoint-schema {checkpoint_path}", run)
+            self.assertNotIn("python3 scripts/process-upstream-catalogue-candidate.py", run)
+        bind = by_id["bind_push"]["run"]
+        self.assertIn(f"python3 {processor_path}", bind)
+        self.assertIn(f"--checkpoint-schema {checkpoint_path}", bind)
+
+        self.assertEqual(job["outputs"]["producer_head_sha"], "${{ steps.producer.outputs.head_sha }}")
+        self.assertEqual(job["outputs"]["processor_head_sha"], "${{ steps.processor_revision.outputs.head_sha }}")
+        revision_step = by_id["processor_revision"]
+        self.assertIn("git rev-parse HEAD", revision_step["run"])
+        summary = by_id["publish_result"]
+        self.assertEqual(summary["env"]["PRODUCER_HEAD_SHA"], "${{ steps.producer.outputs.head_sha }}")
+        self.assertEqual(summary["env"]["PROCESSOR_HEAD_SHA"], "${{ steps.processor_revision.outputs.head_sha }}")
+        for identity in ("baseline_sha256", "policy_sha256", "adapter_revision", "generator_revision", "extractor_revision"):
+            self.assertIn(identity, summary["run"])
 
     def test_ready_is_bundle_verified_and_artifact_locator_is_bound_before_success(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]

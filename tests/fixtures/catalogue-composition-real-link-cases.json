@@ -1,0 +1,297 @@
+{
+  "provenance": {
+    "baseline_artifact": {
+      "digest_kind": "materialized Git LFS payload SHA-256",
+      "path": "data/data-go-kr.registry.json",
+      "payload_bytes": 137735169,
+      "payload_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+    },
+    "projection": {
+      "api_fields": [
+        "id",
+        "title",
+        "provider",
+        "organization",
+        "source_category",
+        "priority",
+        "source_keywords"
+      ],
+      "api_source_raw_fields": [
+        "api_type",
+        "id",
+        "list_id",
+        "list_type",
+        "meta_url",
+        "guide_url",
+        "operation_url",
+        "operation_seq",
+        "request_cnt",
+        "data_format",
+        "is_charged"
+      ],
+      "description": "Bounded allowlist projection from the identified source payloads; hashes bind decoded source objects and each projected object separately.",
+      "excluded_values": [
+        "credentials",
+        "sample key values",
+        "contact values",
+        "unneeded descriptive text"
+      ],
+      "is_byte_exact_source_record": false,
+      "operation_fields": [
+        "name",
+        "endpoint"
+      ],
+      "operation_source_raw_fields": [
+        "api_type",
+        "id",
+        "list_id",
+        "list_type",
+        "meta_url",
+        "guide_url",
+        "operation_url",
+        "operation_seq"
+      ],
+      "url_query_allowlist": [
+        "apiCd",
+        "menuId"
+      ]
+    },
+    "upstream_candidate_artifact": {
+      "payload_bytes": 109412233,
+      "payload_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+      "role": "frozen data.go.kr refresh candidate input"
+    }
+  },
+  "records": [
+    {
+      "api_key": {
+        "id": "15001668",
+        "provider": "data.go.kr"
+      },
+      "baseline": {
+        "id": "15001668",
+        "operations": [
+          {
+            "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009",
+            "name": "해양수산부 국립수산물품질관리원_수산물재고동향_20230629",
+            "source": {
+              "raw": {
+                "api_type": "LINK",
+                "guide_url": "https://www.nfqs.go.kr/hpmg/api/actionApiForm.do?menuId=M0001347",
+                "id": "uddi:640176f9-2fb2-4cd1-bae0-f04034b54fdb_202306301313",
+                "list_id": "15001668",
+                "list_type": "PR0027",
+                "meta_url": "https://www.data.go.kr/catalog/15001668/openapi.json",
+                "operation_seq": "",
+                "operation_url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=009"
+              },
+              "system": "data.go.kr",
+              "url": "https://www.data.go.kr/catalog/15001668/openapi.json"
+            }
+          }
+        ],
+        "organization": "해양수산부 국립수산물품질관리원",
+        "priority": "P2",
+        "provider": "data.go.kr",
+        "source": {
+          "raw": {
+            "api_type": "LINK",
+            "data_format": "XML",
+            "guide_url": "https://www.nfqs.go.kr/hpmg/api/actionApiForm.do?menuId=M0001347",
+            "id": "uddi:640176f9-2fb2-4cd1-bae0-f04034b54fdb_202306301313",
+            "is_charged": "무료",
+            "list_id": "15001668",
+            "list_type": "PR0027",
+            "meta_url": "https://www.data.go.kr/catalog/15001668/openapi.json",
+            "operation_seq": "",
+            "operation_url": "",
+            "request_cnt": 114
+          },
+          "system": "data.go.kr",
+          "url": "https://www.data.go.kr/catalog/15001668/openapi.json"
+        },
+        "source_category": "농축수산",
+        "source_keywords": [
+          "수산물",
+          "냉동선어",
+          "입출하",
+          "재고관리",
+          "현황파악",
+          "유통"
+        ],
+        "title": "해양수산부 국립수산물품질관리원_수산물재고동향"
+      },
+      "expected_baseline_operation_count": 1,
+      "expected_baseline_operation_identity_sha256": [
+        "7e50f299c964b3ff8bf19c0669e096cce8bdfbadf8f5a69fc4081a1db271e93c"
+      ],
+      "expected_upstream_operation_count": 0,
+      "projection_sha256": {
+        "baseline": "1809adaf2c4e8c6721f8da197f952c42dec9238363db1ce5a961ea1c509c0740",
+        "upstream_candidate": "34f06abe0ed38c3a758b069c07eab829528dd7fc1d5df2d30aef6ca4e1c8a2bd"
+      },
+      "source_object_canonical_sha256": {
+        "baseline": "38ecef8bd47cf8d70a0a5bf047f0c49917194533f1bfa407ba874a88c951c819",
+        "upstream_candidate": "b3882277027014af513206000f4de52c9137b7c472c3159e4fbe8173416197d6"
+      },
+      "upstream_candidate": {
+        "id": "15001668",
+        "operations": [],
+        "organization": "해양수산부 국립수산물품질관리원",
+        "priority": "P2",
+        "provider": "data.go.kr",
+        "source": {
+          "raw": {
+            "api_type": "LINK",
+            "data_format": "XML",
+            "guide_url": "https://www.nfqs.go.kr/hpmg/api/actionApiForm.do?menuId=M0001347",
+            "id": "uddi:640176f9-2fb2-4cd1-bae0-f04034b54fdb_202306301313",
+            "is_charged": "무료",
+            "list_id": "15001668",
+            "list_type": "PR0027",
+            "meta_url": "https://www.data.go.kr/catalog/15001668/openapi.json",
+            "operation_seq": "",
+            "operation_url": "",
+            "request_cnt": 128
+          },
+          "system": "data.go.kr",
+          "url": "https://www.data.go.kr/catalog/15001668/openapi.json"
+        },
+        "source_category": "농축수산",
+        "source_keywords": [
+          "수산물",
+          "냉동선어",
+          "입출하",
+          "재고관리",
+          "현황파악",
+          "유통"
+        ],
+        "title": "해양수산부 국립수산물품질관리원_수산물재고동향"
+      }
+    },
+    {
+      "api_key": {
+        "id": "15001702",
+        "provider": "data.go.kr"
+      },
+      "baseline": {
+        "id": "15001702",
+        "operations": [
+          {
+            "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008",
+            "name": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 1",
+            "source": {
+              "raw": {
+                "api_type": "LINK",
+                "guide_url": "https://www.nfqs.go.kr/hpmg/api/actionApiForm.do?menuId=M0001347",
+                "id": "uddi:bdcc718f-b253-4f8d-9f18-f3bbfc60fc24_202509011426",
+                "list_id": "15001702",
+                "list_type": "PR0027",
+                "meta_url": "https://www.data.go.kr/catalog/15001702/openapi.json",
+                "operation_seq": "",
+                "operation_url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=008"
+              },
+              "system": "data.go.kr",
+              "url": "https://www.data.go.kr/catalog/15001702/openapi.json"
+            }
+          },
+          {
+            "endpoint": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003",
+            "name": "해양수산부 국립수산물품질관리원_검역시행장정보_20230629 외부 링크 2",
+            "source": {
+              "raw": {
+                "api_type": "LINK",
+                "guide_url": "https://www.nfqs.go.kr/hpmg/api/actionApiForm.do?menuId=M0001347",
+                "id": "uddi:bdcc718f-b253-4f8d-9f18-f3bbfc60fc24_202509011426",
+                "list_id": "15001702",
+                "list_type": "PR0027",
+                "meta_url": "https://www.data.go.kr/catalog/15001702/openapi.json",
+                "operation_seq": "",
+                "operation_url": "https://www.nfqs.go.kr/hpmg/api/actionApiDetail.do?apiCd=003"
+              },
+              "system": "data.go.kr",
+              "url": "https://www.data.go.kr/catalog/15001702/openapi.json"
+            }
+          }
+        ],
+        "organization": "해양수산부 국립수산물품질관리원",
+        "priority": "P2",
+        "provider": "data.go.kr",
+        "source": {
+          "raw": {
+            "api_type": "LINK",
+            "data_format": "JSON+XML",
+            "guide_url": "https://www.nfqs.go.kr/hpmg/api/actionApiForm.do?menuId=M0001347",
+            "id": "uddi:bdcc718f-b253-4f8d-9f18-f3bbfc60fc24_202509011426",
+            "is_charged": "무료",
+            "list_id": "15001702",
+            "list_type": "PR0027",
+            "meta_url": "https://www.data.go.kr/catalog/15001702/openapi.json",
+            "operation_seq": "",
+            "operation_url": "",
+            "request_cnt": 2
+          },
+          "system": "data.go.kr",
+          "url": "https://www.data.go.kr/catalog/15001702/openapi.json"
+        },
+        "source_category": "농축수산",
+        "source_keywords": [
+          "수산물",
+          "검역",
+          "시행장",
+          "수출입",
+          "현황정보"
+        ],
+        "title": "해양수산부 국립수산물품질관리원_검역시행장정보"
+      },
+      "expected_baseline_operation_count": 2,
+      "expected_baseline_operation_identity_sha256": [
+        "159b09f1dbed8594ae4e55c06b16c95fe62938ee37d41a6e5ffd688d5a39c82d",
+        "3f22c350eaa44849db6cfac0ee3509bb36c570cba5bd80496670153d30f47894"
+      ],
+      "expected_upstream_operation_count": 0,
+      "projection_sha256": {
+        "baseline": "5d4d4028d71a2e871ab08a42b5b08675c98bfc1f64135296e3196e995891cbda",
+        "upstream_candidate": "9a97bccf59007cd986d95ba85cac9988451c3151ad537849f74531a769555b47"
+      },
+      "source_object_canonical_sha256": {
+        "baseline": "712bf590145571c63314a5918509ac57fe022e6b9122c78dbb302adfa5805eb4",
+        "upstream_candidate": "6312ae958010efc0c0622fc4b182d4da56ce34da37c0523056bb1d3b591349f7"
+      },
+      "upstream_candidate": {
+        "id": "15001702",
+        "operations": [],
+        "organization": "해양수산부 국립수산물품질관리원",
+        "priority": "P2",
+        "provider": "data.go.kr",
+        "source": {
+          "raw": {
+            "api_type": "LINK",
+            "data_format": "JSON+XML",
+            "guide_url": "https://www.nfqs.go.kr/hpmg/api/actionApiForm.do?menuId=M0001347",
+            "id": "uddi:bdcc718f-b253-4f8d-9f18-f3bbfc60fc24_202509011426",
+            "is_charged": "무료",
+            "list_id": "15001702",
+            "list_type": "PR0027",
+            "meta_url": "https://www.data.go.kr/catalog/15001702/openapi.json",
+            "operation_seq": "",
+            "operation_url": "",
+            "request_cnt": 5
+          },
+          "system": "data.go.kr",
+          "url": "https://www.data.go.kr/catalog/15001702/openapi.json"
+        },
+        "source_category": "농축수산",
+        "source_keywords": [
+          "수산물",
+          "검역",
+          "시행장",
+          "수출입",
+          "현황정보"
+        ],
+        "title": "해양수산부 국립수산물품질관리원_검역시행장정보"
+      }
+    }
+  ],
+  "schema_version": "datapan.real-link-contract-projection.v1"
+}

@@ -4,12 +4,20 @@
   "title": "Datapan runtime freshness batch v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "generated_at", "queue", "registry", "selection", "operations"],
+  "required": ["schema_version", "generated_at", "queue", "registry", "registry_snapshot", "selection", "operations"],
   "properties": {
     "schema_version": {"const": "datapan.runtime-freshness-batch.v1"},
     "generated_at": {"type": "string", "format": "date-time"},
     "queue": {"type": "string", "minLength": 1},
     "registry": {"type": "string", "minLength": 1},
+    "registry_snapshot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_sha256", "operation_manifest_sha256"],
+      "properties": {
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "operation_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "selection": {
       "type": "object", "additionalProperties": false,
       "required": ["rotation_seed", "shard_index", "shard_count", "batch_size", "eligible_operations", "offset", "selected_operations", "wrapped"],
@@ -34,8 +42,30 @@
           "operation": {"type": "string", "minLength": 1},
           "operation_seq": {"type": ["string", "null"]},
           "classification": {"type": "string", "minLength": 1},
-          "priority": {"type": "integer", "minimum": 0}
+          "priority": {"type": "integer", "minimum": 0},
+          "contract_binding": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/plan_contract_binding"}]}
         }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "plan_contract_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "identity_key", "source_id", "dataset_id", "upstream_api_id", "operation_key", "source_identity_sha256", "method_action_sha256", "parameter_contract_sha256", "contract_sha256", "source_snapshot_sha256", "operation_manifest_sha256"],
+      "properties": {
+        "schema_version": {"const": "datapan.runtime-freshness-plan-contract-binding.v1"},
+        "identity_key": {"type": "string", "minLength": 1},
+        "source_id": {"type": "string", "minLength": 1},
+        "dataset_id": {"type": "string", "minLength": 1},
+        "upstream_api_id": {"type": "string", "minLength": 1},
+        "operation_key": {"type": "string", "minLength": 1},
+        "source_identity_sha256": {"$ref": "#/$defs/sha256"},
+        "method_action_sha256": {"$ref": "#/$defs/sha256"},
+        "parameter_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "contract_sha256": {"$ref": "#/$defs/sha256"},
+        "source_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "operation_manifest_sha256": {"$ref": "#/$defs/sha256"}
       }
     }
   }

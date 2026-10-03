@@ -7,8 +7,10 @@
   "source_profile": "sources/data_go_kr.json",
   "generation_inputs": {
     "coverage": "reports/coverage.json",
+    "dependencies": "reports/dependencies.json",
     "latest_verification": "reports/latest-verification.json",
     "latest_verification_summary": "reports/latest-verification-summary.json",
+    "current_runtime_evidence_projection": "reports/current-runtime-evidence-projection.json",
     "verification_plan": "reports/verification-plan.json",
     "provider_index": "data/provider-index.json"
   },
@@ -21,40 +23,25 @@
     "call_capable_adapters": 23
   },
   "evidence": {
-    "total": 7181,
-    "verified": 3577,
-    "failed": 946,
-    "skipped": 2658,
+    "scope": "current_contract_bound_within_expiry",
+    "total": 0,
+    "current_bound_observations": 0,
+    "fresh_verified": 0,
+    "verified": 0,
+    "failed": 0,
+    "skipped": 0,
     "unknown": 0,
-    "coverage_percent": 33.8,
-    "by_kind": [
-      {
-        "key": "data_go_kr_gateway",
-        "count": 1756
-      },
-      {
-        "key": "external_endpoint",
-        "count": 5311
-      },
-      {
-        "key": "malformed_endpoint",
-        "count": 14
-      },
-      {
-        "key": "no_endpoint",
-        "count": 81
-      },
-      {
-        "key": "service_root",
-        "count": 19
-      }
-    ]
+    "coverage_percent": 0.0,
+    "success_coverage_percent": 0.0,
+    "by_kind": []
   },
   "growth_target": {
     "target_percent": 10,
+    "target_basis": "fresh_verified_current_contract",
     "target_evidence_total": 2126,
-    "remaining_to_target": 0,
-    "status": "above_target"
+    "fresh_verified_total": 0,
+    "remaining_to_target": 2126,
+    "status": "below_target"
   },
   "verification_plan": {
     "planned_batches": 20,
@@ -260,5 +247,46 @@
     "verification_capable_adapters": 138,
     "call_capable_adapters": 23
   },
-  "warnings": []
+  "warnings": [
+    {
+      "kind": "runtime_evidence_below_target",
+      "severity": "warning",
+      "message": "2126 fresh verified current-contract runtime results remain before the success growth target."
+    }
+  ],
+  "historical_evidence": {
+    "total": 7181,
+    "verified": 3577,
+    "failed": 946,
+    "skipped": 2658,
+    "unknown": 0,
+    "by_kind": [
+      {
+        "key": "data_go_kr_gateway",
+        "count": 1756
+      },
+      {
+        "key": "external_endpoint",
+        "count": 5311
+      },
+      {
+        "key": "malformed_endpoint",
+        "count": 14
+      },
+      {
+        "key": "no_endpoint",
+        "count": 81
+      },
+      {
+        "key": "service_root",
+        "count": 19
+      }
+    ]
+  },
+  "evidence_dispositions": {
+    "unbound": 7180,
+    "contract_changed": 0,
+    "ambiguous": 1,
+    "historical": 0
+  }
 }

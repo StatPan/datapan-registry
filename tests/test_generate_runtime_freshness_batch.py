@@ -30,6 +30,13 @@ class RuntimeFreshnessBatchTest(unittest.TestCase):
         self.assertEqual([row["operation_seq"] for row in selected], ["5", "6", "0", "1"])
         self.assertEqual(len({row["identity_key"] for row in selected}), 4)
 
+    def test_selection_skips_operations_without_a_complete_current_contract(self) -> None:
+        value = queue(4)
+        value["queue"][0]["classification"] = "unsupported_current_binding"
+        selected, meta = MODULE.select(value, rotation_seed=0, shard_index=0, shard_count=1, batch_size=2)
+        self.assertEqual(meta["eligible_operations"], 3)
+        self.assertEqual([row["operation_seq"] for row in selected], ["1", "2"])
+
     def test_materialized_registry_exactly_matches_selection(self) -> None:
         selected = queue(2)["queue"]
         registry = [{"id": "d", "operations": [{"name": "o0", "source": {"raw": {"operation_seq": "0"}}}, {"name": "o1", "source": {"raw": {"operation_seq": "1"}}}, {"name": "other", "source": {"raw": {"operation_seq": "2"}}}]}]

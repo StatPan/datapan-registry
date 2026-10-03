@@ -44,12 +44,19 @@ jobs:
       state_publication_status: ${{ steps.publish_result.outputs.state_publication_status }}
       processing_replay: ${{ steps.bundle_check.outputs.replay }}
       candidate_available: ${{ steps.bundle_check.outputs.candidate_available }}
+      producer_head_sha: ${{ steps.producer.outputs.head_sha }}
+      processor_head_sha: ${{ steps.processor_revision.outputs.head_sha }}
     steps:
       - name: Checkout workflow source
         uses: actions/checkout@v7
         with:
           path: bootstrap
           lfs: false
+
+      - name: Record trusted processor revision
+        id: processor_revision
+        working-directory: bootstrap
+        run: echo "head_sha=$(git rev-parse HEAD)" >> "${GITHUB_OUTPUT}"
 
       - name: Prepare and validate isolated state worktree
         id: state
@@ -321,9 +328,10 @@ jobs:
         working-directory: datapan-registry
         run: |
           set -euo pipefail
-          python3 scripts/materialize-canonical-registry.py
+          python3 ../bootstrap/scripts/materialize-canonical-registry.py
           python3 -m pip install --disable-pip-version-check 'jsonschema==4.25.1'
-          python3 scripts/validate-source-refresh-policy.py
+          python3 ../bootstrap/scripts/validate-source-refresh-policy.py \
+            --schema ../bootstrap/schemas/datapan.source-refresh-policy.v1.schema.json
 
       - name: Download and bind exact producer artifact
         if: steps.select.outputs.decision == 'process'
@@ -579,6 +587,8 @@ jobs:
             --baseline data/data-go-kr.registry.json
             --source-policy policy/source-refresh.json
             --provider-index data/provider-index.json
+            --checkpoint-schema ../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json
+            --composer ../bootstrap/scripts/compose-upstream-catalogue-candidate.py
             --state-dir "${STATE_DIR}"
             --output-dir .datapan/ci/upstream-catalogue-processing
             --producer-run-id "${PRODUCER_RUN_ID}"
@@ -615,7 +625,7 @@ jobs:
             if [ -n "${RESUME_EVIDENCE}" ] && [ -f "${RESUME_EVIDENCE}" ]; then args+=(--resume-enrichment-evidence "${RESUME_EVIDENCE}"); fi
           fi
           set +e
-          python3 scripts/process-upstream-catalogue-candidate.py "${args[@]}"
+          python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py "${args[@]}"
           status="$?"
           set -e
           echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
@@ -692,6 +702,8 @@ jobs:
               --refresh-evidence .datapan/ci/upstream-refresh/upstream-refresh-evidence.json
               --source-policy policy/source-refresh.json
               --provider-index data/provider-index.json
+              --checkpoint-schema ../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json
+              --composer ../bootstrap/scripts/compose-upstream-catalogue-candidate.py
               --state-dir "${STATE_DIR}"
               --output-dir "${output}"
               --producer-run-id "${PRODUCER_RUN_ID}"
@@ -709,7 +721,7 @@ jobs:
             if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
             if [ -n "${RESUME_EVIDENCE}" ] && [ -f "${RESUME_EVIDENCE}" ]; then args+=(--resume-enrichment-evidence "${RESUME_EVIDENCE}"); fi
             set +e
-            python3 scripts/process-upstream-catalogue-candidate.py "${args[@]}"
+            python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py "${args[@]}"
             status="$?"
             set -e
             echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
@@ -978,10 +990,10 @@ jobs:
           )
           print(f"expires_at={expires_at}")
           PY
-          python3 scripts/process-upstream-catalogue-candidate.py \
+          python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py \
             --source data_go_kr \
             --state-dir "${STATE_DIR}" \
-            --checkpoint-schema schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json \
+            --checkpoint-schema ../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json \
             --processor-run-id "${PROCESSOR_RUN_ID}" \
             --processor-artifact-run-id "${PROCESSOR_ARTIFACT_RUN_ID}" \
             --bind-output-artifact-id "${ARTIFACT_ID}" \
@@ -999,6 +1011,8 @@ jobs:
         id: publish_result
         env:
           DECISION: ${{ steps.select.outputs.decision }}
+          PRODUCER_HEAD_SHA: ${{ steps.producer.outputs.head_sha }}
+          PROCESSOR_HEAD_SHA: ${{ steps.processor_revision.outputs.head_sha }}
         run: |
           set -euo pipefail
           result=datapan-registry/.datapan/ci/upstream-catalogue-processing/upstream-catalogue-processing-result.json
@@ -1030,8 +1044,33 @@ jobs:
             echo "- generation: \`${generation:-none}\`"
             echo "- processor artifact: \`${artifact_name}\`"
             echo "- durable processor receipt: \`${state_publication_status}\`"
+            echo "- trusted processor source commit: \`${PROCESSOR_HEAD_SHA:-unavailable}\`"
+            echo "- producer input source commit: \`${PRODUCER_HEAD_SHA:-unavailable}\`"
             echo "- catalogue publication: \`false\`"
           } >> "${GITHUB_STEP_SUMMARY}"
+          checkpoint=datapan-registry/.datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json
+          if [ -f "${checkpoint}" ]; then
+            python3 - "${checkpoint}" >> "${GITHUB_STEP_SUMMARY}" <<'PY'
+          import json
+          import sys
+
+          with open(sys.argv[1], encoding="utf-8") as handle:
+              receipt = json.load(handle)
+          inputs = receipt.get("generation_inputs") or {}
+          print("- digest-bound generation inputs:")
+          for name, label in (
+              ("baseline_sha256", "producer baseline"),
+              ("policy_sha256", "producer source policy"),
+              ("adapter_revision", "producer provider adapter index"),
+              ("generator_revision", "trusted processor code"),
+              ("extractor_revision", "trusted detail extractor"),
+          ):
+              value = inputs.get(name)
+              print(f"  - {label}: `{value or 'unavailable'}`")
+          PY
+          else
+            echo "- digest-bound generation inputs: unavailable (no checkpoint receipt)" >> "${GITHUB_STEP_SUMMARY}"
+          fi
 
       - name: Fail non-ready or interrupted processing runs after receipts are uploaded
         if: always() && (steps.upload.outcome != 'success' || (steps.publish_result.outputs.status != 'ready' && steps.publish_result.outputs.status != 'no-change' && steps.publish_result.outputs.status != 'idle' && !(steps.publish_result.outputs.status == 'quarantined' && steps.publish_result.outputs.candidate_available == 'false' && steps.bundle_check.outputs.verified == 'true' && steps.publish_result.outputs.state_publication_status == 'published')) || (steps.publish_result.outputs.state_publication_status != 'published' && steps.publish_result.outputs.state_publication_status != 'not_required' && !(steps.publish_result.outputs.status == 'idle' && steps.publish_result.outputs.processing_replay == 'true' && (steps.publish_result.outputs.state_publication_status == 'replay_recorded' || steps.publish_result.outputs.state_publication_status == 'replay_unmodified'))))
