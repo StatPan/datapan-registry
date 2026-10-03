@@ -1466,6 +1466,7 @@ def load_promotion_journal(root: pathlib.Path) -> dict[str, Any] | None:
 def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> dict[str, Any]:
     """Reconcile or dispatch the exact owned PR head and persist every CI step to its journal row."""
     module = load_module(root / "scripts/canonical_update_ci.py", "canonical_update_ci")
+    ownership_helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_pr_ci_ownership")
     repository = str(receipt.get("candidate", {}).get("repository", ""))
     candidate = receipt.get("candidate", {})
     source_id = str(candidate.get("source_id", ""))
@@ -1516,6 +1517,7 @@ def ensure_verify_release_ci(root: pathlib.Path, receipt: Mapping[str, Any]) -> 
         dispatch=dispatch,
         read_run=lambda run_id: read_verify_release_run(repository, run_id),
         persist=persist_ci,
+        branch_matches=ownership_helper.automation_branch_matches,
     )
     return result
 
@@ -1781,22 +1783,55 @@ def validate_prepared_create_pr_readback(
     registry_sha256: str,
     composition_receipt_sha256: str,
 ) -> int:
-    """Require one exact open PR, remote branch, and preserved prepared receipt."""
+    """Require exact evidence for an unbound create or pending-review create receipt."""
     candidate = receipt.get("candidate")
     ownership = receipt.get("ownership")
     pr_record = receipt.get("pr")
+    pr_number = pr_record.get("number") if isinstance(pr_record, Mapping) else None
+    prepared_pr_zero = (
+        receipt.get("status") == "prepared"
+        and isinstance(pr_record, Mapping)
+        and not isinstance(pr_number, bool)
+        and pr_number == 0
+        and pr_record.get("url") == ""
+        and pr_record.get("state") == "missing"
+        and pr_record.get("merge_commit_sha") is None
+    )
+    pending_pr_positive = (
+        receipt.get("status") == "pending-review"
+        and isinstance(pr_record, Mapping)
+        and not isinstance(pr_number, bool)
+        and isinstance(pr_number, int)
+        and pr_number > 0
+        and pr_record.get("url") == f"https://github.com/{repository}/pull/{pr_number}"
+        and pr_record.get("state") == "open"
+        and (
+            pr_record.get("merge_commit_sha") is None
+            or (
+                isinstance(pr_record.get("merge_commit_sha"), str)
+                and re.fullmatch(r"[a-f0-9]{40}", pr_record["merge_commit_sha"]) is not None
+            )
+        )
+    )
     if (
-        receipt.get("status") != "prepared"
+        not (prepared_pr_zero or pending_pr_positive)
         or receipt.get("action") not in {"create", "create_replacement"}
         or receipt.get("refresh_from") is not None
+        or receipt.get("superseded_by") is not None
         or not isinstance(candidate, Mapping)
         or not isinstance(ownership, Mapping)
         or not isinstance(pr_record, Mapping)
-        or isinstance(pr_record.get("number"), bool)
-        or pr_record.get("number") != 0
-        or pr_record.get("state") != "missing"
     ):
-        raise PromotionError("prepared PR recovery requires the original create or replacement intent with PR number zero")
+        raise PromotionError("owned create recovery requires an unsuperseded standalone create in prepared/pr-zero or pending-review/pr-positive state")
+
+    if pending_pr_positive:
+        acknowledgements = receipt.get("acknowledgements")
+        pending_acknowledgements = [
+            item for item in acknowledgements
+            if isinstance(item, Mapping) and item.get("status") == "pending-review"
+        ] if isinstance(acknowledgements, list) else []
+        if len(pending_acknowledgements) != 1 or not helper.exact_pending_review_witness(receipt):
+            raise PromotionError("pending-review PR recovery requires one exact immutable head/manifest/artifact/run-attempt acknowledgement")
 
     expected_candidate = {
         "repository": repository,
@@ -1825,11 +1860,13 @@ def validate_prepared_create_pr_readback(
 
     try:
         expected_owner = helper.owner_id(repository, source_id, scope)
-        expected_branch = helper.automation_branch(candidate, str(receipt["action"]))
     except Exception as exc:  # noqa: BLE001 - malformed durable ownership must fail closed
         raise PromotionError("prepared PR recovery ownership identity is invalid") from exc
     owner = ownership.get("owner_id")
     branch = ownership.get("branch")
+    if not helper.automation_branch_matches(candidate, str(receipt["action"]), branch):
+        raise PromotionError("prepared PR recovery branch is not an exact canonical or inherited owned branch")
+    expected_branch = branch
     issue_number = ownership.get("issue_number")
     expected_head = ownership.get("expected_head_sha")
     if (
@@ -1963,11 +2000,24 @@ def validate_prepared_create_pr_readback(
         or row.get("head_sha") != candidate["head_sha"]
         or row.get("body") != body
         or row.get("body_sha256") != body_sha
+        or (pending_pr_positive and number != pr_number)
+        or (pending_pr_positive and row.get("url") != pr_record.get("url"))
     ):
         raise PromotionError("prepared PR recovery list read-back differs from the exact owned candidate")
 
     observed_body = observed.get("body")
     observed_number = observed.get("number")
+    observed_merge = observed.get("mergeCommit")
+    if observed_merge is None:
+        observed_merge_sha = None
+    elif (
+        isinstance(observed_merge, Mapping)
+        and isinstance(observed_merge.get("oid"), str)
+        and re.fullmatch(r"[a-f0-9]{40}", observed_merge["oid"]) is not None
+    ):
+        observed_merge_sha = observed_merge["oid"]
+    else:
+        raise PromotionError("prepared PR recovery API returned a malformed merge commit identity")
     if (
         isinstance(observed_number, bool)
         or observed_number != number
@@ -1977,6 +2027,7 @@ def validate_prepared_create_pr_readback(
         or observed.get("headRefName") != expected_branch
         or observed.get("baseRefName") != "main"
         or observed.get("headRefOid") != candidate["head_sha"]
+        or observed.get("url") != f"https://github.com/{repository}/pull/{number}"
         or not isinstance(observed_body, str)
         or observed_body != body
         or hashlib.sha256(observed_body.encode("utf-8")).hexdigest() != body_sha
@@ -1985,6 +2036,30 @@ def validate_prepared_create_pr_readback(
     if not isinstance(remote_branch_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", remote_branch_sha) or remote_branch_sha != candidate["head_sha"]:
         raise PromotionError("prepared PR recovery remote branch SHA differs from the exact candidate head")
     return number
+
+
+def bind_verified_recovery_head(receipt: Mapping[str, Any]) -> dict[str, Any]:
+    """Advance only the ownership head after the caller completed strict remote read-back."""
+    candidate = receipt.get("candidate")
+    ownership = receipt.get("ownership")
+    if not isinstance(candidate, Mapping) or not isinstance(ownership, Mapping):
+        raise PromotionError("owned create recovery has no candidate ownership")
+    head = candidate.get("head_sha")
+    current = ownership.get("expected_head_sha")
+    if not isinstance(head, str) or not re.fullmatch(r"[a-f0-9]{40}", head):
+        raise PromotionError("owned create recovery candidate has no exact immutable head")
+    if current not in {"0" * 40, head}:
+        raise PromotionError("owned create recovery cannot normalize an arbitrary ownership head")
+    if (
+        receipt.get("status") not in {"prepared", "pending-review"}
+        or receipt.get("action") not in {"create", "create_replacement"}
+        or receipt.get("refresh_from") is not None
+        or receipt.get("superseded_by") is not None
+    ):
+        raise PromotionError("owned create recovery cannot bind a refresh, superseded, or terminal receipt")
+    updated = json.loads(json.dumps(receipt))
+    updated["ownership"]["expected_head_sha"] = head
+    return updated
 
 
 def resolve_prepared_create_pr_readback(
@@ -2081,7 +2156,7 @@ def reconcile_prepared_create_pr(
     observed_at: str,
     run_url: str,
 ) -> tuple[dict[str, Any], int]:
-    """Promote only the durable acknowledgement after strict accepted-PR read-back."""
+    """Bind a verified create head and preserve or append its exact PR acknowledgement."""
     number, observed = resolve_prepared_create_pr_readback(
         root, repository, receipt, helper,
         source_id=source_id, scope=scope, generation_id=generation_id,
@@ -2089,16 +2164,49 @@ def reconcile_prepared_create_pr(
         registry_sha256=registry_sha256,
         composition_receipt_sha256=composition_receipt_sha256,
     )
+    bound = bind_verified_recovery_head(receipt)
     try:
         updated = helper.record_pr_readback(
-            json.loads(json.dumps(receipt)), observed,
+            bound, observed,
             observed_at=observed_at, run_url=run_url,
         )
     except helper.AdmissionError as exc:
-        raise PromotionError("prepared PR recovery could not bind the exact pending-review acknowledgement") from exc
-    for field in ("action", "candidate", "source_refresh_evidence", "checks", "validation_evidence", "ownership", "blockers"):
-        if updated.get(field) != receipt.get(field):
-            raise PromotionError(f"prepared PR recovery unexpectedly changed immutable {field} evidence")
+        raise PromotionError("owned PR recovery could not preserve or bind the exact pending-review acknowledgement") from exc
+    expected = json.loads(json.dumps(receipt))
+    expected["ownership"]["expected_head_sha"] = receipt["candidate"]["head_sha"]
+    expected["pr"] = {
+        "number": number,
+        "url": f"https://github.com/{repository}/pull/{number}",
+        "state": "open",
+        "merge_commit_sha": (
+            observed.get("mergeCommit", {}).get("oid")
+            if isinstance(observed.get("mergeCommit"), Mapping)
+            else None
+        ),
+    }
+    if receipt.get("status") == "prepared":
+        old_acknowledgements = receipt.get("acknowledgements", [])
+        new_acknowledgements = updated.get("acknowledgements", [])
+        if (
+            updated.get("status") != "pending-review"
+            or not isinstance(old_acknowledgements, list)
+            or not isinstance(new_acknowledgements, list)
+            or new_acknowledgements[:len(old_acknowledgements)] != old_acknowledgements
+            or len(new_acknowledgements) != len(old_acknowledgements) + 1
+        ):
+            raise PromotionError("prepared PR recovery did not append exactly one pending-review acknowledgement")
+        expected["status"] = "pending-review"
+        expected["acknowledgements"] = new_acknowledgements
+        pending_acknowledgements = [
+            item for item in new_acknowledgements
+            if isinstance(item, Mapping) and item.get("status") == "pending-review"
+        ]
+        if len(pending_acknowledgements) != 1 or not helper.exact_pending_review_witness(updated):
+            raise PromotionError("prepared PR recovery acknowledgement does not bind exact candidate artifact/run provenance")
+    elif updated.get("status") != "pending-review" or updated.get("acknowledgements") != receipt.get("acknowledgements"):
+        raise PromotionError("pending-review recovery must preserve its historical acknowledgement without duplication")
+    if updated != expected:
+        raise PromotionError("owned PR recovery changed evidence beyond the verified expected-head binding and PR read-back")
     persist_journal_record(root, journal_source_base_sha, updated, observed_at=observed_at)
     return updated, number
 
@@ -2897,6 +3005,18 @@ def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False)
         and isinstance(intent.get("pr"), Mapping)
         and intent["pr"].get("number") == 0
     ]
+    pending_create_receipts = [
+        receipt for receipt in journal.get("records", [])
+        if isinstance(receipt, Mapping)
+        and receipt.get("status") == "pending-review"
+        and receipt.get("superseded_by") is None
+        and isinstance(receipt.get("pr"), Mapping)
+        and isinstance(receipt.get("ownership"), Mapping)
+        and isinstance(receipt["pr"].get("number"), int)
+        and not isinstance(receipt["pr"].get("number"), bool)
+        and receipt["pr"].get("number", 0) > 0
+        and receipt["ownership"].get("expected_head_sha") != receipt.get("candidate", {}).get("head_sha")
+    ]
     if prepare_only:
         readbacks = []
         for intent in prepared_create_intents:
@@ -2910,9 +3030,23 @@ def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False)
                 "candidate_sha": intent["candidate"]["head_sha"],
                 "generation_id": intent["candidate"]["generation_id"],
             })
+        pending_bindings = []
+        for receipt in pending_create_receipts:
+            validation_args = prepared_create_validation_args(repo, receipt)
+            number, _ = resolve_prepared_create_pr_readback(
+                root, repo, receipt, helper, **validation_args,
+            )
+            pending_bindings.append({
+                "pr_number": number,
+                "candidate_base_sha": receipt["candidate"]["base_sha"],
+                "candidate_sha": receipt["candidate"]["head_sha"],
+                "generation_id": receipt["candidate"]["generation_id"],
+                "head_binding_required": True,
+            })
         print(json.dumps({
             "status": "promotion-pr-recovery-validated-read-only",
             "validated_prepared_creates": readbacks,
+            "validated_pending_create_head_bindings": pending_bindings,
             "external_mutations": False,
             "journal_updated": False,
             "ci_dispatched": False,
@@ -3009,10 +3143,31 @@ def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False)
             raise PromotionError("journal candidate PR is absent from GitHub read-back")
         observed = gh_pr_readback(root, repo, number)
         if observed.get("state") == "OPEN":
-            refreshed = helper.record_pr_readback(
-                old, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
+            standalone_create = (
+                old.get("status") == "pending-review"
+                and old.get("action") in {"create", "create_replacement"}
+                and old.get("refresh_from") is None
+                and old.get("superseded_by") is None
             )
-            persist_journal_record(root, base, refreshed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat())
+            candidate = old.get("candidate", {})
+            ownership = old.get("ownership", {})
+            if standalone_create:
+                validation_args = prepared_create_validation_args(repo, old)
+                refreshed, verified_number = reconcile_prepared_create_pr(
+                    root, repo, old, helper, **validation_args,
+                    journal_source_base_sha=base,
+                    observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+                    run_url=run_url,
+                )
+                if verified_number != number:
+                    raise PromotionError("owned pending-review PR changed number during expected-head recovery")
+            elif ownership.get("expected_head_sha") != candidate.get("head_sha"):
+                raise PromotionError("zero or mismatched expected head is not recoverable for a refresh, predecessor, or non-create receipt")
+            else:
+                refreshed = helper.record_pr_readback(
+                    old, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
+                )
+                persist_journal_record(root, base, refreshed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat())
             try:
                 ci_receipt = ensure_verify_release_ci(root, refreshed)
                 ci = ci_receipt.get("ci", {})

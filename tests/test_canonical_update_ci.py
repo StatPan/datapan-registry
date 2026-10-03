@@ -116,6 +116,39 @@ class CanonicalUpdateCITests(unittest.TestCase):
         self.on_dispatch = None
         self.read_run_exception: Exception | None = None
 
+    def test_revision_specific_owned_branch_is_accepted_but_unbound_suffix_is_not(self) -> None:
+        receipt = copy.deepcopy(self.receipt)
+        receipt["candidate"]["registry_sha256"] = "c" * 64
+        revision = hashlib.sha256(f"{receipt['candidate']['generation_id']}\0{receipt['candidate']['registry_sha256']}".encode()).hexdigest()[:20]
+        branch_prefix = BRANCH
+        receipt["ownership"]["branch"] = f"{branch_prefix}-{revision}"
+        self.pr["headRefName"] = receipt["ownership"]["branch"]
+        identity = CI._receipt_identity(REPOSITORY, receipt, PROMOTION.automation_branch_matches)
+        self.assertEqual(identity["branch"], receipt["ownership"]["branch"])
+
+        receipt["ownership"]["branch"] = f"{branch_prefix}-unbound-revision"
+        with self.assertRaisesRegex(CI.VerifyReleaseDispatchError, "canonical source/scope"):
+            CI._receipt_identity(REPOSITORY, receipt, PROMOTION.automation_branch_matches)
+
+        receipt["ownership"]["branch"] = f"{branch_prefix}-{revision}"
+        receipt["candidate"]["generation_id"] = "changed-generation"
+        with self.assertRaisesRegex(CI.VerifyReleaseDispatchError, "canonical source/scope"):
+            CI._receipt_identity(REPOSITORY, receipt, PROMOTION.automation_branch_matches)
+
+        receipt["candidate"]["generation_id"] = "generation-a"
+        receipt["candidate"]["registry_sha256"] = "d" * 64
+        with self.assertRaisesRegex(CI.VerifyReleaseDispatchError, "canonical source/scope"):
+            CI._receipt_identity(REPOSITORY, receipt, PROMOTION.automation_branch_matches)
+
+    def test_refresh_branch_is_inherited_only_inside_the_shared_source_scope_namespace(self) -> None:
+        candidate = copy.deepcopy(self.receipt["candidate"])
+        candidate["registry_sha256"] = "e" * 64
+        owned = PROMOTION.automation_branch(candidate, "create")
+        self.assertTrue(PROMOTION.automation_branch_matches(candidate, "refresh_owned", owned))
+        self.assertTrue(PROMOTION.automation_branch_matches(candidate, "reuse_owned", BRANCH))
+        self.assertFalse(PROMOTION.automation_branch_matches(candidate, "refresh_owned", "automation/other-source/branch"))
+        self.assertFalse(PROMOTION.automation_branch_matches(candidate, "create", owned + "-extra"))
+
     def read_pr(self) -> dict:
         if self.pr_values:
             return copy.deepcopy(self.pr_values.pop(0))
