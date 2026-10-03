@@ -633,6 +633,16 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             b'<a href="https://openapi.airport.co.kr/detail" onclick="fn_LinkApiRequest()">API</a>'
         )
         (producer / "sitecustomize.py").write_text(
+            "import datetime as _datetime\n"
+            "import os\n"
+            "_real_datetime = _datetime.datetime\n"
+            "_frozen_now = _real_datetime.fromisoformat(os.environ['DATAPAN_TEST_FROZEN_NOW'].replace('Z', '+00:00'))\n"
+            "class _FrozenDateTime(_real_datetime):\n"
+            "    @classmethod\n"
+            "    def now(cls, tz=None):\n"
+            "        if tz is None: return _frozen_now.replace(tzinfo=None)\n"
+            "        return _frozen_now.astimezone(tz)\n"
+            "_datetime.datetime = _FrozenDateTime\n"
             "import urllib.request\n"
             "BODY = " + repr(page_bytes) + "\n"
             "class Response:\n"
@@ -683,9 +693,12 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             "PYTHONDONTWRITEBYTECODE": "1",
         }
 
-        def run_processor(*arguments: str) -> subprocess.CompletedProcess[str]:
+        def run_processor(
+            *arguments: str, frozen_now: str = "2026-10-03T10:00:01Z",
+        ) -> subprocess.CompletedProcess[str]:
+            run_env = {**env, "DATAPAN_TEST_FROZEN_NOW": frozen_now}
             return subprocess.run(
-                ["python3", processor, *arguments], cwd=producer, env=env,
+                ["python3", processor, *arguments], cwd=producer, env=run_env,
                 text=True, capture_output=True, check=False,
             )
 
@@ -698,7 +711,8 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             artifact_dir / "upstream-refresh-evidence.json",
         )
         input_digests = {path.name: MODULE.file_sha256(path) for path in producer_inputs}
-        claim = run_processor(*common, "--claim-only")
+        fixture_now = "2026-10-03T10:00:01Z"
+        claim = run_processor(*common, "--claim-only", frozen_now=fixture_now)
         self.assertEqual(claim.returncode, 0, claim.stderr or claim.stdout)
         claim_result = json.loads(claim.stdout)
         generation_id = claim_result["generation_id"]
@@ -707,10 +721,14 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         reserved = json.loads(checkpoint_path.read_text(encoding="utf-8"))
         self.assertEqual(reserved["request_reservation"]["owner_run_id"], "777-1")
 
-        worker = run_processor(*common, "--require-durable-reservation")
+        worker = run_processor(*common, "--require-durable-reservation", frozen_now=fixture_now)
         self.assertEqual(worker.returncode, 0, worker.stderr or worker.stdout)
         completed = json.loads(checkpoint_path.read_text(encoding="utf-8"))
         self.assertEqual(completed["status"], "ready")
+        enrichment = json.loads(
+            (producer / ".datapan/ci/upstream-catalogue-processing/upstream-catalogue-enrichment-evidence.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(enrichment["records"][0]["source_provenance"]["observed_at"], fixture_now)
         self.assertEqual(
             {path.name: MODULE.file_sha256(path) for path in producer_inputs},
             input_digests,
@@ -748,6 +766,59 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(bind.returncode, 0, bind.stderr or bind.stdout)
         bound = json.loads(checkpoint_path.read_text(encoding="utf-8"))
         self.assertEqual(bound["output_artifact"]["artifact_id"], "998877")
+
+    @unittest.skipUnless(ACTUAL_COMPOSER.is_file(), "observation boundary regression requires the reviewed #656 composer")
+    def test_detail_observation_future_tolerance_accepts_exact_boundary_and_rejects_beyond(self) -> None:
+        evaluation_now = MODULE.parse_timestamp("2026-10-03T10:00:01Z")
+        self.now = "2026-10-03T10:00:01Z"
+        self.write_real_composer_inputs([], [self.real_link_row()], self.now)
+        page_bytes = (
+            b'<a href="https://www.data.go.kr/guide/2.pdf">API Guide</a>'
+            b'<a href="https://openapi.airport.co.kr/detail" onclick="fn_LinkApiRequest()">API</a>'
+        )
+
+        cases = (
+            ("past", -timedelta(seconds=1), 0),
+            ("current", timedelta(0), 0),
+            ("exact-boundary", timedelta(minutes=5), 0),
+            ("beyond-boundary", timedelta(minutes=5, seconds=1), 2),
+        )
+        for index, (name, offset, expected_code) in enumerate(cases, start=1):
+            with self.subTest(observation=name):
+                observed_at = MODULE.timestamp(evaluation_now + offset)
+                observation = MODULE.DetailPageObservation(
+                    body=page_bytes.decode("utf-8"), page_bytes=page_bytes,
+                    page_url="https://www.data.go.kr/data/2/openapi.do",
+                    effective_url="https://www.data.go.kr/data/2/openapi.do",
+                    page_sha256=MODULE.sha256_bytes(page_bytes), observed_at=observed_at,
+                )
+                output_dir = self.root / f"boundary-output-{name}"
+                state_dir = self.root / f"boundary-state-{name}"
+                args = self.args(run_id=f"696000{index}", **{
+                    "--composer": ACTUAL_COMPOSER,
+                    "--state-dir": state_dir,
+                    "--output-dir": output_dir,
+                })
+                args.fixture_composer = None
+                args.allow_fixture_composer = False
+                code, checkpoint = MODULE.process(
+                    args, fetcher=lambda _url, _timeout: observation,
+                    sleeper=lambda _delay: None, clock=lambda: evaluation_now,
+                )
+                self.assertEqual(code, expected_code, checkpoint.get("outcome"))
+                if expected_code == 0:
+                    self.assertEqual(checkpoint["status"], "ready")
+                    enrichment = json.loads(
+                        (output_dir / "upstream-catalogue-enrichment-evidence.json").read_text(encoding="utf-8")
+                    )
+                    self.assertEqual(enrichment["records"][0]["source_provenance"]["observed_at"], observed_at)
+                else:
+                    result = json.loads(
+                        (output_dir / "upstream-catalogue-processing-result.json").read_text(encoding="utf-8")
+                    )
+                    self.assertFalse(result["candidate_available"])
+                    self.assertEqual(result["reason"], "pending_detail_or_no_safe_change")
+                    self.assertEqual(checkpoint["attempts_consumed"], 1)
 
     @unittest.skipUnless(ACTUAL_COMPOSER.is_file(), "actual composer integration requires the reviewed #656 CLI")
     def test_real_composer_keeps_failed_link_pending_while_admitting_safe_rest_addition(self) -> None:
