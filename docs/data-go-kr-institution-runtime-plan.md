@@ -16,15 +16,15 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 
 | Rank | Institution | APIs | Covered APIs | Uncovered APIs | Ops | Runtime Reactivation APIs | Missing Evidence Ops | Planned Ops |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 행정안전부 | 1252 | 1252 | 0 | 1767 | 1187 | 1626 | 100 |
-| 2 | 경기도 | 840 | 840 | 0 | 2241 | 643 | 1765 | 100 |
-| 3 | 식품의약품안전처 | 392 | 392 | 0 | 648 | 349 | 559 | 100 |
-| 4 | 국토교통부 | 393 | 393 | 0 | 1055 | 275 | 704 | 100 |
-| 5 | 성평등가족부 | 273 | 273 | 0 | 348 | 270 | 345 | 100 |
-| 6 | 국회 국회사무처 | 277 | 277 | 0 | 277 | 247 | 247 | 100 |
+| 1 | 행정안전부 | 1252 | 1252 | 0 | 1767 | 1133 | 1570 | 100 |
+| 2 | 경기도 | 840 | 840 | 0 | 2241 | 638 | 1753 | 100 |
+| 3 | 식품의약품안전처 | 392 | 392 | 0 | 648 | 328 | 517 | 100 |
+| 4 | 국토교통부 | 393 | 393 | 0 | 1055 | 274 | 698 | 100 |
+| 5 | 국회 국회사무처 | 277 | 277 | 0 | 277 | 247 | 247 | 100 |
+| 6 | 성평등가족부 | 273 | 273 | 0 | 348 | 240 | 269 | 100 |
 | 7 | 공정거래위원회 | 250 | 250 | 0 | 353 | 232 | 327 | 100 |
 | 8 | 한국마사회 | 223 | 223 | 0 | 223 | 208 | 208 | 100 |
-| 9 | 부산광역시 | 259 | 259 | 0 | 336 | 195 | 264 | 100 |
+| 9 | 부산광역시 | 259 | 259 | 0 | 336 | 187 | 248 | 100 |
 | 10 | 법제처 | 203 | 203 | 0 | 403 | 170 | 285 | 100 |
 
 ## Batch Outputs
@@ -35,8 +35,8 @@ data.go.kr gateway verification requires a service key; no-key runs only prove p
 | 2 | 경기도 | `reports/data-go-kr/institution-batches/institution-02.json` |
 | 3 | 식품의약품안전처 | `reports/data-go-kr/institution-batches/institution-03.json` |
 | 4 | 국토교통부 | `reports/data-go-kr/institution-batches/institution-04.json` |
-| 5 | 성평등가족부 | `reports/data-go-kr/institution-batches/institution-05.json` |
-| 6 | 국회 국회사무처 | `reports/data-go-kr/institution-batches/institution-06.json` |
+| 5 | 국회 국회사무처 | `reports/data-go-kr/institution-batches/institution-05.json` |
+| 6 | 성평등가족부 | `reports/data-go-kr/institution-batches/institution-06.json` |
 | 7 | 공정거래위원회 | `reports/data-go-kr/institution-batches/institution-07.json` |
 | 8 | 한국마사회 | `reports/data-go-kr/institution-batches/institution-08.json` |
 | 9 | 부산광역시 | `reports/data-go-kr/institution-batches/institution-09.json` |
