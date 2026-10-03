@@ -1344,6 +1344,7 @@ def gh_pr_readback(root: pathlib.Path, repository: str, number: int) -> dict[str
     pull = gh_rest_json(root, f"repos/{repository}/pulls/{number}", "--method", "GET")
     base = pull.get("base") if isinstance(pull, Mapping) else None
     head = pull.get("head") if isinstance(pull, Mapping) else None
+    authoritative_base_sha = base.get("sha") if isinstance(base, Mapping) else None
     base_repository = base.get("repo") if isinstance(base, Mapping) else None
     head_repository = head.get("repo") if isinstance(head, Mapping) else None
     authoritative_base = base_repository.get("full_name") if isinstance(base_repository, Mapping) else None
@@ -1352,6 +1353,7 @@ def gh_pr_readback(root: pathlib.Path, repository: str, number: int) -> dict[str
         "number": value.get("number"), "url": value.get("url"), "state": value.get("state"),
         "body": value.get("body"), "headRefName": value.get("headRefName"),
         "headRefOid": value.get("headRefOid"), "baseRefName": value.get("baseRefName"),
+        "baseRefOid": authoritative_base_sha,
         "mergeCommit": value.get("mergeCommit"),
         "repository": authoritative_base,
         "headRepository": authoritative_head,
@@ -1763,6 +1765,404 @@ def validate_existing_pr_api_readback(
     refresh_pr_phase(intents[0], receipt, observed, helper)
 
 
+def validate_prepared_create_pr_readback(
+    receipt: Mapping[str, Any],
+    pull_requests: Sequence[Mapping[str, Any]],
+    observed: Mapping[str, Any],
+    remote_branch_sha: str | None,
+    helper: Any,
+    *,
+    repository: str,
+    source_id: str,
+    scope: str,
+    generation_id: str,
+    registry_path: str,
+    registry_bytes: int,
+    registry_sha256: str,
+    composition_receipt_sha256: str,
+) -> int:
+    """Require one exact open PR, remote branch, and preserved prepared receipt."""
+    candidate = receipt.get("candidate")
+    ownership = receipt.get("ownership")
+    pr_record = receipt.get("pr")
+    if (
+        receipt.get("status") != "prepared"
+        or receipt.get("action") not in {"create", "create_replacement"}
+        or receipt.get("refresh_from") is not None
+        or not isinstance(candidate, Mapping)
+        or not isinstance(ownership, Mapping)
+        or not isinstance(pr_record, Mapping)
+        or isinstance(pr_record.get("number"), bool)
+        or pr_record.get("number") != 0
+        or pr_record.get("state") != "missing"
+    ):
+        raise PromotionError("prepared PR recovery requires the original create or replacement intent with PR number zero")
+
+    expected_candidate = {
+        "repository": repository,
+        "source_id": source_id,
+        "scope": scope,
+        "generation_id": generation_id,
+        "registry_path": registry_path,
+        "registry_bytes": registry_bytes,
+        "registry_sha256": registry_sha256,
+        "composition_receipt_sha256": composition_receipt_sha256,
+    }
+    if any(candidate.get(key) != value for key, value in expected_candidate.items()):
+        raise PromotionError("prepared PR recovery candidate differs from the trusted processor bundle")
+    for name in ("base_sha", "head_sha"):
+        if (
+            not isinstance(candidate.get(name), str)
+            or not re.fullmatch(r"[a-f0-9]{40}", str(candidate.get(name)))
+            or candidate.get(name) == "0" * 40
+        ):
+            raise PromotionError(f"prepared PR recovery candidate has an invalid {name}")
+    for name in ("manifest_sha256", "registry_sha256", "composition_receipt_sha256"):
+        if not isinstance(candidate.get(name), str) or not re.fullmatch(r"[a-f0-9]{64}", str(candidate.get(name))):
+            raise PromotionError(f"prepared PR recovery candidate has an invalid {name}")
+    if isinstance(candidate.get("registry_bytes"), bool) or not isinstance(candidate.get("registry_bytes"), int) or candidate["registry_bytes"] < 1:
+        raise PromotionError("prepared PR recovery candidate has an invalid registry byte count")
+
+    try:
+        expected_owner = helper.owner_id(repository, source_id, scope)
+        expected_branch = helper.automation_branch(candidate, str(receipt["action"]))
+    except Exception as exc:  # noqa: BLE001 - malformed durable ownership must fail closed
+        raise PromotionError("prepared PR recovery ownership identity is invalid") from exc
+    owner = ownership.get("owner_id")
+    branch = ownership.get("branch")
+    issue_number = ownership.get("issue_number")
+    expected_head = ownership.get("expected_head_sha")
+    if (
+        owner != expected_owner
+        or branch != expected_branch
+        or expected_head not in {"0" * 40, candidate.get("head_sha")}
+        or isinstance(issue_number, bool)
+        or not isinstance(issue_number, int)
+        or issue_number < 1
+        or ownership.get("issue_url") != f"https://github.com/{repository}/issues/{issue_number}"
+    ):
+        raise PromotionError("prepared PR recovery owner, branch, expected head, or issue identity differs")
+
+    body = ownership.get("body")
+    body_sha = ownership.get("body_sha256")
+    if (
+        not isinstance(body, str)
+        or not isinstance(body_sha, str)
+        or not re.fullmatch(r"[a-f0-9]{64}", body_sha)
+        or hashlib.sha256(body.encode("utf-8")).hexdigest() != body_sha
+    ):
+        raise PromotionError("prepared PR recovery body bytes or digest are invalid")
+    required_body_lines = (
+        helper.body_marker(expected_owner, generation_id),
+        f"- Source: `{source_id}`; scope: `{scope}`",
+        f"- Candidate base commit: `{candidate['base_sha']}`",
+        f"- Registry artifact: `{registry_path}` ({registry_bytes} bytes, sha256 `{registry_sha256}`)",
+        f"- Manifest sha256: `{candidate['manifest_sha256']}`",
+        f"- Composition receipt sha256: `{composition_receipt_sha256}`",
+        "- Full-scope freshness: `false`; publication allowed: `false`",
+        f"Closes #{issue_number}",
+    )
+    body_lines = set(body.splitlines())
+    close_refs = re.findall(r"(?im)^[ \t]*(?:Closes|Fixes|Resolves)[ \t]+#([1-9][0-9]*)[ \t]*$", body)
+    if any(line not in body_lines for line in required_body_lines) or close_refs != [str(issue_number)]:
+        raise PromotionError("prepared PR recovery body does not bind the exact candidate and issue")
+    if helper.body_marker(expected_owner, generation_id) not in body:
+        raise PromotionError("prepared PR recovery body is missing the exact owner and generation marker")
+
+    payload = candidate.get("payload_readback")
+    if not isinstance(payload, Mapping) or any(payload.get(key) != value for key, value in {
+        "status": "verified",
+        "provider": "github-git-lfs",
+        "repository": repository,
+        "remote": "origin",
+        "source_sha": candidate["head_sha"],
+        "manifest_sha256": candidate["manifest_sha256"],
+        "path": registry_path,
+        "bytes": registry_bytes,
+        "sha256": registry_sha256,
+        "lfs_oid": registry_sha256,
+        "readback": "isolated_lfs_storage_verified",
+        "policy_path": "policy/registry-distribution.json",
+    }.items()):
+        raise PromotionError("prepared PR recovery lost the exact verified Git LFS payload proof")
+    if (
+        isinstance(payload.get("policy_bytes"), bool)
+        or not isinstance(payload.get("policy_bytes"), int)
+        or payload["policy_bytes"] < 1
+        or not isinstance(payload.get("policy_sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", payload["policy_sha256"])
+        or not isinstance(payload.get("observed_at"), str)
+        or not payload["observed_at"]
+    ):
+        raise PromotionError("prepared PR recovery has an invalid Git LFS policy proof")
+
+    checks = receipt.get("checks")
+    if not isinstance(checks, Mapping) or any(checks.get(name) != "passed" for name in helper.REQUIRED_CHECKS):
+        raise PromotionError("prepared PR recovery has incomplete source validation checks")
+    manual_review = candidate.get("manual_review_acceptance_status")
+    if manual_review not in helper.MANUAL_REVIEW_STATES or checks.get("manual_review_acceptance") != manual_review:
+        raise PromotionError("prepared PR recovery changed the preserved manual-review status")
+    applicability = checks.get("diagnostic_current_source_applicability")
+    if applicability not in {"historical_scope_unchanged", "revalidation_required"}:
+        raise PromotionError("prepared PR recovery has an invalid current-source applicability status")
+    source_refresh = receipt.get("source_refresh_evidence")
+    if not isinstance(source_refresh, Mapping) or any(source_refresh.get(key) != value for key, value in {
+        "schema_version": "datapan.canonical-source-refresh-evidence.v1",
+        "registry_path": registry_path,
+        "registry_bytes": registry_bytes,
+        "registry_sha256": registry_sha256,
+        "manifest_sha256": candidate["manifest_sha256"],
+    }.items()):
+        raise PromotionError("prepared PR recovery lost the exact source-refresh validation receipt")
+    source_applicability = source_refresh.get("diagnostic_current_source_applicability")
+    if not isinstance(source_applicability, Mapping) or source_applicability.get("status") != applicability:
+        raise PromotionError("prepared PR recovery changed source-applicability evidence")
+    source_commands = source_refresh.get("commands")
+    if not isinstance(source_commands, list) or len(source_commands) != 9 or any(
+        not isinstance(item, Mapping)
+        or item.get("exit_code") != 0
+        or item.get("input_registry_sha256") != registry_sha256
+        for item in source_commands
+    ):
+        raise PromotionError("prepared PR recovery has incomplete source-refresh command evidence")
+    evidence = receipt.get("validation_evidence")
+    required_evidence = set((*helper.REQUIRED_CHECKS, "manual_review_acceptance", "diagnostic_current_source_applicability"))
+    if not isinstance(evidence, list) or any(
+        not isinstance(item, Mapping)
+        or item.get("exit_code") != 0
+        or item.get("source_sha") != candidate["head_sha"]
+        or item.get("manifest_sha256") != candidate["manifest_sha256"]
+        for item in evidence
+    ) or not required_evidence.issubset({
+        item.get("name") for item in evidence
+        if isinstance(item, Mapping) and isinstance(item.get("name"), str)
+    }):
+        raise PromotionError("prepared PR recovery lost the exact-head source-validation command evidence")
+
+    related_open = [
+        row for row in pull_requests
+        if str(row.get("state", "")).upper() == "OPEN"
+        and (
+            row.get("owner_id") == expected_owner
+            or row.get("generation_id") == generation_id
+            or row.get("head_ref") == expected_branch
+        )
+    ]
+    if len(related_open) != 1:
+        raise PromotionError("prepared PR recovery requires exactly one open PR read-back for this owner and generation")
+    row = related_open[0]
+    number = row.get("number")
+    if (
+        isinstance(number, bool)
+        or not isinstance(number, int)
+        or number < 1
+        or row.get("owner_id") != expected_owner
+        or row.get("generation_id") != generation_id
+        or row.get("head_ref") != expected_branch
+        or row.get("base_ref") != "main"
+        or row.get("head_sha") != candidate["head_sha"]
+        or row.get("body") != body
+        or row.get("body_sha256") != body_sha
+    ):
+        raise PromotionError("prepared PR recovery list read-back differs from the exact owned candidate")
+
+    observed_body = observed.get("body")
+    observed_number = observed.get("number")
+    if (
+        isinstance(observed_number, bool)
+        or observed_number != number
+        or observed.get("repository") != repository
+        or observed.get("headRepository") != repository
+        or str(observed.get("state", "")).upper() != "OPEN"
+        or observed.get("headRefName") != expected_branch
+        or observed.get("baseRefName") != "main"
+        or observed.get("headRefOid") != candidate["head_sha"]
+        or not isinstance(observed_body, str)
+        or observed_body != body
+        or hashlib.sha256(observed_body.encode("utf-8")).hexdigest() != body_sha
+    ):
+        raise PromotionError("prepared PR recovery API read-back differs from exact repository, branch, head, body, owner, generation, or issue")
+    if not isinstance(remote_branch_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", remote_branch_sha) or remote_branch_sha != candidate["head_sha"]:
+        raise PromotionError("prepared PR recovery remote branch SHA differs from the exact candidate head")
+    return number
+
+
+def resolve_prepared_create_pr_readback(
+    root: pathlib.Path,
+    repository: str,
+    receipt: Mapping[str, Any],
+    helper: Any,
+    *,
+    source_id: str,
+    scope: str,
+    generation_id: str,
+    registry_path: str,
+    registry_bytes: int,
+    registry_sha256: str,
+    composition_receipt_sha256: str,
+) -> tuple[int, dict[str, Any]]:
+    """Read back one accepted create without regenerating or trusting CLI output."""
+    candidate = receipt.get("candidate")
+    ownership = receipt.get("ownership")
+    if not isinstance(candidate, Mapping) or not isinstance(ownership, Mapping):
+        raise PromotionError("prepared PR recovery receipt has no candidate ownership")
+    action = receipt.get("action")
+    if action not in {"create", "create_replacement"}:
+        raise PromotionError("prepared PR recovery has an unsupported create action")
+    try:
+        owner = helper.owner_id(repository, source_id, scope)
+        branch = helper.automation_branch(candidate, str(action))
+    except Exception as exc:  # noqa: BLE001 - malformed durable identity must fail closed
+        raise PromotionError("prepared PR recovery candidate ownership is invalid") from exc
+    rows = gh_open_prs(root, repository)
+    related_open = [
+        row for row in rows
+        if str(row.get("state", "")).upper() == "OPEN"
+        and (
+            row.get("owner_id") == owner
+            or row.get("generation_id") == generation_id
+            or row.get("head_ref") == branch
+        )
+    ]
+    if len(related_open) != 1:
+        raise PromotionError("prepared PR recovery found zero or multiple open owned PRs; no retry or mutation is safe")
+    number = related_open[0].get("number")
+    if isinstance(number, bool) or not isinstance(number, int) or number < 1:
+        raise PromotionError("prepared PR recovery list read-back has no valid PR number")
+    observed = gh_pr_readback(root, repository, number)
+    materializer = helper.load_materializer(root)
+    remote_sha = helper.remote_ref_sha(materializer, root, "origin", f"refs/heads/{branch}")
+    validate_prepared_create_pr_readback(
+        receipt, rows, observed, remote_sha, helper,
+        repository=repository, source_id=source_id, scope=scope,
+        generation_id=generation_id, registry_path=registry_path,
+        registry_bytes=registry_bytes, registry_sha256=registry_sha256,
+        composition_receipt_sha256=composition_receipt_sha256,
+    )
+    return number, observed
+
+
+def prepared_create_validation_args(repository: str, receipt: Mapping[str, Any]) -> dict[str, Any]:
+    """Build exact recovery inputs only from a validated durable candidate receipt."""
+    candidate = receipt.get("candidate")
+    if not isinstance(candidate, Mapping) or candidate.get("repository") != repository:
+        raise PromotionError("prepared PR recovery candidate does not bind the current repository")
+    for name in ("source_id", "scope", "generation_id", "registry_path", "registry_sha256", "composition_receipt_sha256"):
+        if not isinstance(candidate.get(name), str) or not candidate[name]:
+            raise PromotionError(f"prepared PR recovery candidate has no durable {name}")
+    byte_count = candidate.get("registry_bytes")
+    if isinstance(byte_count, bool) or not isinstance(byte_count, int) or byte_count < 1:
+        raise PromotionError("prepared PR recovery candidate has no durable registry byte count")
+    return {
+        "source_id": candidate["source_id"],
+        "scope": candidate["scope"],
+        "generation_id": candidate["generation_id"],
+        "registry_path": candidate["registry_path"],
+        "registry_bytes": byte_count,
+        "registry_sha256": candidate["registry_sha256"],
+        "composition_receipt_sha256": candidate["composition_receipt_sha256"],
+    }
+
+
+def reconcile_prepared_create_pr(
+    root: pathlib.Path,
+    repository: str,
+    receipt: Mapping[str, Any],
+    helper: Any,
+    *,
+    source_id: str,
+    scope: str,
+    generation_id: str,
+    registry_path: str,
+    registry_bytes: int,
+    registry_sha256: str,
+    composition_receipt_sha256: str,
+    journal_source_base_sha: str,
+    observed_at: str,
+    run_url: str,
+) -> tuple[dict[str, Any], int]:
+    """Promote only the durable acknowledgement after strict accepted-PR read-back."""
+    number, observed = resolve_prepared_create_pr_readback(
+        root, repository, receipt, helper,
+        source_id=source_id, scope=scope, generation_id=generation_id,
+        registry_path=registry_path, registry_bytes=registry_bytes,
+        registry_sha256=registry_sha256,
+        composition_receipt_sha256=composition_receipt_sha256,
+    )
+    try:
+        updated = helper.record_pr_readback(
+            json.loads(json.dumps(receipt)), observed,
+            observed_at=observed_at, run_url=run_url,
+        )
+    except helper.AdmissionError as exc:
+        raise PromotionError("prepared PR recovery could not bind the exact pending-review acknowledgement") from exc
+    for field in ("action", "candidate", "source_refresh_evidence", "checks", "validation_evidence", "ownership", "blockers"):
+        if updated.get(field) != receipt.get(field):
+            raise PromotionError(f"prepared PR recovery unexpectedly changed immutable {field} evidence")
+    persist_journal_record(root, journal_source_base_sha, updated, observed_at=observed_at)
+    return updated, number
+
+
+def create_pr_then_reconcile_prepared_create(
+    root: pathlib.Path,
+    repository: str,
+    receipt: Mapping[str, Any],
+    helper: Any,
+    *,
+    source_id: str,
+    scope: str,
+    generation_id: str,
+    registry_path: str,
+    registry_bytes: int,
+    registry_sha256: str,
+    composition_receipt_sha256: str,
+    journal_source_base_sha: str,
+    observed_at: str,
+    run_url: str,
+    body_path: pathlib.Path,
+) -> tuple[dict[str, Any], int]:
+    """Attempt one PR create, then require authoritative read-back regardless of CLI status."""
+    ownership = receipt.get("ownership")
+    candidate = receipt.get("candidate")
+    if not isinstance(ownership, Mapping) or not isinstance(candidate, Mapping):
+        raise PromotionError("prepared PR creation has no durable owner or candidate")
+    try:
+        command((
+            "gh", "pr", "create", "--repo", repository, "--draft", "--base", "main",
+            "--head", str(ownership.get("branch", "")), "--title", pr_title(candidate),
+            "--body-file", str(body_path),
+        ), root, allowed_returncodes=frozenset(range(-255, 256)))
+    except (OSError, subprocess.SubprocessError, PromotionError):
+        # A missing CLI result has the same safe recovery path as a nonzero
+        # status: authoritative read-back either proves exact acceptance or
+        # fails closed without creating another PR.
+        pass
+    return reconcile_prepared_create_pr(
+        root, repository, receipt, helper,
+        source_id=source_id, scope=scope, generation_id=generation_id,
+        registry_path=registry_path, registry_bytes=registry_bytes,
+        registry_sha256=registry_sha256,
+        composition_receipt_sha256=composition_receipt_sha256,
+        journal_source_base_sha=journal_source_base_sha,
+        observed_at=observed_at, run_url=run_url,
+    )
+
+
+def verify_release_ci_observation(root: pathlib.Path, receipt: Mapping[str, Any]) -> tuple[str | None, str | None]:
+    """Keep CI observation independent from the exact accepted PR read-back."""
+    ci_state = None
+    ci_blocker = None
+    try:
+        ci_receipt = ensure_verify_release_ci(root, receipt)
+        ci_entry = ci_receipt.get("ci", {})
+        if isinstance(ci_entry, Mapping):
+            ci_state = ci_entry.get("state")
+            ci_blocker = ci_entry.get("blocker")
+    except Exception as exc:  # noqa: BLE001 - CI observation is independent of accepted PR ownership
+        ci_blocker = str(exc)
+    return ci_state, ci_blocker
+
+
 def existing_pr_rows(
     journal: Mapping[str, Any] | None,
     github_prs: Sequence[Mapping[str, Any]],
@@ -2075,6 +2475,56 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
             "registry_sha256": bundle["registry_sha256"],
         }, sort_keys=True))
         return
+    prior_pr = prior.get("pr") if isinstance(prior, Mapping) else None
+    if (
+        prior is not None
+        and prior.get("status") == "prepared"
+        and isinstance(prior_pr, Mapping)
+        and prior_pr.get("number") == 0
+    ):
+        # Check the original immutable intent before any native regeneration.
+        # A PR-zero row records prepared intent, not proof that branch advance
+        # completed; only exact PR and remote-branch read-back can establish it.
+        helper = load_canonical_update_pr(root)
+        observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
+        run_url = f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
+        recovery_args = {
+            "source_id": checkpoint["source_id"], "scope": checkpoint["source_scope"],
+            "generation_id": checkpoint["generation_id"], "registry_path": bundle["registry_path"],
+            "registry_bytes": bundle["registry_bytes"], "registry_sha256": bundle["registry_sha256"],
+            "composition_receipt_sha256": bundle["composition_receipt_sha256"],
+        }
+        if args.prepare_only:
+            number, _ = resolve_prepared_create_pr_readback(
+                root, repo, prior, helper, **recovery_args,
+            )
+            print(json.dumps({
+                "status": "prepared-create-validated-read-only", "pr_number": number,
+                "candidate_base_sha": prior["candidate"]["base_sha"],
+                "candidate_sha": prior["candidate"]["head_sha"],
+                "generation_id": prior["candidate"]["generation_id"],
+                "external_mutations": False, "journal_updated": False,
+                "verify_release_ci_state": None, "verify_release_ci_blocker": "prepare_only",
+            }, sort_keys=True))
+            return
+        final_receipt, number = reconcile_prepared_create_pr(
+            root, repo, prior, helper, **recovery_args,
+            journal_source_base_sha=head_sha, observed_at=observed_at, run_url=run_url,
+        )
+        ci_state, ci_blocker = verify_release_ci_observation(root, final_receipt)
+        print(json.dumps({
+            "status": final_receipt["status"], "pr_number": number,
+            "recovered_prepared_create": True, "candidate_base_sha": final_receipt["candidate"]["base_sha"],
+            "candidate_sha": final_receipt["candidate"]["head_sha"],
+            "registry_sha256": final_receipt["candidate"]["registry_sha256"],
+            "generation_id": final_receipt["candidate"]["generation_id"],
+            "manual_review_acceptance": final_receipt["candidate"]["manual_review_acceptance_status"],
+            "blockers": final_receipt.get("blockers", []),
+            "source_refresh_commands": len(final_receipt.get("source_refresh_evidence", {}).get("commands", [])),
+            "native_source_regeneration": False,
+            "verify_release_ci_state": ci_state, "verify_release_ci_blocker": ci_blocker,
+        }, sort_keys=True))
+        return
     if prior is None and isinstance(prior_journal, Mapping):
         same_payload = [
             row for row in prior_journal.get("records", [])
@@ -2324,37 +2774,31 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
                 raise PromotionError("owned PR has not read back the exact pushed refresh head")
         else:
             validate_exact_open_pr(prepared, immediate, helper)
+        final_receipt = helper.record_pr_readback(
+            pushed, immediate, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+            run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
+        )
+        persist_journal_record(
+            root, head_sha, final_receipt,
+            observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+            supersede_from=final_receipt.get("refresh_from"),
+        )
     else:
-        output = command(("gh", "pr", "create", "--repo", repo, "--draft", "--base", "main", "--head", pushed["ownership"]["branch"], "--title", title, "--body-file", str(body_path)), root)
-        found = re.search(r"/pull/(\d+)$", output.stdout.strip())
-        if not found:
-            all_prs = gh_open_prs(root, repo)
-            recovered = [row for row in all_prs if row.get("owner_id") == owner and row.get("generation_id") == checkpoint["generation_id"] and row.get("state") == "open"]
-            if len(recovered) != 1:
-                raise PromotionError("candidate PR creation lacks an authoritative owner/generation read-back")
-            number = int(recovered[0]["number"])
-        else:
-            number = int(found.group(1))
-    observed_pr = gh_pr_readback(root, repo, number)
-    final_receipt = helper.record_pr_readback(
-        pushed, observed_pr, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
-        run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
-    )
-    persist_journal_record(
-        root, head_sha, final_receipt,
-        observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
-        supersede_from=final_receipt.get("refresh_from"),
-    )
-    ci_state = None
-    ci_blocker = None
-    try:
-        ci_receipt = ensure_verify_release_ci(root, final_receipt)
-        ci_entry = ci_receipt.get("ci", {})
-        if isinstance(ci_entry, Mapping):
-            ci_state = ci_entry.get("state")
-            ci_blocker = ci_entry.get("blocker")
-    except Exception as exc:  # noqa: BLE001 - CI dispatch is independent of owned PR creation
-        ci_blocker = str(exc)
+        # The CLI may return nonzero after GitHub accepted the create request,
+        # or lose its response. Its output is never the ownership authority.
+        # Read back the unique exact candidate before recording pending-review.
+        final_receipt, number = create_pr_then_reconcile_prepared_create(
+            root, repo, pushed, helper,
+            source_id=checkpoint["source_id"], scope=checkpoint["source_scope"],
+            generation_id=checkpoint["generation_id"], registry_path=bundle["registry_path"],
+            registry_bytes=bundle["registry_bytes"], registry_sha256=bundle["registry_sha256"],
+            composition_receipt_sha256=bundle["composition_receipt_sha256"],
+            journal_source_base_sha=head_sha,
+            observed_at=dt.datetime.now(dt.timezone.utc).isoformat(),
+            run_url=f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}",
+            body_path=body_path,
+        )
+    ci_state, ci_blocker = verify_release_ci_observation(root, final_receipt)
     print(json.dumps({
         "status": final_receipt["status"], "pr_number": number,
         "candidate_sha": candidate_head, "registry_sha256": bundle["registry_sha256"],
@@ -2435,7 +2879,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     execute_candidate_preparation(args, root)
 
 
-def reconcile_open_promotions(root: pathlib.Path) -> None:
+def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False) -> None:
     repo = os.environ["GITHUB_REPOSITORY"]
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_pr_reconcile")
     journal = load_promotion_journal(root)
@@ -2444,6 +2888,55 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
         return
     run_url = f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
     base = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    prepared_create_intents = [
+        intent for intent in journal.get("records", [])
+        if isinstance(intent, Mapping)
+        and intent.get("status") == "prepared"
+        and intent.get("superseded_by") is None
+        and not isinstance(intent.get("refresh_from"), Mapping)
+        and isinstance(intent.get("pr"), Mapping)
+        and intent["pr"].get("number") == 0
+    ]
+    if prepare_only:
+        readbacks = []
+        for intent in prepared_create_intents:
+            validation_args = prepared_create_validation_args(repo, intent)
+            number, _ = resolve_prepared_create_pr_readback(
+                root, repo, intent, helper, **validation_args,
+            )
+            readbacks.append({
+                "pr_number": number,
+                "candidate_base_sha": intent["candidate"]["base_sha"],
+                "candidate_sha": intent["candidate"]["head_sha"],
+                "generation_id": intent["candidate"]["generation_id"],
+            })
+        print(json.dumps({
+            "status": "promotion-pr-recovery-validated-read-only",
+            "validated_prepared_creates": readbacks,
+            "external_mutations": False,
+            "journal_updated": False,
+            "ci_dispatched": False,
+        }, sort_keys=True))
+        return
+    reconciled_create_keys: set[tuple[str, str, str, str, str]] = set()
+    for intent in prepared_create_intents:
+        validation_args = prepared_create_validation_args(repo, intent)
+        observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
+        refreshed, recovered_number = reconcile_prepared_create_pr(
+            root, repo, intent, helper, **validation_args,
+            journal_source_base_sha=base, observed_at=observed_at, run_url=run_url,
+        )
+        ci_state, ci_blocker = verify_release_ci_observation(root, refreshed)
+        print(json.dumps({
+            "status": "prepared-pr-create-recovered",
+            "pr_number": recovered_number,
+            "candidate_base_sha": refreshed["candidate"]["base_sha"],
+            "candidate_sha": refreshed["candidate"]["head_sha"],
+            "generation_id": refreshed["candidate"]["generation_id"],
+            "verify_release_ci_state": ci_state,
+            "verify_release_ci_blocker": ci_blocker,
+        }, sort_keys=True))
+        reconciled_create_keys.add(helper.candidate_key(intent))
     # Complete only refreshes whose persisted intent, predecessor identity,
     # target head, and target body prove one of the two post-push crash points.
     # A pre-push intent remains pending while its predecessor stays active.
@@ -2500,17 +2993,21 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
     prs = gh_open_prs(root, repo)
     by_number = {int(row["number"]): row for row in prs}
     for old in list(journal.get("records", [])):
+        if helper.candidate_key(old) in reconciled_create_keys:
+            continue
         if (
             old.get("superseded_by") is not None
             or (old.get("status") == "prepared" and isinstance(old.get("refresh_from"), Mapping))
             or old.get("status") not in {"prepared", "pending-review"}
-            or not old.get("pr", {}).get("number")
         ):
             continue
-        actual = by_number.get(int(old["pr"]["number"]))
+        number = int(old.get("pr", {}).get("number", 0))
+        if number == 0:
+            raise PromotionError("non-prepared promotion journal row has no durable PR number")
+        actual = by_number.get(number)
         if actual is None:
             raise PromotionError("journal candidate PR is absent from GitHub read-back")
-        observed = gh_pr_readback(root, repo, int(old["pr"]["number"]))
+        observed = gh_pr_readback(root, repo, number)
         if observed.get("state") == "OPEN":
             refreshed = helper.record_pr_readback(
                 old, observed, observed_at=dt.datetime.now(dt.timezone.utc).isoformat(), run_url=run_url,
@@ -2521,14 +3018,14 @@ def reconcile_open_promotions(root: pathlib.Path) -> None:
                 ci = ci_receipt.get("ci", {})
                 print(json.dumps({
                     "status": "verify-release-ci-reconciled",
-                    "pr_number": int(old["pr"]["number"]),
+                    "pr_number": number,
                     "ci_state": ci.get("state") if isinstance(ci, Mapping) else None,
                     "ci_blocker": ci.get("blocker") if isinstance(ci, Mapping) else None,
                 }, sort_keys=True))
             except Exception as exc:  # noqa: BLE001 - CI observation must not gate independent candidate recovery
                 print(json.dumps({
                     "status": "verify-release-ci-observation-failed",
-                    "pr_number": int(old["pr"]["number"]),
+                    "pr_number": number,
                     "reason": str(exc),
                 }, sort_keys=True))
             continue
@@ -2656,8 +3153,10 @@ def main() -> int:
                 raise PromotionError("ready recovery requires durable processor state and the pinned Datapan CLI")
             recover_ready_processor_candidate(args, root)
         elif args.mode == "reconcile-prs":
-            reconcile_open_promotions(root)
+            reconcile_open_promotions(root, prepare_only=args.prepare_only)
         else:
+            if args.prepare_only:
+                raise PromotionError("--prepare-only cannot be combined with reconcile-publication")
             if args.publication_receipt is None:
                 raise PromotionError("reconcile-publication mode requires the downloaded immutable #592 receipt")
             reconcile_publication(root, args.publication_receipt.resolve())
