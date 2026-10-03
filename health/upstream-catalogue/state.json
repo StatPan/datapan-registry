@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
-      "last_receipt_sha256": "7b75ef77e9ec62738dd36763b7d0a710f657c3fb3aa2f85b277a5d264dd97473",
-      "last_seen_at": "2026-10-03T09:48:02Z",
-      "observation_count": 10,
+      "last_receipt_sha256": "2be4ebf614b9b9dd4e7b33f0565738dae3889e2c08f74995b2f1f162b47050dc",
+      "last_seen_at": "2026-10-03T09:54:47Z",
+      "observation_count": 11,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -52,9 +52,9 @@
       "fault_key": "43ee60fa2c26b99c60ab25fee25a75303bfeb43ad3207db2b2c8f8b3c5c2beb6",
       "first_seen_at": "2026-10-03T09:08:06Z",
       "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
-      "last_receipt_sha256": "7b75ef77e9ec62738dd36763b7d0a710f657c3fb3aa2f85b277a5d264dd97473",
-      "last_seen_at": "2026-10-03T09:48:02Z",
-      "observation_count": 4,
+      "last_receipt_sha256": "2be4ebf614b9b9dd4e7b33f0565738dae3889e2c08f74995b2f1f162b47050dc",
+      "last_seen_at": "2026-10-03T09:54:47Z",
+      "observation_count": 5,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_pending_review",
@@ -90,8 +90,8 @@
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37114256225-1-7b75ef77e9ec6273.json",
-    "sha256": "7b75ef77e9ec62738dd36763b7d0a710f657c3fb3aa2f85b277a5d264dd97473"
+    "path": "receipts/receipt-37114628442-1-2be4ebf614b9b9dd.json",
+    "sha256": "2be4ebf614b9b9dd4e7b33f0565738dae3889e2c08f74995b2f1f162b47050dc"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -111,7 +111,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "b4e3cbc5edef92050264f71d09711a0ec5e145c3446c066dbaf845dd7a848851",
+  "state_sha256": "25544f2a9d67f024e0addca478ecac1dbcfc1bcdaf31f2203f1471dfe1f8c03c",
   "state_status": "degraded",
-  "updated_at": "2026-10-03T09:48:02Z"
+  "updated_at": "2026-10-03T09:54:47Z"
 }
