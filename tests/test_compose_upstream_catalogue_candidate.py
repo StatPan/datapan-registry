@@ -75,11 +75,33 @@ def link_api(identifier: str, *, guide: str | None | bool = None, endpoint: str 
 
 
 def compose(baseline: list[dict], candidate: list[dict], **kwargs) -> dict:
+    index = kwargs.pop("provider_index", provider_index())
     return composer.compose_registries(
-        baseline, candidate, provider_index(),
+        baseline, candidate, index,
         baseline_sha256="a" * 64, candidate_sha256="b" * 64,
         provider_index_sha256="c" * 64, **kwargs,
     )
+
+
+def worker_outcome(candidate_row: dict, status: str) -> dict:
+    return {
+        "api_key": {"provider": "data.go.kr", "id": candidate_row["id"]},
+        "status": status,
+        "source_sha256": composer.source_fingerprint(candidate_row),
+        "guide_sha256": composer.guide_fingerprint(candidate_row),
+    }
+
+
+def worker_enrichment(outcomes: list[dict], records: list[dict] | None = None) -> dict:
+    return {
+        "schema_version": "datapan.catalogue-enrichment-evidence.v1",
+        "original_candidate_sha256": "b" * 64,
+        "provider_index_sha256": "c" * 64,
+        "adapter_revision": "c" * 64,
+        "extractor_revision": "d" * 64,
+        "records": records or [],
+        "worker_outcomes": outcomes,
+    }
 
 
 def enrichment_evidence(candidate_row: dict, operations: list[dict], *, candidate_sha: str = "b" * 64) -> dict:
@@ -117,6 +139,93 @@ def enrichment_evidence(candidate_row: dict, operations: list[dict], *, candidat
 
 
 class CatalogueCompositionTests(unittest.TestCase):
+    def test_actual_failed_run_worker_quarantines_retain_baselines_and_allow_safe_partial_row(self):
+        fixture_path = ROOT / "tests/fixtures/upstream_catalogue/failed-worker-scope-run-37091592758.json"
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        baseline = fixture["baseline"]
+        candidate = fixture["candidate"]
+        outcomes = fixture["expected_worker_outcomes"]
+        self.assertEqual([row["api_key"]["id"] for row in outcomes], ["15013677", "15019347", "15020786", "15020966"])
+        legacy = compose(
+            baseline, candidate,
+            provider_index=provider_index(),
+            enrichment_evidence=worker_enrichment([]),
+        )
+        legacy_by_id = {
+            row["api_key"]["id"]: row
+            for row in legacy["semantic_diff"]["api_decisions"]
+        }
+        for identity, expected_tags in fixture["expected_composer_findings"].items():
+            self.assertEqual(legacy_by_id[identity]["disposition"], "accept_changed")
+            self.assertEqual(legacy_by_id[identity]["tags"], expected_tags)
+
+        safe_before = rest_api("safe-independent")
+        safe_before["operations"][0]["endpoint"] = "https://link.example.gov/v1/safe"
+        safe_before["operations"][0]["source"]["raw"]["operation_url"] = "https://link.example.gov/v1/safe"
+        safe_after = copy.deepcopy(safe_before)
+        safe_after["title"] = "Independently safe update"
+        result = compose(
+            [*baseline, safe_before], [*candidate, safe_after],
+            provider_index=provider_index(),
+            enrichment_evidence=worker_enrichment(outcomes),
+        )
+        self.assertEqual(result["composed_registry"], [*baseline, safe_after])
+        self.assertEqual(result["ready_scope_registry"], [safe_after])
+        self.assertEqual(
+            [key["id"] for key in result["semantic_diff"]["quarantined_api_keys"]],
+            ["15013677", "15019347", "15020786", "15020966"],
+        )
+        candidate_by_id = {row["id"]: row for row in candidate}
+        baseline_by_id = {row["id"]: row for row in baseline}
+        for decision in result["semantic_diff"]["api_decisions"][:4]:
+            identity = decision["api_key"]["id"]
+            self.assertEqual(decision["disposition"], "quarantine")
+            self.assertIn("prior_runtime_evidence_stale", decision["tags"])
+            self.assertIn("source_contract_change", decision["tags"])
+            self.assertIn("volatile_request_cnt", decision["tags"])
+            self.assertEqual(decision["baseline_record_sha256"], composer.digest_json(baseline_by_id[identity]))
+            self.assertEqual(decision["candidate_record_sha256"], composer.digest_json(candidate_by_id[identity]))
+            self.assertEqual(decision["findings"], ["worker_detail_quarantined"])
+        self.assertEqual(result["status"], "ready_scoped")
+
+    def test_retry_and_unqueued_outcomes_are_pending_and_new_rows_stay_excluded(self):
+        baseline = link_api("retry-existing")
+        candidate_existing = link_api("retry-existing", guide="https://www.data.go.kr/guide/new", operations=False)
+        candidate_new = link_api("retry-new", operations=False)
+        outcomes = [worker_outcome(candidate_existing, "retry"), worker_outcome(candidate_new, "retry")]
+        result = compose(
+            [baseline], [candidate_existing, candidate_new],
+            enrichment_evidence=worker_enrichment(outcomes),
+        )
+        self.assertEqual(result["composed_registry"], [baseline])
+        self.assertEqual(result["ready_scope_registry"], [])
+        self.assertEqual(result["semantic_diff"]["applied_api_keys"], [])
+        self.assertEqual(result["semantic_diff"]["retained_pending_api_keys"], [
+            {"provider": "data.go.kr", "id": "retry-existing"},
+            {"provider": "data.go.kr", "id": "retry-new"},
+        ])
+        decisions = {row["api_key"]["id"]: row for row in result["semantic_diff"]["api_decisions"]}
+        self.assertEqual(decisions["retry-existing"]["disposition"], "retain_worker_pending")
+        self.assertEqual(decisions["retry-new"]["disposition"], "retain_worker_pending")
+        self.assertEqual(result["status"], "no_safe_change")
+
+    def test_worker_outcome_identity_fingerprint_and_overlap_fail_closed(self):
+        candidate = link_api("19000001", operations=False)
+        outcome = worker_outcome(candidate, "quarantined")
+        malformed = copy.deepcopy(outcome)
+        malformed["source_sha256"] = "f" * 64
+        with self.assertRaisesRegex(composer.CompositionError, "source binding mismatch"):
+            compose([], [candidate], enrichment_evidence=worker_enrichment([malformed]))
+        malformed_guide = copy.deepcopy(outcome)
+        malformed_guide["guide_sha256"] = "e" * 64
+        with self.assertRaisesRegex(composer.CompositionError, "guide binding mismatch"):
+            compose([], [candidate], enrichment_evidence=worker_enrichment([malformed_guide]))
+        with self.assertRaisesRegex(composer.CompositionError, "duplicate API identity"):
+            compose([], [candidate], enrichment_evidence=worker_enrichment([outcome, outcome]))
+        success = enrichment_evidence(candidate, link_api("19000001")["operations"])["records"]
+        with self.assertRaisesRegex(composer.CompositionError, "overlaps successful enrichment"):
+            compose([], [candidate], enrichment_evidence=worker_enrichment([outcome], success))
+
     def test_real_link_empty_import_retains_baseline_contract_operations(self):
         fixture_path = ROOT / "tests/fixtures/catalogue-composition-real-link-cases.json"
         fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
@@ -301,6 +410,9 @@ class CatalogueCompositionTests(unittest.TestCase):
         evidence = enrichment_evidence(candidate, link_api("1013", guide=False)["operations"])
         schema = composer.load_json(composer.ENRICHMENT_EVIDENCE_SCHEMA)
         composer.jsonschema.Draft202012Validator(schema, format_checker=composer.jsonschema.FormatChecker()).validate(evidence)
+        composer.jsonschema.Draft202012Validator(schema, format_checker=composer.jsonschema.FormatChecker()).validate(
+            worker_enrichment([worker_outcome(candidate, "retry")])
+        )
 
     def test_enriched_detail_source_url_survives_later_cycle_and_refresh(self):
         baseline = link_api("1012", guide="https://www.data.go.kr/guide/v1")

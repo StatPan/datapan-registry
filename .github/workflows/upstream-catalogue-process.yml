@@ -13,6 +13,10 @@ on:
         description: Resume a trusted successful Upstream catalog refresh run
         required: false
         type: string
+      recover_failed_processor_run_id:
+        description: Safely terminalize an exact failed processor generation after its lease expires
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -80,6 +84,7 @@ jobs:
           EVENT_PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
           EVENT_PRODUCER_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
           INPUT_PRODUCER_RUN_ID: ${{ inputs.producer_run_id }}
+          INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID: ${{ inputs.recover_failed_processor_run_id }}
           REPOSITORY: ${{ github.repository }}
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
         run: |
@@ -87,6 +92,7 @@ jobs:
           find_prior_generation() {
             python3 - "${STATE_DIR}" "$1" <<'PY'
           import hashlib
+          import datetime as dt
           import json
           import pathlib
           import re
@@ -144,6 +150,88 @@ jobs:
           print("\t".join(matches[0]) if matches else "\t\t")
           PY
           }
+          if [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ -n "${INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID}" ]; then
+            if [ -n "${INPUT_PRODUCER_RUN_ID}" ]; then
+              echo "FAIL producer_run_id and recover_failed_processor_run_id are mutually exclusive" >&2
+              exit 1
+            fi
+            [[ "${INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID}" =~ ^[0-9]+$ ]]
+          python3 - "${STATE_DIR}" "${INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID}" <<'PY' >> "${GITHUB_OUTPUT}"
+          import datetime as dt
+          import hashlib
+          import json
+          import pathlib
+          import re
+          import sys
+
+          state = pathlib.Path(sys.argv[1])
+          failed_run_id = sys.argv[2]
+          index_path = state / "sources/data_go_kr/index.json"
+          if not index_path.is_file():
+              raise SystemExit("FAIL recovery target has no durable source index")
+          index = json.loads(index_path.read_text(encoding="utf-8"))
+          if index.get("schema_version") != "datapan.upstream-catalogue-checkpoint.v1" or not isinstance(index.get("generations"), list):
+              raise SystemExit("FAIL corrupt source index while selecting recovery target")
+          matches = []
+          for row in index["generations"]:
+              if not isinstance(row, dict) or not isinstance(row.get("generation_id"), str):
+                  continue
+              generation_id = row["generation_id"]
+              if not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+                  raise SystemExit("FAIL invalid generation id while selecting recovery target")
+              path = state / "sources/data_go_kr/generations" / f"{generation_id}.json"
+              if not path.is_file():
+                  continue
+              checkpoint = json.loads(path.read_text(encoding="utf-8"))
+              unsigned = dict(checkpoint)
+              claimed = unsigned.pop("checkpoint_sha256", None)
+              canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+              if hashlib.sha256(canonical).hexdigest() != claimed or checkpoint.get("generation_id") != generation_id:
+                  raise SystemExit("FAIL corrupt generation checkpoint while selecting recovery target")
+              locator = checkpoint.get("output_artifact") if isinstance(checkpoint.get("output_artifact"), dict) else {}
+              name = str(locator.get("name") or "")
+              match = re.fullmatch(r"upstream-catalogue-processing-([0-9]+)-([0-9]+)", name)
+              if (
+                  str(locator.get("run_id") or "") == failed_run_id
+                  and match is not None and match.group(1) == failed_run_id
+              ):
+                  matches.append((checkpoint, int(match.group(2))))
+          if len(matches) != 1:
+              raise SystemExit("FAIL recovery run must identify exactly one durable generation")
+          checkpoint, old_attempt = matches[0]
+          lease = checkpoint.get("lease") if isinstance(checkpoint.get("lease"), dict) else {}
+          locator = checkpoint.get("output_artifact") if isinstance(checkpoint.get("output_artifact"), dict) else {}
+          reservation = checkpoint.get("request_reservation") if isinstance(checkpoint.get("request_reservation"), dict) else {}
+          try:
+              lease_expiry = dt.datetime.fromisoformat(str(lease.get("expires_at", "")).replace("Z", "+00:00"))
+          except ValueError as exc:
+              raise SystemExit("FAIL recovery target lease expiry is invalid") from exc
+          if lease_expiry.tzinfo is None or lease_expiry > dt.datetime.now(dt.timezone.utc):
+              raise SystemExit("FAIL recovery target lease is still active")
+          if (
+              checkpoint.get("source_id") != "data_go_kr"
+              or checkpoint.get("status") not in {"enriching", "composing", "retry"}
+              or lease.get("owner_run_id") != f"{failed_run_id}-{old_attempt}"
+              or lease.get("fencing_token") != checkpoint.get("fencing_token")
+              or reservation.get("owner_run_id") != lease.get("owner_run_id")
+              or reservation.get("generation_id") != checkpoint.get("generation_id")
+              or locator.get("artifact_id") is not None
+              or locator.get("bundle_manifest_sha256") is not None
+          ):
+              raise SystemExit("FAIL recovery target is not an active source generation")
+          observation = checkpoint.get("last_observation") if isinstance(checkpoint.get("last_observation"), dict) else {}
+          producer_run_id = str(observation.get("producer_run_id") or "")
+          if not producer_run_id.isdigit():
+              raise SystemExit("FAIL recovery target lacks its immutable producer run id")
+          print("decision=recover")
+          print(f"producer_run_id={producer_run_id}")
+          print(f"generation_id={checkpoint['generation_id']}")
+          print(f"recover_failed_run_id={failed_run_id}")
+          print(f"recover_failed_attempt={old_attempt}")
+          print(f"expected_checkpoint_sha256={checkpoint['checkpoint_sha256']}")
+          PY
+            exit 0
+          fi
           if [ "${EVENT_NAME}" = "workflow_run" ]; then
             [[ "${EVENT_PRODUCER_RUN_ID}" =~ ^[0-9]+$ ]]
             [[ "${EVENT_PRODUCER_HEAD_SHA}" =~ ^[a-f0-9]{40}$ ]]
@@ -318,10 +406,15 @@ jobs:
           echo "run_url=${producer_url}" >> "${GITHUB_OUTPUT}"
 
       - name: Setup Python
-        if: steps.select.outputs.decision == 'process'
+        if: steps.select.outputs.decision == 'process' || steps.select.outputs.decision == 'recover'
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
+      - name: Install recovery validation dependency
+        if: steps.select.outputs.decision == 'recover'
+        working-directory: bootstrap
+        run: python3 -m pip install --disable-pip-version-check 'jsonschema==4.25.1'
 
       - name: Materialize canonical registry and install validators
         if: steps.select.outputs.decision == 'process'
@@ -441,6 +534,129 @@ jobs:
           import datetime as dt
           print("at=" + (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=30)).replace(microsecond=0).isoformat().replace("+00:00", "Z"))
           PY
+
+      - name: Authenticate and download the exact failed processor artifact
+        if: steps.select.outputs.decision == 'recover'
+        id: failed_artifact
+        working-directory: bootstrap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          FAILED_RUN_ID: ${{ steps.select.outputs.recover_failed_run_id }}
+          FAILED_ATTEMPT: ${{ steps.select.outputs.recover_failed_attempt }}
+        run: |
+          set -euo pipefail
+          root=.datapan/ci/failed-processor-recovery
+          mkdir -p "${root}/artifact"
+          gh api "repos/${REPOSITORY}/actions/runs/${FAILED_RUN_ID}" > "${root}/run-api.json"
+          gh api "repos/${REPOSITORY}/actions/runs/${FAILED_RUN_ID}/artifacts?per_page=100" > "${root}/artifacts-api.json"
+          python3 - "${root}" <<'PY'
+          import datetime as dt
+          import json
+          import os
+          import re
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          repository = os.environ["REPOSITORY"]
+          run_id = os.environ["FAILED_RUN_ID"]
+          attempt = int(os.environ["FAILED_ATTEMPT"])
+          default_branch = os.environ["DEFAULT_BRANCH"]
+          run = json.loads((root / "run-api.json").read_text(encoding="utf-8"))
+          if (
+              str(run.get("id")) != run_id
+              or run.get("name") != "Process upstream catalogue"
+              or run.get("path") != ".github/workflows/upstream-catalogue-process.yml"
+              or (run.get("head_repository") or {}).get("full_name") != repository
+              or run.get("head_branch") != default_branch
+              or run.get("status") != "completed"
+              or run.get("conclusion") != "failure"
+              or run.get("event") not in {"workflow_dispatch", "schedule", "workflow_run"}
+              or int(run.get("run_attempt", -1)) != attempt
+              or not re.fullmatch(r"[a-f0-9]{40}", str(run.get("head_sha") or ""))
+          ):
+              raise SystemExit("FAIL failed processor run is not the exact trusted default-branch failure")
+          artifacts_payload = json.loads((root / "artifacts-api.json").read_text(encoding="utf-8"))
+          name = f"upstream-catalogue-processing-{run_id}-{attempt}"
+          matches = [item for item in artifacts_payload.get("artifacts", []) if item.get("name") == name]
+          if len(matches) != 1:
+              raise SystemExit("FAIL failed processor run does not have exactly one matching artifact")
+          artifact = matches[0]
+          artifact_id = str(artifact.get("id") or "")
+          expires_at = str(artifact.get("expires_at") or "")
+          expiry = dt.datetime.fromisoformat(expires_at.replace("Z", "+00:00")) if expires_at else None
+          digest = str(artifact.get("digest") or "")
+          if (
+              not artifact_id.isdigit()
+              or artifact.get("expired") is not False
+              or expiry is None or expiry.tzinfo is None or expiry <= dt.datetime.now(dt.timezone.utc)
+              or not re.fullmatch(r"sha256:[a-f0-9]{64}", digest)
+              or int(artifact.get("size_in_bytes", 0)) <= 0
+          ):
+              raise SystemExit("FAIL failed processor artifact is expired or has incomplete metadata")
+          workflow_run = artifact.get("workflow_run") if isinstance(artifact.get("workflow_run"), dict) else {}
+          if (
+              str(workflow_run.get("id")) != run_id
+              or workflow_run.get("head_sha") != run.get("head_sha")
+              or workflow_run.get("head_branch") != default_branch
+          ):
+              raise SystemExit("FAIL failed processor artifact is not attached to the selected run")
+          failed_run = {
+              "repository": repository, "id": int(run_id), "name": run["name"], "path": run["path"],
+              "head_branch": run["head_branch"], "head_sha": run["head_sha"], "event": run["event"],
+              "status": run["status"], "conclusion": run["conclusion"], "run_attempt": attempt,
+              "default_branch": default_branch,
+          }
+          failed_artifact = {
+              "repository": repository, "run_id": run_id, "run_attempt": attempt,
+              "id": int(artifact_id), "name": name, "expired": artifact["expired"],
+              "expires_at": expires_at, "created_at": artifact.get("created_at"),
+              "size_in_bytes": int(artifact["size_in_bytes"]), "digest": digest,
+              "workflow_run": workflow_run,
+          }
+          (root / "failed-run-metadata.json").write_text(json.dumps(failed_run, sort_keys=True) + "\n", encoding="utf-8")
+          (root / "failed-artifact-metadata.json").write_text(json.dumps(failed_artifact, sort_keys=True) + "\n", encoding="utf-8")
+          (root / "artifact-id.txt").write_text(artifact_id + "\n", encoding="utf-8")
+          PY
+          artifact_id="$(cat "${root}/artifact-id.txt")"
+          gh api -H 'Accept: application/vnd.github+json' "repos/${REPOSITORY}/actions/artifacts/${artifact_id}/zip" > "${root}/artifact.zip"
+          python3 - "${root}" <<'PY'
+          import hashlib
+          import json
+          import stat
+          import zipfile
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          metadata = json.loads((root / "failed-artifact-metadata.json").read_text(encoding="utf-8"))
+          archive = root / "artifact.zip"
+          expected_digest = metadata["digest"].removeprefix("sha256:")
+          if hashlib.sha256(archive.read_bytes()).hexdigest() != expected_digest:
+              raise SystemExit("FAIL downloaded failed processor artifact digest mismatch")
+          destination = root / "artifact"
+          total = 0
+          seen = set()
+          with zipfile.ZipFile(archive) as bundle:
+              for member in bundle.infolist():
+                  name = member.filename
+                  if member.is_dir():
+                      continue
+                  if name != Path(name).name or name in seen or stat.S_IFMT(member.external_attr >> 16) == stat.S_IFLNK:
+                      raise SystemExit("FAIL failed processor archive contains an unsafe member path")
+                  seen.add(name)
+                  total += member.file_size
+                  if total > 268435456:
+                      raise SystemExit("FAIL failed processor archive exceeds the recovery size bound")
+                  (destination / name).write_bytes(bundle.read(member))
+          required = {"upstream-catalogue-checkpoint-receipt.json", "upstream-catalogue-processing-result.json"}
+          if not required <= seen:
+              raise SystemExit("FAIL failed processor archive lacks its exact checkpoint/result receipts")
+          PY
+          echo "artifact_id=${artifact_id}" >> "${GITHUB_OUTPUT}"
+          echo "artifact_name=upstream-catalogue-processing-${FAILED_RUN_ID}-${FAILED_ATTEMPT}" >> "${GITHUB_OUTPUT}"
 
       - name: Restore digest-bound detail cache when available
         if: steps.select.outputs.decision == 'process' && steps.input_artifact.outputs.input_error == ''
@@ -729,6 +945,51 @@ jobs:
             echo "exit_code=${{ steps.claim.outputs.exit_code }}" >> "${GITHUB_OUTPUT}"
           fi
 
+      - name: Terminalize the exact failed processor generation without reprocessing
+        if: steps.select.outputs.decision == 'recover'
+        id: run_recovery
+        working-directory: bootstrap
+        env:
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          OUTPUT_DIR: ../datapan-registry/.datapan/ci/upstream-catalogue-processing
+          PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          FAILED_RUN_ID: ${{ steps.select.outputs.recover_failed_run_id }}
+          GENERATION_ID: ${{ steps.select.outputs.generation_id }}
+          EXPECTED_CHECKPOINT_SHA256: ${{ steps.select.outputs.expected_checkpoint_sha256 }}
+          EXPECTED_STATE_HEAD_SHA: ${{ steps.state.outputs.old_sha }}
+          PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
+          PROCESSOR_ARTIFACT_EXPIRES_AT: ${{ steps.expiry.outputs.at }}
+          CURRENT_HEAD_SHA: ${{ steps.processor_revision.outputs.head_sha }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          mkdir -p "${OUTPUT_DIR}"
+          set +e
+          python3 scripts/process-upstream-catalogue-candidate.py \
+            --source data_go_kr \
+            --state-dir "${STATE_DIR}" \
+            --output-dir "${OUTPUT_DIR}" \
+            --checkpoint-schema schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json \
+            --producer-run-id "${PRODUCER_RUN_ID}" \
+            --producer-run-url "https://github.com/${REPOSITORY}/actions/runs/${PRODUCER_RUN_ID}" \
+            --processor-run-id "${PROCESSOR_RUN_ID}" \
+            --processor-artifact-run-id "${PROCESSOR_ARTIFACT_RUN_ID}" \
+            --output-artifact-expires-at "${PROCESSOR_ARTIFACT_EXPIRES_AT}" \
+            --repository "${REPOSITORY}" \
+            --execution-mode live \
+            --recover-failed-processor-run-id "${FAILED_RUN_ID}" \
+            --recover-failed-generation-id "${GENERATION_ID}" \
+            --failed-run-metadata .datapan/ci/failed-processor-recovery/failed-run-metadata.json \
+            --failed-artifact-metadata .datapan/ci/failed-processor-recovery/failed-artifact-metadata.json \
+            --failed-artifact-dir .datapan/ci/failed-processor-recovery/artifact \
+            --expected-checkpoint-sha256 "${EXPECTED_CHECKPOINT_SHA256}" \
+            --expected-state-head-sha "${EXPECTED_STATE_HEAD_SHA}" \
+            --current-head-sha "${CURRENT_HEAD_SHA}"
+          status="$?"
+          set -e
+          echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+
       - name: Validate the processor bundle and write a failure receipt if needed
         if: always()
         id: bundle_check
@@ -1006,6 +1267,61 @@ jobs:
             --result .datapan/ci/upstream-catalogue-final-push.json
           echo "published=true" >> "${GITHUB_OUTPUT}"
 
+      - name: Bind recovery artifact and compare-and-swap terminal checkpoint
+        if: always() && steps.select.outputs.decision == 'recover' && steps.upload.outputs['artifact-id'] != '' && steps.bundle_check.outputs.verified == 'true' && steps.bundle_check.outputs.generation_id != ''
+        id: bind_recovery
+        continue-on-error: true
+        working-directory: bootstrap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
+          ARTIFACT_NAME: upstream-catalogue-processing-${{ github.run_id }}-${{ github.run_attempt }}
+          ARTIFACT_ID: ${{ steps.upload.outputs['artifact-id'] }}
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          STATE_BRANCH: automation/upstream-catalogue-state
+          OUTPUT_DIR: ../datapan-registry/.datapan/ci/upstream-catalogue-processing
+          EXPECTED_STATE_HEAD_SHA: ${{ steps.state.outputs.old_sha }}
+        run: |
+          set -euo pipefail
+          [[ "${ARTIFACT_ID}" =~ ^[0-9]+$ ]]
+          generation_id="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8")).get("generation_id") or "")' "${OUTPUT_DIR}/upstream-catalogue-processing-result.json")"
+          [[ "${generation_id}" =~ ^[a-f0-9]{64}$ ]]
+          gh api "repos/${REPOSITORY}/actions/runs/${PROCESSOR_ARTIFACT_RUN_ID}/artifacts?per_page=100" > .datapan/ci/recovery-processor-artifact-metadata.json
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import datetime as dt
+          import json
+          import os
+          from pathlib import Path
+          payload = json.loads(Path(".datapan/ci/recovery-processor-artifact-metadata.json").read_text(encoding="utf-8"))
+          matches = [row for row in payload.get("artifacts", []) if str(row.get("id")) == os.environ["ARTIFACT_ID"] and row.get("name") == os.environ["ARTIFACT_NAME"]]
+          if len(matches) != 1 or str(matches[0].get("workflow_run", {}).get("id")) != os.environ["PROCESSOR_ARTIFACT_RUN_ID"]:
+              raise SystemExit("FAIL uploaded recovery artifact locator does not match Actions metadata")
+          artifact = matches[0]
+          expires_at = str(artifact.get("expires_at", ""))
+          if artifact.get("expired") or not expires_at or dt.datetime.fromisoformat(expires_at.replace("Z", "+00:00")) <= dt.datetime.now(dt.timezone.utc):
+              raise SystemExit("FAIL uploaded recovery artifact expired before checkpoint binding")
+          Path(".datapan/ci/recovery-processor-artifact-locator.json").write_text(
+              json.dumps({"artifact_id": os.environ["ARTIFACT_ID"], "expires_at": expires_at}, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          print(f"expires_at={expires_at}")
+          PY
+          python3 scripts/process-upstream-catalogue-candidate.py \
+            --source data_go_kr --state-dir "${STATE_DIR}" \
+            --checkpoint-schema schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json \
+            --processor-run-id "${PROCESSOR_RUN_ID}" --processor-artifact-run-id "${PROCESSOR_ARTIFACT_RUN_ID}" \
+            --bind-output-artifact-id "${ARTIFACT_ID}" \
+            --bind-output-artifact-expires-at "$(python3 -c 'import json; print(json.load(open(".datapan/ci/recovery-processor-artifact-locator.json", encoding="utf-8"))["expires_at"])')" \
+            --bind-generation-id "${generation_id}"
+          python3 scripts/upstream-catalogue-state-branch.py commit-push \
+            --worktree ../state-repo --remote origin --branch "${STATE_BRANCH}" \
+            --repository "${REPOSITORY}" --expected-old-sha "${EXPECTED_STATE_HEAD_SHA}" \
+            --message "Record verified failed processor recovery" \
+            --result .datapan/ci/recovery-state-push.json
+          echo "published=true" >> "${GITHUB_OUTPUT}"
+
       - name: Publish processing status
         if: always()
         id: publish_result
@@ -1026,7 +1342,7 @@ jobs:
             state_publication_status=replay_recorded
           elif [ "${{ steps.bundle_check.outputs.replay }}" = "true" ] && [ "${{ steps.bundle_check.outputs.verified }}" = "true" ] && [ "${{ steps.claim_push.outcome }}" = "success" ]; then
             state_publication_status=replay_unmodified
-          elif [ "${{ steps.bind_push.outputs.published }}" = "true" ]; then
+          elif [ "${{ steps.bind_push.outputs.published }}" = "true" ] || [ "${{ steps.bind_recovery.outputs.published }}" = "true" ]; then
             state_publication_status=published
           elif [ "${{ steps.claim_push.outcome }}" = "success" ] && [ "${{ steps.claim_push.outputs.changed }}" = "true" ] && [ "${{ steps.bundle_check.outputs.verified }}" != "true" ]; then
             state_publication_status=checkpoint_recorded

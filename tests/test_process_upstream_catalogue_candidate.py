@@ -103,8 +103,9 @@ def digest(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 p=argparse.ArgumentParser(); p.add_argument("--baseline"); p.add_argument("--candidate"); p.add_argument("--diff"); p.add_argument("--refresh-evidence"); p.add_argument("--provider-index"); p.add_argument("--source-policy"); p.add_argument("--producer-run-id"); p.add_argument("--producer-run-url"); p.add_argument("--output-dir"); p.add_argument("--enrichment-evidence"); a=p.parse_args()
 out=pathlib.Path(a.output_dir); out.mkdir(parents=True, exist_ok=True)
 enrichment=json.loads(pathlib.Path(a.enrichment_evidence).read_text())
-assert set(enrichment) == {"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records"}
+assert set(enrichment) in ({"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records"}, {"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records", "worker_outcomes"})
 for row in enrichment["records"]: assert set(row) == {"api_key", "status", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "source_provenance"}
+for row in enrichment.get("worker_outcomes", []): assert set(row) == {"api_key", "status", "source_sha256", "guide_sha256"}
 (out/"composed-candidate.registry.json").write_bytes(pathlib.Path(a.candidate).read_bytes())
 (out/"ready-scope.registry.json").write_bytes(pathlib.Path(a.candidate).read_bytes())
 (out/"semantic-diff.json").write_text(json.dumps({"summary":{"added":1,"removed":0,"changed":0}}))
@@ -117,7 +118,8 @@ baseline=json.loads(pathlib.Path(a.baseline).read_text())
 baseline_ids={row["id"] for row in baseline}
 unresolved=[{"provider":"data.go.kr","id":row["id"]} for row in candidate if row.get("type") == "LINK" and row["id"] not in enriched_ids and row["id"] not in baseline_ids]
 status=__import__("os").environ.get("TEST_COMPOSER_STATUS", "no_safe_change" if unresolved else "ready_scoped")
-receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.baseline)),"candidate_sha256":digest(pathlib.Path(a.candidate))},"outputs":outputs,"scope":{"full_scope_fresh":False,"publication_allowed":False,"global_counts":{"before":1,"after":2},"applied_api_keys":[],"retained_pending_api_keys":[],"quarantined_api_keys":unresolved}}
+quarantined=[] if __import__("os").environ.get("TEST_OMIT_WORKER_OUTCOMES") == "1" else unresolved
+receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.baseline)),"candidate_sha256":digest(pathlib.Path(a.candidate))},"outputs":outputs,"scope":{"full_scope_fresh":False,"publication_allowed":False,"global_counts":{"before":1,"after":2},"applied_api_keys":[],"retained_pending_api_keys":[],"quarantined_api_keys":quarantined}}
 (out/"composition-receipt.json").write_text(json.dumps(receipt))
 '''
 
@@ -178,8 +180,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         result_digest_entry = next(entry for entry in checkpoint["output_digests"] if entry["path"] == result_path.name)
         self.assertEqual(result_digest_entry["sha256"], MODULE.file_sha256(result_path))
         evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
-        self.assertEqual(set(evidence), {"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records"})
+        self.assertEqual(set(evidence), {"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records", "worker_outcomes"})
         self.assertEqual([row["status"] for row in evidence["records"]], ["enriched"])
+        self.assertEqual(evidence["worker_outcomes"], [])
         for row in evidence["records"]:
             self.assertEqual(set(row), {"api_key", "status", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "source_provenance"})
             expected_url = "https://www.data.go.kr/data/" + row["api_key"]["id"] + "/openapi.do"
@@ -319,6 +322,147 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(checkpoint["attempts_consumed"], 2)
         self.assertEqual(len(calls), 2)
         self.assertNotIn("secret", self.checkpoint_path(checkpoint).read_text())
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["worker_outcomes"], [{
+            "api_key": {"provider": "data.go.kr", "id": "2"},
+            "status": "retry",
+            "source_sha256": MODULE.source_fingerprint(self.new_link),
+            "guide_sha256": MODULE.guide_fingerprint(self.new_link),
+        }])
+
+    def test_unqueued_worker_rows_are_explicitly_retained_as_retry_outcomes(self) -> None:
+        third = copy.deepcopy(self.new_link)
+        third["id"] = "3"
+        third["title"] = "Third detail"
+        third["source"]["url"] = "https://www.data.go.kr/data/3/openapi.do"
+        third["source"]["raw"]["meta_url"] = "https://www.data.go.kr/data/3/openapi.do"
+        third["source"]["raw"]["api_id"] = "3"
+        self.candidate_path.write_text(json.dumps([self.old_link, self.new_link, third]), encoding="utf-8")
+        code, checkpoint = self.invoke(
+            fetcher=lambda *_: (_ for _ in ()).throw(TimeoutError("fixture")),
+            **{"--retries-per-detail": 0, "--max-attempts": 1, "--max-queue": 1},
+        )
+        self.assertEqual(code, 2)
+        self.assertEqual(checkpoint["status"], "retry")
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual([row["api_key"]["id"] for row in evidence["worker_outcomes"]], ["2", "3"])
+        self.assertEqual([row["status"] for row in evidence["worker_outcomes"]], ["retry", "retry"])
+        self.assertEqual(
+            [row["source_sha256"] for row in evidence["worker_outcomes"]],
+            [MODULE.source_fingerprint(self.new_link), MODULE.source_fingerprint(third)],
+        )
+
+    def test_new_generator_preserves_all_frozen_retry_attempts_across_recovery(self) -> None:
+        from tests.test_recover_upstream_catalogue_failed_generation import RECOVERY, frozen_inputs
+
+        values = frozen_inputs()
+        durable_state, old_checkpoint, run, artifact, payload, current_run = values
+        plan = RECOVERY.recover_failed_generation(
+            durable_state, old_checkpoint, run, artifact, payload,
+            RECOVERY.GENERATION_CHECKPOINT_SHA256, current_run,
+            datetime(2026, 10, 3, 4, 0, tzinfo=timezone.utc),
+        )
+        terminal = MODULE.seal_checkpoint(plan.checkpoint)
+        old_retry_state = copy.deepcopy(durable_state["index"]["detail_retry_state"])
+        self.assertEqual(len(old_retry_state), 24)
+        self.assertEqual({row["attempts"] for row in old_retry_state.values()}, {1})
+
+        source_dir = self.state_dir / "sources/data_go_kr"
+        generation_dir = source_dir / "generations"
+        generation_dir.mkdir(parents=True)
+        old_index = copy.deepcopy(durable_state["index"])
+        old_index["generations"][0].update(
+            status="quarantined", updated_at=terminal["last_heartbeat_at"],
+        )
+        (source_dir / "index.json").write_text(json.dumps(old_index), encoding="utf-8")
+        (generation_dir / f"{terminal['generation_id']}.json").write_text(
+            json.dumps(terminal), encoding="utf-8",
+        )
+
+        candidate_rows = []
+        for identity in sorted(old_retry_state):
+            url = f"https://www.data.go.kr/data/{identity}/openapi.do"
+            candidate_rows.append({
+                "id": identity,
+                "provider": "data.go.kr",
+                "type": "LINK",
+                "title": f"Frozen retry {identity}",
+                "operations": [],
+                "source": {
+                    "system": "data.go.kr",
+                    "url": url,
+                    "raw": {"type": "LINK", "api_type": "LINK", "api_id": identity, "meta_url": url},
+                },
+            })
+        self.baseline_path.write_text("[]", encoding="utf-8")
+        self.candidate_path.write_text(json.dumps(candidate_rows), encoding="utf-8")
+        self.write_observation("2026-10-03T03:50:00Z")
+        self.now = "2026-10-03T04:00:00Z"
+        self.provider_index_path.write_text(json.dumps({"adapters": []}), encoding="utf-8")
+
+        def frozen_source_fingerprint(row: dict) -> str:
+            return old_retry_state[MODULE.record_id(row)]["source_sha256"]
+
+        def frozen_guide_fingerprint(row: dict) -> str | None:
+            return old_retry_state[MODULE.record_id(row)]["guide_sha256"]
+
+        calls = []
+
+        def fail_again(url: str, _timeout: float) -> str:
+            calls.append(url)
+            raise TimeoutError("frozen retry fixture")
+
+        with (
+            mock.patch.object(MODULE, "source_fingerprint", side_effect=frozen_source_fingerprint),
+            mock.patch.object(MODULE, "guide_fingerprint", side_effect=frozen_guide_fingerprint),
+        ):
+            code, checkpoint = self.invoke(
+                run_id="36646768289",
+                fetcher=fail_again,
+                **{
+                    "--processor-run-id": "38000000000-1",
+                    "--processor-artifact-run-id": "38000000000",
+                    "--max-attempts": 24,
+                    "--max-queue": 48,
+                    "--retries-per-detail": 2,
+                },
+            )
+
+        self.assertEqual(code, 2)
+        self.assertEqual(len(calls), 24)
+        self.assertNotEqual(checkpoint["generation_id"], RECOVERY.GENERATION_ID)
+        self.assertEqual(checkpoint["generation_inputs"]["generator_revision"], MODULE.generator_revision())
+        self.assertNotEqual(
+            checkpoint["generation_inputs"]["generator_revision"],
+            old_checkpoint["generation_inputs"]["generator_revision"],
+        )
+        self.assertEqual(checkpoint["attempts_consumed"], 24)
+        self.assertEqual(checkpoint["detail_queue_cursor"], 0)
+        self.assertEqual(checkpoint["attempts_by_id"], {identity: 2 for identity in old_retry_state})
+        updated_index = json.loads((source_dir / "index.json").read_text(encoding="utf-8"))
+        self.assertEqual(set(updated_index["detail_retry_state"]), set(old_retry_state))
+        for identity, previous in old_retry_state.items():
+            current = updated_index["detail_retry_state"][identity]
+            self.assertEqual(current["attempts"], previous["attempts"] + 1, identity)
+            self.assertEqual(current["source_sha256"], previous["source_sha256"], identity)
+            self.assertEqual(current["guide_sha256"], previous["guide_sha256"], identity)
+
+    def test_worker_scope_mismatch_seals_result_only_quarantine_marker(self) -> None:
+        def fail(_url: str, _timeout: float) -> str:
+            raise TimeoutError("fixture transient error")
+        with mock.patch.dict(os.environ, {"TEST_OMIT_WORKER_OUTCOMES": "1"}):
+            code, checkpoint = self.invoke(fetcher=fail, **{"--retries-per-detail": 0, "--max-attempts": 1})
+        self.assertEqual(code, 3)
+        self.assertEqual(checkpoint["status"], "quarantined")
+        self.assertEqual(checkpoint["outcome"]["reason"], "composer_scope_omits_worker_outcomes")
+        self.assertEqual([row["path"] for row in checkpoint["output_digests"]], ["upstream-catalogue-processing-result.json"])
+        self.assertEqual(checkpoint["output_artifact"]["bundle_manifest_sha256"], MODULE.sha256_bytes(MODULE.canonical_json(checkpoint["output_digests"])))
+        result = json.loads((self.output_dir / "upstream-catalogue-processing-result.json").read_text())
+        self.assertFalse(result["candidate_available"])
+        for name in ("composed-candidate.registry.json", "ready-scope.registry.json", "semantic-diff.json", "regeneration-queue.json", "quarantine.json", "composition-receipt.json", "upstream-catalogue-enrichment-evidence.json"):
+            self.assertFalse((self.output_dir / name).exists())
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        self.assertIs(MODULE.verify_checkpoint(checkpoint, schema), checkpoint)
 
     def test_claim_reserves_attempts_durably_before_any_detail_request(self) -> None:
         args = self.args(**{"--claim-only": None, "--max-attempts": 2, "--retries-per-detail": 2})

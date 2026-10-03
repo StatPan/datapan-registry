@@ -1931,6 +1931,38 @@ def existing_pr_rows(
     return result, issue_number
 
 
+def active_open_pr_rows(existing: Sequence[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    """Separate the unique writable PR from closed archival ownership rows."""
+    opened = [row for row in existing if row.get("state") == "open"]
+    if len(opened) > 1:
+        raise PromotionError("duplicate_open_prs: preserve all candidate branches and resolve ownership")
+    return opened
+
+
+def inspect_existing_pr_route(
+    root: pathlib.Path,
+    repository: str,
+    journal: Mapping[str, Any] | None,
+    existing: Sequence[Mapping[str, Any]],
+    candidate: Mapping[str, Any],
+    helper: Any,
+) -> tuple[list[Mapping[str, Any]], list[Mapping[str, Any]], Mapping[str, Any] | None, Mapping[str, Any]]:
+    """Resolve branch action from full history but read back only its unique open PR."""
+    history = list(existing)
+    decision = helper.decide_existing_prs(candidate, history)
+    opened = active_open_pr_rows(existing)
+    active_action = decision.get("action") in {"reuse_owned", "refresh_owned"}
+    if bool(opened) != active_action:
+        raise PromotionError("PR ownership route disagrees with the exact open-row inventory")
+    if opened and int(decision.get("pr_number", 0)) != int(opened[0]["number"]):
+        raise PromotionError("PR branch decision does not bind the unique open PR")
+    observed = None
+    if opened:
+        observed = gh_pr_readback(root, repository, int(opened[0]["number"]))
+        validate_existing_pr_api_readback(observed, journal, opened, helper)
+    return history, opened, observed, decision
+
+
 def pr_title(candidate: Mapping[str, Any]) -> str:
     return f"Review canonical registry update: {candidate['source_id']} ({candidate['generation_id']})"
 
@@ -2172,14 +2204,11 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
 
     github_prs = gh_open_prs(root, repo)
     existing, existing_issue_number = existing_pr_rows(prior_journal, github_prs, helper, candidate)
-    if existing:
-        # The summary PR listing does not expose authoritative base/head
-        # repository identities. Bind the exact REST read-back before the
-        # candidate can make any remote LFS request.
-        validate_existing_pr_api_readback(
-            gh_pr_readback(root, repo, int(existing[0]["number"])),
-            prior_journal, existing, helper,
-        )
+    # Keep closed rows intact for create_replacement and branch CAS decisions;
+    # only the unique open row receives a writable PR API read-back.
+    existing, open_existing, _, existing_decision = inspect_existing_pr_route(
+        root, repo, prior_journal, existing, candidate, helper,
+    )
     owner = helper.owner_id(repo, checkpoint["source_id"], checkpoint["source_scope"])
     # A refreshed generation reuses its still-open owned issue. Otherwise a
     # stable owner+generation marker makes interrupted issue creation safely
@@ -2198,19 +2227,21 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     )
     if not upload_lfs_oid and isinstance(previous_payload_readback, Mapping):
         prepared["candidate"]["payload_readback"] = json.loads(json.dumps(previous_payload_readback))
-    if existing:
+    if open_existing:
         # Upload/read-back can take minutes. Re-read the actual PR API fields
         # after the remote LFS proof and compare them with the durable prior
         # receipt before advancing the branch.
         latest_prs = gh_open_prs(root, repo)
         latest_existing, _ = existing_pr_rows(prior_journal, latest_prs, helper, candidate)
-        if len(latest_existing) != 1 or latest_existing[0]["number"] != existing[0]["number"]:
-            raise PromotionError("owned PR changed during Git LFS validation; preserve branch and re-read")
-        validate_existing_pr_api_readback(
-            gh_pr_readback(root, repo, int(latest_existing[0]["number"])),
-            prior_journal, latest_existing, helper,
+        latest_existing, latest_open, _, latest_decision = inspect_existing_pr_route(
+            root, repo, prior_journal, latest_existing, candidate, helper,
         )
+        if len(latest_open) != 1 or latest_open[0]["number"] != open_existing[0]["number"]:
+            raise PromotionError("owned PR changed during Git LFS validation; preserve branch and re-read")
+        if latest_decision.get("branch") != existing_decision.get("branch"):
+            raise PromotionError("owned PR branch route changed during Git LFS validation; preserve branch and re-read")
         existing = latest_existing
+        open_existing = latest_open
     issue_number, issue_url = ensure_candidate_issue(root, repo, candidate, owner, existing_issue_number)
     body = helper.render_pr_body(candidate, owner, issue_number)
     prepared["ownership"]["issue_number"] = issue_number
@@ -2220,15 +2251,15 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     if prior is not None and isinstance(prior.get("refresh_from"), Mapping):
         prepared["refresh_from"] = json.loads(json.dumps(prior["refresh_from"]))
     elif prepared.get("action") == "refresh_owned":
-        if not existing or not isinstance(existing[0].get("revision_ref"), Mapping):
+        if not open_existing or not isinstance(open_existing[0].get("revision_ref"), Mapping):
             raise PromotionError("owned PR refresh has no exact durable predecessor revision")
-        prepared["refresh_from"] = json.loads(json.dumps(existing[0]["revision_ref"]))
+        prepared["refresh_from"] = json.loads(json.dumps(open_existing[0]["revision_ref"]))
     now = dt.datetime.now(dt.timezone.utc).isoformat()
     persist_journal_record(root, head_sha, prepared, observed_at=now)
-    if existing:
+    if open_existing:
         # This is the last GitHub PR read before the helper's remote-main and
         # candidate-branch compare-and-swap checks and branch push.
-        latest_pr = gh_pr_readback(root, repo, int(existing[0]["number"]))
+        latest_pr = gh_pr_readback(root, repo, int(open_existing[0]["number"]))
         if isinstance(prepared.get("refresh_from"), Mapping):
             predecessor = journal_record_for(
                 prior_journal,
@@ -2241,7 +2272,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
                 raise PromotionError("prepared refresh intent lost its exact predecessor before branch CAS")
             refresh_pr_phase(prepared, predecessor, latest_pr, helper)
         else:
-            validate_exact_open_pr(existing[0].get("record", prepared), latest_pr, helper)
+            validate_exact_open_pr(open_existing[0].get("record", prepared), latest_pr, helper)
     pushed = helper.push_owned_branch(
         candidate, prepared, existing, head_sha, repository_root=root, remote="origin",
     )
@@ -2249,8 +2280,8 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     body_path.parent.mkdir(parents=True, exist_ok=True)
     body_path.write_text(body, encoding="utf-8")
     title = pr_title(candidate)
-    if existing:
-        number = int(existing[0]["number"])
+    if open_existing:
+        number = int(open_existing[0]["number"])
         immediate = gh_pr_readback(root, repo, number)
         if isinstance(prepared.get("refresh_from"), Mapping):
             predecessor = journal_record_for(

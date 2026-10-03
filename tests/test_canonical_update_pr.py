@@ -599,6 +599,11 @@ class CanonicalUpdatePromotionTests(unittest.TestCase):
         valid = {"records": [old, target]}
         PROMOTION.validate_revision_links(valid)
 
+        impossible = copy.deepcopy(valid)
+        impossible["records"][1]["status"] = "prepared"
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "completed pending-review lifecycle"):
+            PROMOTION.validate_revision_links(impossible)
+
         tamperers = (
             lambda row: row.update(source_sha="e" * 40),
             lambda row: row.update(manifest_sha256="e" * 64),

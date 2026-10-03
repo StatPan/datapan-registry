@@ -1179,23 +1179,60 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
             "after-body-edit": {"head": self.new_head, "body": new["ownership"]["body"]},
         }
 
-    def github_list_row(self, body: str, head: str) -> dict:
+    def github_list_row(
+        self, body: str, head: str, *, number: int | None = None,
+        state: str = "open", generation_id: str | None = None,
+        head_ref: str | None = None,
+    ) -> dict:
         owner = PR_HELPER.owner_id(self.repository, self.source_id, self.scope)
         return {
-            "number": self.pr_number, "state": "open", "owner_id": owner,
-            "generation_id": self.generation_id,
+            "number": self.pr_number if number is None else number,
+            "state": state, "owner_id": owner,
+            "generation_id": generation_id or self.generation_id,
             "head_sha": head, "body": body, "body_sha256": hashlib.sha256(body.encode()).hexdigest(),
-            "head_ref": self.branch, "base_ref": "main",
+            "head_ref": head_ref or self.branch, "base_ref": "main",
         }
 
-    def github_api_readback(self, body: str, head: str) -> dict:
+    def github_api_readback(
+        self, body: str, head: str, *, number: int | None = None,
+        generation_id: str | None = None, head_ref: str | None = None,
+    ) -> dict:
         owner = PR_HELPER.owner_id(self.repository, self.source_id, self.scope)
         return {
-            "number": self.pr_number, "state": "OPEN", "body": body,
-            "headRefName": self.branch, "headRefOid": head, "baseRefName": "main",
+            "number": self.pr_number if number is None else number,
+            "state": "OPEN", "body": body,
+            "headRefName": head_ref or self.branch, "headRefOid": head, "baseRefName": "main",
             "repository": self.repository, "headRepository": self.repository,
             "body_sha256": hashlib.sha256(body.encode()).hexdigest(),
-            "owner_id": owner, "generation_id": self.generation_id,
+            "owner_id": owner, "generation_id": generation_id or self.generation_id,
+        }
+
+    def owned_receipt(
+        self, *, state: str, number: int, generation_id: str,
+        head: str, registry_sha: str,
+    ) -> dict:
+        owner = PR_HELPER.owner_id(self.repository, self.source_id, self.scope)
+        candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": generation_id,
+            "head_sha": head, "manifest_sha256": "a" * 64,
+            "registry_sha256": registry_sha,
+        }
+        branch = PR_HELPER.automation_branch(candidate, "create")
+        body = f"{PR_HELPER.body_marker(owner, generation_id)}\n\nPayload {registry_sha[:8]}.\n"
+        return {
+            "schema_version": PR_HELPER.SCHEMA_VERSION,
+            "status": "pending-review" if state == "open" else "closed",
+            "action": "create", "candidate": candidate,
+            "ownership": {
+                "owner_id": owner, "branch": branch,
+                "expected_head_sha": head,
+                "body_sha256": hashlib.sha256(body.encode()).hexdigest(),
+                "body": body, "issue_number": 651,
+            },
+            "pr": {"number": number, "state": state},
+            "acknowledgements": ([{"status": "pending-review", "observed_at": "2026-10-03T00:00:00Z"}]
+                                 if state == "open" else []),
         }
 
     def test_exact_refresh_crash_phases_recover_same_owned_pr_without_duplicate(self) -> None:
@@ -1267,6 +1304,118 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
         tampered = self.github_list_row(prepared["ownership"]["body"] + "human\n", self.new_head)
         with self.assertRaisesRegex(RUNNER.PromotionError, "exact prepared head/body"):
             RUNNER.existing_pr_rows(journal, [tampered], PR_HELPER, candidate)
+
+    def test_closed_archive_routes_to_replacement_without_open_pr_readback(self) -> None:
+        closed = self.owned_receipt(
+            state="closed", number=650, generation_id="generation-previous",
+            head="a" * 40, registry_sha="9" * 64,
+        )
+        candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": self.generation_id,
+            "head_sha": self.new_head, "manifest_sha256": "a" * 64,
+            "registry_sha256": "e" * 64,
+        }
+        listed = self.github_list_row(
+            closed["ownership"]["body"], closed["candidate"]["head_sha"],
+            number=650, state="closed", generation_id="generation-previous",
+            head_ref=closed["ownership"]["branch"],
+        )
+        existing, _ = RUNNER.existing_pr_rows({"records": [closed]}, [listed], PR_HELPER, candidate)
+
+        with mock.patch.object(RUNNER, "gh_pr_readback") as readback:
+            history, opened, observed, decision = RUNNER.inspect_existing_pr_route(
+                pathlib.Path("."), self.repository, {"records": [closed]},
+                existing, candidate, PR_HELPER,
+            )
+
+        readback.assert_not_called()
+        self.assertEqual(history, existing)
+        self.assertEqual(opened, [])
+        self.assertIsNone(observed)
+        self.assertEqual(decision["action"], "create_replacement")
+        self.assertEqual(decision["supersedes_prs"], [650])
+        self.assertEqual(decision["expected_head_sha"], "0" * 40)
+
+    def test_closed_history_and_one_open_pr_route_only_open_readback_and_refresh(self) -> None:
+        opened = self.owned_receipt(
+            state="open", number=self.pr_number, generation_id=self.generation_id,
+            head=self.old_head, registry_sha="d" * 64,
+        )
+        closed = self.owned_receipt(
+            state="closed", number=650, generation_id="generation-previous",
+            head="a" * 40, registry_sha="9" * 64,
+        )
+        journal = {"records": [closed, opened]}
+        candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": self.generation_id,
+            "head_sha": self.new_head, "manifest_sha256": "a" * 64,
+            "registry_sha256": "e" * 64,
+        }
+        listed_closed = self.github_list_row(
+            closed["ownership"]["body"], closed["candidate"]["head_sha"],
+            number=650, state="closed", generation_id="generation-previous",
+            head_ref=closed["ownership"]["branch"],
+        )
+        listed_open = self.github_list_row(
+            opened["ownership"]["body"], opened["candidate"]["head_sha"],
+            number=self.pr_number, generation_id=self.generation_id,
+            head_ref=opened["ownership"]["branch"],
+        )
+        existing, issue_number = RUNNER.existing_pr_rows(
+            journal, [listed_closed, listed_open], PR_HELPER, candidate,
+        )
+        self.assertEqual({row["state"] for row in existing}, {"open", "closed"})
+        self.assertEqual(issue_number, 651)
+        api_open = self.github_api_readback(
+            opened["ownership"]["body"], opened["candidate"]["head_sha"],
+            number=self.pr_number, generation_id=self.generation_id,
+            head_ref=opened["ownership"]["branch"],
+        )
+
+        with mock.patch.object(RUNNER, "gh_pr_readback", return_value=api_open) as readback:
+            history, active, observed, decision = RUNNER.inspect_existing_pr_route(
+                pathlib.Path("."), self.repository, journal, existing, candidate, PR_HELPER,
+            )
+
+        readback.assert_called_once_with(pathlib.Path("."), self.repository, self.pr_number)
+        self.assertEqual(len(history), 2)
+        self.assertEqual([row["number"] for row in active], [self.pr_number])
+        self.assertIs(observed, api_open)
+        self.assertEqual(decision["action"], "refresh_owned")
+        self.assertEqual(decision["pr_number"], self.pr_number)
+        self.assertEqual(decision["branch"], opened["ownership"]["branch"])
+
+    def test_multiple_open_pr_history_still_fails_closed(self) -> None:
+        first = self.owned_receipt(
+            state="open", number=652, generation_id=self.generation_id,
+            head=self.old_head, registry_sha="d" * 64,
+        )
+        second = self.owned_receipt(
+            state="open", number=653, generation_id="generation-other",
+            head="f" * 40, registry_sha="8" * 64,
+        )
+        rows = [
+            self.github_list_row(
+                first["ownership"]["body"], first["candidate"]["head_sha"],
+                number=652, generation_id=self.generation_id,
+                head_ref=first["ownership"]["branch"],
+            ),
+            self.github_list_row(
+                second["ownership"]["body"], second["candidate"]["head_sha"],
+                number=653, generation_id="generation-other",
+                head_ref=second["ownership"]["branch"],
+            ),
+        ]
+        candidate = {
+            "repository": self.repository, "source_id": self.source_id,
+            "scope": self.scope, "generation_id": self.generation_id,
+            "head_sha": self.new_head, "manifest_sha256": "a" * 64,
+            "registry_sha256": "e" * 64,
+        }
+        with self.assertRaisesRegex(RUNNER.PromotionError, "duplicate_open_prs"):
+            RUNNER.existing_pr_rows({"records": [first, second]}, rows, PR_HELPER, candidate)
 
 
 

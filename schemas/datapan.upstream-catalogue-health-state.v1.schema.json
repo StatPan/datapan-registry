@@ -62,7 +62,17 @@
         "first_seen_at": {"type": "string", "format": "date-time"}, "last_seen_at": {"type": "string", "format": "date-time"},
         "observation_count": {"type": "integer", "minimum": 1}, "last_receipt_sha256": {"$ref": "#/$defs/digest"},
         "generation_id": {"type": ["string", "null"]}, "producer_run_id": {"type": ["string", "null"]},
-        "recovery_evidence": {"type": ["object", "null"]}
+        "recovery_evidence": {"type": ["object", "null"]},
+        "execution_identity": {
+          "type": "object", "additionalProperties": false,
+          "required": ["run_id", "run_attempt", "run_started_at", "head_sha"],
+          "properties": {
+            "run_id": {"type": "string", "pattern": "^[0-9]+$"},
+            "run_attempt": {"type": "integer", "minimum": 1},
+            "run_started_at": {"type": "string", "format": "date-time"},
+            "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"}
+          }
+        }
       }
     },
     "observation_record": {

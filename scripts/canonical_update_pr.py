@@ -1135,6 +1135,11 @@ def validate_revision_links(journal: Mapping[str, Any]) -> None:
                 raise AdmissionError("promotion supersession link does not bind an exact durable target PR identity")
             if target.get("refresh_from") != revision_reference(row):
                 raise AdmissionError("promotion supersession link is not reciprocated by the target refresh intent")
+            if target.get("status") not in {
+                "pending-review", "merged", "publication-pending", "published",
+                "read-back-confirmed", "failed", "closed",
+            }:
+                raise AdmissionError("promotion supersession target has no completed pending-review lifecycle")
             if not exact_pending_review_witness(target):
                 raise AdmissionError("promotion supersession requires an immutable exact pending-review target read-back witness")
             if row.get("status") not in {"prepared", "pending-review"}:
