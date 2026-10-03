@@ -1,4 +1,6 @@
 repo: StatPan/datapan-registry
+# Astra review and passing CI remain required; this only waives GitHub APPROVED evidence.
+finish_review_policy: none
 profiles:
   default:
     labels:

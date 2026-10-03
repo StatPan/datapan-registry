@@ -460,6 +460,21 @@ stale manifest or release ledger, and a merely requested auto-merge all fail.
 Replaying the same run and artifact returns the byte-identical prior admission
 without a new branch or PR; reusing a run ID with different bytes fails.
 
+The shared PR handoff checks the repository's `allow_auto_merge` setting before
+requesting an automatic merge. If auto-merge is disabled, or the merge is still
+pending when the wait expires, the workflow leaves the PR open and records a
+`pending` status plus an exact run/PR-bound resume command in its step summary.
+That workflow step exits successfully to preserve the human handoff, but the
+evidence delivery remains incomplete and no next-phase dispatch is sent. After
+the normal review and merge, run the summary's `gh api .../dispatches` command
+with the same run ID and PR number. An imported runtime-evidence PR resumes
+with `runtime-freshness-import-attest`; an attestation PR resumes with
+`runtime-freshness-import-attestation-verify`. Process pending runs one at a
+time so each attestation is checked against the current `main`. The helper
+fails closed on API errors and closed-unmerged PRs; when auto-merge is enabled,
+it requests only `--auto --squash` and dispatches the next phase only after
+observing `MERGED`.
+
 Institution-scoped runtime reactivation batches should follow the priority
 order in `docs/data-go-kr-coverage-backlog.md` and
 `docs/data-go-kr-institution-api-overview.md`. Start with the largest
