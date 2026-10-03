@@ -182,7 +182,7 @@ jobs:
           python -m unittest tests/test_run_upstream_refresh.py
           python scripts/check-upstream-catalogue-health.py --help
           python scripts/persist-upstream-catalogue-health.py --help
-          python -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py
+          python -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py tests/test_persist_upstream_catalogue_health.py
           python -m unittest tests/test_process_upstream_catalogue_candidate.py
           python -m unittest tests/test_upstream_catalogue_process_workflow.py
           python -m unittest tests/test_recover_upstream_catalogue_failed_generation.py

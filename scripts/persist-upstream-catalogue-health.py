@@ -190,6 +190,113 @@ def observation_record(source: dict[str, Any], receipt_sha256: str) -> dict[str,
     }
 
 
+def promotion_execution_order(run: Any) -> tuple[dt.datetime, int, int] | None:
+    """Return C attempt order from its immutable start time and exact identity."""
+    if not isinstance(run, dict):
+        return None
+    run_id = run.get("run_id")
+    attempt = run.get("run_attempt")
+    if (
+        not isinstance(run_id, str)
+        or not run_id.isdigit()
+        or int(run_id) < 1
+        or isinstance(attempt, bool)
+        or not isinstance(attempt, int)
+        or attempt < 1
+    ):
+        return None
+    try:
+        started_at = parse_time(run.get("run_started_at"), "promotion_execution.run_started_at")
+    except ValueError:
+        return None
+    return started_at, int(run_id), attempt
+
+
+def trusted_promotion_success(
+    source: dict[str, Any], receipt: dict[str, Any], workflow_path: str,
+    workflow_events: set[str], maximum_future_skew: int,
+) -> dict[str, Any] | None:
+    """Validate a C success summary emitted after the checker authenticated the configured workflow."""
+    canonical = source.get("canonical")
+    if not isinstance(canonical, dict):
+        return None
+    execution_state = canonical.get("promotion_execution")
+    if not isinstance(execution_state, dict):
+        return None
+    success = execution_state.get("latest_successful_execution_run")
+    latest = execution_state.get("latest_execution_run")
+    if not isinstance(success, dict) or not isinstance(latest, dict):
+        return None
+
+    repository = receipt.get("repository")
+    workflow_id = success.get("workflow_id")
+    if (
+        not isinstance(repository, str)
+        or not repository
+        or not isinstance(workflow_path, str)
+        or not workflow_path
+        or not workflow_events
+        or isinstance(workflow_id, bool)
+        or not isinstance(workflow_id, int)
+        or workflow_id < 1
+        or latest.get("workflow_id") != workflow_id
+        or isinstance(latest.get("workflow_id"), bool)
+    ):
+        return None
+
+    order = promotion_execution_order(success)
+    latest_order = promotion_execution_order(latest)
+    if order is None or latest_order is None or latest_order < order:
+        return None
+    try:
+        evaluated_at = parse_time(receipt.get("evaluated_at"), "receipt.evaluated_at")
+    except ValueError:
+        return None
+    if order[0] > evaluated_at + dt.timedelta(seconds=maximum_future_skew):
+        return None
+
+    expected_repository = repository.casefold()
+    for run in (success, latest):
+        head_sha = run.get("head_sha")
+        run_workflow_id = run.get("workflow_id")
+        if (
+            run.get("path") != workflow_path
+            or run.get("event") not in workflow_events
+            or run.get("head_branch") != "main"
+            or not isinstance(run.get("repository"), str)
+            or run["repository"].casefold() != expected_repository
+            or not isinstance(run.get("head_repository"), str)
+            or run["head_repository"].casefold() != expected_repository
+            or not isinstance(head_sha, str)
+            or not re.fullmatch(r"[a-f0-9]{40,64}", head_sha)
+            or isinstance(run_workflow_id, bool)
+            or not isinstance(run_workflow_id, int)
+            or run_workflow_id < 1
+        ):
+            return None
+    if success.get("status") != "completed" or success.get("conclusion") != "success":
+        return None
+    if latest_order == order:
+        identity_fields = (
+            "run_id", "run_attempt", "workflow_id", "path", "event", "run_started_at",
+            "head_branch", "head_sha", "repository", "head_repository",
+        )
+        if (
+            any(latest.get(field) != success.get(field) for field in identity_fields)
+            or latest.get("status") != "completed"
+            or latest.get("conclusion") != "success"
+        ):
+            return None
+    elif not (
+        latest.get("status") != "completed"
+        or latest.get("conclusion") in {"pending", "skipped", "neutral"}
+    ):
+        # A later nonterminal/neutral run does not undo an independently trusted
+        # success after the recorded failure, but a later terminal failure does.
+        return None
+    return success
+
+
 def merge_observations(state: dict[str, Any], receipt: dict[str, Any]) -> None:
     per_source = state.setdefault("observations_by_source", {})
     for source in receipt.get("sources", []):
@@ -211,6 +318,8 @@ def merge_observations(state: dict[str, Any], receipt: dict[str, Any]) -> None:
 def recovery_evidence(
     old_fault: dict[str, Any], source: dict[str, Any] | None, current_faults: list[dict[str, Any]],
     receipt: dict[str, Any], processor_workflow_path: str, processor_workflow_events: set[str],
+    promotion_workflow_path: str = "", promotion_workflow_events: set[str] | None = None,
+    maximum_future_skew: int = 0,
 ) -> dict[str, Any] | None:
     if source is None or receipt.get("execution_mode") != "live":
         return None
@@ -280,6 +389,25 @@ def recovery_evidence(
             ))
             and not any(row.get("stage") == "processor-execution" and row.get("severity") == "error" for row in stage_faults)
         )
+    elif stage == "promotion-execution":
+        execution = trusted_promotion_success(
+            source, receipt, promotion_workflow_path, promotion_workflow_events or set(), maximum_future_skew,
+        )
+        identity = old_fault.get("execution_identity")
+        prior_order = promotion_execution_order(identity) if isinstance(identity, dict) else None
+        execution_order = promotion_execution_order(execution)
+        prior_head_sha = identity.get("head_sha") if isinstance(identity, dict) else None
+        cleared = (
+            old_fault.get("reason") == "promotion_workflow_run_failed"
+            and old_fault.get("severity") == "error"
+            and execution is not None
+            and execution_order is not None
+            and prior_order is not None
+            and isinstance(prior_head_sha, str)
+            and re.fullmatch(r"[a-f0-9]{40,64}", prior_head_sha)
+            and execution_order > prior_order
+            and not any(row.get("stage") == "promotion-execution" and row.get("severity") == "error" for row in stage_faults)
+        )
     elif stage in {"promotion", "publication"}:
         publication = source.get("canonical", {}).get("publication")
         cleared = (
@@ -293,6 +421,14 @@ def recovery_evidence(
         cleared = False
     if not cleared:
         return None
+    if stage == "promotion-execution":
+        return {
+            "verified": True,
+            "stage": stage,
+            "health_receipt_sha256": receipt["receipt_sha256"],
+            "execution_run_id": execution["run_id"],
+            "execution_run_attempt": execution["run_attempt"],
+        }
     return {
         "verified": True,
         "stage": stage,
@@ -311,7 +447,8 @@ def recovery_evidence(
 
 def merge_faults(
     state: dict[str, Any], receipt: dict[str, Any], processor_workflow_path: str,
-    processor_workflow_events: set[str],
+    processor_workflow_events: set[str], promotion_workflow_path: str = "",
+    promotion_workflow_events: set[str] | None = None, maximum_future_skew: int = 0,
 ) -> None:
     evaluated_at = receipt["evaluated_at"]
     now = parse_time(evaluated_at, "receipt.evaluated_at")
@@ -343,6 +480,7 @@ def merge_faults(
         source = source_by_id.get(prior.get("source_id"))
         evidence = recovery_evidence(
             prior, source, list(incoming.values()), receipt, processor_workflow_path, processor_workflow_events,
+            promotion_workflow_path, promotion_workflow_events, maximum_future_skew,
         )
         if evidence is not None:
             prior["status"] = "recovered"
@@ -503,6 +641,9 @@ def persist(receipt_path: pathlib.Path, state_root: pathlib.Path, policy_path: p
     merge_faults(
         state, receipt, policy["processor_state"]["workflow_path"],
         set(policy["processor_state"]["allowed_events"]),
+        policy["promotion_state"]["promotion_workflow_path"],
+        set(policy["processor_state"]["allowed_events"]),
+        int(policy["clock"]["maximum_future_skew_seconds"]),
     )
     last_good = state.setdefault("last_good_by_source", {})
     for source in receipt.get("sources", []):
