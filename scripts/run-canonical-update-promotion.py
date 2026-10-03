@@ -174,7 +174,21 @@ def load_module(path: pathlib.Path, name: str) -> Any:
     if spec is None or spec.loader is None:
         raise PromotionError(f"cannot load required helper: {path}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    missing = object()
+    previous = sys.modules.get(name, missing)
+    # Some helpers define dataclasses (and other decorators) that resolve
+    # their module through sys.modules while the class body is executing.
+    # Match normal import semantics, and avoid leaving a half-initialized
+    # module behind when execution fails.
+    sys.modules[name] = module
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        if previous is missing:
+            sys.modules.pop(name, None)
+        else:
+            sys.modules[name] = previous
+        raise
     return module
 
 
@@ -2187,6 +2201,11 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     candidate["validation_evidence"] = evidence
 
     if args.prepare_only:
+        # Keep the offline rehearsal aligned with the pure local admission
+        # gate that prepare_lfs_upload applies before any LFS operation.
+        helper.validate_candidate(
+            candidate, head_sha, composition_schema, require_payload_readback=False,
+        )
         print(json.dumps({
             "status": "candidate-prepared-locally",
             "external_mutations": False,
