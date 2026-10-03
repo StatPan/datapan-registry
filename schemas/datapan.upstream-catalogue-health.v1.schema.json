@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.upstream-catalogue-health.v1.schema.json",
+  "title": "Datapan Upstream Catalogue Health Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "repository", "evaluated_at", "execution_mode", "health_workflow", "policy_sha256", "source_policy_sha256", "sources", "faults", "summary", "receipt_sha256"],
+  "properties": {
+    "schema_version": {"const": "datapan.upstream-catalogue-health.v1"},
+    "repository": {"type": "string", "minLength": 3, "maxLength": 200},
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "execution_mode": {"enum": ["live", "fixture"]},
+    "health_workflow": {"$ref": "#/$defs/workflow"},
+    "policy_sha256": {"$ref": "#/$defs/digest"},
+    "source_policy_sha256": {"$ref": "#/$defs/digest"},
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/source"}},
+    "faults": {"type": "array", "items": {"$ref": "#/$defs/fault"}},
+    "summary": {"$ref": "#/$defs/summary"},
+    "receipt_sha256": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "nullable_string": {"type": ["string", "null"]},
+    "workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "run_attempt", "revision"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "revision": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"}
+      }
+    },
+    "fault": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "stage", "reason", "severity", "owner_ticket", "fault_key", "recommended_action"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "stage": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "severity": {"enum": ["info", "warning", "error"]},
+        "owner_ticket": {"type": "integer", "minimum": 1},
+        "fault_key": {"$ref": "#/$defs/digest"},
+        "recommended_action": {"type": "string", "minLength": 1}
+      }
+    },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "observed_at", "producer_run_id", "refresh_evidence_sha256", "execution_mode", "collection_status", "age_seconds", "max_age_seconds"],
+      "properties": {
+      "state": {"enum": ["missing", "fixture_only", "provider_failure", "collection_missing", "evidence_digest_missing", "producer_unverified", "producer_artifact_missing", "stale", "fresh", "invalid_time"]},
+        "observed_at": {"$ref": "#/$defs/nullable_string"},
+        "producer_run_id": {"$ref": "#/$defs/nullable_string"},
+        "refresh_evidence_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "execution_mode": {"$ref": "#/$defs/nullable_string"},
+        "collection_status": {"$ref": "#/$defs/nullable_string"},
+        "age_seconds": {"type": ["integer", "null"], "minimum": 0},
+        "max_age_seconds": {"type": "integer", "minimum": 1}
+      }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "overall", "observation", "processor", "collector", "canonical", "faults", "recommended_recovery"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "overall": {"enum": ["healthy", "degraded", "blocked", "fixture"]},
+        "observation": {"$ref": "#/$defs/observation"},
+        "processor": {"$ref": "#/$defs/processor"},
+        "collector": {"$ref": "#/$defs/collector"},
+        "canonical": {"$ref": "#/$defs/canonical"},
+        "faults": {"type": "array", "items": {"$ref": "#/$defs/fault"}},
+        "recommended_recovery": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "processor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "generation_id", "candidate_sha256", "checkpoint_observed_at", "last_observation", "last_heartbeat_at", "last_progress_at", "attempts_consumed", "attempts_by_id", "request_reservation", "detail_records", "detail_queue_cursor", "lease", "output_artifact", "output_digests", "outcome"],
+      "properties": {
+        "state": {"type": "string", "minLength": 1},
+        "generation_id": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "candidate_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "checkpoint_observed_at": {"type": ["string", "null"]},
+        "last_observation": {"type": ["object", "null"]},
+        "last_heartbeat_at": {"$ref": "#/$defs/nullable_string"},
+        "last_progress_at": {"$ref": "#/$defs/nullable_string"},
+        "attempts_consumed": {"type": ["integer", "null"], "minimum": 0},
+        "attempts_by_id": {"type": ["object", "null"], "maxProperties": 4096, "additionalProperties": {"type": "integer", "minimum": 0}},
+        "request_reservation": {"type": ["object", "null"]},
+        "detail_records": {"type": ["array", "null"], "maxItems": 128, "items": {"type": "object"}},
+        "detail_queue_cursor": {"type": ["integer", "null"], "minimum": 0},
+        "lease": {"type": ["object", "null"]},
+        "output_artifact": {"type": ["object", "null"]},
+        "output_digests": {"type": ["array", "null"]},
+        "outcome": {"type": ["object", "null"]}
+      }
+    },
+    "collector": {
+      "type": "object", "additionalProperties": false,
+      "required": ["latest_scheduled_run", "latest_execution_run", "age_seconds", "expected_interval_seconds", "grace_seconds"],
+      "properties": {
+        "latest_scheduled_run": {"type": ["object", "null"]},
+        "latest_execution_run": {"type": ["object", "null"]},
+        "age_seconds": {"type": ["integer", "null"], "minimum": 0},
+        "expected_interval_seconds": {"type": "integer", "minimum": 1},
+        "grace_seconds": {"type": "integer", "minimum": 0}
+      }
+    },
+    "canonical": {
+      "type": "object", "additionalProperties": false,
+      "required": ["main", "last_good", "promotion_status", "publication", "promotion_stage"],
+      "properties": {
+        "main": {
+          "type": "object", "additionalProperties": false,
+          "required": ["revision", "manifest_sha256", "registry_path", "registry_bytes", "registry_sha256"],
+          "properties": {
+            "revision": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+            "manifest_sha256": {"$ref": "#/$defs/digest"},
+            "registry_path": {"type": "string", "minLength": 1},
+            "registry_bytes": {"type": "integer", "minimum": 1},
+            "registry_sha256": {"$ref": "#/$defs/digest"}
+          }
+        },
+        "last_good": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/last_good"}]},
+        "promotion_status": {"type": "string", "minLength": 1},
+        "publication": {"type": ["object", "null"]},
+        "promotion_stage": {"$ref": "#/$defs/promotion_stage"}
+      }
+    },
+    "promotion_stage": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["status", "entered_at", "age_seconds", "deadline_seconds"],
+      "properties": {
+        "status": {"enum": ["pending-review", "merged", "publication-pending", "published"]},
+        "entered_at": {"type": "string", "format": "date-time"},
+        "age_seconds": {"type": "integer", "minimum": 0},
+        "deadline_seconds": {"type": "integer", "minimum": 1}
+      }
+    },
+    "last_good": {
+      "type": "object",
+      "required": ["status", "source_id", "generation_id", "publication_revision", "publication_pointer_revision", "artifact_identity", "verified", "publication_run_jobs_completed_at", "publication_run_completion_basis", "publication_run_id", "publication_run_attempt"],
+      "properties": {
+        "status": {"const": "read-back-confirmed"},
+        "source_id": {"type": "string", "minLength": 1},
+        "generation_id": {"$ref": "#/$defs/digest"},
+        "publication_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "publication_pointer_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "artifact_identity": {
+          "type": "object", "additionalProperties": false,
+          "required": ["path", "bytes", "sha256"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "bytes": {"type": "integer", "minimum": 1},
+            "sha256": {"$ref": "#/$defs/digest"}
+          }
+        },
+        "verified": {"const": true},
+        "publication_run_jobs_completed_at": {"type": "string", "format": "date-time"},
+        "publication_run_completion_basis": {"const": "max_completed_at_all_jobs_exact_run_attempt"},
+        "publication_run_id": {"type": "integer", "minimum": 1},
+        "publication_run_attempt": {"type": "integer", "minimum": 1}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_count", "healthy", "degraded", "blocked", "fixture", "fault_count", "live_fresh_observation_count", "last_good_count"],
+      "properties": {
+        "source_count": {"type": "integer", "minimum": 1},
+        "healthy": {"type": "integer", "minimum": 0},
+        "degraded": {"type": "integer", "minimum": 0},
+        "blocked": {"type": "integer", "minimum": 0},
+        "fixture": {"type": "integer", "minimum": 0},
+        "fault_count": {"type": "integer", "minimum": 0},
+        "live_fresh_observation_count": {"type": "integer", "minimum": 0},
+        "last_good_count": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

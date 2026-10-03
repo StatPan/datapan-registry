@@ -272,6 +272,81 @@ Every run uploads the candidate snapshot when available, catalog diff,
 `upstream-refresh-work-packet.json`. Material drift is routed to human review;
 publication remains false until release manifest verification, readiness, and
 consumer compatibility gates run through the existing release workflow.
+
+`.github/workflows/upstream-catalogue-process.yml` (`Process upstream
+catalogue`) consumes only a successful default-branch run of that collector.
+It also resumes the oldest active generation hourly, or a trusted collector
+run selected by a default-branch manual dispatch. It fetches the exact
+unexpired collector artifact and any prior enrichment cache named by the
+checkpoint, then reserves at most 24 detail requests for up to 48 APIs before
+making public detail-page requests. A cancellation leaves those reserved
+attempts consumed for the next continuation. The workflow stores checkpoints
+and fair-queue state on `automation/upstream-catalogue-state`; that branch is
+limited to `.datapan/upstream-catalogue-state/` and each update uses an exact
+remote-SHA compare-and-swap.
+
+Each run uploads a 30-day processing artifact named
+`upstream-catalogue-processing-<run-id>-<attempt>`. Its `ready` status means
+the composer verified a scoped candidate bundle, including safe partial
+receipts with pending detail retries. `no-change` is reported only when the
+composer found no change and no pending detail work remains. This workflow
+does not update the canonical registry, open a pull request, or publish a
+release; the processing artifact is the input to the separate promotion path.
+An exact redelivery of an already terminal collector observation emits a
+verified `idle` receipt with no candidate and keeps the original checkpoint
+artifact locator, so it cannot start a second promotion.
+Expired or mismatched artifacts, invalid checkpoint state, and interrupted
+artifact or state-branch writes remain failed or retryable outcomes.
+
+For offline review of a successful observation, compose a candidate from the
+manifest-bound baseline and the exact candidate/diff/evidence artifact set:
+
+```bash
+python scripts/compose-upstream-catalogue-candidate.py \
+  --baseline /path/to/materialized-data-go-kr.registry.json \
+  --candidate /path/to/candidate.registry.json \
+  --diff /path/to/catalog-diff.json \
+  --refresh-evidence /path/to/upstream-refresh-evidence.json \
+  --producer-run-id 1234567890 \
+  --producer-run-url https://github.com/StatPan/datapan-registry/actions/runs/1234567890 \
+  --expected-baseline-sha256 <baseline-sha256> \
+  --expected-candidate-sha256 <candidate-sha256> \
+  --expected-diff-sha256 <diff-sha256> \
+  --output-dir /tmp/catalogue-composition-1234567890
+```
+
+The command makes no provider calls and never writes the canonical registry.
+It verifies that the refresh receipt, candidate, and full diff belong together,
+then applies only source-backed row changes that pass identity and provenance
+checks. `composed-candidate.registry.json` starts from the baseline and keeps
+every pending or quarantined baseline row intact; `ready-scope.registry.json`
+contains only admitted row changes. A new LINK API without operation evidence
+stays out of both outputs, a changed LINK guide keeps the old baseline row
+whole until matching detail evidence is supplied with `--enrichment-evidence`,
+and absent APIs stay in the baseline with an authoritative-deletion-evidence
+queue item. The original producer candidate remains immutable and its digest
+is retained in the receipt.
+
+Each LINK enrichment record binds its operations to the canonical detail page
+derived from the numeric API id (`https://www.data.go.kr/data/<id>/openapi.do`),
+the fetched page-byte digest, observation time, extractor revision, and the
+original candidate's source and nullable guide fingerprints. The effective URL
+must remain that exact page URL; redirects to other hosts or paths are rejected.
+An observed guide URL and its digest are recorded separately from the producer
+candidate's guide fingerprint, so a missing candidate guide can be represented
+without fabricating source metadata. Prior composed operations may be retained
+only when their source URL is that same derived detail page and their source
+metadata still matches the API row; this preserves provenance without treating
+old detail evidence as current evidence.
+
+The output directory is an atomic review bundle containing a semantic diff,
+regeneration queue, quarantine list, and `composition-receipt.json`. The
+receipt binds input and output hashes, reports the exact admitted, pending, and
+quarantined API identities, and always sets `full_scope_fresh` and
+`publication_allowed` to false. `ready_scoped` means a safe subset changed; it
+does not mean the full upstream snapshot is complete or publishable. Re-running
+with identical inputs and producer run identity is a byte-identical no-op.
+
 - regenerates and validates `reports/release-consumer-compatibility.json`, the
   manifest-bound downstream compatibility matrix that keeps the canonical
   registry path required, release-health evidence named, shard install fields
@@ -410,6 +485,30 @@ release-ledger fixed point. A closed-unmerged PR, missing or changed receipt,
 stale manifest or release ledger, and a merely requested auto-merge all fail.
 Replaying the same run and artifact returns the byte-identical prior admission
 without a new branch or PR; reusing a run ID with different bytes fails.
+
+Historical manual-review decisions remain historical records; they do not
+automatically approve a changed source snapshot or changed operation risk.
+Evaluate effective current approval independently against the current source,
+operation contract, and applicable expiry and semantic policy. Until the #661
+semantic and expiry repair has passed, do not rebind an artifact-only manual
+acceptance to changed source or risk. Runtime evidence projection does not
+replace the #592 release-admission and publication gates, and cannot authorize
+canonical or Hugging Face publication by itself.
+
+The shared PR handoff checks the repository's `allow_auto_merge` setting before
+requesting an automatic merge. If auto-merge is disabled, or the merge is still
+pending when the wait expires, the workflow leaves the PR open and records a
+`pending` status plus an exact run/PR-bound resume command in its step summary.
+That workflow step exits successfully to preserve the human handoff, but the
+evidence delivery remains incomplete and no next-phase dispatch is sent. After
+the normal review and merge, run the summary's `gh api .../dispatches` command
+with the same run ID and PR number. An imported runtime-evidence PR resumes
+with `runtime-freshness-import-attest`; an attestation PR resumes with
+`runtime-freshness-import-attestation-verify`. Process pending runs one at a
+time so each attestation is checked against the current `main`. The helper
+fails closed on API errors and closed-unmerged PRs; when auto-merge is enabled,
+it requests only `--auto --squash` and dispatches the next phase only after
+observing `MERGED`.
 
 Institution-scoped runtime reactivation batches should follow the priority
 order in `docs/data-go-kr-coverage-backlog.md` and
@@ -619,6 +718,61 @@ Move from scheduled health checks to scheduled release drafting only after:
 - release verification and readiness reports are consistently useful;
 - provider adapter evidence is improving across releases;
 - consumers can pin either a git tag or a release asset.
+
+## Upstream catalogue health and recovery evidence
+
+`.github/workflows/upstream-catalogue-health.yml` runs on an independent hourly
+UTC clock and after `Upstream catalog refresh`, `Process upstream catalogue`,
+`Canonical update promotion`, and `Canonical update publication acknowledgement`
+workflow completions. The hourly run detects a collector that never starts;
+the completion triggers give earlier reports for failed collection, processor
+handoff, and promotion transitions. The health watchdog does not call the
+provider or publish canonical data. Its source
+freshness deadline is derived from `policy/source-refresh.json` cadence and the
+per-source grace in `policy/upstream-catalogue-health.json`; hourly watchdog
+runs never extend the weekly source TTL.
+
+The checker reads the processor-owned
+`automation/upstream-catalogue-state` branch, GitHub Actions run and artifact
+metadata, and the canonical promotion acknowledgement branch. It records each
+live source observation only when its producer run is a successful main-branch
+collector run and its run-bound evidence artifact remains available. Processor
+heartbeats do not refresh source observation age. An independent owned branch,
+`automation/upstream-catalogue-health-state`, stores the sealed receipt, stable
+fault keys, stage-specific recovery evidence, the last read-back-confirmed
+canonical identity, and a monotonic history of distinct producer-run/evidence
+identities. Updates use a serialized workflow and bounded, fast-forward-only
+push retries; the writer refuses fixture receipts, an unowned root, and
+corrupted state rather than overwriting it.
+
+Promotion ordering binds to the exact acknowledgement run attempt and reads
+that attempt's complete workflow-job list. Its ordering timestamp is the maximum
+`completed_at` among those completed jobs; a nullable run-attempt `completed_at`
+and mutable `updated_at` do not establish publication order.
+
+For a read-only local fixture check, install `jsonschema` and run:
+
+```sh
+python3 -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py
+```
+
+Fixture and replayed inputs can exercise failure classification and recovery
+rules, but cannot update durable state or count as operational observations.
+Operational acceptance still requires two distinct, increasing live source
+observations, automatic processing of those observations, and reviewed
+stage-specific recovery evidence from the enabled workflow. A genuine no-change
+result proves a fresh observation only when it is bound to the successful
+collector run and its evidence digest; it does not prove full-scope freshness or
+publication readiness. `ready_scoped`, pending review, publication pending,
+published-but-not-read-back, and read-back-confirmed remain separate states.
+
+When the durable health branch is corrupt or ownership cannot be verified, the
+workflow preserves the failed receipt artifact and stops the state write. An
+operator should inspect the exact branch root and ownership marker, retain the
+last-good canonical identity, and repair only the damaged owned health files
+after review. Expired leases can be retried only against the same generation
+and digest-bound inputs within the configured attempt budget; failed evidence
+and queued work are retained.
 
 ## Non-Goals
 

@@ -111,7 +111,8 @@ def build(
     observations_path: pathlib.Path, receipt_output: pathlib.Path,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     report, run_receipt = load(report_path), load(run_receipt_path)
-    importer_module().validate_receipt(report_path, report, run_receipt)
+    importer = importer_module()
+    importer.validate_receipt(report_path, report, run_receipt)
     catalog, observations, policy = load(catalog_path), load(observations_path), load(POLICY)
     source_id = str(catalog.get("source_id"))
     allowed = {str(row["failure_class"]) for row in policy.get("classes", []) if isinstance(row, dict)}
@@ -143,6 +144,19 @@ def build(
         status, reason = str(raw.get("status", "unknown")), str(raw.get("reason", ""))
         observed_at = timestamp(raw, generated_at)
         base = {"subject_id": subject, "dataset_id": dataset_id, "operation": operation, "status": status, "reason": reason}
+        identity_key = raw.get("identity_key")
+        if isinstance(identity_key, str) and identity_key:
+            base["identity_key"] = identity_key
+        # Hash the exact row that the importer persists. Sanitized producer
+        # reports may contain safe diagnostics (for example checked_at or
+        # duration_ms) that importable_result intentionally drops.
+        persisted_result = importer.importable_result(raw)
+        result_bytes = json.dumps(persisted_result, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        base["result_sha256"] = hashlib.sha256(result_bytes).hexdigest()
+        contract_binding = raw.get("contract_binding")
+        if isinstance(contract_binding, dict):
+            encoded_binding = json.dumps(contract_binding, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            base["contract_binding_sha256"] = hashlib.sha256(encoded_binding).hexdigest()
         if status == "verified":
             active = sorted(active_by_subject.get(subject, set()))
             if not active:

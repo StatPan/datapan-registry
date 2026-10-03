@@ -69,30 +69,72 @@
       "authority_ticket": "StatPan/datapan-registry#633"
     },
     {
-      "path": "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+      "path": "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
       "kind": "schema",
-      "authority_ticket": "StatPan/datapan-registry#658"
+      "authority_ticket": "StatPan/datapan-registry#656"
     },
     {
-      "path": "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+      "path": "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
       "kind": "schema",
-      "authority_ticket": "StatPan/datapan-registry#658"
+      "authority_ticket": "StatPan/datapan-registry#656"
     },
     {
-      "path": "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
-      "kind": "schema",
-      "authority_ticket": "StatPan/datapan-registry#658"
+      "path": "reports/current-runtime-evidence-projection.json",
+      "kind": "current_runtime_evidence_projection",
+      "schema": "https://schemas.datapan.dev/datapan.current-runtime-evidence-projection.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#660"
     },
     {
-      "path": "schemas/datapan.registry-distribution.v1.schema.json",
+      "path": "schemas/datapan.current-runtime-evidence-projection.v1.schema.json",
       "kind": "schema",
-      "authority_ticket": "StatPan/datapan-registry#658"
+      "authority_ticket": "StatPan/datapan-registry#660"
     },
     {
-      "path": "policy/data-go-kr-operation-denominator-expectation.json",
-      "kind": "operation_denominator_expectation",
-      "schema": "https://schemas.datapan.dev/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
-      "authority_ticket": "StatPan/datapan-registry#658"
+      "path": "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#657"
+    },
+    {
+      "path": "schemas/datapan.manual-review-scope.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#661"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-state-owner.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "policy/upstream-catalogue-health.json",
+      "kind": "upstream_catalogue_health_policy",
+      "schema": "https://schemas.datapan.dev/datapan.upstream-catalogue-health-policy.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#659"
+    },
+    {
+      "path": "reports/diagnostic-current-source-applicability.json",
+      "kind": "diagnostic_current_source_applicability",
+      "schema": "https://schemas.datapan.dev/datapan.diagnostic-current-source-applicability.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#666"
+    },
+    {
+      "path": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#666"
     }
   ]
 }

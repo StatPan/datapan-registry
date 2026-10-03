@@ -36,6 +36,17 @@ Run `python3 scripts/validate-diagnostic-evidence-mapping-draft.py` to verify
 pinned inputs, false-positive fallbacks, cause/action compatibility, all three
 consumer packets, and the unpublished draft boundary.
 
+That validator checks the immutable historical proof, including the archived
+health-catalogue bytes identified by their original Git commit and blob. The
+separate `reports/diagnostic-current-source-applicability.json` receipt binds
+those historical proofs to the exact current registry and health-catalogue
+bytes. `revalidation_required` is a valid candidate-review state when source
+bytes change; the receipt never grants current compatibility or publication
+authority. Run `python3 scripts/validate-diagnostic-current-source-applicability.py
+--require-current-publication` only when a caller needs an explicit
+diagnostic-specific publication decision; it fails closed until that authority
+is separately established.
+
 ## Boundary
 
 Registry owns the stable vocabulary, required evidence shape, responsibility

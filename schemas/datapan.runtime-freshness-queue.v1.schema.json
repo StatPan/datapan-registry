@@ -10,11 +10,12 @@
     "generated_at": {"type": "string", "format": "date-time"},
     "inputs": {
       "type": "object", "additionalProperties": false,
-      "required": ["canonical_registry", "operation_denominator_rollup", "latest_verification", "coverage_policy"],
+      "required": ["canonical_registry", "operation_denominator_rollup", "latest_verification", "current_runtime_evidence_projection", "coverage_policy"],
       "properties": {
         "canonical_registry": {"type": "string", "minLength": 1},
         "operation_denominator_rollup": {"type": "string", "minLength": 1},
         "latest_verification": {"type": "string", "minLength": 1},
+        "current_runtime_evidence_projection": {"type": "string", "minLength": 1},
         "coverage_policy": {"type": "string", "minLength": 1}
       }
     },
@@ -29,7 +30,7 @@
     },
     "summary": {
       "type": "object", "additionalProperties": false,
-      "required": ["supported_operations", "fresh_verified", "queued", "never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified"],
+      "required": ["supported_operations", "fresh_verified", "queued", "never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified", "unbound", "contract_changed", "unsupported_current_binding", "ambiguous_evidence_records", "historical_evidence_records"],
       "properties": {
         "supported_operations": {"type": "integer", "minimum": 1},
         "fresh_verified": {"type": "integer", "minimum": 0},
@@ -38,7 +39,12 @@
         "unknown_timestamp": {"type": "integer", "minimum": 0},
         "stale": {"type": "integer", "minimum": 0},
         "expired": {"type": "integer", "minimum": 0},
-        "recent_non_verified": {"type": "integer", "minimum": 0}
+        "recent_non_verified": {"type": "integer", "minimum": 0},
+        "unbound": {"type": "integer", "minimum": 0},
+        "contract_changed": {"type": "integer", "minimum": 0},
+        "unsupported_current_binding": {"type": "integer", "minimum": 0},
+        "ambiguous_evidence_records": {"type": "integer", "minimum": 0},
+        "historical_evidence_records": {"type": "integer", "minimum": 0}
       }
     },
     "queue": {
@@ -51,9 +57,10 @@
           "dataset_id": {"type": ["string", "null"]},
           "operation": {"type": "string", "minLength": 1},
           "operation_seq": {"type": ["string", "null"]},
-          "classification": {"enum": ["never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified"]},
+          "classification": {"enum": ["never_evidenced", "unknown_timestamp", "stale", "expired", "recent_non_verified", "unbound", "contract_changed", "unsupported_current_binding"]},
           "priority": {"type": "integer", "minimum": 0, "maximum": 4},
-          "action": {"enum": ["collect_initial_evidence", "repair_evidence_timestamp", "reverify_stale_operation", "reverify_expired_operation", "retry_or_route_failure"]},
+          "action": {"enum": ["collect_initial_evidence", "collect_current_contract_evidence", "repair_evidence_timestamp", "reverify_stale_operation", "reverify_expired_operation", "retry_or_route_failure", "review_source_specific_receipt", "resolve_current_operation_contract"]},
+          "reason": {"type": "string", "minLength": 1},
           "last_status": {"type": ["string", "null"]},
           "last_verified_at": {"type": ["string", "null"], "format": "date-time"}
         }

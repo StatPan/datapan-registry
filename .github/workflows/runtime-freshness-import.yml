@@ -120,6 +120,7 @@ jobs:
           git push --force-with-lease origin "HEAD:refs/heads/${IMPORT_BRANCH}"
 
       - name: Create or update the checked import PR
+        id: handoff
         if: steps.transaction.outputs.changed == 'true'
         timeout-minutes: 45
         env:
@@ -132,23 +133,11 @@ jobs:
               --body "Automated secret-safe freshness import from workflow run ${PRODUCER_RUN_ID}. The PR contains the deterministic run admission, exact import arithmetic, and only sanitized receipt-derived registry evidence. A separate post-merge workflow must place the final attestation on main before the run is complete. Relates #344.")"
             pr="${url##*/}"
           fi
-          gh pr merge "${pr}" --repo "${GITHUB_REPOSITORY}" --auto --squash
-          state=OPEN
-          for _ in $(seq 1 180); do
-            state="$(gh pr view "${pr}" --repo "${GITHUB_REPOSITORY}" --json state --jq .state)"
-            if [ "${state}" = "MERGED" ] || [ "${state}" = "CLOSED" ]; then
-              break
-            fi
-            sleep 10
-          done
-          jq -n \
-            --arg run_id "${PRODUCER_RUN_ID}" \
-            --arg pr_number "${pr}" \
-            '{event_type:"runtime-freshness-import-attest",client_payload:{run_id:$run_id,pr_number:$pr_number}}' \
-            > .datapan/runtime-freshness/import-attestation-dispatch.json
-          gh api --method POST "repos/${GITHUB_REPOSITORY}/dispatches" \
-            --input .datapan/runtime-freshness/import-attestation-dispatch.json
-          test "${state}" = "MERGED"
+          python3 scripts/runtime-freshness-pr-handoff.py \
+            --repo "${GITHUB_REPOSITORY}" \
+            --run-id "${PRODUCER_RUN_ID}" \
+            --pr "${pr}" \
+            --resume-event runtime-freshness-import-attest
 
       - name: Record idempotent no-change outcome
         if: steps.transaction.outputs.changed != 'true'

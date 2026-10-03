@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.current-runtime-evidence-projection.v1.schema.json",
+  "title": "Datapan current runtime evidence projection v1",
+  "description": "Immutable runtime rows projected onto complete current operation contracts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "inputs", "freshness", "current_contracts", "provenance", "summary", "operations", "current_evidence", "records"],
+  "properties": {
+    "schema_version": {"const": "datapan.current-runtime-evidence-projection.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["registry", "registry_source_sha256", "operation_manifest", "operation_manifest_sha256", "latest_verification", "latest_verification_sha256"],
+      "properties": {
+        "registry": {"type": "string", "minLength": 1},
+        "registry_source_sha256": {"$ref": "#/$defs/sha256"},
+        "operation_manifest": {"type": "string", "minLength": 1},
+        "operation_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "latest_verification": {"type": "string", "minLength": 1},
+        "latest_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "freshness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["as_of", "fresh_days", "expire_days"],
+      "properties": {
+        "as_of": {"type": "string", "format": "date-time"},
+        "fresh_days": {"type": "integer", "minimum": 1},
+        "expire_days": {"type": "integer", "minimum": 2}
+      }
+    },
+    "current_contracts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["operation_count", "complete_operation_count", "contract_set_sha256"],
+      "properties": {
+        "operation_count": {"type": "integer", "minimum": 0},
+        "complete_operation_count": {"type": "integer", "minimum": 0},
+        "contract_set_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["admitted_runs", "attested_runs", "pending_attestation_runs", "invalid_runs", "proven_row_bindings"],
+      "properties": {
+        "admitted_runs": {"type": "integer", "minimum": 0},
+        "attested_runs": {"type": "integer", "minimum": 0},
+        "pending_attestation_runs": {"type": "integer", "minimum": 0},
+        "invalid_runs": {"type": "integer", "minimum": 0},
+        "proven_row_bindings": {"type": "integer", "minimum": 0}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["historical_evidence_records", "current_operations_with_bound_evidence", "current_operations_with_fresh_verified_evidence", "current_operations_within_expiry_window", "eligible", "stale", "expired", "unknown_timestamp", "recent_non_verified", "contract_changed", "ambiguous", "unbound", "historical", "bound_current_eligible_operations", "bound_current_stale_operations", "bound_current_expired_operations", "bound_current_non_verified_operations", "bound_current_unknown_timestamp_operations"],
+      "properties": {
+        "historical_evidence_records": {"type": "integer", "minimum": 0},
+        "current_operations_with_bound_evidence": {"type": "integer", "minimum": 0},
+        "current_operations_with_fresh_verified_evidence": {"type": "integer", "minimum": 0},
+        "current_operations_within_expiry_window": {"type": "integer", "minimum": 0},
+        "eligible": {"type": "integer", "minimum": 0},
+        "stale": {"type": "integer", "minimum": 0},
+        "expired": {"type": "integer", "minimum": 0},
+        "unknown_timestamp": {"type": "integer", "minimum": 0},
+        "recent_non_verified": {"type": "integer", "minimum": 0},
+        "contract_changed": {"type": "integer", "minimum": 0},
+        "ambiguous": {"type": "integer", "minimum": 0},
+        "unbound": {"type": "integer", "minimum": 0},
+        "historical": {"type": "integer", "minimum": 0},
+        "bound_current_eligible_operations": {"type": "integer", "minimum": 0},
+        "bound_current_stale_operations": {"type": "integer", "minimum": 0},
+        "bound_current_expired_operations": {"type": "integer", "minimum": 0},
+        "bound_current_non_verified_operations": {"type": "integer", "minimum": 0},
+        "bound_current_unknown_timestamp_operations": {"type": "integer", "minimum": 0}
+      }
+    },
+    "operations": {"type": "array", "items": {"$ref": "#/$defs/operation"}},
+    "current_evidence": {"type": "array", "items": {"$ref": "#/$defs/current_evidence"}},
+    "records": {"type": "array", "items": {"$ref": "#/$defs/record"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "nullable_string": {"type": ["string", "null"]},
+    "endpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scheme", "host", "path", "query_sha256"],
+      "properties": {
+        "scheme": {"enum": ["http", "https"]},
+        "host": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "query_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "operation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "identity_key", "dataset_id", "operation", "operation_seq", "upstream_api_id", "upstream_operation_key", "source_identity_sha256", "endpoint", "method_action_sha256", "parameter_contract_sha256", "contract_sha256", "contract_complete", "incomplete_reasons"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "identity_key": {"type": "string", "minLength": 1},
+        "dataset_id": {"type": "string", "minLength": 1},
+        "operation": {"type": "string"},
+        "operation_manifest_id": {"$ref": "#/$defs/nullable_string"},
+        "operation_seq": {"$ref": "#/$defs/nullable_string"},
+        "upstream_api_id": {"$ref": "#/$defs/nullable_string"},
+        "upstream_operation_key": {"$ref": "#/$defs/nullable_string"},
+        "source_identity_sha256": {"$ref": "#/$defs/sha256"},
+        "endpoint": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/endpoint"}]},
+        "method_action_sha256": {"$ref": "#/$defs/sha256"},
+        "parameter_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "contract_sha256": {"$ref": "#/$defs/sha256"},
+        "contract_complete": {"type": "boolean"},
+        "incomplete_reasons": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "current_evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["identity_key", "dataset_id", "operation", "contract_sha256", "evidence_record_sha256", "contract_binding_sha256", "run_id", "status", "verified_at", "disposition"],
+      "properties": {
+        "identity_key": {"type": "string", "minLength": 1},
+        "dataset_id": {"type": "string", "minLength": 1},
+        "operation": {"type": "string", "minLength": 1},
+        "contract_sha256": {"$ref": "#/$defs/sha256"},
+        "evidence_record_sha256": {"$ref": "#/$defs/sha256"},
+        "contract_binding_sha256": {"$ref": "#/$defs/sha256"},
+        "run_id": {"type": "string", "minLength": 1},
+        "status": {"type": "string", "minLength": 1},
+        "verified_at": {"$ref": "#/$defs/nullable_datetime"},
+        "disposition": {"enum": ["eligible", "stale", "expired", "unknown_timestamp", "recent_non_verified"]}
+      }
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidence_record_sha256", "disposition", "reason", "source_id", "dataset_id", "operation", "identity_key", "status", "verified_at", "run_id", "plan_sha256", "contract_binding_sha256", "source_snapshot_sha256", "operation_manifest_sha256", "contract_sha256"],
+      "properties": {
+        "evidence_record_sha256": {"$ref": "#/$defs/sha256"},
+        "disposition": {"enum": ["eligible", "stale", "expired", "unknown_timestamp", "recent_non_verified", "contract_changed", "ambiguous", "unbound", "historical"]},
+        "reason": {"type": "string", "minLength": 1},
+        "source_id": {"$ref": "#/$defs/nullable_string"},
+        "dataset_id": {"$ref": "#/$defs/nullable_string"},
+        "operation": {"$ref": "#/$defs/nullable_string"},
+        "identity_key": {"$ref": "#/$defs/nullable_string"},
+        "status": {"$ref": "#/$defs/nullable_string"},
+        "verified_at": {"$ref": "#/$defs/nullable_datetime"},
+        "run_id": {"$ref": "#/$defs/nullable_string"},
+        "plan_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "contract_binding_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "source_snapshot_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "operation_manifest_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "contract_sha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]}
+      }
+    },
+    "nullable_datetime": {"type": ["string", "null"], "format": "date-time"}
+  }
+}

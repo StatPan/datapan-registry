@@ -91,6 +91,7 @@
       "artifact_kinds": [
         "health_probe_catalog",
         "data_go_kr_operation_manifest",
+        "current_runtime_evidence_projection",
         "runtime_evidence_growth",
         "credential_runtime_evidence_policy",
         "credential_runtime_collection_preflight",
@@ -108,7 +109,6 @@
         "source_runtime_remediation_map",
         "source_runtime_evidence_rollup",
         "operation_denominator_rollup",
-        "operation_denominator_expectation",
         "runtime_freshness_queue",
         "sustainable_coverage_policy",
         "completeness_proof_policy",
@@ -119,7 +119,10 @@
       "generated_by": [
         "policy/health-probe-canaries.json plus python scripts/generate-health-probe-catalog.py",
         "python scripts/generate-data-go-kr-operation-manifest.py",
-        "python scripts/update-data-go-kr-operation-denominator-expectation.py --write",
+        "python scripts/generate-current-runtime-evidence-projection.py",
+        "python scripts/generate-coverage-backlog.py",
+        "python scripts/generate-institution-api-overview.py",
+        "python scripts/generate-runtime-evidence-growth.py",
         "python scripts/generate-source-contract-rollup.py",
         "python scripts/generate-source-report-inventory.py",
         "python scripts/generate-credential-runtime-evidence-policy.py",
@@ -135,7 +138,6 @@
         "python scripts/generate-source-runtime-remediation-map.py",
         "python scripts/generate-source-runtime-readiness.py",
         "python scripts/generate-operation-denominator-rollup.py",
-        "python scripts/update-data-go-kr-operation-denominator-expectation.py --check",
         "python scripts/generate-runtime-freshness-queue.py",
         "python scripts/generate-sustainable-coverage.py",
         "manual policy updates validated by python scripts/validate-completeness-proof.py",
@@ -147,6 +149,8 @@
         "python scripts/generate-data-go-kr-operation-manifest.py --check",
         "python scripts/validate-data-go-kr-operation-manifest.py",
         "python -m unittest tests/test_validate_data_go_kr_operation_manifest.py",
+        "python scripts/generate-current-runtime-evidence-projection.py --check",
+        "python -m unittest tests/test_runtime_evidence_projection.py",
         "python scripts/generate-source-contract-rollup.py --check",
         "python scripts/validate-source-contract-rollups.py",
         "python scripts/validate-source-reference-drift.py",
@@ -167,6 +171,8 @@
         "python scripts/generate-source-runtime-remediation-map.py --check",
         "python scripts/validate-source-runtime-evidence-rollup.py",
         "python scripts/validate-runtime-evidence-growth.py",
+        "python scripts/validate-coverage-backlog.py",
+        "python scripts/validate-institution-api-overview.py",
         "python scripts/generate-operation-denominator-rollup.py --check",
         "python scripts/generate-runtime-freshness-queue.py --check",
         "python scripts/generate-sustainable-coverage.py --self-test",
@@ -177,10 +183,25 @@
         "python scripts/validate-source-refresh-policy.py",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
-      "manifest_relationship": "Source rollups, source-bound denominator expectations, sustainable coverage, completeness-proof and source refresh policies, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for declared public-data scopes, authoritative denominators, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
-      "schema_relationship": "Schema-backed source, denominator expectation, sustainable coverage, completeness-proof, and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
+      "manifest_relationship": "Source rollups, current runtime evidence projection, sustainable coverage, completeness-proof and source refresh policies, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for declared public-data scopes, authoritative denominators, immutable operation-bound evidence, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
+      "schema_relationship": "Schema-backed source, current runtime projection, sustainable coverage, completeness-proof, and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
       "package_relationship": "Included in release packages through manifest.json.",
       "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."
+    },
+    {
+      "id": "upstream_catalogue_health_policy",
+      "artifact_kinds": ["upstream_catalogue_health_policy"],
+      "owner": "upstream catalogue health maintainers",
+      "generated_by": ["manual source-specific freshness grace and recovery deadline updates"],
+      "checked_by": [
+        "python scripts/validate-source-refresh-policy.py",
+        "python -m unittest tests/test_check_upstream_catalogue_health.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "The independent watchdog cadence, processor and promotion state locations, and per-source freshness/recovery policy are manifest-bound.",
+      "schema_relationship": "Validated against datapan.upstream-catalogue-health-policy.v1 and cross-bound to source-refresh cadence by the health checker.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Fixture inputs exercise classification only; they cannot be persisted or counted as live source observations, and this policy does not authorize provider calls or publication."
     },
     {
       "id": "source_provenance",
@@ -225,6 +246,24 @@
       "schema_relationship": "The diagnostic envelope and publication readiness schemas are indexed by schemas/index.json; generator tests validate the remaining bounded policy and evidence shapes.",
       "package_relationship": "Included in release packages and Hugging Face distribution staging through manifest.json, without granting publication authority.",
       "exemption_boundary": "Tagging, GitHub Release creation, immutable distribution publication, anonymous fetch proof, live inference, mutable history, telemetry, and consumer deployment remain outside this generated artifact class."
+    },
+    {
+      "id": "diagnostic_current_source_applicability",
+      "artifact_kinds": ["diagnostic_current_source_applicability"],
+      "owner": "diagnostic contract maintainers",
+      "generated_by": [
+        "python scripts/generate-diagnostic-current-source-applicability.py --write"
+      ],
+      "checked_by": [
+        "python scripts/generate-diagnostic-current-source-applicability.py --check",
+        "python scripts/validate-diagnostic-current-source-applicability.py",
+        "python -m unittest tests/test_diagnostic_current_source_applicability.py",
+        "python scripts/sync-release-manifest-artifacts.py --check"
+      ],
+      "manifest_relationship": "The receipt binds immutable historical diagnostic proof inputs to exact current Registry and health bytes, with explicit static mismatches and no current-source approval claim.",
+      "schema_relationship": "Validated against schemas/datapan.diagnostic-current-source-applicability.v1.schema.json and independently recomputed from its pinned historical inputs and current source artifacts.",
+      "package_relationship": "Included in release packages as review evidence; a pending receipt is not current diagnostic compatibility or publication authority.",
+      "exemption_boundary": "Historical consumer and human-review proofs stay byte-bound to their original scope. Current-source compatibility, runtime acceptance, fresh consumer approval, release readiness, human acceptance, and publication require an independent authorized decision; this receipt grants none."
     },
     {
       "id": "downstream_release_evidence",

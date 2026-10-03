@@ -12,10 +12,14 @@ from typing import Any
 
 import jsonschema
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from runtime_evidence_projection import file_sha256, make_contract_binding, operation_contract, operation_manifest_index, upstream_operation_key
+
 
 DEFAULT_QUEUE = pathlib.Path("reports/runtime-freshness-queue.json")
 DEFAULT_REGISTRY = pathlib.Path("data/data-go-kr.registry.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-batch.v1.schema.json")
+DEFAULT_OPERATION_MANIFEST = pathlib.Path("reports/data-go-kr/operation-manifest.json")
 
 
 def load(path: pathlib.Path) -> Any:
@@ -23,17 +27,20 @@ def load(path: pathlib.Path) -> Any:
 
 
 def operation_identity(dataset_id: str, operation: dict[str, Any]) -> str:
-    source = operation.get("source")
-    raw = source.get("raw") if isinstance(source, dict) else None
-    sequence = raw.get("operation_seq") if isinstance(raw, dict) else None
-    suffix = str(sequence) if sequence is not None and str(sequence) else str(operation.get("name", ""))
+    sequence = upstream_operation_key(operation)
+    suffix = sequence or str(operation.get("name", ""))
     return f"data_go_kr:{dataset_id}:{suffix}"
 
 
 def select(queue: dict[str, Any], *, rotation_seed: int, shard_index: int, shard_count: int, batch_size: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if rotation_seed < 0 or shard_index < 0 or shard_count < 1 or shard_index >= shard_count or batch_size < 1:
         raise ValueError("invalid rotation or shard parameters")
-    eligible = [row for row in queue.get("queue", []) if isinstance(row, dict) and row.get("source_id") == "data_go_kr"]
+    eligible = [
+        row for row in queue.get("queue", [])
+        if isinstance(row, dict)
+        and row.get("source_id") == "data_go_kr"
+        and row.get("classification") != "unsupported_current_binding"
+    ]
     if not eligible:
         raise ValueError("freshness queue has no data_go_kr operations")
     if batch_size > len(eligible):
@@ -76,13 +83,62 @@ def materialize(registry: list[Any], selected: list[dict[str, Any]]) -> list[dic
     return output
 
 
-def build(queue_path: pathlib.Path, registry_path: pathlib.Path, *, rotation_seed: int, shard_index: int, shard_count: int, batch_size: int) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+def build(queue_path: pathlib.Path, registry_path: pathlib.Path, *, rotation_seed: int, shard_index: int, shard_count: int, batch_size: int, operation_manifest_path: pathlib.Path = DEFAULT_OPERATION_MANIFEST) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     queue, registry = load(queue_path), load(registry_path)
+    operation_manifest = load(operation_manifest_path)
     if not isinstance(queue, dict) or not isinstance(registry, list):
         raise ValueError("queue or registry input has the wrong shape")
+    if not isinstance(operation_manifest, dict):
+        raise ValueError("operation manifest input must be an object")
     selected, selection = select(queue, rotation_seed=rotation_seed, shard_index=shard_index, shard_count=shard_count, batch_size=batch_size)
     batch_registry = materialize(registry, selected)
-    plan = {"schema_version": "datapan.runtime-freshness-batch.v1", "generated_at": queue["generated_at"], "queue": queue_path.as_posix(), "registry": registry_path.as_posix(), "selection": selection, "operations": [{key: row.get(key) for key in ("identity_key", "dataset_id", "operation", "operation_seq", "classification", "priority")} for row in selected]}
+    registry_sha256 = file_sha256(registry_path)
+    operation_manifest_sha256 = file_sha256(operation_manifest_path)
+    snapshot = operation_manifest.get("source_snapshot")
+    if not isinstance(snapshot, dict) or snapshot.get("sha256") != registry_sha256:
+        raise ValueError("operation manifest is not bound to the exact registry snapshot")
+    manifest_by_key = operation_manifest_index(operation_manifest)
+    contract_by_key: dict[str, list[dict[str, Any]]] = {}
+    for dataset in registry:
+        if not isinstance(dataset, dict) or not isinstance(dataset.get("operations"), list):
+            continue
+        dataset_id = str(dataset.get("id", ""))
+        for op_index, operation in enumerate(dataset["operations"]):
+            if not isinstance(operation, dict):
+                continue
+            source = operation.get("source")
+            source_system = str(source.get("system") or "data.go.kr") if isinstance(source, dict) else "data.go.kr"
+            operation_key = upstream_operation_key(operation) or ""
+            manifest_matches = manifest_by_key.get((dataset_id, source_system, operation_key), [])
+            contract = operation_contract(dataset, operation, op_index, manifest_matches[0] if len(manifest_matches) == 1 else None)
+            if len(manifest_matches) != 1:
+                contract["contract_complete"] = False
+                contract["incomplete_reasons"].append("missing_or_ambiguous_operation_manifest_identity")
+            contract_by_key.setdefault(contract["identity_key"], []).append(contract)
+    plan_operations = []
+    for row in selected:
+        item = {key: row.get(key) for key in ("identity_key", "dataset_id", "operation", "operation_seq", "classification", "priority")}
+        matches = contract_by_key.get(str(row.get("identity_key")), [])
+        contract = matches[0] if len(matches) == 1 else None
+        binding = None
+        if contract is not None and contract["contract_complete"]:
+            binding = make_contract_binding(
+                contract,
+                source_snapshot_sha256=registry_sha256,
+                operation_manifest_sha256=operation_manifest_sha256,
+                identity_key=str(row["identity_key"]),
+            )
+        item["contract_binding"] = binding
+        plan_operations.append(item)
+    plan = {
+        "schema_version": "datapan.runtime-freshness-batch.v1",
+        "generated_at": queue["generated_at"],
+        "queue": queue_path.as_posix(),
+        "registry": registry_path.as_posix(),
+        "registry_snapshot": {"source_sha256": registry_sha256, "operation_manifest_sha256": operation_manifest_sha256},
+        "selection": selection,
+        "operations": plan_operations,
+    }
     return batch_registry, plan
 
 
@@ -90,6 +146,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--queue", type=pathlib.Path, default=DEFAULT_QUEUE)
     parser.add_argument("--registry", type=pathlib.Path, default=DEFAULT_REGISTRY)
+    parser.add_argument("--operation-manifest", "--manifest", dest="operation_manifest", type=pathlib.Path, default=DEFAULT_OPERATION_MANIFEST)
     parser.add_argument("--schema", type=pathlib.Path, default=DEFAULT_SCHEMA)
     parser.add_argument("--rotation-seed", type=int, required=True)
     parser.add_argument("--shard-index", type=int, required=True)
@@ -99,7 +156,7 @@ def main() -> int:
     parser.add_argument("--output-plan", type=pathlib.Path, required=True)
     args = parser.parse_args()
     try:
-        registry, plan = build(args.queue, args.registry, rotation_seed=args.rotation_seed, shard_index=args.shard_index, shard_count=args.shard_count, batch_size=args.batch_size)
+        registry, plan = build(args.queue, args.registry, rotation_seed=args.rotation_seed, shard_index=args.shard_index, shard_count=args.shard_count, batch_size=args.batch_size, operation_manifest_path=args.operation_manifest)
         errors = list(jsonschema.Draft202012Validator(load(args.schema), format_checker=jsonschema.FormatChecker()).iter_errors(plan))
         if errors:
             raise ValueError("; ".join(error.message for error in errors))

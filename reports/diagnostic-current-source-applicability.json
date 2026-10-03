@@ -1,0 +1,567 @@
+{
+  "schema_version": "datapan.diagnostic-current-source-applicability.v1",
+  "status": "historical_scope_unchanged",
+  "historical_inputs": [
+    {
+      "path": "drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json",
+      "bytes": 19525,
+      "sha256": "da55d52d2ee1f197969ac63a1d5ab5b98e3b88fd65f90d6a48800d2e3c522d33"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/consumer-contract.v1.json",
+      "bytes": 6125,
+      "sha256": "02146e5cbc84a4f7e9b6883ff049c62b7f188cccd731c300e762395b486483a5"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/datapan.diagnostic-envelope.v1.schema.json",
+      "bytes": 45525,
+      "sha256": "da254b40947462347fcda90fdd7686b6632c76943b438f2046a28f079f33e403"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/data-go-kr-registry-identity-proof.v1.json",
+      "bytes": 4364,
+      "sha256": "b4b8fac3de722db5cf3a55ad195be90c8b57a16f11791213542fd67cbc8c4df0"
+    },
+    {
+      "path": "policy/data-go-kr-diagnostic-evidence-mapping.v1.json",
+      "bytes": 27117,
+      "sha256": "c79d9a5afe2702b22cf49fff97178b4f79ffc16eaa4624b68f826fb8c9509273"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/release-candidate/consumer-proof-intake.v1.json",
+      "bytes": 3539,
+      "sha256": "8291c9958c470dbf85eea72e99d180c2e745a81667c078a2f9c12fed16d96bf8"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-cli.v1.json",
+      "bytes": 2099,
+      "sha256": "b1487e736c8b853ae950e70fa8845754ae5722c9dc3d215d50b3a8e767f38068"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-health.v1.json",
+      "bytes": 2170,
+      "sha256": "e831df46e50107c116132f423525af5b1ea8c9743c014956a2fc3732077db70c"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/consumer-compatibility/datapan-web.v1.json",
+      "bytes": 2136,
+      "sha256": "6dcdb0b7404a43e0a58fbd1b2cbd43ebeded4778d67f1cb3f85015f391cd673c"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-cli.compatibility-receipt.v1.json",
+      "bytes": 5149,
+      "sha256": "b2256d7030bacaa640d964439de6292042d3821e0ce756187856f1d3f547220b"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-health.compatibility-receipt.v1.json",
+      "bytes": 7968,
+      "sha256": "23fe6cf7fbb63268dab889ed516a494a915877f15664821f445656fae36b18e8"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/release-candidate/proofs/datapan-web.compatibility-receipt.v1.json",
+      "bytes": 5182,
+      "sha256": "b032daa09fbb8d01508dac7ad76ce55754ba977492972c85917906468e86d180"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/approval-propagating.json",
+      "bytes": 3004,
+      "sha256": "fe000f4082f948d6a96f045d7fae91c6bdf7288c6746196a8c7b0868d6416099"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/approval-required.json",
+      "bytes": 2247,
+      "sha256": "d11fc4e18aee6fe1a7f5c9c0a94a1e6e1bae0177447f2f6bcc0dddbe6961e7d3"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/contract-drift.json",
+      "bytes": 2205,
+      "sha256": "13bc8af8c6b1540ef91a49f60ed9aab5514fabee3316868dc9f946adbe1da470"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/credential-invalid.json",
+      "bytes": 2164,
+      "sha256": "c5796d7bf59c6f282f9f75b14717a51ff716859e06f6325e784c48d507816497"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/invalid-input.json",
+      "bytes": 2209,
+      "sha256": "80adb4fce6ede5c34223468bf26b69e90c20c92d74661777c458a5238ad6ab07"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/provider-outage.json",
+      "bytes": 3588,
+      "sha256": "33c0160c4cf136b34dc3befa1ff5803c71f3c37d7946fa2b56e70c69d4be6200"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/rate-limited.json",
+      "bytes": 2108,
+      "sha256": "8be4fb69e91ae42c2a03510458b9b9fd23cf4780d551ea1ddaa505c8bc40d318"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/ready.json",
+      "bytes": 1967,
+      "sha256": "7ae2306176bdd007ca2a4ca822240e4e515c76967b2af0c816584463aee420fc"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/semantic-quality.json",
+      "bytes": 2966,
+      "sha256": "06fcc308aa039861b38f6da2fee8f23150ea7d2cac998b5d9e05b011ca1ca9b0"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/stale-data.json",
+      "bytes": 2465,
+      "sha256": "f4cc2d0f34bdfb74bbed9a3bcb5cad7b0f5444fa5ded6ca1742c916799aecf92"
+    },
+    {
+      "path": "drafts/diagnostic-envelope/fixtures/unknown.json",
+      "bytes": 2035,
+      "sha256": "e0635cf4980438141007607c66eca821383f605393a69bdb03522b3873c1dcf0"
+    },
+    {
+      "path": "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.v1.json",
+      "bytes": 16353,
+      "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
+    },
+    {
+      "path": "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.provenance.v1.json",
+      "bytes": 340,
+      "sha256": "05fe6f98a65dd72fc994129e6b9712d54c6400d1705b911c1be940717cc852b2"
+    }
+  ],
+  "historical_registry_identity": {
+    "path": "data/data-go-kr.registry.json",
+    "bytes": 137735169,
+    "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+  },
+  "archived_health_catalog": {
+    "artifact": {
+      "path": "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.v1.json",
+      "bytes": 16353,
+      "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
+    },
+    "source_git": {
+      "path": "reports/health-probe-catalog.json",
+      "commit": "b49d66b97d8155c34649f4dd2040b884c4212d64",
+      "blob": "f3c286b8b8998e2d139a3d71e02dee5af032856f"
+    }
+  },
+  "current_inputs": {
+    "registry": {
+      "path": "data/data-go-kr.registry.json",
+      "bytes": 137735169,
+      "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+    },
+    "health_catalog": {
+      "path": "reports/health-probe-catalog.json",
+      "bytes": 16353,
+      "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
+    },
+    "other_authoritative_inputs": [
+      {
+        "path": "reports/data-go-kr/error-action-catalog.json",
+        "bytes": 7314,
+        "sha256": "6ebc5df47d73192e08727c4d4669c80b76a7b493a27574bf897e863307a1bb45"
+      },
+      {
+        "path": "reports/error-action-routing-rollup.json",
+        "bytes": 8323,
+        "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"
+      },
+      {
+        "path": "sources/data_go_kr.json",
+        "bytes": 2819,
+        "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+      },
+      {
+        "path": "schemas/datapan.source-profile.v1.schema.json",
+        "bytes": 9602,
+        "sha256": "ce01786b97680a16d0e58fdee8377502d5888deb72e03fee50344fcd5b89a2cf"
+      }
+    ]
+  },
+  "checked_facts": {
+    "health_pointers": [
+      {
+        "cause": "provider_outage",
+        "path": "reports/health-probe-catalog.json",
+        "json_pointer": "/receipt_contract/policy_authority",
+        "expected": "datapan-registry",
+        "actual": "datapan-registry",
+        "status": "matched"
+      },
+      {
+        "cause": "ready",
+        "path": "reports/health-probe-catalog.json",
+        "json_pointer": "/receipt_contract/policy_authority",
+        "expected": "datapan-registry",
+        "actual": "datapan-registry",
+        "status": "matched"
+      }
+    ],
+    "registry_datasets": [
+      {
+        "dataset_id": "15000017",
+        "expected_sha256": "450fff02f56dee24c021f6349ee3e25c6fdf5cb1a5d5b7399e7e3f1d687b26aa",
+        "actual_sha256": "450fff02f56dee24c021f6349ee3e25c6fdf5cb1a5d5b7399e7e3f1d687b26aa",
+        "status": "matched",
+        "expected_operations": [
+          {
+            "operation_name": "국민여행총량조회",
+            "source_operation_seq": "2366",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "a229e555645af3138c77ff26d423929bd21dbc3218c854db9944328a96f20da5"
+          },
+          {
+            "operation_name": "국민여행경험률조회",
+            "source_operation_seq": "2367",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "e31218bd3d6bf4295a6eeae34b563e692746dfbdfaf9477263b4979fb8d095f8"
+          },
+          {
+            "operation_name": "국민여행횟수조회",
+            "source_operation_seq": "2368",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "313d4cf3b3bba1906f9547abfab3a0cf3d3011cd1103a3b94d16260740562a75"
+          },
+          {
+            "operation_name": "국민여행일수조회",
+            "source_operation_seq": "2369",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "90a27ec58331376f603667126a08257586a3e0eb5582da9b7be0a8c986becde6"
+          },
+          {
+            "operation_name": "국민여행지출조회",
+            "source_operation_seq": "2370",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "3239418e12ad9b955f9e17e4cf7c191a2264356c7d347f4b113b59593eec5c72"
+          },
+          {
+            "operation_name": "외래관광객지역비율조회",
+            "source_operation_seq": "2371",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "b3f65c03b247a2398cfe333e1fba4eabe7dfedc8d04c7a3568ee8110fecdf031"
+          },
+          {
+            "operation_name": "외래관광객방한활동비율조회",
+            "source_operation_seq": "2372",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "0d4e4d686b54a2322a93b3c31509aa6f57edb1bd2387ec1c77bdf55cab1f0bfa"
+          },
+          {
+            "operation_name": "외래관광객지출조회",
+            "source_operation_seq": "2373",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "98870a312d33657091b58276bc52c8cb894f03f65f2d5390f3d0a8c4a5c8dd14"
+          },
+          {
+            "operation_name": "관광사업체수조회",
+            "source_operation_seq": "2374",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "4560bf04607122c6ede90cc152a0330fb8e2452a0c029ad94ad76b7f2bac820d"
+          },
+          {
+            "operation_name": "관광사업체종사자수조회",
+            "source_operation_seq": "2375",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "47c1a39a587ee12d0cf86d2b736a84b29909f319b5202d3278ca8c707c2b8f3d"
+          },
+          {
+            "operation_name": "관광사업체매출액조회",
+            "source_operation_seq": "2376",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "7840a893fbc889c8df13a9b17afb66b1a3c664a9dacfbc8bdcb7fddd976e61fb"
+          }
+        ],
+        "actual_operations": [
+          {
+            "operation_name": "국민여행총량조회",
+            "source_operation_seq": "2366",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "a229e555645af3138c77ff26d423929bd21dbc3218c854db9944328a96f20da5"
+          },
+          {
+            "operation_name": "국민여행경험률조회",
+            "source_operation_seq": "2367",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "e31218bd3d6bf4295a6eeae34b563e692746dfbdfaf9477263b4979fb8d095f8"
+          },
+          {
+            "operation_name": "국민여행횟수조회",
+            "source_operation_seq": "2368",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "313d4cf3b3bba1906f9547abfab3a0cf3d3011cd1103a3b94d16260740562a75"
+          },
+          {
+            "operation_name": "국민여행일수조회",
+            "source_operation_seq": "2369",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "90a27ec58331376f603667126a08257586a3e0eb5582da9b7be0a8c986becde6"
+          },
+          {
+            "operation_name": "국민여행지출조회",
+            "source_operation_seq": "2370",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "3239418e12ad9b955f9e17e4cf7c191a2264356c7d347f4b113b59593eec5c72"
+          },
+          {
+            "operation_name": "외래관광객지역비율조회",
+            "source_operation_seq": "2371",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "b3f65c03b247a2398cfe333e1fba4eabe7dfedc8d04c7a3568ee8110fecdf031"
+          },
+          {
+            "operation_name": "외래관광객방한활동비율조회",
+            "source_operation_seq": "2372",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "0d4e4d686b54a2322a93b3c31509aa6f57edb1bd2387ec1c77bdf55cab1f0bfa"
+          },
+          {
+            "operation_name": "외래관광객지출조회",
+            "source_operation_seq": "2373",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "98870a312d33657091b58276bc52c8cb894f03f65f2d5390f3d0a8c4a5c8dd14"
+          },
+          {
+            "operation_name": "관광사업체수조회",
+            "source_operation_seq": "2374",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "4560bf04607122c6ede90cc152a0330fb8e2452a0c029ad94ad76b7f2bac820d"
+          },
+          {
+            "operation_name": "관광사업체종사자수조회",
+            "source_operation_seq": "2375",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "47c1a39a587ee12d0cf86d2b736a84b29909f319b5202d3278ca8c707c2b8f3d"
+          },
+          {
+            "operation_name": "관광사업체매출액조회",
+            "source_operation_seq": "2376",
+            "source_system": "data.go.kr",
+            "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+            "source_sha256": "7840a893fbc889c8df13a9b17afb66b1a3c664a9dacfbc8bdcb7fddd976e61fb"
+          }
+        ],
+        "operation_checks": [
+          {
+            "expected": {
+              "operation_name": "국민여행총량조회",
+              "source_operation_seq": "2366",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "a229e555645af3138c77ff26d423929bd21dbc3218c854db9944328a96f20da5"
+            },
+            "actual": {
+              "operation_name": "국민여행총량조회",
+              "source_operation_seq": "2366",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "a229e555645af3138c77ff26d423929bd21dbc3218c854db9944328a96f20da5"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "국민여행경험률조회",
+              "source_operation_seq": "2367",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "e31218bd3d6bf4295a6eeae34b563e692746dfbdfaf9477263b4979fb8d095f8"
+            },
+            "actual": {
+              "operation_name": "국민여행경험률조회",
+              "source_operation_seq": "2367",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "e31218bd3d6bf4295a6eeae34b563e692746dfbdfaf9477263b4979fb8d095f8"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "국민여행횟수조회",
+              "source_operation_seq": "2368",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "313d4cf3b3bba1906f9547abfab3a0cf3d3011cd1103a3b94d16260740562a75"
+            },
+            "actual": {
+              "operation_name": "국민여행횟수조회",
+              "source_operation_seq": "2368",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "313d4cf3b3bba1906f9547abfab3a0cf3d3011cd1103a3b94d16260740562a75"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "국민여행일수조회",
+              "source_operation_seq": "2369",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "90a27ec58331376f603667126a08257586a3e0eb5582da9b7be0a8c986becde6"
+            },
+            "actual": {
+              "operation_name": "국민여행일수조회",
+              "source_operation_seq": "2369",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "90a27ec58331376f603667126a08257586a3e0eb5582da9b7be0a8c986becde6"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "국민여행지출조회",
+              "source_operation_seq": "2370",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "3239418e12ad9b955f9e17e4cf7c191a2264356c7d347f4b113b59593eec5c72"
+            },
+            "actual": {
+              "operation_name": "국민여행지출조회",
+              "source_operation_seq": "2370",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "3239418e12ad9b955f9e17e4cf7c191a2264356c7d347f4b113b59593eec5c72"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "외래관광객지역비율조회",
+              "source_operation_seq": "2371",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "b3f65c03b247a2398cfe333e1fba4eabe7dfedc8d04c7a3568ee8110fecdf031"
+            },
+            "actual": {
+              "operation_name": "외래관광객지역비율조회",
+              "source_operation_seq": "2371",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "b3f65c03b247a2398cfe333e1fba4eabe7dfedc8d04c7a3568ee8110fecdf031"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "외래관광객방한활동비율조회",
+              "source_operation_seq": "2372",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "0d4e4d686b54a2322a93b3c31509aa6f57edb1bd2387ec1c77bdf55cab1f0bfa"
+            },
+            "actual": {
+              "operation_name": "외래관광객방한활동비율조회",
+              "source_operation_seq": "2372",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "0d4e4d686b54a2322a93b3c31509aa6f57edb1bd2387ec1c77bdf55cab1f0bfa"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "외래관광객지출조회",
+              "source_operation_seq": "2373",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "98870a312d33657091b58276bc52c8cb894f03f65f2d5390f3d0a8c4a5c8dd14"
+            },
+            "actual": {
+              "operation_name": "외래관광객지출조회",
+              "source_operation_seq": "2373",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "98870a312d33657091b58276bc52c8cb894f03f65f2d5390f3d0a8c4a5c8dd14"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "관광사업체수조회",
+              "source_operation_seq": "2374",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "4560bf04607122c6ede90cc152a0330fb8e2452a0c029ad94ad76b7f2bac820d"
+            },
+            "actual": {
+              "operation_name": "관광사업체수조회",
+              "source_operation_seq": "2374",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "4560bf04607122c6ede90cc152a0330fb8e2452a0c029ad94ad76b7f2bac820d"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "관광사업체종사자수조회",
+              "source_operation_seq": "2375",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "47c1a39a587ee12d0cf86d2b736a84b29909f319b5202d3278ca8c707c2b8f3d"
+            },
+            "actual": {
+              "operation_name": "관광사업체종사자수조회",
+              "source_operation_seq": "2375",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "47c1a39a587ee12d0cf86d2b736a84b29909f319b5202d3278ca8c707c2b8f3d"
+            },
+            "status": "matched"
+          },
+          {
+            "expected": {
+              "operation_name": "관광사업체매출액조회",
+              "source_operation_seq": "2376",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "7840a893fbc889c8df13a9b17afb66b1a3c664a9dacfbc8bdcb7fddd976e61fb"
+            },
+            "actual": {
+              "operation_name": "관광사업체매출액조회",
+              "source_operation_seq": "2376",
+              "source_system": "data.go.kr",
+              "source_url": "https://www.data.go.kr/catalog/15000017/openapi.json",
+              "source_sha256": "7840a893fbc889c8df13a9b17afb66b1a3c664a9dacfbc8bdcb7fddd976e61fb"
+            },
+            "status": "matched"
+          }
+        ],
+        "unmatched_current_operations": []
+      }
+    ]
+  },
+  "mismatches": [],
+  "authority": {
+    "current_source_compatibility_approved": false,
+    "current_runtime_evidence_accepted": false,
+    "current_consumer_approval": false,
+    "release_readiness_granted": false,
+    "publication_allowed": false,
+    "human_acceptance_granted": false
+  }
+}

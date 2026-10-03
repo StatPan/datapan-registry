@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+  "title": "Datapan Upstream Catalogue Checkpoint v1",
+  "description": "Small durable source-generation state. Large source inputs and result bundles remain digest-bound Actions artifacts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "source_id", "source_scope", "generation_id", "generation_inputs",
+    "observed_at", "last_observation", "observation_count", "last_heartbeat_at", "last_progress_at",
+    "status", "attempts_consumed", "attempts_by_id", "detail_retry_reset_ids", "request_reservation", "detail_records", "detail_queue_cursor", "output_digests",
+    "output_artifact", "input_artifacts", "lease", "fencing_token", "outcome", "checkpoint_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "datapan.upstream-catalogue-checkpoint.v1"},
+    "source_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "source_scope": {"type": "string", "minLength": 1, "maxLength": 128},
+    "generation_id": {"$ref": "#/$defs/digest"},
+    "generation_inputs": {"$ref": "#/$defs/generation_inputs"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "last_observation": {"$ref": "#/$defs/observation"},
+    "observation_count": {"type": "integer", "minimum": 1},
+    "last_heartbeat_at": {"type": "string", "format": "date-time"},
+    "last_progress_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["queued", "validating", "enriching", "composing", "ready", "no-change", "retry", "quarantined"]},
+    "attempts_consumed": {"type": "integer", "minimum": 0, "maximum": 100000},
+    "attempts_by_id": {
+      "type": "object", "maxProperties": 4096,
+      "additionalProperties": {"type": "integer", "minimum": 0, "maximum": 100}
+    },
+    "detail_retry_reset_ids": {"type": "array", "maxItems": 4096, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+    "request_reservation": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["owner_run_id", "generation_id", "fencing_token", "reserved_at", "expires_at", "attempt_budget", "reserved_attempts", "attempts_made", "records"],
+          "properties": {
+            "owner_run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+            "generation_id": {"$ref": "#/$defs/digest"},
+            "fencing_token": {"type": "integer", "minimum": 1},
+            "reserved_at": {"type": "string", "format": "date-time"},
+            "expires_at": {"type": "string", "format": "date-time"},
+            "attempt_budget": {"type": "integer", "minimum": 0, "maximum": 100},
+            "reserved_attempts": {"type": "integer", "minimum": 0, "maximum": 100},
+            "attempts_made": {"type": "integer", "minimum": 0, "maximum": 100},
+            "records": {
+              "type": "array", "maxItems": 48,
+              "items": {
+                "type": "object", "additionalProperties": false,
+                "required": ["id", "attempts_reserved", "source_sha256", "guide_sha256"],
+                "properties": {
+                  "id": {"type": "string", "minLength": 1, "maxLength": 128},
+                  "attempts_reserved": {"type": "integer", "minimum": 1, "maximum": 100},
+                  "source_sha256": {"$ref": "#/$defs/digest"},
+                  "guide_sha256": {"$ref": "#/$defs/nullable_digest"}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "detail_records": {"type": "array", "maxItems": 128, "items": {"$ref": "#/$defs/detail_record"}},
+    "detail_queue_cursor": {"type": "integer", "minimum": 0, "maximum": 1000000},
+    "output_digests": {"type": "array", "maxItems": 16, "items": {"$ref": "#/$defs/artifact_digest"}},
+    "output_artifact": {"$ref": "#/$defs/output_artifact"},
+    "input_artifacts": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"$ref": "#/$defs/input_artifact"}},
+    "lease": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/lease"}]},
+    "fencing_token": {"type": "integer", "minimum": 0},
+    "outcome": {"type": "object", "maxProperties": 24, "additionalProperties": {"type": ["string", "integer", "number", "boolean", "null", "array", "object"]}},
+    "checkpoint_sha256": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "nullable_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+    "generation_inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "source_scope", "baseline_sha256", "candidate_sha256", "observation_failure_sha256", "policy_sha256", "adapter_revision", "generator_revision", "extractor_revision"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "source_scope": {"type": "string", "minLength": 1},
+        "baseline_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "candidate_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "observation_failure_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "policy_sha256": {"$ref": "#/$defs/digest"},
+        "adapter_revision": {"$ref": "#/$defs/digest"},
+        "generator_revision": {"$ref": "#/$defs/digest"},
+        "extractor_revision": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observed_at", "producer_run_id", "refresh_evidence_sha256", "collection_status", "execution_mode"],
+      "properties": {
+        "observed_at": {"type": "string", "format": "date-time"},
+        "producer_run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "refresh_evidence_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "collection_status": {"enum": ["success", "failure", "missing"]},
+        "execution_mode": {"enum": ["live", "fixture"]}
+      }
+    },
+    "artifact_digest": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256", "bytes"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "maxLength": 128},
+        "sha256": {"$ref": "#/$defs/digest"},
+        "bytes": {"type": "integer", "minimum": 0, "maximum": 536870912}
+      }
+    },
+    "output_artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "run_id", "name", "artifact_id", "expires_at", "bundle_manifest_sha256"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1, "maxLength": 200},
+        "run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "artifact_id": {"type": ["string", "null"], "maxLength": 128},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "bundle_manifest_sha256": {"$ref": "#/$defs/nullable_digest"}
+      }
+    },
+    "input_artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "name", "artifact_id", "expires_at", "candidate_sha256", "evidence_sha256", "diff_sha256"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "name": {"type": "string", "minLength": 1, "maxLength": 128},
+        "artifact_id": {"type": ["string", "null"], "maxLength": 128},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "candidate_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "evidence_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "diff_sha256": {"$ref": "#/$defs/nullable_digest"}
+      }
+    },
+    "lease": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner_run_id", "expires_at", "fencing_token"],
+      "properties": {
+        "owner_run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "fencing_token": {"type": "integer", "minimum": 1}
+      }
+    },
+    "detail_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "source_sha256", "guide_sha256", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "source_sha256": {"$ref": "#/$defs/digest"},
+        "guide_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "status": {"enum": ["retained_unchanged", "enriched", "retry", "quarantined"]}
+      }
+    }
+  }
+}

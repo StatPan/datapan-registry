@@ -12,6 +12,8 @@ import re
 import sys
 from typing import Any
 
+from manual_review_scope import evaluate_review_scope
+
 try:
     import jsonschema
 except ImportError as exc:  # pragma: no cover - environment guard
@@ -35,6 +37,8 @@ DEFAULT_CREDENTIAL_MANUAL_REVIEW_DECISION = pathlib.Path("reports/credential-run
 DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE = pathlib.Path(
     "reports/credential-runtime-manual-review-acceptance.json"
 )
+DEFAULT_HEALTH_PLAN = pathlib.Path("reports/health-runtime-observation-plan.v1.json")
+DEFAULT_HEALTH_SELECTION = pathlib.Path("policy/health-runtime-observation-selection.json")
 DEFAULT_ERROR_ACTION_ROUTING_ROLLUP = pathlib.Path("reports/error-action-routing-rollup.json")
 DEFAULT_IMPACT_ROLLUP = pathlib.Path("reports/registry-impact-plan.json")
 DEFAULT_RELEASE_DISTRIBUTION_FOOTPRINT = pathlib.Path("reports/release-distribution-footprint.json")
@@ -222,6 +226,46 @@ def as_dict(value: object, label: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValueError(f"{label} must be a JSON object")
     return value
+
+
+def validate_manual_review_scope_current(
+    *,
+    compatibility: dict[str, Any],
+    decision: dict[str, Any],
+    decision_path: pathlib.Path,
+    acceptance: dict[str, Any],
+    handoff: dict[str, Any],
+    handoff_path: pathlib.Path,
+    manifest: dict[str, Any],
+    health_plan: dict[str, Any],
+    health_selection: dict[str, Any],
+) -> dict[str, Any]:
+    scope = evaluate_review_scope(
+        decision=decision,
+        decision_sha256=hashlib.sha256(decision_path.read_bytes()).hexdigest(),
+        compatibility=compatibility,
+        handoff=handoff,
+        handoff_sha256=hashlib.sha256(handoff_path.read_bytes()).hexdigest(),
+        manifest=manifest,
+        health_plan=health_plan,
+        health_selection=health_selection,
+    )
+    summary = as_dict(acceptance.get("summary"), "manual_review_acceptance.summary")
+    decision_body = as_dict(decision.get("decision"), "manual_review_decision.decision")
+    expected_status = (
+        "accepted"
+        if scope["effective_accepted"] is True
+        else scope["scope_status"]
+        if decision_body.get("accepted") is True
+        else "not_accepted"
+    )
+    if summary.get("accepted") is not scope["effective_accepted"]:
+        raise ValueError("manual-review acceptance is stale for the current review scope or expiry")
+    if summary.get("acceptance_status") != expected_status:
+        raise ValueError("manual-review acceptance status does not match the current review scope")
+    if acceptance.get("review_scope") != scope:
+        raise ValueError("manual-review acceptance scope receipt is stale or was modified")
+    return scope
 
 
 def as_list(value: object, label: str) -> list[Any]:
@@ -1149,8 +1193,6 @@ def validate_runtime_risk_evidence(
     for key, value in credential_acceptance_expected.items():
         if risk.get(key) != value:
             raise ValueError(f"runtime_risk_evidence.{key} expected {value}, got {risk.get(key)}")
-    if credential_acceptance_summary.get("accepted") != credential_decision_summary.get("accepted"):
-        raise ValueError("manual-review acceptance accepted state must match manual-review decision")
     if credential_acceptance_summary.get("decision_status") != credential_decision_summary.get("decision_status"):
         raise ValueError("manual-review acceptance decision status must match manual-review decision")
     if credential_acceptance_summary.get("decision_reason") != credential_decision_body.get("reason"):
@@ -1186,12 +1228,13 @@ def validate_runtime_risk_evidence(
     ):
         raise ValueError("accepted manual-review boundary requires accepted status, decision, and release boundary")
     if credential_acceptance_summary.get("accepted") is False and (
-        credential_acceptance_summary.get("acceptance_status") != "not_accepted"
+        credential_acceptance_summary.get("acceptance_status")
+        not in {"not_accepted", "revalidation_required", "unproven"}
         or credential_acceptance_summary.get("acceptance_decision")
         != "blocked_until_explicit_manual_review_acceptance"
         or credential_acceptance_boundary.get("manual_review_release_boundary_accepted") is not False
     ):
-        raise ValueError("unaccepted manual-review boundary must stay explicitly blocked")
+        raise ValueError("pending manual-review boundary must stay explicitly blocked")
     if risk.get("remediation_credential_policy_available") is not True:
         raise ValueError("source runtime remediation must expose the credential policy availability boundary")
     if risk.get("remediation_receipt_contract_available") is not True:
@@ -1474,6 +1517,8 @@ def main() -> int:
         default=DEFAULT_CREDENTIAL_MANUAL_REVIEW_ACCEPTANCE,
         type=pathlib.Path,
     )
+    parser.add_argument("--health-plan", default=DEFAULT_HEALTH_PLAN, type=pathlib.Path)
+    parser.add_argument("--health-selection", default=DEFAULT_HEALTH_SELECTION, type=pathlib.Path)
     parser.add_argument("--error-action-routing-rollup", default=DEFAULT_ERROR_ACTION_ROUTING_ROLLUP, type=pathlib.Path)
     parser.add_argument("--impact-rollup", default=DEFAULT_IMPACT_ROLLUP, type=pathlib.Path)
     parser.add_argument(
@@ -1527,6 +1572,8 @@ def main() -> int:
             load_json(args.credential_manual_review_acceptance),
             args.credential_manual_review_acceptance.as_posix(),
         )
+        health_plan = as_dict(load_json(args.health_plan), args.health_plan.as_posix())
+        health_selection = as_dict(load_json(args.health_selection), args.health_selection.as_posix())
         error_action_routing = as_dict(
             load_json(args.error_action_routing_rollup),
             args.error_action_routing_rollup.as_posix(),
@@ -1546,6 +1593,18 @@ def main() -> int:
                 location = ".".join(str(part) for part in error.path) or "<root>"
                 print(f"  {location}: {error.message}", file=sys.stderr)
             return 1
+
+        validate_manual_review_scope_current(
+            compatibility=report,
+            decision=credential_manual_review_decision,
+            decision_path=args.credential_manual_review_decision,
+            acceptance=credential_manual_review_acceptance,
+            handoff=credential_review_handoff,
+            handoff_path=args.credential_review_handoff,
+            manifest=manifest,
+            health_plan=health_plan,
+            health_selection=health_selection,
+        )
 
         validate_consistency(
             report,

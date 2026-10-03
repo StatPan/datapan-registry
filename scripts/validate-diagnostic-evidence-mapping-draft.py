@@ -24,6 +24,13 @@ FIXTURES = DRAFT / "fixtures"
 PACKETS = DRAFT / "consumer-compatibility"
 REGISTRY_IDENTITY_PROOF = DRAFT / "data-go-kr-registry-identity-proof.v1.json"
 EXPECTED_REGISTRY_IDENTITY_PROOF_SHA256 = "b4b8fac3de722db5cf3a55ad195be90c8b57a16f11791213542fd67cbc8c4df0"
+HISTORICAL_HEALTH_CATALOG = ROOT / "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.v1.json"
+EXPECTED_HISTORICAL_HEALTH_SHA256 = "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
+EXPECTED_HISTORICAL_REGISTRY = {
+    "path": "data/data-go-kr.registry.json",
+    "bytes": 137735169,
+    "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+}
 EXPECTED_CONSUMERS = ["datapan-cli", "datapan-health", "datapan-web"]
 OBLIGATIONS = {"action", "scope", "timing", "redaction", "unknown_fallback"}
 SOURCE_BASIS_TYPES = {"registry_rule", "registry_fact", "registry_dataset_identity", "consumer_evidence", "resolution_policy"}
@@ -97,9 +104,8 @@ def validate_registry_identity_proof(mapping: dict[str, Any], path: pathlib.Path
     if set(proof) != {"schema_version", "source_registry", "identity_contract", "datasets"} or proof.get("schema_version") != "datapan.diagnostic-registry-identity-proof.v1":
         raise ValueError("Registry identity proof shape drift")
     registry_input = next(item for item in mapping["authoritative_inputs"] if item["schema_version"] == "datapan.data-go-kr-registry-array.v1")
-    registry_manifest = next(item for item in load(ROOT / "manifest.json")["artifacts"] if item["path"] == registry_input["path"])
-    expected_source = {"path": registry_input["path"], "bytes": registry_manifest["bytes"], "sha256": registry_input["sha256"]}
-    if proof["source_registry"] != expected_source or registry_manifest["sha256"] != registry_input["sha256"]:
+    expected_source = EXPECTED_HISTORICAL_REGISTRY
+    if registry_input["path"] != expected_source["path"] or registry_input["sha256"] != expected_source["sha256"] or proof["source_registry"] != expected_source:
         raise ValueError("Registry identity proof source artifact drift")
     if proof["identity_contract"] != mapping["operation_application_path_contract"]["registry_identity"]:
         raise ValueError("Registry identity proof contract drift")
@@ -137,7 +143,7 @@ def effective_registry_ids(mapping: dict[str, Any], registry_ids: frozenset[str]
 
 def validate_inputs(mapping: dict[str, Any], registry_identity_proof: pathlib.Path | None = None) -> frozenset[str] | None:
     for item in mapping["authoritative_inputs"]:
-        path = ROOT / item["path"]
+        path = HISTORICAL_HEALTH_CATALOG if item["path"] == "reports/health-probe-catalog.json" else ROOT / item["path"]
         if not path.is_file():
             raise ValueError(f"missing authoritative input: {item['path']}")
         if item["schema_version"] == "datapan.data-go-kr-registry-array.v1" and registry_identity_proof is not None:
@@ -148,7 +154,10 @@ def validate_inputs(mapping: dict[str, Any], registry_identity_proof: pathlib.Pa
                 raise ValueError(f"Registry dataset array drift: {item['path']}")
         elif item["schema_version"] != "json-schema-draft-2020-12" and value.get("schema_version") != item["schema_version"]:
             raise ValueError(f"schema version drift: {item['path']}")
-        if hashlib.sha256(path.read_bytes()).hexdigest() != item["sha256"]:
+        if item["path"] == "reports/health-probe-catalog.json" and item["sha256"] != EXPECTED_HISTORICAL_HEALTH_SHA256:
+            raise ValueError("historical health catalog mapping pin drift")
+        expected_digest = EXPECTED_HISTORICAL_HEALTH_SHA256 if item["path"] == "reports/health-probe-catalog.json" else item["sha256"]
+        if hashlib.sha256(path.read_bytes()).hexdigest() != expected_digest:
             raise ValueError(f"authoritative input digest drift: {item['path']}")
     if registry_identity_proof is not None:
         return validate_registry_identity_proof(mapping, registry_identity_proof)
@@ -244,7 +253,7 @@ def validate_source_basis(mapping: dict[str, Any], registry_ids: frozenset[str] 
                     raise ValueError(f"{item['cause']}: source basis shape drift")
                 if basis.get("artifact") not in allowed_artifacts:
                     raise ValueError(f"{item['cause']}: unpinned Registry source basis")
-                artifact = ROOT / basis.get("artifact", "")
+                artifact = HISTORICAL_HEALTH_CATALOG if basis.get("artifact") == "reports/health-probe-catalog.json" else ROOT / basis.get("artifact", "")
                 try:
                     actual = pointer_get(load(artifact), basis["json_pointer"])
                 except (OSError, KeyError, IndexError, ValueError, TypeError) as exc:
