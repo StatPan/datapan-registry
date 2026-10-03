@@ -211,7 +211,11 @@ def validate_composition(
         or sum(summary_dispositions.values()) != len(identities)
     ):
         raise AdmissionError("composition disposition arithmetic does not cover the global API denominator")
-    if summary_dispositions.get("retain_deletion_pending", 0) != len(pending) or summary_dispositions.get("quarantine", 0) != len(quarantined):
+    pending_disposition_count = (
+        summary_dispositions.get("retain_deletion_pending", 0)
+        + summary_dispositions.get("retain_worker_pending", 0)
+    )
+    if pending_disposition_count != len(pending) or summary_dispositions.get("quarantine", 0) != len(quarantined):
         raise AdmissionError("composition pending/quarantine counts disagree with their identity partitions")
     outputs = composition["outputs"]
     required_outputs = {"composed-candidate.registry.json", "ready-scope.registry.json", "semantic-diff.json", "regeneration-queue.json", "quarantine.json"}

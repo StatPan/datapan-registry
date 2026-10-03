@@ -178,6 +178,11 @@ def load_module(path: pathlib.Path, name: str) -> Any:
     return module
 
 
+def load_canonical_update_pr(root: pathlib.Path) -> Any:
+    """Load the shared canonical composition and promotion validator."""
+    return load_module(root / "scripts/canonical_update_pr.py", "canonical_update_pr")
+
+
 def command(
     argv: Sequence[str],
     cwd: pathlib.Path,
@@ -1983,7 +1988,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     if idle is not None:
         print(json.dumps(idle, sort_keys=True))
         return
-    helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_pr")
+    helper = load_canonical_update_pr(root)
     composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
     _, checkpoint = locate_processor_checkpoint(
         args.state_root, processor_run_id, repository=repo, workflow_run_id=run_id,
@@ -2384,7 +2389,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
         return
 
     composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
-    composition_helper = load_module(root / "scripts/compose-upstream-catalogue-candidate.py", "processor_bundle_composition_helper")
+    composition_helper = load_canonical_update_pr(root)
     current_head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
     screened, blocked = select_first_eligible_processor_bundle(
         root, repository, candidates, blocked,
