@@ -7,6 +7,7 @@ import json
 import pathlib
 import subprocess
 import tempfile
+import types
 import unittest
 import zipfile
 from unittest import mock
@@ -626,6 +627,99 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
         )
         return bundle, checkpoint, uploaded_copy
 
+    def ready_bundle_with_worker_pending_composition(
+        self,
+        root: pathlib.Path,
+        *,
+        retain_worker_pending: int = 1,
+    ) -> tuple[pathlib.Path, dict, dict]:
+        bundle, checkpoint, _uploaded = self.ready_bundle(root)
+        candidate_path = bundle / "composed-candidate.registry.json"
+        candidate_sha = RUNNER.file_sha256(candidate_path)
+        applied = [{"provider": "data.go.kr", "id": "applied-1"}]
+        pending = [
+            {"provider": "data.go.kr", "id": "pending-deletion-1"},
+            {"provider": "data.go.kr", "id": "pending-worker-1"},
+        ]
+        quarantined = [{"provider": "data.go.kr", "id": "quarantined-1"}]
+        (bundle / "semantic-diff.json").write_bytes(RUNNER.canonical_json({
+            "applied_api_keys": applied,
+            "retained_pending_api_keys": pending,
+            "quarantined_api_keys": quarantined,
+            "api_decisions": [{"api_key": str(index)} for index in range(4)],
+        }))
+        output_names = (
+            "composed-candidate.registry.json", "ready-scope.registry.json",
+            "semantic-diff.json", "regeneration-queue.json", "quarantine.json",
+        )
+        outputs = {}
+        for name in output_names:
+            path = bundle / name
+            payload = path.read_bytes()
+            outputs[name] = {"bytes": len(payload), "sha256": hashlib.sha256(payload).hexdigest()}
+
+        generation_inputs = checkpoint["generation_inputs"]
+        input_digests = {
+            "baseline": {"bytes": 24, "sha256": generation_inputs["baseline_sha256"]},
+            "candidate": {"bytes": candidate_path.stat().st_size, "sha256": candidate_sha},
+        }
+        for name in (
+            "full_diff", "refresh_evidence", "provider_index", "source_policy",
+            "registry_schema", "provider_index_schema", "diff_schema",
+            "refresh_evidence_schema", "enrichment_evidence_schema", "composer",
+            "receipt_schema",
+        ):
+            input_digests[name] = {"bytes": 1, "sha256": hashlib.sha256(name.encode()).hexdigest()}
+        accept_new_count = 2 if retain_worker_pending == 0 else 1
+        composition = {
+            "schema_version": "datapan.catalogue-composition-receipt.v1",
+            "producer": {
+                "repository": self.repository,
+                "run_id": "70000000001",
+                "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/70000000001",
+            },
+            "input_digests": input_digests,
+            "status": "ready_scoped",
+            "scope": {
+                "full_scope_fresh": False,
+                "publication_allowed": False,
+                "global_counts": {
+                    "api_records": {"baseline_candidate_union": 4},
+                    "dispositions": {
+                        "accept_new": accept_new_count,
+                        "retain_deletion_pending": 1,
+                        "retain_worker_pending": retain_worker_pending,
+                        "quarantine": 1,
+                    },
+                },
+                "applied_api_keys": applied,
+                "retained_pending_api_keys": pending,
+                "quarantined_api_keys": quarantined,
+            },
+            "outputs": outputs,
+        }
+        (bundle / "composition-receipt.json").write_bytes(RUNNER.canonical_json(composition))
+
+        digests = []
+        for name in RUNNER.REQUIRED_PROCESSOR_FILES:
+            path = bundle / name
+            digests.append({"path": name, "sha256": RUNNER.file_sha256(path), "bytes": path.stat().st_size})
+        checkpoint["output_digests"] = digests
+        checkpoint["output_artifact"]["bundle_manifest_sha256"] = hashlib.sha256(
+            RUNNER.canonical_json(digests),
+        ).hexdigest()
+        uploaded_copy = copy.deepcopy(checkpoint)
+        uploaded_copy["output_artifact"]["artifact_id"] = None
+        uploaded_copy["output_artifact"]["expires_at"] = "2026-10-30T00:00:00Z"
+        uploaded_copy["last_heartbeat_at"] = uploaded_copy["observed_at"]
+        self.seal(uploaded_copy)
+        checkpoint["last_heartbeat_at"] = "2026-10-03T00:05:00Z"
+        self.seal(checkpoint)
+        (bundle / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+            RUNNER.canonical_json(uploaded_copy),
+        )
+        return bundle, checkpoint, uploaded_copy
+
     def ready_state(self, root: pathlib.Path, *checkpoints: dict) -> pathlib.Path:
         state_root = root / "state"
         source_root = state_root / "sources/data_go_kr"
@@ -751,6 +845,68 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             self.assertEqual(validated["status"], "ready")
             self.assertEqual(validated["registry_sha256"], checkpoint["generation_inputs"]["candidate_sha256"])
             helper.validate_composition.assert_called_once()
+
+    def test_recovery_entrypoint_uses_real_validator_for_worker_pending_receipt(self) -> None:
+        repository_root = pathlib.Path(__file__).parents[1]
+        with tempfile.TemporaryDirectory() as raw:
+            temp_root = pathlib.Path(raw)
+            bundle, checkpoint, _uploaded = self.ready_bundle_with_worker_pending_composition(temp_root)
+            validation_results = []
+
+            def select_candidate(_root, repository, candidates, blocked, **kwargs):
+                self.assertEqual(repository, self.repository)
+                composition_helper = kwargs["composition_helper"]
+                self.assertTrue(callable(composition_helper.validate_composition))
+                validation_results.append(RUNNER.validate_processor_bundle(
+                    candidates[0], bundle, kwargs["composition_schema"], composition_helper,
+                ))
+                locator = checkpoint["output_artifact"]
+                return ({
+                    "bundle_dir": bundle,
+                    "run_id": locator["run_id"],
+                    "attempt": 2,
+                    "run": {"head_sha": self.source_sha},
+                    "artifact_id": locator["artifact_id"],
+                }, blocked)
+
+            args = types.SimpleNamespace(
+                state_root=temp_root / "state",
+                datapan_cli="datapan",
+                event_run_id=None,
+            )
+            with (
+                mock.patch.dict(RUNNER.os.environ, {
+                    "GITHUB_REPOSITORY": self.repository,
+                    "GITHUB_DEFAULT_BRANCH": self.default_branch,
+                }, clear=False),
+                mock.patch.object(RUNNER, "load_promotion_journal", return_value=None),
+                mock.patch.object(RUNNER, "list_recoverable_processor_checkpoints", return_value=([checkpoint], [])),
+                mock.patch.object(RUNNER, "select_first_eligible_processor_bundle", side_effect=select_candidate),
+                mock.patch.object(RUNNER, "execute_candidate_preparation") as prepare,
+            ):
+                RUNNER.recover_ready_processor_candidate(args, repository_root)
+
+            self.assertEqual(len(validation_results), 1)
+            self.assertEqual(validation_results[0]["registry_sha256"], checkpoint["generation_inputs"]["candidate_sha256"])
+            prepare.assert_called_once_with(args, repository_root)
+            self.assertEqual(args.bundle_dir, bundle)
+            self.assertEqual(args.processor_artifact_id, checkpoint["output_artifact"]["artifact_id"])
+
+    def test_real_validator_rejects_worker_pending_count_mismatch(self) -> None:
+        repository_root = pathlib.Path(__file__).parents[1]
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            bundle, checkpoint, _uploaded = self.ready_bundle_with_worker_pending_composition(
+                root, retain_worker_pending=0,
+            )
+            composition_schema = RUNNER.load_object(
+                repository_root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+            )
+            composition_helper = RUNNER.load_canonical_update_pr(repository_root)
+            with self.assertRaisesRegex(RUNNER.PromotionError, "did not admit a valid ready_scoped") as raised:
+                RUNNER.validate_processor_bundle(checkpoint, bundle, composition_schema, composition_helper)
+            self.assertIsNotNone(raised.exception.__cause__)
+            self.assertIn("pending/quarantine counts disagree", str(raised.exception.__cause__))
 
     def test_resealed_checkpoint_mutations_outside_delivery_fields_are_rejected(self) -> None:
         mutations = (
