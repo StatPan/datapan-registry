@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
-      "last_receipt_sha256": "f37c62f66a1c2d4f2627e11632602d7f423c5c2938964995b5ea30a80b6839c5",
-      "last_seen_at": "2026-10-03T14:19:54Z",
-      "observation_count": 25,
+      "last_receipt_sha256": "4628e7471bb3e6aa4036c8c4a6efd1df101cc17ce5f3071a5debd236de0ab40c",
+      "last_seen_at": "2026-10-03T14:35:13Z",
+      "observation_count": 26,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -52,9 +52,9 @@
       "fault_key": "43ee60fa2c26b99c60ab25fee25a75303bfeb43ad3207db2b2c8f8b3c5c2beb6",
       "first_seen_at": "2026-10-03T09:08:06Z",
       "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
-      "last_receipt_sha256": "f37c62f66a1c2d4f2627e11632602d7f423c5c2938964995b5ea30a80b6839c5",
-      "last_seen_at": "2026-10-03T14:19:54Z",
-      "observation_count": 13,
+      "last_receipt_sha256": "4628e7471bb3e6aa4036c8c4a6efd1df101cc17ce5f3071a5debd236de0ab40c",
+      "last_seen_at": "2026-10-03T14:35:13Z",
+      "observation_count": 14,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_pending_review",
@@ -133,6 +133,29 @@
     },
     {
       "execution_identity": {
+        "head_sha": "cbd138bf63569c3a273165ee53b53703d2fdaf08",
+        "run_attempt": 1,
+        "run_id": "37129182488",
+        "run_started_at": "2026-10-03T14:19:16Z"
+      },
+      "fault_key": "3d02059de2ec26757f01d048c1e35453199887cab5906087c97f8c7d9fd9831e",
+      "first_seen_at": "2026-10-03T14:35:13Z",
+      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+      "last_receipt_sha256": "4628e7471bb3e6aa4036c8c4a6efd1df101cc17ce5f3071a5debd236de0ab40c",
+      "last_seen_at": "2026-10-03T14:35:13Z",
+      "observation_count": 1,
+      "owner_ticket": 659,
+      "producer_run_id": "36646768289",
+      "reason": "promotion_workflow_run_failed",
+      "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "recovery_evidence": null,
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "promotion-execution",
+      "status": "open"
+    },
+    {
+      "execution_identity": {
         "head_sha": "d8fa2c893b373429cb21dccafbad3284d317b320",
         "run_attempt": 1,
         "run_id": "37124002368",
@@ -192,8 +215,8 @@
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37129214429-1-f37c62f66a1c2d4f.json",
-    "sha256": "f37c62f66a1c2d4f2627e11632602d7f423c5c2938964995b5ea30a80b6839c5"
+    "path": "receipts/receipt-37130117979-1-4628e7471bb3e6aa.json",
+    "sha256": "4628e7471bb3e6aa4036c8c4a6efd1df101cc17ce5f3071a5debd236de0ab40c"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -213,7 +236,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "e1324af8a5c3467106622dd6b9440bc2e5151b9bd8d0b552a50e6e41c6e05953",
-  "state_status": "degraded",
-  "updated_at": "2026-10-03T14:19:54Z"
+  "state_sha256": "82bf52a705655ddf921e136d88b4e668a90e76d327a1a4affa1a33b040af9792",
+  "state_status": "blocked",
+  "updated_at": "2026-10-03T14:35:13Z"
 }
