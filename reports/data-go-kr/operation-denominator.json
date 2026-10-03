@@ -1,12 +1,30 @@
 {
   "schema_version": "datapan.operation-denominator.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-09-29T23:44:39Z",
   "source_id": "data_go_kr",
   "provider": "data.go.kr",
-  "scope": {"kind": "aggregate_supported_catalog", "definition": "Operations materialized in the canonical data.go.kr registry coverage report.", "unknown_upstream_operations_covered": false},
-  "provenance": {"source_profile": "sources/data_go_kr.json", "catalog_artifact": "reports/coverage.json", "reviewed_at": "2026-07-04"},
-  "identity_fields": ["provider", "dataset_id", "operation"],
-  "summary": {"operations": 21256, "callable_operations": 21114},
+  "scope": {
+    "kind": "aggregate_supported_catalog",
+    "definition": "Operations materialized in the canonical data.go.kr registry coverage report.",
+    "unknown_upstream_operations_covered": false
+  },
+  "provenance": {
+    "source_profile": "sources/data_go_kr.json",
+    "catalog_artifact": "reports/coverage.json",
+    "reviewed_at": "2026-06-29"
+  },
+  "identity_fields": [
+    "provider",
+    "dataset_id",
+    "operation"
+  ],
+  "summary": {
+    "operations": 21533,
+    "callable_operations": 21391
+  },
   "operations": [],
-  "maintenance": {"refresh_owner": "datapan-registry", "refresh_trigger": "scheduled_catalog_observation"}
+  "maintenance": {
+    "refresh_owner": "datapan-registry",
+    "refresh_trigger": "scheduled_catalog_observation"
+  }
 }

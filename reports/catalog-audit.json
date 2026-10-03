@@ -1,36 +1,36 @@
 {
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-09-29T23:44:39Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
+  "registry": "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
   "sample_limit": 5,
   "audit": {
-    "specs_total": 12060,
-    "operations_total": 21256,
-    "callable_operations": 21114,
+    "specs_total": 12282,
+    "operations_total": 21533,
+    "callable_operations": 21391,
     "specs_without_operations": 473,
     "specs_without_callable_operation": 548,
     "operations_without_endpoint": 142,
-    "operations_without_request_params": 8918,
-    "operations_without_response_params": 10140,
+    "operations_without_request_params": 8914,
+    "operations_without_response_params": 10085,
     "specs_missing_organization": 0,
     "specs_missing_source_url": 0,
     "specs_missing_updated_at": 0,
     "dependency": {
-      "data_go_kr_gateway_operations": 11426,
-      "gateway_with_external_guide_specs": 902,
+      "data_go_kr_gateway_operations": 11703,
+      "gateway_with_external_guide_specs": 932,
       "external_endpoint_specs": 4716,
       "external_endpoint_operations": 9646,
       "service_root_only_operations": 19,
       "soap_operations": 35,
       "wms_operations": 123,
-      "dev_approval_required_operations": 224,
-      "prod_approval_required_operations": 8091,
+      "dev_approval_required_operations": 226,
+      "prod_approval_required_operations": 8079,
       "malformed_endpoint_url_count": 42,
-      "malformed_guide_url_count": 682,
+      "malformed_guide_url_count": 683,
       "top_endpoint_hosts": [
         {
           "host": "apis.data.go.kr",
-          "count": 11423
+          "count": 11700
         },
         {
           "host": "data.gg.go.kr",
@@ -270,7 +270,7 @@
         },
         {
           "host": "phdata.pohang.go.kr",
-          "count": 52
+          "count": 53
         }
       ]
     },

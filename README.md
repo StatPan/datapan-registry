@@ -23,15 +23,15 @@ redistributing, contributing, or reporting a vulnerability.
 ## Current Snapshot
 
 - Provider: `data.go.kr`
-- Specs: `12060`
-- Operations: `21256`
-- Callable operations: `21114` (`99.3%`)
+- Specs: `12282`
+- Operations: `21533`
+- Callable operations: `21391` (`99.3%`)
 - Sustainable coverage decision: `coverage_gaps` (`6` of `9` layers meet
   policy targets). Routable coverage is not treated as total usability.
 - Supported-source denominator coverage: `5` of `5` sources have an explicit
-  operation denominator (`100.0%`), covering `21260` operations in total.
+  operation denominator (`100.0%`), covering `21537` operations in total.
 - Runtime operation evidence: `0` unique operation identities out of
-  `21260` (`0.0%`); fresh successful evidence covers `0` unique operations
+  `21537` (`0.0%`); fresh successful evidence covers `0` unique operations
   (`0.0%`) as of `2026-09-30T01:45:58.529244Z`.
 - Runtime freshness: `0` current operations have fresh verified
   evidence within the `30` day window; `0` have current-bound evidence within the
@@ -58,9 +58,9 @@ redistributing, contributing, or reporting a vulnerability.
   `reports/latest-verification.json` (`3577` verified, `946` failed, `2658`
   skipped)
 - Runtime evidence growth target: `0` fresh verified current-contract results are below
-  the unrounded `10%` release target (`2126` results); `2126` additional results are
+  the unrounded `10%` release target (`2154` results); `2154` additional results are
   required.
-- Institution API overview: `411` organizations, `12060` APIs, and `21256`
+- Institution API overview: `416` organizations, `12282` APIs, and `21533`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.
 - Missing external host probe: `81` manifest-bound probe records remain in

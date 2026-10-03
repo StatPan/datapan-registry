@@ -1,24 +1,24 @@
 {
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-09-29T23:44:39Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
+  "registry": "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
-  "filtered_count": 326,
+  "filtered_count": 328,
   "summary": {
-    "hosts": 326,
+    "hosts": 328,
     "data_go_kr_gateway_hosts": 2,
     "external_endpoint_hosts": 179,
-    "external_guide_hosts": 233,
+    "external_guide_hosts": 235,
     "registered_adapter_hosts": 168,
     "operation_hosts": 181,
-    "guide_only_hosts": 145,
+    "guide_only_hosts": 147,
     "missing_adapter_hosts": 11,
     "needs_adapter_operations": 29,
     "service_root_operations": 19,
     "unsupported_protocol_operations": 158,
-    "approval_required_operations": 8197,
-    "malformed_source_url_count": 724
+    "approval_required_operations": 8185,
+    "malformed_source_url_count": 725
   },
   "providers": [
     {
@@ -796,10 +796,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 26,
+      "specs": 27,
       "operations": 42,
       "external_endpoint_operations": 42,
-      "external_guide_specs": 14,
+      "external_guide_specs": 15,
       "approval_required_operations": 14,
       "sample_ids": [
         "15037518",
@@ -1367,10 +1367,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 21,
+      "specs": 25,
       "operations": 15,
       "external_endpoint_operations": 15,
-      "external_guide_specs": 20,
+      "external_guide_specs": 24,
       "approval_required_operations": 10,
       "sample_ids": [
         "15004087",
@@ -1592,10 +1592,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 8,
+      "specs": 9,
       "operations": 8,
       "external_endpoint_operations": 8,
-      "external_guide_specs": 1,
+      "external_guide_specs": 2,
       "sample_ids": [
         "15001011",
         "15001018",
@@ -1763,10 +1763,10 @@
         "external_guide"
       ],
       "adapter_status": "adapter",
-      "specs": 6,
+      "specs": 8,
       "operations": 6,
       "external_endpoint_operations": 6,
-      "external_guide_specs": 6,
+      "external_guide_specs": 8,
       "approval_required_operations": 6,
       "sample_ids": [
         "15051436",
@@ -3003,9 +3003,9 @@
         "external_guide"
       ],
       "adapter_status": "guide_only",
-      "specs": 52,
+      "specs": 53,
       "operations": 0,
-      "external_guide_specs": 52,
+      "external_guide_specs": 53,
       "sample_ids": [
         "15139496",
         "15139501",
@@ -3043,6 +3043,21 @@
       ]
     },
     {
+      "host": "odp.airport.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 24,
+      "operations": 0,
+      "external_guide_specs": 24,
+      "sample_ids": [
+        "15095049",
+        "15095066",
+        "15098224"
+      ]
+    },
+    {
       "host": "ext.fips.go.kr",
       "kinds": [
         "external_guide"
@@ -3055,21 +3070,6 @@
         "15043939",
         "15056511",
         "15056556"
-      ]
-    },
-    {
-      "host": "odp.airport.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 16,
-      "operations": 0,
-      "external_guide_specs": 16,
-      "sample_ids": [
-        "15095049",
-        "15095066",
-        "15098224"
       ]
     },
     {
@@ -3239,6 +3239,21 @@
       ]
     },
     {
+      "host": "soil.rda.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 11,
+      "operations": 0,
+      "external_guide_specs": 11,
+      "sample_ids": [
+        "15075883",
+        "15075887",
+        "15075889"
+      ]
+    },
+    {
       "host": "kipo-api.koreantk.com",
       "kinds": [
         "external_guide"
@@ -3312,21 +3327,6 @@
         "15008887",
         "15017664",
         "15017665"
-      ]
-    },
-    {
-      "host": "soil.rda.go.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 9,
-      "operations": 0,
-      "external_guide_specs": 9,
-      "sample_ids": [
-        "15075883",
-        "15075887",
-        "15075889"
       ]
     },
     {
@@ -3417,6 +3417,21 @@
         "15098385",
         "15098435",
         "15098436"
+      ]
+    },
+    {
+      "host": "api.socialservice.or.kr:444",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 6,
+      "operations": 0,
+      "external_guide_specs": 6,
+      "sample_ids": [
+        "15057683",
+        "15059061",
+        "3075061"
       ]
     },
     {
@@ -3570,6 +3585,21 @@
       ]
     },
     {
+      "host": "www.h2nbiz.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15133016",
+        "15133332",
+        "15133338"
+      ]
+    },
+    {
       "host": "www.kordi.go.kr",
       "kinds": [
         "external_guide"
@@ -3598,6 +3628,21 @@
         "15141771",
         "15141804",
         "15141806"
+      ]
+    },
+    {
+      "host": "www.nics.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 5,
+      "operations": 0,
+      "external_guide_specs": 5,
+      "sample_ids": [
+        "15136077",
+        "15136089",
+        "15136091"
       ]
     },
     {
@@ -3722,21 +3767,6 @@
       ]
     },
     {
-      "host": "www.h2nbiz.or.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 4,
-      "operations": 0,
-      "external_guide_specs": 4,
-      "sample_ids": [
-        "15133016",
-        "15133332",
-        "15133338"
-      ]
-    },
-    {
       "host": "www.i-se.co.kr",
       "kinds": [
         "external_guide"
@@ -3809,21 +3839,6 @@
         "15062581",
         "15099792",
         "15099836"
-      ]
-    },
-    {
-      "host": "api.socialservice.or.kr:444",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 3,
-      "operations": 0,
-      "external_guide_specs": 3,
-      "sample_ids": [
-        "15057683",
-        "15059061",
-        "3075061"
       ]
     },
     {
@@ -4044,6 +4059,20 @@
       "sample_ids": [
         "15084296",
         "15084303"
+      ]
+    },
+    {
+      "host": "ocis.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 2,
+      "operations": 0,
+      "external_guide_specs": 2,
+      "sample_ids": [
+        "15162966",
+        "15163410"
       ]
     },
     {
@@ -4464,6 +4493,19 @@
       ]
     },
     {
+      "host": "knhanes.kdca.go.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15166328"
+      ]
+    },
+    {
       "host": "koreanfood.rda.go.kr",
       "kinds": [
         "external_guide"
@@ -4552,6 +4594,19 @@
       "external_guide_specs": 1,
       "sample_ids": [
         "15144520"
+      ]
+    },
+    {
+      "host": "portal.kosha.or.kr",
+      "kinds": [
+        "external_guide"
+      ],
+      "adapter_status": "guide_only",
+      "specs": 1,
+      "operations": 0,
+      "external_guide_specs": 1,
+      "sample_ids": [
+        "15150176"
       ]
     },
     {
@@ -4919,19 +4974,6 @@
       ]
     },
     {
-      "host": "www.nics.go.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 1,
-      "operations": 0,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15136077"
-      ]
-    },
-    {
       "host": "www.sejong.go.kr",
       "kinds": [
         "external_guide"
@@ -4971,19 +5013,6 @@
       ]
     },
     {
-      "host": "www2.nics.go.kr",
-      "kinds": [
-        "external_guide"
-      ],
-      "adapter_status": "guide_only",
-      "specs": 1,
-      "operations": 0,
-      "external_guide_specs": 1,
-      "sample_ids": [
-        "15041818"
-      ]
-    },
-    {
       "host": "xn--now-po7lf48dlsm0ya109f.kr",
       "kinds": [
         "external_guide"
@@ -5016,10 +5045,10 @@
         "data_go_kr_gateway"
       ],
       "adapter_status": "builtin",
-      "specs": 6778,
-      "operations": 11423,
+      "specs": 7000,
+      "operations": 11700,
       "wms_operations": 7,
-      "approval_required_operations": 4018,
+      "approval_required_operations": 4006,
       "sample_ids": [
         "15000115",
         "15000415",
