@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.catalogue-enrichment-evidence.v1.schema.json",
+  "title": "Datapan Catalogue Enrichment Evidence v1",
+  "description": "Source-bound operation enrichment tied to the immutable producer candidate and the canonical data.go.kr detail page actually observed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records"],
+  "properties": {
+    "schema_version": {"const": "datapan.catalogue-enrichment-evidence.v1"},
+    "original_candidate_sha256": {"$ref": "#/$defs/sha256"},
+    "provider_index_sha256": {"$ref": "#/$defs/sha256"},
+    "adapter_revision": {"$ref": "#/$defs/sha256"},
+    "extractor_revision": {"$ref": "#/$defs/sha256"},
+    "records": {"type": "array", "items": {"$ref": "#/$defs/record"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "nullableSha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "nullableHttpUrl": {
+      "anyOf": [
+        {"type": "string", "format": "uri", "pattern": "^https?://"},
+        {"type": "null"}
+      ]
+    },
+    "api_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "id"],
+      "properties": {
+        "provider": {"const": "data.go.kr"},
+        "id": {"type": "string", "pattern": "^[0-9]+$"}
+      }
+    },
+    "source_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system", "page_url", "effective_url", "page_sha256", "observed_at"],
+      "properties": {
+        "system": {"const": "data.go.kr"},
+        "page_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "effective_url": {"type": "string", "format": "uri", "pattern": "^https://"},
+        "page_sha256": {"$ref": "#/$defs/sha256"},
+        "observed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_key", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "status", "source_provenance"],
+      "properties": {
+        "api_key": {"$ref": "#/$defs/api_key"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "guide_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "observed_guide_url": {"$ref": "#/$defs/nullableHttpUrl"},
+        "observed_guide_url_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "operations": {"type": "array", "items": {"type": "object"}},
+        "operations_sha256": {"$ref": "#/$defs/sha256"},
+        "status": {"const": "enriched"},
+        "source_provenance": {"$ref": "#/$defs/source_provenance"}
+      }
+    }
+  }
+}

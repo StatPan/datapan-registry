@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 97,
+  "count": 99,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -867,6 +867,24 @@
       "version": "v1",
       "bytes": 4339,
       "sha256": "ac55a4b88c0e0ad6639ca97403e2c83e9d61f574315785f122e4279cf74b17e2"
+    },
+    {
+      "path": "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.catalogue-composition-receipt.v1.schema.json",
+      "title": "Datapan Catalogue Composition Receipt v1",
+      "contract": "catalogue-composition-receipt",
+      "version": "v1",
+      "bytes": 3740,
+      "sha256": "00e13f478c7902bdd457f8b27916237b89de4f7c491b5d85915d80b9d507d1b8"
+    },
+    {
+      "path": "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.catalogue-enrichment-evidence.v1.schema.json",
+      "title": "Datapan Catalogue Enrichment Evidence v1",
+      "contract": "catalogue-enrichment-evidence",
+      "version": "v1",
+      "bytes": 2893,
+      "sha256": "8d03e0a401a51e52a459acced0488007c1014cd3141a2549586043d0efaea696"
     },
     {
       "path": "schemas/datapan.current-runtime-evidence-projection.v1.schema.json",

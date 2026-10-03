@@ -148,6 +148,8 @@ jobs:
           python scripts/validate-source-profiles.py
           python scripts/validate-source-refresh-policy.py
           python -m unittest tests/test_run_upstream_refresh.py
+          python -m unittest tests/test_compose_upstream_catalogue_candidate.py
+          python -m unittest tests/test_manual_review_technical_rebinding.py
           python -m unittest tests/test_sync_release_manifest_artifacts.py
           python scripts/generate-source-contract-rollup.py --check
           python scripts/validate-source-contract-rollups.py
@@ -168,6 +170,7 @@ jobs:
           python -m unittest tests/test_apply_runtime_freshness_import.py
           python -m unittest tests/test_generate_runtime_freshness_import_admission.py
           python -m unittest tests/test_attest_runtime_freshness_import.py
+          python -m unittest tests/test_runtime_freshness_pr_handoff.py
           python scripts/generate-runtime-evidence-growth.py --check
           python -m unittest tests/test_generate_runtime_evidence_growth.py
           python scripts/generate-readme-runtime-snapshot.py --check
@@ -180,6 +183,7 @@ jobs:
           python -m py_compile scripts/apply-runtime-freshness-import.py
           python -m py_compile scripts/generate-runtime-freshness-import-admission.py
           python -m py_compile scripts/attest-runtime-freshness-import.py
+          python -m py_compile scripts/runtime-freshness-pr-handoff.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
           python -m unittest tests/test_convert_source_verification_receipt.py
           python -m unittest tests/test_generate_source_runtime_remediation_map.py
