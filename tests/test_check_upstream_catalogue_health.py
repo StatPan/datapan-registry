@@ -27,6 +27,10 @@ SOURCE_POLICY = json.loads((ROOT / "policy/source-refresh.json").read_text())
 SOURCE_POLICY_SHA = HEALTH.file_sha256(ROOT / "policy/source-refresh.json")
 HEALTH_POLICY_SHA = HEALTH.file_sha256(ROOT / "policy/upstream-catalogue-health.json")
 RUN_ID = "100"
+COLLECTOR_PATH = ".github/workflows/upstream-catalog-refresh.yml"
+PROMOTION_PATH = ".github/workflows/canonical-update-promotion.yml"
+PUBLICATION_ACK_PATH = ".github/workflows/canonical-update-publication-ack.yml"
+WORKFLOW_IDS_BY_PATH = {COLLECTOR_PATH: 1101, PROMOTION_PATH: 1102, PUBLICATION_ACK_PATH: 1103}
 EVIDENCE_SHA = "c" * 64
 GENERATION_ID = "a" * 64
 REAL_PROCESSOR_READY_BUNDLE = [
@@ -145,8 +149,11 @@ def promotion_attempt_evidence(
     job_conclusion: str | None = "success", job_completed_at: str | None = None,
 ) -> dict:
     head_sha = "f" * 40
+    plain_workflow_path = workflow_path.removesuffix("@main").removesuffix("@refs/heads/main")
     run = {
-        "id": run_id, "run_attempt": 1, "path": workflow_path, "status": "completed", "conclusion": "success",
+        "id": run_id, "workflow_id": WORKFLOW_IDS_BY_PATH.get(plain_workflow_path, 1999), "run_attempt": 1,
+        "path": plain_workflow_path, "event": "workflow_run", "status": "completed", "conclusion": "success",
+        "repository": {"full_name": "StatPan/datapan-registry"},
         "head_repository": {"full_name": "StatPan/datapan-registry"}, "head_branch": "main", "head_sha": head_sha,
         # GitHub can leave this null in the exact-attempt response. Ordering uses the attempt-bound jobs API.
         "completed_at": None, "updated_at": completed_at,
@@ -180,11 +187,13 @@ def write_state(root: pathlib.Path, checkpoints: list[dict]) -> pathlib.Path:
 
 def collector_run(*, run_id: str = RUN_ID, conclusion: str = "success", status: str = "completed", created_at: str = "2026-09-30T20:17:00Z") -> dict:
     return {
-        "id": int(run_id), "path": ".github/workflows/upstream-catalog-refresh.yml@main",
+        "id": int(run_id), "workflow_id": WORKFLOW_IDS_BY_PATH[COLLECTOR_PATH], "path": COLLECTOR_PATH,
         "event": "schedule", "status": status, "conclusion": conclusion,
         "created_at": created_at, "updated_at": "2026-09-30T20:25:00Z",
         "run_started_at": "2026-09-30T20:17:01Z", "head_branch": "main",
         "head_sha": "a" * 40,
+        "repository": {"full_name": "StatPan/datapan-registry"},
+        "head_repository": {"full_name": "StatPan/datapan-registry"},
     }
 
 
@@ -254,9 +263,9 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                     if not isinstance(row, dict):
                         continue
                     workflow_path = (
-                        ".github/workflows/canonical-update-publication-ack.yml@main"
+                        PUBLICATION_ACK_PATH
                         if row.get("status") in {"publication-pending", "published", "read-back-confirmed"}
-                        else ".github/workflows/canonical-update-promotion.yml@main"
+                        else PROMOTION_PATH
                     )
                     run_map.setdefault(
                         f"{row.get('run_id')}/{row.get('run_attempt')}",
@@ -275,6 +284,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             producer_runs_by_id={str(row.get("id")): row for row in run_rows if isinstance(row, dict)},
             promotion_runs_by_id=run_map,
             promotion_workflow_paths=POLICY["promotion_state"],
+            workflow_ids_by_path=WORKFLOW_IDS_BY_PATH,
         )
 
     def test_fresh_live_observation_and_terminal_no_change_are_separate_from_heartbeat(self) -> None:
@@ -285,6 +295,55 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         self.assertEqual(source["observation"]["state"], "fresh")
         self.assertEqual(source["processor"]["state"], "no-change")
         self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
+
+    def test_real_actions_run_shape_binds_plain_path_without_a_ref_field(self) -> None:
+        run = collector_run()
+        self.assertEqual(run["path"], COLLECTOR_PATH)
+        self.assertNotIn("ref", run)
+        self.assertTrue(HEALTH.trusted_main_workflow_run(
+            run, "StatPan/datapan-registry", COLLECTOR_PATH,
+            WORKFLOW_IDS_BY_PATH[COLLECTOR_PATH], {"schedule", "workflow_dispatch"},
+        ))
+        invalid_rows = []
+        for field in ("repository", "head_repository", "head_sha", "workflow_id", "path", "event", "head_branch"):
+            invalid = copy.deepcopy(run)
+            invalid.pop(field)
+            invalid_rows.append((field, invalid))
+        wrong_repository = copy.deepcopy(run)
+        wrong_repository["repository"]["full_name"] = "someone-else/datapan-registry"
+        invalid_rows.append(("repository.full_name", wrong_repository))
+        wrong_head_repository = copy.deepcopy(run)
+        wrong_head_repository["head_repository"]["full_name"] = "someone-else/datapan-registry"
+        invalid_rows.append(("head_repository.full_name", wrong_head_repository))
+        wrong_workflow_id = copy.deepcopy(run)
+        wrong_workflow_id["workflow_id"] += 1
+        invalid_rows.append(("workflow_id mismatch", wrong_workflow_id))
+        wrong_sha = copy.deepcopy(run)
+        wrong_sha["head_sha"] = "not-a-commit"
+        invalid_rows.append(("head_sha format", wrong_sha))
+        for label, invalid in invalid_rows:
+            with self.subTest(label=label):
+                self.assertFalse(HEALTH.trusted_main_workflow_run(
+                    invalid, "StatPan/datapan-registry", COLLECTOR_PATH,
+                    WORKFLOW_IDS_BY_PATH[COLLECTOR_PATH], {"schedule", "workflow_dispatch"},
+                ))
+
+    def test_workflow_identity_uses_github_metadata_for_the_configured_path(self) -> None:
+        with mock.patch.object(HEALTH, "gh_json", return_value={"id": 1101, "path": COLLECTOR_PATH}) as api:
+            self.assertEqual(HEALTH.collect_workflow_identity("StatPan/datapan-registry", COLLECTOR_PATH), 1101)
+        api.assert_called_once_with("repos/StatPan/datapan-registry/actions/workflows/upstream-catalog-refresh.yml")
+        with mock.patch.object(HEALTH, "gh_json", return_value={"id": 1101, "path": ".github/workflows/other.yml"}):
+            with self.assertRaisesRegex(RuntimeError, "github_workflow_identity_invalid"):
+                HEALTH.collect_workflow_identity("StatPan/datapan-registry", COLLECTOR_PATH)
+
+    def test_incomplete_actions_run_cannot_supply_schedule_or_observation_trust(self) -> None:
+        incomplete = collector_run()
+        incomplete.pop("repository")
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(pathlib.Path(directory), runs=[incomplete])
+        reasons = {row["reason"] for row in report["faults"]}
+        self.assertIn("scheduled_execution_missing", reasons)
+        self.assertIn("source_observation_run_unverified", reasons)
 
     def test_main_canonical_identity_uses_manifest_bound_lfs_oid_without_materializing_payload(self) -> None:
         expected_oid = "a" * 64
@@ -536,7 +595,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         final_run_id = str(ack["acknowledgements"][-1]["run_id"])
         incomplete_attempt = promotion_attempt_evidence(
             int(final_run_id), "2026-09-30T21:00:00Z",
-            ".github/workflows/canonical-update-publication-ack.yml@main",
+            PUBLICATION_ACK_PATH,
             job_status="in_progress", job_conclusion=None, job_completed_at=None,
         )
         with tempfile.TemporaryDirectory() as directory:
@@ -630,6 +689,22 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         source = report["sources"][0]
         self.assertEqual(source["canonical"]["last_good"]["publication_revision"], "9" * 40)
         self.assertIn("promotion_readback_run_unverified", {row["reason"] for row in source["faults"]})
+
+    def test_readback_requires_run_repository_workflow_id_and_head_sha(self) -> None:
+        ack = promotion_receipt(GENERATION_ID, "read-back-confirmed")
+        final_run_id = str(ack["acknowledgements"][-1]["run_id"])
+        valid = promotion_attempt_evidence(int(final_run_id), "2026-09-30T21:00:00Z", PUBLICATION_ACK_PATH)
+        for field in ("repository", "workflow_id", "head_sha"):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as directory:
+                malformed = copy.deepcopy(valid)
+                malformed["run"].pop(field)
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")], ack=ack,
+                    promotion_runs={f"{final_run_id}/1": malformed},
+                )
+            source = report["sources"][0]
+            self.assertEqual(source["canonical"]["last_good"]["publication_revision"], "9" * 40)
+            self.assertIn("promotion_readback_run_unverified", {row["reason"] for row in source["faults"]})
 
     def test_readback_from_older_generation_advances_last_good_while_new_candidate_waits(self) -> None:
         generation_b = "9" * 64

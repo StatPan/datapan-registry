@@ -1114,7 +1114,7 @@
           "type": "boolean"
         },
         "manual_review_acceptance_status": {
-          "enum": ["not_accepted", "accepted"]
+          "enum": ["not_accepted", "accepted", "revalidation_required", "unproven"]
         },
         "manual_review_acceptance_accepted": {
           "type": "boolean"

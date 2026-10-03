@@ -95,6 +95,7 @@
         "registry",
         "dependencies",
         "latest_verification",
+        "current_runtime_evidence_projection",
         "coverage",
         "provider_index"
       ],
@@ -106,6 +107,9 @@
           "$ref": "#/$defs/path"
         },
         "latest_verification": {
+          "$ref": "#/$defs/path"
+        },
+        "current_runtime_evidence_projection": {
           "$ref": "#/$defs/path"
         },
         "coverage": {
@@ -125,6 +129,10 @@
         "operations",
         "runtime_evidence",
         "runtime_evidence_percent",
+        "unbound_evidence_records",
+        "contract_changed_evidence_records",
+        "ambiguous_evidence_records",
+        "historical_evidence_records",
         "callable_operations",
         "external_endpoint_operations",
         "registered_adapter_operations",
@@ -146,6 +154,18 @@
         },
         "runtime_evidence_percent": {
           "$ref": "#/$defs/percent"
+        },
+        "unbound_evidence_records": {
+          "$ref": "#/$defs/count"
+        },
+        "contract_changed_evidence_records": {
+          "$ref": "#/$defs/count"
+        },
+        "ambiguous_evidence_records": {
+          "$ref": "#/$defs/count"
+        },
+        "historical_evidence_records": {
+          "$ref": "#/$defs/count"
         },
         "callable_operations": {
           "$ref": "#/$defs/count"

@@ -200,6 +200,24 @@ def collect_workflow_runs(repository: str, workflow_path: str, limit: int) -> li
     return [row for row in rows if isinstance(row, dict)]
 
 
+def collect_workflow_identity(repository: str, workflow_path: str) -> int:
+    """Resolve the configured workflow path to GitHub's authoritative workflow ID."""
+    workflow_filename = pathlib.PurePosixPath(workflow_path).name
+    if not workflow_filename.endswith((".yml", ".yaml")):
+        raise RuntimeError("collector_workflow_filename_invalid")
+    payload = gh_json(f"repos/{repository}/actions/workflows/{workflow_filename}")
+    workflow_id = payload.get("id") if isinstance(payload, dict) else None
+    if (
+        isinstance(workflow_id, bool)
+        or not isinstance(workflow_id, int)
+        or workflow_id < 1
+        or not isinstance(payload.get("path"), str)
+        or not workflow_path_matches(payload["path"], workflow_path)
+    ):
+        raise RuntimeError("github_workflow_identity_invalid")
+    return workflow_id
+
+
 def collect_run_artifacts(repository: str, run_id: str) -> list[dict[str, Any]]:
     if not run_id.isdigit():
         return []
@@ -377,7 +395,40 @@ def workflow_path_matches(actual: Any, expected: str) -> bool:
 
 
 def run_matches_workflow(run: dict[str, Any], expected: str) -> bool:
-    return workflow_path_matches(run.get("path"), expected) or workflow_path_matches(run.get("workflow_path"), expected)
+    return workflow_path_matches(run.get("path"), expected)
+
+
+def trusted_main_workflow_run(
+    run: dict[str, Any], repository: str, workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str] | None,
+) -> bool:
+    """Require authoritative run metadata to bind workflow, repository, ref, and commit."""
+    actual_workflow_id = run.get("workflow_id")
+    head_repository = run.get("head_repository")
+    run_repository = run.get("repository")
+    run_id = run.get("id")
+    return bool(
+        isinstance(workflow_id, int)
+        and not isinstance(workflow_id, bool)
+        and workflow_id > 0
+        and isinstance(run_id, int)
+        and not isinstance(run_id, bool)
+        and run_id > 0
+        and isinstance(actual_workflow_id, int)
+        and not isinstance(actual_workflow_id, bool)
+        and actual_workflow_id == workflow_id
+        and run_matches_workflow(run, workflow_path)
+        and isinstance(run.get("event"), str)
+        and bool(run.get("event"))
+        and (allowed_events is None or run.get("event") in allowed_events)
+        and run.get("head_branch") == "main"
+        and isinstance(run_repository, dict)
+        and str(run_repository.get("full_name", "")).casefold() == repository.casefold()
+        and isinstance(head_repository, dict)
+        and str(head_repository.get("full_name", "")).casefold() == repository.casefold()
+        and isinstance(run.get("head_sha"), str)
+        and REVISION.fullmatch(run["head_sha"])
+    )
 
 
 def report_workflow_run(run: dict[str, Any], artifacts: list[dict[str, Any]]) -> dict[str, Any]:
@@ -418,6 +469,7 @@ def evaluate_source(
     producer_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_workflow_paths: dict[str, str] | None = None,
+    workflow_ids_by_path: dict[str, int] | None = None,
     promotion_ack_error: str | None = None,
     workflow_api_error: str | None = None,
     health_state_error: str | None = None,
@@ -436,11 +488,14 @@ def evaluate_source(
 
     refresh = refresh_source or {}
     collector_path = str(refresh.get("workflow_path") or "")
+    collector_workflow_id = (workflow_ids_by_path or {}).get(collector_path)
     matching_runs = [
         row for row in workflow_runs
         if isinstance(row, dict)
-        and (not collector_path or run_matches_workflow(row, collector_path))
-        and row.get("head_branch") in {None, "", "main"}
+        and collector_path
+        and trusted_main_workflow_run(
+            row, repository, collector_path, collector_workflow_id, {"schedule", "workflow_dispatch"},
+        )
     ]
     scheduled_runs = [row for row in matching_runs if row.get("event") == "schedule"]
     scheduled_runs.sort(key=workflow_run_order)
@@ -515,15 +570,11 @@ def evaluate_source(
         run_is_trusted = bool(
             producer_run
             and str(producer_run.get("id", "")) == producer_id
-            and run_matches_workflow(producer_run, collector_path)
-            and producer_run.get("event") in {"schedule", "workflow_dispatch"}
+            and trusted_main_workflow_run(
+                producer_run, repository, collector_path, collector_workflow_id, {"schedule", "workflow_dispatch"},
+            )
             and producer_run.get("status") == "completed"
             and producer_run.get("conclusion") == "success"
-            and producer_run.get("head_branch") == "main"
-            and (
-                not isinstance(producer_run.get("head_repository"), dict)
-                or producer_run["head_repository"].get("full_name") in {None, repository}
-            )
         )
         artifact_is_trusted = any(
             row.get("name") == expected_artifact and not row.get("expired")
@@ -689,7 +740,10 @@ def evaluate_source(
         if final_item.get("status") != "read-back-confirmed":
             continue
         claimed_publication = promotion_publication(final_item)
-        trusted_run = trusted_promotion_run(final_item, promotion_runs, repository, promotion_workflow_paths or {}, as_of, maximum_future_skew)
+        trusted_run = trusted_promotion_run(
+            final_item, promotion_runs, repository, promotion_workflow_paths or {}, workflow_ids_by_path or {},
+            as_of, maximum_future_skew,
+        )
         if claimed_publication is None or claimed_publication.get("verified") is not True:
             if record_generation == generation_id:
                 add("publication", "readback_receipt_invalid", "error", _fault_action(source, "publication_failure"), record_generation)
@@ -716,7 +770,8 @@ def evaluate_source(
         current_item = current_items[-1]
         promotion_state = str(current_item.get("status", "unknown"))
         current_run = None if promotion_state == "prepared" else trusted_promotion_run(
-            current_item, promotion_runs, repository, promotion_workflow_paths or {}, as_of, maximum_future_skew,
+            current_item, promotion_runs, repository, promotion_workflow_paths or {}, workflow_ids_by_path or {},
+            as_of, maximum_future_skew,
         )
         publication = promotion_publication(current_item)
         if publication is not None:
@@ -972,7 +1027,7 @@ def promotion_run_references(journal: dict[str, Any] | None, source_ids: set[str
 
 def trusted_promotion_run(
     item: dict[str, Any], promotion_runs_by_id: dict[str, dict[str, Any]], repository: str,
-    workflow_paths: dict[str, str],
+    workflow_paths: dict[str, str], workflow_ids_by_path: dict[str, int],
     as_of: dt.datetime, maximum_future_skew: int,
 ) -> dict[str, Any] | None:
     run_id = item.get("run_id")
@@ -1009,16 +1064,15 @@ def trusted_promotion_run(
         or run.get("status") != "completed"
         or run.get("conclusion") != "success"
         or not expected_path
-        or not run_matches_workflow(run, expected_path)
-        or not isinstance(run.get("head_repository"), dict)
-        or str(run["head_repository"].get("full_name", "")).casefold() != repository.casefold()
-        or run.get("head_branch") != "main"
+        or not trusted_main_workflow_run(
+            run, repository, expected_path, workflow_ids_by_path.get(expected_path), None,
+        )
     ):
         return None
     completed_jobs: list[dt.datetime] = []
     seen_job_ids: set[str] = set()
     allowed_job_conclusions = {"success", "skipped", "neutral"}
-    expected_head_sha = run.get("head_sha")
+    expected_head_sha = run["head_sha"]
     for job in jobs:
         if not isinstance(job, dict):
             return None
@@ -1158,6 +1212,7 @@ def evaluate(
     promotion_ack: dict[str, Any] | None, main_revision: str, manifest_sha256: str, registry_path: pathlib.Path,
     last_good: dict[str, Any] | None, mode: str, workflow_run_id: str, workflow_run_attempt: int,
     source_policy_sha256: str, health_policy_sha256: str, workflow_api_error: str | None = None,
+    workflow_ids_by_path: dict[str, int] | None = None,
     producer_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_workflow_paths: dict[str, str] | None = None,
@@ -1223,6 +1278,7 @@ def evaluate(
             producer_runs_by_id=producer_runs_by_id,
             promotion_runs_by_id=promotion_runs_by_id,
             promotion_workflow_paths=promotion_workflow_paths,
+            workflow_ids_by_path=workflow_ids_by_path,
             promotion_ack_error=promotion_ack_error,
             health_state_error=health_state_error,
         )
@@ -1296,6 +1352,7 @@ def main(argv: list[str] | None = None) -> int:
         workflow_api_error = None
         health_state_error = None
         promotion_ack_error = None
+        workflow_ids_by_path: dict[str, int] = {}
         if args.fixture_input:
             mode = "fixture"
             fixture = load_json(args.fixture_input)
@@ -1305,17 +1362,27 @@ def main(argv: list[str] | None = None) -> int:
             producer_runs_by_id = fixture.get("producer_runs_by_id", {})
             promotion_ack = fixture.get("promotion_ack")
             promotion_runs_by_id = fixture.get("promotion_runs_by_id", {})
+            workflow_ids_by_path = fixture.get("workflow_ids_by_path", {})
             main_revision = args.main_revision or fixture.get("main_revision", "")
             last_good = fixture.get("last_good")
         else:
             mode = "live"
             workflow = health_policy["health_workflow"]
             try:
+                workflow_ids_by_path[workflow["collector_workflow_path"]] = collect_workflow_identity(
+                    args.repository, workflow["collector_workflow_path"],
+                )
                 workflow_runs = collect_workflow_runs(args.repository, workflow["collector_workflow_path"], int(health_policy["processor_state"]["workflow_run_limit"]))
             except RuntimeError as exc:
                 workflow_runs = []
                 workflow_api_error = str(exc)
-            scheduled = sorted((row for row in workflow_runs if row.get("event") == "schedule"), key=workflow_run_order)
+            scheduled = sorted((
+                row for row in workflow_runs
+                if trusted_main_workflow_run(
+                    row, args.repository, workflow["collector_workflow_path"],
+                    workflow_ids_by_path.get(workflow["collector_workflow_path"]), {"schedule"},
+                )
+            ), key=workflow_run_order)
             artifacts_by_run = {}
             artifact_by_id = {}
             producer_runs_by_id = {}
@@ -1371,9 +1438,11 @@ def main(argv: list[str] | None = None) -> int:
             latest_collector = sorted(
                 (
                     row for row in workflow_runs
-                    if row.get("event") in {"schedule", "workflow_dispatch"}
-                    and row.get("head_branch") in {None, "", "main"}
-                    and run_matches_workflow(row, workflow["collector_workflow_path"])
+                    if trusted_main_workflow_run(
+                        row, args.repository, workflow["collector_workflow_path"],
+                        workflow_ids_by_path.get(workflow["collector_workflow_path"]),
+                        {"schedule", "workflow_dispatch"},
+                    )
                 ),
                 key=workflow_run_order,
             )
@@ -1402,6 +1471,16 @@ def main(argv: list[str] | None = None) -> int:
             if len(promotion_references) > 500:
                 promotion_ack_error = "promotion_run_reference_limit_exceeded"
                 promotion_references = set(sorted(promotion_references)[-500:])
+            if promotion_references:
+                for workflow_key in ("promotion_workflow_path", "publication_ack_workflow_path"):
+                    workflow_path = health_policy.get("promotion_state", {}).get(workflow_key)
+                    if not isinstance(workflow_path, str) or not workflow_path:
+                        promotion_ack_error = promotion_ack_error or "promotion_workflow_path_missing"
+                        continue
+                    try:
+                        workflow_ids_by_path[workflow_path] = collect_workflow_identity(args.repository, workflow_path)
+                    except RuntimeError as exc:
+                        promotion_ack_error = promotion_ack_error or str(exc)
             for promotion_run_id, promotion_attempt in sorted(promotion_references):
                 key = f"{promotion_run_id}/{promotion_attempt}"
                 try:
@@ -1447,6 +1526,7 @@ def main(argv: list[str] | None = None) -> int:
             producer_runs_by_id=producer_runs_by_id,
             promotion_runs_by_id=promotion_runs_by_id,
             promotion_workflow_paths=health_policy.get("promotion_state", {}),
+            workflow_ids_by_path=workflow_ids_by_path,
             promotion_ack_error=promotion_ack_error,
             health_state_error=health_state_error,
         )

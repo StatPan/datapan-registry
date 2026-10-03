@@ -8,6 +8,7 @@ import sys
 
 
 WORKFLOW = pathlib.Path(".github/workflows/runtime-freshness-import.yml")
+HANDOFF = pathlib.Path("scripts/runtime-freshness-pr-handoff.py")
 
 
 def main() -> int:
@@ -36,10 +37,10 @@ def main() -> int:
             "no-change gate": "steps.transaction.outputs.changed == 'true'",
             "bytecode disabled": "PYTHONDONTWRITEBYTECODE: \"1\"",
             "cache cleanup": "-name __pycache__ -prune -exec rm -rf {} +",
-            "auto merge": "gh pr merge \"${pr}\"",
-            "actual merge wait": "for _ in $(seq 1 180)",
-            "merge completion gate": "test \"${state}\" = \"MERGED\"",
-            "post-merge dispatch": "runtime-freshness-import-attest",
+            "shared policy-aware handoff": "scripts/runtime-freshness-pr-handoff.py",
+            "import attestation resume event": "--resume-event runtime-freshness-import-attest",
+            "run-bound handoff": "--run-id \"${PRODUCER_RUN_ID}\"",
+            "PR-bound handoff": "--pr \"${pr}\"",
         }
         missing = [label for label, marker in required.items() if marker not in text]
         if missing:
@@ -48,6 +49,20 @@ def main() -> int:
             raise ValueError("freshness import workflow must not consume repository credential secrets")
         if "ref: ${{ env.PRODUCER_HEAD_SHA }}" in text:
             raise ValueError("freshness import must mutate current main, not a stale producer checkout")
+        if "gh pr merge " in text or '"/dispatches"' in text or "for _ in $(seq 1 180)" in text:
+            raise ValueError("freshness import must delegate merge and dispatch policy to the shared handoff")
+        handoff = HANDOFF.read_text(encoding="utf-8")
+        handoff_required = {
+            "repository auto-merge policy": ".allow_auto_merge",
+            "pending open PR outcome": 'return "pending"',
+            "only auto-squash merge request": '"--auto", "--squash"',
+            "merged-only next-phase dispatch": "if merged:",
+            "manual resume command": "resume_command(repo, run_id, pr, event)",
+            "final delivery remains incomplete": "evidence delivery is still pending",
+        }
+        missing_handoff = [label for label, marker in handoff_required.items() if marker not in handoff]
+        if missing_handoff:
+            raise ValueError(f"missing shared handoff contract markers: {', '.join(missing_handoff)}")
         permissions = text.split("permissions:", 1)[1].split("jobs:", 1)[0]
         expected_permissions = {"actions: read", "contents: write", "pull-requests: write"}
         actual_permissions = {line.strip() for line in permissions.splitlines() if line.strip()}

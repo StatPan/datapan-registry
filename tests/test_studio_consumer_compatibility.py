@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import importlib.util
 import pathlib
+import sys
 import unittest
 
 
 ROOT = pathlib.Path(__file__).parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
 
 
 def load_script(name: str, path: str):

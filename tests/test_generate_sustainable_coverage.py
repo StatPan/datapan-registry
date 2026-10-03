@@ -25,6 +25,7 @@ class SustainableCoverageTest(unittest.TestCase):
         inputs["latest_verification"]["generated_at"] = evaluation_time
         inputs["runtime_freshness_queue"]["generated_at"] = evaluation_time
         inputs["runtime_freshness_queue"]["freshness"]["as_of"] = evaluation_time
+        inputs["current_runtime_evidence_projection"]["freshness"]["as_of"] = evaluation_time
 
         report = MODULE.build_report(policy, inputs)
 

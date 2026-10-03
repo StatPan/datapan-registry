@@ -11,7 +11,7 @@ import re
 import sys
 from typing import Any
 
-from manual_review_evidence_digest import compatibility_binding_sha256
+from manual_review_scope import evaluate_review_scope
 
 try:
     import jsonschema
@@ -23,6 +23,9 @@ DEFAULT_DECISION = pathlib.Path("reports/credential-runtime-manual-review-decisi
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json")
 DEFAULT_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_COMPATIBILITY = pathlib.Path("reports/release-consumer-compatibility.json")
+DEFAULT_MANIFEST = pathlib.Path("manifest.json")
+DEFAULT_HEALTH_PLAN = pathlib.Path("reports/health-runtime-observation-plan.v1.json")
+DEFAULT_HEALTH_SELECTION = pathlib.Path("policy/health-runtime-observation-selection.json")
 DEFAULT_TECHNICAL_REBINDING = pathlib.Path("reports/credential-runtime-manual-review-technical-rebinding.json")
 SECRET_VALUE_PATTERNS = [
     re.compile(r"(?i)(service[_-]?key|authorization|bearer\s+[a-z0-9._~+/=-]{16,})"),
@@ -89,7 +92,17 @@ def validate_secret_free(record: dict[str, Any]) -> None:
                 raise ValueError("manual-review decision must not contain secret-like values")
 
 
-def validate_decision(record: dict[str, Any], *, decision_path: pathlib.Path, handoff_path: pathlib.Path, compatibility_path: pathlib.Path, technical_rebinding_path: pathlib.Path) -> None:
+def validate_decision(
+    record: dict[str, Any],
+    *,
+    decision_path: pathlib.Path,
+    handoff_path: pathlib.Path,
+    compatibility_path: pathlib.Path,
+    technical_rebinding_path: pathlib.Path | None = None,
+    manifest_path: pathlib.Path = DEFAULT_MANIFEST,
+    health_plan_path: pathlib.Path = DEFAULT_HEALTH_PLAN,
+    health_selection_path: pathlib.Path = DEFAULT_HEALTH_SELECTION,
+) -> dict[str, Any]:
     summary = as_dict(record.get("summary"), "summary")
     decision = as_dict(record.get("decision"), "decision")
     inputs = as_dict(record.get("inputs"), "inputs")
@@ -111,14 +124,31 @@ def validate_decision(record: dict[str, Any], *, decision_path: pathlib.Path, ha
     if accepted is False:
         if decision.get("decision_status") != "not_asserted":
             raise ValueError("unaccepted decision must use decision_status=not_asserted")
-        for nullable_key in ("reviewer", "reviewed_at", "handoff_sha256", "compatibility_sha256", "expires_at"):
+        for nullable_key in (
+            "reviewer",
+            "reviewed_at",
+            "handoff_sha256",
+            "compatibility_sha256",
+            "review_scope_version",
+            "review_scope_sha256",
+            "expires_at",
+        ):
             if decision.get(nullable_key) is not None:
                 raise ValueError(f"unaccepted decision must keep decision.{nullable_key}=null")
         if decision.get("reason") != "manual_review_acceptance_not_asserted":
             raise ValueError("unaccepted decision reason must be manual_review_acceptance_not_asserted")
         if as_list(decision.get("revalidation_triggers"), "decision.revalidation_triggers"):
             raise ValueError("unaccepted decision must not define revalidation triggers")
-        return
+        return evaluate_review_scope(
+            decision=record,
+            decision_sha256=file_sha256(decision_path),
+            compatibility=load_json(compatibility_path),
+            handoff=load_json(handoff_path),
+            handoff_sha256=file_sha256(handoff_path),
+            manifest=load_json(manifest_path),
+            health_plan=load_json(health_plan_path),
+            health_selection=load_json(health_selection_path),
+        )
 
     if accepted is not True:
         raise ValueError("decision.accepted must be a boolean")
@@ -128,16 +158,19 @@ def validate_decision(record: dict[str, Any], *, decision_path: pathlib.Path, ha
         value = decision.get(required_key)
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f"accepted decision requires non-empty decision.{required_key}")
-    if decision.get("handoff_sha256") != file_sha256(handoff_path):
-        raise ValueError("accepted decision handoff_sha256 must match the current credential review handoff")
-    current_compatibility = compatibility_binding_sha256(load_json(compatibility_path))
-    if decision.get("compatibility_sha256") != current_compatibility:
-        rebinding = load_json(technical_rebinding_path)
-        if rebinding.get("status") != "approved_artifact_only_rebinding" or rebinding.get("old_compatibility_sha256") != decision.get("compatibility_sha256") or rebinding.get("new_compatibility_sha256") != current_compatibility or rebinding.get("decision_sha256") != file_sha256(decision_path):
-            raise ValueError("accepted decision compatibility_sha256 must match the current consumer compatibility report")
     triggers = as_list(decision.get("revalidation_triggers"), "decision.revalidation_triggers")
     if not triggers:
         raise ValueError("accepted decision requires at least one revalidation trigger")
+    return evaluate_review_scope(
+        decision=record,
+        decision_sha256=file_sha256(decision_path),
+        compatibility=load_json(compatibility_path),
+        handoff=load_json(handoff_path),
+        handoff_sha256=file_sha256(handoff_path),
+        manifest=load_json(manifest_path),
+        health_plan=load_json(health_plan_path),
+        health_selection=load_json(health_selection_path),
+    )
 
 
 def main() -> int:
@@ -147,19 +180,34 @@ def main() -> int:
     parser.add_argument("--handoff", default=DEFAULT_HANDOFF, type=pathlib.Path)
     parser.add_argument("--compatibility", default=DEFAULT_COMPATIBILITY, type=pathlib.Path)
     parser.add_argument("--technical-rebinding", default=DEFAULT_TECHNICAL_REBINDING, type=pathlib.Path)
+    parser.add_argument("--manifest", default=DEFAULT_MANIFEST, type=pathlib.Path)
+    parser.add_argument("--health-plan", default=DEFAULT_HEALTH_PLAN, type=pathlib.Path)
+    parser.add_argument("--health-selection", default=DEFAULT_HEALTH_SELECTION, type=pathlib.Path)
     args = parser.parse_args()
 
     try:
         record = load_json(args.decision)
         validate_schema(record, args.schema)
         validate_secret_free(record)
-        validate_decision(record, decision_path=args.decision, handoff_path=args.handoff, compatibility_path=args.compatibility, technical_rebinding_path=args.technical_rebinding)
+        scope = validate_decision(
+            record,
+            decision_path=args.decision,
+            handoff_path=args.handoff,
+            compatibility_path=args.compatibility,
+            technical_rebinding_path=args.technical_rebinding,
+            manifest_path=args.manifest,
+            health_plan_path=args.health_plan,
+            health_selection_path=args.health_selection,
+        )
     except Exception as exc:  # noqa: BLE001 - release operators need the failed invariant
         print(f"FAIL {args.decision}: {exc}", file=sys.stderr)
         return 1
 
     summary = as_dict(record.get("summary"), "summary")
-    print(f"ok {args.decision} (accepted={summary.get('accepted')}, status={summary.get('decision_status')})")
+    print(
+        f"ok {args.decision} (historical_accepted={summary.get('accepted')}, "
+        f"scope={scope['scope_status']}, effective_accepted={scope['effective_accepted']})"
+    )
     return 0
 
 

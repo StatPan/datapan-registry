@@ -133,7 +133,8 @@
       "required": [
         "registry",
         "dependencies",
-        "latest_verification"
+        "latest_verification",
+        "current_runtime_evidence_projection"
       ],
       "properties": {
         "registry": {
@@ -143,6 +144,9 @@
           "$ref": "#/$defs/path"
         },
         "latest_verification": {
+          "$ref": "#/$defs/path"
+        },
+        "current_runtime_evidence_projection": {
           "$ref": "#/$defs/path"
         }
       }
@@ -162,6 +166,10 @@
         "runtime_verified_operation_count",
         "runtime_failed_operation_count",
         "runtime_skipped_operation_count",
+        "unbound_evidence_records",
+        "contract_changed_evidence_records",
+        "ambiguous_evidence_records",
+        "historical_evidence_records",
         "runtime_evidence_api_count",
         "runtime_reactivation_api_count",
         "runtime_repair_api_count"
@@ -198,6 +206,18 @@
           "$ref": "#/$defs/count"
         },
         "runtime_skipped_operation_count": {
+          "$ref": "#/$defs/count"
+        },
+        "unbound_evidence_records": {
+          "$ref": "#/$defs/count"
+        },
+        "contract_changed_evidence_records": {
+          "$ref": "#/$defs/count"
+        },
+        "ambiguous_evidence_records": {
+          "$ref": "#/$defs/count"
+        },
+        "historical_evidence_records": {
           "$ref": "#/$defs/count"
         },
         "runtime_evidence_api_count": {

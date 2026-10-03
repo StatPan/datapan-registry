@@ -26,19 +26,21 @@ redistributing, contributing, or reporting a vulnerability.
 - Specs: `12060`
 - Operations: `21256`
 - Callable operations: `21114` (`99.3%`)
-- Sustainable coverage decision: `coverage_gaps` (`7` of `9` layers meet
+- Sustainable coverage decision: `coverage_gaps` (`6` of `9` layers meet
   policy targets). Routable coverage is not treated as total usability.
 - Supported-source denominator coverage: `5` of `5` sources have an explicit
   operation denominator (`100.0%`), covering `21260` operations in total.
-- Runtime operation evidence: `6961` unique operation identities out of
-  `21260` (`32.7%`); fresh successful evidence covers `736` unique operations
-  (`3.5%`) as of `2026-09-30T01:45:58.529244Z`.
-- Runtime freshness: `1509` evidence records are within the `30` day fresh
-  window, `3336` are stale, `514` are expired, and `1822` missing timestamps are
-  explicitly excluded from fresh coverage.
+- Runtime operation evidence: `0` unique operation identities out of
+  `21260` (`0.0%`); fresh successful evidence covers `0` unique operations
+  (`0.0%`) as of `2026-09-30T01:45:58.529244Z`.
+- Runtime freshness: `0` current operations have fresh verified
+  evidence within the `30` day window; `0` have current-bound evidence within the
+  `90` day expiry window (`0` stale, `0` recent non-verified).
+  `0` are expired and `0` have unknown timestamps. The projection retains
+  `7181` historical input rows separately (`7180` unbound, `1` ambiguous).
 - Required consumer proof: `3` of `3` required consumers (`datapan-cli`,
   `release-operator`, `studio`) are proven (`100.0%`).
-- Latest release: `v2026.06.25.24`
+- Prepared snapshot version: `0.1.1-dev` (from `manifest.json`); published releases: [GitHub Releases](https://github.com/StatPan/datapan-registry/releases/latest).
 - Registered external adapters: `airport`, `andong`, `anyang`, `atfis`, `calspia`, `car`, `car365`, `childcare-info`, `chungbuk-tour`, `chungnam`, `codil`, `consumer`, `culture`, `daegu`, `daejeon`, `data-gg`,
   `dgfca`, `dongjak`, `ecos`, `ecvam`, `ekape`, `emuseum`, `epost`, `eshare`, `ex`, `fairdata`, `folk`, `foodsafetykorea`, `forest`,
   `franchise-ftc`, `garak`, `gblib`, `geoje`, `gicoms`, `gimhae`, `gims`, `gogung`, `gwanak`, `gwangjin`, `gwangmyeong`, `happysd`, `hrfco`, `hug`, `humetro`,
@@ -55,9 +57,9 @@ redistributing, contributing, or reporting a vulnerability.
 - Runtime verification evidence: `7181` bounded checks merged into
   `reports/latest-verification.json` (`3577` verified, `946` failed, `2658`
   skipped)
-- Runtime evidence growth target: `33.8%` checked evidence is above the
-  unrounded `10%` release target; `0` additional records are required for this
-  target.
+- Runtime evidence growth target: `0` fresh verified current-contract results are below
+  the unrounded `10%` release target (`2126` results); `2126` additional results are
+  required.
 - Institution API overview: `411` organizations, `12060` APIs, and `21256`
   operations in `reports/data-go-kr/institution-api-overview.json`; readable
   tables live in `docs/data-go-kr-institution-api-overview.md`.

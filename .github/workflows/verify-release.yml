@@ -103,7 +103,8 @@ jobs:
           python3 -m venv .datapan/ci/source-profile-venv
           . .datapan/ci/source-profile-venv/bin/activate
           python -m pip install --upgrade pip
-          python -m pip install jsonschema PyYAML==6.0.2
+          python -m pip install jsonschema
+          python -m pip install 'PyYAML==6.0.2'
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-data-go-kr-operation-manifest.py --check
@@ -151,6 +152,11 @@ jobs:
           python scripts/check-upstream-catalogue-health.py --help
           python scripts/persist-upstream-catalogue-health.py --help
           python -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py
+          python -m unittest tests/test_process_upstream_catalogue_candidate.py
+          python -m unittest tests/test_upstream_catalogue_process_workflow.py
+          python3 -m py_compile scripts/upstream-catalogue-state-branch.py
+          python -m unittest tests/test_compose_upstream_catalogue_candidate.py
+          python -m unittest tests/test_manual_review_technical_rebinding.py
           python -m unittest tests/test_sync_release_manifest_artifacts.py
           python scripts/generate-source-contract-rollup.py --check
           python scripts/validate-source-contract-rollups.py
@@ -160,6 +166,8 @@ jobs:
           python scripts/generate-failure-recovery-rollup.py --check
           python scripts/generate-operation-denominator-rollup.py --check
           python -m unittest tests/test_generate_operation_denominator_rollup.py
+          python scripts/generate-current-runtime-evidence-projection.py --check
+          python -m unittest tests/test_runtime_evidence_projection.py
           python scripts/generate-runtime-freshness-queue.py --check
           python -m unittest tests/test_generate_runtime_freshness_queue.py
           python -m unittest tests/test_generate_runtime_freshness_batch.py
@@ -169,8 +177,11 @@ jobs:
           python -m unittest tests/test_apply_runtime_freshness_import.py
           python -m unittest tests/test_generate_runtime_freshness_import_admission.py
           python -m unittest tests/test_attest_runtime_freshness_import.py
+          python -m unittest tests/test_runtime_freshness_pr_handoff.py
           python scripts/generate-runtime-evidence-growth.py --check
+          python -m unittest tests/test_generate_runtime_evidence_growth.py
           python scripts/generate-readme-runtime-snapshot.py --check
+          python -m unittest tests/test_generate_readme_runtime_snapshot.py
           python scripts/check-runtime-freshness-workflow.py
           python scripts/check-runtime-freshness-import-workflow.py
           python scripts/check-runtime-freshness-import-attestation-workflow.py
@@ -179,6 +190,7 @@ jobs:
           python -m py_compile scripts/apply-runtime-freshness-import.py
           python -m py_compile scripts/generate-runtime-freshness-import-admission.py
           python -m py_compile scripts/attest-runtime-freshness-import.py
+          python -m py_compile scripts/runtime-freshness-pr-handoff.py
           python -m unittest tests/test_generate_failure_recovery_rollup.py
           python -m unittest tests/test_convert_source_verification_receipt.py
           python -m unittest tests/test_generate_source_runtime_remediation_map.py
@@ -215,6 +227,7 @@ jobs:
           python scripts/validate-credential-runtime-manual-review-decision.py
           python scripts/generate-credential-runtime-manual-review-acceptance.py --check
           python scripts/generate-credential-runtime-manual-review-acceptance-packet.py --check
+          python -m unittest tests/test_manual_review_scope.py tests/test_manual_review_rebinding_acceptance_paths.py tests/test_manual_review_technical_rebinding.py
           python scripts/run-credential-runtime-collection.py --self-test
           python scripts/run-credential-runtime-collection.py --check
           python scripts/run-credential-runtime-operator-workflow.py --self-test
@@ -240,6 +253,7 @@ jobs:
           python -m py_compile scripts/generate-failure-recovery-rollup.py
           python -m py_compile scripts/generate-operation-denominator-rollup.py
           python -m py_compile scripts/generate-runtime-freshness-queue.py
+          python -m py_compile scripts/runtime_evidence_projection.py scripts/generate-current-runtime-evidence-projection.py scripts/generate-coverage-backlog.py scripts/generate-institution-api-overview.py scripts/generate-runtime-evidence-growth.py scripts/validate-runtime-evidence-growth.py
           python -m py_compile scripts/generate-runtime-freshness-batch.py scripts/check-runtime-freshness-workflow.py scripts/check-runtime-freshness-import-workflow.py scripts/consolidate-runtime-freshness-run.py scripts/import-runtime-freshness-run.py scripts/project-runtime-freshness-recovery.py scripts/apply-runtime-freshness-import.py scripts/generate-runtime-evidence-growth.py scripts/generate-readme-runtime-snapshot.py
           python -m py_compile scripts/convert-source-verification-to-credential-receipt.py
           python -m py_compile scripts/validate-diagnostic-envelope-draft.py
@@ -282,6 +296,7 @@ jobs:
           python -m py_compile scripts/validate-credential-runtime-manual-review-decision.py
           python -m py_compile scripts/generate-credential-runtime-manual-review-acceptance.py
           python -m py_compile scripts/generate-credential-runtime-manual-review-acceptance-packet.py
+          python -m py_compile scripts/manual_review_scope.py
           python -m py_compile scripts/run-credential-runtime-collection.py
           python -m py_compile scripts/run-credential-runtime-operator-workflow.py
           python -m py_compile scripts/check-credential-runtime-github-secrets.py

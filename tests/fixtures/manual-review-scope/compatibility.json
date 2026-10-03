@@ -1,0 +1,595 @@
+{
+  "schema_version": "datapan.release-consumer-compatibility.v1",
+  "generated_at": "2026-07-11T10:28:35Z",
+  "provider": "data.go.kr",
+  "source_id": "data_go_kr",
+  "generation_inputs": {
+    "manifest": {
+      "path": "manifest.json",
+      "generated_at": "2026-07-11T10:28:35Z",
+      "artifact_count": 161,
+      "evidence_contracts": 18
+    },
+    "readiness": {
+      "path": "reports/latest-release-readiness.json",
+      "normalization": "omit_generated_at",
+      "normalized_sha256": "a9e92a09b238348e6c2c43ba5e549731154f2e7e575b822b2719eb23bc1330ae",
+      "ready": true,
+      "gates_total": 23,
+      "passed": 23,
+      "failed": 0
+    }
+  },
+  "summary": {
+    "consumer_count": 7,
+    "proven_consumers": 3,
+    "blocked_consumers": 0,
+    "canonical_registry_required": true,
+    "shard_assets_required": false
+  },
+  "compatibility_path": {
+    "path": "data/data-go-kr.registry.json",
+    "artifact_kind": "registry",
+    "required": true,
+    "status": "manifest_bound",
+    "proof": [
+      "manifest.json artifact kind registry",
+      "reports/latest-release-readiness.json registry_has_specs gate",
+      "Verify registry release materialized LFS check"
+    ]
+  },
+  "release_health_evidence": {
+    "artifact_bundle": "datapan-registry-release-health",
+    "required_schemas": [
+      "schemas/datapan.install-smoke-summary.v1.schema.json",
+      "schemas/datapan.doctor-smoke-summary.v1.schema.json",
+      "schemas/datapan.release-health-rollup.v1.schema.json"
+    ],
+    "required_ci_reports": [
+      ".datapan/ci/current-release-install-smoke.json",
+      ".datapan/ci/current-release-doctor-smoke.json",
+      ".datapan/ci/latest-release-install-smoke.json",
+      ".datapan/ci/latest-release-doctor-smoke.json",
+      ".datapan/ci/release-health-rollup.json"
+    ],
+    "rollup_generation_contract": {
+      "generator": "scripts/generate-release-health-rollup.py",
+      "validator": "scripts/validate-release-health-rollups.py",
+      "schema": "schemas/datapan.release-health-rollup.v1.schema.json",
+      "output": ".datapan/ci/release-health-rollup.json",
+      "inputs": [
+        {
+          "scope": "current",
+          "install_summary": ".datapan/ci/current-release-install-smoke.json",
+          "doctor_summary": ".datapan/ci/current-release-doctor-smoke.json"
+        },
+        {
+          "scope": "latest",
+          "install_summary": ".datapan/ci/latest-release-install-smoke.json",
+          "doctor_summary": ".datapan/ci/latest-release-doctor-smoke.json"
+        }
+      ]
+    },
+    "required_shard_install_fields": [
+      "mode",
+      "shards_asset_present",
+      "shards_validated",
+      "shards_inventory_present",
+      "shards_count",
+      "shards_records"
+    ]
+  },
+  "manifest_evidence_contracts": [
+    {
+      "contract": "source_contracts",
+      "path": "reports/source-contract-rollup.json",
+      "kind": "source_contract_rollup",
+      "schema": "https://schemas.datapan.dev/datapan.source-contract-rollup.v1.schema.json",
+      "bytes": 17111,
+      "sha256": "5ef88403ec986f566fda484a6ac326008fbb6d9ab8af4b7a76507648af4d486f",
+      "required": true
+    },
+    {
+      "contract": "source_runtime_evidence",
+      "path": "reports/source-runtime-evidence-rollup.json",
+      "kind": "source_runtime_evidence_rollup",
+      "schema": "https://schemas.datapan.dev/datapan.source-runtime-evidence-rollup.v1.schema.json",
+      "bytes": 4085,
+      "sha256": "f9b162809c885e63544f31132bc0cf2cdd817ac4aafe78fbc9ed50b7b4ed5d49",
+      "required": true
+    },
+    {
+      "contract": "source_runtime_remediation",
+      "path": "reports/source-runtime-remediation-map.json",
+      "kind": "source_runtime_remediation_map",
+      "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json",
+      "bytes": 8075,
+      "sha256": "4fdd8abbbe897bd3abdf02485cefda9293eeecc49079d1d9b552bec556bad3f3",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_evidence_policy",
+      "path": "reports/credential-runtime-evidence-policy.json",
+      "kind": "credential_runtime_evidence_policy",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-evidence-policy.v1.schema.json",
+      "bytes": 13577,
+      "sha256": "51918322dcffba3ee263d4539c466fbff916305a76138a063560f1d28e610c55",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_collection_preflight",
+      "path": "reports/credential-runtime-collection-preflight.json",
+      "kind": "credential_runtime_collection_preflight",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-preflight.v1.schema.json",
+      "bytes": 10737,
+      "sha256": "104700685baa8f1f33a8e9db020ba1ef7da187ac7eefb59992f2d03ae47c340e",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_runner_readiness",
+      "path": "reports/credential-runtime-runner-readiness.json",
+      "kind": "credential_runtime_runner_readiness",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-runner-readiness.v1.schema.json",
+      "bytes": 9705,
+      "sha256": "d4be7f62bf4f79b9e14be7f7942f67182f65bea3ad4aba65c37fc08334777ba8",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_collection_execution_plan",
+      "path": "reports/credential-runtime-collection-execution-plan.json",
+      "kind": "credential_runtime_collection_execution_plan",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-collection-execution-plan.v1.schema.json",
+      "bytes": 18360,
+      "sha256": "9481077224c901bf1b34b355df5cebb5728e85a0a67de457ba40e077a2b971e2",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_receipt_collection_queue",
+      "path": "reports/credential-runtime-receipt-collection-queue.json",
+      "kind": "credential_runtime_receipt_collection_queue",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-receipt-collection-queue.v1.schema.json",
+      "bytes": 15368,
+      "sha256": "36672af81d64a4333a4f3bc0a94bae3c4d84f71394a77f2309d2215c0b4f8a58",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_review_handoff",
+      "path": "reports/credential-runtime-review-handoff.json",
+      "kind": "credential_runtime_review_handoff",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-review-handoff.v1.schema.json",
+      "bytes": 12845,
+      "sha256": "7d8e645a0f58469fabe3f9289e20ea6835c81e088dd363519d015d1d0f501beb",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_manual_review_decision",
+      "path": "reports/credential-runtime-manual-review-decision.json",
+      "kind": "credential_runtime_manual_review_decision",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-decision.v1.schema.json",
+      "bytes": 1771,
+      "sha256": "4d0bee81a67d4b49a1ccb022ab6be7a28a76b9613cbd7c2211d5f22ce9d69151",
+      "required": true
+    },
+    {
+      "contract": "credential_runtime_manual_review_acceptance",
+      "path": "reports/credential-runtime-manual-review-acceptance.json",
+      "kind": "credential_runtime_manual_review_acceptance",
+      "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance.v1.schema.json",
+      "bytes": 4585,
+      "sha256": "268e1aaf383f4a454e3c4d0513692e6d80156ffe5e2dbcf962c5df0f71095631",
+      "required": true
+    },
+    {
+      "contract": "error_action_routing",
+      "path": "reports/error-action-routing-rollup.json",
+      "kind": "error_action_routing_rollup",
+      "schema": "https://schemas.datapan.dev/datapan.error-action-routing-rollup.v1.schema.json",
+      "bytes": 8323,
+      "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1",
+      "required": true
+    },
+    {
+      "contract": "downstream_impact",
+      "path": "reports/registry-impact-plan.json",
+      "kind": "registry_impact_plan",
+      "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json",
+      "bytes": 11519,
+      "sha256": "76bb56f189609836956b6a7d44143c354e64d52ac0d3d9d07e8511b344efd820",
+      "required": true
+    },
+    {
+      "contract": "source_reference_drift",
+      "path": "reports/source-reference-drift.json",
+      "kind": "source_reference_drift",
+      "schema": "https://schemas.datapan.dev/datapan.source-reference-drift.v1.schema.json",
+      "bytes": 8915,
+      "sha256": "974cf944245517478c438c6bfe0d7e79409ca23d0c6fc3f8ffc0e1b913662ff0",
+      "required": true
+    },
+    {
+      "contract": "source_report_inventory",
+      "path": "reports/source-report-inventory.json",
+      "kind": "source_report_inventory",
+      "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
+      "bytes": 61997,
+      "sha256": "03b976af59e3eab446a7d1da3826f7bb5d9cf729dae726a691b1be65272e83c7",
+      "required": true
+    },
+    {
+      "contract": "release_distribution_footprint",
+      "path": "reports/release-distribution-footprint.json",
+      "kind": "release_distribution_footprint",
+      "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
+      "bytes": 2141,
+      "sha256": "e379762b44343c2db31849cd258dd4680178d3c800d442309ce8e8dcf3cf7e8d",
+      "required": true
+    },
+    {
+      "contract": "release_shard_consumer_proof",
+      "path": "reports/release-shard-consumer-proof.json",
+      "kind": "release_shard_consumer_proof",
+      "schema": "https://schemas.datapan.dev/datapan.release-shard-consumer-proof.v1.schema.json",
+      "bytes": 3864,
+      "sha256": "beb22f0af6a28ee7ac7c9393c5e47e1b52caf952850955170e239da71fcdcd8b",
+      "required": true
+    },
+    {
+      "contract": "release_consumer_decision",
+      "path": "reports/release-consumer-decision.json",
+      "kind": "release_consumer_decision",
+      "schema": "https://schemas.datapan.dev/datapan.release-consumer-decision.v1.schema.json",
+      "bytes": 2848,
+      "sha256": "c73d316363bea8e9bf3d7822fe2271b2a1665ce80f5a22c0c24c3032dcf5dbe6",
+      "required": true
+    }
+  ],
+  "runtime_risk_evidence": {
+    "source_runtime_rollup": "reports/source-runtime-evidence-rollup.json",
+    "source_runtime_remediation_map": "reports/source-runtime-remediation-map.json",
+    "credential_runtime_evidence_policy": "reports/credential-runtime-evidence-policy.json",
+    "credential_runtime_collection_preflight": "reports/credential-runtime-collection-preflight.json",
+    "credential_runtime_runner_readiness": "reports/credential-runtime-runner-readiness.json",
+    "credential_runtime_collection_execution_plan": "reports/credential-runtime-collection-execution-plan.json",
+    "credential_runtime_receipt_collection_queue": "reports/credential-runtime-receipt-collection-queue.json",
+    "credential_runtime_review_handoff": "reports/credential-runtime-review-handoff.json",
+    "credential_runtime_manual_review_decision": "reports/credential-runtime-manual-review-decision.json",
+    "credential_runtime_manual_review_acceptance": "reports/credential-runtime-manual-review-acceptance.json",
+    "error_action_routing_rollup": "reports/error-action-routing-rollup.json",
+    "downstream_impact_rollup": "reports/registry-impact-plan.json",
+    "manual_review_required": false,
+    "compatibility_effect": "runtime_evidence_clear",
+    "required_contracts": [
+      "source_runtime_evidence",
+      "source_runtime_remediation",
+      "credential_runtime_evidence_policy",
+      "credential_runtime_collection_preflight",
+      "credential_runtime_runner_readiness",
+      "credential_runtime_collection_execution_plan",
+      "credential_runtime_receipt_collection_queue",
+      "credential_runtime_review_handoff",
+      "credential_runtime_manual_review_decision",
+      "credential_runtime_manual_review_acceptance",
+      "error_action_routing",
+      "downstream_impact"
+    ],
+    "blocking_count": 5,
+    "warning_count": 0,
+    "effective_blocking_count": 0,
+    "effective_warning_count": 0,
+    "sources_without_evidence": 0,
+    "remediation_follow_up_required": 0,
+    "remediation_manual_review_boundaries": 5,
+    "remediation_credential_policy_available": true,
+    "remediation_receipt_contract_available": true,
+    "remediation_reviewed_receipt_intake_available": true,
+    "remediation_receipt_reviewed": true,
+    "remediation_receipt_relief_eligible": true,
+    "remediation_receipt_backed_relief_allowed": true,
+    "remediation_receipt_backed_relief_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
+    "remediation_receipt_linked_findings": 5,
+    "remediation_receipt_linked_absent": 0,
+    "remediation_receipt_linked_relief_eligible": 5,
+    "credential_policy_sources": 5,
+    "credential_policy_manual_review_boundaries": 5,
+    "credential_policy_receipt_contract_available": true,
+    "credential_policy_reviewed_receipt_intake_available": true,
+    "credential_policy_receipt_present": true,
+    "credential_policy_receipt_validated": true,
+    "credential_policy_receipt_reviewed": true,
+    "credential_policy_receipt_relief_eligible": true,
+    "credential_policy_manual_review_reduction_allowed": true,
+    "credential_policy_live_receipts": 5,
+    "credential_policy_reviewed_receipts": 5,
+    "credential_policy_default_ci_requires_credentials": false,
+    "credential_collection_preflight_status": "reviewed_receipts_complete",
+    "credential_collection_preflight_candidate_batches_present": 5,
+    "credential_collection_preflight_candidate_batches_missing": 0,
+    "credential_collection_preflight_reviewed_receipts_present": 5,
+    "credential_collection_preflight_reviewed_receipts_missing": 0,
+    "credential_collection_preflight_default_ci_runnable_sources": 0,
+    "credential_collection_preflight_operator_environment_required_sources": 5,
+    "credential_collection_preflight_manual_review_reduction_allowed": true,
+    "credential_runner_readiness_status": "reviewed_receipts_complete",
+    "credential_runner_ready_to_run_without_credentials": 0,
+    "credential_runner_blocked_on_operator_env": 5,
+    "credential_runner_blocked_on_candidate_batch": 0,
+    "credential_runner_reviewed_receipts_present": 5,
+    "credential_runner_reviewed_receipts_missing": 0,
+    "credential_runner_default_ci_requires_credentials": false,
+    "credential_runner_checked_in_secrets_allowed": false,
+    "credential_runner_manual_review_reduction_allowed": true,
+    "credential_runner_local_session_artifacts_checked_in": false,
+    "credential_execution_plan_status": "reviewed_receipts_complete",
+    "credential_execution_operator_sources_ready": 0,
+    "credential_execution_reviewed_receipts_missing": 0,
+    "credential_execution_batch_ready_for_operator_credentials": false,
+    "credential_execution_next_action": "refresh_release_evidence_after_reviewed_receipts",
+    "credential_execution_session_output_path": ".datapan/runtime-evidence/credential-runtime-collection-session.json",
+    "credential_execution_default_ci_requires_credentials": false,
+    "credential_execution_checked_in_secrets_allowed": false,
+    "credential_execution_checked_in_session_output_allowed": false,
+    "credential_execution_goal_closure_allowed": false,
+    "credential_execution_review_promotion_script": "scripts/promote-credential-runtime-session-review.py",
+    "credential_execution_review_promotion_decision_template_path": ".datapan/runtime-evidence/credential-runtime-session-review-decisions.json",
+    "credential_execution_review_promotion_init_decisions_command": "python3 scripts/promote-credential-runtime-session-review.py --init-decisions",
+    "credential_execution_review_promotion_check_command": "python3 scripts/promote-credential-runtime-session-review.py --check",
+    "credential_execution_review_promotion_run_command": "python3 scripts/promote-credential-runtime-session-review.py --run",
+    "credential_execution_review_promotion_self_test_command": "python3 scripts/promote-credential-runtime-session-review.py --self-test",
+    "credential_execution_review_promotion_session_review_plan_output_path": ".datapan/runtime-evidence/credential-runtime-session-review-plan.json",
+    "credential_execution_review_promotion_requires_session_review_plan": true,
+    "credential_execution_review_promotion_requires_finalized_reviewer_decisions": true,
+    "credential_execution_review_promotion_requires_explicit_run": true,
+    "credential_execution_review_promotion_default_ci_requires_credentials": false,
+    "credential_execution_review_promotion_checked_in_session_output_allowed": false,
+    "credential_execution_review_promotion_checked_in_review_plan_allowed": false,
+    "credential_execution_review_promotion_checked_in_decisions_allowed": false,
+    "credential_execution_review_promotion_checked_in_secrets_allowed": false,
+    "credential_execution_review_promotion_goal_closure_allowed": false,
+    "credential_policy_effect": "credential_safe_manual_review_boundary",
+    "credential_policy_relief_gate_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
+    "credential_queue_status": "complete_relief_eligible",
+    "credential_queue_absent": 0,
+    "credential_queue_staged_only": 0,
+    "credential_queue_reviewed_rejected": 0,
+    "credential_queue_reviewed_accepted": 0,
+    "credential_queue_relief_eligible": 5,
+    "credential_queue_reviewed_receipts": 5,
+    "credential_queue_manual_review_reduction_allowed": true,
+    "credential_queue_default_ci_requires_credentials": false,
+    "credential_handoff_status": "relief_ready",
+    "credential_handoff_pending_review_sources": 0,
+    "credential_handoff_reviewed_receipts": 5,
+    "credential_handoff_relief_eligible_sources": 5,
+    "credential_handoff_global_manual_review_relief_allowed": true,
+    "credential_handoff_manual_review_required": false,
+    "credential_handoff_default_ci_requires_credentials": false,
+    "credential_handoff_relief_decision": "allowed_by_all_reviewed_validated_receipts",
+    "manual_review_decision_status": "accepted",
+    "manual_review_decision_accepted": true,
+    "manual_review_decision_reason": "Accountable revalidation after artifact_count changed 160 to 161 and manifest-bound bytes changed; runtime_risk_evidence and summary are byte-equal, credential, runtime, workflow, and pin semantics are unchanged, and publication and cutover remain blocked.",
+    "manual_review_decision_boundary_accepted": true,
+    "manual_review_acceptance_status": "accepted",
+    "manual_review_acceptance_accepted": true,
+    "manual_review_acceptance_decision": "accepted_manual_review_release_boundary",
+    "manual_review_acceptance_required_evidence": 5,
+    "manual_review_acceptance_boundary_accepted": true,
+    "manual_review_acceptance_goal_completion_effect": "manual_review_boundary_accepted_for_release",
+    "manual_review_reduction_allowed": true,
+    "manual_review_reduction_status": "allowed_by_reviewed_validated_credential_runtime_receipts",
+    "blocker_ids": [
+      "credential_required"
+    ],
+    "warning_ids": [],
+    "sources": [
+      {
+        "source_id": "data_go_kr",
+        "blocking_count": 1,
+        "warning_count": 0,
+        "blocker_ids": [
+          "credential_required"
+        ],
+        "warning_ids": []
+      },
+      {
+        "source_id": "ecos",
+        "blocking_count": 1,
+        "warning_count": 0,
+        "blocker_ids": [
+          "credential_required"
+        ],
+        "warning_ids": []
+      },
+      {
+        "source_id": "kosis",
+        "blocking_count": 1,
+        "warning_count": 0,
+        "blocker_ids": [
+          "credential_required"
+        ],
+        "warning_ids": []
+      },
+      {
+        "source_id": "open_assembly",
+        "blocking_count": 1,
+        "warning_count": 0,
+        "blocker_ids": [
+          "credential_required"
+        ],
+        "warning_ids": []
+      },
+      {
+        "source_id": "seoul_open_data",
+        "blocking_count": 1,
+        "warning_count": 0,
+        "blocker_ids": [
+          "credential_required"
+        ],
+        "warning_ids": []
+      }
+    ],
+    "error_action_blocking_rules": 8,
+    "error_action_manual_review_rules": 25,
+    "downstream_manual_review_changes": 2
+  },
+  "shard_policy": {
+    "phase": "compatibility_period",
+    "asset_name": "data-go-kr-shards.tar.gz",
+    "required_for_release": false,
+    "publication_status": "optional_draft_asset",
+    "monolith_fallback_required": true,
+    "downstream_tracking": "StatPan/datapan-cli#128",
+    "blocked_until": [
+      "catalog install proves shard-preferred monolith fallback",
+      "doctor reports shard inventory health as additive metadata",
+      "release verify and readiness understand registry_shards artifacts",
+      "downstream SDK, MCP, Studio, and API consumers keep canonical registry compatibility"
+    ]
+  },
+  "shard_consumer_proof": {
+    "path": "reports/release-shard-consumer-proof.json",
+    "proof_status": "shard_preferred_fallback_proven",
+    "shard_preferred_ready": true,
+    "monolith_fallback_proven": true,
+    "distribution_action_resolved": true,
+    "canonical_registry_required": true,
+    "shard_assets_required": false,
+    "checked_in_large_shards": false,
+    "canonical_registry_bytes": 137735169,
+    "shard_archive_publication": "optional_release_asset",
+    "workflow_contract_present": true,
+    "consumer_effect": "shard_preferred_supported_with_canonical_fallback",
+    "goal_completion_effect": "distribution_pressure_evidence_only_goal_still_requires_credential_and_manual_review_gates"
+  },
+  "shard_release_evidence": {
+    "status": "ci_validated_optional_asset",
+    "workflow": ".github/workflows/verify-release.yml",
+    "gate_name": "Validate full registry shard release evidence",
+    "source_registry": "data/data-go-kr.registry.json",
+    "generated_inventory": ".datapan/ci/full-registry-shards/registry-shards.json",
+    "generated_archive": ".datapan/ci/full-data-go-kr-shards.tar.gz",
+    "archive_check": ".datapan/ci/full-shard-archive-check.txt",
+    "required_commands": [
+      "python scripts/generate-registry-shards.py",
+      "python scripts/validate-registry-shards.py",
+      "python scripts/package-registry-shards.py",
+      "python scripts/package-registry-shards.py --check"
+    ],
+    "release_distribution_footprint": "reports/release-distribution-footprint.json",
+    "canonical_registry_bytes": 137735169,
+    "manifest_bound_bytes_excluding_self": 173957232,
+    "large_monolith_threshold_bytes": 100000000,
+    "registry_footprint_status": "large_monolith_shard_additive",
+    "canonical_registry_required": true,
+    "shard_distribution_required": false,
+    "monolith_fallback_required": true,
+    "footprint_consumer_effect": "canonical_registry_required_shards_optional"
+  },
+  "consumers": [
+    {
+      "consumer": "datapan-cli",
+      "surfaces": [
+        "catalog install",
+        "doctor",
+        "catalog release verify",
+        "catalog release readiness"
+      ],
+      "compatibility_mode": "shard_preferred_with_monolith_fallback",
+      "status": "proven",
+      "evidence": [
+        "reports/latest-release-verification.json",
+        "reports/latest-release-readiness.json",
+        "datapan-registry-release-health/release-health-rollup.json",
+        "reports/release-shard-consumer-proof.json"
+      ],
+      "notes": "CLI release install, doctor, release verify, and readiness compatibility are proven with shard-preferred support and canonical monolith fallback while shard assets remain optional."
+    },
+    {
+      "consumer": "release-operator",
+      "surfaces": [
+        "GitHub Release zip",
+        "weekly release-health workflow",
+        "manual release draft workflow"
+      ],
+      "compatibility_mode": "canonical_monolith",
+      "status": "proven",
+      "evidence": [
+        "manifest.json",
+        "reports/latest-release-readiness.json",
+        "datapan-registry-release-health/release-health-rollup.json",
+        "reports/release-shard-consumer-proof.json"
+      ],
+      "notes": "Operators must keep the canonical registry in the release zip and may attach shard archives only as optional compatibility-period assets; current shard consumer effect is shard_preferred_supported_with_canonical_fallback."
+    },
+    {
+      "consumer": "datapan-api",
+      "surfaces": [
+        "served dataset contract review",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "registry_metadata",
+      "status": "additive",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/registry-governance-policy.md"
+      ],
+      "notes": "Registry-only release evidence does not require API route or database changes unless an impact plan marks served datasets."
+    },
+    {
+      "consumer": "datapan-data",
+      "surfaces": [
+        "promoted dataset review",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "registry_metadata",
+      "status": "additive",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/data-go-kr-mastery-plan.md"
+      ],
+      "notes": "Registry-only compatibility evidence does not create promoted data blocks."
+    },
+    {
+      "consumer": "sdk",
+      "surfaces": [
+        "served dataset SDK regeneration",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "no_served_contract",
+      "status": "not_required",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/registry-governance-policy.md"
+      ],
+      "notes": "No SDK regeneration is required for registry-only release-health and compatibility artifacts."
+    },
+    {
+      "consumer": "mcp",
+      "surfaces": [
+        "tool contract review",
+        "registry impact plan"
+      ],
+      "compatibility_mode": "no_served_contract",
+      "status": "not_required",
+      "evidence": [
+        "reports/registry-impact-plan.json",
+        "docs/registry-governance-policy.md"
+      ],
+      "notes": "No MCP contract regeneration is required for registry-only release-health and compatibility artifacts."
+    },
+    {
+      "consumer": "studio",
+      "surfaces": [
+        "registry snapshot loading",
+        "future shard-preferred browsing"
+      ],
+      "compatibility_mode": "shard_preferred_with_monolith_fallback",
+      "status": "proven",
+      "evidence": [
+        "reports/release-shard-consumer-proof.json",
+        "StatPan/datapan-cli#128",
+        "StatPan/datapan-cli#129"
+      ],
+      "notes": "Studio-facing snapshot loading may prefer validated shards and retains the proven canonical registry fallback implemented by the shared CLI consumer."
+    }
+  ]
+}

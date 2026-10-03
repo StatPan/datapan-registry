@@ -47,7 +47,10 @@
           "disposition": {"enum": ["classified_failure", "unclassified_failure", "healthy_recovery", "no_active_failure"]},
           "failure_class": {"enum": ["credential", "parameter", "adapter", "parser", "rate_limit", "upstream", "reference_drift", "catalog_drift", "consumer"]},
           "rule_id": {"type": "string", "minLength": 1},
-          "observed_at": {"type": "string", "format": "date-time"}
+          "observed_at": {"type": "string", "format": "date-time"},
+          "identity_key": {"type": "string", "minLength": 1},
+          "result_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "contract_binding_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
         }
       }
     }
