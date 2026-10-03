@@ -2307,16 +2307,13 @@ def main(argv: list[str] | None = None) -> int:
                         records = promotion_ack.get("records")
                         if not isinstance(records, list):
                             raise ValueError("promotion_journal_records_invalid")
-                        record_keys: set[tuple[str, str, str, str]] = set()
+                        record_keys: set[tuple[str, str, str, str, str, str]] = set()
                         for record in records:
                             validate_health_promotion_record(record)
                             candidate = record.get("candidate") if isinstance(record, dict) else None
                             if not isinstance(candidate, dict) or str(candidate.get("repository", "")).casefold() != args.repository.casefold():
                                 raise ValueError("promotion_record_repository_mismatch")
-                            key = (
-                                str(candidate.get("source_id", "")), str(candidate.get("scope", "")),
-                                str(candidate.get("generation_id", "")), str(candidate.get("registry_sha256", "")),
-                            )
+                            key = PROMOTION.candidate_key(record)
                             if key in record_keys:
                                 raise ValueError("promotion_journal_duplicate_candidate")
                             record_keys.add(key)

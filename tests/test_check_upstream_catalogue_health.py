@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import copy
+import contextlib
 import datetime as dt
 import importlib.util
+import io
 import json
 import pathlib
 import tempfile
@@ -22,6 +24,7 @@ PERSIST = importlib.util.module_from_spec(PERSIST_SPEC)
 PERSIST_SPEC.loader.exec_module(PERSIST)
 
 AS_OF = dt.datetime.fromisoformat("2026-10-01T00:00:00+00:00")
+LIVE_CLI_AS_OF = dt.datetime.fromisoformat("2026-10-03T14:00:00+00:00")
 POLICY = json.loads((ROOT / "policy/upstream-catalogue-health.json").read_text())
 SOURCE_POLICY = json.loads((ROOT / "policy/source-refresh.json").read_text())
 SOURCE_POLICY_SHA = HEALTH.file_sha256(ROOT / "policy/source-refresh.json")
@@ -78,6 +81,11 @@ REAL_PROCESSOR_READY_BUNDLE = [
     },
 ]
 REAL_PROCESSOR_READY_BUNDLE_SHA256 = "16f5b87a7027821c66e540bb5243e0248695a009c339e6167b05c9368886821e"
+DISTINCT_REVISION_JOURNAL = ROOT / "tests/fixtures/upstream-catalogue-health/promotion-journal-distinct-revisions.json"
+DISTINCT_REVISION_JOURNAL_SHA256 = "89bad0fc177203a49e59c878f3a5022005836cdd498b939844990324c446050e"
+DISTINCT_REVISION_GENERATION = "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4"
+DISTINCT_REVISION_REGISTRY_SHA256 = "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+DISTINCT_REVISION_CURRENT_HEAD = "16b4ddaa0fd13671b79896d71380ee71328b297f"
 
 
 def checkpoint(
@@ -422,6 +430,89 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             promotion_workflow_api_error=promotion_workflow_api_error,
             prior_promotion_execution_faults=prior_promotion_execution_faults or [],
         )
+
+    def run_live_health_cli(self, temp: pathlib.Path, journal: dict, *, cp: list[dict] | None = None) -> tuple[int, dict, mock.Mock]:
+        """Exercise main's live promotion-journal intake with every remote API stubbed."""
+        journal_path = temp / "promotion-journal.json"
+        journal_path.write_text(json.dumps(journal, sort_keys=True), encoding="utf-8")
+        state_dir = write_state(temp / "processor-state", cp or [])
+        output_path = temp / "health-receipt.json"
+        attempt_evidence: dict[tuple[str, int], dict] = {}
+        records = journal.get("records", []) if isinstance(journal, dict) else []
+        for record in records if isinstance(records, list) else []:
+            if not isinstance(record, dict):
+                continue
+            for acknowledgement in record.get("acknowledgements", []):
+                if not isinstance(acknowledgement, dict):
+                    continue
+                run_id = acknowledgement.get("run_id")
+                attempt = acknowledgement.get("run_attempt")
+                if not isinstance(run_id, int) or not isinstance(attempt, int):
+                    continue
+                workflow_path = (
+                    PUBLICATION_ACK_PATH
+                    if acknowledgement.get("status") in {"publication-pending", "published", "read-back-confirmed"}
+                    else PROMOTION_PATH
+                )
+                evidence = promotion_attempt_evidence(
+                    run_id, acknowledgement.get("observed_at"), workflow_path,
+                )
+                evidence["attempt_number"] = attempt
+                evidence["run"]["run_attempt"] = attempt
+                evidence["jobs_api_endpoint"] = (
+                    f"repos/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}/jobs"
+                )
+                attempt_evidence[(str(run_id), attempt)] = evidence
+
+        def workflow_identity(repository: str, workflow_path: str) -> int:
+            self.assertEqual(repository, "StatPan/datapan-registry")
+            return WORKFLOW_IDS_BY_PATH[workflow_path]
+
+        def run_attempt(repository: str, run_id: str, attempt: int) -> dict:
+            self.assertEqual(repository, "StatPan/datapan-registry")
+            return attempt_evidence[(str(run_id), attempt)]
+
+        evaluator = HEALTH.evaluate
+        with mock.patch.multiple(
+            HEALTH,
+            collect_workflow_identity=mock.DEFAULT,
+            collect_workflow_runs=mock.DEFAULT,
+            collect_processor_prior_attempt_history=mock.DEFAULT,
+            collect_promotion_execution_attempts=mock.DEFAULT,
+            collect_run=mock.DEFAULT,
+            collect_run_artifacts=mock.DEFAULT,
+            collect_artifact=mock.DEFAULT,
+            collect_run_attempt_evidence=mock.DEFAULT,
+            evaluate=mock.DEFAULT,
+        ) as patched, mock.patch.object(
+            HEALTH, "gh_json", side_effect=AssertionError("unexpected GitHub API access in local intake test"),
+        ), mock.patch.object(
+            HEALTH.subprocess, "run", side_effect=AssertionError("unexpected subprocess or network access in local intake test"),
+        ):
+            patched["collect_workflow_identity"].side_effect = workflow_identity
+            patched["collect_workflow_runs"].return_value = []
+            patched["collect_processor_prior_attempt_history"].return_value = ({}, set())
+            patched["collect_promotion_execution_attempts"].return_value = ({}, set())
+            patched["collect_run"].side_effect = AssertionError("unexpected producer-run lookup in local intake test")
+            patched["collect_run_artifacts"].side_effect = AssertionError("unexpected artifact-list lookup in local intake test")
+            patched["collect_artifact"].return_value = {"expired": False}
+            patched["collect_run_attempt_evidence"].side_effect = run_attempt
+            patched["evaluate"].side_effect = evaluator
+            with contextlib.redirect_stdout(io.StringIO()):
+                result = HEALTH.main([
+                    "--as-of", LIVE_CLI_AS_OF.isoformat(),
+                    "--repository", "StatPan/datapan-registry",
+                    "--processor-state-dir", str(state_dir),
+                    "--promotion-ack", str(journal_path),
+                    "--registry", str(ROOT / "data/data-go-kr.registry.json"),
+                    "--main-revision", "a" * 40,
+                    "--workflow-run-id", "900",
+                    "--workflow-run-attempt", "1",
+                    "--output", str(output_path),
+                ])
+            self.assertEqual(result, 0)
+            receipt = json.loads(output_path.read_text(encoding="utf-8"))
+            return result, receipt, patched["evaluate"]
 
     def test_fresh_live_observation_and_terminal_no_change_are_separate_from_heartbeat(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -1589,6 +1680,112 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         self.assertEqual(canonical["promotion_status"], "pending-review")
         self.assertEqual(canonical["last_good"]["generation_id"], GENERATION_ID)
         self.assertEqual(canonical["last_good"]["publication_revision"], "1" * 40)
+
+    def test_live_cli_accepts_frozen_distinct_revision_journal_without_inventing_freshness(self) -> None:
+        self.assertEqual(HEALTH.file_sha256(DISTINCT_REVISION_JOURNAL), DISTINCT_REVISION_JOURNAL_SHA256)
+        journal = json.loads(DISTINCT_REVISION_JOURNAL.read_text(encoding="utf-8"))
+        heads = [row["candidate"]["head_sha"] for row in journal["records"]]
+        self.assertEqual(len(journal["records"]), 3)
+        self.assertEqual(len(set(heads)), 3)
+        self.assertEqual(heads[-1], DISTINCT_REVISION_CURRENT_HEAD)
+        self.assertTrue(all(row["candidate"]["generation_id"] == DISTINCT_REVISION_GENERATION for row in journal["records"]))
+        self.assertTrue(all(row["candidate"]["registry_sha256"] == DISTINCT_REVISION_REGISTRY_SHA256 for row in journal["records"]))
+
+        current = checkpoint(
+            generation_id=DISTINCT_REVISION_GENERATION,
+            status="ready",
+            execution_mode="fixture",
+            producer_run_id="fixture-only-run",
+        )
+        current["output_digests"][0]["sha256"] = DISTINCT_REVISION_REGISTRY_SHA256
+        current["output_artifact"]["bundle_manifest_sha256"] = HEALTH.sha256_bytes(
+            HEALTH.canonical_json(current["output_digests"])
+        )
+        current["checkpoint_sha256"] = HEALTH.sha256_bytes(HEALTH.canonical_json({
+            key: value for key, value in current.items() if key != "checkpoint_sha256"
+        }))
+        with tempfile.TemporaryDirectory() as directory:
+            _result, receipt, evaluator = self.run_live_health_cli(
+                pathlib.Path(directory), journal, cp=[current],
+            )
+
+        loaded = evaluator.call_args.kwargs["promotion_ack"]
+        self.assertEqual(loaded, journal)
+        self.assertEqual(
+            [row["candidate"]["head_sha"] for row in loaded["records"]],
+            [
+                "bcc306c20c424faa9e789444e5914bf1887b930d",
+                "1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07",
+                DISTINCT_REVISION_CURRENT_HEAD,
+            ],
+        )
+        source = receipt["sources"][0]
+        self.assertEqual(source["canonical"]["promotion_status"], "pending-review")
+        self.assertEqual(
+            source["canonical"]["promotion_stage"]["entered_at"],
+            journal["records"][-1]["acknowledgements"][-1]["observed_at"],
+        )
+        self.assertIsNone(source["canonical"]["last_good"])
+        publication = source["canonical"]["publication"]
+        self.assertFalse(publication["verified"])
+        self.assertIsNone(publication["publisher_run_verified"])
+        self.assertIsNone(publication["publication_revision"])
+        self.assertIsNone(publication["publication_pointer_revision"])
+        reasons = {row["reason"] for row in source["faults"]}
+        self.assertIn("promotion_pending_review", reasons)
+        self.assertNotIn("promotion_journal_unavailable", reasons)
+        self.assertNotIn("promotion_generation_record_ambiguous", reasons)
+        self.assertEqual(receipt["summary"]["live_fresh_observation_count"], 0)
+        self.assertEqual(source["observation"]["execution_mode"], "fixture")
+
+    def test_live_cli_rejects_exact_duplicate_candidate_identity(self) -> None:
+        journal = json.loads(DISTINCT_REVISION_JOURNAL.read_text(encoding="utf-8"))
+        journal["records"].append(copy.deepcopy(journal["records"][-1]))
+        with tempfile.TemporaryDirectory() as directory:
+            _result, receipt, evaluator = self.run_live_health_cli(pathlib.Path(directory), journal)
+        self.assertIsNone(evaluator.call_args.kwargs["promotion_ack"])
+        self.assertIn("promotion_journal_duplicate_candidate", evaluator.call_args.kwargs["promotion_ack_error"])
+        self.assertIn("promotion_journal_unavailable", {row["reason"] for row in receipt["sources"][0]["faults"]})
+        self.assertIsNone(receipt["sources"][0]["canonical"]["last_good"])
+
+    def test_live_cli_fails_closed_for_wrong_repository_schema_and_broken_revision_links(self) -> None:
+        original = json.loads(DISTINCT_REVISION_JOURNAL.read_text(encoding="utf-8"))
+        cases = []
+
+        wrong_journal_repository = copy.deepcopy(original)
+        wrong_journal_repository["repository"] = "attacker/fork"
+        cases.append(("wrong_journal_repository", wrong_journal_repository, "promotion_journal_repository_mismatch"))
+
+        wrong_repository = copy.deepcopy(original)
+        wrong_repository["records"][-1]["candidate"]["repository"] = "attacker/fork"
+        cases.append(("wrong_repository", wrong_repository, "promotion_record_repository_mismatch"))
+
+        malformed_schema = copy.deepcopy(original)
+        malformed_schema.pop("updated_at")
+        cases.append(("malformed_schema", malformed_schema, "'updated_at' is a required property"))
+
+        broken_link = copy.deepcopy(original)
+        broken_link["records"][0]["superseded_by"]["head_sha"] = "0" * 40
+        cases.append(("broken_reciprocal_link", broken_link, "promotion_journal_revision_links_invalid"))
+
+        for name, journal, expected_error in cases:
+            with self.subTest(case=name), tempfile.TemporaryDirectory() as directory:
+                _result, receipt, evaluator = self.run_live_health_cli(pathlib.Path(directory), journal)
+            if name == "broken_reciprocal_link":
+                self.assertIsInstance(evaluator.call_args.kwargs["promotion_ack"], dict)
+                self.assertIsNone(evaluator.call_args.kwargs["promotion_ack_error"])
+            else:
+                if evaluator.call_args.kwargs["promotion_ack"] is not None:
+                    self.fail(f"live CLI passed invalid {name} journal to Health evaluation")
+                self.assertIn(expected_error, evaluator.call_args.kwargs["promotion_ack_error"])
+            source = receipt["sources"][0]
+            self.assertIn("promotion_journal_unavailable", {row["reason"] for row in source["faults"]})
+            self.assertIsNone(source["canonical"]["last_good"])
+            self.assertEqual(source["canonical"]["promotion_status"], "unavailable")
+            publication = source["canonical"]["publication"]
+            if publication is not None:
+                self.assertFalse(publication["verified"])
+                self.assertIsNone(publication["publisher_run_verified"])
 
     @staticmethod
     def revision_ref(record: dict) -> dict:
