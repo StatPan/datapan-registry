@@ -1,0 +1,825 @@
+{
+  "evaluated_at": "2026-10-03T18:00:52Z",
+  "execution_mode": "live",
+  "faults": [
+    {
+      "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+      "owner_ticket": 659,
+      "reason": "candidate_ready_with_pending_scope",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "candidate"
+    },
+    {
+      "fault_key": "7678c24a0fcb40b7df3f32f828be41a70a046d2bad441e6cbeb50c1ec2b404b4",
+      "owner_ticket": 659,
+      "reason": "promotion_record_for_different_generation",
+      "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "promotion"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "e01af4e189073ec583a997c28c20a7acee9c9496",
+        "run_attempt": 1,
+        "run_id": "37136377127",
+        "run_started_at": "2026-10-03T16:18:40Z"
+      },
+      "fault_key": "7a05efdcfec9950e728817a486c0fdacd589415513fa6d326d7cadf230f03ab2",
+      "owner_ticket": 659,
+      "reason": "promotion_workflow_run_failed",
+      "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "promotion-execution"
+    },
+    {
+      "fault_key": "d36ca8b10f4fd57b22c47324edafd80fd8bc62bc39c9f6aae39d8ed0ff55d444",
+      "owner_ticket": 659,
+      "reason": "promotion_ack_missing",
+      "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "promotion"
+    }
+  ],
+  "health_workflow": {
+    "revision": "e01af4e189073ec583a997c28c20a7acee9c9496",
+    "run_attempt": 1,
+    "run_id": "37142614671"
+  },
+  "policy_sha256": "084ebb5730bc6e3d2c34e88683a490c0c976dd595e98e0a1aae6e163f1887b30",
+  "receipt_sha256": "bf8f9cf0c521276741beab3e6ba9bed2431a79b87390f5325e5ab90241168941",
+  "repository": "StatPan/datapan-registry",
+  "schema_version": "datapan.upstream-catalogue-health.v1",
+  "source_policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc",
+  "sources": [
+    {
+      "canonical": {
+        "last_good": null,
+        "main": {
+          "manifest_sha256": "2dc29766ca0a06ad3c7f3cc3e6b087d9ebd8e60b6c60f04cb83225f657eb8aff",
+          "registry_bytes": 139155499,
+          "registry_path": "data/data-go-kr.registry.json",
+          "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+          "revision": "e01af4e189073ec583a997c28c20a7acee9c9496"
+        },
+        "promotion_execution": {
+          "execution_failure": {
+            "conclusion": "failure",
+            "created_at": "2026-10-03T16:18:40Z",
+            "event": "workflow_run",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "e01af4e189073ec583a997c28c20a7acee9c9496",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37136377127",
+            "run_started_at": "2026-10-03T16:18:40Z",
+            "status": "completed",
+            "updated_at": "2026-10-03T16:19:28Z",
+            "workflow_id": 373708872
+          },
+          "latest_execution_run": {
+            "conclusion": "failure",
+            "created_at": "2026-10-03T16:18:40Z",
+            "event": "workflow_run",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "e01af4e189073ec583a997c28c20a7acee9c9496",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37136377127",
+            "run_started_at": "2026-10-03T16:18:40Z",
+            "status": "completed",
+            "updated_at": "2026-10-03T16:19:28Z",
+            "workflow_id": 373708872
+          },
+          "latest_successful_execution_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-03T14:55:46Z",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37131395571",
+            "run_started_at": "2026-10-03T14:55:46Z",
+            "status": "completed",
+            "updated_at": "2026-10-03T14:56:23Z",
+            "workflow_id": 373708872
+          }
+        },
+        "promotion_stage": null,
+        "promotion_status": "unavailable",
+        "publication": null
+      },
+      "collector": {
+        "age_seconds": 325000,
+        "expected_interval_seconds": 604800,
+        "grace_seconds": 86400,
+        "latest_execution_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        },
+        "latest_scheduled_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        }
+      },
+      "faults": [
+        {
+          "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+          "owner_ticket": 659,
+          "reason": "candidate_ready_with_pending_scope",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "candidate"
+        },
+        {
+          "fault_key": "7678c24a0fcb40b7df3f32f828be41a70a046d2bad441e6cbeb50c1ec2b404b4",
+          "owner_ticket": 659,
+          "reason": "promotion_record_for_different_generation",
+          "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "promotion"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "e01af4e189073ec583a997c28c20a7acee9c9496",
+            "run_attempt": 1,
+            "run_id": "37136377127",
+            "run_started_at": "2026-10-03T16:18:40Z"
+          },
+          "fault_key": "7a05efdcfec9950e728817a486c0fdacd589415513fa6d326d7cadf230f03ab2",
+          "owner_ticket": 659,
+          "reason": "promotion_workflow_run_failed",
+          "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "promotion-execution"
+        },
+        {
+          "fault_key": "d36ca8b10f4fd57b22c47324edafd80fd8bc62bc39c9f6aae39d8ed0ff55d444",
+          "owner_ticket": 659,
+          "reason": "promotion_ack_missing",
+          "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "promotion"
+        }
+      ],
+      "observation": {
+        "age_seconds": 324973,
+        "collection_status": "success",
+        "execution_mode": "live",
+        "max_age_seconds": 691200,
+        "observed_at": "2026-09-29T23:44:39Z",
+        "producer_run_id": "36646768289",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "state": "fresh"
+      },
+      "overall": "blocked",
+      "processor": {
+        "attempts_by_id": {
+          "15003164": 1,
+          "15005257": 1,
+          "15006273": 1,
+          "15007088": 1,
+          "15008409": 1,
+          "15008517": 1,
+          "15013677": 1,
+          "15013679": 1,
+          "15014832": 1,
+          "15015158": 1,
+          "15015163": 1,
+          "15015164": 1,
+          "15015212": 1,
+          "15019347": 1,
+          "15019666": 1,
+          "15020786": 1,
+          "15020843": 1,
+          "15020966": 1,
+          "15021305": 1,
+          "15024888": 1,
+          "15027423": 1,
+          "15027426": 1,
+          "15028101": 1,
+          "15029122": 1,
+          "15031993": 1,
+          "15031994": 1,
+          "15032073": 1,
+          "15032578": 1,
+          "15032581": 1,
+          "15032588": 1,
+          "15032592": 1,
+          "15032604": 1,
+          "15032613": 1,
+          "15032644": 1,
+          "15032647": 1,
+          "15032650": 1,
+          "15032652": 1,
+          "15032656": 1,
+          "15032657": 1,
+          "15032659": 1,
+          "15032678": 1,
+          "15032684": 1,
+          "15032685": 1,
+          "15032686": 1,
+          "15032687": 1,
+          "15032688": 1,
+          "15032691": 1,
+          "15032693": 1,
+          "15032694": 1,
+          "15032695": 1,
+          "15032696": 1,
+          "15032697": 1,
+          "15032703": 1,
+          "15032710": 1,
+          "15032712": 1,
+          "15032715": 1,
+          "15032716": 1,
+          "15032733": 1,
+          "15032735": 1,
+          "15032747": 1,
+          "15032794": 1,
+          "15032796": 1,
+          "15032807": 1,
+          "15032809": 1,
+          "15032813": 1,
+          "15032817": 1,
+          "15032826": 1,
+          "15032829": 1,
+          "15032835": 1,
+          "15032837": 1,
+          "15032848": 1,
+          "15032849": 1,
+          "15032850": 1,
+          "15032852": 1,
+          "15032855": 1,
+          "15032865": 1,
+          "15032866": 1,
+          "15032867": 1,
+          "15032868": 1,
+          "15032872": 1,
+          "15032912": 1,
+          "15032919": 1,
+          "15032920": 1,
+          "15032938": 1,
+          "15032941": 1,
+          "15032958": 1,
+          "15033015": 1,
+          "15033016": 1,
+          "15033017": 1,
+          "15033020": 1,
+          "15033021": 1,
+          "15033027": 1,
+          "15033028": 1,
+          "15033029": 1,
+          "15033030": 1,
+          "15033031": 1
+        },
+        "attempts_consumed": 24,
+        "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+        "checkpoint_observed_at": "2026-09-29T23:44:39Z",
+        "detail_queue_cursor": 96,
+        "detail_records": [
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032850",
+            "source_sha256": "4623f67dddf142063d42c8ade2f230a36d80baad4aec4bd6eb788e79279382a3",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15032852",
+            "source_sha256": "8aee75c81dda1aa5108d952bf54f2954a9eeeb43792dcb4b3ae04f954d4e07e4",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032855",
+            "source_sha256": "fd6db72c21564e417553084ac665c9e7620add52841aebad14b495dc32fd60ac",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032865",
+            "source_sha256": "a539fb7d6db0b51b5c97f1599af7a89e9fc2d07f1b1b9e5d72d2678a2ee133b7",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032866",
+            "source_sha256": "8ec0dec65d77a12932e0f4144cd2901bcd5d1468e944c250260407b5593ed4c6",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032867",
+            "source_sha256": "627b6dc63307b760c861482488f0c7db5510743189299b4e61d259bd5db41999",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032868",
+            "source_sha256": "3958061f8fab94c714628f546b94ae26355f973ff6c91f53432c1665cc78d065",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032872",
+            "source_sha256": "83ef350ef433a01079b6d3be9e1556d79ea20e2e714efe3f745c4528a82feda9",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032912",
+            "source_sha256": "c49ca06c89850757b39030f992b67f994e01b440489135250e1853578929df10",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032919",
+            "source_sha256": "d55af9e34449516bde0ef39960ffe7cffa566849c64c6c7056749ef3dcf55b02",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032920",
+            "source_sha256": "3bc7deeb40090f8303273d963888d4cea6d35e0e429d3c3e6e433165b89f8f82",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15032938",
+            "source_sha256": "67d69d2d00c1abbaf8ecddb3ce1394a4780e5ed48a2cce6dade95affb8a47c8c",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032941",
+            "source_sha256": "4a0b44632acc1ef2e6249db1042e30f1b1ab57e988ffb290026b85965de31f03",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15032958",
+            "source_sha256": "972463a5ff8b8f51e60e34c4f6f7e5a470a76f56b315410ebe6c78316b4bc5d5",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033015",
+            "source_sha256": "9ac97321207e4b8054e695336bb8aeedd65b253997662b516fc67566a0554fee",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033016",
+            "source_sha256": "7f9126ade2ec62e1720714660594e1d8d382899b56df23c4a489640ee70d7dd3",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15033017",
+            "source_sha256": "5afa20239365d8d6582a8bf97f09f219c5b42be0c4e8a48ffc88ecac2e91a551",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033020",
+            "source_sha256": "51ea48ff857e0269844947d2cf7d4f67a0c08130aa7e0fe5be894ac7f7bbaf75",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033021",
+            "source_sha256": "88fa3f4d880f94d0f91aed7d8139c764d1f9db6c875a1746fd0f8f00b5d686ad",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033027",
+            "source_sha256": "0287145cb81ef2eced27775f3c5fef36ccfd494f2b4f63482ad387f33623839c",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033028",
+            "source_sha256": "0cc8787225f18ecd1518958d49897c31a54cf9e3f4f5b8b4cd20e76955aca438",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033029",
+            "source_sha256": "0920b5a5aa4a889323e80a0d3a45ff88ce0c6a8d73bd0b2412edfa8f7a034c51",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15033030",
+            "source_sha256": "cb5e09daae0931b8311e41ab567d8de55ce4db0124e081a869b664190e41cb31",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "missing_link_detail_operations"
+            },
+            "guide_sha256": null,
+            "id": "15033031",
+            "source_sha256": "6cfea486e3240357f2ee9fede437417bd6d6a12dff3c38ae3879aaf67a0933eb",
+            "status": "quarantined"
+          }
+        ],
+        "execution_failure": null,
+        "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+        "last_heartbeat_at": "2026-10-03T16:18:29Z",
+        "last_observation": {
+          "collection_status": "success",
+          "execution_mode": "live",
+          "observed_at": "2026-09-29T23:44:39Z",
+          "producer_run_id": "36646768289",
+          "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+        },
+        "last_progress_at": "2026-10-03T16:15:44Z",
+        "latest_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-03T16:14:56Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "e01af4e189073ec583a997c28c20a7acee9c9496",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37136145963",
+          "run_started_at": "2026-10-03T16:14:56Z",
+          "status": "completed",
+          "updated_at": "2026-10-03T16:18:38Z",
+          "workflow_id": 373610259
+        },
+        "latest_successful_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-03T16:14:56Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "e01af4e189073ec583a997c28c20a7acee9c9496",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37136145963",
+          "run_started_at": "2026-10-03T16:14:56Z",
+          "status": "completed",
+          "updated_at": "2026-10-03T16:18:38Z",
+          "workflow_id": 373610259
+        },
+        "lease": null,
+        "outcome": {
+          "attempts_this_invocation": 24,
+          "composer_status": "ready_scoped",
+          "detail_failure_counts": {
+            "missing_link_detail_operations": 20,
+            "timeout": 4
+          },
+          "detail_reason_unavailable_count": 884,
+          "detail_retry_count": 888,
+          "detail_unattempted_count": 884,
+          "pending_count": 4382,
+          "reason": "scoped_candidate_ready_pending_outcomes_retained"
+        },
+        "output_artifact": {
+          "artifact_id": "11277759104",
+          "bundle_manifest_sha256": "df05d7df7d15fee97c99d2301196a6fd007afc22a898b391cc873854a0620a41",
+          "expires_at": "2026-11-02T16:18:29Z",
+          "name": "upstream-catalogue-processing-37136145963-1",
+          "repository": "StatPan/datapan-registry",
+          "run_id": "37136145963"
+        },
+        "output_digests": [
+          {
+            "bytes": 139155499,
+            "path": "composed-candidate.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          {
+            "bytes": 85703345,
+            "path": "ready-scope.registry.json",
+            "sha256": "1e82aa849995beb4a9c9d8eaca8d355dfd5fb9a78233af70e749b99f81b76084"
+          },
+          {
+            "bytes": 11553794,
+            "path": "semantic-diff.json",
+            "sha256": "89fecb372670dfefdab1557306b55a59b06f0372dde941964b3ca990d36de194"
+          },
+          {
+            "bytes": 3502558,
+            "path": "regeneration-queue.json",
+            "sha256": "f8518647157b1e1f637b338091d8d46c80f481b909fe07e006941145ad42bc14"
+          },
+          {
+            "bytes": 679175,
+            "path": "quarantine.json",
+            "sha256": "06e2b406cd636cc8a1379f4094dc48294a41d03e8a70d413ddc86d20d51ef339"
+          },
+          {
+            "bytes": 939105,
+            "path": "composition-receipt.json",
+            "sha256": "f9b2ddc2513870e76be8865469c47810537dcf0c733353466439398c8e656545"
+          },
+          {
+            "bytes": 235455,
+            "path": "upstream-catalogue-enrichment-evidence.json",
+            "sha256": "82075a57df13c86ac6edd268342be18c92b8e49067d06d487362ab5a2d920651"
+          },
+          {
+            "bytes": 717,
+            "path": "upstream-catalogue-processing-result.json",
+            "sha256": "048a62dd000a30d847527169b5ffa869282dd700676e70b77747e4b17cce6a91"
+          }
+        ],
+        "request_reservation": {
+          "attempt_budget": 24,
+          "attempts_made": 24,
+          "expires_at": "2026-10-03T17:00:39Z",
+          "fencing_token": 1,
+          "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+          "owner_run_id": "37136145963-1",
+          "records": [
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032850",
+              "source_sha256": "4623f67dddf142063d42c8ade2f230a36d80baad4aec4bd6eb788e79279382a3"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032852",
+              "source_sha256": "8aee75c81dda1aa5108d952bf54f2954a9eeeb43792dcb4b3ae04f954d4e07e4"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032855",
+              "source_sha256": "fd6db72c21564e417553084ac665c9e7620add52841aebad14b495dc32fd60ac"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032865",
+              "source_sha256": "a539fb7d6db0b51b5c97f1599af7a89e9fc2d07f1b1b9e5d72d2678a2ee133b7"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032866",
+              "source_sha256": "8ec0dec65d77a12932e0f4144cd2901bcd5d1468e944c250260407b5593ed4c6"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032867",
+              "source_sha256": "627b6dc63307b760c861482488f0c7db5510743189299b4e61d259bd5db41999"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032868",
+              "source_sha256": "3958061f8fab94c714628f546b94ae26355f973ff6c91f53432c1665cc78d065"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032872",
+              "source_sha256": "83ef350ef433a01079b6d3be9e1556d79ea20e2e714efe3f745c4528a82feda9"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032912",
+              "source_sha256": "c49ca06c89850757b39030f992b67f994e01b440489135250e1853578929df10"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032919",
+              "source_sha256": "d55af9e34449516bde0ef39960ffe7cffa566849c64c6c7056749ef3dcf55b02"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032920",
+              "source_sha256": "3bc7deeb40090f8303273d963888d4cea6d35e0e429d3c3e6e433165b89f8f82"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032938",
+              "source_sha256": "67d69d2d00c1abbaf8ecddb3ce1394a4780e5ed48a2cce6dade95affb8a47c8c"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032941",
+              "source_sha256": "4a0b44632acc1ef2e6249db1042e30f1b1ab57e988ffb290026b85965de31f03"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15032958",
+              "source_sha256": "972463a5ff8b8f51e60e34c4f6f7e5a470a76f56b315410ebe6c78316b4bc5d5"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033015",
+              "source_sha256": "9ac97321207e4b8054e695336bb8aeedd65b253997662b516fc67566a0554fee"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033016",
+              "source_sha256": "7f9126ade2ec62e1720714660594e1d8d382899b56df23c4a489640ee70d7dd3"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033017",
+              "source_sha256": "5afa20239365d8d6582a8bf97f09f219c5b42be0c4e8a48ffc88ecac2e91a551"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033020",
+              "source_sha256": "51ea48ff857e0269844947d2cf7d4f67a0c08130aa7e0fe5be894ac7f7bbaf75"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033021",
+              "source_sha256": "88fa3f4d880f94d0f91aed7d8139c764d1f9db6c875a1746fd0f8f00b5d686ad"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033027",
+              "source_sha256": "0287145cb81ef2eced27775f3c5fef36ccfd494f2b4f63482ad387f33623839c"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033028",
+              "source_sha256": "0cc8787225f18ecd1518958d49897c31a54cf9e3f4f5b8b4cd20e76955aca438"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033029",
+              "source_sha256": "0920b5a5aa4a889323e80a0d3a45ff88ce0c6a8d73bd0b2412edfa8f7a034c51"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033030",
+              "source_sha256": "cb5e09daae0931b8311e41ab567d8de55ce4db0124e081a869b664190e41cb31"
+            },
+            {
+              "attempts_reserved": 1,
+              "guide_sha256": null,
+              "id": "15033031",
+              "source_sha256": "6cfea486e3240357f2ee9fede437417bd6d6a12dff3c38ae3879aaf67a0933eb"
+            }
+          ],
+          "reserved_at": "2026-10-03T16:15:41Z",
+          "reserved_attempts": 24
+        },
+        "state": "ready"
+      },
+      "recommended_recovery": [
+        "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+        "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+        "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available."
+      ],
+      "source_id": "data_go_kr"
+    }
+  ],
+  "summary": {
+    "blocked": 1,
+    "degraded": 0,
+    "fault_count": 4,
+    "fixture": 0,
+    "healthy": 0,
+    "last_good_count": 0,
+    "live_fresh_observation_count": 1,
+    "source_count": 1
+  }
+}
