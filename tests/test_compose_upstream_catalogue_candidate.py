@@ -226,6 +226,29 @@ class CatalogueCompositionTests(unittest.TestCase):
         with self.assertRaisesRegex(composer.CompositionError, "overlaps successful enrichment"):
             compose([], [candidate], enrichment_evidence=worker_enrichment([outcome], success))
 
+    def test_worker_outcome_failure_diagnostic_is_optional_bounded_and_closed(self):
+        candidate = link_api("19000002", operations=False)
+        old = worker_outcome(candidate, "retry")
+        old_result = compose([], [candidate], enrichment_evidence=worker_enrichment([old]))
+        self.assertEqual(old_result["semantic_diff"]["retained_pending_api_keys"], [
+            {"provider": "data.go.kr", "id": "19000002"},
+        ])
+
+        observed = copy.deepcopy(old)
+        observed["failure_diagnostic"] = {"code": "provider_http_error", "http_status": 503}
+        result = compose([], [candidate], enrichment_evidence=worker_enrichment([observed]))
+        self.assertEqual(result["status"], "no_safe_change")
+
+        malformed = copy.deepcopy(observed)
+        malformed["failure_diagnostic"]["message"] = "secret response body"
+        with self.assertRaises(composer.CompositionError):
+            compose([], [candidate], enrichment_evidence=worker_enrichment([malformed]))
+
+        malformed_status = copy.deepcopy(old)
+        malformed_status["failure_diagnostic"] = {"code": "timeout", "http_status": 503}
+        with self.assertRaises(composer.CompositionError):
+            compose([], [candidate], enrichment_evidence=worker_enrichment([malformed_status]))
+
     def test_real_link_empty_import_retains_baseline_contract_operations(self):
         fixture_path = ROOT / "tests/fixtures/catalogue-composition-real-link-cases.json"
         fixture = json.loads(fixture_path.read_text(encoding="utf-8"))

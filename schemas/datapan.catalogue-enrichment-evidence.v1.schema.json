@@ -78,8 +78,19 @@
         "api_key": {"$ref": "#/$defs/worker_api_key"},
         "source_sha256": {"$ref": "#/$defs/sha256"},
         "guide_sha256": {"$ref": "#/$defs/nullableSha256"},
-        "status": {"enum": ["retry", "quarantined"]}
+        "status": {"enum": ["retry", "quarantined"]},
+        "failure_diagnostic": {"$ref": "#/$defs/failure_diagnostic"}
       }
+    },
+    "failure_diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code"],
+      "properties": {
+        "code": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error"]},
+        "http_status": {"type": "integer", "minimum": 400, "maximum": 599}
+      },
+      "allOf": [{"if": {"properties": {"code": {"const": "provider_http_error"}}, "required": ["code"]}, "then": {}, "else": {"not": {"required": ["http_status"]}}}]
     }
   }
 }
