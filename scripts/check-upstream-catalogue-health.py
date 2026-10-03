@@ -34,6 +34,8 @@ REVISION = re.compile(r"^[a-f0-9]{40,64}$")
 MAX_PROMOTION_JOB_PAGES = 5
 MAX_PROMOTION_JOBS = 500
 MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS = 5
+MAX_PROMOTION_EXECUTION_ATTEMPTS = 2
+PROMOTION_WORKFLOW_EVENTS = {"workflow_run", "schedule", "workflow_dispatch"}
 PROCESSOR_OUTPUT_PATHS = (
     "composed-candidate.registry.json",
     "ready-scope.registry.json",
@@ -700,6 +702,185 @@ def processor_execution_state(
     )
 
 
+def promotion_execution_run_order(run: dict[str, Any]) -> tuple[dt.datetime, int, int] | None:
+    """Order C runs only by their actual attempt start, never mutable timestamps."""
+    if not isinstance(run, dict):
+        return None
+    try:
+        started_at = parse_time(run.get("run_started_at"), "promotion_run.run_started_at")
+        run_id = int(run.get("run_id", run.get("id")))
+        attempt = run.get("run_attempt")
+    except (TypeError, ValueError):
+        return None
+    if run_id < 1 or isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+        return None
+    return started_at, run_id, attempt
+
+
+def trusted_promotion_execution_run(
+    run: Any, repository: str, workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str] = PROMOTION_WORKFLOW_EVENTS,
+) -> bool:
+    return bool(
+        isinstance(run, dict)
+        and trusted_processor_workflow_run(run, repository, workflow_path, workflow_id, allowed_events)
+        and promotion_execution_run_order(run) is not None
+    )
+
+
+def promotion_attempt_evidence_run(
+    evidence: Any, expected_run: dict[str, Any], repository: str, workflow_path: str,
+    workflow_id: int | None, allowed_events: set[str], as_of: dt.datetime,
+    maximum_future_skew: int,
+) -> dict[str, Any] | None:
+    """Validate exact C attempt evidence and bind it to the ordered workflow-run summary."""
+    attempt = expected_run.get("run_attempt")
+    if isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+        return None
+    run = processor_attempt_evidence_run(evidence, repository, workflow_path, workflow_id, attempt, allowed_events)
+    if run is None or not trusted_promotion_execution_run(run, repository, workflow_path, workflow_id, allowed_events):
+        return None
+    expected_run_id = expected_run.get("run_id", expected_run.get("id"))
+    if str(run.get("id")) != str(expected_run_id):
+        return None
+    for field in ("run_attempt", "workflow_id", "path", "event", "status", "conclusion", "head_branch", "head_sha"):
+        if run.get(field) != expected_run.get(field):
+            return None
+    for field in ("repository", "head_repository"):
+        actual_repo = run.get(field)
+        expected_repo = expected_run.get(field)
+        if not isinstance(actual_repo, dict):
+            return None
+        actual_name = actual_repo.get("full_name")
+        expected_name = expected_repo if isinstance(expected_repo, str) else (
+            expected_repo.get("full_name") if isinstance(expected_repo, dict) else None
+        )
+        if not isinstance(actual_name, str) or not isinstance(expected_name, str) or actual_name.casefold() != expected_name.casefold():
+            return None
+    exact_order = promotion_execution_run_order(run)
+    expected_order = promotion_execution_run_order(expected_run)
+    if exact_order is None or expected_order is None or exact_order != expected_order:
+        return None
+    try:
+        seconds_since(as_of, run.get("run_started_at"), "promotion_run.run_started_at", maximum_future_skew)
+    except ValueError:
+        return None
+    return run
+
+
+def trusted_promotion_execution_inputs(
+    runs: list[dict[str, Any]], previous_attempts: dict[str, Any], previous_attempt_errors: set[str],
+    repository: str, workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str], as_of: dt.datetime, maximum_future_skew: int,
+) -> tuple[list[dict[str, Any]], dict[str, Any], set[str]]:
+    """Keep C execution ordering strict while reusing the B processor's bounded history collector."""
+    trusted_runs: list[dict[str, Any]] = []
+    errors = set(previous_attempt_errors)
+    for run in runs:
+        if not isinstance(run, dict) or not trusted_processor_workflow_run(run, repository, workflow_path, workflow_id, allowed_events):
+            continue
+        identity = f"{run.get('id')}/{run.get('run_attempt')}"
+        try:
+            seconds_since(as_of, run.get("run_started_at"), "promotion_run.run_started_at", maximum_future_skew)
+        except ValueError:
+            errors.add(identity)
+            continue
+        trusted_runs.append(run)
+
+    validated_attempts: dict[str, Any] = {}
+    for identity, evidence in previous_attempts.items():
+        try:
+            run_id, attempt_text = identity.split("/", 1)
+            attempt = int(attempt_text)
+        except (AttributeError, ValueError):
+            errors.add(str(identity))
+            continue
+        run = processor_attempt_evidence_run(evidence, repository, workflow_path, workflow_id, attempt, allowed_events)
+        if run is None or str(run.get("id")) != run_id or not trusted_promotion_execution_run(run, repository, workflow_path, workflow_id, allowed_events):
+            errors.add(identity)
+            continue
+        try:
+            seconds_since(as_of, run.get("run_started_at"), "promotion_run.run_started_at", maximum_future_skew)
+        except ValueError:
+            errors.add(identity)
+            continue
+        validated_attempts[identity] = evidence
+    return trusted_runs, validated_attempts, errors
+
+
+def promotion_execution_references(
+    runs: list[dict[str, Any]], previous_attempts: dict[str, Any], previous_attempt_errors: set[str],
+    repository: str, workflow_path: str, workflow_id: int | None, allowed_events: set[str],
+    as_of: dt.datetime, maximum_future_skew: int,
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None, set[str]]:
+    trusted_runs, validated_attempts, errors = trusted_promotion_execution_inputs(
+        runs, previous_attempts, previous_attempt_errors, repository, workflow_path,
+        workflow_id, allowed_events, as_of, maximum_future_skew,
+    )
+    latest, failure, success, lookup_error = processor_execution_state(
+        trusted_runs, validated_attempts, errors, repository, workflow_path, workflow_id, allowed_events,
+    )
+    if lookup_error:
+        errors.add(lookup_error)
+    return latest, failure, success, errors
+
+
+def collect_promotion_execution_attempts(
+    repository: str, workflow_path: str, workflow_id: int | None,
+    runs: list[dict[str, Any]], previous_attempts: dict[str, Any], previous_attempt_errors: set[str],
+    as_of: dt.datetime, maximum_future_skew: int,
+) -> tuple[dict[str, Any], set[str]]:
+    """Fetch at most the selected unresolved failure and success exact C attempts."""
+    _, failure, success, errors = promotion_execution_references(
+        runs, previous_attempts, previous_attempt_errors, repository, workflow_path,
+        workflow_id, PROMOTION_WORKFLOW_EVENTS, as_of, maximum_future_skew,
+    )
+    evidence_by_id = dict(previous_attempts)
+    selected = {f"{run['run_id']}/{run['run_attempt']}": run for run in (failure, success) if isinstance(run, dict)}
+    for identity, summary in sorted(selected.items()):
+        if identity in evidence_by_id:
+            continue
+        if len(evidence_by_id) >= MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS + MAX_PROMOTION_EXECUTION_ATTEMPTS:
+            errors.add(identity)
+            continue
+        try:
+            evidence_by_id[identity] = collect_run_attempt_evidence(repository, identity.split("/", 1)[0], int(summary["run_attempt"]))
+        except RuntimeError:
+            evidence_by_id[identity] = {"availability_error": True}
+            errors.add(identity)
+    return evidence_by_id, errors
+
+
+def promotion_execution_state(
+    runs: list[dict[str, Any]], previous_attempts: dict[str, Any], previous_attempt_errors: set[str],
+    attempt_evidence: dict[str, Any], repository: str, workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str], as_of: dt.datetime, maximum_future_skew: int,
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None, set[str]]:
+    latest, failure, success, errors = promotion_execution_references(
+        runs, previous_attempts, previous_attempt_errors, repository, workflow_path,
+        workflow_id, allowed_events, as_of, maximum_future_skew,
+    )
+    trusted_failure = None
+    trusted_success = None
+    for summary in (failure, success):
+        if not isinstance(summary, dict):
+            continue
+        identity = f"{summary.get('run_id')}/{summary.get('run_attempt')}"
+        exact_run = promotion_attempt_evidence_run(
+            attempt_evidence.get(identity), summary, repository, workflow_path,
+            workflow_id, allowed_events, as_of, maximum_future_skew,
+        )
+        if exact_run is None:
+            errors.add(identity)
+            continue
+        report = report_processor_run(exact_run, workflow_path)
+        if summary is failure:
+            trusted_failure = report
+        if summary is success:
+            trusted_success = report
+    return latest, trusted_failure, trusted_success, errors
+
+
 def processor_pending_reruns_after_success(
     runs: list[dict[str, Any]], repository: str, workflow_path: str,
     workflow_id: int | None, allowed_events: set[str],
@@ -803,6 +984,29 @@ def _fault_action(source: dict[str, Any], key: str) -> str:
     return str(actions.get(key, "Inspect the health receipt and preserve the last-good canonical identity."))
 
 
+def _promotion_recovery_action(source: dict[str, Any], workflow_path: str) -> str:
+    return (
+        f"Inspect the existing owned promotion reconciliation workflow `{workflow_path}` for the recorded candidate, "
+        "then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. "
+        + _fault_action(source, "promotion_wait")
+    )
+
+
+def validate_health_promotion_record(record: dict[str, Any]) -> None:
+    """Read historical prepared records without inventing a missing payload-readback clock."""
+    if record.get("status") != "prepared" or record.get("acknowledgements") != []:
+        validate_schema(record, PROMOTION_SCHEMA, "promotion_record")
+        return
+    schema = load_json(PROMOTION_SCHEMA)
+    candidate_required = schema.get("$defs", {}).get("candidate", {}).get("required")
+    readback_required = schema.get("$defs", {}).get("payload_readback", {}).get("required")
+    if isinstance(candidate_required, list) and "payload_readback" in candidate_required:
+        candidate_required.remove("payload_readback")
+    if isinstance(readback_required, list) and "observed_at" in readback_required:
+        readback_required.remove("observed_at")
+    validate_schema_value(record, schema, "promotion_record")
+
+
 def evaluate_source(
     *, source: dict[str, Any], repository: str, refresh_source: dict[str, Any] | None, policy_sha256: str,
     as_of: dt.datetime, workflow_runs: list[dict[str, Any]], artifacts_by_run: dict[str, list[dict[str, Any]]],
@@ -823,6 +1027,13 @@ def evaluate_source(
     processor_workflow_id: int | None = None,
     processor_workflow_events: set[str] | None = None,
     prior_processor_execution_faults: list[dict[str, Any]] | None = None,
+    promotion_workflow_runs: list[dict[str, Any]] | None = None,
+    promotion_workflow_previous_attempts: dict[str, Any] | None = None,
+    promotion_workflow_previous_attempt_errors: set[str] | None = None,
+    promotion_workflow_attempt_evidence: dict[str, Any] | None = None,
+    promotion_workflow_attempt_errors: set[str] | None = None,
+    promotion_workflow_api_error: str | None = None,
+    prior_promotion_execution_faults: list[dict[str, Any]] | None = None,
     health_state_error: str | None = None,
 ) -> dict[str, Any]:
     source_id = str(source["source_id"])
@@ -894,6 +1105,23 @@ def evaluate_source(
             faults.append({key: prior[key] for key in (
                 "source_id", "stage", "reason", "severity", "owner_ticket", "fault_key", "recommended_action", "execution_identity",
             ) if key in prior})
+
+    promotion_workflow_path = str((promotion_workflow_paths or {}).get("promotion_workflow_path") or "")
+    promotion_workflow_id = (workflow_ids_by_path or {}).get(promotion_workflow_path)
+    c_latest, c_failure, c_success, c_execution_errors = promotion_execution_state(
+        promotion_workflow_runs or [],
+        promotion_workflow_previous_attempts or {},
+        (promotion_workflow_previous_attempt_errors or set()) | (promotion_workflow_attempt_errors or set()),
+        promotion_workflow_attempt_evidence or {},
+        repository,
+        promotion_workflow_path,
+        promotion_workflow_id,
+        PROMOTION_WORKFLOW_EVENTS,
+        as_of,
+        maximum_future_skew,
+    )
+    c_success_order = promotion_execution_run_order(c_success) if c_success else None
+    c_failure_order = promotion_execution_run_order(c_failure) if c_failure else None
 
     if health_state_error:
         add("health-state", "durable_health_state_unavailable", "error", _fault_action(source, "processor_stalled"), health_state_error)
@@ -1231,13 +1459,19 @@ def evaluate_source(
             current_item, promotion_runs, repository, promotion_workflow_paths or {}, workflow_ids_by_path or {},
             as_of, maximum_future_skew,
         )
-        publication = promotion_publication(current_item)
+        publication = None if promotion_state == "prepared" else promotion_publication(current_item)
         if publication is not None:
             publication["source_id"] = source_id
             publication["generation_id"] = generation_id
             publication["publisher_run_verified"] = current_run is not None if promotion_state == "read-back-confirmed" else None
 
-        if promotion_state == "pending-review":
+        if promotion_state == "prepared":
+            add(
+                "promotion", "promotion_ack_missing", "warning",
+                _promotion_recovery_action(source, promotion_workflow_path), generation_id,
+            )
+            stage_deadline_key = "pending-review"
+        elif promotion_state == "pending-review":
             add("promotion", "promotion_pending_review", "info", _fault_action(source, "promotion_wait"))
             stage_deadline_key = "pending-review"
         elif promotion_state in {"merged", "publication-pending", "published"}:
@@ -1249,21 +1483,50 @@ def evaluate_source(
         if stage_deadline_key is not None:
             stage_entered_at = current_item.get("observed_at")
             stage_deadline = int(source["stage_deadlines_seconds"][stage_deadline_key])
-            try:
-                stage_age = seconds_since(as_of, stage_entered_at, "promotion_stage.observed_at", maximum_future_skew)
+            if promotion_state == "prepared" and stage_entered_at is None:
                 promotion_stage = {
-                    "status": promotion_state,
-                    "entered_at": stage_entered_at,
-                    "age_seconds": stage_age,
+                    "status": "prepared",
+                    "entered_at": None,
+                    "age_seconds": None,
                     "deadline_seconds": stage_deadline,
                 }
-                if stage_age > stage_deadline:
-                    if stage_deadline_key == "pending-review":
-                        add("promotion", "promotion_review_wait_overdue", "warning", _fault_action(source, "promotion_wait"))
+                add(
+                    "promotion", "promotion_prepared_stage_clock_unavailable", "warning",
+                    _promotion_recovery_action(source, promotion_workflow_path), generation_id,
+                )
+            else:
+                try:
+                    stage_age = seconds_since(as_of, stage_entered_at, "promotion_stage.observed_at", maximum_future_skew)
+                    promotion_stage = {
+                        "status": promotion_state,
+                        "entered_at": stage_entered_at,
+                        "age_seconds": stage_age,
+                        "deadline_seconds": stage_deadline,
+                    }
+                    if stage_age > stage_deadline:
+                        if promotion_state == "prepared":
+                            add(
+                                "promotion", "promotion_prepared_delivery_overdue", "warning",
+                                _promotion_recovery_action(source, promotion_workflow_path), generation_id,
+                            )
+                        elif stage_deadline_key == "pending-review":
+                            add("promotion", "promotion_review_wait_overdue", "warning", _fault_action(source, "promotion_wait"))
+                        else:
+                            add("publication", "publication_readback_lag_overdue", "error", _fault_action(source, "promotion_wait"))
+                except ValueError:
+                    if promotion_state == "prepared":
+                        promotion_stage = {
+                            "status": "prepared",
+                            "entered_at": None,
+                            "age_seconds": None,
+                            "deadline_seconds": stage_deadline,
+                        }
+                        add(
+                            "promotion", "promotion_prepared_stage_clock_invalid", "warning",
+                            _promotion_recovery_action(source, promotion_workflow_path), generation_id,
+                        )
                     else:
-                        add("publication", "publication_readback_lag_overdue", "error", _fault_action(source, "promotion_wait"))
-            except ValueError as exc:
-                add("promotion", str(exc), "error", _fault_action(source, "promotion_wait"))
+                        add("promotion", "promotion_stage_clock_invalid", "error", _fault_action(source, "promotion_wait"), generation_id)
 
         if promotion_state not in {"prepared"}:
             if current_run is None:
@@ -1281,9 +1544,64 @@ def evaluate_source(
             elif publication.get("publisher_run_verified") is not True:
                 add("publication", "promotion_readback_run_unverified", "error", _fault_action(source, "publication_failure"), str(current_item.get("run_id", "")))
     elif checkpoint is not None and checkpoint.get("status") == "ready":
-        add("promotion", "promotion_ack_missing", "warning", _fault_action(source, "promotion_wait"))
+        add(
+            "promotion", "promotion_ack_missing", "warning",
+            _promotion_recovery_action(source, promotion_workflow_path), generation_id,
+        )
         if source_records:
             add("promotion", "promotion_record_for_different_generation", "warning", _fault_action(source, "promotion_wait"), generation_id)
+
+    if promotion_workflow_api_error:
+        add(
+            "promotion-execution", "promotion_workflow_observations_unavailable", "error",
+            _promotion_recovery_action(source, promotion_workflow_path), promotion_workflow_path,
+        )
+    for identity in sorted(c_execution_errors):
+        add(
+            "promotion-execution", "promotion_workflow_attempt_unavailable", "error",
+            _promotion_recovery_action(source, promotion_workflow_path), identity,
+        )
+    if c_failure:
+        execution_fault = fault(
+            source_id, "promotion-execution", "promotion_workflow_run_failed", "error", owner_ticket,
+            _promotion_recovery_action(source, promotion_workflow_path),
+            f"{c_failure['run_id']}/{c_failure['run_attempt']}",
+        )
+        execution_fault["execution_identity"] = {
+            "run_id": c_failure["run_id"],
+            "run_attempt": c_failure["run_attempt"],
+            "run_started_at": c_failure["run_started_at"],
+            "head_sha": c_failure["head_sha"],
+        }
+        faults.append(execution_fault)
+    for prior in prior_promotion_execution_faults or []:
+        if (
+            not isinstance(prior, dict)
+            or prior.get("source_id") != source_id
+            or prior.get("stage") != "promotion-execution"
+            or prior.get("reason") != "promotion_workflow_run_failed"
+            or prior.get("severity") != "error"
+            or not isinstance(prior.get("fault_key"), str)
+        ):
+            continue
+        prior_identity = prior.get("execution_identity")
+        prior_order = promotion_execution_run_order({
+            "run_id": prior_identity.get("run_id"),
+            "run_attempt": prior_identity.get("run_attempt"),
+            "run_started_at": prior_identity.get("run_started_at"),
+        }) if isinstance(prior_identity, dict) else None
+        recovered_after_failure = (
+            c_success_order is not None
+            and c_failure is None
+            and not c_execution_errors
+            and not promotion_workflow_api_error
+            and prior_order is not None
+            and c_success_order > prior_order
+        )
+        if not recovered_after_failure and not any(row.get("fault_key") == prior["fault_key"] for row in faults):
+            faults.append({key: prior[key] for key in (
+                "source_id", "stage", "reason", "severity", "owner_ticket", "fault_key", "recommended_action", "execution_identity",
+            ) if key in prior})
 
     if trusted_readbacks:
         latest_order, latest_publication = max(trusted_readbacks, key=lambda entry: entry[0])
@@ -1313,6 +1631,11 @@ def evaluate_source(
         "promotion_status": promotion_state,
         "publication": publication,
         "promotion_stage": promotion_stage,
+        "promotion_execution": {
+            "latest_execution_run": c_latest,
+            "latest_successful_execution_run": c_success,
+            "execution_failure": c_failure,
+        },
     }
     unique_faults = {row["fault_key"]: row for row in faults}
     faults = [unique_faults[key] for key in sorted(unique_faults)]
@@ -1453,7 +1776,9 @@ def promotion_items_for_source(ack: dict[str, Any], source_id: str, generation_i
     if ack.get("status") != previous_status:
         return []
     if not accepted and ack.get("status") == "prepared":
-        accepted.append({"status": "prepared", "observed_at": ack.get("candidate", {}).get("payload_readback", {}).get("observed_at")})
+        readback = candidate.get("payload_readback")
+        observed_at = readback.get("observed_at") if isinstance(readback, dict) else None
+        accepted.append({"status": "prepared", "observed_at": observed_at})
     return accepted
 
 
@@ -1682,6 +2007,13 @@ def evaluate(
     processor_previous_attempt_errors: set[str] | None = None,
     processor_workflow_api_error: str | None = None,
     prior_processor_execution_faults: list[dict[str, Any]] | None = None,
+    promotion_workflow_runs: list[dict[str, Any]] | None = None,
+    promotion_workflow_previous_attempts: dict[str, Any] | None = None,
+    promotion_workflow_previous_attempt_errors: set[str] | None = None,
+    promotion_workflow_attempt_evidence: dict[str, Any] | None = None,
+    promotion_workflow_attempt_errors: set[str] | None = None,
+    promotion_workflow_api_error: str | None = None,
+    prior_promotion_execution_faults: list[dict[str, Any]] | None = None,
     producer_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_workflow_paths: dict[str, str] | None = None,
@@ -1762,6 +2094,13 @@ def evaluate(
             processor_workflow_id=(workflow_ids_by_path or {}).get(health_policy["processor_state"]["workflow_path"]),
             processor_workflow_events=set(health_policy["processor_state"]["allowed_events"]),
             prior_processor_execution_faults=prior_processor_execution_faults or [],
+            promotion_workflow_runs=promotion_workflow_runs or [],
+            promotion_workflow_previous_attempts=promotion_workflow_previous_attempts or {},
+            promotion_workflow_previous_attempt_errors=promotion_workflow_previous_attempt_errors or set(),
+            promotion_workflow_attempt_evidence=promotion_workflow_attempt_evidence or {},
+            promotion_workflow_attempt_errors=promotion_workflow_attempt_errors or set(),
+            promotion_workflow_api_error=promotion_workflow_api_error,
+            prior_promotion_execution_faults=prior_promotion_execution_faults or [],
             producer_runs_by_id=producer_runs_by_id,
             promotion_runs_by_id=promotion_runs_by_id,
             promotion_workflow_paths=promotion_workflow_paths,
@@ -1803,11 +2142,15 @@ def evaluate(
 def validate_schema(value: Any, schema_path: pathlib.Path, label: str) -> None:
     if not schema_path.exists():
         raise ValueError(f"schema_missing:{label}")
+    validate_schema_value(value, load_json(schema_path), label)
+
+
+def validate_schema_value(value: Any, schema: dict[str, Any], label: str) -> None:
     try:
         import jsonschema
     except ImportError as exc:
         raise ValueError("missing_dependency:jsonschema") from exc
-    jsonschema.Draft202012Validator(load_json(schema_path)).validate(value)
+    jsonschema.Draft202012Validator(schema).validate(value)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1838,6 +2181,7 @@ def main(argv: list[str] | None = None) -> int:
         validate_schema(source_policy, ROOT / "schemas/datapan.source-refresh-policy.v1.schema.json", "source_policy")
         workflow_api_error = None
         processor_workflow_api_error = None
+        promotion_workflow_api_error = None
         health_state_error = None
         promotion_ack_error = None
         workflow_ids_by_path: dict[str, int] = {}
@@ -1853,6 +2197,19 @@ def main(argv: list[str] | None = None) -> int:
             } if isinstance(processor_previous_attempt_errors, list) else set()
             processor_workflow_api_error = fixture.get("processor_workflow_api_error") if isinstance(fixture, dict) else None
             prior_processor_execution_faults = fixture.get("prior_processor_execution_faults", []) if isinstance(fixture, dict) else []
+            promotion_workflow_runs = fixture.get("promotion_workflow_runs", []) if isinstance(fixture, dict) else []
+            promotion_workflow_previous_attempts = fixture.get("promotion_workflow_previous_attempts", {}) if isinstance(fixture, dict) else {}
+            promotion_workflow_previous_attempt_errors = fixture.get("promotion_workflow_previous_attempt_errors", []) if isinstance(fixture, dict) else []
+            promotion_workflow_previous_attempt_errors = {
+                row for row in promotion_workflow_previous_attempt_errors if isinstance(row, str)
+            } if isinstance(promotion_workflow_previous_attempt_errors, list) else set()
+            promotion_workflow_attempt_evidence = fixture.get("promotion_workflow_attempt_evidence", {}) if isinstance(fixture, dict) else {}
+            promotion_workflow_attempt_errors = fixture.get("promotion_workflow_attempt_errors", []) if isinstance(fixture, dict) else []
+            promotion_workflow_attempt_errors = {
+                row for row in promotion_workflow_attempt_errors if isinstance(row, str)
+            } if isinstance(promotion_workflow_attempt_errors, list) else set()
+            promotion_workflow_api_error = fixture.get("promotion_workflow_api_error") if isinstance(fixture, dict) else None
+            prior_promotion_execution_faults = fixture.get("prior_promotion_execution_faults", []) if isinstance(fixture, dict) else []
             artifacts_by_run = fixture.get("artifacts_by_run", {}) if isinstance(fixture, dict) else {}
             artifact_by_id = fixture.get("artifacts_by_id", {}) if isinstance(fixture, dict) else {}
             producer_runs_by_id = fixture.get("producer_runs_by_id", {}) if isinstance(fixture, dict) else {}
@@ -1892,6 +2249,43 @@ def main(argv: list[str] | None = None) -> int:
                     args.repository, processor_workflow_runs, processor_workflow_path,
                     workflow_ids_by_path.get(processor_workflow_path), processor_workflow_events,
                 )
+            promotion_workflow_path = health_policy["promotion_state"]["promotion_workflow_path"]
+            promotion_workflow_runs = []
+            promotion_workflow_previous_attempts = {}
+            promotion_workflow_previous_attempt_errors: set[str] = set()
+            promotion_workflow_attempt_evidence = {}
+            promotion_workflow_attempt_errors: set[str] = set()
+            try:
+                workflow_ids_by_path[promotion_workflow_path] = collect_workflow_identity(
+                    args.repository, promotion_workflow_path,
+                )
+                promotion_workflow_runs = collect_workflow_runs(
+                    args.repository, promotion_workflow_path, int(processor_policy["workflow_run_limit"]),
+                )
+            except RuntimeError as exc:
+                promotion_workflow_api_error = str(exc)
+            if promotion_workflow_api_error is None:
+                promotion_workflow_runs, _, promotion_workflow_previous_attempt_errors = trusted_promotion_execution_inputs(
+                    promotion_workflow_runs, {}, set(), args.repository, promotion_workflow_path,
+                    workflow_ids_by_path.get(promotion_workflow_path), PROMOTION_WORKFLOW_EVENTS,
+                    as_of, int(health_policy["clock"]["maximum_future_skew_seconds"]),
+                )
+                promotion_workflow_previous_attempts, looked_up_errors = collect_processor_prior_attempt_history(
+                    args.repository, promotion_workflow_runs, promotion_workflow_path,
+                    workflow_ids_by_path.get(promotion_workflow_path), PROMOTION_WORKFLOW_EVENTS,
+                )
+                promotion_workflow_previous_attempt_errors |= looked_up_errors
+                promotion_workflow_runs, promotion_workflow_previous_attempts, promotion_workflow_previous_attempt_errors = trusted_promotion_execution_inputs(
+                    promotion_workflow_runs, promotion_workflow_previous_attempts, promotion_workflow_previous_attempt_errors,
+                    args.repository, promotion_workflow_path, workflow_ids_by_path.get(promotion_workflow_path),
+                    PROMOTION_WORKFLOW_EVENTS, as_of, int(health_policy["clock"]["maximum_future_skew_seconds"]),
+                )
+                promotion_workflow_attempt_evidence, promotion_workflow_attempt_errors = collect_promotion_execution_attempts(
+                    args.repository, promotion_workflow_path, workflow_ids_by_path.get(promotion_workflow_path),
+                    promotion_workflow_runs, promotion_workflow_previous_attempts,
+                    promotion_workflow_previous_attempt_errors, as_of,
+                    int(health_policy["clock"]["maximum_future_skew_seconds"]),
+                )
             scheduled = sorted((
                 row for row in workflow_runs
                 if trusted_main_workflow_run(
@@ -1915,7 +2309,7 @@ def main(argv: list[str] | None = None) -> int:
                             raise ValueError("promotion_journal_records_invalid")
                         record_keys: set[tuple[str, str, str, str]] = set()
                         for record in records:
-                            validate_schema(record, PROMOTION_SCHEMA, "promotion_record")
+                            validate_health_promotion_record(record)
                             candidate = record.get("candidate") if isinstance(record, dict) else None
                             if not isinstance(candidate, dict) or str(candidate.get("repository", "")).casefold() != args.repository.casefold():
                                 raise ValueError("promotion_record_repository_mismatch")
@@ -1927,7 +2321,7 @@ def main(argv: list[str] | None = None) -> int:
                                 raise ValueError("promotion_journal_duplicate_candidate")
                             record_keys.add(key)
                     else:
-                        validate_schema(promotion_ack, PROMOTION_SCHEMA, "promotion_ack")
+                        validate_health_promotion_record(promotion_ack)
                         candidate = promotion_ack.get("candidate") if isinstance(promotion_ack, dict) else None
                         if not isinstance(candidate, dict) or str(candidate.get("repository", "")).casefold() != args.repository.casefold():
                             raise ValueError("promotion_receipt_repository_mismatch")
@@ -2014,6 +2408,7 @@ def main(argv: list[str] | None = None) -> int:
                 if metadata is not None:
                     artifact_by_id[artifact_id] = metadata
             prior_processor_execution_faults = []
+            prior_promotion_execution_faults = []
             try:
                 health_state = read_health_state(args.health_state) if args.health_state else None
                 last_good = health_state.get("last_good_by_source") if isinstance(health_state, dict) else None
@@ -2026,15 +2421,29 @@ def main(argv: list[str] | None = None) -> int:
                         and row.get("reason") == "processor_run_failed"
                         and row.get("status") in {"open", "recovery_pending_verification"}
                     ]
+                    prior_promotion_execution_faults = [
+                        row for row in state_faults
+                        if isinstance(row, dict)
+                        and row.get("stage") == "promotion-execution"
+                        and row.get("reason") == "promotion_workflow_run_failed"
+                        and row.get("status") in {"open", "recovery_pending_verification"}
+                    ]
             except (OSError, ValueError, json.JSONDecodeError) as exc:
                 last_good = None
                 prior_processor_execution_faults = []
+                prior_promotion_execution_faults = []
                 health_state_error = str(exc)
         if mode == "fixture":
             workflow_runs = workflow_runs if isinstance(workflow_runs, list) else []
             processor_workflow_runs = processor_workflow_runs if isinstance(processor_workflow_runs, list) else []
             processor_previous_attempts = processor_previous_attempts if isinstance(processor_previous_attempts, dict) else {}
             prior_processor_execution_faults = prior_processor_execution_faults if isinstance(prior_processor_execution_faults, list) else []
+            promotion_workflow_runs = promotion_workflow_runs if isinstance(promotion_workflow_runs, list) else []
+            promotion_workflow_previous_attempts = promotion_workflow_previous_attempts if isinstance(promotion_workflow_previous_attempts, dict) else {}
+            promotion_workflow_previous_attempt_errors = promotion_workflow_previous_attempt_errors if isinstance(promotion_workflow_previous_attempt_errors, set) else set()
+            promotion_workflow_attempt_evidence = promotion_workflow_attempt_evidence if isinstance(promotion_workflow_attempt_evidence, dict) else {}
+            promotion_workflow_attempt_errors = promotion_workflow_attempt_errors if isinstance(promotion_workflow_attempt_errors, set) else set()
+            prior_promotion_execution_faults = prior_promotion_execution_faults if isinstance(prior_promotion_execution_faults, list) else []
             artifacts_by_run = artifacts_by_run if isinstance(artifacts_by_run, dict) else {}
             artifact_by_id = artifact_by_id if isinstance(artifact_by_id, dict) else {}
             producer_runs_by_id = producer_runs_by_id if isinstance(producer_runs_by_id, dict) else {}
@@ -2066,6 +2475,13 @@ def main(argv: list[str] | None = None) -> int:
             processor_previous_attempt_errors=processor_previous_attempt_errors,
             processor_workflow_api_error=processor_workflow_api_error,
             prior_processor_execution_faults=prior_processor_execution_faults,
+            promotion_workflow_runs=promotion_workflow_runs,
+            promotion_workflow_previous_attempts=promotion_workflow_previous_attempts,
+            promotion_workflow_previous_attempt_errors=promotion_workflow_previous_attempt_errors,
+            promotion_workflow_attempt_evidence=promotion_workflow_attempt_evidence,
+            promotion_workflow_attempt_errors=promotion_workflow_attempt_errors,
+            promotion_workflow_api_error=promotion_workflow_api_error,
+            prior_promotion_execution_faults=prior_promotion_execution_faults,
             promotion_runs_by_id=promotion_runs_by_id,
             promotion_workflow_paths=health_policy.get("promotion_state", {}),
             workflow_ids_by_path=workflow_ids_by_path,

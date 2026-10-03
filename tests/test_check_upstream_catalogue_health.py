@@ -168,6 +168,47 @@ def promotion_attempt_evidence(
     return {"run": run, "attempt_number": 1, "jobs_api_endpoint": endpoint, "job_count": 1, "jobs": [job]}
 
 
+def promotion_execution_run(
+    *, run_id: int = 700, attempt: int = 1, status: str = "completed", conclusion: str | None = "failure",
+    event: str = "workflow_run", run_started_at: str = "2026-09-30T22:00:00Z",
+    created_at: str = "2026-09-30T22:01:00Z", updated_at: str = "2026-10-01T00:00:00Z",
+    workflow_id: int | None = None, path: str = PROMOTION_PATH,
+    repository: str = "StatPan/datapan-registry", head_repository: str | None = None,
+    head_branch: str = "main", head_sha: str = "a" * 40,
+) -> dict:
+    return {
+        "id": run_id, "workflow_id": workflow_id if workflow_id is not None else WORKFLOW_IDS_BY_PATH[PROMOTION_PATH],
+        "run_attempt": attempt, "path": path, "event": event, "status": status, "conclusion": conclusion,
+        "created_at": created_at, "run_started_at": run_started_at, "updated_at": updated_at,
+        "head_branch": head_branch, "head_sha": head_sha,
+        "repository": {"full_name": repository},
+        "head_repository": {"full_name": head_repository if head_repository is not None else repository},
+    }
+
+
+def promotion_execution_attempt_evidence(run: dict) -> dict:
+    run_id = run["id"]
+    attempt = run["run_attempt"]
+    return {
+        "run": copy.deepcopy(run), "attempt_number": attempt,
+        "jobs_api_endpoint": f"repos/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}/jobs",
+        "job_count": 1,
+        "jobs": [{
+            "id": run_id + 20000, "run_id": run_id, "head_sha": run["head_sha"],
+            "status": "completed", "conclusion": run.get("conclusion"),
+            "completed_at": run.get("updated_at"),
+        }],
+    }
+
+
+def prepared_promotion_receipt(observed_at: str | None = "2026-09-30T22:00:00Z") -> dict:
+    receipt = promotion_receipt(GENERATION_ID, "prepared")
+    receipt["pr"] = {"number": 0, "url": None, "state": "missing", "merge_commit_sha": None}
+    if observed_at is not None:
+        receipt["candidate"]["payload_readback"] = {"observed_at": observed_at}
+    return receipt
+
+
 def write_state(root: pathlib.Path, checkpoints: list[dict]) -> pathlib.Path:
     source_dir = root / "sources/data_go_kr"
     generation_dir = source_dir / "generations"
@@ -303,7 +344,15 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                    processor_previous_attempts: dict | None = None,
                    processor_previous_attempt_errors: set[str] | None = None,
                    processor_api_error: str | None = None,
-                   prior_processor_execution_faults: list[dict] | None = None) -> dict:
+                   prior_processor_execution_faults: list[dict] | None = None,
+                   promotion_workflow_runs: list[dict] | None = None,
+                   promotion_workflow_previous_attempts: dict | None = None,
+                   promotion_workflow_previous_attempt_errors: set[str] | None = None,
+                   promotion_workflow_attempt_evidence: dict | None = None,
+                   promotion_workflow_attempt_errors: set[str] | None = None,
+                   promotion_workflow_api_error: str | None = None,
+                   prior_promotion_execution_faults: list[dict] | None = None,
+                   workflow_ids_by_path: dict | None = None) -> dict:
         checkpoints = cp if cp is not None else [checkpoint()]
         run_rows = runs if runs is not None else [collector_run()]
         artifact_rows = artifacts_by_run if artifacts_by_run is not None else {RUN_ID: [{"id": 101, "name": f"upstream-catalog-refresh-{RUN_ID}", "expired": False}]}
@@ -334,6 +383,18 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                         f"{row.get('run_id')}/{row.get('run_attempt')}",
                         promotion_attempt_evidence(int(row.get("run_id")), row.get("observed_at"), workflow_path),
                     )
+        c_attempt_evidence = dict(promotion_workflow_attempt_evidence or {})
+        c_runs = promotion_workflow_runs or []
+        for row in c_runs:
+            if not isinstance(row, dict) or row.get("status") != "completed" or row.get("conclusion") not in {"success", "failure"}:
+                continue
+            identity = f"{row.get('id')}/{row.get('run_attempt')}"
+            c_attempt_evidence.setdefault(identity, promotion_execution_attempt_evidence(row))
+        for evidence in (promotion_workflow_previous_attempts or {}).values():
+            run = evidence.get("run") if isinstance(evidence, dict) else None
+            if isinstance(run, dict) and run.get("status") == "completed" and run.get("conclusion") in {"success", "failure"}:
+                identity = f"{run.get('id')}/{run.get('run_attempt')}"
+                c_attempt_evidence.setdefault(identity, evidence)
         return HEALTH.evaluate(
             as_of=as_of, repository="StatPan/datapan-registry", health_policy=POLICY,
             source_policy=SOURCE_POLICY, workflow_runs=run_rows,
@@ -347,12 +408,19 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             producer_runs_by_id={str(row.get("id")): row for row in run_rows if isinstance(row, dict)},
             promotion_runs_by_id=run_map,
             promotion_workflow_paths=POLICY["promotion_state"],
-            workflow_ids_by_path=WORKFLOW_IDS_BY_PATH,
+            workflow_ids_by_path=workflow_ids_by_path or WORKFLOW_IDS_BY_PATH,
             processor_workflow_runs=processor_runs or [],
             processor_previous_attempts=processor_previous_attempts or {},
             processor_previous_attempt_errors=processor_previous_attempt_errors or set(),
             processor_workflow_api_error=processor_api_error,
             prior_processor_execution_faults=prior_processor_execution_faults or [],
+            promotion_workflow_runs=c_runs,
+            promotion_workflow_previous_attempts=promotion_workflow_previous_attempts or {},
+            promotion_workflow_previous_attempt_errors=promotion_workflow_previous_attempt_errors or set(),
+            promotion_workflow_attempt_evidence=c_attempt_evidence,
+            promotion_workflow_attempt_errors=promotion_workflow_attempt_errors or set(),
+            promotion_workflow_api_error=promotion_workflow_api_error,
+            prior_promotion_execution_faults=prior_promotion_execution_faults or [],
         )
 
     def test_fresh_live_observation_and_terminal_no_change_are_separate_from_heartbeat(self) -> None:
@@ -1008,6 +1076,336 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             self.assertEqual("publication_readback_lag_overdue" in reasons, overdue)
             self.assertEqual(source["canonical"]["promotion_status"], "published")
             self.assertEqual(source["canonical"]["promotion_stage"]["age_seconds"], publication_deadline + int(overdue))
+
+    def test_frozen_prepared_record_and_exact_failed_c_attempt_keep_delivery_unacknowledged(self) -> None:
+        as_of = dt.datetime.fromisoformat("2026-10-03T08:06:00+00:00")
+        c_run = promotion_execution_run(
+            run_id=37101245239, attempt=3, status="completed", conclusion="failure",
+            event="workflow_run", run_started_at="2026-10-03T07:48:16Z",
+            created_at="2026-10-03T07:48:16Z", updated_at="2026-10-03T08:05:24Z",
+            workflow_id=373708872, head_sha="dc79e3931d6cfbbe5b19917487d356f88d0682f0",
+        )
+        workflow_ids = {**WORKFLOW_IDS_BY_PATH, PROMOTION_PATH: 373708872}
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt("2026-10-03T08:04:47.354255Z"),
+                promotion_workflow_runs=[c_run], last_good={}, as_of=as_of,
+                workflow_ids_by_path=workflow_ids,
+            )
+        source = report["sources"][0]
+        canonical = source["canonical"]
+        reasons = {row["reason"] for row in source["faults"]}
+        failed = [row for row in source["faults"] if row["reason"] == "promotion_workflow_run_failed"]
+        self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
+        self.assertEqual(source["overall"], "blocked")
+        self.assertEqual(canonical["promotion_status"], "prepared")
+        self.assertEqual(canonical["promotion_stage"]["status"], "prepared")
+        self.assertEqual(canonical["promotion_stage"]["entered_at"], "2026-10-03T08:04:47.354255Z")
+        self.assertIn("promotion_ack_missing", reasons)
+        self.assertIn("promotion_workflow_run_failed", reasons)
+        self.assertNotIn("candidate_ready_with_pending_scope", reasons)
+        self.assertIsNone(canonical["publication"])
+        self.assertIsNone(canonical["last_good"])
+        self.assertEqual(len(failed), 1)
+        self.assertEqual(failed[0]["execution_identity"], {
+            "run_id": "37101245239", "run_attempt": 3,
+            "run_started_at": "2026-10-03T07:48:16Z",
+            "head_sha": "dc79e3931d6cfbbe5b19917487d356f88d0682f0",
+        })
+        self.assertIn(PROMOTION_PATH, failed[0]["recommended_action"])
+        HEALTH.validate_schema(report, HEALTH.HEALTH_RECEIPT_SCHEMA, "health_receipt")
+
+    def test_prepared_stage_uses_pending_review_budget_and_fails_closed_on_bad_clock(self) -> None:
+        deadline = POLICY["sources"][0]["stage_deadlines_seconds"]["pending-review"]
+        frozen = json.loads((ROOT / "tests/fixtures/canonical-update-promotion/attempt-3-pr-686-recovery.json").read_text())
+        prepared = copy.deepcopy(frozen["state"]["records"][0])
+        prepared["candidate"]["payload_readback"].pop("observed_at")
+        HEALTH.validate_health_promotion_record(prepared)
+        prepared["candidate"].pop("payload_readback")
+        HEALTH.validate_health_promotion_record(prepared)
+        for offset, overdue in ((deadline, False), (deadline + 1, True)):
+            entered = (AS_OF - dt.timedelta(seconds=offset)).isoformat().replace("+00:00", "Z")
+            with self.subTest(overdue=overdue), tempfile.TemporaryDirectory() as directory:
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                    ack=prepared_promotion_receipt(entered), as_of=AS_OF,
+                )
+            source = report["sources"][0]
+            stage = source["canonical"]["promotion_stage"]
+            reasons = {row["reason"] for row in source["faults"]}
+            self.assertEqual(stage["status"], "prepared")
+            self.assertEqual(stage["deadline_seconds"], deadline)
+            self.assertEqual(stage["age_seconds"], offset)
+            self.assertEqual("promotion_prepared_delivery_overdue" in reasons, overdue)
+            self.assertIn("promotion_ack_missing", reasons)
+
+        cases = (
+            (None, "promotion_prepared_stage_clock_unavailable"),
+            ("not-a-timestamp", "promotion_prepared_stage_clock_invalid"),
+            ((AS_OF + dt.timedelta(hours=1)).isoformat().replace("+00:00", "Z"), "promotion_prepared_stage_clock_invalid"),
+        )
+        for entered, expected_reason in cases:
+            with self.subTest(clock=entered), tempfile.TemporaryDirectory() as directory:
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                    ack=prepared_promotion_receipt(entered),
+                )
+            stage = report["sources"][0]["canonical"]["promotion_stage"]
+            reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+            self.assertEqual(stage["status"], "prepared")
+            self.assertIsNone(stage["entered_at"])
+            self.assertIsNone(stage["age_seconds"])
+            self.assertIn(expected_reason, reasons)
+            self.assertIn("promotion_ack_missing", reasons)
+
+    def test_prepared_fault_identities_do_not_depend_on_retained_journal_order(self) -> None:
+        cases = (
+            (None, "promotion_prepared_stage_clock_unavailable"),
+            ("not-a-timestamp", "promotion_prepared_stage_clock_invalid"),
+            ("2026-09-01T00:00:00Z", "promotion_prepared_delivery_overdue"),
+        )
+        for observed_at, expected_reason in cases:
+            with self.subTest(observed_at=observed_at):
+                selected = prepared_promotion_receipt(observed_at)
+                other = copy.deepcopy(selected)
+                other["candidate"]["generation_id"] = "b" * 64
+                rows = [selected, other]
+                observed: list[dict[str, str]] = []
+                for ordered_rows in (rows, list(reversed(rows))):
+                    journal = {
+                        "schema_version": "datapan.canonical-update-promotion-journal.v1",
+                        "repository": "StatPan/datapan-registry",
+                        "records": copy.deepcopy(ordered_rows),
+                        "updated_at": "2026-09-30T22:00:00Z",
+                    }
+                    with tempfile.TemporaryDirectory() as directory:
+                        report = self.run_health(
+                            pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                            ack=journal,
+                        )
+                    observed.append({
+                        row["reason"]: row["fault_key"]
+                        for row in report["sources"][0]["faults"]
+                        if row["reason"] in {"promotion_ack_missing", expected_reason}
+                    })
+                self.assertEqual(observed[0], observed[1])
+                self.assertEqual(set(observed[0]), {"promotion_ack_missing", expected_reason})
+
+    def test_promotion_failure_order_uses_attempt_start_and_rejects_untrusted_identity(self) -> None:
+        older_failure = promotion_execution_run(
+            run_id=701, conclusion="failure", run_started_at="2026-09-30T22:00:00Z",
+            created_at="2026-09-30T23:00:00Z", updated_at="2026-10-01T00:00:00Z",
+        )
+        later_created_success = promotion_execution_run(
+            run_id=702, conclusion="success", run_started_at="2026-09-30T21:00:00Z",
+            created_at="2026-09-30T23:30:00Z", updated_at="2026-10-01T00:30:00Z",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[later_created_success, older_failure],
+            )
+        execution = report["sources"][0]["canonical"]["promotion_execution"]
+        reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+        self.assertEqual(execution["latest_execution_run"]["run_id"], "701")
+        self.assertEqual(execution["execution_failure"]["run_id"], "701")
+        self.assertIn("promotion_workflow_run_failed", reasons)
+
+        untrusted = promotion_execution_run(run_id=703, repository="attacker/fork")
+        with tempfile.TemporaryDirectory() as directory:
+            rejected = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[untrusted],
+            )
+        rejected_reasons = {row["reason"] for row in rejected["sources"][0]["faults"]}
+        self.assertNotIn("promotion_workflow_run_failed", rejected_reasons)
+        self.assertIsNone(rejected["sources"][0]["canonical"]["promotion_execution"]["execution_failure"])
+
+    def test_pending_and_skipped_c_reruns_do_not_hide_the_exact_prior_failure(self) -> None:
+        failed = promotion_execution_run(run_id=704, attempt=1, conclusion="failure", run_started_at="2026-09-30T21:00:00Z")
+        skipped_rerun = promotion_execution_run(
+            run_id=704, attempt=2, status="completed", conclusion="skipped",
+            run_started_at="2026-09-30T22:00:00Z", created_at="2026-09-30T22:00:00Z",
+        )
+        neutral_rerun = promotion_execution_run(
+            run_id=704, attempt=2, status="completed", conclusion="neutral",
+            run_started_at="2026-09-30T22:15:00Z", created_at="2026-09-30T22:15:00Z",
+        )
+        in_progress = promotion_execution_run(
+            run_id=705, attempt=1, status="in_progress", conclusion=None,
+            run_started_at="2026-09-30T22:30:00Z", created_at="2026-09-30T22:30:00Z",
+        )
+        for later in (skipped_rerun, neutral_rerun, in_progress):
+            previous = {"704/1": promotion_execution_attempt_evidence(failed)} if later["id"] == 704 else {}
+            with self.subTest(status=later["status"], conclusion=later["conclusion"]), tempfile.TemporaryDirectory() as directory:
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                    ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed, later],
+                    promotion_workflow_previous_attempts=previous,
+                )
+            execution = report["sources"][0]["canonical"]["promotion_execution"]
+            self.assertEqual(execution["execution_failure"]["run_id"], "704")
+            self.assertIn("promotion_workflow_run_failed", {row["reason"] for row in report["sources"][0]["faults"]})
+
+    def test_later_trusted_c_success_clears_only_execution_fault_and_not_missing_ack(self) -> None:
+        failed = promotion_execution_run(run_id=706, conclusion="failure", run_started_at="2026-09-30T21:00:00Z")
+        with tempfile.TemporaryDirectory() as directory:
+            first = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed],
+            )
+        prior = next(row for row in first["sources"][0]["faults"] if row["reason"] == "promotion_workflow_run_failed")
+        prior_last_good = first["sources"][0]["canonical"]["last_good"]
+        success = promotion_execution_run(
+            run_id=707, conclusion="success", run_started_at="2026-09-30T23:00:00Z",
+            created_at="2026-09-30T23:01:00Z", updated_at="2026-10-01T00:00:00Z",
+            event="workflow_dispatch",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            recovered = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed, success],
+                prior_promotion_execution_faults=[prior],
+            )
+        source = recovered["sources"][0]
+        reasons = {row["reason"] for row in source["faults"]}
+        execution = source["canonical"]["promotion_execution"]
+        self.assertNotIn("promotion_workflow_run_failed", reasons)
+        self.assertIn("promotion_ack_missing", reasons)
+        self.assertEqual(execution["latest_successful_execution_run"]["run_id"], "707")
+        self.assertIsNone(execution["execution_failure"])
+        self.assertEqual(source["canonical"]["promotion_status"], "prepared")
+        self.assertIsNone(source["canonical"]["publication"])
+        self.assertEqual(source["canonical"]["last_good"], prior_last_good)
+
+    def test_promotion_api_or_exact_attempt_failure_is_explicit_and_keeps_prior_fault(self) -> None:
+        failed = promotion_execution_run(run_id=708, conclusion="failure", run_started_at="2026-09-30T21:00:00Z")
+        with tempfile.TemporaryDirectory() as directory:
+            initial = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed],
+            )
+        prior = next(row for row in initial["sources"][0]["faults"] if row["reason"] == "promotion_workflow_run_failed")
+
+        with tempfile.TemporaryDirectory() as directory:
+            unavailable_api = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), prior_promotion_execution_faults=[prior],
+                promotion_workflow_api_error="github_api_unavailable",
+            )
+        api_reasons = {row["reason"] for row in unavailable_api["sources"][0]["faults"]}
+        self.assertIn("promotion_workflow_observations_unavailable", api_reasons)
+        self.assertIn("promotion_workflow_run_failed", api_reasons)
+
+        with tempfile.TemporaryDirectory() as directory:
+            unavailable_attempt = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed],
+                promotion_workflow_attempt_evidence={"708/1": {"availability_error": True}},
+                prior_promotion_execution_faults=[prior],
+            )
+        attempt_source = unavailable_attempt["sources"][0]
+        attempt_reasons = {row["reason"] for row in attempt_source["faults"]}
+        self.assertIn("promotion_workflow_attempt_unavailable", attempt_reasons)
+        self.assertIn("promotion_workflow_run_failed", attempt_reasons)
+        self.assertIsNone(attempt_source["canonical"]["promotion_execution"]["execution_failure"])
+
+    def test_promotion_success_cannot_clear_c_fault_and_duplicate_failure_is_deduplicated(self) -> None:
+        failed = promotion_execution_run(run_id=709, conclusion="failure", run_started_at="2026-09-30T21:00:00Z")
+        with tempfile.TemporaryDirectory() as directory:
+            initial = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed],
+            )
+        c_fault = next(row for row in initial["sources"][0]["faults"] if row["reason"] == "promotion_workflow_run_failed")
+        b_success = processor_run(run_id=710, conclusion="success", run_started_at="2026-09-30T23:00:00Z")
+        with tempfile.TemporaryDirectory() as directory:
+            preserved = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), processor_runs=[b_success],
+                prior_promotion_execution_faults=[c_fault],
+            )
+        self.assertIn("promotion_workflow_run_failed", {row["reason"] for row in preserved["sources"][0]["faults"]})
+
+        with tempfile.TemporaryDirectory() as directory:
+            duplicate = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed],
+                prior_promotion_execution_faults=[c_fault],
+            )
+        self.assertEqual(
+            sum(row["reason"] == "promotion_workflow_run_failed" for row in duplicate["sources"][0]["faults"]),
+            1,
+        )
+
+    def test_untrusted_exact_c_success_cannot_clear_prior_failure(self) -> None:
+        failed = promotion_execution_run(run_id=712, conclusion="failure", run_started_at="2026-09-30T21:00:00Z")
+        with tempfile.TemporaryDirectory() as directory:
+            initial = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed],
+            )
+        prior = next(row for row in initial["sources"][0]["faults"] if row["reason"] == "promotion_workflow_run_failed")
+        success = promotion_execution_run(
+            run_id=713, conclusion="success", run_started_at="2026-09-30T23:00:00Z",
+        )
+        exact = promotion_execution_attempt_evidence(success)
+        exact["run"]["head_repository"]["full_name"] = "attacker/fork"
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed, success],
+                promotion_workflow_attempt_evidence={"713/1": exact},
+                prior_promotion_execution_faults=[prior],
+            )
+        source = report["sources"][0]
+        reasons = {row["reason"] for row in source["faults"]}
+        self.assertIn("promotion_workflow_attempt_unavailable", reasons)
+        self.assertIn("promotion_workflow_run_failed", reasons)
+        self.assertIsNone(source["canonical"]["promotion_execution"]["latest_successful_execution_run"])
+
+    def test_c_execution_fault_and_recovery_do_not_depend_on_promotion_stage(self) -> None:
+        failed = promotion_execution_run(run_id=714, conclusion="failure", run_started_at="2026-09-30T21:00:00Z")
+        acknowledged = promotion_receipt(GENERATION_ID, "read-back-confirmed")
+        with tempfile.TemporaryDirectory() as directory:
+            initial = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=acknowledged, promotion_workflow_runs=[failed],
+            )
+        source = initial["sources"][0]
+        self.assertEqual(source["canonical"]["promotion_status"], "read-back-confirmed")
+        self.assertIsNone(source["canonical"]["promotion_stage"])
+        c_fault = next(row for row in source["faults"] if row["reason"] == "promotion_workflow_run_failed")
+        previous_last_good = source["canonical"]["last_good"]
+        success = promotion_execution_run(
+            run_id=715, conclusion="success", run_started_at="2026-09-30T23:00:00Z",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            recovered = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=acknowledged, promotion_workflow_runs=[failed, success],
+                prior_promotion_execution_faults=[c_fault],
+            )
+        recovered_source = recovered["sources"][0]
+        reasons = {row["reason"] for row in recovered_source["faults"]}
+        self.assertNotIn("promotion_workflow_run_failed", reasons)
+        self.assertEqual(recovered_source["canonical"]["promotion_status"], "read-back-confirmed")
+        self.assertEqual(recovered_source["canonical"]["publication"], source["canonical"]["publication"])
+        self.assertEqual(recovered_source["canonical"]["last_good"], previous_last_good)
+
+    def test_c_run_summary_without_attempt_start_is_unavailable_not_created_time_ordered(self) -> None:
+        failed = promotion_execution_run(run_id=711, conclusion="failure", run_started_at="not-a-time")
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=prepared_promotion_receipt(), promotion_workflow_runs=[failed],
+            )
+        source = report["sources"][0]
+        reasons = {row["reason"] for row in source["faults"]}
+        self.assertIn("promotion_workflow_attempt_unavailable", reasons)
+        self.assertNotIn("promotion_workflow_run_failed", reasons)
+        self.assertIsNone(source["canonical"]["promotion_execution"]["execution_failure"])
 
     def test_publication_retry_starts_a_new_deadline_after_failed_attempt(self) -> None:
         ack = promotion_receipt(GENERATION_ID, "publication-pending")
