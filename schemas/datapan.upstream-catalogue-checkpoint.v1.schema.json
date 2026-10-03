@@ -68,7 +68,19 @@
     "input_artifacts": {"type": "array", "minItems": 1, "maxItems": 8, "items": {"$ref": "#/$defs/input_artifact"}},
     "lease": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/lease"}]},
     "fencing_token": {"type": "integer", "minimum": 0},
-    "outcome": {"type": "object", "maxProperties": 24, "additionalProperties": {"type": ["string", "integer", "number", "boolean", "null", "array", "object"]}},
+    "outcome": {
+      "type": "object", "maxProperties": 24,
+      "properties": {
+        "detail_failure_counts": {
+          "type": "object", "maxProperties": 10,
+          "propertyNames": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error"]},
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "detail_reason_unavailable_count": {"type": "integer", "minimum": 0},
+        "detail_unattempted_count": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": {"type": ["string", "integer", "number", "boolean", "null", "array", "object"]}
+    },
     "checkpoint_sha256": {"$ref": "#/$defs/digest"}
   },
   "$defs": {
@@ -150,8 +162,18 @@
         "id": {"type": "string", "minLength": 1, "maxLength": 128},
         "source_sha256": {"$ref": "#/$defs/digest"},
         "guide_sha256": {"$ref": "#/$defs/nullable_digest"},
-        "status": {"enum": ["retained_unchanged", "enriched", "retry", "quarantined"]}
+        "status": {"enum": ["retained_unchanged", "enriched", "retry", "quarantined"]},
+        "failure_diagnostic": {"$ref": "#/$defs/failure_diagnostic"}
       }
+    },
+    "failure_diagnostic": {
+      "type": "object", "additionalProperties": false,
+      "required": ["code"],
+      "properties": {
+        "code": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error"]},
+        "http_status": {"type": "integer", "minimum": 400, "maximum": 599}
+      },
+      "allOf": [{"if": {"properties": {"code": {"const": "provider_http_error"}}, "required": ["code"]}, "then": {}, "else": {"not": {"required": ["http_status"]}}}]
     }
   }
 }

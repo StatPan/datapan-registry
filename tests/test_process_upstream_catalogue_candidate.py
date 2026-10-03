@@ -11,6 +11,7 @@ import tempfile
 import unittest
 import urllib.error
 import urllib.request
+import jsonschema
 from datetime import datetime, timedelta, timezone
 from unittest import mock
 
@@ -105,7 +106,10 @@ out=pathlib.Path(a.output_dir); out.mkdir(parents=True, exist_ok=True)
 enrichment=json.loads(pathlib.Path(a.enrichment_evidence).read_text())
 assert set(enrichment) in ({"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records"}, {"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records", "worker_outcomes"})
 for row in enrichment["records"]: assert set(row) == {"api_key", "status", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "source_provenance"}
-for row in enrichment.get("worker_outcomes", []): assert set(row) == {"api_key", "status", "source_sha256", "guide_sha256"}
+for row in enrichment.get("worker_outcomes", []):
+    assert set(row) in ({"api_key", "status", "source_sha256", "guide_sha256"}, {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic"})
+    if "failure_diagnostic" in row:
+        assert set(row["failure_diagnostic"]) in ({"code"}, {"code", "http_status"})
 (out/"composed-candidate.registry.json").write_bytes(pathlib.Path(a.candidate).read_bytes())
 (out/"ready-scope.registry.json").write_bytes(pathlib.Path(a.candidate).read_bytes())
 (out/"semantic-diff.json").write_text(json.dumps({"summary":{"added":1,"removed":0,"changed":0}}))
@@ -328,7 +332,223 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             "status": "retry",
             "source_sha256": MODULE.source_fingerprint(self.new_link),
             "guide_sha256": MODULE.guide_fingerprint(self.new_link),
+            "failure_diagnostic": {"code": "timeout"},
         }])
+        self.assertEqual(checkpoint["detail_records"][-1]["failure_diagnostic"], {"code": "timeout"})
+        self.assertEqual(checkpoint["outcome"]["detail_failure_counts"], {"timeout": 1})
+        self.assertEqual(checkpoint["outcome"]["detail_reason_unavailable_count"], 0)
+        self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 0)
+
+    def test_malformed_observation_timestamp_keeps_retry_budget_and_status(self) -> None:
+        expected_url = "https://www.data.go.kr/data/2/openapi.do"
+        body = "<html>malformed timestamp fixture</html>"
+        page_bytes = body.encode("utf-8")
+        observation = MODULE.DetailPageObservation(
+            body=body,
+            page_url=expected_url,
+            effective_url=expected_url,
+            page_sha256=MODULE.sha256_bytes(page_bytes),
+            observed_at="not-a-timestamp",
+        )
+        calls = []
+
+        def malformed_observation(url: str, _timeout: float):
+            calls.append(url)
+            return observation
+
+        code, checkpoint = self.invoke(
+            fetcher=malformed_observation,
+            **{"--retries-per-detail": 2, "--max-attempts": 3},
+        )
+        self.assertEqual(code, 2)
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(checkpoint["attempts_consumed"], 3)
+        self.assertEqual(checkpoint["status"], "retry")
+        self.assertEqual(checkpoint["detail_records"][-1]["status"], "retry")
+        self.assertEqual(
+            checkpoint["detail_records"][-1]["failure_diagnostic"],
+            {"code": "observation_mismatch"},
+        )
+
+    def test_provider_http_error_persists_only_fixed_status_code(self) -> None:
+        def fail(_url: str, _timeout: float) -> str:
+            raise urllib.error.HTTPError(
+                "https://www.data.go.kr/data/2/openapi.do?token=SECRET", 503,
+                "SECRET response text", {}, None,
+            )
+
+        code, checkpoint = self.invoke(fetcher=fail, **{"--retries-per-detail": 0, "--max-attempts": 1})
+        self.assertEqual(code, 2)
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"], {
+            "code": "provider_http_error", "http_status": 503,
+        })
+        self.assertEqual(checkpoint["detail_records"][-1]["failure_diagnostic"], {
+            "code": "provider_http_error", "http_status": 503,
+        })
+        serialized = self.checkpoint_path(checkpoint).read_text() + json.dumps(evidence)
+        self.assertNotIn("SECRET", serialized)
+        self.assertNotIn("token=", serialized)
+
+    def test_parser_failure_is_classified_at_parser_boundary_without_exception_text(self) -> None:
+        with mock.patch.object(
+            MODULE.DETAIL_HELPERS,
+            "extract_link_detail_operation_urls",
+            side_effect=ValueError("SECRET parser payload"),
+        ):
+            code, checkpoint = self.invoke(**{"--retries-per-detail": 0, "--max-attempts": 1})
+        self.assertEqual(code, 2)
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"], {
+            "code": "contract_or_parse_error",
+        })
+        serialized = self.checkpoint_path(checkpoint).read_text() + json.dumps(evidence)
+        self.assertNotIn("SECRET", serialized)
+
+    def test_failure_diagnostic_is_carried_then_cleared_by_success(self) -> None:
+        calls = []
+
+        def fail(url: str, timeout: float) -> str:
+            calls.append(url)
+            raise TimeoutError("secret timeout details")
+
+        code, first = self.invoke(
+            fetcher=fail, **{"--retries-per-detail": 1, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 2)
+        first_index = json.loads((self.state_dir / "sources/data_go_kr/index.json").read_text())
+        identity = MODULE.record_id(self.new_link)
+        self.assertEqual(first_index["detail_retry_state"][identity]["failure_diagnostic"], {"code": "timeout"})
+
+        code, second = self.invoke(
+            run_id="102", fetcher=lambda url, timeout: (calls.append(url) or self.successful_fetch(url, timeout)),
+            **{"--retries-per-detail": 1, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(second["detail_records"][-1]["status"], "enriched")
+        self.assertNotIn("failure_diagnostic", second["detail_records"][-1])
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["worker_outcomes"], [])
+        second_index = json.loads((self.state_dir / "sources/data_go_kr/index.json").read_text())
+        self.assertNotIn(identity, second_index["detail_retry_state"])
+        self.assertNotIn("failure_diagnostic", json.dumps(second))
+
+    def test_failure_diagnostic_survives_same_contract_new_generation_without_refetch(self) -> None:
+        calls = []
+
+        def fail(url: str, _timeout: float) -> str:
+            calls.append(url)
+            raise TimeoutError("first observed failure")
+
+        code, first = self.invoke(
+            fetcher=fail, **{"--retries-per-detail": 1, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 2)
+        policy = json.loads(self.policy_path.read_text(encoding="utf-8"))
+        policy["semantic_policy_revision"] = "independent-policy-generation"
+        self.policy_path.write_text(json.dumps(policy), encoding="utf-8")
+
+        def unexpected_fetch(*_args):
+            self.fail("exhausted retry must not issue another detail request")
+
+        code, second = self.invoke(
+            run_id="102", fetcher=unexpected_fetch,
+            **{"--retries-per-detail": 0, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 2)
+        self.assertNotEqual(second["generation_id"], first["generation_id"])
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(second["attempts_consumed"], 0)
+        self.assertEqual(second["detail_records"][-1]["status"], "quarantined")
+        self.assertEqual(second["detail_records"][-1]["failure_diagnostic"], {"code": "timeout"})
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"], {"code": "timeout"})
+
+    def test_checkpoint_and_retry_index_reject_malformed_diagnostics(self) -> None:
+        code, checkpoint = self.invoke(
+            fetcher=lambda *_: (_ for _ in ()).throw(TimeoutError("secret")),
+            **{"--retries-per-detail": 0, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 2)
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        tampered = copy.deepcopy(checkpoint)
+        tampered["detail_records"][0]["failure_diagnostic"]["raw_error"] = "secret"
+        MODULE.seal_checkpoint(tampered)
+        with self.assertRaises(jsonschema.ValidationError):
+            MODULE.verify_checkpoint(tampered, schema)
+
+        index = json.loads((self.state_dir / "sources/data_go_kr/index.json").read_text())
+        retry_row = next(iter(index["detail_retry_state"].values()))
+        retry_row["failure_diagnostic"] = {"code": "provider_http_error", "http_status": 503, "message": "secret"}
+        path = self.root / "tampered-index.json"
+        path.write_text(json.dumps(index), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "corrupt_detail_retry_state"):
+            MODULE.source_retry_state(path)
+
+    def test_failure_classifier_uses_fixed_types_not_exception_text_or_class_name(self) -> None:
+        class SecretRuntimeFailure(RuntimeError):
+            pass
+
+        self.assertEqual(MODULE.classify_detail_exception(TimeoutError("SECRET URL")), {"code": "timeout"})
+        self.assertEqual(MODULE.classify_detail_exception(urllib.error.URLError("SECRET URL")), {"code": "transport_error"})
+        self.assertEqual(MODULE.classify_detail_exception(urllib.error.URLError(TimeoutError("SECRET URL"))), {"code": "timeout"})
+        for status in (429, 503):
+            error = urllib.error.HTTPError("https://public.example/path?token=SECRET", status, "SECRET body", {}, None)
+            self.assertEqual(MODULE.classify_detail_exception(error), {
+                "code": "provider_http_error", "http_status": status,
+            })
+        self.assertEqual(MODULE.classify_detail_exception(MODULE.DetailResponseBytesCapError("SECRET")), {"code": "response_bytes_cap"})
+        self.assertEqual(MODULE.classify_detail_exception(MODULE.UnsafeDetailRedirectError("SECRET")), {"code": "unsafe_redirect"})
+        self.assertEqual(MODULE.classify_detail_exception(SecretRuntimeFailure("SECRET")), {"code": "unexpected_error"})
+
+    def test_retry_failure_diagnostic_is_dropped_when_source_fingerprint_changes(self) -> None:
+        def fail(_url: str, _timeout: float) -> str:
+            raise TimeoutError("old observed cause")
+
+        code, original = self.invoke(fetcher=fail, **{"--retries-per-detail": 2, "--max-attempts": 1})
+        self.assertEqual(code, 2)
+        identity = MODULE.record_id(self.new_link)
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        initial_index = json.loads(index_path.read_text())
+        self.assertEqual(initial_index["detail_retry_state"][identity]["failure_diagnostic"], {"code": "timeout"})
+
+        candidate = json.loads(self.candidate_path.read_text())
+        candidate[-1]["source"]["raw"]["title"] = "Changed source contract"
+        self.candidate_path.write_text(json.dumps(candidate), encoding="utf-8")
+        self.write_observation("2026-10-02T10:00:00Z")
+        self.now = "2026-10-02T10:00:01Z"
+        code, changed = self.invoke(
+            run_id="102", fetcher=lambda *_: self.fail("claim only must not fetch"),
+            **{"--claim-only": None, "--retries-per-detail": 2, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 0)
+        self.assertNotEqual(changed["generation_id"], original["generation_id"])
+        changed_index = json.loads(index_path.read_text())
+        self.assertNotIn("failure_diagnostic", changed_index["detail_retry_state"][identity])
+
+    def test_retry_failure_diagnostic_is_dropped_at_new_observation_epoch(self) -> None:
+        def fail(_url: str, _timeout: float) -> str:
+            raise TimeoutError("old observation failure")
+
+        code, first = self.invoke(fetcher=fail, **{"--retries-per-detail": 2, "--max-attempts": 1})
+        self.assertEqual(code, 2)
+        identity = MODULE.record_id(self.new_link)
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        initial_index = json.loads(index_path.read_text())
+        self.assertEqual(initial_index["detail_retry_state"][identity]["failure_diagnostic"], {"code": "timeout"})
+
+        self.write_observation("2026-10-22T10:00:00Z")
+        self.now = "2026-10-22T10:00:01Z"
+        code, next_claim = self.invoke(
+            run_id="102", fetcher=lambda *_: self.fail("new epoch claim must not fetch"),
+            **{"--claim-only": None, "--retries-per-detail": 2, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 0)
+        self.assertEqual(next_claim["generation_id"], first["generation_id"])
+        self.assertIn(identity, next_claim["detail_retry_reset_ids"])
+        updated_index = json.loads(index_path.read_text())
+        self.assertNotIn("failure_diagnostic", updated_index["detail_retry_state"][identity])
 
     def test_unqueued_worker_rows_are_explicitly_retained_as_retry_outcomes(self) -> None:
         third = copy.deepcopy(self.new_link)
@@ -351,6 +571,78 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             [row["source_sha256"] for row in evidence["worker_outcomes"]],
             [MODULE.source_fingerprint(self.new_link), MODULE.source_fingerprint(third)],
         )
+
+    def test_full_queue_diagnostics_count_observed_failures_and_unattempted_rows(self) -> None:
+        rows = []
+        for identity in range(1000, 1908):
+            row = copy.deepcopy(self.new_link)
+            row["id"] = str(identity)
+            row["title"] = f"Queued detail {identity}"
+            row["source"]["url"] = f"https://www.data.go.kr/data/{identity}/openapi.do"
+            row["source"]["raw"]["api_id"] = str(identity)
+            row["source"]["raw"]["meta_url"] = row["source"]["url"]
+            rows.append(row)
+        self.baseline_path.write_text("[]", encoding="utf-8")
+        self.candidate_path.write_text(json.dumps(rows), encoding="utf-8")
+        calls = []
+
+        def fail(url: str, _timeout: float) -> str:
+            calls.append(url)
+            raise TimeoutError("SECRET detail response")
+
+        code, checkpoint = self.invoke(
+            fetcher=fail,
+            **{"--retries-per-detail": 0, "--max-attempts": 24, "--max-queue": 48},
+        )
+        self.assertEqual(code, 2)
+        self.assertEqual(len(calls), 24)
+        self.assertEqual(checkpoint["attempts_consumed"], 24)
+        self.assertEqual(checkpoint["request_reservation"]["attempts_made"], 24)
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["records"], [])
+        self.assertEqual(len(evidence["worker_outcomes"]), 908)
+        self.assertEqual(
+            sum("failure_diagnostic" in row for row in evidence["worker_outcomes"]), 24,
+        )
+        self.assertEqual(checkpoint["outcome"]["detail_failure_counts"], {"timeout": 24})
+        self.assertEqual(checkpoint["outcome"]["detail_reason_unavailable_count"], 884)
+        self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 884)
+        result = json.loads((self.output_dir / "upstream-catalogue-processing-result.json").read_text())
+        self.assertEqual(result["detail_failure_counts"], {"timeout": 24})
+        self.assertEqual(result["detail_reason_unavailable_count"], 884)
+        self.assertEqual(result["detail_unattempted_count"], 884)
+        self.assertNotIn("SECRET", json.dumps(evidence) + json.dumps(checkpoint) + json.dumps(result))
+
+    def test_unavailable_diagnostic_aggregate_can_exceed_retry_state_capacity(self) -> None:
+        rows = []
+        for identity in range(20_000, 24_100):
+            row = copy.deepcopy(self.new_link)
+            row["id"] = str(identity)
+            row["title"] = f"Large queued detail {identity}"
+            row["source"]["url"] = f"https://www.data.go.kr/data/{identity}/openapi.do"
+            row["source"]["raw"]["api_id"] = str(identity)
+            row["source"]["raw"]["meta_url"] = row["source"]["url"]
+            rows.append(row)
+        self.baseline_path.write_text("[]", encoding="utf-8")
+        self.candidate_path.write_text(json.dumps(rows), encoding="utf-8")
+        calls = []
+
+        def fail(url: str, _timeout: float) -> str:
+            calls.append(url)
+            raise TimeoutError("fixture")
+
+        code, checkpoint = self.invoke(
+            fetcher=fail,
+            **{"--retries-per-detail": 0, "--max-attempts": 1, "--max-queue": 1},
+        )
+        self.assertEqual(code, 2)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(checkpoint["attempts_consumed"], 1)
+        self.assertEqual(checkpoint["outcome"]["detail_failure_counts"], {"timeout": 1})
+        self.assertEqual(checkpoint["outcome"]["detail_reason_unavailable_count"], 4099)
+        self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 4099)
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        self.assertIs(MODULE.verify_checkpoint(checkpoint, schema), checkpoint)
 
     def test_new_generator_preserves_all_frozen_retry_attempts_across_recovery(self) -> None:
         from tests.test_recover_upstream_catalogue_failed_generation import RECOVERY, frozen_inputs

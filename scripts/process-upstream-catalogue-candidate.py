@@ -30,6 +30,11 @@ STATE_FILE_LIMIT = 256 * 1024
 MAX_INPUT_BYTES = 256 * 1024 * 1024
 MAX_DETAIL_BYTES = 1024 * 1024
 MAX_REDIRECTS = 3
+DETAIL_FAILURE_CODES = frozenset({
+    "timeout", "transport_error", "provider_http_error", "response_bytes_cap",
+    "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations",
+    "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error",
+})
 DEFAULT_TIMEOUT_SECONDS = 12
 DEFAULT_RETRIES_PER_DETAIL = 2
 DEFAULT_MAX_ATTEMPTS = 24
@@ -262,6 +267,20 @@ def redact_operation_raw(value: Any) -> Any:
     return value
 
 
+class DetailResponseBytesCapError(ValueError):
+    """The public detail body exceeded the fixed response byte cap."""
+
+    def __init__(self, *_args: Any) -> None:
+        super().__init__("detail_response_too_large")
+
+
+class UnsafeDetailRedirectError(urllib.error.URLError):
+    """A public detail request attempted a redirect outside its fixed host."""
+
+    def __init__(self, *_args: Any) -> None:
+        super().__init__("redirect_outside_allowed_public_detail_host")
+
+
 class SameHostRedirectHandler(urllib.request.HTTPRedirectHandler):
     def __init__(self, allowed_host: str = "www.data.go.kr") -> None:
         super().__init__()
@@ -276,7 +295,7 @@ class SameHostRedirectHandler(urllib.request.HTTPRedirectHandler):
             or parsed.username or parsed.password or parsed.query or parsed.fragment
             or new_url != request.full_url
         ):
-            raise urllib.error.URLError("redirect_outside_allowed_public_detail_host")
+            raise UnsafeDetailRedirectError()
         return super().redirect_request(request, response, code, message, headers, new_url)
 
 
@@ -289,13 +308,13 @@ def fetch_public_detail(url: str, timeout: float = DEFAULT_TIMEOUT_SECONDS) -> D
     with opener.open(request, timeout=timeout) as response:
         final = urllib.parse.urlsplit(response.geturl())
         if final.scheme != "https" or final.hostname != "www.data.go.kr" or final.username or final.password or response.geturl() != url:
-            raise ValueError("redirect_outside_allowed_public_detail_host")
+            raise UnsafeDetailRedirectError()
         content_length = response.headers.get("Content-Length")
         if content_length and int(content_length) > MAX_DETAIL_BYTES:
-            raise ValueError("detail_response_too_large")
+            raise DetailResponseBytesCapError()
         body_bytes = response.read(MAX_DETAIL_BYTES + 1)
         if len(body_bytes) > MAX_DETAIL_BYTES:
-            raise ValueError("detail_response_too_large")
+            raise DetailResponseBytesCapError()
     return DetailPageObservation(
         body=body_bytes.decode("utf-8", errors="replace"), page_url=url, effective_url=response.geturl(),
         page_sha256=sha256_bytes(body_bytes), observed_at=timestamp(), page_bytes=body_bytes,
@@ -392,12 +411,19 @@ def source_retry_state(index_path: pathlib.Path) -> dict[str, dict[str, Any]]:
     for identity, row in retry_state.items():
         if (
             not isinstance(identity, str) or not isinstance(row, dict)
+            or not {"source_sha256", "guide_sha256", "attempts", "last_attempt_at"}.issubset(row)
+            or set(row) - {"source_sha256", "guide_sha256", "attempts", "last_attempt_at", "failure_diagnostic"}
             or not re.fullmatch(r"[a-f0-9]{64}", str(row.get("source_sha256") or ""))
             or row.get("guide_sha256") is not None and not re.fullmatch(r"[a-f0-9]{64}", str(row.get("guide_sha256")))
             or not isinstance(row.get("attempts"), int) or row["attempts"] < 1
         ):
             raise ValueError("corrupt_detail_retry_state")
         parse_timestamp(str(row.get("last_attempt_at")))
+        if "failure_diagnostic" in row:
+            try:
+                validate_failure_diagnostic(row["failure_diagnostic"])
+            except ValueError as exc:
+                raise ValueError("corrupt_detail_retry_state") from exc
     return retry_state
 
 
@@ -621,6 +647,45 @@ def safe_error_class(exc: BaseException) -> str:
     return name[:64]
 
 
+def validate_failure_diagnostic(value: Any) -> dict[str, Any]:
+    if not isinstance(value, dict) or set(value) not in ({"code"}, {"code", "http_status"}):
+        raise ValueError("invalid_detail_failure_diagnostic")
+    code = value.get("code")
+    if not isinstance(code, str) or code not in DETAIL_FAILURE_CODES:
+        raise ValueError("invalid_detail_failure_diagnostic")
+    result: dict[str, Any] = {"code": code}
+    if "http_status" in value:
+        status = value["http_status"]
+        if (
+            code != "provider_http_error" or not isinstance(status, int) or isinstance(status, bool)
+            or not 400 <= status <= 599
+        ):
+            raise ValueError("invalid_detail_failure_diagnostic")
+        result["http_status"] = status
+    return result
+
+
+def classify_detail_exception(exc: BaseException) -> dict[str, Any]:
+    """Classify a fetch exception using fixed types and never inspect its text."""
+    if isinstance(exc, urllib.error.HTTPError):
+        diagnostic: dict[str, Any] = {"code": "provider_http_error"}
+        status = exc.code
+        if isinstance(status, int) and not isinstance(status, bool) and 400 <= status <= 599:
+            diagnostic["http_status"] = status
+        return diagnostic
+    if isinstance(exc, DetailResponseBytesCapError):
+        return {"code": "response_bytes_cap"}
+    if isinstance(exc, UnsafeDetailRedirectError):
+        return {"code": "unsafe_redirect"}
+    if isinstance(exc, TimeoutError):
+        return {"code": "timeout"}
+    if isinstance(exc, urllib.error.URLError):
+        return {"code": "timeout" if isinstance(exc.reason, TimeoutError) else "transport_error"}
+    if isinstance(exc, (ConnectionError, OSError)):
+        return {"code": "transport_error"}
+    return {"code": "unexpected_error"}
+
+
 def extract_operations(row: dict[str, Any], body: str) -> list[dict[str, Any]]:
     operations = []
     for index, endpoint in enumerate(DETAIL_HELPERS.extract_link_detail_operation_urls(body)):
@@ -670,6 +735,9 @@ def processing_result(
         "processor_run_id": str(processor_run_id or ""),
         "processor_artifact_run_id": str(processor_artifact_run_id or ""),
         "attempts_consumed": checkpoint.get("attempts_consumed", 0),
+        "detail_failure_counts": outcome.get("detail_failure_counts", {}),
+        "detail_reason_unavailable_count": outcome.get("detail_reason_unavailable_count", 0),
+        "detail_unattempted_count": outcome.get("detail_unattempted_count", 0),
         "observed_at": observation.get("observed_at"),
         "last_heartbeat_at": checkpoint.get("last_heartbeat_at"),
         "last_progress_at": checkpoint.get("last_progress_at"),
@@ -849,7 +917,10 @@ def validated_resume_records(
         for outcome in outcomes:
             if (
                 not isinstance(outcome, dict)
-                or set(outcome) != {"api_key", "status", "source_sha256", "guide_sha256"}
+                or set(outcome) not in (
+                    {"api_key", "status", "source_sha256", "guide_sha256"},
+                    {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic"},
+                )
                 or not isinstance(outcome.get("api_key"), dict)
                 or outcome["api_key"].get("provider") != "data.go.kr"
                 or outcome.get("status") not in {"retry", "quarantined"}
@@ -857,6 +928,11 @@ def validated_resume_records(
                 or (outcome.get("guide_sha256") is not None and not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("guide_sha256"))))
             ):
                 raise ValueError("resume_worker_outcome_invalid")
+            if "failure_diagnostic" in outcome:
+                try:
+                    validate_failure_diagnostic(outcome["failure_diagnostic"])
+                except ValueError as exc:
+                    raise ValueError("resume_worker_outcome_invalid") from exc
             identity = str(outcome["api_key"].get("id") or "")
             if not identity or identity in outcome_ids or identity in successful_ids:
                 raise ValueError("resume_worker_outcome_identity_invalid")
@@ -1133,15 +1209,36 @@ def append_generation_index(index_path: pathlib.Path, checkpoint_path: pathlib.P
             identity = str(record.get("id") or "")
             attempts = int(checkpoint.get("attempts_by_id", {}).get(identity, 0))
             if attempts:
-                retry_state[identity] = {
+                retry_entry = {
                     "source_sha256": record["source_sha256"],
                     "guide_sha256": record["guide_sha256"],
                     "attempts": attempts,
                     "last_attempt_at": reservation["reserved_at"],
                 }
+                prior = retry_state.get(identity)
+                if (
+                    isinstance(prior, dict)
+                    and prior.get("source_sha256") == retry_entry["source_sha256"]
+                    and prior.get("guide_sha256") == retry_entry["guide_sha256"]
+                    and "failure_diagnostic" in prior
+                ):
+                    retry_entry["failure_diagnostic"] = validate_failure_diagnostic(prior["failure_diagnostic"])
+                retry_state[identity] = retry_entry
     for record in checkpoint.get("detail_records", []):
-        if isinstance(record, dict) and record.get("status") == "enriched":
-            retry_state.pop(str(record.get("id") or ""), None)
+        if not isinstance(record, dict):
+            continue
+        identity = str(record.get("id") or "")
+        if record.get("status") == "enriched":
+            retry_state.pop(identity, None)
+            continue
+        if "failure_diagnostic" in record:
+            current = retry_state.get(identity)
+            if (
+                isinstance(current, dict)
+                and current.get("source_sha256") == record.get("source_sha256")
+                and current.get("guide_sha256") == record.get("guide_sha256")
+            ):
+                current["failure_diagnostic"] = validate_failure_diagnostic(record["failure_diagnostic"])
     if len(retry_state) > DEFAULT_MAX_RETRY_STATES:
         raise ValueError("detail_retry_state_capacity_exceeded")
     atomic_write_json(index_path, index)
@@ -1537,6 +1634,7 @@ def process(
         return 3, checkpoint
     queued, retained, _ = detail_queue(baseline_rows, candidate_rows, all_cached_records, now)
     durable_retry_state = source_retry_state(index_path)
+    retained_failure_diagnostics: dict[str, dict[str, Any]] = {}
     attempt_counts = checkpoint.setdefault("attempts_by_id", {})
     reset_ids = set(str(value) for value in checkpoint.get("detail_retry_reset_ids", []))
     for queue_row in queued:
@@ -1562,7 +1660,15 @@ def process(
             reset_ids.add(identity)
         else:
             attempt_counts[identity] = max(int(attempt_counts.get(identity, 0)), int(prior_state["attempts"]))
+            if "failure_diagnostic" in prior_state:
+                retained_failure_diagnostics[identity] = validate_failure_diagnostic(prior_state["failure_diagnostic"])
     checkpoint["detail_retry_reset_ids"] = sorted(reset_ids)[-DEFAULT_MAX_RETRY_STATES:]
+    reset_identity_set = set(checkpoint["detail_retry_reset_ids"])
+    if reset_identity_set:
+        checkpoint["detail_records"] = [
+            row for row in checkpoint.get("detail_records", [])
+            if not isinstance(row, dict) or str(row.get("id") or "") not in reset_identity_set
+        ]
     queue_cursor = source_queue_cursor(index_path, int(checkpoint.get("detail_queue_cursor", 0)))
     reservation = checkpoint.get("request_reservation")
     if args.claim_only:
@@ -1647,20 +1753,19 @@ def process(
         attempts_available = reserved_count
         row_status = "retry"
         row_operations: list[dict[str, Any]] = []
-        last_error = ""
+        failure_diagnostic = retained_failure_diagnostics.get(identity)
         source_provenance: dict[str, Any] | None = None
         if not identity.isdigit():
             row_status = "quarantined"
-            last_error = "invalid_detail_identity"
+            failure_diagnostic = {"code": "contract_or_parse_error"}
         try:
             page_url = candidate_detail_url(row, identity)
         except ValueError:
             page_url = ""
             row_status = "quarantined"
-            last_error = "unsafe_candidate_detail_provenance"
+            failure_diagnostic = {"code": "contract_or_parse_error"}
         if row_status != "quarantined" and reserved_count == 0:
             row_status = "quarantined"
-            last_error = "detail_retry_limit_exhausted"
         while attempts_available > 0 and attempts_this_invocation < attempt_budget:
             if row_status == "quarantined":
                 break
@@ -1673,6 +1778,7 @@ def process(
             checkpoint["last_heartbeat_at"] = timestamp(now_fn())
             checkpoint["last_progress_at"] = timestamp(now_fn())
             atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
+            failure_context = "fetch"
             try:
                 expected_page_url = safe_public_page_url(identity)
                 fetched = fetcher(expected_page_url, float(args.timeout))
@@ -1687,14 +1793,18 @@ def process(
                         page_sha256=sha256_bytes(body.encode("utf-8")), observed_at=timestamp(now),
                     )
                 body = observation.body
-                if (
-                    observation.page_url != expected_page_url or observation.effective_url != expected_page_url
-                    or observation.page_sha256 != sha256_bytes(observation.page_bytes)
-                    or parse_timestamp(observation.observed_at) > now_fn() + dt.timedelta(minutes=5)
-                ):
+                failure_context = "observation"
+                observation_valid = (
+                    observation.page_url == expected_page_url
+                    and observation.effective_url == expected_page_url
+                    and observation.page_sha256 == sha256_bytes(observation.page_bytes)
+                    and parse_timestamp(observation.observed_at) <= now_fn() + dt.timedelta(minutes=5)
+                )
+                if not observation_valid:
                     row_status = "quarantined"
-                    last_error = "detail_page_observation_mismatch"
+                    failure_diagnostic = {"code": "observation_mismatch"}
                     break
+                failure_context = "parser"
                 urls = DETAIL_HELPERS.extract_link_detail_operation_urls(body)
                 missing_hosts = {
                     (urllib.parse.urlsplit(endpoint).hostname or "").lower()
@@ -1704,7 +1814,7 @@ def process(
                 }
                 if missing_hosts:
                     row_status = "quarantined"
-                    last_error = "unsafe_or_unregistered_operation_host"
+                    failure_diagnostic = {"code": "unsafe_or_unregistered_operation_host"}
                     break
                 observed_guide = observed_guide_url(body, page_url)
                 for index, endpoint in enumerate(urls):
@@ -1719,7 +1829,7 @@ def process(
                     row_operations.append(item)
                 if row_operations:
                     row_status = "enriched"
-                    last_error = ""
+                    failure_diagnostic = None
                     source_provenance = {
                         "system": "data.go.kr",
                         "page_url": observation.page_url,
@@ -1729,15 +1839,22 @@ def process(
                     }
                 else:
                     row_status = "quarantined"
-                    last_error = "missing_link_detail_operations"
+                    failure_diagnostic = {"code": "missing_link_detail_operations"}
                 break
             except Exception as exc:  # network failures remain per-identity
-                last_error = safe_error_class(exc)
+                if failure_context == "parser":
+                    failure_diagnostic = {"code": "contract_or_parse_error"}
+                elif failure_context == "observation":
+                    # A malformed observation is retryable under the existing
+                    # fetch exception path; only an explicit false validation
+                    # result above is quarantined.
+                    failure_diagnostic = {"code": "observation_mismatch"}
+                else:
+                    failure_diagnostic = classify_detail_exception(exc)
                 if attempts_available > 0 and attempts_this_invocation < attempt_budget:
                     sleeper(min(5.0, 0.25 * (2 ** (used - 1))))
-        else:
-            if attempts_available == 0 and row_status == "retry":
-                last_error = "request_budget_exhausted"
+        # Request-budget exhaustion is accounted in the reservation counters;
+        # it must not replace the last observed failure diagnostic.
         if row_status == "enriched":
             attempt_counts.pop(identity, None)
             refunded_reservations += max(0, reserved_count - attempted_by_id.get(identity, 0))
@@ -1751,10 +1868,13 @@ def process(
                 attempt_counts.pop(identity, None)
         fingerprint = queue_row["source_sha256"]
         guide_fingerprint = queue_row["guide_sha256"]
-        worker_records.append({
+        worker_record = {
             "id": identity, "status": row_status,
             "source_sha256": fingerprint, "guide_sha256": guide_fingerprint,
-        })
+        }
+        if row_status != "enriched" and failure_diagnostic is not None:
+            worker_record["failure_diagnostic"] = validate_failure_diagnostic(failure_diagnostic)
+        worker_records.append(worker_record)
         if row_status == "enriched":
             enriched_records.append({
                 "api_key": {"provider": "data.go.kr", "id": identity},
@@ -1784,6 +1904,42 @@ def process(
         for record in reservation.get("records", []) if attempted_by_id.get(record["id"], 0)
     ]
 
+    unresolved_worker_outcomes: list[dict[str, Any]] = []
+    for row in worker_records:
+        if row.get("status") not in {"retry", "quarantined"}:
+            continue
+        outcome = {
+            "api_key": {"provider": "data.go.kr", "id": row["id"]},
+            "status": row["status"],
+            "source_sha256": row["source_sha256"],
+            "guide_sha256": row["guide_sha256"],
+        }
+        if "failure_diagnostic" in row:
+            outcome["failure_diagnostic"] = validate_failure_diagnostic(row["failure_diagnostic"])
+        unresolved_worker_outcomes.append(outcome)
+    for row in unqueued:
+        outcome = {
+            "api_key": {"provider": "data.go.kr", "id": row["id"]},
+            "status": "retry",
+            "source_sha256": row["source_sha256"],
+            "guide_sha256": row["guide_sha256"],
+        }
+        diagnostic = retained_failure_diagnostics.get(row["id"])
+        if diagnostic is not None:
+            outcome["failure_diagnostic"] = validate_failure_diagnostic(diagnostic)
+        unresolved_worker_outcomes.append(outcome)
+    detail_failure_counts: dict[str, int] = {}
+    for row in unresolved_worker_outcomes:
+        diagnostic = row.get("failure_diagnostic")
+        if isinstance(diagnostic, dict):
+            code = validate_failure_diagnostic(diagnostic)["code"]
+            detail_failure_counts[code] = detail_failure_counts.get(code, 0) + 1
+    detail_failure_counts = dict(sorted(detail_failure_counts.items()))
+    detail_reason_unavailable_count = sum("failure_diagnostic" not in row for row in unresolved_worker_outcomes)
+    detail_unattempted_count = sum(
+        row["api_key"]["id"] not in attempted_by_id for row in unresolved_worker_outcomes
+    )
+
     enrichment = {
         "schema_version": ENRICHMENT_SCHEMA,
         "original_candidate_sha256": candidate_sha,
@@ -1791,23 +1947,7 @@ def process(
         "adapter_revision": adapter_sha,
         "extractor_revision": extractor_revision(),
         "records": enriched_records,
-        "worker_outcomes": [
-            {
-                "api_key": {"provider": "data.go.kr", "id": row["id"]},
-                "status": row["status"],
-                "source_sha256": row["source_sha256"],
-                "guide_sha256": row["guide_sha256"],
-            }
-            for row in worker_records if row.get("status") in {"retry", "quarantined"}
-        ] + [
-            {
-                "api_key": {"provider": "data.go.kr", "id": row["id"]},
-                "status": "retry",
-                "source_sha256": row["source_sha256"],
-                "guide_sha256": row["guide_sha256"],
-            }
-            for row in unqueued
-        ],
+        "worker_outcomes": unresolved_worker_outcomes,
     }
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1930,6 +2070,9 @@ def process(
             "reason": outcome_reason, "composer_status": receipt_status,
             "pending_count": pending_count, "detail_retry_count": worker_retry_count,
             "attempts_this_invocation": attempts_this_invocation,
+            "detail_failure_counts": detail_failure_counts,
+            "detail_reason_unavailable_count": detail_reason_unavailable_count,
+            "detail_unattempted_count": detail_unattempted_count,
         },
         "lease": None,
         "last_heartbeat_at": timestamp(now_fn()),

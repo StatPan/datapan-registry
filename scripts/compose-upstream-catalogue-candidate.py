@@ -433,9 +433,28 @@ def validate_worker_outcomes(
         raise CompositionError("enrichment evidence worker_outcomes must be an array")
     by_key: dict[tuple[str, str], dict[str, Any]] = {}
     expected_fields = {"api_key", "status", "source_sha256", "guide_sha256"}
+    failure_codes = {
+        "timeout", "transport_error", "provider_http_error", "response_bytes_cap",
+        "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations",
+        "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error",
+    }
     for index, outcome in enumerate(outcomes):
-        if not isinstance(outcome, dict) or set(outcome) != expected_fields:
+        if not isinstance(outcome, dict) or set(outcome) not in (expected_fields, expected_fields | {"failure_diagnostic"}):
             raise CompositionError(f"enrichment evidence worker_outcomes[{index}] has an invalid shape")
+        if "failure_diagnostic" in outcome:
+            diagnostic = outcome["failure_diagnostic"]
+            if (
+                not isinstance(diagnostic, dict)
+                or set(diagnostic) not in ({"code"}, {"code", "http_status"})
+                or diagnostic.get("code") not in failure_codes
+                or "http_status" in diagnostic and (
+                    diagnostic.get("code") != "provider_http_error"
+                    or not isinstance(diagnostic.get("http_status"), int)
+                    or isinstance(diagnostic.get("http_status"), bool)
+                    or not 400 <= diagnostic["http_status"] <= 599
+                )
+            ):
+                raise CompositionError(f"enrichment evidence worker_outcomes[{index}] has an invalid failure_diagnostic")
         if not isinstance(outcome.get("api_key"), dict):
             raise CompositionError(f"enrichment evidence worker_outcomes[{index}] must include api_key")
         key = api_key(outcome["api_key"])
