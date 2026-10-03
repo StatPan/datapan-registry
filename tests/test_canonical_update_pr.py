@@ -263,6 +263,68 @@ class CanonicalUpdatePromotionTests(unittest.TestCase):
         )
         self.assertEqual(len(journal["records"]), 2)
 
+    def test_same_payload_source_refresh_uses_distinct_head_revision_and_exact_intent(self) -> None:
+        predecessor = self.revision_receipt(
+            registry_sha="d" * 64, head_sha="b" * 40,
+            status="pending-review", body="reviewed candidate body\n",
+        )
+        successor = self.revision_receipt(
+            registry_sha="d" * 64, head_sha="c" * 40,
+            status="prepared", body="successor candidate body\n",
+        )
+        self.assertEqual(PROMOTION.payload_key(predecessor), PROMOTION.payload_key(successor))
+        self.assertNotEqual(PROMOTION.candidate_key(predecessor), PROMOTION.candidate_key(successor))
+        self.assertNotEqual(
+            PROMOTION._reference_key(PROMOTION.revision_reference(predecessor)),
+            PROMOTION._reference_key(PROMOTION.revision_reference(successor)),
+        )
+
+        journal = PROMOTION.append_journal_record(
+            None, predecessor, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:00:00Z",
+        )
+        journal = PROMOTION.append_journal_record(
+            journal, successor, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:01:00Z",
+        )
+        schema = __import__("json").loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text()
+        )
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "same-payload successor"):
+            PROMOTION.validate_journal(journal, schema)
+
+        target_main = "e" * 40
+        successor["candidate"]["base_sha"] = target_main
+        successor["refresh_from"] = PROMOTION.revision_reference(predecessor)
+        successor["refresh_target_main_sha"] = target_main
+        journal["records"][1] = successor
+        PROMOTION.validate_journal(journal, schema)
+
+        successor["refresh_target_main_sha"] = "f" * 40
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "exact target main"):
+            PROMOTION.validate_journal(journal, schema)
+
+    def test_legacy_revision_references_without_manifest_discriminator_remain_readable(self) -> None:
+        predecessor = self.revision_receipt(
+            registry_sha="d" * 64, head_sha="b" * 40,
+            status="pending-review", body="legacy predecessor body\n",
+        )
+        successor = self.revision_receipt(
+            registry_sha="f" * 64, head_sha="c" * 40,
+            status="prepared", body="legacy successor body\n",
+        )
+        legacy_ref = PROMOTION.revision_reference(predecessor)
+        legacy_ref.pop("manifest_sha256")
+        successor["refresh_from"] = legacy_ref
+        journal = PROMOTION.append_journal_record(
+            None, predecessor, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:00:00Z",
+        )
+        journal = PROMOTION.append_journal_record(
+            journal, successor, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:01:00Z",
+        )
+        schema = __import__("json").loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text()
+        )
+        PROMOTION.validate_journal(journal, schema)
+
     def test_new_pr_branch_is_revision_specific_and_refresh_inherits_exact_legacy_branch(self) -> None:
         first = self.candidate("generation-a")
         second = {**self.candidate("generation-b"), "registry_sha256": "9" * 64}

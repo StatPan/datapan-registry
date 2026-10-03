@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import pathlib
 import re
 import sys
@@ -28,13 +29,65 @@ def replace(text: str, pattern: str, value: str, label: str) -> str:
     return updated
 
 
+def summary_count(summary: dict[str, Any], key: str, report: str) -> int:
+    value = summary.get(key)
+    if type(value) is not int or value < 0:
+        raise ValueError(f"{report}.summary.{key} must be a nonnegative integer")
+    return value
+
+
 def build(text: str) -> str:
     manifest = load("manifest.json")
     sustainable = load("reports/sustainable-coverage.json")
+    coverage = load("reports/coverage.json")
+    institution_overview = load("reports/data-go-kr/institution-api-overview.json")
     freshness = load("reports/runtime-freshness-queue.json")
     projection = load("reports/current-runtime-evidence-projection.json")
     verification = load("reports/latest-verification-summary.json")
     growth = load("reports/data-go-kr/runtime-evidence-growth.json")
+    coverage_summary = coverage.get("summary")
+    if not isinstance(coverage_summary, dict):
+        raise ValueError("reports/coverage.json.summary must be an object")
+    institution_summary = institution_overview.get("summary")
+    if not isinstance(institution_summary, dict):
+        raise ValueError("reports/data-go-kr/institution-api-overview.json.summary must be an object")
+
+    specs = summary_count(coverage_summary, "specs", "reports/coverage.json")
+    operations = summary_count(coverage_summary, "operations", "reports/coverage.json")
+    callable_operations = summary_count(coverage_summary, "callable_operations", "reports/coverage.json")
+    institution_report = "reports/data-go-kr/institution-api-overview.json"
+    institutions = summary_count(institution_summary, "institutions", institution_report)
+    institution_apis = summary_count(institution_summary, "apis", "reports/data-go-kr/institution-api-overview.json")
+    institution_operations = summary_count(institution_summary, "operations", institution_report)
+    institution_callable_operations = summary_count(
+        institution_summary,
+        "callable_operations",
+        institution_report,
+    )
+    for label, coverage_value, institution_value in (
+        ("spec/API totals", specs, institution_apis),
+        ("operation totals", operations, institution_operations),
+        ("callable-operation totals", callable_operations, institution_callable_operations),
+    ):
+        if coverage_value != institution_value:
+            raise ValueError(
+                f"coverage and institution report totals are inconsistent for {label}: "
+                f"coverage={coverage_value}, institution={institution_value}"
+            )
+    if callable_operations > operations:
+        raise ValueError("reports/coverage.json.summary.callable_operations exceeds operations")
+    callable_percent = coverage_summary.get("callable_operation_percent")
+    if (
+        isinstance(callable_percent, bool)
+        or not isinstance(callable_percent, (int, float))
+        or not math.isfinite(callable_percent)
+        or not 0 <= callable_percent <= 100
+    ):
+        raise ValueError("reports/coverage.json.summary.callable_operation_percent must be between 0 and 100")
+    expected_callable_percent = callable_operations / operations * 100 if operations else 0.0
+    if f"{callable_percent:.1f}" != f"{expected_callable_percent:.1f}":
+        raise ValueError("reports/coverage.json.summary.callable_operation_percent is inconsistent with its totals")
+
     layers = {row["id"]: row for row in sustainable["layers"]}
     summary, queue, counts = sustainable["summary"], freshness["summary"], verification["summary"]
     denominator = layers["catalog_denominator"]
@@ -43,6 +96,24 @@ def build(text: str) -> str:
     consumers = layers["required_consumer_proven"]
     projection_summary = projection["summary"]
     projection_freshness = projection["freshness"]
+    text = replace(text, r"- Specs: `\d+`", f"- Specs: `{specs}`", "specs")
+    text = replace(text, r"- Operations: `\d+`", f"- Operations: `{operations}`", "operations")
+    text = replace(
+        text,
+        r"- Callable operations: `\d+` \(`[\d.]+%`\)",
+        f"- Callable operations: `{callable_operations}` (`{callable_percent:.1f}%`)",
+        "callable operations",
+    )
+    institution_text = (
+        f"- Institution API overview: `{institutions}` organizations, `{institution_apis}` APIs, and "
+        f"`{institution_operations}`\n  operations"
+    )
+    text = replace(
+        text,
+        r"- Institution API overview: `\d+` organizations, `\d+` APIs, and `\d+`\n  operations",
+        institution_text,
+        "institution API overview",
+    )
     text = replace(text, r"- Sustainable coverage decision: `[^`]+` \(`\d+` of `\d+` layers meet\n  policy targets\)\.", f"- Sustainable coverage decision: `{summary['decision']}` (`{summary['layers_meeting_target']}` of `{summary['layers_total']}` layers meet\n  policy targets).", "sustainable coverage")
     text = replace(text, r"- Supported-source denominator coverage:.*\n  .*\n?", f"- Supported-source denominator coverage: `{denominator['numerator']}` of `{denominator['denominator']}` sources have an explicit\n  operation denominator (`{denominator['percent']:.1f}%`), covering `{queue['supported_operations']}` operations in total.\n", "denominator")
     text = replace(text, r"- Runtime operation evidence:.*\n  .*\n  .*\n?", f"- Runtime operation evidence: `{runtime['numerator']}` unique operation identities out of\n  `{runtime['denominator']}` (`{runtime['percent']:.1f}%`); fresh successful evidence covers `{fresh['numerator']}` unique operations\n  (`{fresh['percent']:.1f}%`) as of `{freshness['generated_at']}`.\n", "runtime evidence")

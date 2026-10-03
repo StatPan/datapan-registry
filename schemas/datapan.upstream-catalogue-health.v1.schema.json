@@ -156,7 +156,17 @@
         "last_good": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/last_good"}]},
         "promotion_status": {"type": "string", "minLength": 1},
         "publication": {"type": ["object", "null"]},
-        "promotion_stage": {"$ref": "#/$defs/promotion_stage"}
+        "promotion_stage": {"$ref": "#/$defs/promotion_stage"},
+        "promotion_execution": {"$ref": "#/$defs/promotion_execution"}
+      }
+    },
+    "promotion_execution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["latest_execution_run", "latest_successful_execution_run", "execution_failure"],
+      "properties": {
+        "latest_execution_run": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]},
+        "latest_successful_execution_run": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]},
+        "execution_failure": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]}
       }
     },
     "promotion_stage": {
@@ -164,9 +174,9 @@
       "additionalProperties": false,
       "required": ["status", "entered_at", "age_seconds", "deadline_seconds"],
       "properties": {
-        "status": {"enum": ["pending-review", "merged", "publication-pending", "published"]},
-        "entered_at": {"type": "string", "format": "date-time"},
-        "age_seconds": {"type": "integer", "minimum": 0},
+        "status": {"enum": ["prepared", "pending-review", "merged", "publication-pending", "published"]},
+        "entered_at": {"type": ["string", "null"], "format": "date-time"},
+        "age_seconds": {"type": ["integer", "null"], "minimum": 0},
         "deadline_seconds": {"type": "integer", "minimum": 1}
       }
     },
