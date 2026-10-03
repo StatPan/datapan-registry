@@ -1,39 +1,29 @@
 {
-  "generated_at": "2026-07-04T06:39:51Z",
+  "generated_at": "2026-09-29T23:44:39Z",
   "provider": "data.go.kr",
-  "registry": ".\\data\\data-go-kr.registry.json",
-  "source": "release",
-  "verification": ".\\reports\\latest-verification.json",
+  "registry": "/home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json",
+  "source": "flag",
+  "verification": "/home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json",
   "batch_size": 10,
   "timeout": "10s",
   "summary": {
-    "operations": 21256,
-    "evidence_total": 4774,
-    "uncovered_gateway_candidates": 10714,
-    "uncovered_adapter_candidates": 3393,
+    "operations": 21533,
+    "evidence_total": 7181,
+    "uncovered_gateway_candidates": 9948,
+    "uncovered_adapter_candidates": 4543,
     "missing_adapter_hosts": 11,
-    "planned_batches": 20,
-    "planned_operations": 114
+    "planned_batches": 38,
+    "planned_operations": 240
   },
   "batches": [
     {
       "label": "gateway",
       "kind": "data_go_kr_gateway",
-      "candidates": 11419,
-      "uncovered_candidates": 10714,
+      "candidates": 11696,
+      "uncovered_candidates": 9948,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --kind data_go_kr_gateway --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gateway-next.json --json",
       "output": ".datapan/verification/gateway-next.json"
-    },
-    {
-      "label": "calspia",
-      "provider": "calspia",
-      "kind": "external_endpoint",
-      "candidates": 168,
-      "uncovered_candidates": 138,
-      "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider calspia --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/calspia-next.json --json",
-      "output": ".datapan/verification/calspia-next.json"
     },
     {
       "label": "car",
@@ -42,7 +32,7 @@
       "candidates": 2,
       "uncovered_candidates": 1,
       "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider car --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/car-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider car --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/car-next.json --json",
       "output": ".datapan/verification/car-next.json"
     },
     {
@@ -50,9 +40,9 @@
       "provider": "consumer",
       "kind": "external_endpoint",
       "candidates": 36,
-      "uncovered_candidates": 26,
+      "uncovered_candidates": 23,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider consumer --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/consumer-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider consumer --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/consumer-next.json --json",
       "output": ".datapan/verification/consumer-next.json"
     },
     {
@@ -62,7 +52,7 @@
       "candidates": 65,
       "uncovered_candidates": 6,
       "planned_operations": 6,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider daejeon --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/daejeon-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider daejeon --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/daejeon-next.json --json",
       "output": ".datapan/verification/daejeon-next.json"
     },
     {
@@ -70,9 +60,9 @@
       "provider": "data-gg",
       "kind": "external_endpoint",
       "candidates": 2207,
-      "uncovered_candidates": 2080,
+      "uncovered_candidates": 1747,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider data-gg --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/data-gg-next.json --json",
       "output": ".datapan/verification/data-gg-next.json"
     },
     {
@@ -82,7 +72,7 @@
       "candidates": 71,
       "uncovered_candidates": 1,
       "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider dongjak --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/dongjak-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider dongjak --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/dongjak-next.json --json",
       "output": ".datapan/verification/dongjak-next.json"
     },
     {
@@ -90,9 +80,9 @@
       "provider": "ex",
       "kind": "external_endpoint",
       "candidates": 279,
-      "uncovered_candidates": 2,
-      "planned_operations": 2,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ex --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ex-next.json --json",
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider ex --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ex-next.json --json",
       "output": ".datapan/verification/ex-next.json"
     },
     {
@@ -102,7 +92,7 @@
       "candidates": 17,
       "uncovered_candidates": 7,
       "planned_operations": 7,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider fairdata --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/fairdata-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider fairdata --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/fairdata-next.json --json",
       "output": ".datapan/verification/fairdata-next.json"
     },
     {
@@ -110,9 +100,9 @@
       "provider": "foodsafetykorea",
       "kind": "external_endpoint",
       "candidates": 290,
-      "uncovered_candidates": 275,
+      "uncovered_candidates": 244,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider foodsafetykorea --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/foodsafetykorea-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider foodsafetykorea --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/foodsafetykorea-next.json --json",
       "output": ".datapan/verification/foodsafetykorea-next.json"
     },
     {
@@ -122,7 +112,7 @@
       "candidates": 4,
       "uncovered_candidates": 1,
       "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider gwanak --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwanak-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider gwanak --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwanak-next.json --json",
       "output": ".datapan/verification/gwanak-next.json"
     },
     {
@@ -132,7 +122,7 @@
       "candidates": 2,
       "uncovered_candidates": 2,
       "planned_operations": 2,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider gwangjin --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangjin-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider gwangjin --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangjin-next.json --json",
       "output": ".datapan/verification/gwangjin-next.json"
     },
     {
@@ -140,9 +130,9 @@
       "provider": "gwangmyeong",
       "kind": "external_endpoint",
       "candidates": 608,
-      "uncovered_candidates": 538,
+      "uncovered_candidates": 57,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider gwangmyeong --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangmyeong-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider gwangmyeong --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/gwangmyeong-next.json --json",
       "output": ".datapan/verification/gwangmyeong-next.json"
     },
     {
@@ -152,7 +142,7 @@
       "candidates": 3,
       "uncovered_candidates": 1,
       "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider happysd --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/happysd-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider happysd --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/happysd-next.json --json",
       "output": ".datapan/verification/happysd-next.json"
     },
     {
@@ -162,7 +152,7 @@
       "candidates": 1,
       "uncovered_candidates": 1,
       "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider ip-navi --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ip-navi-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider ip-navi --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ip-navi-next.json --json",
       "output": ".datapan/verification/ip-navi-next.json"
     },
     {
@@ -172,7 +162,7 @@
       "candidates": 5,
       "uncovered_candidates": 4,
       "planned_operations": 4,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jeju-air --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeju-air-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider jeju-air --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeju-air-next.json --json",
       "output": ".datapan/verification/jeju-air-next.json"
     },
     {
@@ -180,9 +170,9 @@
       "provider": "jejudatahub",
       "kind": "external_endpoint",
       "candidates": 185,
-      "uncovered_candidates": 173,
+      "uncovered_candidates": 172,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jejudatahub --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jejudatahub-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider jejudatahub --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jejudatahub-next.json --json",
       "output": ".datapan/verification/jejudatahub-next.json"
     },
     {
@@ -192,7 +182,7 @@
       "candidates": 7,
       "uncovered_candidates": 7,
       "planned_operations": 7,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jejuits --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jejuits-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider jejuits --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jejuits-next.json --json",
       "output": ".datapan/verification/jejuits-next.json"
     },
     {
@@ -200,9 +190,9 @@
       "provider": "jeju-www",
       "kind": "external_endpoint",
       "candidates": 171,
-      "uncovered_candidates": 129,
+      "uncovered_candidates": 117,
       "planned_operations": 10,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jeju-www --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeju-www-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider jeju-www --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jeju-www-next.json --json",
       "output": ".datapan/verification/jeju-www-next.json"
     },
     {
@@ -212,8 +202,198 @@
       "candidates": 1,
       "uncovered_candidates": 1,
       "planned_operations": 1,
-      "command": "datapan catalog verify --registry .\\data\\data-go-kr.registry.json --provider jongno --kind external_endpoint --exclude-input .\\reports\\latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jongno-next.json --json",
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider jongno --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/jongno-next.json --json",
       "output": ".datapan/verification/jongno-next.json"
+    },
+    {
+      "label": "juso",
+      "provider": "juso",
+      "kind": "external_endpoint",
+      "candidates": 30,
+      "uncovered_candidates": 8,
+      "planned_operations": 8,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider juso --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/juso-next.json --json",
+      "output": ".datapan/verification/juso-next.json"
+    },
+    {
+      "label": "kipris-plus",
+      "provider": "kipris-plus",
+      "kind": "external_endpoint",
+      "candidates": 150,
+      "uncovered_candidates": 41,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider kipris-plus --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/kipris-plus-next.json --json",
+      "output": ".datapan/verification/kipris-plus-next.json"
+    },
+    {
+      "label": "lofin365",
+      "provider": "lofin365",
+      "kind": "external_endpoint",
+      "candidates": 343,
+      "uncovered_candidates": 284,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider lofin365 --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/lofin365-next.json --json",
+      "output": ".datapan/verification/lofin365-next.json"
+    },
+    {
+      "label": "mafra",
+      "provider": "mafra",
+      "kind": "external_endpoint",
+      "candidates": 316,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider mafra --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/mafra-next.json --json",
+      "output": ".datapan/verification/mafra-next.json"
+    },
+    {
+      "label": "mnd-open-data",
+      "provider": "mnd-open-data",
+      "kind": "external_endpoint",
+      "candidates": 23,
+      "uncovered_candidates": 2,
+      "planned_operations": 2,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider mnd-open-data --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/mnd-open-data-next.json --json",
+      "output": ".datapan/verification/mnd-open-data-next.json"
+    },
+    {
+      "label": "nabic",
+      "provider": "nabic",
+      "kind": "external_endpoint",
+      "candidates": 1,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider nabic --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/nabic-next.json --json",
+      "output": ".datapan/verification/nabic-next.json"
+    },
+    {
+      "label": "ncpms",
+      "provider": "ncpms",
+      "kind": "external_endpoint",
+      "candidates": 5,
+      "uncovered_candidates": 4,
+      "planned_operations": 4,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider ncpms --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/ncpms-next.json --json",
+      "output": ".datapan/verification/ncpms-next.json"
+    },
+    {
+      "label": "nongsaro",
+      "provider": "nongsaro",
+      "kind": "external_endpoint",
+      "candidates": 330,
+      "uncovered_candidates": 266,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider nongsaro --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/nongsaro-next.json --json",
+      "output": ".datapan/verification/nongsaro-next.json"
+    },
+    {
+      "label": "open-assembly",
+      "provider": "open-assembly",
+      "kind": "external_endpoint",
+      "candidates": 277,
+      "uncovered_candidates": 247,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider open-assembly --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/open-assembly-next.json --json",
+      "output": ".datapan/verification/open-assembly-next.json"
+    },
+    {
+      "label": "open-law",
+      "provider": "open-law",
+      "kind": "external_endpoint",
+      "candidates": 370,
+      "uncovered_candidates": 287,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider open-law --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/open-law-next.json --json",
+      "output": ".datapan/verification/open-law-next.json"
+    },
+    {
+      "label": "psis",
+      "provider": "psis",
+      "kind": "external_endpoint",
+      "candidates": 4,
+      "uncovered_candidates": 3,
+      "planned_operations": 3,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider psis --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/psis-next.json --json",
+      "output": ".datapan/verification/psis-next.json"
+    },
+    {
+      "label": "safetydata",
+      "provider": "safetydata",
+      "kind": "external_endpoint",
+      "candidates": 370,
+      "uncovered_candidates": 360,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider safetydata --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safetydata-next.json --json",
+      "output": ".datapan/verification/safetydata-next.json"
+    },
+    {
+      "label": "safemap",
+      "provider": "safemap",
+      "kind": "external_endpoint",
+      "candidates": 104,
+      "uncovered_candidates": 94,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider safemap --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/safemap-next.json --json",
+      "output": ".datapan/verification/safemap-next.json"
+    },
+    {
+      "label": "seogu",
+      "provider": "seogu",
+      "kind": "external_endpoint",
+      "candidates": 154,
+      "uncovered_candidates": 106,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider seogu --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seogu-next.json --json",
+      "output": ".datapan/verification/seogu-next.json"
+    },
+    {
+      "label": "seogwipo",
+      "provider": "seogwipo",
+      "kind": "external_endpoint",
+      "candidates": 69,
+      "uncovered_candidates": 7,
+      "planned_operations": 7,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider seogwipo --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seogwipo-next.json --json",
+      "output": ".datapan/verification/seogwipo-next.json"
+    },
+    {
+      "label": "seoul-map",
+      "provider": "seoul-map",
+      "kind": "external_endpoint",
+      "candidates": 2,
+      "uncovered_candidates": 1,
+      "planned_operations": 1,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider seoul-map --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-map-next.json --json",
+      "output": ".datapan/verification/seoul-map-next.json"
+    },
+    {
+      "label": "seoul-open-data",
+      "provider": "seoul-open-data",
+      "kind": "external_endpoint",
+      "candidates": 183,
+      "uncovered_candidates": 21,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider seoul-open-data --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-open-data-next.json --json",
+      "output": ".datapan/verification/seoul-open-data-next.json"
+    },
+    {
+      "label": "seoul-tdata",
+      "provider": "seoul-tdata",
+      "kind": "external_endpoint",
+      "candidates": 22,
+      "uncovered_candidates": 22,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider seoul-tdata --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/seoul-tdata-next.json --json",
+      "output": ".datapan/verification/seoul-tdata-next.json"
+    },
+    {
+      "label": "vworld",
+      "provider": "vworld",
+      "kind": "external_endpoint",
+      "candidates": 460,
+      "uncovered_candidates": 395,
+      "planned_operations": 10,
+      "command": "datapan catalog verify --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --provider vworld --kind external_endpoint --exclude-input /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --limit 10 --timeout 10s --output .datapan/verification/vworld-next.json --json",
+      "output": ".datapan/verification/vworld-next.json"
     }
   ],
   "gaps": {
@@ -360,7 +540,7 @@
   "next": [
     {
       "label": "coverage",
-      "command": "datapan catalog coverage --registry .\\data\\data-go-kr.registry.json --verification .\\reports\\latest-verification.json --json"
+      "command": "datapan catalog coverage --registry /home/runner/work/datapan-registry/datapan-registry/data/data-go-kr.registry.json --verification /home/runner/work/datapan-registry/datapan-registry/reports/latest-verification.json --json"
     }
   ]
 }

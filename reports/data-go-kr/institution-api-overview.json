@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.institution-api-overview.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-09-29T23:44:39Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "generation_inputs": {
@@ -12,16 +12,16 @@
     "provider_index": "data/provider-index.json"
   },
   "summary": {
-    "institutions": 411,
-    "apis": 12060,
-    "operations": 21256,
+    "institutions": 416,
+    "apis": 12282,
+    "operations": 21533,
     "runtime_evidence": 0,
     "runtime_evidence_percent": 0.0,
     "unbound_evidence_records": 7180,
     "contract_changed_evidence_records": 0,
     "ambiguous_evidence_records": 1,
     "historical_evidence_records": 0,
-    "callable_operations": 21114,
+    "callable_operations": 21391,
     "external_endpoint_operations": 9646,
     "registered_adapter_operations": 9636,
     "missing_adapter_operations": 29,
@@ -30,7 +30,7 @@
   "by_dependency_class": [
     {
       "key": "data_go_kr_gateway",
-      "count": 11419
+      "count": 11696
     },
     {
       "key": "external_endpoint",
@@ -60,7 +60,7 @@
     },
     {
       "key": "builtin",
-      "count": 11419
+      "count": 11696
     },
     {
       "key": "missing",
@@ -74,59 +74,59 @@
   "top_source_categories": [
     {
       "category": "공공행정",
-      "operation_count": 2707
+      "operation_count": 2755
     },
     {
       "category": "문화관광",
-      "operation_count": 2329
-    },
-    {
-      "category": "농축수산",
-      "operation_count": 2279
+      "operation_count": 2355
     },
     {
       "category": "교통물류",
-      "operation_count": 2266
+      "operation_count": 2326
+    },
+    {
+      "category": "농축수산",
+      "operation_count": 2302
     },
     {
       "category": "사회복지",
-      "operation_count": 1477
+      "operation_count": 1503
     },
     {
       "category": "산업고용",
-      "operation_count": 1395
+      "operation_count": 1420
     },
     {
       "category": "재정금융",
-      "operation_count": 1334
+      "operation_count": 1345
     },
     {
       "category": "환경기상",
-      "operation_count": 1298
+      "operation_count": 1317
     },
     {
       "category": "식품건강",
-      "operation_count": 1234
+      "operation_count": 1236
     },
     {
       "category": "국토관리",
-      "operation_count": 1143
+      "operation_count": 1154
     },
     {
       "category": "보건의료",
-      "operation_count": 1014
+      "operation_count": 1021
     },
     {
       "category": "재난안전",
-      "operation_count": 903
+      "operation_count": 911
     },
     {
       "category": "교육",
-      "operation_count": 802
+      "operation_count": 811
     },
     {
       "category": "과학기술",
-      "operation_count": 754
+      "operation_count": 755
     },
     {
       "category": "통일외교안보",
@@ -134,13 +134,13 @@
     },
     {
       "category": "법률",
-      "operation_count": 79
+      "operation_count": 80
     }
   ],
   "top_hosts": [
     {
       "host": "apis.data.go.kr",
-      "operation_count": 11423
+      "operation_count": 11700
     },
     {
       "host": "data.gg.go.kr",
@@ -525,21 +525,21 @@
     },
     {
       "organization": "국토교통부",
-      "api_count": 393,
-      "operation_api_count": 393,
-      "operation_count": 1055,
+      "api_count": 395,
+      "operation_api_count": 395,
+      "operation_count": 1065,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 258,
+      "approval_required_operations": 268,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 397
+          "count": 407
         },
         {
           "key": "external_endpoint",
@@ -553,7 +553,7 @@
         },
         {
           "key": "builtin",
-          "count": 397
+          "count": 407
         }
       ],
       "top_categories": [
@@ -563,7 +563,7 @@
         },
         {
           "category": "교통물류",
-          "operation_count": 386
+          "operation_count": 396
         },
         {
           "category": "환경기상",
@@ -590,7 +590,7 @@
         },
         {
           "host": "apis.data.go.kr",
-          "operation_count": 397
+          "operation_count": 407
         },
         {
           "host": "www.calspia.go.kr",
@@ -623,21 +623,21 @@
     },
     {
       "organization": "식품의약품안전처",
-      "api_count": 392,
-      "operation_api_count": 392,
-      "operation_count": 648,
+      "api_count": 393,
+      "operation_api_count": 393,
+      "operation_count": 649,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 515,
+      "approval_required_operations": 516,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 363
+          "count": 364
         },
         {
           "key": "external_endpoint",
@@ -651,19 +651,19 @@
         },
         {
           "key": "builtin",
-          "count": 363
+          "count": 364
         }
       ],
       "top_categories": [
         {
           "category": "식품건강",
-          "operation_count": 648
+          "operation_count": 649
         }
       ],
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 363
+          "operation_count": 364
         },
         {
           "host": "www.foodsafetykorea.go.kr",
@@ -841,6 +841,68 @@
       ]
     },
     {
+      "organization": "부산광역시",
+      "api_count": 320,
+      "operation_api_count": 320,
+      "operation_count": 397,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 74,
+      "no_endpoint_operations": 1,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 396
+        },
+        {
+          "key": "no_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 396
+        },
+        {
+          "key": "not_applicable",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 103
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 61
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 52
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 49
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 34
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 396
+        }
+      ]
+    },
+    {
       "organization": "제주특별자치도",
       "api_count": 171,
       "operation_api_count": 171,
@@ -1003,21 +1065,21 @@
     },
     {
       "organization": "농촌진흥청",
-      "api_count": 136,
-      "operation_api_count": 136,
-      "operation_count": 363,
+      "api_count": 139,
+      "operation_api_count": 139,
+      "operation_count": 370,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 243,
+      "approval_required_operations": 250,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 21
+          "count": 28
         },
         {
           "key": "external_endpoint",
@@ -1031,7 +1093,7 @@
         },
         {
           "key": "builtin",
-          "count": 21
+          "count": 28
         },
         {
           "key": "missing",
@@ -1041,7 +1103,7 @@
       "top_categories": [
         {
           "category": "농축수산",
-          "operation_count": 363
+          "operation_count": 370
         }
       ],
       "top_hosts": [
@@ -1056,7 +1118,7 @@
         },
         {
           "host": "apis.data.go.kr",
-          "operation_count": 21
+          "operation_count": 28
         },
         {
           "host": "nongsaro.go.kr",
@@ -1083,22 +1145,89 @@
       ]
     },
     {
-      "organization": "공정거래위원회",
-      "api_count": 250,
-      "operation_api_count": 250,
-      "operation_count": 353,
+      "organization": "성평등가족부",
+      "api_count": 287,
+      "operation_api_count": 287,
+      "operation_count": 362,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 301,
+      "approval_required_operations": 0,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 295
+          "count": 361
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
+        {
+          "key": "builtin",
+          "count": 361
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "사회복지",
+          "operation_count": 349
+        },
+        {
+          "category": "재난안전",
+          "operation_count": 6
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 4
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 3
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 361
+        },
+        {
+          "host": "api.sexoffender.go.kr",
+          "operation_count": 1,
+          "adapter": "sexoffender",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "공정거래위원회",
+      "api_count": 257,
+      "operation_api_count": 257,
+      "operation_count": 360,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 308,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 302
         },
         {
           "key": "external_endpoint",
@@ -1112,13 +1241,13 @@
         },
         {
           "key": "builtin",
-          "count": 295
+          "count": 302
         }
       ],
       "top_categories": [
         {
           "category": "산업고용",
-          "operation_count": 155
+          "operation_count": 162
         },
         {
           "category": "재정금융",
@@ -1132,7 +1261,7 @@
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 295
+          "operation_count": 302
         },
         {
           "host": "www.consumer.go.kr",
@@ -1219,151 +1348,22 @@
       ]
     },
     {
-      "organization": "성평등가족부",
-      "api_count": 273,
-      "operation_api_count": 273,
-      "operation_count": 348,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 347
-        },
-        {
-          "key": "external_endpoint",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 1
-        },
-        {
-          "key": "builtin",
-          "count": 347
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "사회복지",
-          "operation_count": 335
-        },
-        {
-          "category": "재난안전",
-          "operation_count": 6
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 4
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 3
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 347
-        },
-        {
-          "host": "api.sexoffender.go.kr",
-          "operation_count": 1,
-          "adapter": "sexoffender",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
-      "organization": "부산광역시",
-      "api_count": 259,
-      "operation_api_count": 259,
-      "operation_count": 336,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 74,
-      "no_endpoint_operations": 1,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 335
-        },
-        {
-          "key": "no_endpoint",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 335
-        },
-        {
-          "key": "not_applicable",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "문화관광",
-          "operation_count": 97
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 47
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 41
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 37
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 28
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 335
-        }
-      ]
-    },
-    {
       "organization": "한국산업인력공단",
-      "api_count": 230,
-      "operation_api_count": 230,
-      "operation_count": 317,
+      "api_count": 234,
+      "operation_api_count": 234,
+      "operation_count": 321,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 181,
+      "approval_required_operations": 184,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 167
+          "count": 171
         },
         {
           "key": "external_endpoint",
@@ -1377,7 +1377,7 @@
         },
         {
           "key": "builtin",
-          "count": 167
+          "count": 171
         },
         {
           "key": "missing",
@@ -1387,11 +1387,11 @@
       "top_categories": [
         {
           "category": "교육",
-          "operation_count": 195
+          "operation_count": 197
         },
         {
           "category": "산업고용",
-          "operation_count": 65
+          "operation_count": 67
         },
         {
           "category": "공공행정",
@@ -1401,7 +1401,7 @@
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 167
+          "operation_count": 171
         },
         {
           "host": "openapi.q-net.or.kr",
@@ -1745,6 +1745,52 @@
       ]
     },
     {
+      "organization": "한국마사회",
+      "api_count": 229,
+      "operation_api_count": 229,
+      "operation_count": 229,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 227,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 229
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 229
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 225
+        },
+        {
+          "category": "교육",
+          "operation_count": 2
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 229
+        }
+      ]
+    },
+    {
       "organization": "기상청",
       "api_count": 89,
       "operation_api_count": 89,
@@ -1888,86 +1934,40 @@
       ]
     },
     {
-      "organization": "한국마사회",
-      "api_count": 223,
-      "operation_api_count": 223,
-      "operation_count": 223,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 221,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 223
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 223
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 219
-        },
-        {
-          "category": "교육",
-          "operation_count": 2
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 223
-        }
-      ]
-    },
-    {
       "organization": "한국관광공사",
-      "api_count": 28,
-      "operation_api_count": 28,
-      "operation_count": 213,
+      "api_count": 29,
+      "operation_api_count": 29,
+      "operation_count": 218,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 212,
+      "approval_required_operations": 217,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 213
+          "count": 218
         }
       ],
       "by_adapter_status": [
         {
           "key": "builtin",
-          "count": 213
+          "count": 218
         }
       ],
       "top_categories": [
         {
           "category": "문화관광",
-          "operation_count": 213
+          "operation_count": 218
         }
       ],
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 213
+          "operation_count": 218
         }
       ]
     },
@@ -2010,10 +2010,10 @@
       ]
     },
     {
-      "organization": "전라남도",
-      "api_count": 109,
-      "operation_api_count": 109,
-      "operation_count": 175,
+      "organization": "전남광주통합특별시",
+      "api_count": 111,
+      "operation_api_count": 111,
+      "operation_count": 185,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
@@ -2025,21 +2025,13 @@
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 174
-        },
-        {
-          "key": "external_endpoint",
-          "count": 1
+          "count": 185
         }
       ],
       "by_adapter_status": [
         {
-          "key": "adapter",
-          "count": 1
-        },
-        {
           "key": "builtin",
-          "count": 174
+          "count": 185
         }
       ],
       "top_categories": [
@@ -2067,16 +2059,7 @@
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 174
-        },
-        {
-          "host": "jeonnam.openapi.redtable.global",
-          "operation_count": 1,
-          "adapter": "jeonnam-redtable",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
+          "operation_count": 185
         }
       ]
     },
@@ -2277,6 +2260,61 @@
           "host": "map.seoul.go.kr",
           "operation_count": 2,
           "adapter": "seoul-map",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "한국환경공단",
+      "api_count": 75,
+      "operation_api_count": 75,
+      "operation_count": 161,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 50,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 160
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        },
+        {
+          "key": "builtin",
+          "count": 160
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "환경기상",
+          "operation_count": 161
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 160
+        },
+        {
+          "host": "www.recycling-info.or.kr",
+          "operation_count": 1,
+          "adapter": "recycling-info",
           "adapter_status": "registered",
           "capabilities": [
             "verification"
@@ -2544,61 +2582,6 @@
       ]
     },
     {
-      "organization": "한국환경공단",
-      "api_count": 66,
-      "operation_api_count": 66,
-      "operation_count": 152,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 41,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 151
-        },
-        {
-          "key": "external_endpoint",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 1
-        },
-        {
-          "key": "builtin",
-          "count": 151
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "환경기상",
-          "operation_count": 152
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 151
-        },
-        {
-          "host": "www.recycling-info.or.kr",
-          "operation_count": 1,
-          "adapter": "recycling-info",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
       "organization": "대전광역시",
       "api_count": 81,
       "operation_api_count": 81,
@@ -2796,7 +2779,7 @@
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 3,
+      "approval_required_operations": 0,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -3023,6 +3006,44 @@
       ]
     },
     {
+      "organization": "서울올림픽기념국민체육진흥공단",
+      "api_count": 74,
+      "operation_api_count": 74,
+      "operation_count": 115,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 115
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 115
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 115
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 115
+        }
+      ]
+    },
+    {
       "organization": "농림수산식품교육문화정보원",
       "api_count": 75,
       "operation_api_count": 75,
@@ -3095,44 +3116,6 @@
       ]
     },
     {
-      "organization": "서울올림픽기념국민체육진흥공단",
-      "api_count": 70,
-      "operation_api_count": 70,
-      "operation_count": 111,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 1,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 111
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 111
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "문화관광",
-          "operation_count": 111
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 111
-        }
-      ]
-    },
-    {
       "organization": "한국예탁결제원",
       "api_count": 10,
       "operation_api_count": 10,
@@ -3143,7 +3126,7 @@
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 110,
+      "approval_required_operations": 0,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -3167,6 +3150,44 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 110
+        }
+      ]
+    },
+    {
+      "organization": "농촌진흥청 국립농업과학원",
+      "api_count": 30,
+      "operation_api_count": 30,
+      "operation_count": 107,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 3,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 107
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 107
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 107
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 107
         }
       ]
     },
@@ -3286,44 +3307,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 103
-        }
-      ]
-    },
-    {
-      "organization": "농촌진흥청 국립농업과학원",
-      "api_count": 27,
-      "operation_api_count": 27,
-      "operation_count": 102,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 3,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 102
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 102
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 102
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 102
         }
       ]
     },
@@ -3690,6 +3673,129 @@
           "adapter": "garak",
           "adapter_status": "registered",
           "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "인천국제공항공사",
+      "api_count": 49,
+      "operation_api_count": 49,
+      "operation_count": 82,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 39,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 82
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 82
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 79
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 3
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 82
+        }
+      ]
+    },
+    {
+      "organization": "농림축산식품부 국립농산물품질관리원",
+      "api_count": 31,
+      "operation_api_count": 31,
+      "operation_count": 82,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 57,
+      "no_endpoint_operations": 9,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 15
+        },
+        {
+          "key": "external_endpoint",
+          "count": 58
+        },
+        {
+          "key": "no_endpoint",
+          "count": 9
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 58
+        },
+        {
+          "key": "builtin",
+          "count": 15
+        },
+        {
+          "key": "not_applicable",
+          "count": 9
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 54
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 26
+        },
+        {
+          "category": "식품건강",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "data.mafra.go.kr",
+          "operation_count": 49,
+          "adapter": "mafra",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 15
+        },
+        {
+          "host": "data.naqs.go.kr",
+          "operation_count": 9,
+          "adapter": "naqs",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
             "verification"
           ]
         }
@@ -4186,87 +4292,6 @@
       ]
     },
     {
-      "organization": "농림축산식품부 국립농산물품질관리원",
-      "api_count": 29,
-      "operation_api_count": 29,
-      "operation_count": 72,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 57,
-      "no_endpoint_operations": 9,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 5
-        },
-        {
-          "key": "external_endpoint",
-          "count": 58
-        },
-        {
-          "key": "no_endpoint",
-          "count": 9
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 58
-        },
-        {
-          "key": "builtin",
-          "count": 5
-        },
-        {
-          "key": "not_applicable",
-          "count": 9
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 53
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 17
-        },
-        {
-          "category": "식품건강",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "data.mafra.go.kr",
-          "operation_count": 49,
-          "adapter": "mafra",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
-          "host": "data.naqs.go.kr",
-          "operation_count": 9,
-          "adapter": "naqs",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 5
-        }
-      ]
-    },
-    {
       "organization": "서울교통공사",
       "api_count": 25,
       "operation_api_count": 25,
@@ -4728,48 +4753,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 70
-        }
-      ]
-    },
-    {
-      "organization": "인천국제공항공사",
-      "api_count": 41,
-      "operation_api_count": 41,
-      "operation_count": 69,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 26,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 69
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 69
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 66
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 3
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 69
         }
       ]
     },
@@ -5318,6 +5301,98 @@
       ]
     },
     {
+      "organization": "농촌진흥청 국립원예특작과학원",
+      "api_count": 23,
+      "operation_api_count": 23,
+      "operation_count": 58,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 38,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 58
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 58
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 58
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 58
+        }
+      ]
+    },
+    {
+      "organization": "행정안전부 한국지역정보개발원",
+      "api_count": 44,
+      "operation_api_count": 44,
+      "operation_count": 57,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 16,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 57
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 57
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 39
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 8
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 4
+        },
+        {
+          "category": "문화관광",
+          "operation_count": 3
+        },
+        {
+          "category": "교육",
+          "operation_count": 3
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 57
+        }
+      ]
+    },
+    {
       "organization": "농림축산식품부 농림축산검역본부",
       "api_count": 25,
       "operation_api_count": 25,
@@ -5397,44 +5472,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "농촌진흥청 국립원예특작과학원",
-      "api_count": 22,
-      "operation_api_count": 22,
-      "operation_count": 57,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 37,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 57
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 57
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 57
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 57
         }
       ]
     },
@@ -5571,6 +5608,60 @@
       ]
     },
     {
+      "organization": "경상북도 포항시",
+      "api_count": 53,
+      "operation_api_count": 53,
+      "operation_count": 53,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 53,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 53
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 53
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 24
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 18
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 6
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 2
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 53
+        }
+      ]
+    },
+    {
       "organization": "경상북도 경주시",
       "api_count": 49,
       "operation_api_count": 49,
@@ -5621,60 +5712,6 @@
         {
           "host": "its.gyeongju.go.kr:81",
           "operation_count": 3
-        }
-      ]
-    },
-    {
-      "organization": "경상북도 포항시",
-      "api_count": 52,
-      "operation_api_count": 52,
-      "operation_count": 52,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 52,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 52
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 52
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 24
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 17
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 6
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 2
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 52
         }
       ]
     },
@@ -6175,60 +6212,6 @@
       ]
     },
     {
-      "organization": "행정안전부 한국지역정보개발원",
-      "api_count": 38,
-      "operation_api_count": 38,
-      "operation_count": 51,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 14,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 51
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 51
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 33
-        },
-        {
-          "category": "교통물류",
-          "operation_count": 8
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 4
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 3
-        },
-        {
-          "category": "교육",
-          "operation_count": 3
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 51
-        }
-      ]
-    },
-    {
       "organization": "해양수산부 국립수산물품질관리원",
       "api_count": 40,
       "operation_api_count": 40,
@@ -6268,6 +6251,69 @@
           "capabilities": [
             "verification"
           ]
+        }
+      ]
+    },
+    {
+      "organization": "한국사회보장정보원",
+      "api_count": 35,
+      "operation_api_count": 35,
+      "operation_count": 50,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 22,
+      "no_endpoint_operations": 5,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 22
+        },
+        {
+          "key": "external_endpoint",
+          "count": 23
+        },
+        {
+          "key": "no_endpoint",
+          "count": 5
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 23
+        },
+        {
+          "key": "builtin",
+          "count": 22
+        },
+        {
+          "key": "not_applicable",
+          "count": 5
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "사회복지",
+          "operation_count": 50
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "info.childcare.go.kr",
+          "operation_count": 23,
+          "adapter": "childcare-info",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 22
         }
       ]
     },
@@ -6480,10 +6526,10 @@
       ]
     },
     {
-      "organization": "전라남도 광양시",
-      "api_count": 42,
-      "operation_api_count": 42,
-      "operation_count": 47,
+      "organization": "전남광주통합특별시 광양시",
+      "api_count": 41,
+      "operation_api_count": 41,
+      "operation_count": 46,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
@@ -6495,13 +6541,13 @@
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 47
+          "count": 46
         }
       ],
       "by_adapter_status": [
         {
           "key": "builtin",
-          "count": 47
+          "count": 46
         }
       ],
       "top_categories": [
@@ -6511,7 +6557,7 @@
         },
         {
           "category": "문화관광",
-          "operation_count": 12
+          "operation_count": 11
         },
         {
           "category": "사회복지",
@@ -6529,14 +6575,14 @@
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 47
+          "operation_count": 46
         }
       ]
     },
     {
-      "organization": "한국사회보장정보원",
-      "api_count": 32,
-      "operation_api_count": 32,
+      "organization": "한국산업안전보건공단",
+      "api_count": 29,
+      "operation_api_count": 29,
       "operation_count": 45,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
@@ -6544,55 +6590,34 @@
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 22,
-      "no_endpoint_operations": 5,
+      "approval_required_operations": 38,
+      "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 17
-        },
-        {
-          "key": "external_endpoint",
-          "count": 23
-        },
-        {
-          "key": "no_endpoint",
-          "count": 5
+          "count": 45
         }
       ],
       "by_adapter_status": [
         {
-          "key": "adapter",
-          "count": 23
-        },
-        {
           "key": "builtin",
-          "count": 17
-        },
-        {
-          "key": "not_applicable",
-          "count": 5
+          "count": 45
         }
       ],
       "top_categories": [
         {
-          "category": "사회복지",
-          "operation_count": 45
+          "category": "재난안전",
+          "operation_count": 41
+        },
+        {
+          "category": "산업고용",
+          "operation_count": 4
         }
       ],
       "top_hosts": [
         {
-          "host": "info.childcare.go.kr",
-          "operation_count": 23,
-          "adapter": "childcare-info",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        },
-        {
           "host": "apis.data.go.kr",
-          "operation_count": 17
+          "operation_count": 45
         }
       ]
     },
@@ -6665,6 +6690,66 @@
       ]
     },
     {
+      "organization": "한국문화관광연구원",
+      "api_count": 11,
+      "operation_api_count": 11,
+      "operation_count": 45,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 19
+        },
+        {
+          "key": "external_endpoint",
+          "count": 7
+        },
+        {
+          "key": "service_root",
+          "count": 19
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 26
+        },
+        {
+          "key": "builtin",
+          "count": 19
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 45
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "openapi.tour.go.kr",
+          "operation_count": 26,
+          "adapter": "tour",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 19
+        }
+      ]
+    },
+    {
       "organization": "방위사업청",
       "api_count": 7,
       "operation_api_count": 7,
@@ -6699,6 +6784,60 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 45
+        }
+      ]
+    },
+    {
+      "organization": "전북특별자치도",
+      "api_count": 33,
+      "operation_api_count": 33,
+      "operation_count": 44,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 11,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 44
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 44
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 26
+        },
+        {
+          "category": "교통물류",
+          "operation_count": 7
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 3
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 2
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 44
         }
       ]
     },
@@ -6757,56 +6896,57 @@
       ]
     },
     {
-      "organization": "전북특별자치도",
-      "api_count": 31,
-      "operation_api_count": 31,
-      "operation_count": 42,
+      "organization": "한국공항공사",
+      "api_count": 29,
+      "operation_api_count": 29,
+      "operation_count": 43,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 11,
+      "approval_required_operations": 0,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 42
+          "count": 37
+        },
+        {
+          "key": "external_endpoint",
+          "count": 6
         }
       ],
       "by_adapter_status": [
         {
+          "key": "adapter",
+          "count": 6
+        },
+        {
           "key": "builtin",
-          "count": 42
+          "count": 37
         }
       ],
       "top_categories": [
         {
-          "category": "문화관광",
-          "operation_count": 26
-        },
-        {
           "category": "교통물류",
-          "operation_count": 6
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 3
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 2
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 2
+          "operation_count": 43
         }
       ],
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 42
+          "operation_count": 37
+        },
+        {
+          "host": "openapi.airport.co.kr",
+          "operation_count": 6,
+          "adapter": "airport",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
         }
       ]
     },
@@ -6910,48 +7050,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "한국산업안전보건공단",
-      "api_count": 26,
-      "operation_api_count": 26,
-      "operation_count": 42,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 35,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 42
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 42
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재난안전",
-          "operation_count": 38
-        },
-        {
-          "category": "산업고용",
-          "operation_count": 4
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 42
         }
       ]
     },
@@ -7188,61 +7286,6 @@
       ]
     },
     {
-      "organization": "한국공항공사",
-      "api_count": 25,
-      "operation_api_count": 25,
-      "operation_count": 39,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 33
-        },
-        {
-          "key": "external_endpoint",
-          "count": 6
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 6
-        },
-        {
-          "key": "builtin",
-          "count": 33
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 39
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 33
-        },
-        {
-          "host": "openapi.airport.co.kr",
-          "operation_count": 6,
-          "adapter": "airport",
-          "adapter_status": "registered",
-          "capabilities": [
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
       "organization": "소방청",
       "api_count": 8,
       "operation_api_count": 8,
@@ -7290,33 +7333,33 @@
     },
     {
       "organization": "한국동서발전(주)",
-      "api_count": 36,
-      "operation_api_count": 36,
-      "operation_count": 36,
+      "api_count": 37,
+      "operation_api_count": 37,
+      "operation_count": 37,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 3,
+      "approval_required_operations": 4,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 36
+          "count": 37
         }
       ],
       "by_adapter_status": [
         {
           "key": "builtin",
-          "count": 36
+          "count": 37
         }
       ],
       "top_categories": [
         {
           "category": "산업고용",
-          "operation_count": 21
+          "operation_count": 22
         },
         {
           "category": "환경기상",
@@ -7338,7 +7381,7 @@
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 36
+          "operation_count": 37
         }
       ]
     },
@@ -7575,6 +7618,72 @@
       ]
     },
     {
+      "organization": "한국토지주택공사",
+      "api_count": 32,
+      "operation_api_count": 32,
+      "operation_count": 32,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 4,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 25
+        },
+        {
+          "key": "external_endpoint",
+          "count": 7
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 7
+        },
+        {
+          "key": "builtin",
+          "count": 25
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "국토관리",
+          "operation_count": 32
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 25
+        },
+        {
+          "host": "openapi.ebid.lh.or.kr",
+          "operation_count": 6,
+          "adapter": "lh-ebid",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "data.myhome.go.kr:443",
+          "operation_count": 1,
+          "adapter": "myhome",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
       "organization": "한국남부발전(주)",
       "api_count": 31,
       "operation_api_count": 31,
@@ -7714,6 +7823,66 @@
       ]
     },
     {
+      "organization": "한국원자력환경공단",
+      "api_count": 26,
+      "operation_api_count": 26,
+      "operation_count": 30,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 20,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 15
+        },
+        {
+          "key": "external_endpoint",
+          "count": 15
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 15
+        },
+        {
+          "key": "builtin",
+          "count": 15
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 28
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.korad.or.kr",
+          "operation_count": 15,
+          "adapter": "korad",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 15
+        }
+      ]
+    },
+    {
       "organization": "한국식품안전관리인증원",
       "api_count": 29,
       "operation_api_count": 29,
@@ -7752,6 +7921,62 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 29
+        }
+      ]
+    },
+    {
+      "organization": "한국전력거래소",
+      "api_count": 29,
+      "operation_api_count": 29,
+      "operation_count": 29,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 29,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 23
+        },
+        {
+          "key": "external_endpoint",
+          "count": 6
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 6
+        },
+        {
+          "key": "builtin",
+          "count": 23
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 29
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 23
+        },
+        {
+          "host": "openapi.kpx.or.kr",
+          "operation_count": 6,
+          "adapter": "kpx",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
         }
       ]
     },
@@ -8083,6 +8308,86 @@
       ]
     },
     {
+      "organization": "농촌진흥청 국립축산과학원",
+      "api_count": 27,
+      "operation_api_count": 27,
+      "operation_count": 28,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 15,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 28
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 28
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "농축수산",
+          "operation_count": 28
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 28
+        }
+      ]
+    },
+    {
+      "organization": "한국주택금융공사",
+      "api_count": 25,
+      "operation_api_count": 25,
+      "operation_count": 28,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 2,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 28
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 28
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재정금융",
+          "operation_count": 27
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 28
+        }
+      ]
+    },
+    {
       "organization": "한국과학기술정보연구원",
       "api_count": 25,
       "operation_api_count": 25,
@@ -8275,92 +8580,6 @@
       ]
     },
     {
-      "organization": "농촌진흥청 국립축산과학원",
-      "api_count": 25,
-      "operation_api_count": 25,
-      "operation_count": 26,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 13,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 26
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 26
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "농축수산",
-          "operation_count": 26
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 26
-        }
-      ]
-    },
-    {
-      "organization": "한국문화관광연구원",
-      "api_count": 7,
-      "operation_api_count": 7,
-      "operation_count": 26,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 7
-        },
-        {
-          "key": "service_root",
-          "count": 19
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 26
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 26
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "openapi.tour.go.kr",
-          "operation_count": 26,
-          "adapter": "tour",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
       "organization": "산업통상부",
       "api_count": 6,
       "operation_api_count": 5,
@@ -8399,7 +8618,7 @@
       ]
     },
     {
-      "organization": "한국전력거래소",
+      "organization": "한국해양교통안전공단",
       "api_count": 25,
       "operation_api_count": 25,
       "operation_count": 25,
@@ -8414,109 +8633,29 @@
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 19
-        },
-        {
-          "key": "external_endpoint",
-          "count": 6
+          "count": 25
         }
       ],
       "by_adapter_status": [
         {
-          "key": "adapter",
-          "count": 6
-        },
-        {
           "key": "builtin",
-          "count": 19
+          "count": 25
         }
       ],
       "top_categories": [
         {
-          "category": "산업고용",
-          "operation_count": 25
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
+          "category": "교통물류",
           "operation_count": 19
         },
         {
-          "host": "openapi.kpx.or.kr",
-          "operation_count": 6,
-          "adapter": "kpx",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
-      "organization": "한국토지주택공사",
-      "api_count": 25,
-      "operation_api_count": 25,
-      "operation_count": 25,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 3,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 18
-        },
-        {
-          "key": "external_endpoint",
-          "count": 7
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 7
-        },
-        {
-          "key": "builtin",
-          "count": 18
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "국토관리",
-          "operation_count": 25
+          "category": "재난안전",
+          "operation_count": 6
         }
       ],
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
-          "operation_count": 18
-        },
-        {
-          "host": "openapi.ebid.lh.or.kr",
-          "operation_count": 6,
-          "adapter": "lh-ebid",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "data.myhome.go.kr:443",
-          "operation_count": 1,
-          "adapter": "myhome",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
+          "operation_count": 25
         }
       ]
     },
@@ -8563,66 +8702,6 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 25
-        }
-      ]
-    },
-    {
-      "organization": "한국원자력환경공단",
-      "api_count": 21,
-      "operation_api_count": 21,
-      "operation_count": 25,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 16,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 10
-        },
-        {
-          "key": "external_endpoint",
-          "count": 15
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 15
-        },
-        {
-          "key": "builtin",
-          "count": 10
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
-          "operation_count": 23
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "www.korad.or.kr",
-          "operation_count": 15,
-          "adapter": "korad",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 10
         }
       ]
     },
@@ -8682,6 +8761,44 @@
           "capabilities": [
             "verification"
           ]
+        }
+      ]
+    },
+    {
+      "organization": "질병관리청",
+      "api_count": 10,
+      "operation_api_count": 7,
+      "operation_count": 25,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 25
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 25
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "보건의료",
+          "operation_count": 25
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 25
         }
       ]
     },
@@ -8766,48 +8883,6 @@
       ]
     },
     {
-      "organization": "한국해양교통안전공단",
-      "api_count": 24,
-      "operation_api_count": 24,
-      "operation_count": 24,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 24,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 24
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 24
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 18
-        },
-        {
-          "category": "재난안전",
-          "operation_count": 6
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 24
-        }
-      ]
-    },
-    {
       "organization": "한국수목원정원관리원",
       "api_count": 16,
       "operation_api_count": 16,
@@ -8877,44 +8952,6 @@
           "capabilities": [
             "verification"
           ]
-        }
-      ]
-    },
-    {
-      "organization": "질병관리청",
-      "api_count": 9,
-      "operation_api_count": 6,
-      "operation_count": 24,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 24
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 24
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "보건의료",
-          "operation_count": 24
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 24
         }
       ]
     },
@@ -9209,7 +9246,7 @@
       ]
     },
     {
-      "organization": "전라남도 여수시",
+      "organization": "전남광주통합특별시 여수시",
       "api_count": 9,
       "operation_api_count": 9,
       "operation_count": 22,
@@ -9481,6 +9518,56 @@
       ]
     },
     {
+      "organization": "한국지역난방공사",
+      "api_count": 20,
+      "operation_api_count": 20,
+      "operation_count": 20,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 20
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 20
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 8
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 8
+        },
+        {
+          "category": "재난안전",
+          "operation_count": 2
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 20
+        }
+      ]
+    },
+    {
       "organization": "대구경북과학기술원",
       "api_count": 17,
       "operation_api_count": 17,
@@ -9523,7 +9610,7 @@
       ]
     },
     {
-      "organization": "전라남도 곡성군",
+      "organization": "전남광주통합특별시 곡성군",
       "api_count": 14,
       "operation_api_count": 14,
       "operation_count": 20,
@@ -9607,48 +9694,6 @@
       ]
     },
     {
-      "organization": "한국주택금융공사",
-      "api_count": 16,
-      "operation_api_count": 16,
-      "operation_count": 19,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 19
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 19
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재정금융",
-          "operation_count": 18
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 19
-        }
-      ]
-    },
-    {
       "organization": "한국국토정보공사",
       "api_count": 2,
       "operation_api_count": 1,
@@ -9721,6 +9766,78 @@
         {
           "host": "apis.data.go.kr",
           "operation_count": 19
+        }
+      ]
+    },
+    {
+      "organization": "부산교통공사",
+      "api_count": 18,
+      "operation_api_count": 18,
+      "operation_count": 18,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 1,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 9
+        },
+        {
+          "key": "external_endpoint",
+          "count": 8
+        },
+        {
+          "key": "no_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 8
+        },
+        {
+          "key": "builtin",
+          "count": 9
+        },
+        {
+          "key": "not_applicable",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 12
+        },
+        {
+          "category": "환경기상",
+          "operation_count": 4
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 9
+        },
+        {
+          "host": "data.humetro.busan.kr",
+          "operation_count": 8,
+          "adapter": "humetro",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
         }
       ]
     },
@@ -10150,56 +10267,6 @@
       ]
     },
     {
-      "organization": "한국지역난방공사",
-      "api_count": 16,
-      "operation_api_count": 16,
-      "operation_count": 16,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 1,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 16
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 16
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
-          "operation_count": 8
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 5
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 2
-        },
-        {
-          "category": "재난안전",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 16
-        }
-      ]
-    },
-    {
       "organization": "한국천문연구원",
       "api_count": 7,
       "operation_api_count": 7,
@@ -10379,9 +10446,9 @@
     },
     {
       "organization": "대전도시공사",
-      "api_count": 14,
-      "operation_api_count": 14,
-      "operation_count": 14,
+      "api_count": 15,
+      "operation_api_count": 15,
+      "operation_count": 15,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
       "verified": 0,
@@ -10393,13 +10460,13 @@
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 14
+          "count": 15
         }
       ],
       "by_adapter_status": [
         {
           "key": "builtin",
-          "count": 14
+          "count": 15
         }
       ],
       "top_categories": [
@@ -10427,7 +10494,49 @@
       "top_hosts": [
         {
           "host": "apis.data.go.kr",
+          "operation_count": 15
+        }
+      ]
+    },
+    {
+      "organization": "한국장애인고용공단",
+      "api_count": 14,
+      "operation_api_count": 14,
+      "operation_count": 15,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 15,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 15
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 15
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
           "operation_count": 14
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 15
         }
       ]
     },
@@ -10554,6 +10663,60 @@
       ]
     },
     {
+      "organization": "경상북도",
+      "api_count": 13,
+      "operation_api_count": 13,
+      "operation_count": 14,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 7,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 14
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 14
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
+          "operation_count": 6
+        },
+        {
+          "category": "재난안전",
+          "operation_count": 2
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 2
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 2
+        },
+        {
+          "category": "보건의료",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 14
+        }
+      ]
+    },
+    {
       "organization": "한국저작권위원회",
       "api_count": 5,
       "operation_api_count": 4,
@@ -10647,102 +10810,6 @@
         },
         {
           "category": "문화관광",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 13
-        }
-      ]
-    },
-    {
-      "organization": "경상북도",
-      "api_count": 12,
-      "operation_api_count": 12,
-      "operation_count": 13,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 6,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 13
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 13
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 6
-        },
-        {
-          "category": "재난안전",
-          "operation_count": 2
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 2
-        },
-        {
-          "category": "사회복지",
-          "operation_count": 2
-        },
-        {
-          "category": "보건의료",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 13
-        }
-      ]
-    },
-    {
-      "organization": "한국장애인고용공단",
-      "api_count": 12,
-      "operation_api_count": 12,
-      "operation_count": 13,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 13,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 13
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 13
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
-          "operation_count": 12
-        },
-        {
-          "category": "공공행정",
           "operation_count": 1
         }
       ],
@@ -10922,7 +10989,7 @@
       ]
     },
     {
-      "organization": "전라남도 보성군",
+      "organization": "전남광주통합특별시 보성군",
       "api_count": 12,
       "operation_api_count": 12,
       "operation_count": 12,
@@ -11170,6 +11237,44 @@
       ]
     },
     {
+      "organization": "주식회사한국중소벤처기업유통원",
+      "api_count": 8,
+      "operation_api_count": 8,
+      "operation_count": 11,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 11
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 11
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 11
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 11
+        }
+      ]
+    },
+    {
       "organization": "창업진흥원",
       "api_count": 6,
       "operation_api_count": 6,
@@ -11198,48 +11303,6 @@
         {
           "category": "산업고용",
           "operation_count": 11
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 11
-        }
-      ]
-    },
-    {
-      "organization": "광주광역시",
-      "api_count": 5,
-      "operation_api_count": 3,
-      "operation_count": 11,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 1,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 11
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 11
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 10
-        },
-        {
-          "category": "문화관광",
-          "operation_count": 1
         }
       ],
       "top_hosts": [
@@ -11346,6 +11409,44 @@
       ]
     },
     {
+      "organization": "한국무역보험공사",
+      "api_count": 10,
+      "operation_api_count": 10,
+      "operation_count": 10,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 10,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 10
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 10
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "재정금융",
+          "operation_count": 10
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 10
+        }
+      ]
+    },
+    {
       "organization": "한국청소년활동진흥원",
       "api_count": 8,
       "operation_api_count": 8,
@@ -11373,44 +11474,6 @@
       "top_categories": [
         {
           "category": "사회복지",
-          "operation_count": 10
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 10
-        }
-      ]
-    },
-    {
-      "organization": "주식회사한국중소벤처기업유통원",
-      "api_count": 7,
-      "operation_api_count": 7,
-      "operation_count": 10,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 10
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 10
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "산업고용",
           "operation_count": 10
         }
       ],
@@ -11704,66 +11767,6 @@
       ]
     },
     {
-      "organization": "부산교통공사",
-      "api_count": 9,
-      "operation_api_count": 9,
-      "operation_count": 9,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 1,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 8
-        },
-        {
-          "key": "no_endpoint",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 8
-        },
-        {
-          "key": "not_applicable",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교통물류",
-          "operation_count": 6
-        },
-        {
-          "category": "환경기상",
-          "operation_count": 2
-        },
-        {
-          "category": "공공행정",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "data.humetro.busan.kr",
-          "operation_count": 8,
-          "adapter": "humetro",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
       "organization": "서울특별시 양천구",
       "api_count": 9,
       "operation_api_count": 9,
@@ -11932,6 +11935,60 @@
       ]
     },
     {
+      "organization": "한국소비자원",
+      "api_count": 3,
+      "operation_api_count": 3,
+      "operation_count": 9,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 5
+        },
+        {
+          "key": "external_endpoint",
+          "count": 4
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 5
+        },
+        {
+          "key": "missing",
+          "count": 4
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "공공행정",
+          "operation_count": 8
+        },
+        {
+          "category": "재난안전",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 5
+        },
+        {
+          "host": "openapi.price.go.kr",
+          "operation_count": 4
+        }
+      ]
+    },
+    {
       "organization": "한국식품연구원",
       "api_count": 1,
       "operation_api_count": 1,
@@ -12002,6 +12059,44 @@
         {
           "category": "통일외교안보",
           "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 8
+        }
+      ]
+    },
+    {
+      "organization": "(주)강원랜드",
+      "api_count": 8,
+      "operation_api_count": 8,
+      "operation_count": 8,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 8
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 8
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 8
         }
       ],
       "top_hosts": [
@@ -12124,44 +12219,6 @@
         {
           "category": "교육",
           "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 8
-        }
-      ]
-    },
-    {
-      "organization": "한국무역보험공사",
-      "api_count": 8,
-      "operation_api_count": 8,
-      "operation_count": 8,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 8,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 8
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 8
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "재정금융",
-          "operation_count": 8
         }
       ],
       "top_hosts": [
@@ -12519,6 +12576,90 @@
         {
           "category": "문화관광",
           "operation_count": 7
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 7
+        }
+      ]
+    },
+    {
+      "organization": "법무부",
+      "api_count": 7,
+      "operation_api_count": 7,
+      "operation_count": 7,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 7,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 7
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 7
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "법률",
+          "operation_count": 7
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 7
+        }
+      ]
+    },
+    {
+      "organization": "한국가스공사",
+      "api_count": 7,
+      "operation_api_count": 7,
+      "operation_count": 7,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 5,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 7
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 7
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 5
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 1
+        },
+        {
+          "category": "사회복지",
+          "operation_count": 1
         }
       ],
       "top_hosts": [
@@ -12933,44 +13074,6 @@
       ]
     },
     {
-      "organization": "법무부",
-      "api_count": 6,
-      "operation_api_count": 6,
-      "operation_count": 6,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 6,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 6
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 6
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "법률",
-          "operation_count": 6
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 6
-        }
-      ]
-    },
-    {
       "organization": "우체국금융개발원",
       "api_count": 6,
       "operation_api_count": 6,
@@ -13109,9 +13212,9 @@
       ]
     },
     {
-      "organization": "한국가스공사",
-      "api_count": 6,
-      "operation_api_count": 6,
+      "organization": "공공데이터활용지원센터",
+      "api_count": 4,
+      "operation_api_count": 4,
       "operation_count": 6,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
@@ -13119,34 +13222,102 @@
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 4,
+      "approval_required_operations": 1,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 6
+          "count": 5
+        },
+        {
+          "key": "malformed_endpoint",
+          "count": 1
         }
       ],
       "by_adapter_status": [
         {
           "key": "builtin",
-          "count": 6
+          "count": 5
+        },
+        {
+          "key": "not_applicable",
+          "count": 1
         }
       ],
       "top_categories": [
         {
-          "category": "산업고용",
+          "category": "공공행정",
           "operation_count": 5
         },
         {
-          "category": "공공행정",
+          "category": "교육",
           "operation_count": 1
         }
       ],
       "top_hosts": [
         {
+          "host": "api.odcloud.kr",
+          "operation_count": 3
+        },
+        {
           "host": "apis.data.go.kr",
+          "operation_count": 2
+        }
+      ]
+    },
+    {
+      "organization": "문화체육관광부 국립중앙박물관",
+      "api_count": 3,
+      "operation_api_count": 2,
+      "operation_count": 6,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 3
+        },
+        {
+          "key": "external_endpoint",
+          "count": 3
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 3
+        },
+        {
+          "key": "builtin",
+          "count": 3
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
           "operation_count": 6
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "www.emuseum.go.kr",
+          "operation_count": 3,
+          "adapter": "emuseum",
+          "adapter_status": "registered",
+          "capabilities": [
+            "call",
+            "verification"
+          ]
+        },
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 3
         }
       ]
     },
@@ -13459,63 +13630,9 @@
       ]
     },
     {
-      "organization": "공공데이터활용지원센터",
-      "api_count": 3,
-      "operation_api_count": 3,
-      "operation_count": 5,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 1,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 4
-        },
-        {
-          "key": "malformed_endpoint",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 4
-        },
-        {
-          "key": "not_applicable",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
-          "operation_count": 4
-        },
-        {
-          "category": "교육",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "api.odcloud.kr",
-          "operation_count": 3
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 1
-        }
-      ]
-    },
-    {
-      "organization": "한국소비자원",
-      "api_count": 2,
-      "operation_api_count": 2,
+      "organization": "한국석유관리원",
+      "api_count": 5,
+      "operation_api_count": 5,
       "operation_count": 5,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
@@ -13528,41 +13645,25 @@
       "by_dependency_class": [
         {
           "key": "data_go_kr_gateway",
-          "count": 1
-        },
-        {
-          "key": "external_endpoint",
-          "count": 4
+          "count": 5
         }
       ],
       "by_adapter_status": [
         {
           "key": "builtin",
-          "count": 1
-        },
-        {
-          "key": "missing",
-          "count": 4
+          "count": 5
         }
       ],
       "top_categories": [
         {
-          "category": "공공행정",
-          "operation_count": 4
-        },
-        {
-          "category": "재난안전",
-          "operation_count": 1
+          "category": "산업고용",
+          "operation_count": 5
         }
       ],
       "top_hosts": [
         {
-          "host": "openapi.price.go.kr",
-          "operation_count": 4
-        },
-        {
           "host": "apis.data.go.kr",
-          "operation_count": 1
+          "operation_count": 5
         }
       ]
     },
@@ -13719,44 +13820,6 @@
       ]
     },
     {
-      "organization": "(주)강원랜드",
-      "api_count": 4,
-      "operation_api_count": 4,
-      "operation_count": 4,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 4
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 4
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "문화관광",
-          "operation_count": 4
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 4
-        }
-      ]
-    },
-    {
       "organization": "경기도 김포시",
       "api_count": 4,
       "operation_api_count": 4,
@@ -13877,6 +13940,48 @@
         {
           "category": "과학기술",
           "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 4
+        }
+      ]
+    },
+    {
+      "organization": "문화체육관광부 국립한글박물관",
+      "api_count": 4,
+      "operation_api_count": 4,
+      "operation_count": 4,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 4,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 4
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 4
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 3
+        },
+        {
+          "category": "공공행정",
+          "operation_count": 1
         }
       ],
       "top_hosts": [
@@ -14047,7 +14152,7 @@
       ]
     },
     {
-      "organization": "한국석유관리원",
+      "organization": "한국사학진흥재단",
       "api_count": 4,
       "operation_api_count": 4,
       "operation_count": 4,
@@ -14057,7 +14162,7 @@
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 0,
+      "approval_required_operations": 2,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -14073,7 +14178,7 @@
       ],
       "top_categories": [
         {
-          "category": "산업고용",
+          "category": "교육",
           "operation_count": 4
         }
       ],
@@ -14158,6 +14263,44 @@
       "top_categories": [
         {
           "category": "재정금융",
+          "operation_count": 4
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 4
+        }
+      ]
+    },
+    {
+      "organization": "의료기관평가인증원",
+      "api_count": 2,
+      "operation_api_count": 2,
+      "operation_count": 4,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 4
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 4
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "보건의료",
           "operation_count": 4
         }
       ],
@@ -14568,6 +14711,56 @@
       ]
     },
     {
+      "organization": "서울특별시교육청",
+      "api_count": 3,
+      "operation_api_count": 3,
+      "operation_count": 3,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 2
+        },
+        {
+          "key": "external_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 2
+        },
+        {
+          "key": "missing",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교육",
+          "operation_count": 3
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 2
+        },
+        {
+          "host": "openapi-lib.sen.go.kr",
+          "operation_count": 1
+        }
+      ]
+    },
+    {
       "organization": "충청북도 보은군",
       "api_count": 3,
       "operation_api_count": 3,
@@ -14725,9 +14918,9 @@
       ]
     },
     {
-      "organization": "문화체육관광부 국립중앙박물관",
+      "organization": "재단법인국가생명윤리정책원",
       "api_count": 2,
-      "operation_api_count": 1,
+      "operation_api_count": 2,
       "operation_count": 3,
       "runtime_evidence_count": 0,
       "runtime_evidence_percent": 0.0,
@@ -14735,51 +14928,7 @@
       "failed": 0,
       "skipped": 0,
       "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "external_endpoint",
-          "count": 3
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "adapter",
-          "count": 3
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "문화관광",
-          "operation_count": 3
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "www.emuseum.go.kr",
-          "operation_count": 3,
-          "adapter": "emuseum",
-          "adapter_status": "registered",
-          "capabilities": [
-            "call",
-            "verification"
-          ]
-        }
-      ]
-    },
-    {
-      "organization": "전라남도 순천시",
-      "api_count": 2,
-      "operation_api_count": 1,
-      "operation_count": 3,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
+      "approval_required_operations": 3,
       "no_endpoint_operations": 0,
       "by_dependency_class": [
         {
@@ -14795,7 +14944,7 @@
       ],
       "top_categories": [
         {
-          "category": "교통물류",
+          "category": "보건의료",
           "operation_count": 3
         }
       ],
@@ -14872,6 +15021,44 @@
       "top_categories": [
         {
           "category": "문화관광",
+          "operation_count": 3
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 3
+        }
+      ]
+    },
+    {
+      "organization": "전남광주통합특별시 순천시",
+      "api_count": 1,
+      "operation_api_count": 1,
+      "operation_count": 3,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 3
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 3
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "교통물류",
           "operation_count": 3
         }
       ],
@@ -15314,56 +15501,6 @@
       ]
     },
     {
-      "organization": "서울특별시교육청",
-      "api_count": 2,
-      "operation_api_count": 2,
-      "operation_count": 2,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 1,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 1
-        },
-        {
-          "key": "external_endpoint",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 1
-        },
-        {
-          "key": "missing",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "교육",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "openapi-lib.sen.go.kr",
-          "operation_count": 1
-        },
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 1
-        }
-      ]
-    },
-    {
       "organization": "시흥도시공사",
       "api_count": 2,
       "operation_api_count": 2,
@@ -15505,6 +15642,44 @@
       "top_categories": [
         {
           "category": "환경기상",
+          "operation_count": 2
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 2
+        }
+      ]
+    },
+    {
+      "organization": "중소벤처기업연구원",
+      "api_count": 2,
+      "operation_api_count": 2,
+      "operation_count": 2,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 2
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 2
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
           "operation_count": 2
         }
       ],
@@ -15699,44 +15874,6 @@
       "top_categories": [
         {
           "category": "문화관광",
-          "operation_count": 2
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 2
-        }
-      ]
-    },
-    {
-      "organization": "의료기관평가인증원",
-      "api_count": 1,
-      "operation_api_count": 1,
-      "operation_count": 2,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 2
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 2
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "보건의료",
           "operation_count": 2
         }
       ],
@@ -15948,6 +16085,44 @@
       ]
     },
     {
+      "organization": "한국사회적기업진흥원",
+      "api_count": 2,
+      "operation_api_count": 1,
+      "operation_count": 1,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "data_go_kr_gateway",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "builtin",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "산업고용",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "apis.data.go.kr",
+          "operation_count": 1
+        }
+      ]
+    },
+    {
       "organization": "강원특별자치도 속초시",
       "api_count": 1,
       "operation_api_count": 1,
@@ -16089,44 +16264,6 @@
       "top_categories": [
         {
           "category": "과학기술",
-          "operation_count": 1
-        }
-      ],
-      "top_hosts": [
-        {
-          "host": "apis.data.go.kr",
-          "operation_count": 1
-        }
-      ]
-    },
-    {
-      "organization": "문화체육관광부 국립한글박물관",
-      "api_count": 1,
-      "operation_api_count": 1,
-      "operation_count": 1,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 1,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [
-        {
-          "key": "data_go_kr_gateway",
-          "count": 1
-        }
-      ],
-      "by_adapter_status": [
-        {
-          "key": "builtin",
-          "count": 1
-        }
-      ],
-      "top_categories": [
-        {
-          "category": "공공행정",
           "operation_count": 1
         }
       ],
@@ -16366,7 +16503,7 @@
       ]
     },
     {
-      "organization": "인천광역시 동구",
+      "organization": "인천광역시 제물포구",
       "api_count": 1,
       "operation_api_count": 1,
       "operation_count": 1,
@@ -16442,7 +16579,50 @@
       ]
     },
     {
-      "organization": "중소벤처기업연구원",
+      "organization": "전라남도",
+      "api_count": 1,
+      "operation_api_count": 1,
+      "operation_count": 1,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 1,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [
+        {
+          "key": "external_endpoint",
+          "count": 1
+        }
+      ],
+      "by_adapter_status": [
+        {
+          "key": "adapter",
+          "count": 1
+        }
+      ],
+      "top_categories": [
+        {
+          "category": "문화관광",
+          "operation_count": 1
+        }
+      ],
+      "top_hosts": [
+        {
+          "host": "jeonnam.openapi.redtable.global",
+          "operation_count": 1,
+          "adapter": "jeonnam-redtable",
+          "adapter_status": "registered",
+          "capabilities": [
+            "verification"
+          ]
+        }
+      ]
+    },
+    {
+      "organization": "전라남도 광양시",
       "api_count": 1,
       "operation_api_count": 1,
       "operation_count": 1,
@@ -16468,7 +16648,7 @@
       ],
       "top_categories": [
         {
-          "category": "산업고용",
+          "category": "문화관광",
           "operation_count": 1
         }
       ],
@@ -17226,6 +17406,24 @@
       "top_hosts": []
     },
     {
+      "organization": "광주광역시",
+      "api_count": 2,
+      "operation_api_count": 0,
+      "operation_count": 0,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [],
+      "by_adapter_status": [],
+      "top_categories": [],
+      "top_hosts": []
+    },
+    {
       "organization": "문화체육관광부 대한민국역사박물관",
       "api_count": 2,
       "operation_api_count": 0,
@@ -17766,6 +17964,24 @@
       "top_hosts": []
     },
     {
+      "organization": "전라남도 순천시",
+      "api_count": 1,
+      "operation_api_count": 0,
+      "operation_count": 0,
+      "runtime_evidence_count": 0,
+      "runtime_evidence_percent": 0.0,
+      "verified": 0,
+      "failed": 0,
+      "skipped": 0,
+      "unknown": 0,
+      "approval_required_operations": 0,
+      "no_endpoint_operations": 0,
+      "by_dependency_class": [],
+      "by_adapter_status": [],
+      "top_categories": [],
+      "top_hosts": []
+    },
+    {
       "organization": "전라남도 함평군",
       "api_count": 1,
       "operation_api_count": 0,
@@ -17893,24 +18109,6 @@
     },
     {
       "organization": "한국보건산업진흥원",
-      "api_count": 1,
-      "operation_api_count": 0,
-      "operation_count": 0,
-      "runtime_evidence_count": 0,
-      "runtime_evidence_percent": 0.0,
-      "verified": 0,
-      "failed": 0,
-      "skipped": 0,
-      "unknown": 0,
-      "approval_required_operations": 0,
-      "no_endpoint_operations": 0,
-      "by_dependency_class": [],
-      "by_adapter_status": [],
-      "top_categories": [],
-      "top_hosts": []
-    },
-    {
-      "organization": "한국사회적기업진흥원",
       "api_count": 1,
       "operation_api_count": 0,
       "operation_count": 0,

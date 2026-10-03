@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.external-adapter-backlog.v1",
-  "generated_at": "2026-07-04T06:39:24Z",
+  "generated_at": "2026-09-29T23:44:39Z",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
   "source_profile": "sources/data_go_kr.json",
@@ -309,9 +309,9 @@
         "http_status": null,
         "body_shape": null,
         "missing_params": [
+          "sid",
           "dataValue",
-          "dataName",
-          "sid"
+          "dataName"
         ],
         "recommended_action": "implement_provider_adapter"
       },
@@ -410,7 +410,7 @@
       },
       {
         "dataset_id": "15059302",
-        "title": "해양수산부_연안정보도 도엽제공 서비스",
+        "title": "연안정보도 도엽제공 서비스",
         "organization": "해양수산부",
         "operation": "연안정보도 1:25000 축척 도엽 다운로드 정보 현황",
         "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
@@ -426,7 +426,7 @@
       },
       {
         "dataset_id": "15059302",
-        "title": "해양수산부_연안정보도 도엽제공 서비스",
+        "title": "연안정보도 도엽제공 서비스",
         "organization": "해양수산부",
         "operation": "연안정보도 1:25000 축척 도엽 상세정보 현황",
         "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
@@ -442,7 +442,7 @@
       },
       {
         "dataset_id": "15059302",
-        "title": "해양수산부_연안정보도 도엽제공 서비스",
+        "title": "연안정보도 도엽제공 서비스",
         "organization": "해양수산부",
         "operation": "연안정보도 1:25000 축척 도엽정보 리스트 정보 현황",
         "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
@@ -458,7 +458,7 @@
       },
       {
         "dataset_id": "15059302",
-        "title": "해양수산부_연안정보도 도엽제공 서비스",
+        "title": "연안정보도 도엽제공 서비스",
         "organization": "해양수산부",
         "operation": "연안정보도 1:5000 축척 도엽 다운로드 정보 현황",
         "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
@@ -474,7 +474,7 @@
       },
       {
         "dataset_id": "15059302",
-        "title": "해양수산부_연안정보도 도엽제공 서비스",
+        "title": "연안정보도 도엽제공 서비스",
         "organization": "해양수산부",
         "operation": "연안정보도 1:5000 축척 도엽 상세정보 현황",
         "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",
@@ -490,7 +490,7 @@
       },
       {
         "dataset_id": "15059302",
-        "title": "해양수산부_연안정보도 도엽제공 서비스",
+        "title": "연안정보도 도엽제공 서비스",
         "organization": "해양수산부",
         "operation": "연안정보도 1:5000 축척 도엽정보 리스트 정보 현황",
         "endpoint": "http://openapi.coast.kr/openapi/service/coastSpatialDataService",

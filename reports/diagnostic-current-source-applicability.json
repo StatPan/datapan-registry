@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.diagnostic-current-source-applicability.v1",
-  "status": "historical_scope_unchanged",
+  "status": "revalidation_required",
   "historical_inputs": [
     {
       "path": "drafts/diagnostic-envelope/data-go-kr-evidence-mapping.v1.json",
@@ -148,13 +148,13 @@
   "current_inputs": {
     "registry": {
       "path": "data/data-go-kr.registry.json",
-      "bytes": 137735169,
-      "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+      "bytes": 139155499,
+      "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
     },
     "health_catalog": {
       "path": "reports/health-probe-catalog.json",
       "bytes": 16353,
-      "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
+      "sha256": "eb25549cfcc3bcbdd07727fadd18707fc86a1661944b59e7c6f69650932f64a9"
     },
     "other_authoritative_inputs": [
       {
@@ -555,7 +555,32 @@
       }
     ]
   },
-  "mismatches": [],
+  "mismatches": [
+    {
+      "code": "current_source_bytes_changed",
+      "path": "data/data-go-kr.registry.json",
+      "expected": {
+        "bytes": 137735169,
+        "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+      },
+      "actual": {
+        "bytes": 139155499,
+        "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+      }
+    },
+    {
+      "code": "current_source_bytes_changed",
+      "path": "reports/health-probe-catalog.json",
+      "expected": {
+        "bytes": 16353,
+        "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
+      },
+      "actual": {
+        "bytes": 16353,
+        "sha256": "eb25549cfcc3bcbdd07727fadd18707fc86a1661944b59e7c6f69650932f64a9"
+      }
+    }
+  ],
   "authority": {
     "current_source_compatibility_approved": false,
     "current_runtime_evidence_accepted": false,

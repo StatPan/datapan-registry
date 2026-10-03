@@ -11,9 +11,9 @@
   "summary": {
     "artifact_count": 191,
     "schema_artifacts": 110,
-    "manifest_bound_bytes_excluding_self": 232655118,
+    "manifest_bound_bytes_excluding_self": 236719266,
     "canonical_registry_path": "data/data-go-kr.registry.json",
-    "canonical_registry_bytes": 137735169,
+    "canonical_registry_bytes": 139155499,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
@@ -31,32 +31,32 @@
     {
       "path": "data/data-go-kr.registry.json",
       "kind": "registry",
-      "bytes": 137735169,
-      "sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644"
+      "bytes": 139155499,
+      "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
     },
     {
       "path": "reports/current-runtime-evidence-projection.json",
       "kind": "current_runtime_evidence_projection",
-      "bytes": 28859595,
-      "sha256": "651fbfe294fecc76cce3a25001bcc91e0f7879e68d08277f0b9f73d9cebb95e7"
+      "bytes": 29188092,
+      "sha256": "7480938ab72d4a3679944a8856a5c5ad6abaf4d0c9dd0df9b00ed8953688d0a3"
     },
     {
       "path": "reports/data-go-kr/operation-manifest.json",
       "kind": "data_go_kr_operation_manifest",
-      "bytes": 23887000,
-      "sha256": "931be9cfcc4aa2ce0b444221de2044b624e6dbdcff8af1288be295b7d202f04a"
+      "bytes": 24366827,
+      "sha256": "b68601aee31acdb90b0a655dcb079c185af2c7fdd107333712c9b84e6a2700be"
     },
     {
       "path": "reports/dependencies.json",
       "kind": "dependencies",
-      "bytes": 18948589,
-      "sha256": "670be7d2914573bc034fab5b248a75b177996541a4b7efdc7116ad2c5af4a0ae"
+      "bytes": 19140444,
+      "sha256": "ec2b7091462a70ae87332cd4ffde281082dd2ee3249a455d9be871ad6e69a298"
     },
     {
       "path": "reports/runtime-freshness-queue.json",
       "kind": "runtime_freshness_queue",
-      "bytes": 10654849,
-      "sha256": "3d2bf70b48cdd2b06997368f4818a40aa50428b5f69be50155deb9fd3861db53"
+      "bytes": 10762875,
+      "sha256": "43604184f4deb9d28d6e4205b1eaaf09ae93e0a4663adf778401ea8e509e2b6b"
     }
   ]
 }
