@@ -74,10 +74,10 @@
         "detail_failure_counts": {
           "type": "object", "maxProperties": 10,
           "propertyNames": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error"]},
-          "additionalProperties": {"type": "integer", "minimum": 0, "maximum": 4096}
+          "additionalProperties": {"type": "integer", "minimum": 0}
         },
-        "detail_reason_unavailable_count": {"type": "integer", "minimum": 0, "maximum": 4096},
-        "detail_unattempted_count": {"type": "integer", "minimum": 0, "maximum": 4096}
+        "detail_reason_unavailable_count": {"type": "integer", "minimum": 0},
+        "detail_unattempted_count": {"type": "integer", "minimum": 0}
       },
       "additionalProperties": {"type": ["string", "integer", "number", "boolean", "null", "array", "object"]}
     },

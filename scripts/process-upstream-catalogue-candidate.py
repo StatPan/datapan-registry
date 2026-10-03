@@ -1793,15 +1793,13 @@ def process(
                         page_sha256=sha256_bytes(body.encode("utf-8")), observed_at=timestamp(now),
                     )
                 body = observation.body
-                try:
-                    observation_valid = (
-                        observation.page_url == expected_page_url
-                        and observation.effective_url == expected_page_url
-                        and observation.page_sha256 == sha256_bytes(observation.page_bytes)
-                        and parse_timestamp(observation.observed_at) <= now_fn() + dt.timedelta(minutes=5)
-                    )
-                except (AttributeError, KeyError, TypeError, ValueError):
-                    observation_valid = False
+                failure_context = "observation"
+                observation_valid = (
+                    observation.page_url == expected_page_url
+                    and observation.effective_url == expected_page_url
+                    and observation.page_sha256 == sha256_bytes(observation.page_bytes)
+                    and parse_timestamp(observation.observed_at) <= now_fn() + dt.timedelta(minutes=5)
+                )
                 if not observation_valid:
                     row_status = "quarantined"
                     failure_diagnostic = {"code": "observation_mismatch"}
@@ -1844,10 +1842,15 @@ def process(
                     failure_diagnostic = {"code": "missing_link_detail_operations"}
                 break
             except Exception as exc:  # network failures remain per-identity
-                failure_diagnostic = (
-                    {"code": "contract_or_parse_error"}
-                    if failure_context == "parser" else classify_detail_exception(exc)
-                )
+                if failure_context == "parser":
+                    failure_diagnostic = {"code": "contract_or_parse_error"}
+                elif failure_context == "observation":
+                    # A malformed observation is retryable under the existing
+                    # fetch exception path; only an explicit false validation
+                    # result above is quarantined.
+                    failure_diagnostic = {"code": "observation_mismatch"}
+                else:
+                    failure_diagnostic = classify_detail_exception(exc)
                 if attempts_available > 0 and attempts_this_invocation < attempt_budget:
                     sleeper(min(5.0, 0.25 * (2 ** (used - 1))))
         # Request-budget exhaustion is accounted in the reservation counters;

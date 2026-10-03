@@ -339,6 +339,37 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(checkpoint["outcome"]["detail_reason_unavailable_count"], 0)
         self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 0)
 
+    def test_malformed_observation_timestamp_keeps_retry_budget_and_status(self) -> None:
+        expected_url = "https://www.data.go.kr/data/2/openapi.do"
+        body = "<html>malformed timestamp fixture</html>"
+        page_bytes = body.encode("utf-8")
+        observation = MODULE.DetailPageObservation(
+            body=body,
+            page_url=expected_url,
+            effective_url=expected_url,
+            page_sha256=MODULE.sha256_bytes(page_bytes),
+            observed_at="not-a-timestamp",
+        )
+        calls = []
+
+        def malformed_observation(url: str, _timeout: float):
+            calls.append(url)
+            return observation
+
+        code, checkpoint = self.invoke(
+            fetcher=malformed_observation,
+            **{"--retries-per-detail": 2, "--max-attempts": 3},
+        )
+        self.assertEqual(code, 2)
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(checkpoint["attempts_consumed"], 3)
+        self.assertEqual(checkpoint["status"], "retry")
+        self.assertEqual(checkpoint["detail_records"][-1]["status"], "retry")
+        self.assertEqual(
+            checkpoint["detail_records"][-1]["failure_diagnostic"],
+            {"code": "observation_mismatch"},
+        )
+
     def test_provider_http_error_persists_only_fixed_status_code(self) -> None:
         def fail(_url: str, _timeout: float) -> str:
             raise urllib.error.HTTPError(
@@ -581,6 +612,37 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(result["detail_reason_unavailable_count"], 884)
         self.assertEqual(result["detail_unattempted_count"], 884)
         self.assertNotIn("SECRET", json.dumps(evidence) + json.dumps(checkpoint) + json.dumps(result))
+
+    def test_unavailable_diagnostic_aggregate_can_exceed_retry_state_capacity(self) -> None:
+        rows = []
+        for identity in range(20_000, 24_100):
+            row = copy.deepcopy(self.new_link)
+            row["id"] = str(identity)
+            row["title"] = f"Large queued detail {identity}"
+            row["source"]["url"] = f"https://www.data.go.kr/data/{identity}/openapi.do"
+            row["source"]["raw"]["api_id"] = str(identity)
+            row["source"]["raw"]["meta_url"] = row["source"]["url"]
+            rows.append(row)
+        self.baseline_path.write_text("[]", encoding="utf-8")
+        self.candidate_path.write_text(json.dumps(rows), encoding="utf-8")
+        calls = []
+
+        def fail(url: str, _timeout: float) -> str:
+            calls.append(url)
+            raise TimeoutError("fixture")
+
+        code, checkpoint = self.invoke(
+            fetcher=fail,
+            **{"--retries-per-detail": 0, "--max-attempts": 1, "--max-queue": 1},
+        )
+        self.assertEqual(code, 2)
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(checkpoint["attempts_consumed"], 1)
+        self.assertEqual(checkpoint["outcome"]["detail_failure_counts"], {"timeout": 1})
+        self.assertEqual(checkpoint["outcome"]["detail_reason_unavailable_count"], 4099)
+        self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 4099)
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        self.assertIs(MODULE.verify_checkpoint(checkpoint, schema), checkpoint)
 
     def test_new_generator_preserves_all_frozen_retry_attempts_across_recovery(self) -> None:
         from tests.test_recover_upstream_catalogue_failed_generation import RECOVERY, frozen_inputs
