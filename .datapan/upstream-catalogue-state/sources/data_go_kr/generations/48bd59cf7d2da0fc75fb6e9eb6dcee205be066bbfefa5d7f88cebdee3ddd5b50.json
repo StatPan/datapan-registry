@@ -26,11 +26,11 @@
     "15029122": 1
   },
   "attempts_consumed": 24,
-  "checkpoint_sha256": "fa1bd6ed711c88290e43acf53c0d00b4b4fe931dc0ccef7b5b29cf74a3fe3bfb",
+  "checkpoint_sha256": "ce9898930b889e9832c39907dc5f18947caa88197596ca1377b3a8a48c8aeb39",
   "detail_queue_cursor": 24,
   "detail_records": [],
   "detail_retry_reset_ids": [],
-  "fencing_token": 1,
+  "fencing_token": 2,
   "generation_id": "48bd59cf7d2da0fc75fb6e9eb6dcee205be066bbfefa5d7f88cebdee3ddd5b50",
   "generation_inputs": {
     "adapter_revision": "b235d6f053bd8ec1f87d6a889a07912dfde1a944353eb640da8713fdf640e4d6",
@@ -54,7 +54,7 @@
       "run_id": "36646768289"
     }
   ],
-  "last_heartbeat_at": "2026-10-03T02:58:33Z",
+  "last_heartbeat_at": "2026-10-03T05:21:11Z",
   "last_observation": {
     "collection_status": "success",
     "execution_mode": "live",
@@ -63,28 +63,57 @@
     "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
   },
   "last_progress_at": "2026-10-03T02:58:33Z",
-  "lease": {
-    "expires_at": "2026-10-03T03:43:30Z",
-    "fencing_token": 1,
-    "owner_run_id": "37091592758-1"
-  },
+  "lease": null,
   "observation_count": 1,
   "observed_at": "2026-09-29T23:44:39Z",
   "outcome": {
-    "pending_count": 884,
-    "reason": "request_budget_reserved",
-    "reserved_attempts": 24,
-    "reserved_records": 24
+    "reason": "recovered_failed_processor_scope_mismatch",
+    "recovery_evidence": {
+      "failed_artifact": {
+        "archive_bytes": 17093081,
+        "archive_sha256": "b3ef63c8dcfd22e04d3d54cac3763733d24883400d36a0eacfbbe834ad5496cf",
+        "checkpoint_file_sha256": "9dfe32e4b767852d3407926c1b1a2511b396426cc38e0d99bb20547338dea038",
+        "checkpoint_sha256": "c67784de42c19b4fdd15979f1cb5ed8a8d88e158bd7e4e19cbf2745f8d2156be",
+        "id": 11262805213,
+        "name": "upstream-catalogue-processing-37091592758-1",
+        "processing_result_file_sha256": "214eddc35c05b7b66f1173ff6f751efc4f74393cd3022ff64338c649046f70cb"
+      },
+      "failed_run": {
+        "attempt": 1,
+        "conclusion": "failure",
+        "event": "workflow_dispatch",
+        "head_sha": "446016d15d6c16b599bdaf89a97bc450b71205f4",
+        "id": 37091592758,
+        "name": "Process upstream catalogue",
+        "path": ".github/workflows/upstream-catalogue-process.yml",
+        "repository": "StatPan/datapan-registry"
+      },
+      "original_checkpoint_sha256": "fa1bd6ed711c88290e43acf53c0d00b4b4fe931dc0ccef7b5b29cf74a3fe3bfb",
+      "original_scope_error": "composer_scope_omits_worker_outcomes",
+      "recovery_run": {
+        "artifact_name": "upstream-catalogue-processing-37099532176-1",
+        "head_sha": "85c98e866a02e6ea1e36079ed67032e8c6640b09",
+        "processor_artifact_run_id": "37099532176",
+        "processor_run_id": "37099532176-1",
+        "run_attempt": 1
+      }
+    }
   },
   "output_artifact": {
-    "artifact_id": null,
-    "bundle_manifest_sha256": null,
-    "expires_at": "2026-11-02T02:58:30Z",
-    "name": "upstream-catalogue-processing-37091592758-1",
+    "artifact_id": "11265518103",
+    "bundle_manifest_sha256": "fabfb85c7ba639434e6e58af8a86d404949caee790822ead66906824b8702a5d",
+    "expires_at": "2026-11-02T05:21:11Z",
+    "name": "upstream-catalogue-processing-37099532176-1",
     "repository": "StatPan/datapan-registry",
-    "run_id": "37091592758"
+    "run_id": "37099532176"
   },
-  "output_digests": [],
+  "output_digests": [
+    {
+      "bytes": 547,
+      "path": "upstream-catalogue-processing-result.json",
+      "sha256": "0c947d618f2d8caa05ace58d7289492df96d1927466bbf913da81de772170b40"
+    }
+  ],
   "request_reservation": {
     "attempt_budget": 24,
     "attempts_made": 0,
@@ -244,5 +273,5 @@
   "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
   "source_id": "data_go_kr",
   "source_scope": "aggregate_supported_catalog",
-  "status": "enriching"
+  "status": "quarantined"
 }
