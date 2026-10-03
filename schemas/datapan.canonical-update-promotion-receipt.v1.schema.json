@@ -242,6 +242,9 @@
     "refresh_from": {
       "$ref": "#/$defs/revisionReference"
     },
+    "refresh_target_main_sha": {
+      "$ref": "#/$defs/sha1"
+    },
     "superseded_by": {
       "$ref": "#/$defs/revisionReference"
     },
@@ -263,6 +266,7 @@
         "scope": {"type": "string", "minLength": 1},
         "generation_id": {"type": "string", "minLength": 1},
         "registry_sha256": {"$ref": "#/$defs/sha256"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
         "head_sha": {"$ref": "#/$defs/sha1"},
         "pr_number": {"type": "integer", "minimum": 1},
         "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},

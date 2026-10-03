@@ -6,6 +6,33 @@ on:
     types: [completed]
   schedule:
     - cron: "43 * * * *"
+  workflow_dispatch:
+    inputs:
+      refresh_pr_number:
+        description: Existing adopted canonical PR to refresh
+        required: false
+        type: string
+        default: ""
+      expected_predecessor_head_sha:
+        description: Exact predecessor candidate head SHA
+        required: false
+        type: string
+        default: ""
+      expected_predecessor_body_sha256:
+        description: Exact predecessor PR body SHA-256
+        required: false
+        type: string
+        default: ""
+      expected_predecessor_manifest_sha256:
+        description: Exact predecessor release manifest SHA-256
+        required: false
+        type: string
+        default: ""
+      target_main_sha:
+        description: Exact trusted default-branch target SHA
+        required: false
+        type: string
+        default: ""
 
 permissions:
   actions: write
@@ -19,7 +46,10 @@ concurrency:
 
 jobs:
   reconcile:
-    if: github.event_name == 'schedule' || (github.event.workflow_run.name == 'Process upstream catalogue' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.head_branch == github.event.repository.default_branch)
+    if: >-
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.name == 'Process upstream catalogue' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.repository.full_name == github.repository && github.event.workflow_run.head_repository.full_name == github.repository && github.event.workflow_run.head_branch == github.event.repository.default_branch) ||
+      (github.event_name == 'workflow_dispatch' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch))
     runs-on: ubuntu-latest
     env:
       PYTHONDONTWRITEBYTECODE: "1"
@@ -75,6 +105,9 @@ jobs:
         run: python -m pip install --disable-pip-version-check jsonschema 'PyYAML==6.0.2'
 
       - name: Reconcile owned PRs and exact-head CI
+        if: >-
+          github.event_name != 'workflow_dispatch' ||
+          (inputs.refresh_pr_number == '' && inputs.expected_predecessor_head_sha == '' && inputs.expected_predecessor_body_sha256 == '' && inputs.expected_predecessor_manifest_sha256 == '' && inputs.target_main_sha == '')
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -83,8 +116,35 @@ jobs:
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: python3 scripts/run-canonical-update-promotion.py --mode reconcile-prs
 
+      - name: Refresh one explicitly bound owned source revision
+        if: >-
+          github.event_name == 'workflow_dispatch' &&
+          (inputs.refresh_pr_number != '' || inputs.expected_predecessor_head_sha != '' || inputs.expected_predecessor_body_sha256 != '' || inputs.expected_predecessor_manifest_sha256 != '' || inputs.target_main_sha != '')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          REFRESH_PR_NUMBER: ${{ inputs.refresh_pr_number }}
+          EXPECTED_PREDECESSOR_HEAD_SHA: ${{ inputs.expected_predecessor_head_sha }}
+          EXPECTED_PREDECESSOR_BODY_SHA256: ${{ inputs.expected_predecessor_body_sha256 }}
+          EXPECTED_PREDECESSOR_MANIFEST_SHA256: ${{ inputs.expected_predecessor_manifest_sha256 }}
+          TARGET_MAIN_SHA: ${{ inputs.target_main_sha }}
+        run: |
+          python3 scripts/run-canonical-update-promotion.py \
+            --mode refresh-owned-source \
+            --state-root .datapan/processor-state/.datapan/upstream-catalogue-state \
+            --datapan-cli .datapan/datapan-cli \
+            --refresh-pr-number "$REFRESH_PR_NUMBER" \
+            --expected-predecessor-head-sha "$EXPECTED_PREDECESSOR_HEAD_SHA" \
+            --expected-predecessor-body-sha256 "$EXPECTED_PREDECESSOR_BODY_SHA256" \
+            --expected-predecessor-manifest-sha256 "$EXPECTED_PREDECESSOR_MANIFEST_SHA256" \
+            --target-main-sha "$TARGET_MAIN_SHA"
+
       - name: Recover at most one durable ready processor bundle
-        if: steps.processor-state-branch.outputs.exists == 'true'
+        if: >-
+          steps.processor-state-branch.outputs.exists == 'true' &&
+          (github.event_name != 'workflow_dispatch' || (inputs.refresh_pr_number == '' && inputs.expected_predecessor_head_sha == '' && inputs.expected_predecessor_body_sha256 == '' && inputs.expected_predecessor_manifest_sha256 == '' && inputs.target_main_sha == ''))
         env:
           GH_TOKEN: ${{ github.token }}
           GITHUB_TOKEN: ${{ github.token }}

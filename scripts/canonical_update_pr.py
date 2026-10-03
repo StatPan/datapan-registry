@@ -962,7 +962,8 @@ def build_receipt(
     }
 
 
-def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
+def payload_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
+    """Return the legacy five-field identity used only for payload grouping."""
     candidate = receipt.get("candidate", {})
     return (
         str(candidate.get("repository", "")).lower(),
@@ -971,6 +972,12 @@ def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
         str(candidate.get("generation_id", "")),
         str(candidate.get("registry_sha256", "")),
     )
+
+
+def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str, str, str]:
+    """Identify one source revision, including the reviewed preparation head."""
+    candidate = receipt.get("candidate", {})
+    return (*payload_key(receipt), str(candidate.get("head_sha", "")))
 
 
 REVISION_REFERENCE_FIELDS = (
@@ -990,6 +997,7 @@ def revision_reference(receipt: Mapping[str, Any]) -> dict[str, Any]:
         "scope": str(candidate.get("scope", "")),
         "generation_id": str(candidate.get("generation_id", "")),
         "registry_sha256": str(candidate.get("registry_sha256", "")),
+        "manifest_sha256": str(candidate.get("manifest_sha256", "")),
         "head_sha": str(candidate.get("head_sha", "")),
         "pr_number": pr.get("number"),
         "owner_id": str(ownership.get("owner_id", "")),
@@ -999,16 +1007,21 @@ def revision_reference(receipt: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _reference_matches_receipt(reference: Mapping[str, Any], receipt: Mapping[str, Any]) -> bool:
-    return all(reference.get(field) == revision_reference(receipt).get(field) for field in REVISION_REFERENCE_FIELDS)
+    expected = revision_reference(receipt)
+    if not all(reference.get(field) == expected.get(field) for field in REVISION_REFERENCE_FIELDS):
+        return False
+    # Historical references predate the optional manifest discriminator.
+    return "manifest_sha256" not in reference or reference.get("manifest_sha256") == expected.get("manifest_sha256")
 
 
-def _reference_key(reference: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
+def _reference_key(reference: Mapping[str, Any]) -> tuple[str, str, str, str, str, str]:
     return (
         str(reference.get("repository", "")).lower(),
         str(reference.get("source_id", "")),
         str(reference.get("scope", "")),
         str(reference.get("generation_id", "")),
         str(reference.get("registry_sha256", "")),
+        str(reference.get("head_sha", "")),
     )
 
 
@@ -1127,10 +1140,22 @@ def validate_revision_links(journal: Mapping[str, Any]) -> None:
     if len(keys) != len(set(keys)):
         raise AdmissionError("promotion journal contains duplicate source/scope/generation/payload revisions")
     by_key = {candidate_key(row): row for row in rows}
+    active_payloads: dict[tuple[str, str, str, str, str], list[Mapping[str, Any]]] = {}
     for row in rows:
         refresh_from = row.get("refresh_from")
         superseded_by = row.get("superseded_by")
         current_key = candidate_key(row)
+        refresh_target_main = row.get("refresh_target_main_sha")
+        if refresh_target_main is not None:
+            if (
+                not isinstance(refresh_target_main, str)
+                or not re.fullmatch(r"[a-f0-9]{40}", refresh_target_main)
+                or row.get("candidate", {}).get("base_sha") != refresh_target_main
+                or not isinstance(refresh_from, Mapping)
+            ):
+                raise AdmissionError("promotion source refresh is not bound to its exact target main and predecessor")
+        if row.get("superseded_by") is None and row.get("status") in {"prepared", "pending-review"}:
+            active_payloads.setdefault(payload_key(row), []).append(row)
         if refresh_from is not None:
             predecessor = by_key.get(_reference_key(refresh_from))
             if predecessor is None or not _reference_matches_receipt(refresh_from, predecessor):
@@ -1150,14 +1175,16 @@ def validate_revision_links(journal: Mapping[str, Any]) -> None:
                 raise AdmissionError("promotion refresh intent crosses its owned repository, issue, or PR")
             if predecessor.get("status") not in {"prepared", "pending-review"}:
                 raise AdmissionError("promotion refresh intent cannot supersede a terminal or last-good receipt")
+            if refresh_target_main is not None and predecessor.get("status") != "pending-review":
+                raise AdmissionError("trusted-main source refresh requires a reviewed predecessor PR")
             predecessor_link = predecessor.get("superseded_by")
-            if predecessor_link is not None and predecessor_link != revision_reference(row):
+            if predecessor_link is not None and not _reference_matches_receipt(predecessor_link, row):
                 raise AdmissionError("promotion refresh intent predecessor is already superseded by another revision")
         if superseded_by is not None:
             target = by_key.get(_reference_key(superseded_by))
             if target is None or not _reference_matches_receipt(superseded_by, target):
                 raise AdmissionError("promotion supersession link does not bind an exact durable target PR identity")
-            if target.get("refresh_from") != revision_reference(row):
+            if not _reference_matches_receipt(target.get("refresh_from", {}), row):
                 raise AdmissionError("promotion supersession link is not reciprocated by the target refresh intent")
             if target.get("status") not in {
                 "pending-review", "merged", "publication-pending", "published",
@@ -1168,8 +1195,24 @@ def validate_revision_links(journal: Mapping[str, Any]) -> None:
                 raise AdmissionError("promotion supersession requires an immutable exact pending-review target read-back witness")
             if row.get("status") not in {"prepared", "pending-review"}:
                 raise AdmissionError("promotion supersession cannot hide a terminal or last-good receipt")
+    for revisions in active_payloads.values():
+        if len(revisions) <= 1:
+            continue
+        if len(revisions) != 2:
+            raise AdmissionError("promotion journal has ambiguous active revisions for one source payload")
+        predecessor_rows = [row for row in revisions if row.get("status") == "pending-review"]
+        successor_rows = [row for row in revisions if row.get("status") == "prepared"]
+        if len(predecessor_rows) != 1 or len(successor_rows) != 1:
+            raise AdmissionError("same-payload active revisions require one pending predecessor and one prepared successor")
+        predecessor, successor = predecessor_rows[0], successor_rows[0]
+        if (
+            not _reference_matches_receipt(successor.get("refresh_from", {}), predecessor)
+            or not isinstance(successor.get("refresh_target_main_sha"), str)
+            or successor.get("candidate", {}).get("head_sha") == predecessor.get("candidate", {}).get("head_sha")
+        ):
+            raise AdmissionError("same-payload successor is not an explicit source refresh of its active predecessor")
     for start in by_key:
-        seen: set[tuple[str, str, str, str, str]] = set()
+        seen: set[tuple[str, str, str, str, str, str]] = set()
         cursor = start
         while True:
             if cursor in seen:
@@ -1227,7 +1270,7 @@ def preserve_and_validate_ci(previous: Mapping[str, Any], receipt: dict[str, Any
 
 def preserve_and_validate_revision_links(previous: Mapping[str, Any], receipt: dict[str, Any]) -> None:
     """Keep refresh lineage immutable across CI and publication journal updates."""
-    for field in ("refresh_from", "superseded_by"):
+    for field in ("refresh_from", "refresh_target_main_sha", "superseded_by"):
         old = previous.get(field)
         new = receipt.get(field)
         if old is None:
