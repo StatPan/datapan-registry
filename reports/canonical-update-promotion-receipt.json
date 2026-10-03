@@ -449,8 +449,28 @@
       "blockers": [
         "manual_review_revalidation_required",
         "diagnostic_current_source_revalidation_required"
-      ]
+      ],
+      "ci": {
+        "repository": "StatPan/datapan-registry",
+        "workflow_path": ".github/workflows/verify-release.yml",
+        "head_sha": "bcc306c20c424faa9e789444e5914bf1887b930d",
+        "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+        "pr_number": 686,
+        "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a",
+        "body_sha256": "0b366a66013932641ff389db8818fc419213664c0f2edd03bca3daa74e07c654",
+        "request_fingerprint": "400a1a86861c753562bb1041ad6a7fd500d3755d4817939e5e26b327ad3c7e61",
+        "state": "intent",
+        "intent_at": "2026-10-03T10:48:35Z",
+        "run_id": null,
+        "run_attempt": null,
+        "run_url": null,
+        "run_status": null,
+        "conclusion": null,
+        "observed_at": "2026-10-03T10:48:35Z",
+        "dispatch_http_status": null,
+        "blocker": null
+      }
     }
   ],
-  "updated_at": "2026-10-03T10:48:17.186708+00:00"
+  "updated_at": "2026-10-03T10:48:35.952761+00:00"
 }
