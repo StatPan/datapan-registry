@@ -732,6 +732,18 @@ freshness deadline is derived from `policy/source-refresh.json` cadence and the
 per-source grace in `policy/upstream-catalogue-health.json`; hourly watchdog
 runs never extend the weekly source TTL.
 
+Repeated collector execution diagnostics use the existing
+`provider_failure_threshold` value as a shared threshold for three distinct,
+trusted collector run IDs. Health binds each decisive result to the exact run
+attempt, completed job list, workflow identity, repository, `main` head, event,
+and actual attempt start. Replayed checkpoints and retries of one run ID do not
+increase the count. A later exact successful collector attempt resets the
+execution streak; pending, skipped, or neutral reruns retain the prior decisive
+attempt when it is available. If exact attempt evidence is missing or
+ambiguous, Health keeps any known failure open and reports the evidence gap.
+Generic failed Actions runs describe collector execution failures; they do not
+establish a provider or credential cause.
+
 The checker reads the processor-owned
 `automation/upstream-catalogue-state` branch, GitHub Actions run and artifact
 metadata, and the canonical promotion acknowledgement branch. It records each

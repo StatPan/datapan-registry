@@ -284,13 +284,18 @@ def write_state(root: pathlib.Path, checkpoints: list[dict]) -> pathlib.Path:
     return root
 
 
-def collector_run(*, run_id: str = RUN_ID, conclusion: str = "success", status: str = "completed", created_at: str = "2026-09-30T20:17:00Z") -> dict:
+def collector_run(
+    *, run_id: str = RUN_ID, attempt: int = 1, conclusion: str | None = "success",
+    status: str = "completed", created_at: str = "2026-09-30T20:17:00Z",
+    run_started_at: str = "2026-09-30T20:17:01Z", event: str = "schedule",
+    head_sha: str = "a" * 40,
+) -> dict:
     return {
-        "id": int(run_id), "workflow_id": WORKFLOW_IDS_BY_PATH[COLLECTOR_PATH], "path": COLLECTOR_PATH,
-        "event": "schedule", "status": status, "conclusion": conclusion,
+        "id": int(run_id), "workflow_id": WORKFLOW_IDS_BY_PATH[COLLECTOR_PATH], "run_attempt": attempt,
+        "path": COLLECTOR_PATH, "event": event, "status": status, "conclusion": conclusion,
         "created_at": created_at, "updated_at": "2026-09-30T20:25:00Z",
-        "run_started_at": "2026-09-30T20:17:01Z", "head_branch": "main",
-        "head_sha": "a" * 40,
+        "run_started_at": run_started_at, "head_branch": "main",
+        "head_sha": head_sha,
         "repository": {"full_name": "StatPan/datapan-registry"},
         "head_repository": {"full_name": "StatPan/datapan-registry"},
     }
@@ -408,10 +413,20 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                    promotion_workflow_attempt_errors: set[str] | None = None,
                    promotion_workflow_api_error: str | None = None,
                    prior_promotion_execution_faults: list[dict] | None = None,
+                   collector_execution_attempts: dict | None = None,
+                   collector_execution_attempt_errors: set[str] | None = None,
+                   prior_collector_execution_faults: list[dict] | None = None,
                    workflow_ids_by_path: dict | None = None,
                    processor_candidate_screen: object | None = None) -> dict:
         checkpoints = cp if cp is not None else [checkpoint()]
         run_rows = runs if runs is not None else [collector_run()]
+        collector_attempt_rows = dict(collector_execution_attempts or {})
+        if collector_execution_attempts is None:
+            for row in run_rows:
+                if not isinstance(row, dict) or row.get("status") != "completed" or row.get("conclusion") in {None, "skipped", "neutral"}:
+                    continue
+                identity = f"{row.get('id')}/{row.get('run_attempt')}"
+                collector_attempt_rows[identity] = processor_attempt_evidence(row)
         artifact_rows = artifacts_by_run if artifacts_by_run is not None else {RUN_ID: [{"id": 101, "name": f"upstream-catalog-refresh-{RUN_ID}", "expired": False}]}
         state_dir = write_state(temp / "state", checkpoints)
         registry = ROOT / "data/data-go-kr.registry.json"
@@ -471,6 +486,9 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             processor_previous_attempt_errors=processor_previous_attempt_errors or set(),
             processor_workflow_api_error=processor_api_error,
             prior_processor_execution_faults=prior_processor_execution_faults or [],
+            collector_execution_attempts=collector_attempt_rows,
+            collector_execution_attempt_errors=collector_execution_attempt_errors or set(),
+            prior_collector_execution_faults=prior_collector_execution_faults or [],
             promotion_workflow_runs=c_runs,
             promotion_workflow_previous_attempts=promotion_workflow_previous_attempts or {},
             promotion_workflow_previous_attempt_errors=promotion_workflow_previous_attempt_errors or set(),
@@ -1320,6 +1338,175 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         self.assertIn("collector_run_failed", {row["reason"] for row in source["faults"]})
         self.assertEqual(source["collector"]["latest_scheduled_run"]["run_id"], RUN_ID)
         self.assertEqual(source["collector"]["latest_execution_run"]["run_id"], "102")
+
+    def test_three_exact_distinct_collector_failures_trigger_without_processor_checkpoints(self) -> None:
+        runs = [
+            collector_run(run_id=str(run_id), conclusion="failure", run_started_at=f"2026-09-30T23:{minute}:00Z")
+            for run_id, minute in ((101, "10"), (102, "20"), (103, "30"))
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(pathlib.Path(directory), runs=runs, cp=[])
+        faults = report["sources"][0]["faults"]
+        repeated = [row for row in faults if row["reason"] == "repeated_collector_execution_failures"]
+        self.assertEqual(len(repeated), 1)
+        self.assertEqual(repeated[0]["stage"], "collector-execution")
+        self.assertEqual(repeated[0]["execution_identity"]["run_id"], "101")
+        self.assertNotIn("repeated_provider_failures", {row["reason"] for row in faults})
+
+    def test_threshold_fault_anchor_stays_stable_as_distinct_failures_continue(self) -> None:
+        runs = [
+            collector_run(run_id=str(run_id), conclusion="failure", run_started_at=f"2026-09-30T23:{minute}:00Z")
+            for run_id, minute in ((101, "10"), (102, "20"), (103, "30"))
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            first = self.run_health(pathlib.Path(directory), runs=runs, cp=[])
+        prior = next(row for row in first["sources"][0]["faults"] if row["reason"] == "repeated_collector_execution_failures")
+        runs.append(collector_run(run_id="104", conclusion="failure", run_started_at="2026-09-30T23:40:00Z"))
+        with tempfile.TemporaryDirectory() as directory:
+            continued = self.run_health(
+                pathlib.Path(directory), runs=runs, cp=[], prior_collector_execution_faults=[prior],
+            )
+        repeated = [row for row in continued["sources"][0]["faults"] if row["reason"] == "repeated_collector_execution_failures"]
+        self.assertEqual([row["fault_key"] for row in repeated], [prior["fault_key"]])
+
+    def test_conflicting_duplicate_attempt_cannot_recover_prior_streak(self) -> None:
+        prior = {
+            "source_id": "data_go_kr", "stage": "collector-execution",
+            "reason": "repeated_collector_execution_failures", "severity": "error", "owner_ticket": 659,
+            "fault_key": "a" * 64, "recommended_action": "Inspect exact collector attempts.",
+            "execution_identity": {
+                "run_id": "100", "run_attempt": 1, "run_started_at": "2026-09-30T22:00:00Z", "head_sha": "a" * 40,
+            },
+        }
+        success = collector_run(run_id="110", conclusion="success", run_started_at="2026-09-30T23:30:00Z")
+        conflict = copy.deepcopy(success)
+        conflict["conclusion"] = "failure"
+        exact_success = processor_attempt_evidence(success)
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), runs=[success, conflict], cp=[],
+                collector_execution_attempts={"110/1": exact_success},
+                prior_collector_execution_faults=[prior],
+            )
+        retained = next(row for row in report["sources"][0]["faults"] if row["fault_key"] == prior["fault_key"])
+        self.assertEqual(retained["reason"], "repeated_collector_execution_failures")
+        self.assertIn("collector_run_attempt_unavailable", {row["reason"] for row in report["sources"][0]["faults"]})
+        latest = report["sources"][0]["collector"]["latest_execution_run"]
+        self.assertNotIn("latest_successful_execution_run", latest)
+
+    def test_unknown_collector_conclusions_are_unavailable_not_failures(self) -> None:
+        runs = [
+            collector_run(run_id=str(run_id), conclusion="unknown-result", run_started_at=f"2026-09-30T23:{minute}:00Z")
+            for run_id, minute in ((101, "10"), (102, "20"), (103, "30"))
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(pathlib.Path(directory), runs=runs, cp=[])
+        reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+        self.assertIn("collector_run_attempt_unavailable", reasons)
+        self.assertNotIn("repeated_collector_execution_failures", reasons)
+        unavailable = next(row for row in report["sources"][0]["faults"] if row["reason"] == "collector_run_attempt_unavailable")
+        self.assertEqual(unavailable["execution_identity"]["run_id"], "101")
+        self.assertEqual(unavailable["execution_identity"]["run_attempt"], 1)
+
+    def test_checkpoint_replays_and_reruns_of_one_collector_id_do_not_inflate_threshold(self) -> None:
+        first = collector_run(run_id="101", attempt=1, conclusion="failure", run_started_at="2026-09-30T22:00:00Z")
+        rerun = collector_run(run_id="101", attempt=2, conclusion="failure", run_started_at="2026-09-30T22:10:00Z")
+        other = collector_run(run_id="102", conclusion="failure", run_started_at="2026-09-30T22:20:00Z")
+        checkpoints = [
+            checkpoint(
+                generation_id=f"{index:x}" * 64,
+                collection_status="failure",
+                producer_run_id="101",
+                observed_at=f"2026-09-30T22:{30 + index:02d}:00Z",
+            )
+            for index in (1, 2, 3)
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(pathlib.Path(directory), runs=[first, rerun, other], cp=checkpoints)
+        reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+        self.assertNotIn("repeated_collector_execution_failures", reasons)
+        self.assertNotIn("repeated_provider_failures", reasons)
+
+    def test_pending_rerun_uses_exact_prior_failure_and_later_exact_success_recovers(self) -> None:
+        prior_failure = collector_run(run_id="101", conclusion="failure", run_started_at="2026-09-30T22:00:00Z")
+        pending_rerun = collector_run(
+            run_id="101", attempt=2, conclusion=None, status="in_progress",
+            run_started_at="2026-09-30T22:40:00Z",
+        )
+        second_failure = collector_run(run_id="102", conclusion="failure", run_started_at="2026-09-30T22:10:00Z")
+        third_failure = collector_run(run_id="103", conclusion="failure", run_started_at="2026-09-30T22:20:00Z")
+        attempts = {
+            "101/1": processor_attempt_evidence(prior_failure),
+            "102/1": processor_attempt_evidence(second_failure),
+            "103/1": processor_attempt_evidence(third_failure),
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), runs=[pending_rerun, second_failure, third_failure], cp=[],
+                collector_execution_attempts=attempts,
+            )
+        repeated = next(row for row in report["sources"][0]["faults"] if row["reason"] == "repeated_collector_execution_failures")
+
+        later_success = collector_run(run_id="101", attempt=2, conclusion="success", run_started_at="2026-09-30T23:00:00Z")
+        with tempfile.TemporaryDirectory() as directory:
+            recovered = self.run_health(
+                pathlib.Path(directory), runs=[later_success], cp=[],
+                collector_execution_attempts={"101/2": processor_attempt_evidence(later_success)},
+                prior_collector_execution_faults=[repeated],
+            )
+        reasons = {row["reason"] for row in recovered["sources"][0]["faults"]}
+        self.assertNotIn("repeated_collector_execution_failures", reasons)
+
+    def test_untrusted_run_and_missing_exact_attempt_cannot_create_threshold(self) -> None:
+        runs = [
+            collector_run(run_id="101", conclusion="failure", run_started_at="2026-09-30T23:10:00Z"),
+            collector_run(run_id="102", conclusion="failure", run_started_at="2026-09-30T23:20:00Z"),
+            collector_run(run_id="103", conclusion="failure", run_started_at="2026-09-30T23:30:00Z"),
+        ]
+        untrusted = copy.deepcopy(runs[0])
+        untrusted["head_branch"] = "feature/untrusted"
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(pathlib.Path(directory), runs=[untrusted, runs[1], runs[2]], cp=[])
+        reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+        self.assertNotIn("repeated_collector_execution_failures", reasons)
+
+        with tempfile.TemporaryDirectory() as directory:
+            unavailable = self.run_health(
+                pathlib.Path(directory), runs=runs, cp=[], collector_execution_attempts={},
+            )
+        unavailable_reasons = {row["reason"] for row in unavailable["sources"][0]["faults"]}
+        self.assertNotIn("repeated_collector_execution_failures", unavailable_reasons)
+        self.assertIn("collector_run_attempt_unavailable", unavailable_reasons)
+
+    def test_unavailable_fault_identity_does_not_borrow_a_later_error_run(self) -> None:
+        malformed = collector_run(run_id="101", conclusion="failure", run_started_at="2026-09-30T23:10:00Z")
+        malformed["run_attempt"] = 0
+        other = collector_run(run_id="102", conclusion="failure", run_started_at="2026-09-30T23:20:00Z")
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), runs=[malformed, other], cp=[],
+                collector_execution_attempts={"102/1": processor_attempt_evidence(other)},
+                collector_execution_attempt_errors={"102/1"},
+            )
+        unavailable = next(row for row in report["sources"][0]["faults"] if row["reason"] == "collector_run_attempt_unavailable")
+        self.assertNotIn("execution_identity", unavailable)
+
+    def test_queued_handoff_deadline_expires_only_after_3600_seconds(self) -> None:
+        for lag, expected in ((3600, False), (3601, True)):
+            with self.subTest(lag=lag), tempfile.TemporaryDirectory() as directory:
+                completed_at = AS_OF - dt.timedelta(seconds=lag)
+                started_at = completed_at - dt.timedelta(minutes=1)
+                run = collector_run(
+                    run_id="200", conclusion="success", created_at=(started_at - dt.timedelta(minutes=1)).isoformat().replace("+00:00", "Z"),
+                    run_started_at=started_at.isoformat().replace("+00:00", "Z"),
+                )
+                run["updated_at"] = completed_at.isoformat().replace("+00:00", "Z")
+                report = self.run_health(
+                    pathlib.Path(directory), runs=[run], cp=[checkpoint(producer_run_id=RUN_ID)],
+                    artifacts_by_run={"200": [{"id": 101, "name": "upstream-catalog-refresh-200", "expired": False}]},
+                )
+                reasons = {row["reason"] for row in report["sources"][0]["faults"]}
+                self.assertEqual("successful_collector_not_observed" in reasons, expected)
 
     def test_heartbeat_does_not_hide_stalled_progress(self) -> None:
         cp = checkpoint(

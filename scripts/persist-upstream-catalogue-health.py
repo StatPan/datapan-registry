@@ -453,7 +453,8 @@ def recovery_evidence(
     old_fault: dict[str, Any], source: dict[str, Any] | None, current_faults: list[dict[str, Any]],
     receipt: dict[str, Any], processor_workflow_path: str, processor_workflow_events: set[str],
     promotion_workflow_path: str = "", promotion_workflow_events: set[str] | None = None,
-    maximum_future_skew: int = 0,
+    maximum_future_skew: int = 0, collector_workflow_path: str = "",
+    collector_workflow_events: set[str] | None = None,
 ) -> dict[str, Any] | None:
     if source is None or receipt.get("execution_mode") != "live":
         return None
@@ -542,6 +543,74 @@ def recovery_evidence(
             and execution_order > prior_order
             and not any(row.get("stage") == "promotion-execution" and row.get("severity") == "error" for row in stage_faults)
         )
+    elif stage == "collector-execution":
+        collector = source.get("collector", {})
+        latest = collector.get("latest_execution_run") if isinstance(collector, dict) else None
+        execution = latest.get("latest_successful_execution_run") if isinstance(latest, dict) else None
+        identity = old_fault.get("execution_identity")
+        prior_order = promotion_execution_order(identity) if isinstance(identity, dict) else None
+        execution_order = promotion_execution_order(execution)
+        evidence = execution.get("attempt_evidence") if isinstance(execution, dict) else None
+        repository = receipt.get("repository")
+        try:
+            evaluation_time = parse_time(receipt.get("evaluated_at"), "receipt.evaluated_at")
+            if execution_order is not None and execution_order[0] > evaluation_time + dt.timedelta(seconds=maximum_future_skew):
+                execution_order = None
+        except ValueError:
+            execution_order = None
+        run_id = execution.get("run_id") if isinstance(execution, dict) else None
+        attempt = execution.get("run_attempt") if isinstance(execution, dict) else None
+        workflow_id = execution.get("workflow_id") if isinstance(execution, dict) else None
+        jobs_endpoint = evidence.get("jobs_api_endpoint") if isinstance(evidence, dict) else None
+        job_count = evidence.get("job_count") if isinstance(evidence, dict) else None
+        jobs_sha256 = evidence.get("jobs_sha256") if isinstance(evidence, dict) else None
+        prior_head_sha = identity.get("head_sha") if isinstance(identity, dict) else None
+        expected_jobs_endpoint = (
+            f"repos/{repository}/actions/runs/{run_id}/attempts/{attempt}/jobs"
+            if isinstance(repository, str) and isinstance(run_id, str) and isinstance(attempt, int) else None
+        )
+        valid_success = bool(
+            isinstance(execution, dict)
+            and isinstance(repository, str)
+            and repository
+            and isinstance(collector_workflow_path, str)
+            and bool(collector_workflow_path)
+            and workflow_id and isinstance(workflow_id, int) and not isinstance(workflow_id, bool) and workflow_id > 0
+            and execution.get("path") in {collector_workflow_path, f"{collector_workflow_path}@main", f"{collector_workflow_path}@refs/heads/main"}
+            and execution.get("event") in (collector_workflow_events or set())
+            and execution.get("status") == "completed"
+            and execution.get("conclusion") == "success"
+            and execution.get("disposition") == "success"
+            and execution.get("head_branch") == "main"
+            and isinstance(execution.get("head_sha"), str)
+            and re.fullmatch(r"[a-f0-9]{40,64}", execution["head_sha"])
+            and execution.get("repository") == repository
+            and execution.get("head_repository") == repository
+            and isinstance(run_id, str) and run_id.isdigit() and int(run_id) > 0
+            and isinstance(attempt, int) and not isinstance(attempt, bool) and attempt > 0
+            and isinstance(jobs_endpoint, str) and jobs_endpoint == expected_jobs_endpoint
+            and isinstance(job_count, int) and not isinstance(job_count, bool) and 1 <= job_count <= 500
+            and isinstance(jobs_sha256, str) and bool(re.fullmatch(r"[a-f0-9]{64}", jobs_sha256))
+            and execution_order is not None
+            and prior_order is not None
+            and isinstance(prior_head_sha, str)
+            and re.fullmatch(r"[a-f0-9]{40,64}", prior_head_sha)
+            and execution_order > prior_order
+        )
+        cleared = (
+            old_fault.get("reason") in {
+                "repeated_collector_execution_failures",
+                "collector_run_attempt_unavailable",
+            }
+            and old_fault.get("severity") == "error"
+            and valid_success
+            and not any(
+                row.get("stage") == "collector-execution"
+                and row.get("reason") == "collector_run_attempt_unavailable"
+                and row.get("severity") == "error"
+                for row in current_faults
+            )
+        )
     elif stage in {"promotion", "publication"}:
         publication = source.get("canonical", {}).get("publication")
         relation = verified_already_canonical_relation(source, receipt) if (
@@ -575,6 +644,16 @@ def recovery_evidence(
             "health_receipt_sha256": receipt["receipt_sha256"],
             "execution_run_id": execution["run_id"],
             "execution_run_attempt": execution["run_attempt"],
+        }
+    if stage == "collector-execution":
+        return {
+            "verified": True,
+            "stage": stage,
+            "health_receipt_sha256": receipt["receipt_sha256"],
+            "execution_run_id": execution["run_id"],
+            "execution_run_attempt": execution["run_attempt"],
+            "attempt_jobs_sha256": evidence["jobs_sha256"],
+            "fault_reason": old_fault["reason"],
         }
     if (
         stage == "promotion"
@@ -624,6 +703,7 @@ def merge_faults(
     state: dict[str, Any], receipt: dict[str, Any], processor_workflow_path: str,
     processor_workflow_events: set[str], promotion_workflow_path: str = "",
     promotion_workflow_events: set[str] | None = None, maximum_future_skew: int = 0,
+    collector_workflow_path: str = "", collector_workflow_events: set[str] | None = None,
 ) -> None:
     evaluated_at = receipt["evaluated_at"]
     now = parse_time(evaluated_at, "receipt.evaluated_at")
@@ -663,6 +743,7 @@ def merge_faults(
         evidence = recovery_evidence(
             prior, source, list(incoming.values()), receipt, processor_workflow_path, processor_workflow_events,
             promotion_workflow_path, promotion_workflow_events, maximum_future_skew,
+            collector_workflow_path, collector_workflow_events,
         )
         if evidence is not None:
             prior["status"] = "recovered"
@@ -826,6 +907,8 @@ def persist(receipt_path: pathlib.Path, state_root: pathlib.Path, policy_path: p
         policy["promotion_state"]["promotion_workflow_path"],
         set(policy["processor_state"]["allowed_events"]),
         int(policy["clock"]["maximum_future_skew_seconds"]),
+        policy["health_workflow"]["collector_workflow_path"],
+        {"schedule", "workflow_dispatch"},
     )
     last_good = state.setdefault("last_good_by_source", {})
     for source in receipt.get("sources", []):

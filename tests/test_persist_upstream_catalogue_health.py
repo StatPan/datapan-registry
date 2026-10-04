@@ -4,8 +4,12 @@ import copy
 import datetime as dt
 import hashlib
 import importlib.util
+import json
 import pathlib
+import sys
+import tempfile
 import unittest
+from unittest import mock
 
 
 ROOT = pathlib.Path(__file__).parents[1]
@@ -13,11 +17,19 @@ SCRIPT = ROOT / "scripts" / "persist-upstream-catalogue-health.py"
 SPEC = importlib.util.spec_from_file_location("persist_upstream_catalogue_health", SCRIPT)
 assert SPEC and SPEC.loader
 PERSIST = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = PERSIST
 SPEC.loader.exec_module(PERSIST)
+CHECKER_SCRIPT = ROOT / "scripts" / "check-upstream-catalogue-health.py"
+CHECKER_SPEC = importlib.util.spec_from_file_location("check_upstream_catalogue_health_persist_test", CHECKER_SCRIPT)
+assert CHECKER_SPEC and CHECKER_SPEC.loader
+HEALTH = importlib.util.module_from_spec(CHECKER_SPEC)
+sys.modules[CHECKER_SPEC.name] = HEALTH
+CHECKER_SPEC.loader.exec_module(HEALTH)
 
 REPOSITORY = "StatPan/datapan-registry"
 PROMOTION_PATH = ".github/workflows/canonical-update-promotion.yml"
 PROCESSOR_PATH = ".github/workflows/upstream-catalogue-process.yml"
+COLLECTOR_PATH = ".github/workflows/upstream-catalog-refresh.yml"
 ALLOWED_EVENTS = {"workflow_run", "schedule", "workflow_dispatch"}
 PRIOR_RUN_ID = "37101245239"
 PRIOR_STARTED_AT = "2026-10-03T08:05:24Z"
@@ -246,10 +258,205 @@ def reduce(state: dict, receipt: dict) -> None:
         PROMOTION_PATH,
         ALLOWED_EVENTS,
         300,
+        COLLECTOR_PATH,
+        {"schedule", "workflow_dispatch"},
     )
 
 
+def collector_execution_fault(*, reason: str = "repeated_collector_execution_failures") -> dict:
+    return {
+        "source_id": "data_go_kr",
+        "stage": "collector-execution",
+        "reason": reason,
+        "severity": "error",
+        "owner_ticket": 659,
+        "fault_key": "b" * 64,
+        "recommended_action": "Inspect exact collector attempts.",
+        "status": "open",
+        "first_seen_at": "2026-10-03T08:00:00Z",
+        "last_seen_at": "2026-10-03T08:00:00Z",
+        "observation_count": 1,
+        "last_receipt_sha256": "e" * 64,
+        "generation_id": None,
+        "producer_run_id": None,
+        "recovery_evidence": None,
+        "execution_identity": {
+            "run_id": "37110000000",
+            "run_attempt": 1,
+            "run_started_at": "2026-10-03T08:00:00Z",
+            "head_sha": "d" * 40,
+        },
+    }
+
+
+def collector_success_summary(*, run_id: str = "37110000002", started_at: str = "2026-10-03T08:05:00Z") -> dict:
+    attempt = 1
+    return {
+        "run_id": run_id,
+        "run_attempt": attempt,
+        "workflow_id": 1101,
+        "path": COLLECTOR_PATH,
+        "event": "schedule",
+        "status": "completed",
+        "conclusion": "success",
+        "disposition": "success",
+        "run_started_at": started_at,
+        "head_branch": "main",
+        "head_sha": "c" * 40,
+        "repository": REPOSITORY,
+        "head_repository": REPOSITORY,
+        "attempt_evidence": {
+            "jobs_api_endpoint": f"repos/{REPOSITORY}/actions/runs/{run_id}/attempts/{attempt}/jobs",
+            "job_count": 1,
+            "jobs_sha256": "f" * 64,
+        },
+    }
+
+
 class PromotionExecutionRecoveryTests(unittest.TestCase):
+    def test_schema_valid_bad_seal_is_rejected_before_owned_state_initialization(self) -> None:
+        health_policy = json.loads((ROOT / "policy/upstream-catalogue-health.json").read_text(encoding="utf-8"))
+        source_policy = json.loads((ROOT / "policy/source-refresh.json").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            state_root = root / "health/upstream-catalogue"
+            receipt_path = root / "receipt.json"
+            main_identity = {
+                "revision": "a" * 40,
+                "manifest_sha256": "b" * 64,
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 12,
+                "registry_sha256": "c" * 64,
+            }
+            with mock.patch.object(HEALTH, "manifest_registry_identity", return_value={
+                key: value for key, value in main_identity.items() if key != "revision" and key != "manifest_sha256"
+            }):
+                receipt = HEALTH.evaluate(
+                    as_of=dt.datetime.fromisoformat("2026-10-03T08:10:00+00:00"),
+                    repository=REPOSITORY,
+                    health_policy=health_policy,
+                    source_policy=source_policy,
+                    workflow_runs=[],
+                    artifacts_by_run={},
+                    artifact_by_id={},
+                    processor_state_dir=root / "empty-processor-state",
+                    promotion_ack=None,
+                    main_revision=main_identity["revision"],
+                    manifest_sha256=main_identity["manifest_sha256"],
+                    registry_path=ROOT / "data/data-go-kr.registry.json",
+                    last_good=None,
+                    mode="live",
+                    workflow_run_id="37110000001",
+                    workflow_run_attempt=1,
+                    source_policy_sha256="d" * 64,
+                    health_policy_sha256="e" * 64,
+                    workflow_ids_by_path={".github/workflows/upstream-catalogue-health.yml": 1101},
+                )
+            PERSIST.validate_schema(receipt, PERSIST.RECEIPT_SCHEMA, "health_receipt")
+            PERSIST.seal(receipt, "receipt_sha256")
+            receipt["faults"].append(copy.deepcopy(receipt["faults"][0]))
+            PERSIST.validate_schema(receipt, PERSIST.RECEIPT_SCHEMA, "health_receipt")
+            receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "health_receipt_digest_mismatch"):
+                PERSIST.persist(
+                    receipt_path, state_root, ROOT / "policy/upstream-catalogue-health.json", REPOSITORY,
+                )
+
+            self.assertFalse(state_root.exists())
+
+    def test_exact_collector_success_recovers_only_the_older_execution_streak(self) -> None:
+        state = initial_state()
+        prior = collector_execution_fault()
+        state["faults"].append(copy.deepcopy(prior))
+        receipt = live_receipt()
+        receipt["sources"][0]["collector"] = {
+            "latest_execution_run": {
+                "run_id": "37110000003",
+                "latest_successful_execution_run": collector_success_summary(),
+            },
+        }
+
+        reduce(state, receipt)
+
+        recovered = next(row for row in state["faults"] if row["fault_key"] == prior["fault_key"])
+        self.assertEqual(recovered["status"], "recovered")
+        self.assertEqual(recovered["recovery_evidence"]["stage"], "collector-execution")
+        self.assertEqual(recovered["recovery_evidence"]["execution_run_id"], "37110000002")
+
+    def test_later_exact_collector_success_recovers_identified_unavailable_attempt(self) -> None:
+        state = initial_state()
+        prior = collector_execution_fault(reason="collector_run_attempt_unavailable")
+        state["faults"].append(copy.deepcopy(prior))
+        receipt = live_receipt()
+        receipt["sources"][0]["collector"] = {
+            "latest_execution_run": {
+                "run_id": "37110000003",
+                "latest_successful_execution_run": collector_success_summary(),
+            },
+        }
+
+        reduce(state, receipt)
+
+        recovered = next(row for row in state["faults"] if row["fault_key"] == prior["fault_key"])
+        self.assertEqual(recovered["status"], "recovered")
+        self.assertEqual(recovered["recovery_evidence"]["stage"], "collector-execution")
+        self.assertEqual(recovered["recovery_evidence"]["fault_reason"], "collector_run_attempt_unavailable")
+
+    def test_unavailable_collector_fault_without_execution_identity_cannot_recover(self) -> None:
+        state = initial_state()
+        prior = collector_execution_fault(reason="collector_run_attempt_unavailable")
+        prior.pop("execution_identity")
+        state["faults"].append(copy.deepcopy(prior))
+        receipt = live_receipt()
+        receipt["sources"][0]["collector"] = {
+            "latest_execution_run": {
+                "run_id": "37110000003",
+                "latest_successful_execution_run": collector_success_summary(),
+            },
+        }
+
+        reduce(state, receipt)
+
+        retained = next(row for row in state["faults"] if row["fault_key"] == prior["fault_key"])
+        self.assertEqual(retained["status"], "recovery_pending_verification")
+        self.assertFalse(retained["recovery_evidence"]["verified"])
+
+    def test_collector_success_without_exact_attempt_binding_cannot_recover(self) -> None:
+        state = initial_state()
+        prior = collector_execution_fault()
+        state["faults"].append(copy.deepcopy(prior))
+        success = collector_success_summary()
+        success["attempt_evidence"]["jobs_api_endpoint"] = "repos/Other/repo/actions/runs/37110000002/attempts/1/jobs"
+        receipt = live_receipt()
+        receipt["sources"][0]["collector"] = {"latest_execution_run": {"latest_successful_execution_run": success}}
+
+        reduce(state, receipt)
+
+        retained = next(row for row in state["faults"] if row["fault_key"] == prior["fault_key"])
+        self.assertEqual(retained["status"], "recovery_pending_verification")
+        self.assertEqual(retained["recovery_evidence"]["verified"], False)
+
+    def test_unavailable_collector_attempt_fault_blocks_stale_success_recovery(self) -> None:
+        state = initial_state()
+        prior = collector_execution_fault()
+        state["faults"].append(copy.deepcopy(prior))
+        unavailable = {
+            **collector_execution_fault(),
+            "reason": "collector_run_attempt_unavailable",
+            "fault_key": "c" * 64,
+        }
+        receipt = live_receipt(faults=[unavailable])
+        receipt["sources"][0]["collector"] = {
+            "latest_execution_run": {"latest_successful_execution_run": collector_success_summary()},
+        }
+
+        reduce(state, receipt)
+
+        retained = next(row for row in state["faults"] if row["fault_key"] == prior["fault_key"])
+        self.assertEqual(retained["status"], "recovery_pending_verification")
+        self.assertFalse(retained["recovery_evidence"]["verified"])
+
     def test_exact_sealed_noop_relation_recovers_only_current_generation_ack_warnings(self) -> None:
         for reason in ("promotion_ack_missing", "promotion_record_for_different_generation"):
             with self.subTest(reason=reason):
