@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "9691f27d12927290356ae18b135cc1ab0c3cd3b44ec1235d79f4ea3160f9d42d",
-      "last_seen_at": "2026-10-04T08:55:42Z",
-      "observation_count": 53,
+      "last_receipt_sha256": "186790e2fa11235aa69bebf30f20c7bbbeb9fd6781197c8f50e7ee2835c54af4",
+      "last_seen_at": "2026-10-04T09:01:40Z",
+      "observation_count": 54,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -125,11 +125,27 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_record_for_different_generation",
       "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "artifact_id": "11296371494",
+        "basis": "exact_processor_payload_already_canonical",
+        "checkpoint_sha256": "d95b257891c2dbdf0dd7ee45ce9f857ef37de3c64c1255be7d6b37f1fe32df9d",
+        "composed_registry_bytes": 139155499,
+        "composed_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+        "fault_reason": "promotion_record_for_different_generation",
+        "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+        "health_receipt_sha256": "186790e2fa11235aa69bebf30f20c7bbbeb9fd6781197c8f50e7ee2835c54af4",
+        "main_manifest_sha256": "c0e3708881fb39815205b7358d70ef9c7c0b712422d073589d8edff95f16d54e",
+        "main_revision": "13488df5a567e8020773563c0ae2a28d890d405b",
+        "output_bundle_sha256": "d700fb50d0cc1b65da1cc8bd488244a1d82fda880befc170b986c9b73b42cfef",
+        "processor_run_attempt": 1,
+        "processor_run_id": "37183961998",
+        "stage": "promotion",
+        "verified": true
+      },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "fault_key": "b11a123169de28c7edb7e3befcd3b95fffd1fa32420015358d751226d6fa0e41",
@@ -164,11 +180,27 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_ack_missing",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "artifact_id": "11296371494",
+        "basis": "exact_processor_payload_already_canonical",
+        "checkpoint_sha256": "d95b257891c2dbdf0dd7ee45ce9f857ef37de3c64c1255be7d6b37f1fe32df9d",
+        "composed_registry_bytes": 139155499,
+        "composed_registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+        "fault_reason": "promotion_ack_missing",
+        "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+        "health_receipt_sha256": "186790e2fa11235aa69bebf30f20c7bbbeb9fd6781197c8f50e7ee2835c54af4",
+        "main_manifest_sha256": "c0e3708881fb39815205b7358d70ef9c7c0b712422d073589d8edff95f16d54e",
+        "main_revision": "13488df5a567e8020773563c0ae2a28d890d405b",
+        "output_bundle_sha256": "d700fb50d0cc1b65da1cc8bd488244a1d82fda880befc170b986c9b73b42cfef",
+        "processor_run_attempt": 1,
+        "processor_run_id": "37183961998",
+        "stage": "promotion",
+        "verified": true
+      },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -510,12 +542,29 @@
       "source_id": "data_go_kr",
       "stage": "publication",
       "status": "recovery_pending_verification"
+    },
+    {
+      "fault_key": "2256af2c30e594474c69c20e00ad47e50c26837926eeb2a762a1241e5a85a7a7",
+      "first_seen_at": "2026-10-04T09:01:40Z",
+      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+      "last_receipt_sha256": "186790e2fa11235aa69bebf30f20c7bbbeb9fd6781197c8f50e7ee2835c54af4",
+      "last_seen_at": "2026-10-04T09:01:40Z",
+      "observation_count": 1,
+      "owner_ticket": 659,
+      "producer_run_id": "36646768289",
+      "reason": "publication_or_readback_pending",
+      "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "recovery_evidence": null,
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "publication",
+      "status": "open"
     }
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37190490913-1-9691f27d12927290.json",
-    "sha256": "9691f27d12927290356ae18b135cc1ab0c3cd3b44ec1235d79f4ea3160f9d42d"
+    "path": "receipts/receipt-37190800391-1-186790e2fa11235a.json",
+    "sha256": "186790e2fa11235aa69bebf30f20c7bbbeb9fd6781197c8f50e7ee2835c54af4"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -535,7 +584,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "6e2d745daa8793b27131eccce49d9f29439cf67de876db9b29b43f9eb79208dd",
+  "state_sha256": "4ddbf6426538b62f13ee111ad7fc7c3b395d1dec1c77743336bf8046f4f91ec4",
   "state_status": "degraded",
-  "updated_at": "2026-10-04T08:55:42Z"
+  "updated_at": "2026-10-04T09:01:40Z"
 }
