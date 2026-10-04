@@ -77,7 +77,7 @@
       "required": ["key", "version", "authority", "max_level"],
       "properties": {
         "key": {"type": "string", "pattern": "^dpr-op-[0-9]{8}$"},
-        "version": {"const": 1},
+        "version": {"type": "integer", "minimum": 1},
         "authority": {"const": "datapan-registry"},
         "max_level": {"enum": ["L2", "L3", "L4"]}
       }

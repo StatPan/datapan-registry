@@ -6,7 +6,15 @@ An entry is executable only when its eligibility status is `eligible` or `creden
 
 The catalog intentionally excludes credentials, generated query values, response rows, mutable receipts, and live health state. A runner supplies credentials and evaluates a request; Datapan Status stores or projects the resulting mutable observations outside the Registry release. A `not_asserted` freshness policy is not a fresh/stale claim: the Healthcheck stores and presents probe availability and last observation as its separate runtime state.
 
-The reviewed set contains ten canaries: five data.go.kr gateway routes and five registered external-adapter routes. `fixtures/health-probe-catalog/cli-health-probe-v1.json` proves that every selector resolves to the contract used by datapan-cli. The operation-key algorithm remains `datapan-cli-health-operation-key-v1`; the CLI receives the Service Key only at execution time and emits a redacted `datapan.health-probe.v1` receipt.
+The reviewed set contains ten canaries: six data.go.kr gateway routes and four registered external-adapter routes. `fixtures/health-probe-catalog/cli-health-probe-v1.json` proves that every selector resolves to the contract used by datapan-cli. The operation-key algorithm remains `datapan-cli-health-operation-key-v1`; the CLI receives the Service Key only at execution time and emits a redacted `datapan.health-probe.v1` receipt.
+
+## SISUL gateway selection
+
+Policy version 2 of `dpr-op-00000009` selects the current official SISUL gateway dataset `15158559`, operation `69640`, using the existing canonical GET contract at `apis.data.go.kr` path `/B553774/Publicgarage/getPublicgarageQry`. Only `pageNo=1` and `numOfRows=1` are approved; the request budget remains one. The service key and service entitlement must still be supplied and verified at execution.
+
+The official metadata for the previously selected `15109030` now reports that the dataset does not exist. The [current official gateway dataset](https://www.data.go.kr/data/15158559/openapi.do) identifies SISUL and the same bus-depot operation; its matching operation is already present in the canonical Registry. `policy/health-probe-canaries.json` records both metadata identities, acquisition time and digests, the old/new operation selectors and the version change.
+
+This is a reviewed change of the logical monitor's selected API. It does not assert an official retirement date, a redirect relationship or a successful live gateway response. Both canonical records and historical failure evidence are retained. Consumers must adopt the exact newly published catalog/revision and policy version; an observation of the previous API cannot be accepted as a result for this version. Source/immutable publication proof and actual provider/runtime acceptance remain separate.
 
 Each endpoint now declares its upstream `http` or `https` scheme. Consumers must preserve that scheme rather than reconstruct every request as HTTPS. This catalog requires the transport support in datapan-cli #178 (planned release v0.1.40); the older v0.1.37 baseline and v0.1.39 runtime cannot prove execution of this contract. Publication and consumer installation must be verified separately from source validation. Source query values are excluded; the bounded parameter policy alone supplies request parameters.
 

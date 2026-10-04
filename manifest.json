@@ -508,8 +508,8 @@
     {
       "path": "schemas/datapan.health-probe-catalog.v1.schema.json",
       "kind": "schema",
-      "bytes": 7929,
-      "sha256": "f64f7f94ed165f63251eb134739a6cd5c393708dee2e4815635d6d3ed8b0f730"
+      "bytes": 7950,
+      "sha256": "c8f9013cfe3cba1ccb6a0534b25031e76af5924a6496781bf3087957a6c1cbd1"
     },
     {
       "path": "schemas/datapan.source-provenance.v1.schema.json",
@@ -685,8 +685,8 @@
       "path": "reports/health-probe-catalog.json",
       "kind": "health_probe_catalog",
       "schema": "https://schemas.datapan.dev/datapan.health-probe-catalog.v1.schema.json",
-      "bytes": 16784,
-      "sha256": "827433dec514fa10ebef780ff611f6314b6e1d7270acde81ce6d60ec7a46e27e"
+      "bytes": 16753,
+      "sha256": "0503ddd9c93c31781c7920ccccdaf55aa5f3ed7e8061cb7dd16f0d8eb95611d2"
     },
     {
       "path": "reports/regional-baseline-source-provenance.json",
@@ -973,7 +973,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2216,
-      "sha256": "2e63b62307efe609d23b04d919da1c385f1a21c5707b720456bb38e4fe90b02c"
+      "sha256": "19f623cb81c4b3160ebeff8bfce2ed37b70f7a0e9d431b74f603e6dab33756b8"
     },
     {
       "path": "reports/release-shard-consumer-proof.json",
@@ -1199,7 +1199,7 @@
       "kind": "diagnostic_current_source_applicability",
       "schema": "https://schemas.datapan.dev/datapan.diagnostic-current-source-applicability.v1.schema.json",
       "bytes": 25760,
-      "sha256": "2a83349db361b7c3add418b6943514c69829155976edb78e78385ee54b4cab0f"
+      "sha256": "5f69657ae145389839ffd8d869171e061c894bff9e9436c62221b86e41f15554"
     },
     {
       "path": "policy/upstream-catalogue-health.json",

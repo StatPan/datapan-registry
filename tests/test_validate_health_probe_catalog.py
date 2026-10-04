@@ -14,6 +14,11 @@ sys.path.insert(0, str(ROOT / "scripts"))
 SPEC.loader.exec_module(MODULE)
 sys.path.pop(0)
 
+GENERATOR_SPEC = importlib.util.spec_from_file_location("health_catalog_generator", ROOT / "scripts/generate-health-probe-catalog.py")
+GENERATOR = importlib.util.module_from_spec(GENERATOR_SPEC)
+assert GENERATOR_SPEC.loader
+GENERATOR_SPEC.loader.exec_module(GENERATOR)
+
 
 class HealthProbeCatalogTest(unittest.TestCase):
     @classmethod
@@ -56,6 +61,29 @@ class HealthProbeCatalogTest(unittest.TestCase):
         next(e for e in value["entries"] if e["operation_id"] == "dpr-op-00000007")["endpoint"]["path"] = "/openapi/service/weatherMoniterSvc"
         with self.assertRaisesRegex(ValueError, "endpoint transport or correction drift"):
             self.validate(value)
+
+    def test_old_sisul_selector_cannot_replace_current_gateway(self):
+        value = copy.deepcopy(self.catalog)
+        entry = next(e for e in value["entries"] if e["operation_id"] == "dpr-op-00000009")
+        entry["aliases"]["dataset_id"] = "15109030"
+        with self.assertRaisesRegex(ValueError, "selected operation selector drift"):
+            self.validate(value)
+
+    def test_changed_selector_rejects_previous_policy_version(self):
+        value = copy.deepcopy(self.catalog)
+        entry = next(e for e in value["entries"] if e["operation_id"] == "dpr-op-00000009")
+        self.assertEqual(entry["policy"]["version"], 2)
+        entry["policy"]["version"] = 1
+        with self.assertRaisesRegex(ValueError, "selected policy version drift"):
+            self.validate(value)
+
+    def test_generator_rejects_invalid_policy_versions(self):
+        for version in (0, -1, True, "2"):
+            with self.subTest(version=version):
+                policy = MODULE.load(ROOT / "policy/health-probe-canaries.json")
+                policy["canaries"][0]["policy_version"] = version
+                with self.assertRaisesRegex(ValueError, "policy version must be a positive integer"):
+                    GENERATOR.build(policy, self.registry)
 
     def test_selector_drift_rejected(self):
         value = copy.deepcopy(self.fixture)
