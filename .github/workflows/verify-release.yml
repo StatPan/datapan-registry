@@ -197,8 +197,11 @@ jobs:
           python -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py tests/test_persist_upstream_catalogue_health.py
           python -m unittest tests/test_process_upstream_catalogue_candidate.py
           python -m unittest tests/test_upstream_catalogue_process_workflow.py
+          python -m unittest tests/test_upstream_catalogue_handoff.py
+          python -m unittest tests/test_upstream_catalogue_handoff_integration.py
           python -m unittest tests/test_recover_upstream_catalogue_failed_generation.py
           python3 -m py_compile scripts/upstream-catalogue-state-branch.py
+          python3 -m py_compile scripts/upstream_catalogue_handoff.py
           python -m unittest tests/test_compose_upstream_catalogue_candidate.py
           python -m unittest tests/test_manual_review_technical_rebinding.py
           python -m unittest tests/test_sync_release_manifest_artifacts.py

@@ -76,6 +76,7 @@ PROCESSOR_COMPATIBILITY_FILES = (
     ".github/workflows/upstream-catalogue-process.yml",
     ".github/workflows/upstream-catalog-refresh.yml",
     "scripts/upstream-catalogue-state-branch.py",
+    "scripts/upstream_catalogue_handoff.py",
     "scripts/compose-upstream-catalogue-candidate.py",
     "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
@@ -650,10 +651,25 @@ def verify_processor_input_compatibility(
         historical_bytes[raw_path] = source_bytes
         current_digest = hashlib.sha256(current_bytes).hexdigest()
         expected_field = next((field for field, input_path in PROCESSOR_INPUT_PROVENANCE.items() if input_path == raw_path), None)
-        if expected_field is not None and generation_inputs.get(expected_field) != source_digest:
+        if expected_field is not None and expected_field != "generator_revision" and generation_inputs.get(expected_field) != source_digest:
             raise PromotionError(f"processor checkpoint provenance does not match its source commit: {raw_path}")
         if source_digest != current_digest:
             raise PromotionError(f"processor input contract changed since observation: {raw_path}")
+    processor_path = PROCESSOR_INPUT_PROVENANCE["generator_revision"]
+    handoff_path = "scripts/upstream_catalogue_handoff.py"
+    processor_bytes = historical_bytes.get(processor_path)
+    handoff_bytes = historical_bytes.get(handoff_path)
+    if processor_bytes is None or handoff_bytes is None:
+        raise PromotionError("processor source is missing its collector handoff compatibility input")
+    generator_material = {
+        "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
+        "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
+    }
+    expected_generator_revision = hashlib.sha256(
+        json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    if generation_inputs.get("generator_revision") != expected_generator_revision:
+        raise PromotionError("processor checkpoint generator revision does not bind its handoff helper")
     if composition_receipt is not None:
         input_digests = composition_receipt.get("input_digests")
         if not isinstance(input_digests, Mapping):

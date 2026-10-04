@@ -76,6 +76,21 @@ jobs:
           jq -r '"old_sha=" + .old_sha' .datapan/ci/upstream-catalogue-state-context.json >> "${GITHUB_OUTPUT}"
           echo "state_dir=../state-repo/.datapan/upstream-catalogue-state" >> "${GITHUB_OUTPUT}"
 
+      - name: Discover missed trusted collector handoff before scheduled detail continuation
+        id: handoff
+        if: github.event_name == 'schedule'
+        working-directory: bootstrap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+        run: |
+          set -euo pipefail
+          python3 scripts/upstream_catalogue_handoff.py \
+            --repository "${REPOSITORY}" --default-branch "${DEFAULT_BRANCH}" \
+            --state-dir "${STATE_DIR}" >> "${GITHUB_OUTPUT}"
+
       - name: Select producer observation or oldest active generation
         id: select
         working-directory: bootstrap
@@ -83,8 +98,19 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           EVENT_PRODUCER_RUN_ID: ${{ github.event.workflow_run.id }}
           EVENT_PRODUCER_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          EVENT_PRODUCER_RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
           INPUT_PRODUCER_RUN_ID: ${{ inputs.producer_run_id }}
           INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID: ${{ inputs.recover_failed_processor_run_id }}
+          HANDOFF_AVAILABLE: ${{ steps.handoff.outputs.available }}
+          HANDOFF_PRODUCER_RUN_ID: ${{ steps.handoff.outputs.producer_run_id }}
+          HANDOFF_PRODUCER_HEAD_SHA: ${{ steps.handoff.outputs.head_sha }}
+          HANDOFF_RUN_ATTEMPT: ${{ steps.handoff.outputs.run_attempt }}
+          HANDOFF_RUN_STARTED_AT: ${{ steps.handoff.outputs.run_started_at }}
+          HANDOFF_ARTIFACT_ID: ${{ steps.handoff.outputs.artifact_id }}
+          HANDOFF_ARTIFACT_NAME: ${{ steps.handoff.outputs.artifact_name }}
+          HANDOFF_ARTIFACT_EXPIRES_AT: ${{ steps.handoff.outputs.artifact_expires_at }}
+          HANDOFF_ARTIFACT_DIGEST: ${{ steps.handoff.outputs.artifact_digest_sha256 }}
+          HANDOFF_ARTIFACT_SIZE: ${{ steps.handoff.outputs.artifact_size_bytes }}
           REPOSITORY: ${{ github.repository }}
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
         run: |
@@ -242,8 +268,10 @@ jobs:
               echo "producer_run_id=${EVENT_PRODUCER_RUN_ID}"
               echo "producer_head_sha=${EVENT_PRODUCER_HEAD_SHA}"
               echo "generation_id=${generation_id}"
-              echo "expected_input_artifact_id=${expected_artifact_id}"
-              echo "expected_input_expires_at=${expected_expires_at}"
+              [[ "${EVENT_PRODUCER_RUN_ATTEMPT}" =~ ^[1-9][0-9]*$ ]]
+              echo "expected_producer_attempt=${EVENT_PRODUCER_RUN_ATTEMPT}"
+              echo "expected_input_artifact_id="
+              echo "expected_input_expires_at="
               echo "expected_input_name=upstream-catalog-refresh-${EVENT_PRODUCER_RUN_ID}"
             } >> "${GITHUB_OUTPUT}"
             exit 0
@@ -258,9 +286,32 @@ jobs:
               echo "producer_run_id=${INPUT_PRODUCER_RUN_ID}"
               echo "producer_head_sha="
               echo "generation_id=${generation_id}"
-              echo "expected_input_artifact_id=${expected_artifact_id}"
-              echo "expected_input_expires_at=${expected_expires_at}"
+              echo "expected_input_artifact_id="
+              echo "expected_input_expires_at="
               echo "expected_input_name=upstream-catalog-refresh-${INPUT_PRODUCER_RUN_ID}"
+            } >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          if [ "${EVENT_NAME}" = "schedule" ] && [ "${HANDOFF_AVAILABLE}" = "true" ]; then
+            [[ "${HANDOFF_PRODUCER_RUN_ID}" =~ ^[0-9]+$ ]]
+            [[ "${HANDOFF_PRODUCER_HEAD_SHA}" =~ ^[a-f0-9]{40}$ ]]
+            [[ "${HANDOFF_RUN_ATTEMPT}" =~ ^[1-9][0-9]*$ ]]
+            [[ "${HANDOFF_ARTIFACT_ID}" =~ ^[0-9]+$ ]]
+            [[ "${HANDOFF_ARTIFACT_DIGEST}" =~ ^[a-f0-9]{64}$ ]]
+            [[ "${HANDOFF_ARTIFACT_SIZE}" =~ ^[1-9][0-9]*$ ]]
+            {
+              echo "decision=process"
+              echo "producer_run_id=${HANDOFF_PRODUCER_RUN_ID}"
+              echo "producer_head_sha=${HANDOFF_PRODUCER_HEAD_SHA}"
+              echo "generation_id="
+              echo "expected_input_artifact_id=${HANDOFF_ARTIFACT_ID}"
+              echo "expected_input_expires_at=${HANDOFF_ARTIFACT_EXPIRES_AT}"
+              echo "expected_input_name=${HANDOFF_ARTIFACT_NAME}"
+              echo "expected_input_digest=${HANDOFF_ARTIFACT_DIGEST}"
+              echo "expected_input_size=${HANDOFF_ARTIFACT_SIZE}"
+              echo "expected_producer_attempt=${HANDOFF_RUN_ATTEMPT}"
+              echo "expected_producer_started_at=${HANDOFF_RUN_STARTED_AT}"
             } >> "${GITHUB_OUTPUT}"
             exit 0
           fi
@@ -384,8 +435,8 @@ jobs:
           source_sha = str(value.get("head_sha", ""))
           if not re.fullmatch(r"[a-f0-9]{40}", source_sha):
               raise SystemExit("FAIL producer commit identity is invalid")
-          if os.environ["EVENT_NAME"] == "workflow_run" and source_sha != os.environ["EVENT_HEAD_SHA"]:
-              raise SystemExit("FAIL workflow_run source SHA does not match the producer API record")
+          if os.environ.get("EVENT_HEAD_SHA") and source_sha != os.environ["EVENT_HEAD_SHA"]:
+              raise SystemExit("FAIL selected producer SHA does not match its exact Actions API record")
           if str(value.get("id")) != os.environ["PRODUCER_RUN_ID"]:
               raise SystemExit("FAIL producer run id does not match the selected run")
           producer_url = value.get("html_url", "")
@@ -404,6 +455,39 @@ jobs:
           git worktree add --detach ../datapan-registry "${source_sha}"
           echo "head_sha=${source_sha}" >> "${GITHUB_OUTPUT}"
           echo "run_url=${producer_url}" >> "${GITHUB_OUTPUT}"
+
+      - name: Bind the collector upload to the exact completed run attempt
+        if: steps.select.outputs.decision == 'process'
+        id: producer_attempt
+        working-directory: bootstrap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          PRODUCER_HEAD_SHA: ${{ steps.producer.outputs.head_sha }}
+          EXPECTED_RUN_ATTEMPT: ${{ steps.select.outputs.expected_producer_attempt || github.event.workflow_run.run_attempt }}
+          EXPECTED_ARTIFACT_ID: ${{ steps.select.outputs.expected_input_artifact_id }}
+          EXPECTED_ARTIFACT_DIGEST: ${{ steps.select.outputs.expected_input_digest }}
+          EXPECTED_ARTIFACT_SIZE: ${{ steps.select.outputs.expected_input_size }}
+          DISCOVERY_API_REQUESTS: ${{ steps.handoff.outputs.api_requests }}
+        run: |
+          set -euo pipefail
+          args=(
+            --repository "${REPOSITORY}" --default-branch "${DEFAULT_BRANCH}"
+            --state-dir "${STATE_DIR}" --inspect-run-id "${PRODUCER_RUN_ID}"
+            --expected-head-sha "${PRODUCER_HEAD_SHA}"
+          )
+          if [ -n "${EXPECTED_RUN_ATTEMPT}" ]; then args+=(--expected-run-attempt "${EXPECTED_RUN_ATTEMPT}"); fi
+          if [ -n "${EXPECTED_ARTIFACT_ID}" ]; then args+=(--expected-artifact-id "${EXPECTED_ARTIFACT_ID}"); fi
+          if [ -n "${EXPECTED_ARTIFACT_DIGEST}" ]; then args+=(--expected-artifact-digest "${EXPECTED_ARTIFACT_DIGEST}"); fi
+          if [ -n "${EXPECTED_ARTIFACT_SIZE}" ]; then args+=(--expected-artifact-size "${EXPECTED_ARTIFACT_SIZE}"); fi
+          discovery_requests="${DISCOVERY_API_REQUESTS:-0}"
+          [[ "${discovery_requests}" =~ ^[0-9]+$ ]]
+          prior_requests=$((discovery_requests + 1)) # producer revision lookup above
+          args+=(--prior-api-requests "${prior_requests}" --reserve-api-requests 3)
+          python3 scripts/upstream_catalogue_handoff.py "${args[@]}" >> "${GITHUB_OUTPUT}"
 
       - name: Setup Python
         if: steps.select.outputs.decision == 'process' || steps.select.outputs.decision == 'recover'
@@ -433,99 +517,186 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
-          ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
-          EXPECTED_ARTIFACT_ID: ${{ steps.select.outputs.expected_input_artifact_id }}
-          EXPECTED_EXPIRES_AT: ${{ steps.select.outputs.expected_input_expires_at }}
+          PRODUCER_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
+          PRODUCER_ATTEMPT: ${{ steps.producer_attempt.outputs.run_attempt }}
+          PRODUCER_RUN_STARTED_AT: ${{ steps.producer_attempt.outputs.run_started_at }}
+          PRODUCER_RUN_COMPLETED_AT: ${{ steps.producer_attempt.outputs.run_completed_at }}
+          PRODUCER_RUN_UPDATED_AT: ${{ steps.producer_attempt.outputs.run_updated_at }}
+          OBSERVE_JOB_STARTED_AT: ${{ steps.producer_attempt.outputs.observe_job_started_at }}
+          OBSERVE_JOB_COMPLETED_AT: ${{ steps.producer_attempt.outputs.observe_job_completed_at }}
+          ARTIFACT_ID: ${{ steps.producer_attempt.outputs.artifact_id }}
+          ARTIFACT_NAME: ${{ steps.producer_attempt.outputs.artifact_name }}
+          ARTIFACT_EXPIRES_AT: ${{ steps.producer_attempt.outputs.artifact_expires_at }}
+          ARTIFACT_CREATED_AT: ${{ steps.producer_attempt.outputs.artifact_created_at }}
+          ARTIFACT_DIGEST: ${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}
+          ARTIFACT_SIZE: ${{ steps.producer_attempt.outputs.artifact_size_bytes }}
+          REPOSITORY_ID: ${{ steps.producer_attempt.outputs.repository_id }}
+          HEAD_REPOSITORY_ID: ${{ steps.producer_attempt.outputs.head_repository_id }}
+          PRODUCER_EVENT: ${{ steps.producer_attempt.outputs.event }}
+          PRODUCER_URL: ${{ steps.producer_attempt.outputs.producer_url }}
         run: |
           set -euo pipefail
-          [[ "${PRODUCER_RUN_ID}" =~ ^[0-9]+$ ]]
-          mkdir -p .datapan/ci/upstream-refresh .datapan/ci/producer-artifact-metadata
-          CHOICE_PATH=.datapan/ci/producer-artifact-metadata/choice.json
-          export CHOICE_PATH
-          gh api "repos/${REPOSITORY}/actions/runs/${PRODUCER_RUN_ID}/artifacts?per_page=100" > .datapan/ci/producer-artifacts.json
-          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          [[ "${PRODUCER_RUN_ID}" =~ ^[0-9]+$ && "${PRODUCER_ATTEMPT}" =~ ^[1-9][0-9]*$ ]]
+          [[ "${ARTIFACT_ID}" =~ ^[0-9]+$ && "${ARTIFACT_SIZE}" =~ ^[1-9][0-9]*$ ]]
+          [[ "${ARTIFACT_DIGEST}" =~ ^[a-f0-9]{64}$ ]]
+          mkdir -p .datapan/ci/upstream-refresh
+          root=.datapan/ci/upstream-refresh
+          archive="${root}/collector-artifact.zip"
+          gh api -H 'Accept: application/vnd.github+json' \
+            "repos/${REPOSITORY}/actions/artifacts/${ARTIFACT_ID}" > "${root}/artifact-metadata.json"
+          python3 - <<'PY'
           import datetime as dt
           import json
           import os
           from pathlib import Path
-
-          payload = json.loads(Path(".datapan/ci/producer-artifacts.json").read_text(encoding="utf-8"))
-          matches = [row for row in payload.get("artifacts", []) if row.get("name") == os.environ["ARTIFACT_NAME"]]
-          if len(matches) > 1:
-              raise SystemExit("FAIL duplicate producer artifact names")
-          if not matches:
-              fallback_expiry = os.environ.get("EXPECTED_EXPIRES_AT", "")
-              if not fallback_expiry:
-                  fallback_expiry = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=30)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-              expired = dt.datetime.fromisoformat(fallback_expiry.replace("Z", "+00:00")) <= dt.datetime.now(dt.timezone.utc)
-              choice = {"found": False, "input_error": "artifact_missing", "artifact_id": os.environ.get("EXPECTED_ARTIFACT_ID", ""), "expires_at": fallback_expiry, "expired": expired}
-              Path(os.environ["CHOICE_PATH"]).write_text(json.dumps(choice, sort_keys=True) + "\n", encoding="utf-8")
-              print("found=false")
-              print("input_error=artifact_missing")
-              print(f"artifact_id={choice['artifact_id']}")
-              print(f"expires_at={fallback_expiry}")
-              print(f"expired={'true' if expired else 'false'}")
-              raise SystemExit(0)
-          artifact = matches[0]
-          artifact_id = str(artifact.get("id", ""))
-          expires_at = str(artifact.get("expires_at", ""))
-          if not artifact_id.isdigit() or not expires_at:
-              raise SystemExit("FAIL producer artifact metadata is incomplete")
-          if str(artifact.get("workflow_run", {}).get("id", "")) != os.environ["PRODUCER_RUN_ID"]:
-              raise SystemExit("FAIL producer artifact run identity mismatch")
-          expected_id = os.environ.get("EXPECTED_ARTIFACT_ID", "")
-          expected_expiry = os.environ.get("EXPECTED_EXPIRES_AT", "")
-          if expected_id and artifact_id != expected_id:
-              expected_locator_expiry = expected_expiry or expires_at
-              expired = dt.datetime.fromisoformat(expected_locator_expiry.replace("Z", "+00:00")) <= dt.datetime.now(dt.timezone.utc)
-              choice = {"found": False, "input_error": "artifact_missing", "artifact_id": expected_id, "expires_at": expected_locator_expiry, "expired": expired}
-              Path(os.environ["CHOICE_PATH"]).write_text(json.dumps(choice, sort_keys=True) + "\n", encoding="utf-8")
-              print("found=false")
-              print("input_error=artifact_missing")
-              print(f"artifact_id={expected_id}")
-              print(f"expires_at={expected_locator_expiry}")
-              print(f"expired={'true' if expired else 'false'}")
-              raise SystemExit(0)
-          if expected_expiry and expires_at != expected_expiry:
-              raise SystemExit("FAIL producer artifact expiry does not match durable locator")
-          parsed_expiry = dt.datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
-          expired = bool(artifact.get("expired")) or parsed_expiry <= dt.datetime.now(dt.timezone.utc)
-          choice = {"found": not expired, "input_error": "artifact_missing" if expired else "", "artifact_id": artifact_id, "expires_at": expires_at, "expired": expired}
-          Path(os.environ["CHOICE_PATH"]).write_text(json.dumps(choice, sort_keys=True) + "\n", encoding="utf-8")
-          print(f"found={'false' if expired else 'true'}")
-          print(f"input_error={'artifact_missing' if expired else ''}")
-          print(f"artifact_id={artifact_id}")
-          print(f"expires_at={expires_at}")
-          print(f"expired={'true' if expired else 'false'}")
+          artifact = json.loads(Path(".datapan/ci/upstream-refresh/artifact-metadata.json").read_text(encoding="utf-8"))
+          env = os.environ
+          workflow_run = artifact.get("workflow_run")
+          try:
+              expires = dt.datetime.fromisoformat(str(artifact.get("expires_at", "")).replace("Z", "+00:00"))
+              size = int(artifact.get("size_in_bytes", 0))
+          except (TypeError, ValueError) as exc:
+              raise SystemExit("FAIL exact collector artifact metadata is malformed") from exc
+          if (
+              str(artifact.get("id")) != env["ARTIFACT_ID"]
+              or artifact.get("name") != env["ARTIFACT_NAME"]
+              or artifact.get("expired") is not False
+              or artifact.get("expires_at") != env["ARTIFACT_EXPIRES_AT"]
+              or artifact.get("created_at") != env["ARTIFACT_CREATED_AT"]
+              or artifact.get("digest") != "sha256:" + env["ARTIFACT_DIGEST"]
+              or size != int(env["ARTIFACT_SIZE"]) or not 0 < size <= 268435456
+              or expires.tzinfo is None or expires <= dt.datetime.now(dt.timezone.utc)
+              or not isinstance(workflow_run, dict)
+              or str(workflow_run.get("id")) != env["PRODUCER_RUN_ID"]
+              or workflow_run.get("head_sha") != env["PRODUCER_HEAD_SHA"]
+              or str(workflow_run.get("repository_id")) != env["REPOSITORY_ID"]
+              or str(workflow_run.get("head_repository_id")) != env["HEAD_REPOSITORY_ID"]
+          ):
+              raise SystemExit("FAIL exact collector artifact metadata changed before download")
+          job_started = dt.datetime.fromisoformat(env["OBSERVE_JOB_STARTED_AT"].replace("Z", "+00:00"))
+          job_completed = dt.datetime.fromisoformat(env["OBSERVE_JOB_COMPLETED_AT"].replace("Z", "+00:00"))
+          created = dt.datetime.fromisoformat(str(artifact["created_at"]).replace("Z", "+00:00"))
+          if not job_started <= created <= job_completed:
+              raise SystemExit("FAIL collector artifact is outside the exact observe job interval")
           PY
-          found="$(python3 -c 'import json,sys; print(str(json.load(open(sys.argv[1], encoding="utf-8")).get("found", False)).lower())' "${CHOICE_PATH}")"
-          if [ "${found}" = "true" ]; then
-            gh run download "${PRODUCER_RUN_ID}" --repo "${REPOSITORY}" --name "${ARTIFACT_NAME}" --dir .datapan/ci/upstream-refresh
-            python3 - <<'PY'
+          gh api -H 'Accept: application/vnd.github+json' \
+            "repos/${REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" > "${archive}"
+          gh api "repos/${REPOSITORY}/actions/runs/${PRODUCER_RUN_ID}" > "${root}/producer-run-after-download.json"
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import datetime as dt
           import hashlib
           import json
+          import os
+          import re
+          import stat
+          import zipfile
           from pathlib import Path
+
           root = Path(".datapan/ci/upstream-refresh")
+          artifact = json.loads((root / "artifact-metadata.json").read_text(encoding="utf-8"))
+          run = json.loads((root / "producer-run-after-download.json").read_text(encoding="utf-8"))
+          env = os.environ
+          expected = {
+              "id": env["ARTIFACT_ID"], "name": env["ARTIFACT_NAME"],
+              "expires_at": env["ARTIFACT_EXPIRES_AT"], "digest": "sha256:" + env["ARTIFACT_DIGEST"],
+              "size_in_bytes": int(env["ARTIFACT_SIZE"]), "expired": False,
+              "created_at": env["ARTIFACT_CREATED_AT"],
+          }
+          if any(str(artifact.get(key)) != str(value) for key, value in expected.items()):
+              raise SystemExit("FAIL exact collector artifact API metadata changed")
+          workflow_run = artifact.get("workflow_run")
+          if not isinstance(workflow_run, dict) or (
+              str(workflow_run.get("id")) != env["PRODUCER_RUN_ID"]
+              or workflow_run.get("head_sha") != env["PRODUCER_HEAD_SHA"]
+              or str(workflow_run.get("repository_id")) != env["REPOSITORY_ID"]
+              or str(workflow_run.get("head_repository_id")) != env["HEAD_REPOSITORY_ID"]
+          ):
+              raise SystemExit("FAIL exact collector artifact workflow binding changed")
+          if (
+              str(run.get("id")) != env["PRODUCER_RUN_ID"]
+              or run.get("name") != "Upstream catalog refresh"
+              or run.get("path") != ".github/workflows/upstream-catalog-refresh.yml"
+              or (run.get("repository") or {}).get("full_name") != env["REPOSITORY"]
+              or (run.get("head_repository") or {}).get("full_name") != env["REPOSITORY"]
+              or run.get("head_branch") != env["DEFAULT_BRANCH"]
+              or run.get("head_sha") != env["PRODUCER_HEAD_SHA"]
+              or run.get("event") != env["PRODUCER_EVENT"]
+              or run.get("html_url") != env["PRODUCER_URL"]
+              or int(run.get("run_attempt", -1)) != int(env["PRODUCER_ATTEMPT"])
+              or run.get("status") != "completed" or run.get("conclusion") != "success"
+              or run.get("run_started_at") != env["PRODUCER_RUN_STARTED_AT"]
+              or run.get("updated_at") != env["PRODUCER_RUN_UPDATED_AT"]
+          ):
+              raise SystemExit("FAIL producer run attempt changed after exact archive download")
+          expires = dt.datetime.fromisoformat(env["ARTIFACT_EXPIRES_AT"].replace("Z", "+00:00"))
+          if expires.tzinfo is None or expires <= dt.datetime.now(dt.timezone.utc):
+              raise SystemExit("FAIL exact collector artifact expired before download validation")
+          archive = root / "collector-artifact.zip"
+          archive_bytes = archive.read_bytes()
+          archive_sha = hashlib.sha256(archive_bytes).hexdigest()
+          if len(archive_bytes) != int(env["ARTIFACT_SIZE"]) or archive_sha != env["ARTIFACT_DIGEST"]:
+              raise SystemExit("FAIL exact collector archive digest or size mismatch")
+          allowed = {
+              "candidate.registry.json", "catalog-diff.json",
+              "upstream-refresh-evidence.json", "upstream-refresh-work-packet.json",
+          }
+          seen = set()
+          total = 0
+          with zipfile.ZipFile(archive) as bundle:
+              for member in bundle.infolist():
+                  name = member.filename
+                  if member.is_dir():
+                      continue
+                  if name not in allowed or name in seen or stat.S_IFMT(member.external_attr >> 16) == stat.S_IFLNK:
+                      raise SystemExit("FAIL collector artifact archive has unsafe or unexpected members")
+                  seen.add(name)
+                  total += member.file_size
+                  if total > 268435456:
+                      raise SystemExit("FAIL collector artifact expands beyond the input bound")
+                  (root / name).write_bytes(bundle.read(member))
+          required = allowed
+          if seen != required:
+              raise SystemExit("FAIL successful collector artifact is incomplete")
           evidence_path = root / "upstream-refresh-evidence.json"
-          if not evidence_path.is_file():
-              raise SystemExit("FAIL producer artifact lacks refresh evidence")
           evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
           candidate = root / "candidate.registry.json"
           diff = root / "catalog-diff.json"
-          if evidence.get("collection", {}).get("succeeded") is True:
-              if not candidate.is_file() or not diff.is_file():
-                  raise SystemExit("FAIL successful observation artifact is incomplete")
-              candidate_digest = hashlib.sha256(candidate.read_bytes()).hexdigest()
-              diff_digest = hashlib.sha256(diff.read_bytes()).hexdigest()
-              if candidate_digest != evidence.get("snapshot", {}).get("sha256"):
-                  raise SystemExit("FAIL producer candidate digest mismatch")
-              if diff_digest != evidence.get("diff", {}).get("sha256"):
-                  raise SystemExit("FAIL producer diff digest mismatch")
-          elif evidence.get("status") != "collection_failure":
-              raise SystemExit("FAIL producer evidence is not a successful observation or collection failure")
+          if evidence.get("source_id") != "data_go_kr" or evidence.get("collection", {}).get("succeeded") is not True:
+              raise SystemExit("FAIL collector artifact is not a successful data_go_kr observation")
+          observed_at = evidence.get("observed_at")
+          parsed_observed = dt.datetime.fromisoformat(str(observed_at).replace("Z", "+00:00"))
+          if parsed_observed.tzinfo is None or parsed_observed > dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=5):
+              raise SystemExit("FAIL collector evidence observation time is invalid")
+          if (
+              hashlib.sha256(candidate.read_bytes()).hexdigest() != evidence.get("snapshot", {}).get("sha256")
+              or hashlib.sha256(diff.read_bytes()).hexdigest() != evidence.get("diff", {}).get("sha256")
+          ):
+              raise SystemExit("FAIL producer candidate or diff digest mismatch")
+          envelope = {
+              "schema_version": "datapan.upstream-catalogue-admission-envelope.v1",
+              "repository": env["REPOSITORY"], "producer_run_id": env["PRODUCER_RUN_ID"],
+              "run_attempt": int(env["PRODUCER_ATTEMPT"]), "head_sha": env["PRODUCER_HEAD_SHA"],
+              "run_started_at": env["PRODUCER_RUN_STARTED_AT"], "run_completed_at": env["PRODUCER_RUN_COMPLETED_AT"],
+              "observe_job_started_at": env["OBSERVE_JOB_STARTED_AT"], "observe_job_completed_at": env["OBSERVE_JOB_COMPLETED_AT"],
+              "artifact_id": env["ARTIFACT_ID"], "artifact_name": env["ARTIFACT_NAME"],
+              "artifact_expires_at": env["ARTIFACT_EXPIRES_AT"], "artifact_created_at": env["ARTIFACT_CREATED_AT"],
+              "artifact_digest_sha256": env["ARTIFACT_DIGEST"], "artifact_size_bytes": int(env["ARTIFACT_SIZE"]),
+              "archive_sha256": archive_sha, "archive_size_bytes": len(archive_bytes),
+              "observed_at": observed_at,
+              "refresh_evidence_sha256": hashlib.sha256(evidence_path.read_bytes()).hexdigest(),
+              "event": env["PRODUCER_EVENT"],
+          }
+          (root / "collector-admission.json").write_text(json.dumps(envelope, sort_keys=True) + "\n", encoding="utf-8")
+          print("found=true")
+          print("input_error=")
+          print(f"artifact_id={env['ARTIFACT_ID']}")
+          print(f"expires_at={env['ARTIFACT_EXPIRES_AT']}")
+          print("expired=false")
+          print("archive_path=.datapan/ci/upstream-refresh/collector-artifact.zip")
+          print("admission_file=.datapan/ci/upstream-refresh/collector-admission.json")
           PY
-          fi
 
       - name: Calculate processor artifact expiry
         id: expiry
@@ -785,11 +956,14 @@ jobs:
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
           PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
+          PRODUCER_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
           INPUT_ERROR: ${{ steps.input_artifact.outputs.input_error }}
           INPUT_ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
           INPUT_ARTIFACT_ID: ${{ steps.input_artifact.outputs.artifact_id }}
           INPUT_EXPIRES_AT: ${{ steps.input_artifact.outputs.expires_at }}
           INPUT_EXPIRED: ${{ steps.input_artifact.outputs.expired }}
+          INPUT_ADMISSION_FILE: ${{ steps.input_artifact.outputs.admission_file }}
+          INPUT_ARCHIVE_PATH: ${{ steps.input_artifact.outputs.archive_path }}
           TARGET_GENERATION_ID: ${{ steps.select.outputs.generation_id }}
           PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
           PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
@@ -819,6 +993,9 @@ jobs:
             --max-attempts 24 --max-queue 48 --retries-per-detail 2 --timeout 20
           )
           if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
+          if [ -n "${PRODUCER_HEAD_SHA}" ]; then args+=(--producer-head-sha "${PRODUCER_HEAD_SHA}"); fi
+          if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
+          if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
           if [ -n "${TARGET_GENERATION_ID}" ] && [ -n "${INPUT_ERROR}" ]; then
             args+=(--target-generation-id "${TARGET_GENERATION_ID}")
             if [ "${INPUT_EXPIRED}" = "true" ]; then
@@ -870,11 +1047,14 @@ jobs:
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
           PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
+          PRODUCER_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
           INPUT_ERROR: ${{ steps.input_artifact.outputs.input_error }}
           INPUT_ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
           INPUT_ARTIFACT_ID: ${{ steps.input_artifact.outputs.artifact_id }}
           INPUT_EXPIRES_AT: ${{ steps.input_artifact.outputs.expires_at }}
           INPUT_EXPIRED: ${{ steps.input_artifact.outputs.expired }}
+          INPUT_ADMISSION_FILE: ${{ steps.input_artifact.outputs.admission_file }}
+          INPUT_ARCHIVE_PATH: ${{ steps.input_artifact.outputs.archive_path }}
           PROCESSOR_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
           PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
           PROCESSOR_ARTIFACT_EXPIRES_AT: ${{ steps.expiry.outputs.at }}
@@ -934,7 +1114,10 @@ jobs:
               --max-attempts 24 --max-queue 48 --retries-per-detail 2 --timeout 20
               --require-durable-reservation
             )
-            if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
+          if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
+          if [ -n "${PRODUCER_HEAD_SHA}" ]; then args+=(--producer-head-sha "${PRODUCER_HEAD_SHA}"); fi
+          if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
+          if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
             if [ -n "${RESUME_EVIDENCE}" ] && [ -f "${RESUME_EVIDENCE}" ]; then args+=(--resume-enrichment-evidence "${RESUME_EVIDENCE}"); fi
             set +e
             python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py "${args[@]}"
