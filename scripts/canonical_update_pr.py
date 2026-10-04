@@ -1318,11 +1318,17 @@ def append_journal_record(
             raise AdmissionError("a generation id was reused for different immutable candidate identity")
         old_ack = previous.get("acknowledgements", [])
         new_ack = receipt.get("acknowledgements", [])
+        if not isinstance(old_ack, list) or not isinstance(new_ack, list):
+            raise AdmissionError("promotion reconciliation acknowledgements must be ordered arrays")
         if new_ack[:len(old_ack)] != old_ack:
             raise AdmissionError("promotion reconciliation would alter or truncate immutable acknowledgements")
-        if receipt.get("status") != previous.get("status"):
-            if receipt.get("status") not in TRANSITIONS.get(str(previous.get("status")), set()):
-                raise AdmissionError("promotion reconciliation would regress or skip a recorded state transition")
+        replayed = json.loads(json.dumps(previous))
+        for acknowledgement in new_ack[len(old_ack):]:
+            if not isinstance(acknowledgement, Mapping):
+                raise AdmissionError("promotion reconciliation appended a malformed acknowledgement")
+            replayed = record_acknowledgement(replayed, json.loads(json.dumps(acknowledgement)))
+        if replayed.get("status") != receipt.get("status"):
+            raise AdmissionError("promotion reconciliation status is not proven by its complete appended acknowledgement suffix")
         updated = json.loads(json.dumps(receipt))
         old_ownership = previous.get("ownership", {})
         new_ownership = updated.get("ownership", {})
@@ -1333,6 +1339,20 @@ def append_journal_record(
             raise AdmissionError("promotion reconciliation changed the owned issue identity")
         if old_ownership.get("body_sha256") and new_ownership.get("body_sha256") != old_ownership.get("body_sha256"):
             raise AdmissionError("promotion reconciliation changed the exact owned PR body identity")
+        old_pr = previous.get("pr", {})
+        new_pr = updated.get("pr", {})
+        if isinstance(old_pr, Mapping) and isinstance(new_pr, Mapping):
+            if old_pr.get("number", 0) and new_pr.get("number") != old_pr.get("number"):
+                raise AdmissionError("promotion reconciliation changed the durable PR number")
+            if old_pr.get("url") and new_pr.get("url") != old_pr.get("url"):
+                raise AdmissionError("promotion reconciliation changed the durable PR URL")
+            witnessed_merge_sha = replayed.get("pr", {}).get("merge_commit_sha")
+            old_merge_sha = old_pr.get("merge_commit_sha")
+            if (
+                (witnessed_merge_sha is not None and new_pr.get("merge_commit_sha") != witnessed_merge_sha)
+                or (old_merge_sha is not None and new_pr.get("merge_commit_sha") != old_merge_sha)
+            ):
+                raise AdmissionError("promotion reconciliation changed the witnessed PR merge commit")
         preserve_and_validate_ci(previous, updated)
         preserve_and_validate_revision_links(previous, updated)
         rows[matches[0]] = updated

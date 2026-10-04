@@ -349,6 +349,90 @@ class IdleProcessorResultTests(unittest.TestCase):
 
 
 class PublicationReconciliationTests(unittest.TestCase):
+    def test_runner_persists_the_complete_verified_publication_acknowledgement_chain(self) -> None:
+        fixture_path = pathlib.Path(__file__).parent / "fixtures/canonical-update-promotion/attempt-4-pr-686-pending-recovery.json"
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        journal = copy.deepcopy(fixture["state"])
+        durable = journal["records"][0]
+        candidate = durable["candidate"]
+        merge_sha = "f" * 40
+        run_url = "https://github.com/StatPan/datapan-registry/actions/runs/37199628001/attempts/1"
+        merged_pr = copy.deepcopy(fixture["pull_request_readback"])
+        merged_pr.update({"state": "MERGED", "mergeCommit": {"oid": merge_sha}})
+        publication_receipt = {
+            "schema_version": "datapan.registry-publication-receipt.v1",
+            "status": "verified",
+            "source_binding": {
+                "status": "bound",
+                "repository": candidate["repository"],
+                "source_sha": merge_sha,
+                "manifest_sha256": candidate["manifest_sha256"],
+            },
+            "publication": {
+                "status": "published",
+                "dataset": candidate["repository"],
+                "payload_revision": "1" * 40,
+                "pointer_revision": "2" * 40,
+            },
+            "anonymous_verification": {
+                "status": "verified",
+                "dataset": candidate["repository"],
+                "revision": "1" * 40,
+            },
+        }
+        schema = json.loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text(encoding="utf-8")
+        )
+        writes: list[dict] = []
+        with tempfile.TemporaryDirectory(prefix="canonical-publication-reconcile-") as raw:
+            root = pathlib.Path(raw)
+            receipt_path = root / "publication-receipt.json"
+            receipt_path.write_text(json.dumps(publication_receipt), encoding="utf-8")
+
+            def persist(
+                _root: pathlib.Path,
+                _base_sha: str,
+                receipt: dict,
+                *,
+                observed_at: str,
+                **_kwargs: object,
+            ) -> None:
+                nonlocal journal
+                journal = PR_HELPER.append_journal_record(
+                    journal, receipt, repository=candidate["repository"], observed_at=observed_at,
+                )
+                PR_HELPER.validate_journal(journal, schema)
+                writes.append(copy.deepcopy(receipt))
+
+            def command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+                self.assertEqual(argv, ("git", "rev-parse", "HEAD"))
+                return subprocess.CompletedProcess(argv, 0, "8" * 40 + "\n", "")
+
+            with (
+                mock.patch.dict(RUNNER.os.environ, {
+                    "GITHUB_REPOSITORY": candidate["repository"],
+                    "GITHUB_RUN_ID": "37199709258",
+                    "GITHUB_RUN_ATTEMPT": "2",
+                }),
+                mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
+                mock.patch.object(RUNNER, "load_promotion_journal", side_effect=lambda _root: copy.deepcopy(journal)),
+                mock.patch.object(RUNNER, "gh_pr_readback", return_value=merged_pr),
+                mock.patch.object(RUNNER, "command", side_effect=command),
+                mock.patch.object(RUNNER, "persist_journal_record", side_effect=persist),
+            ):
+                RUNNER.reconcile_publication(root, receipt_path)
+
+        self.assertEqual(len(writes), 2)
+        self.assertEqual([receipt["status"] for receipt in writes], ["merged", "read-back-confirmed"])
+        stored = journal["records"][0]
+        self.assertEqual(stored["status"], "read-back-confirmed")
+        self.assertEqual(
+            [row["status"] for row in stored["acknowledgements"]],
+            ["pending-review", "merged", "publication-pending", "published", "read-back-confirmed"],
+        )
+        self.assertEqual(stored["acknowledgements"][0], durable["acknowledgements"][0])
+        self.assertEqual(stored["pr"]["merge_commit_sha"], merge_sha)
+
     def test_publication_can_resolve_a_merge_before_hourly_pr_journal_reconciliation(self) -> None:
         # The durable candidate still records the prepared PR/head, while the
         # immutable #592 receipt already names the squash merge commit.
