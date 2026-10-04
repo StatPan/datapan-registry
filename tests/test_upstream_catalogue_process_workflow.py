@@ -9,6 +9,7 @@ import tempfile
 import unittest
 import datetime as dt
 import hashlib
+import zipfile
 
 import yaml
 
@@ -228,6 +229,20 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("processing_artifact_id", self.text)
         self.assertIn("processing_status", self.text)
 
+    def test_scheduled_handoff_uses_authenticated_bounded_discovery_before_selection(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        handoff = next(step for step in steps if step.get("id") == "handoff")
+        selector = next(step for step in steps if step.get("id") == "select")
+        producer_attempt = next(step for step in steps if step.get("id") == "producer_attempt")
+        artifact = next(step for step in steps if step.get("id") == "input_artifact")
+        self.assertEqual(handoff["if"], "github.event_name == 'schedule'")
+        self.assertEqual(handoff["env"]["GH_TOKEN"], "${{ github.token }}")
+        self.assertIn("--state-dir", handoff["run"])
+        self.assertIn("--reserve-api-requests 3", producer_attempt["run"])
+        self.assertLess(steps.index(handoff), steps.index(selector))
+        self.assertLess(steps.index(selector), steps.index(producer_attempt))
+        self.assertLess(steps.index(producer_attempt), steps.index(artifact))
+
     def test_state_compare_and_swap_precedes_the_live_detail_worker(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]
         ids = [step.get("id", "") for step in steps]
@@ -430,6 +445,7 @@ class WorkflowContractTests(unittest.TestCase):
                     "EVENT_NAME": "workflow_run",
                     "EVENT_PRODUCER_RUN_ID": "12345",
                     "EVENT_PRODUCER_HEAD_SHA": "c" * 40,
+                    "EVENT_PRODUCER_RUN_ATTEMPT": "1",
                     "INPUT_PRODUCER_RUN_ID": "",
                     "REPOSITORY": REPOSITORY,
                     "STATE_DIR": str(state),
@@ -440,9 +456,63 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
             outputs = dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines())
             self.assertEqual(outputs["generation_id"], generation_id)
-            self.assertEqual(outputs["expected_input_artifact_id"], "987")
-            self.assertEqual(outputs["expected_input_expires_at"], expires_at)
+            self.assertEqual(outputs["expected_input_artifact_id"], "")
+            self.assertEqual(outputs["expected_producer_attempt"], "1")
             self.assertEqual(outputs["expected_input_name"], "upstream-catalog-refresh-12345")
+
+    def test_scheduled_handoff_precedes_an_older_active_generation(self) -> None:
+        select_step = next(step for step in self.workflow["jobs"]["process"]["steps"] if step.get("id") == "select")
+        with tempfile.TemporaryDirectory(prefix="catalogue-scheduled-handoff-select-") as temp:
+            root = pathlib.Path(temp)
+            state = root / "state"
+            generation_id = "a" * 64
+            old_checkpoint = {
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "source_id": "data_go_kr", "generation_id": generation_id,
+                "status": "ready", "outcome": {"detail_retry_count": 1},
+                "last_progress_at": "2026-10-01T00:00:00Z",
+                "generation_inputs": {"candidate_sha256": "b" * 64},
+                "input_artifacts": [{
+                    "run_id": "100", "name": "upstream-catalog-refresh-100",
+                    "artifact_id": "1100", "expires_at": "2026-11-01T00:00:00Z",
+                    "candidate_sha256": "b" * 64,
+                }],
+            }
+            canonical = json.dumps(old_checkpoint, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+            old_checkpoint["checkpoint_sha256"] = hashlib.sha256(canonical).hexdigest()
+            source_dir = state / "sources/data_go_kr"
+            (source_dir / "generations").mkdir(parents=True)
+            (source_dir / "generations" / f"{generation_id}.json").write_text(
+                json.dumps(old_checkpoint, sort_keys=True) + "\n", encoding="utf-8",
+            )
+            (source_dir / "index.json").write_text(json.dumps({
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "generations": [{"generation_id": generation_id}],
+            }), encoding="utf-8")
+            output = root / "github-output"
+            result = subprocess.run(
+                ["bash", "-c", select_step["run"]], cwd=root,
+                env={
+                    **os.environ,
+                    "EVENT_NAME": "schedule", "EVENT_PRODUCER_RUN_ID": "", "EVENT_PRODUCER_HEAD_SHA": "",
+                    "INPUT_PRODUCER_RUN_ID": "", "INPUT_RECOVER_FAILED_PROCESSOR_RUN_ID": "",
+                    "HANDOFF_AVAILABLE": "true", "HANDOFF_PRODUCER_RUN_ID": "200",
+                    "HANDOFF_PRODUCER_HEAD_SHA": "c" * 40, "HANDOFF_RUN_ATTEMPT": "1",
+                    "HANDOFF_RUN_STARTED_AT": "2026-10-04T00:00:00Z",
+                    "HANDOFF_ARTIFACT_ID": "1200", "HANDOFF_ARTIFACT_NAME": "upstream-catalog-refresh-200",
+                    "HANDOFF_ARTIFACT_EXPIRES_AT": "2026-11-02T00:00:00Z",
+                    "HANDOFF_ARTIFACT_DIGEST": "d" * 64, "HANDOFF_ARTIFACT_SIZE": "1234",
+                    "REPOSITORY": REPOSITORY, "STATE_DIR": str(state), "GITHUB_OUTPUT": str(output),
+                },
+                text=True, capture_output=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
+            outputs = dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines())
+            self.assertEqual(outputs["decision"], "process")
+            self.assertEqual(outputs["producer_run_id"], "200")
+            self.assertEqual(outputs["expected_producer_attempt"], "1")
+            self.assertEqual(outputs["expected_input_artifact_id"], "1200")
+            self.assertEqual(outputs["generation_id"], "")
 
     def test_valid_marker_result_digest_survives_bundle_and_actionable_receipt_steps(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]
@@ -616,11 +686,16 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertFalse(any("canonical-update" in step.get("name", "") for step in self.workflow["jobs"]["process"]["steps"]))
         self.assertNotIn("pull-requests: write", self.text)
 
-    def test_artifact_step_uses_local_metadata_for_found_missing_and_expired_cases(self) -> None:
+    def test_artifact_step_downloads_and_revalidates_the_exact_admitted_artifact(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]
         artifact_step = next(step for step in steps if step.get("id") == "input_artifact")
         script = artifact_step["run"]
-        self.assertNotIn("${{ steps.input_artifact.outputs.found }}", script)
+        self.assertNotIn("gh run download", script)
+        self.assertIn('actions/artifacts/${ARTIFACT_ID}/zip', script)
+        self.assertIn('actions/artifacts/${ARTIFACT_ID}', script)
+        self.assertIn('actions/runs/${PRODUCER_RUN_ID}', script)
+        self.assertIn('archive_sha != env["ARTIFACT_DIGEST"]', script)
+        self.assertIn('size <= 268435456', script)
 
         with tempfile.TemporaryDirectory(prefix="catalogue-artifact-step-") as temp:
             root = pathlib.Path(temp)
@@ -629,79 +704,113 @@ class WorkflowContractTests(unittest.TestCase):
             fake_gh = fake_bin / "gh"
             fake_gh.write_text(
                 "#!/bin/sh\n"
-                "if [ \"$1\" = api ]; then cat \"$GH_FIXTURE_ARTIFACTS\"; exit 0; fi\n"
-                "if [ \"$1\" = run ] && [ \"$2\" = download ]; then\n"
-                "  shift 2; target=\n"
-                "  while [ $# -gt 0 ]; do if [ \"$1\" = --dir ]; then shift; target=$1; fi; shift; done\n"
-                "  mkdir -p \"$target\"; cp -R \"$GH_FIXTURE_DOWNLOAD\"/. \"$target\"/; exit 0\n"
-                "fi\n"
-                "exit 9\n",
+                "[ \"$1\" = api ] || exit 9\n"
+                "endpoint=\n"
+                "for arg in \"$@\"; do endpoint=$arg; done\n"
+                "printf '%s\\n' \"$endpoint\" >> \"$GH_CALL_LOG\"\n"
+                "case \"$endpoint\" in\n"
+                "  */actions/artifacts/987/zip) cat \"$GH_FIXTURE_ZIP\" ;;\n"
+                "  */actions/artifacts/987) cat \"$GH_FIXTURE_METADATA\" ;;\n"
+                "  */actions/runs/12345) cat \"$GH_FIXTURE_RUN\" ;;\n"
+                "  *) exit 9 ;;\n"
+                "esac\n",
                 encoding="utf-8",
             )
             fake_gh.chmod(0o755)
 
-            download = root / "download"
-            download.mkdir()
+            bundle_path = root / "collector.zip"
             candidate_bytes = b"[]\n"
             diff_bytes = b"{}\n"
-            (download / "candidate.registry.json").write_bytes(candidate_bytes)
-            (download / "catalog-diff.json").write_bytes(diff_bytes)
             evidence = {
+                "source_id": "data_go_kr",
+                "observed_at": "2026-10-04T00:01:00Z",
                 "collection": {"succeeded": True},
                 "snapshot": {"sha256": hashlib.sha256(candidate_bytes).hexdigest()},
                 "diff": {"sha256": hashlib.sha256(diff_bytes).hexdigest()},
             }
-            (download / "upstream-refresh-evidence.json").write_text(json.dumps(evidence), encoding="utf-8")
+            with zipfile.ZipFile(bundle_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                archive.writestr("candidate.registry.json", candidate_bytes)
+                archive.writestr("catalog-diff.json", diff_bytes)
+                archive.writestr("upstream-refresh-evidence.json", json.dumps(evidence))
+                archive.writestr("upstream-refresh-work-packet.json", "{}\n")
+            archive_bytes = bundle_path.read_bytes()
+            digest = hashlib.sha256(archive_bytes).hexdigest()
+            expires = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=1)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+            created = "2026-10-04T00:01:30Z"
+            metadata_path = root / "metadata.json"
+            metadata_path.write_text(json.dumps({
+                "id": 987, "name": "upstream-catalog-refresh-12345", "expires_at": expires,
+                "created_at": created, "expired": False, "digest": f"sha256:{digest}",
+                "size_in_bytes": len(archive_bytes),
+                "workflow_run": {
+                    "id": 12345, "head_sha": "a" * 40,
+                    "repository_id": 111, "head_repository_id": 111,
+                },
+            }), encoding="utf-8")
+            run_path = root / "run.json"
+            run_path.write_text(json.dumps({
+                "id": 12345, "name": "Upstream catalog refresh",
+                "path": ".github/workflows/upstream-catalog-refresh.yml",
+                "repository": {"id": 111, "full_name": REPOSITORY},
+                "head_repository": {"id": 111, "full_name": REPOSITORY},
+                "head_branch": "main", "head_sha": "a" * 40,
+                "event": "schedule", "html_url": f"https://github.com/{REPOSITORY}/actions/runs/12345",
+                "run_attempt": 1, "status": "completed", "conclusion": "success",
+                "run_started_at": "2026-10-04T00:00:00Z", "updated_at": "2026-10-04T00:02:00Z",
+            }), encoding="utf-8")
+            env = {
+                **os.environ,
+                "PATH": f"{fake_bin}:{os.environ['PATH']}",
+                "GH_FIXTURE_METADATA": str(metadata_path),
+                "GH_FIXTURE_RUN": str(run_path),
+                "GH_FIXTURE_ZIP": str(bundle_path),
+                "GH_CALL_LOG": str(root / "gh-calls.log"),
+                "GITHUB_OUTPUT": str(root / "github-output"),
+                "REPOSITORY": REPOSITORY,
+                "DEFAULT_BRANCH": "main",
+                "PRODUCER_RUN_ID": "12345", "PRODUCER_HEAD_SHA": "a" * 40,
+                "PRODUCER_ATTEMPT": "1", "PRODUCER_RUN_STARTED_AT": "2026-10-04T00:00:00Z",
+                "PRODUCER_RUN_COMPLETED_AT": "2026-10-04T00:01:45Z",
+                "PRODUCER_RUN_UPDATED_AT": "2026-10-04T00:02:00Z",
+                "OBSERVE_JOB_STARTED_AT": "2026-10-04T00:00:30Z",
+                "OBSERVE_JOB_COMPLETED_AT": "2026-10-04T00:01:45Z",
+                "ARTIFACT_ID": "987", "ARTIFACT_NAME": "upstream-catalog-refresh-12345",
+                "ARTIFACT_EXPIRES_AT": expires, "ARTIFACT_CREATED_AT": created,
+                "ARTIFACT_DIGEST": digest, "ARTIFACT_SIZE": str(len(archive_bytes)),
+                "REPOSITORY_ID": "111", "HEAD_REPOSITORY_ID": "111",
+                "PRODUCER_EVENT": "schedule",
+                "PRODUCER_URL": f"https://github.com/{REPOSITORY}/actions/runs/12345",
+            }
+            repo = root / "datapan-registry"
+            repo.mkdir()
+            result = subprocess.run(["bash", "-c", script], cwd=repo, env=env, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
+            outputs = dict(line.split("=", 1) for line in (root / "github-output").read_text().splitlines())
+            self.assertEqual(outputs["found"], "true")
+            self.assertEqual(outputs["artifact_id"], "987")
+            archive_path = repo / ".datapan/ci/upstream-refresh/collector-artifact.zip"
+            self.assertEqual(hashlib.sha256(archive_path.read_bytes()).hexdigest(), digest)
+            admission = json.loads((repo / ".datapan/ci/upstream-refresh/collector-admission.json").read_text())
+            self.assertEqual(admission["run_attempt"], 1)
+            self.assertEqual(admission["archive_sha256"], digest)
+            self.assertTrue((repo / ".datapan/ci/upstream-refresh/candidate.registry.json").is_file())
+            calls = (root / "gh-calls.log").read_text().splitlines()
+            self.assertEqual(calls, [
+                f"repos/{REPOSITORY}/actions/artifacts/987",
+                f"repos/{REPOSITORY}/actions/artifacts/987/zip",
+                f"repos/{REPOSITORY}/actions/runs/12345",
+            ])
 
-            def execute(artifacts: list[dict[str, object]], *, expected_id: str = "", expected_expiry: str = "") -> tuple[dict[str, str], pathlib.Path]:
-                case = root / f"case-{len(list(root.glob('case-*')))}"
-                case.mkdir()
-                repo = case / "datapan-registry"
-                repo.mkdir()
-                fixture_json = case / "artifacts.json"
-                fixture_json.write_text(json.dumps({"artifacts": artifacts}), encoding="utf-8")
-                output = case / "github-output"
-                env = {
-                    **os.environ,
-                    "PATH": f"{fake_bin}:{os.environ['PATH']}",
-                    "GH_FIXTURE_ARTIFACTS": str(fixture_json),
-                    "GH_FIXTURE_DOWNLOAD": str(download),
-                    "GITHUB_OUTPUT": str(output),
-                    "REPOSITORY": REPOSITORY,
-                    "PRODUCER_RUN_ID": "12345",
-                    "ARTIFACT_NAME": "upstream-catalog-refresh-12345",
-                    "EXPECTED_ARTIFACT_ID": expected_id,
-                    "EXPECTED_EXPIRES_AT": expected_expiry,
-                }
-                result = subprocess.run(["bash", "-c", script], cwd=repo, env=env, text=True, capture_output=True)
-                self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
-                outputs = dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines())
-                choice_path = repo / ".datapan/ci/producer-artifact-metadata/choice.json"
-                return outputs, choice_path
-
-            expiry = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=1)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-            found_outputs, found_choice = execute([{
-                "id": 987, "name": "upstream-catalog-refresh-12345", "expires_at": expiry,
-                "expired": False, "workflow_run": {"id": 12345},
-            }], expected_id="987", expected_expiry=expiry)
-            self.assertEqual(found_outputs["found"], "true")
-            self.assertTrue((found_choice.parent.parent / "upstream-refresh/candidate.registry.json").is_file())
-
-            missing_outputs, missing_choice = execute([])
-            missing = json.loads(missing_choice.read_text(encoding="utf-8"))
-            self.assertEqual(missing_outputs["found"], "false")
-            self.assertEqual(missing["input_error"], "artifact_missing")
-            self.assertFalse(missing["expired"])
-
-            expired_at = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=1)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-            expired_outputs, expired_choice = execute([{
-                "id": 987, "name": "upstream-catalog-refresh-12345", "expires_at": expired_at,
-                "expired": True, "workflow_run": {"id": 12345},
-            }], expected_id="987", expected_expiry=expired_at)
-            expired = json.loads(expired_choice.read_text(encoding="utf-8"))
-            self.assertEqual(expired_outputs["found"], "false")
-            self.assertEqual(expired["input_error"], "artifact_missing")
-            self.assertTrue(expired["expired"])
+            invalid_metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            invalid_metadata["size_in_bytes"] = 268435457
+            metadata_path.write_text(json.dumps(invalid_metadata), encoding="utf-8")
+            (root / "gh-calls.log").unlink()
+            rejected = subprocess.run(["bash", "-c", script], cwd=repo, env=env, text=True, capture_output=True)
+            self.assertNotEqual(rejected.returncode, 0)
+            self.assertIn("metadata changed before download", rejected.stderr)
+            self.assertEqual((root / "gh-calls.log").read_text().splitlines(), [
+                f"repos/{REPOSITORY}/actions/artifacts/987",
+            ])
 
 
 if __name__ == "__main__":

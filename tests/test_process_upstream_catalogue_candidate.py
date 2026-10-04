@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import importlib.util
 import json
 import os
@@ -78,6 +79,7 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             "id": "2", "provider": "data.go.kr", "type": "LINK", "title": "New detail", "operations": [],
             "source": {"system": "data.go.kr", "url": "https://www.data.go.kr/data/2/openapi.do", "raw": {"type": "LINK", "api_type": "LINK", "title": "New detail", "meta_url": "https://www.data.go.kr/data/2/openapi.do", "api_id": "2"}},
         }
+
         self.baseline_path.write_text(json.dumps([self.old_link]), encoding="utf-8")
         self.candidate_path.write_text(json.dumps([self.old_link, self.new_link]), encoding="utf-8")
         self.diff_path.write_text(json.dumps({"summary": {"added": 1, "removed": 0, "changed": 0}}), encoding="utf-8")
@@ -85,6 +87,35 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
         self.policy_path.write_text(json.dumps({"sources": [{"source_id": "data_go_kr", "canonical_registry": str(self.baseline_path)}]}), encoding="utf-8")
         self.provider_index_path.write_text(json.dumps({"adapters": [{"name": "example", "hosts": ["api.example.gov"]}]}), encoding="utf-8")
         self.composer_path.write_text(self.fake_composer_source(), encoding="utf-8")
+
+    def test_generator_revision_changes_when_collector_handoff_helper_changes(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="collector-handoff-revision-") as temp:
+            root = pathlib.Path(temp)
+            processor_path = root / "process-upstream-catalogue-candidate.py"
+            helper_path = root / "upstream_catalogue_handoff.py"
+            shutil.copy2(SCRIPT, processor_path)
+            shutil.copy2(ROOT / "scripts/upstream_catalogue_handoff.py", helper_path)
+            shutil.copy2(ROOT / "scripts/generate-batch-link-detail-registry-patches.py", root / "generate-batch-link-detail-registry-patches.py")
+            spec = importlib.util.spec_from_file_location("processor_revision_fixture", processor_path)
+            self.assertIsNotNone(spec)
+            assert spec is not None and spec.loader is not None
+            processor = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(processor)
+
+            def independently_derive() -> str:
+                contract = {
+                    "processor_script_sha256": hashlib.sha256(processor_path.read_bytes()).hexdigest(),
+                    "collector_handoff_helper_sha256": hashlib.sha256(helper_path.read_bytes()).hexdigest(),
+                }
+                encoded = json.dumps(contract, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+                return hashlib.sha256(encoded).hexdigest()
+
+            original = processor.generator_revision()
+            self.assertEqual(original, independently_derive())
+            helper_path.write_bytes(helper_path.read_bytes() + b"\n# revision-bound helper change\n")
+            changed = processor.generator_revision()
+            self.assertNotEqual(changed, original)
+            self.assertEqual(changed, independently_derive())
 
     def tearDown(self) -> None:
         self.temp.cleanup()
@@ -1033,7 +1064,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(generation_inputs["adapter_revision"], input_digests["provider-index.json"])
         self.assertEqual(
             generation_inputs["generator_revision"],
-            MODULE.file_sha256(bootstrap / "scripts/process-upstream-catalogue-candidate.py"),
+            MODULE.generator_revision(),
         )
         self.assertEqual(
             generation_inputs["extractor_revision"],
