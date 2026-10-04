@@ -29,7 +29,7 @@
     },
     "schema_version": "datapan.upstream-catalogue-handoff-ledger.v1"
   },
-  "detail_queue_cursor": 240,
+  "detail_queue_cursor": 248,
   "detail_retry_state": {
     "15003164": {
       "attempts": 1,
@@ -1974,6 +1974,54 @@
       "guide_sha256": "f3f84853c88a278794f567e1eab165d1d00780fe6895160205563e28f4250b53",
       "last_attempt_at": "2026-10-04T17:34:21Z",
       "source_sha256": "0e68eb3a3434e735873cc2f94cf2dbc64de6919801cb19f67d9d027418eb3888"
+    },
+    "15057150": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "94e5ef130e4afb6eafb90200ff3d31802ff860431fe5c73cc86f7628dd18b02c"
+    },
+    "15057156": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "ed257d089eb6766d512d146d024fbefb18646be031c57ec364763e39bf32a9fd"
+    },
+    "15057160": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "c2ac21abfaec41dcd837a0e03751f2e497b4c7c849a4d1de43a6298a9159a9c7"
+    },
+    "15057172": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "5f9065ac043ada38186f42568e326aedb3ead340b17e92560065a2c57beb8a5f"
+    },
+    "15057226": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "5ea26a3c3a62a432ba54d26243286363ca2548fe4cfb6ea2f232c11ec24e5374"
+    },
+    "15057248": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "6132a2e6525ce97a12a122067563d5540b748eef124e41f67e743c67872340e9"
+    },
+    "15057261": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "608c483ed7a559921666f289c39819b633257ce9d5de1725a856a5c0784e14b0"
+    },
+    "15057358": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-04T21:22:02Z",
+      "source_sha256": "af7a45a51805ba5b766851b069e27c2ff6437220ea0a76fa1d6d56bcbe837baf"
     }
   },
   "generations": [
@@ -2004,6 +2052,13 @@
       "generation_id": "694cf97f842ef4beab214a8dbfb66bec061f2f153e2f8bb26ca2578e6f2ec5c7",
       "status": "ready",
       "updated_at": "2026-10-04T17:36:02Z"
+    },
+    {
+      "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+      "checkpoint": "9938e29ef963f799af3a15adf472e7a1fca119d5b075c578dfadbef2e11c7ead.json",
+      "generation_id": "9938e29ef963f799af3a15adf472e7a1fca119d5b075c578dfadbef2e11c7ead",
+      "status": "enriching",
+      "updated_at": "2026-10-04T21:22:02Z"
     }
   ],
   "schema_version": "datapan.upstream-catalogue-checkpoint.v1"
