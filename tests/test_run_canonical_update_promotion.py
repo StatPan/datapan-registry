@@ -772,6 +772,18 @@ class ProcessorBundleContractTests(unittest.TestCase):
             with self.assertRaisesRegex(RUNNER.PromotionError, "link metadata provenance is invalid"):
                 RUNNER.validate_processor_link_metadata(checkpoint, bundle, root=SCRIPT.parents[1])
 
+            secret_evidence = copy.deepcopy(evidence)
+            secret_metadata = secret_evidence["worker_outcomes"][0]["link_metadata"]
+            secret_url = "http://data.seoul.go.kr/dataList?refresh%5Ftoken=SYNTHETIC_TEST_VALUE"
+            secret_metadata["resolver"]["resolved_url"] = secret_url
+            secret_metadata["resolver"]["resolved_url_sha256"] = hashlib.sha256(
+                secret_url.encode("utf-8"),
+            ).hexdigest()
+            checkpoint["detail_records"][0]["link_metadata"] = copy.deepcopy(secret_metadata)
+            evidence_path.write_text(json.dumps(secret_evidence), encoding="utf-8")
+            with self.assertRaisesRegex(RUNNER.PromotionError, "link metadata provenance is invalid"):
+                RUNNER.validate_processor_link_metadata(checkpoint, bundle, root=SCRIPT.parents[1])
+
             stripped = copy.deepcopy(evidence)
             stripped["worker_outcomes"][0].pop("link_metadata")
             stripped_checkpoint = copy.deepcopy(checkpoint)

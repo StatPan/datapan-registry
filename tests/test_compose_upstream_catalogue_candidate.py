@@ -175,6 +175,15 @@ class CatalogueCompositionTests(unittest.TestCase):
             {"provider": "data.go.kr", "id": "2"},
         ])
 
+        secret_query = copy.deepcopy(outcome)
+        secret_url = "http://data.seoul.go.kr/dataList?client%5Fsecret=SYNTHETIC_TEST_VALUE"
+        secret_query["link_metadata"]["resolver"]["resolved_url"] = secret_url
+        secret_query["link_metadata"]["resolver"]["resolved_url_sha256"] = hashlib.sha256(
+            secret_url.encode("utf-8"),
+        ).hexdigest()
+        with self.assertRaisesRegex(composer.CompositionError, "worker outcome link metadata is invalid"):
+            compose([baseline], [candidate], enrichment_evidence=worker_enrichment([secret_query]))
+
         forged = copy.deepcopy(outcome)
         forged["link_metadata"]["resolver"]["public_data_detail_pk"] = "uddi:other"
         with self.assertRaisesRegex(composer.CompositionError, "link metadata"):

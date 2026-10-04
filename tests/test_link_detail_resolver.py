@@ -215,6 +215,70 @@ class LinkResolverPureValidationTests(unittest.TestCase):
                 body = json.dumps({**payload, "linkUrl": url}).encode("utf-8")
                 self.assert_rejected(sample, body, code)
 
+    def test_secret_query_names_are_normalized_before_resolver_url_retention(self) -> None:
+        sample = self.samples["15056854"]
+        payload = json.loads(sample["resolver"]["response_body"])
+        secret_urls = (
+            "http://data.seoul.go.kr/dataList?password=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?client_secret=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?client-secret=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?client%5Fsecret=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?CLIENT%2DSECRET=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?refresh_token=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?refresh-token=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?refresh%5Ftoken=SYNTHETIC_TEST_VALUE",
+        )
+        for url in secret_urls:
+            with self.subTest(url=url):
+                body = json.dumps({**payload, "linkUrl": url}).encode("utf-8")
+                self.assert_rejected(sample, body, "link_resolver_url_unsafe")
+
+    def test_persisted_link_metadata_rejects_secret_query_keys_after_digest_rebinding(self) -> None:
+        dataset_id = "15056854"
+        safe_url = "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109"
+        page_time = "2026-10-05T00:00:00Z"
+        resolver_time = "2026-10-05T00:00:01Z"
+
+        def metadata_for(resolved_url: str) -> dict:
+            return {
+                "method": MODULE.DETAIL_HELPERS.CURRENT_LINK_RESOLVER_METHOD,
+                "dataset_id": dataset_id,
+                "public_data_pk": dataset_id,
+                "public_data_detail_pk": "uddi:fixture-current-template",
+                "page": {
+                    "url": MODULE.DETAIL_HELPERS.CURRENT_DETAIL_PAGE_URL.format(dataset_id=dataset_id),
+                    "effective_url": MODULE.DETAIL_HELPERS.CURRENT_DETAIL_PAGE_URL.format(dataset_id=dataset_id),
+                    "sha256": "a" * 64,
+                    "bytes": 100,
+                    "observed_at": page_time,
+                },
+                "resolver": {
+                    "request_url": MODULE.DETAIL_HELPERS.CURRENT_LINK_RESOLVER_URL.format(dataset_id=dataset_id),
+                    "effective_url": MODULE.DETAIL_HELPERS.CURRENT_LINK_RESOLVER_URL.format(dataset_id=dataset_id),
+                    "sha256": "b" * 64,
+                    "bytes": 100,
+                    "observed_at": resolver_time,
+                    "public_data_detail_pk": "uddi:fixture-current-template",
+                    "resolved_url": resolved_url,
+                    "resolved_url_sha256": hashlib.sha256(resolved_url.encode("utf-8")).hexdigest(),
+                },
+            }
+
+        accepted = MODULE.DETAIL_HELPERS.validate_link_metadata(metadata_for(safe_url), dataset_id, {"data.seoul.go.kr"})
+        self.assertEqual(accepted["resolver"]["resolved_url"], safe_url)
+        self.assertEqual(accepted["resolver"]["resolved_url_sha256"], hashlib.sha256(safe_url.encode()).hexdigest())
+
+        secret_urls = (
+            "http://data.seoul.go.kr/dataList?password=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?client_secret=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?client%5Fsecret=SYNTHETIC_TEST_VALUE",
+            "http://data.seoul.go.kr/dataList?refresh_token=SYNTHETIC_TEST_VALUE",
+        )
+        for url in secret_urls:
+            with self.subTest(url=url), self.assertRaises(ValueError) as caught:
+                MODULE.DETAIL_HELPERS.validate_link_metadata(metadata_for(url), dataset_id, {"data.seoul.go.kr"})
+            self.assertEqual(str(caught.exception), "link_resolver_url_unsafe")
+
     def test_resolver_response_size_and_time_validation_are_bounded(self) -> None:
         sample = self.samples["15056854"]
         self.assert_rejected(sample, b"{" + b" " * (64 * 1024), "link_resolver_response_size_invalid")
@@ -760,6 +824,36 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         composed = json.loads((self.output_dir / "composed-candidate.registry.json").read_text(encoding="utf-8"))
         self.assertEqual(composed[0]["operations"], baseline[0]["operations"])
         self.assertEqual(composed[0]["operations"], [])
+
+    def test_secret_bearing_resolver_url_is_quarantined_without_persisting_url_or_value(self) -> None:
+        _baseline, _candidate, args = self._inputs(("15056854",))
+        secret_value = "SYNTHETIC_TEST_VALUE"
+
+        def secret_url(_dataset_id: str, response_body: str) -> str:
+            payload = json.loads(response_body)
+            payload["linkUrl"] = "http://data.seoul.go.kr/dataList?client%5Fsecret=" + secret_value
+            return json.dumps(payload, separators=(",", ":"))
+
+        page_get, resolver_get, page_calls, resolver_calls = self._observations(resolver_transform=secret_url)
+        code, checkpoint = MODULE.process(
+            args,
+            fetcher=page_get,
+            resolver_fetcher=resolver_get,
+            sleeper=lambda _delay: None,
+            clock=lambda: datetime(2026, 10, 5, 0, 0, 2, tzinfo=timezone.utc),
+        )
+        self.assertEqual(code, 2, checkpoint.get("outcome"))
+        self.assertEqual(len(page_calls), 1)
+        self.assertEqual(len(resolver_calls), 1)
+        evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        evidence_bytes = evidence_path.read_bytes()
+        evidence = json.loads(evidence_bytes)
+        outcome = evidence["worker_outcomes"][0]
+        self.assertEqual(outcome["status"], "quarantined")
+        self.assertEqual(outcome["failure_diagnostic"]["code"], "unsafe_or_unregistered_operation_host")
+        self.assertNotIn("link_metadata", outcome)
+        self.assertNotIn(secret_value.encode(), evidence_bytes)
+        self.assertNotIn(secret_value, json.dumps(checkpoint))
 
 
 if __name__ == "__main__":

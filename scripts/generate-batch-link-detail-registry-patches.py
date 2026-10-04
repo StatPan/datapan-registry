@@ -31,8 +31,12 @@ MAX_LINK_RESOLVER_RESPONSE_BYTES = 64 * 1024
 MAX_RESOLVED_LINK_URL_CHARS = 4096
 CURRENT_LINK_RESOLVER_METHOD = "data_go_kr_select_api_link_url_v1"
 SECRET_LINK_QUERY_KEYS = {
-    "key", "apikey", "api_key", "servicekey", "service_key", "token",
-    "access_token", "authorization", "signature",
+    # Keys are compared after case folding and punctuation removal below.
+    # Keep this local to resolved-link metadata: URLs may be retained in
+    # receipts, so common credential-bearing query names must never survive.
+    "key", "apikey", "servicekey", "token", "accesstoken", "authorization",
+    "signature", "password", "passwd", "passphrase", "clientsecret",
+    "refreshtoken", "secret", "apisecret", "credential", "queryvalue",
 }
 
 
@@ -156,6 +160,23 @@ def _strict_json_object(raw: bytes) -> dict[str, Any]:
     return value
 
 
+def _normalized_link_query_key(value: str) -> str:
+    """Canonicalize encoded query names before checking for secret fields."""
+    decoded = value
+    for _ in range(4):
+        if re.search(r"%(?![0-9a-fA-F]{2})", decoded):
+            raise LinkDetailContractError("link_resolver_url_invalid")
+        next_decoded = urllib.parse.unquote_plus(decoded, errors="strict")
+        if next_decoded == decoded:
+            break
+        decoded = next_decoded
+    # Do not accept multiply-encoded query names whose meaning depends on a
+    # downstream decoder applying more layers than this validator.
+    if re.search(r"%[0-9a-fA-F]{2}", decoded):
+        raise LinkDetailContractError("link_resolver_url_unsafe")
+    return re.sub(r"[^a-z0-9]", "", decoded.casefold())
+
+
 def _validated_resolved_url(value: Any) -> str:
     if (
         not isinstance(value, str) or not value or len(value) > MAX_RESOLVED_LINK_URL_CHARS
@@ -178,10 +199,12 @@ def _validated_resolved_url(value: Any) -> str:
         raise LinkDetailContractError("link_resolver_url_unsafe")
     try:
         query_keys = {
-            urllib.parse.unquote_plus(item.partition("=")[0]).strip().lower()
+            _normalized_link_query_key(item.partition("=")[0])
             for item in parsed.query.split("&") if item
         }
-    except ValueError as exc:
+    except LinkDetailContractError:
+        raise
+    except (UnicodeDecodeError, ValueError) as exc:
         raise LinkDetailContractError("link_resolver_url_invalid") from exc
     if query_keys.intersection(SECRET_LINK_QUERY_KEYS):
         raise LinkDetailContractError("link_resolver_url_unsafe")

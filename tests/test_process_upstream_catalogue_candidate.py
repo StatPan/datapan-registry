@@ -279,24 +279,50 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             evidence["worker_outcomes"][0]["failure_diagnostic"]["code"],
             "resolved_link_operation_contract_unproven",
         )
-        evidence["worker_outcomes"][0].pop("link_metadata")
-        evidence_path.write_text(json.dumps(evidence), encoding="utf-8")
+        original_evidence = copy.deepcopy(evidence)
 
-        # Rebind the altered bytes to an otherwise valid owner to exercise the
-        # resume validator's semantic rule, not only its digest guard.
-        evidence_sha = MODULE.file_sha256(evidence_path)
-        for output in checkpoint["output_digests"]:
-            if output["path"] == evidence_path.name:
-                output["sha256"] = evidence_sha
-                break
-        checkpoint["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
-            MODULE.canonical_json(checkpoint["output_digests"]),
-        )
-        owner_path = self.checkpoint_path(checkpoint)
-        owner_path.write_text(json.dumps(MODULE.seal_checkpoint(checkpoint)), encoding="utf-8")
+        def rebind_evidence(value: dict) -> None:
+            evidence_path.write_text(json.dumps(value), encoding="utf-8")
+            evidence_sha = MODULE.file_sha256(evidence_path)
+            for output in checkpoint["output_digests"]:
+                if output["path"] == evidence_path.name:
+                    output["sha256"] = evidence_sha
+                    break
+            checkpoint["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+                MODULE.canonical_json(checkpoint["output_digests"]),
+            )
+            owner_path = self.checkpoint_path(checkpoint)
+            owner_path.write_text(json.dumps(MODULE.seal_checkpoint(checkpoint)), encoding="utf-8")
+
+        secret_evidence = copy.deepcopy(original_evidence)
+        secret_metadata = secret_evidence["worker_outcomes"][0]["link_metadata"]
+        secret_url = "http://api.example.gov/catalogue/landing?client%5Fsecret=SYNTHETIC_TEST_VALUE"
+        secret_metadata["resolver"]["resolved_url"] = secret_url
+        secret_metadata["resolver"]["resolved_url_sha256"] = MODULE.sha256_bytes(secret_url.encode("utf-8"))
+        rebind_evidence(secret_evidence)
+
         checkpoint_schema = json.loads(
             (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
         )
+        with self.assertRaisesRegex(ValueError, "resume_worker_link_metadata_invalid"):
+            MODULE.validated_resume_records(
+                evidence_path,
+                checkpoint=checkpoint,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=checkpoint_schema,
+                provider_index_sha256=checkpoint["generation_inputs"]["adapter_revision"],
+                candidate_by_id={"2": self.new_link},
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+            )
+
+        evidence = copy.deepcopy(original_evidence)
+        evidence["worker_outcomes"][0].pop("link_metadata")
+        rebind_evidence(evidence)
+
+        # Rebind the altered bytes to an otherwise valid owner to exercise the
+        # resume validator's semantic rule, not only its digest guard.
         stripped_checkpoint = copy.deepcopy(checkpoint)
         stripped_checkpoint["detail_records"][0].pop("link_metadata")
         MODULE.seal_checkpoint(stripped_checkpoint)
