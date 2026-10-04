@@ -9,6 +9,7 @@ import io
 import json
 import os
 import pathlib
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -16,6 +17,8 @@ import types
 import unittest
 import zipfile
 from unittest import mock
+
+import yaml
 
 
 SCRIPT = pathlib.Path(__file__).parents[1] / "scripts/run-canonical-update-promotion.py"
@@ -91,6 +94,27 @@ assert command.label == 'python3 scripts/validate-diagnostic-publication.py'
             with self.assertRaisesRegex(RuntimeError, "intentional import failure"):
                 RUNNER.load_module(path, name)
             self.assertNotIn(name, sys.modules)
+
+
+class PublicationAcknowledgementWorkflowDependencyTests(unittest.TestCase):
+    def test_real_receipt_path_installs_yaml_before_runner_invocation(self) -> None:
+        workflow_path = SCRIPT.parents[1] / ".github/workflows/canonical-update-publication-ack.yml"
+        workflow = yaml.load(workflow_path.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
+        steps = workflow["jobs"]["reconcile"]["steps"]
+        install_index, install_step = next(
+            (index, step) for index, step in enumerate(steps)
+            if step.get("name") == "Install publication acknowledgement dependencies"
+        )
+        runner_index, runner_step = next(
+            (index, step) for index, step in enumerate(steps)
+            if "scripts/run-canonical-update-promotion.py --mode reconcile-publication" in step.get("run", "")
+        )
+
+        self.assertEqual(
+            shlex.split(install_step["run"]),
+            ["python", "-m", "pip", "install", "--disable-pip-version-check", "jsonschema", "PyYAML==6.0.2"],
+        )
+        self.assertLess(install_index, runner_index)
 
 
 class GiraFinishReviewPolicyTests(unittest.TestCase):
