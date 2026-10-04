@@ -544,11 +544,15 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     source_sha = "a" * 40
     expiry = "2026-10-31T00:00:00Z"
 
-    def generation_inputs(self, candidate_sha256: str = "d" * 64) -> dict[str, object]:
+    def generation_inputs(
+        self,
+        candidate_sha256: str = "d" * 64,
+        baseline_sha256: str = "c" * 64,
+    ) -> dict[str, object]:
         return {
             "source_id": "data_go_kr",
             "source_scope": "aggregate_supported_catalog",
-            "baseline_sha256": "c" * 64,
+            "baseline_sha256": baseline_sha256,
             "candidate_sha256": candidate_sha256,
             "observation_failure_sha256": None,
             "policy_sha256": "e" * 64,
@@ -576,9 +580,10 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     def checkpoint(
         self, *, run_id: str = "70000000001", attempt: str = "2",
         candidate_sha256: str = "d" * 64, observed_at: str = "2026-10-02T17:00:00Z",
+        baseline_sha256: str = "c" * 64,
         **locator_updates: object,
     ) -> dict:
-        generation_inputs = self.generation_inputs(candidate_sha256)
+        generation_inputs = self.generation_inputs(candidate_sha256, baseline_sha256)
         generation = hashlib.sha256(RUNNER.canonical_json(generation_inputs)).hexdigest()
         locator = {
             "repository": self.repository,
@@ -844,6 +849,9 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
     def screen_candidates(
         self, root: pathlib.Path, checkpoints: list[dict], compatibility_side_effect,
         *, bundle_sha_by_artifact_id: dict[str, str] | None = None,
+        bundle_bytes_by_artifact_id: dict[str, int] | None = None,
+        canonical_identity: dict[str, object] | None = None,
+        already_canonical_out: list[dict[str, object]] | None = None,
         journal: dict | None = None,
     ) -> tuple[dict | None, list[dict[str, str]]]:
         run_by_id = {cp["output_artifact"]["run_id"]: cp for cp in checkpoints}
@@ -861,7 +869,21 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 locator["artifact_id"],
                 checkpoint["generation_inputs"]["candidate_sha256"],
             )
-            return {"composition_receipt": {"input_digests": {}}, "registry_sha256": digest}
+            registry_bytes = (bundle_bytes_by_artifact_id or {}).get(locator["artifact_id"], 37)
+            return {
+                "composition_receipt": {"input_digests": {}},
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": registry_bytes,
+                "registry_sha256": digest,
+                "baseline_sha256": checkpoint["generation_inputs"]["baseline_sha256"],
+            }
+
+        current_identity = canonical_identity or {
+            "main_sha": self.source_sha,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": 999,
+            "registry_sha256": "c" * 64,
+        }
 
         with (
             mock.patch.object(RUNNER, "processor_run_api", side_effect=run_api),
@@ -869,14 +891,357 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             mock.patch.object(RUNNER, "download_processor_artifact", return_value=root / "downloaded-bundle"),
             mock.patch.object(RUNNER, "validate_processor_bundle", side_effect=validate_bundle),
             mock.patch.object(RUNNER, "verify_processor_input_compatibility", side_effect=compatibility_side_effect),
+            mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value=current_identity),
         ):
+            selection_options = {}
+            if already_canonical_out is not None:
+                selection_options["already_canonical"] = already_canonical_out
             return RUNNER.select_first_eligible_processor_bundle(
                 root, self.repository, checkpoints, [], journal,
                 default_branch=self.default_branch,
                 current_head_sha=self.source_sha,
                 composition_schema={},
                 composition_helper=object(),
+                **selection_options,
             )
+
+    def test_current_canonical_is_materialized_from_pinned_lfs_and_manifest_checked(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            registry_path = "data/data-go-kr.registry.json"
+            payload = b'[{"provider":"data.go.kr","id":"pinned"}]\n'
+            digest = hashlib.sha256(payload).hexdigest()
+            manifest = {
+                "source_registry": registry_path,
+                "artifacts": [{
+                    "path": registry_path, "kind": "registry",
+                    "bytes": len(payload), "sha256": digest,
+                }],
+            }
+            (root / "manifest.json").write_bytes(RUNNER.canonical_json(manifest))
+            pointer = root / registry_path
+            pointer.parent.mkdir(parents=True)
+            pointer.write_text(
+                f"version https://git-lfs.github.com/spec/v1\noid sha256:{digest}\nsize {len(payload)}\n",
+                encoding="ascii",
+            )
+            materialized = root / ".datapan/current-canonical" / registry_path
+            command_calls: list[tuple[str, ...]] = []
+            committed_manifest_bytes = [(root / "manifest.json").read_bytes()]
+            committed_pointer_bytes = [pointer.read_bytes()]
+
+            def fake_command(argv: tuple[str, ...], cwd: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+                command_calls.append(argv)
+                if argv[:3] == ("git", "rev-parse", "HEAD"):
+                    return subprocess.CompletedProcess(argv, 0, f"{self.source_sha}\n", "")
+                if argv[:3] == ("git", "ls-remote", "--heads"):
+                    return subprocess.CompletedProcess(argv, 0, f"{self.source_sha}\trefs/heads/main\n", "")
+                if argv[:2] == ("git", "show") and argv[2] == f"{self.source_sha}:manifest.json":
+                    return subprocess.CompletedProcess(argv, 0, committed_manifest_bytes[0].decode("utf-8"), "")
+                if argv[:2] == ("git", "show") and argv[2] == f"{self.source_sha}:{registry_path}":
+                    return subprocess.CompletedProcess(argv, 0, committed_pointer_bytes[0].decode("ascii"), "")
+                if "materialize-canonical-registry.py" in argv[1]:
+                    self.assertIn("--backend", argv)
+                    self.assertEqual(argv[argv.index("--backend") + 1], "github-git-lfs")
+                    self.assertEqual(argv[argv.index("--candidate-commit") + 1], self.source_sha)
+                    self.assertEqual(
+                        argv[argv.index("--expected-manifest-sha256") + 1],
+                        hashlib.sha256((root / "manifest.json").read_bytes()).hexdigest(),
+                    )
+                    pathlib.Path(argv[argv.index("--output") + 1]).parent.mkdir(parents=True, exist_ok=True)
+                    pathlib.Path(argv[argv.index("--output") + 1]).write_bytes(payload)
+                    return subprocess.CompletedProcess(argv, 0, "", "")
+                raise AssertionError(f"unexpected command: {argv}")
+
+            with mock.patch.object(RUNNER, "command", side_effect=fake_command):
+                identity = RUNNER.authenticated_current_canonical_registry(root, self.source_sha)
+            self.assertEqual(identity, {
+                "main_sha": self.source_sha,
+                "registry_path": registry_path,
+                "registry_bytes": len(payload),
+                "registry_sha256": digest,
+            })
+            self.assertEqual(materialized.read_bytes(), payload)
+            self.assertEqual(command_calls.count(("git", "ls-remote", "--heads", "origin", "refs/heads/main")), 2)
+
+            changed = copy.deepcopy(manifest)
+            changed["artifacts"][0]["bytes"] = len(payload) + 1
+            changed["artifacts"][0]["sha256"] = "0" * 64
+            tampered_working = RUNNER.canonical_json(changed)
+            (root / "manifest.json").write_bytes(tampered_working)
+            with mock.patch.object(RUNNER, "command", side_effect=fake_command):
+                with self.assertRaisesRegex(RUNNER.PromotionError, "working bytes do not match the pinned main commit"):
+                    RUNNER.authenticated_current_canonical_registry(root, self.source_sha)
+
+            for field, invalid in (("bytes", len(payload) + 1), ("sha256", "0" * 64)):
+                with self.subTest(field=field):
+                    changed = copy.deepcopy(manifest)
+                    changed["artifacts"][0][field] = invalid
+                    committed_manifest_bytes[0] = RUNNER.canonical_json(changed)
+                    committed_pointer_bytes[0] = (
+                        "version https://git-lfs.github.com/spec/v1\n"
+                        f"oid sha256:{changed['artifacts'][0]['sha256']}\n"
+                        f"size {changed['artifacts'][0]['bytes']}\n"
+                    ).encode("ascii")
+                    (root / "manifest.json").write_bytes(committed_manifest_bytes[0])
+                    materialized.unlink()
+                    with mock.patch.object(RUNNER, "command", side_effect=fake_command):
+                        with self.assertRaisesRegex(RUNNER.PromotionError, "current canonical registry bytes do not match"):
+                            RUNNER.authenticated_current_canonical_registry(root, self.source_sha)
+
+    def test_already_canonical_older_bundle_is_skipped_for_later_distinct_candidate(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            old = self.checkpoint(
+                candidate_sha256="d" * 64,
+                baseline_sha256="c" * 64,
+                run_id="70000000001", artifact_id="111111",
+            )
+            later = self.checkpoint(
+                candidate_sha256="e" * 64,
+                baseline_sha256="d" * 64,
+                run_id="70000000002", artifact_id="222222",
+            )
+            noops: list[dict[str, object]] = []
+            identity = {
+                "main_sha": self.source_sha,
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 37,
+                "registry_sha256": "d" * 64,
+            }
+            old["outcome"].update({"pending_count": 12, "detail_retry_count": 4, "detail_unattempted_count": 4})
+            screened, blocked = self.screen_candidates(
+                root, [old, later], lambda *_args, **_kwargs: None,
+                bundle_sha_by_artifact_id={"111111": "d" * 64, "222222": "e" * 64},
+                canonical_identity=identity,
+                already_canonical_out=noops,
+            )
+            self.assertEqual(screened["generation_id"], later["generation_id"])
+            self.assertEqual(blocked, [])
+            self.assertEqual(noops, [{
+                "generation_id": old["generation_id"],
+                "reason": "already_canonical_payload",
+                "registry_sha256": "d" * 64,
+                "pending_count": 12,
+                "detail_retry_count": 4,
+                "detail_unattempted_count": 4,
+                "candidate_available": False,
+            }])
+
+    def test_same_digest_with_wrong_byte_count_is_not_already_canonical(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            candidate = self.checkpoint(candidate_sha256="d" * 64, baseline_sha256="c" * 64)
+            noops: list[dict[str, object]] = []
+            identity = {
+                "main_sha": self.source_sha,
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 37,
+                "registry_sha256": "d" * 64,
+            }
+            screened, blocked = self.screen_candidates(
+                root, [candidate], lambda *_args, **_kwargs: None,
+                bundle_sha_by_artifact_id={"123456": "d" * 64},
+                bundle_bytes_by_artifact_id={"123456": 36},
+                canonical_identity=identity,
+                already_canonical_out=noops,
+            )
+            self.assertIsNone(screened)
+            self.assertEqual(noops, [])
+            self.assertEqual(blocked, [{
+                "generation_id": candidate["generation_id"],
+                "reason": "processor_baseline_stale_for_current_canonical",
+            }])
+
+    def test_stale_different_payload_does_not_starve_fresh_baseline_candidate(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            old = self.checkpoint(
+                candidate_sha256="e" * 64,
+                baseline_sha256="c" * 64,
+                run_id="70000000001", artifact_id="111111",
+            )
+            fresh = self.checkpoint(
+                candidate_sha256="f" * 64,
+                baseline_sha256="d" * 64,
+                run_id="70000000002", artifact_id="222222",
+            )
+            identity = {
+                "main_sha": self.source_sha,
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 37,
+                "registry_sha256": "d" * 64,
+            }
+            screened, blocked = self.screen_candidates(
+                root, [old, fresh], lambda *_args, **_kwargs: None,
+                bundle_sha_by_artifact_id={"111111": "e" * 64, "222222": "f" * 64},
+                canonical_identity=identity,
+            )
+            self.assertEqual(screened["generation_id"], fresh["generation_id"])
+            self.assertEqual(blocked, [{
+                "generation_id": old["generation_id"],
+                "reason": "processor_baseline_stale_for_current_canonical",
+            }])
+
+    def test_all_stale_different_payloads_remain_blocked_without_promotion(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            old = self.checkpoint(candidate_sha256="e" * 64, baseline_sha256="c" * 64)
+            identity = {
+                "main_sha": self.source_sha,
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 37,
+                "registry_sha256": "d" * 64,
+            }
+            screened, blocked = self.screen_candidates(
+                root, [old], lambda *_args, **_kwargs: None,
+                bundle_sha_by_artifact_id={"123456": "e" * 64},
+                canonical_identity=identity,
+            )
+            self.assertIsNone(screened)
+            self.assertEqual(blocked, [{
+                "generation_id": old["generation_id"],
+                "reason": "processor_baseline_stale_for_current_canonical",
+            }])
+
+    def test_untrusted_bundle_cannot_be_treated_as_already_canonical(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            candidate = self.checkpoint(candidate_sha256="d" * 64, baseline_sha256="c" * 64)
+            noops: list[dict[str, object]] = []
+            selected, blocked = self.screen_candidates(
+                root, [candidate],
+                lambda *_args, **_kwargs: (_ for _ in ()).throw(RUNNER.PromotionError("untrusted input")),
+                canonical_identity={
+                    "main_sha": self.source_sha,
+                    "registry_path": "data/data-go-kr.registry.json",
+                    "registry_bytes": 37,
+                    "registry_sha256": "d" * 64,
+                },
+                already_canonical_out=noops,
+            )
+            self.assertIsNone(selected)
+            self.assertEqual(noops, [])
+            self.assertEqual(blocked, [{
+                "generation_id": candidate["generation_id"],
+                "reason": "processor_bundle_or_input_contract_incompatible",
+            }])
+
+    def test_direct_different_payload_with_stale_baseline_still_fails_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            bundle_dir = root / "bundle"
+            bundle_dir.mkdir()
+            checkpoint = self.checkpoint(candidate_sha256="e" * 64, baseline_sha256="c" * 64)
+            bundle = {
+                "status": "ready",
+                "composition_receipt": {"input_digests": {}},
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 37,
+                "registry_sha256": "e" * 64,
+                "baseline_sha256": "c" * 64,
+            }
+            args = types.SimpleNamespace(
+                workflow_run_id="70000000001", workflow_run_attempt="2",
+                bundle_dir=bundle_dir, workflow_run_head_sha=self.source_sha,
+                state_root=root / "state", datapan_cli=root / "datapan-cli",
+                processor_artifact_id="123456", source_refresh_predecessor=None,
+                source_refresh_target_main_sha=None,
+            )
+
+            def fake_command(argv: tuple[str, ...], _cwd: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+                if argv[:3] == ("git", "rev-parse", "HEAD"):
+                    return subprocess.CompletedProcess(argv, 0, f"{self.source_sha}\n", "")
+                if "materialize-canonical-registry.py" in argv[1]:
+                    return subprocess.CompletedProcess(argv, 0, "", "")
+                raise AssertionError(f"unexpected command: {argv}")
+
+            with contextlib.ExitStack() as stack:
+                stack.enter_context(mock.patch.dict(RUNNER.os.environ, {"GITHUB_REPOSITORY": self.repository}))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_no_candidate_processor_result", return_value=None))
+                stack.enter_context(mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=object()))
+                stack.enter_context(mock.patch.object(RUNNER, "load_object", side_effect=lambda path: (
+                    {"artifacts": [{"path": bundle["registry_path"], "kind": "registry", "bytes": 37}]}
+                    if pathlib.Path(path).name == "manifest.json" else {}
+                )))
+                stack.enter_context(mock.patch.object(RUNNER, "locate_processor_checkpoint", return_value=(root / "state.json", checkpoint)))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
+                stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
+                stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
+                    "main_sha": self.source_sha,
+                    "registry_path": bundle["registry_path"],
+                    "registry_bytes": 37,
+                    "registry_sha256": "d" * 64,
+                }))
+                stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(37, "d" * 64)))
+                materialize = stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
+                journal = stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot"))
+                stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+                with self.assertRaisesRegex(RUNNER.PromotionError, "materialized source differs from the processor's immutable baseline"):
+                    RUNNER.execute_candidate_preparation(args, root)
+            self.assertEqual(
+                sum(any("materialize-canonical-registry.py" in part for part in call.args[0]) for call in materialize.call_args_list),
+                1,
+            )
+            journal.assert_not_called()
+
+    def test_direct_already_canonical_bundle_returns_without_prepare_side_effects(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            bundle_dir = root / "bundle"
+            bundle_dir.mkdir()
+            checkpoint = self.checkpoint(candidate_sha256="d" * 64, baseline_sha256="c" * 64)
+            checkpoint["outcome"].update({"pending_count": 9, "detail_retry_count": 3, "detail_unattempted_count": 6})
+            bundle = {
+                "status": "ready",
+                "composition_receipt": {"input_digests": {}},
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 37,
+                "registry_sha256": "d" * 64,
+                "baseline_sha256": "c" * 64,
+            }
+            args = types.SimpleNamespace(
+                workflow_run_id="70000000001", workflow_run_attempt="2",
+                bundle_dir=bundle_dir, workflow_run_head_sha=self.source_sha,
+                state_root=root / "state", datapan_cli=root / "datapan-cli",
+                processor_artifact_id="123456", source_refresh_predecessor=None,
+                source_refresh_target_main_sha=None,
+            )
+
+            def fake_command(argv: tuple[str, ...], _cwd: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
+                if argv[:3] == ("git", "rev-parse", "HEAD"):
+                    return subprocess.CompletedProcess(argv, 0, f"{self.source_sha}\n", "")
+                raise AssertionError(f"unexpected prepare command for already-canonical bundle: {argv}")
+
+            output = io.StringIO()
+            with contextlib.ExitStack() as stack:
+                stack.enter_context(mock.patch.dict(RUNNER.os.environ, {"GITHUB_REPOSITORY": self.repository}))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_no_candidate_processor_result", return_value=None))
+                stack.enter_context(mock.patch.object(RUNNER, "load_canonical_update_pr", return_value=object()))
+                stack.enter_context(mock.patch.object(RUNNER, "load_object", return_value={}))
+                stack.enter_context(mock.patch.object(RUNNER, "locate_processor_checkpoint", return_value=(root / "state.json", checkpoint)))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
+                stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
+                stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
+                stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
+                    "main_sha": self.source_sha,
+                    "registry_path": bundle["registry_path"],
+                    "registry_bytes": 37,
+                    "registry_sha256": "d" * 64,
+                }))
+                command = stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
+                materialize = stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot"))
+                stack.enter_context(contextlib.redirect_stdout(output))
+                RUNNER.execute_candidate_preparation(args, root)
+            self.assertEqual(command.call_count, 1)
+            materialize.assert_not_called()
+            result = json.loads(output.getvalue())
+            self.assertEqual(result["status"], "already-canonical-payload")
+            self.assertFalse(result["candidate_available"])
+            self.assertEqual(result["pending_count"], 9)
+            self.assertEqual(result["detail_retry_count"], 3)
+            self.assertEqual(result["detail_unattempted_count"], 6)
 
     def test_checkpoint_recomputes_generation_identity_after_resealing(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
@@ -1169,8 +1534,20 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 mock.patch.object(RUNNER, "processor_run_api", side_effect=run_then_missing),
                 mock.patch.object(RUNNER, "processor_artifact_api", side_effect=artifact_api),
                 mock.patch.object(RUNNER, "download_processor_artifact", return_value=root / "downloaded-bundle"),
-                mock.patch.object(RUNNER, "validate_processor_bundle", return_value={"composition_receipt": {"input_digests": {}}}),
+                mock.patch.object(RUNNER, "validate_processor_bundle", side_effect=lambda checkpoint, *_args: {
+                    "composition_receipt": {"input_digests": {}},
+                    "registry_path": "data/data-go-kr.registry.json",
+                    "registry_bytes": 37,
+                    "registry_sha256": checkpoint["generation_inputs"]["candidate_sha256"],
+                    "baseline_sha256": checkpoint["generation_inputs"]["baseline_sha256"],
+                }),
                 mock.patch.object(RUNNER, "verify_processor_input_compatibility", return_value=None),
+                mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
+                    "main_sha": self.source_sha,
+                    "registry_path": "data/data-go-kr.registry.json",
+                    "registry_bytes": 37,
+                    "registry_sha256": "c" * 64,
+                }),
             ):
                 screened, blocked = RUNNER.select_first_eligible_processor_bundle(
                     root, self.repository, [old, new], [],
@@ -1695,6 +2072,10 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
                 stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
                 stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
                 stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
+                stack.enter_context(mock.patch.object(
+                    RUNNER, "authenticated_current_canonical_registry",
+                    side_effect=AssertionError("explicit source refresh must retain its authorized path"),
+                ))
                 stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(registry_bytes, "a" * 64)))
                 stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(journal, state_sha)))
                 stack.enter_context(mock.patch.object(RUNNER, "update_registry_review_artifacts", return_value=root / "reports/review"))
@@ -2649,6 +3030,12 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
                     stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
                     stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
                     stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
+                    stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
+                        "main_sha": controller_head,
+                        "registry_path": candidate["registry_path"],
+                        "registry_bytes": 10,
+                        "registry_sha256": baseline_sha,
+                    }))
                     stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
                     stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(10, baseline_sha)))
                     stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(fixture["state"], "a" * 40)))
