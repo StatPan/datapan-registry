@@ -54,6 +54,18 @@ class UpstreamCatalogueHealthWorkflowTest(unittest.TestCase):
         self.assertIn("git archive", text)
         self.assertIn("git show", text)
 
+    def test_checker_checkout_has_ancestry_and_promotion_verifier_dependencies(self) -> None:
+        checkout = next(
+            step for step in self.workflow["jobs"]["inspect"]["steps"]
+            if step.get("name") == "Checkout the trusted default branch"
+        )
+        self.assertEqual(checkout["with"]["fetch-depth"], "0")
+        setup = next(
+            step for step in self.workflow["jobs"]["inspect"]["steps"]
+            if step.get("name") == "Set up explicit UTC evaluation time and dependencies"
+        )
+        self.assertIn("'PyYAML==6.0.2'", setup["run"])
+
     def test_state_update_uses_bounded_non_force_fast_forward_push(self) -> None:
         steps = self.workflow["jobs"]["inspect"]["steps"]
         persist_step = next(step for step in steps if "Persist receipt" in step.get("name", ""))

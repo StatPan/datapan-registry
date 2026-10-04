@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import datetime as dt
 import hashlib
 import importlib.util
@@ -26,7 +27,10 @@ PROMOTION_JOURNAL_SCHEMA = ROOT / "schemas" / "datapan.canonical-update-promotio
 PROMOTION_SPEC = importlib.util.spec_from_file_location("canonical_update_pr_health", ROOT / "scripts" / "canonical_update_pr.py")
 assert PROMOTION_SPEC and PROMOTION_SPEC.loader
 PROMOTION = importlib.util.module_from_spec(PROMOTION_SPEC)
+sys.modules[PROMOTION_SPEC.name] = PROMOTION
 PROMOTION_SPEC.loader.exec_module(PROMOTION)
+PROMOTION_RUNNER_PATH = ROOT / "scripts" / "run-canonical-update-promotion.py"
+COMPOSITION_SCHEMA_PATH = ROOT / "schemas" / "datapan.catalogue-composition-receipt.v1.schema.json"
 SOURCE_POLICY_DEFAULT = pathlib.Path("policy/source-refresh.json")
 HEALTH_POLICY_DEFAULT = pathlib.Path("policy/upstream-catalogue-health.json")
 DIGEST = re.compile(r"^[a-f0-9]{64}$")
@@ -101,6 +105,207 @@ def manifest_registry_identity(manifest_path: pathlib.Path, registry_path: pathl
     if actual_sha256 != expected_sha256 or actual_bytes != expected_bytes:
         raise ValueError("main_registry_manifest_mismatch")
     return {"registry_path": registry_name, "registry_bytes": actual_bytes, "registry_sha256": actual_sha256}
+
+
+def git_bytes(root: pathlib.Path, revision: str, path: str) -> bytes:
+    result = subprocess.run(
+        ["git", "show", f"{revision}:{path}"], cwd=root, capture_output=True, check=False, timeout=20,
+    )
+    if result.returncode != 0:
+        raise ValueError("main_revision_input_unavailable")
+    return result.stdout
+
+
+def checked_out_main_revision(root: pathlib.Path, requested_revision: str = "") -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, text=True, capture_output=True, check=False, timeout=10,
+    )
+    revision = result.stdout.strip()
+    if result.returncode != 0 or not REVISION.fullmatch(revision):
+        raise ValueError("main_revision_unavailable")
+    if requested_revision and requested_revision != revision:
+        raise ValueError("main_revision_does_not_match_checked_out_head")
+    return revision
+
+
+def verify_main_manifest_binding(
+    root: pathlib.Path, revision: str, manifest_path: pathlib.Path, registry_path: pathlib.Path,
+) -> dict[str, Any]:
+    """Bind the strict manifest/LFS identity to the immutable checked-out main tree."""
+    if checked_out_main_revision(root, revision) != revision:
+        raise ValueError("main_revision_does_not_match_checked_out_head")
+    try:
+        manifest_name = manifest_path.resolve().relative_to(root.resolve()).as_posix()
+        registry_name = registry_path.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError as exc:
+        raise ValueError("main_manifest_path_outside_repository") from exc
+    try:
+        working_manifest = manifest_path.read_bytes()
+        working_registry = registry_path.read_bytes()
+    except OSError as exc:
+        raise ValueError("main_manifest_input_unavailable") from exc
+    if working_manifest != git_bytes(root, revision, manifest_name):
+        raise ValueError("main_manifest_not_bound_to_checked_out_head")
+    head_registry = git_bytes(root, revision, registry_name)
+    if head_registry.startswith(b"version https://git-lfs.github.com/spec/v1\n"):
+        try:
+            lines = head_registry.decode("ascii").splitlines()
+        except UnicodeDecodeError as exc:
+            raise ValueError("main_registry_lfs_pointer_invalid") from exc
+        if len(lines) != 3 or not re.fullmatch(r"oid sha256:[a-f0-9]{64}", lines[1]) or not re.fullmatch(r"size [0-9]+", lines[2]):
+            raise ValueError("main_registry_lfs_pointer_invalid")
+        head_sha256 = lines[1].removeprefix("oid sha256:")
+        head_bytes = int(lines[2].removeprefix("size "))
+    else:
+        head_sha256 = sha256_bytes(head_registry)
+        head_bytes = len(head_registry)
+        if working_registry != head_registry:
+            raise ValueError("main_registry_not_bound_to_checked_out_head")
+    identity = manifest_registry_identity(manifest_path, registry_path)
+    if (identity["registry_sha256"], identity["registry_bytes"]) != (head_sha256, head_bytes):
+        raise ValueError("main_registry_manifest_not_bound_to_checked_out_head")
+    return identity
+
+
+def load_promotion_runner() -> Any:
+    spec = importlib.util.spec_from_file_location("canonical_update_promotion_health", PROMOTION_RUNNER_PATH)
+    if spec is None or spec.loader is None:
+        raise ValueError("processor_candidate_verifier_unavailable")
+    module = importlib.util.module_from_spec(spec)
+    previous = sys.modules.get(spec.name)
+    sys.modules[spec.name] = module
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        if previous is None:
+            sys.modules.pop(spec.name, None)
+        else:
+            sys.modules[spec.name] = previous
+        raise
+    return module
+
+
+def build_processor_candidate_screen(root: pathlib.Path, repository: str, main_revision: str) -> Any | None:
+    """Use the promotion worker's full, read-only B bundle screen for one Health candidate."""
+    try:
+        runner = load_promotion_runner()
+        screen = getattr(runner, "screen_processor_recovery_candidate", None)
+        if not callable(screen):
+            return None
+        compatibility_paths = getattr(runner, "PROCESSOR_COMPATIBILITY_FILES", None)
+        if not isinstance(compatibility_paths, (tuple, list)) or not compatibility_paths:
+            return None
+        paths = ["manifest.json", "data/data-go-kr.registry.json", *compatibility_paths]
+        diff = subprocess.run(
+            ["git", "diff", "--quiet", main_revision, "--", *paths],
+            cwd=root, capture_output=True, check=False, timeout=20,
+        )
+        if diff.returncode != 0:
+            return None
+        composition_schema = load_json(COMPOSITION_SCHEMA_PATH)
+    except Exception:
+        return None
+
+    def screen_candidate(checkpoint: dict[str, Any]) -> dict[str, Any] | None:
+        try:
+            with contextlib.redirect_stdout(sys.stderr):
+                screened, _reason = screen(
+                    root, repository, checkpoint,
+                    default_branch="main",
+                    current_head_sha=main_revision,
+                    composition_schema=composition_schema,
+                    composition_helper=PROMOTION,
+                )
+            return screened if isinstance(screened, dict) else None
+        except Exception:
+            return None
+
+    return screen_candidate
+
+
+def already_canonical_candidate_relation(
+    checkpoint: dict[str, Any] | None, main_identity: dict[str, Any], main_revision: str,
+    mode: str, candidate_screen: Any | None,
+) -> dict[str, Any] | None:
+    """Return a relation only when the complete B screen proves exact current-main bytes."""
+    if (
+        mode != "live"
+        or checkpoint is None
+        or checkpoint.get("status") not in {"ready", "no-change"}
+        or not callable(candidate_screen)
+    ):
+        return None
+    try:
+        screened = candidate_screen(checkpoint)
+        if not isinstance(screened, dict):
+            return None
+        bundle = screened.get("bundle")
+        run = screened.get("run")
+        locator = checkpoint.get("output_artifact")
+        if not isinstance(bundle, dict) or not isinstance(run, dict) or not isinstance(locator, dict):
+            return None
+        generation_id = checkpoint.get("generation_id")
+        checkpoint_sha = checkpoint.get("checkpoint_sha256")
+        generation_inputs = checkpoint.get("generation_inputs")
+        artifact_id = str(locator.get("artifact_id", ""))
+        bundle_sha256 = locator.get("bundle_manifest_sha256")
+        run_id = str(locator.get("run_id", ""))
+        name_match = re.fullmatch(r"upstream-catalogue-processing-([0-9]{6,20})-([1-9][0-9]*)", str(locator.get("name", "")))
+        if (
+            not isinstance(generation_id, str) or not DIGEST.fullmatch(generation_id)
+            or not isinstance(checkpoint_sha, str) or not DIGEST.fullmatch(checkpoint_sha)
+            or not isinstance(generation_inputs, dict)
+            or generation_inputs.get("source_id") != "data_go_kr"
+            or generation_inputs.get("source_scope") != "aggregate_supported_catalog"
+            or sha256_bytes(canonical_json(generation_inputs)) != generation_id
+            or checkpoint.get("source_id") != "data_go_kr"
+            or checkpoint.get("source_scope") != "aggregate_supported_catalog"
+            or not isinstance(bundle_sha256, str) or not DIGEST.fullmatch(bundle_sha256)
+            or screened.get("generation_id") != generation_id
+            or screened.get("run_id") != run_id
+            or not name_match or name_match.group(1) != run_id
+            or str(screened.get("attempt", "")) != name_match.group(2)
+            or str(run.get("id", "")) != run_id
+            or str(run.get("run_attempt", "")) != name_match.group(2)
+            or str(screened.get("artifact_id", "")) != artifact_id
+            or not artifact_id.isdigit()
+            or bundle.get("status") != checkpoint.get("status")
+            or bundle.get("registry_path") != main_identity.get("registry_path")
+        ):
+            return None
+        bundle_dir = pathlib.Path(str(bundle.get("composition_outputs_dir", "")))
+        candidate_path = bundle_dir / "composed-candidate.registry.json"
+        if not candidate_path.is_file() or candidate_path.is_symlink():
+            return None
+        composed_bytes = candidate_path.stat().st_size
+        composed_sha256 = file_sha256(candidate_path)
+        if (
+            isinstance(bundle.get("registry_bytes"), bool)
+            or bundle.get("registry_bytes") != composed_bytes
+            or bundle.get("registry_sha256") != composed_sha256
+            or composed_bytes != main_identity.get("registry_bytes")
+            or composed_sha256 != main_identity.get("registry_sha256")
+            or not REVISION.fullmatch(main_revision)
+            or main_identity.get("revision") != main_revision
+            or not DIGEST.fullmatch(str(main_identity.get("manifest_sha256", "")))
+        ):
+            return None
+        return {
+            "verified": True,
+            "source_id": checkpoint.get("source_id"),
+            "generation_id": generation_id,
+            "checkpoint_sha256": checkpoint_sha,
+            "processor_run_id": run_id,
+            "processor_run_attempt": int(name_match.group(2)),
+            "artifact_id": artifact_id,
+            "output_bundle_sha256": bundle_sha256,
+            "composed_registry_bytes": composed_bytes,
+            "composed_registry_sha256": composed_sha256,
+            "main_revision": main_revision,
+            "main_manifest_sha256": main_identity["manifest_sha256"],
+        }
+    except Exception:
+        return None
 
 
 def load_json(path: pathlib.Path, *, maximum_bytes: int = 4 * 1024 * 1024) -> Any:
@@ -1035,13 +1240,22 @@ def evaluate_source(
     promotion_workflow_api_error: str | None = None,
     prior_promotion_execution_faults: list[dict[str, Any]] | None = None,
     health_state_error: str | None = None,
+    processor_candidate_screen: Any | None = None,
 ) -> dict[str, Any]:
     source_id = str(source["source_id"])
     owner_ticket = int(source["owner_ticket"])
     faults: list[dict[str, Any]] = []
 
-    def add(stage: str, reason: str, severity: str, action: str, failure_identity: str = "") -> None:
-        faults.append(fault(source_id, stage, reason, severity, owner_ticket, action, failure_identity))
+    def add(
+        stage: str, reason: str, severity: str, action: str, failure_identity: str = "",
+        *, generation_id: str | None = None,
+    ) -> None:
+        item = fault(source_id, stage, reason, severity, owner_ticket, action, failure_identity)
+        if generation_id is not None:
+            if not DIGEST.fullmatch(generation_id):
+                raise ValueError("historical_fault_generation_invalid")
+            item["generation_id"] = generation_id
+        faults.append(item)
 
     latest_processor_run, execution_failure, latest_processor_success, previous_attempt_error = processor_execution_state(
         processor_workflow_runs or [],
@@ -1339,6 +1553,10 @@ def evaluate_source(
             if not bundle_valid:
                 add("candidate", bundle_issue, "error", _fault_action(source, "processor_stalled"))
 
+    already_canonical_candidate = already_canonical_candidate_relation(
+        checkpoint, main_identity, str(main_identity.get("revision", "")), mode, processor_candidate_screen,
+    )
+
     ordered_checkpoints = []
     for row in checkpoints:
         current_observation = row.get("last_observation")
@@ -1452,6 +1670,149 @@ def evaluate_source(
             else:
                 add("promotion", "promotion_generation_record_ambiguous", "error", _fault_action(source, "promotion_wait"), generation_id)
     current_items = current_records[0][1] if len(current_records) == 1 else []
+    if already_canonical_candidate is not None and not current_records:
+        # The current B generation has no C record because its exact payload is
+        # already present on main. Preserve any independent delivery state for
+        # an older record that proves the same canonical bytes; the no-op
+        # relation is not evidence that its publication acknowledgement ran.
+        matching_history: list[tuple[dict[str, Any], list[dict[str, Any]]]] = []
+        for record in source_records:
+            candidate = record.get("candidate") if isinstance(record, dict) else None
+            if not isinstance(candidate, dict) or record.get("superseded_by") is not None:
+                continue
+            record_generation = str(candidate.get("generation_id", ""))
+            if (
+                record_generation == generation_id
+                or str(candidate.get("repository", "")).casefold() != repository.casefold()
+                or candidate.get("registry_path") != main_identity.get("registry_path")
+                or isinstance(candidate.get("registry_bytes"), bool)
+                or candidate.get("registry_bytes") != main_identity.get("registry_bytes")
+                or candidate.get("registry_sha256") != main_identity.get("registry_sha256")
+            ):
+                continue
+            accepted = promotion_items_for_source(record, source_id, record_generation)
+            if accepted:
+                matching_history.append((record, accepted))
+
+        if len(matching_history) > 1:
+            add(
+                "promotion", "promotion_canonical_history_ambiguous", "error",
+                _fault_action(source, "promotion_wait"),
+            )
+        elif len(matching_history) == 1:
+            historical_record, historical_items = matching_history[0]
+            historical_candidate = historical_record["candidate"]
+            historical_generation = str(historical_candidate["generation_id"])
+            historical_item = historical_items[-1]
+            historical_status = str(historical_item.get("status", "unknown"))
+            historical_run = None if historical_status == "prepared" else trusted_promotion_run(
+                historical_item, promotion_runs, repository, promotion_workflow_paths or {}, workflow_ids_by_path or {},
+                as_of, maximum_future_skew,
+            )
+            if historical_status in {"merged", "publication-pending", "published", "read-back-confirmed"}:
+                publication = promotion_publication(historical_item)
+                if publication is not None:
+                    publication.update({
+                        "source_id": source_id,
+                        "generation_id": historical_generation,
+                        "publisher_run_verified": historical_run is not None if historical_status == "read-back-confirmed" else None,
+                    })
+
+            if historical_status == "prepared":
+                add(
+                    "promotion", "promotion_ack_missing", "warning",
+                    _promotion_recovery_action(source, promotion_workflow_path), historical_generation,
+                    generation_id=historical_generation,
+                )
+                historical_deadline_key = "pending-review"
+            elif historical_status == "pending-review":
+                add(
+                    "promotion", "promotion_pending_review", "info", _fault_action(source, "promotion_wait"),
+                    historical_generation, generation_id=historical_generation,
+                )
+                historical_deadline_key = "pending-review"
+            elif historical_status in {"merged", "publication-pending", "published"}:
+                add(
+                    "publication", "publication_or_readback_pending", "warning",
+                    _fault_action(source, "promotion_wait"), historical_generation,
+                    generation_id=historical_generation,
+                )
+                historical_deadline_key = "publication-pending"
+            else:
+                historical_deadline_key = None
+
+            if historical_status != "prepared" and historical_run is None:
+                if historical_status == "read-back-confirmed":
+                    historical_stage = "publication"
+                    reason = "promotion_readback_run_unverified"
+                    action = _fault_action(source, "publication_failure")
+                else:
+                    historical_stage = "promotion"
+                    reason = "promotion_ack_run_unverified"
+                    action = _fault_action(source, "promotion_wait")
+                add(
+                    historical_stage, reason, "error", action,
+                    str(historical_item.get("run_id", "")), generation_id=historical_generation,
+                )
+
+            if historical_status == "failed":
+                add(
+                    "publication", "publication_or_promotion_failed", "error",
+                    _fault_action(source, "publication_failure"), historical_generation,
+                    generation_id=historical_generation,
+                )
+            elif historical_status == "closed":
+                add(
+                    "promotion", "candidate_closed_without_acknowledged_publication", "warning",
+                    _fault_action(source, "promotion_wait"), historical_generation,
+                    generation_id=historical_generation,
+                )
+            elif historical_status == "read-back-confirmed":
+                claimed_publication = promotion_publication(historical_item)
+                if claimed_publication is None or claimed_publication.get("verified") is not True:
+                    add(
+                        "publication", "readback_receipt_invalid", "error",
+                        _fault_action(source, "publication_failure"), historical_generation,
+                        generation_id=historical_generation,
+                    )
+
+            if historical_deadline_key is not None:
+                entered_at = historical_item.get("observed_at")
+                deadline = int(source["stage_deadlines_seconds"][historical_deadline_key])
+                try:
+                    stage_age = seconds_since(as_of, entered_at, "historical_promotion_stage.observed_at", maximum_future_skew)
+                    if stage_age > deadline:
+                        if historical_status == "prepared":
+                            add(
+                                "promotion", "promotion_prepared_delivery_overdue", "warning",
+                                _promotion_recovery_action(source, promotion_workflow_path), historical_generation,
+                                generation_id=historical_generation,
+                            )
+                        elif historical_deadline_key == "pending-review":
+                            add(
+                                "promotion", "promotion_review_wait_overdue", "warning",
+                                _fault_action(source, "promotion_wait"), historical_generation,
+                                generation_id=historical_generation,
+                            )
+                        else:
+                            add(
+                                "publication", "publication_readback_lag_overdue", "error",
+                                _fault_action(source, "promotion_wait"), historical_generation,
+                                generation_id=historical_generation,
+                            )
+                except ValueError:
+                    if historical_status == "prepared":
+                        add(
+                            "promotion", "promotion_prepared_stage_clock_invalid", "warning",
+                            _promotion_recovery_action(source, promotion_workflow_path), historical_generation,
+                            generation_id=historical_generation,
+                        )
+                    else:
+                        add(
+                            "promotion", "promotion_stage_clock_invalid", "error",
+                            _fault_action(source, "promotion_wait"), historical_generation,
+                            generation_id=historical_generation,
+                        )
     if current_items:
         current_item = current_items[-1]
         promotion_state = str(current_item.get("status", "unknown"))
@@ -1544,12 +1905,13 @@ def evaluate_source(
             elif publication.get("publisher_run_verified") is not True:
                 add("publication", "promotion_readback_run_unverified", "error", _fault_action(source, "publication_failure"), str(current_item.get("run_id", "")))
     elif checkpoint is not None and checkpoint.get("status") == "ready":
-        add(
-            "promotion", "promotion_ack_missing", "warning",
-            _promotion_recovery_action(source, promotion_workflow_path), generation_id,
-        )
-        if source_records:
-            add("promotion", "promotion_record_for_different_generation", "warning", _fault_action(source, "promotion_wait"), generation_id)
+        if already_canonical_candidate is None:
+            add(
+                "promotion", "promotion_ack_missing", "warning",
+                _promotion_recovery_action(source, promotion_workflow_path), generation_id,
+            )
+            if source_records:
+                add("promotion", "promotion_record_for_different_generation", "warning", _fault_action(source, "promotion_wait"), generation_id)
 
     if promotion_workflow_api_error:
         add(
@@ -1636,6 +1998,7 @@ def evaluate_source(
             "latest_successful_execution_run": c_success,
             "execution_failure": c_failure,
         },
+        "already_canonical_candidate": already_canonical_candidate,
     }
     unique_faults = {row["fault_key"]: row for row in faults}
     faults = [unique_faults[key] for key in sorted(unique_faults)]
@@ -1660,6 +2023,7 @@ def evaluate_source(
         "processor": {
             "state": processor_state,
             "generation_id": generation_id or None,
+            "checkpoint_sha256": checkpoint.get("checkpoint_sha256") if checkpoint else None,
             "candidate_sha256": (checkpoint.get("generation_inputs", {}).get("candidate_sha256") if checkpoint and isinstance(checkpoint.get("generation_inputs"), dict) else None),
             "checkpoint_observed_at": checkpoint.get("observed_at") if checkpoint else None,
             "last_observation": checkpoint.get("last_observation") if checkpoint else None,
@@ -2019,6 +2383,7 @@ def evaluate(
     promotion_workflow_paths: dict[str, str] | None = None,
     promotion_ack_error: str | None = None,
     health_state_error: str | None = None,
+    processor_candidate_screen: Any | None = None,
 ) -> dict[str, Any]:
     if mode not in {"live", "fixture"}:
         raise ValueError("invalid_execution_mode")
@@ -2107,6 +2472,7 @@ def evaluate(
             workflow_ids_by_path=workflow_ids_by_path,
             promotion_ack_error=promotion_ack_error,
             health_state_error=health_state_error,
+            processor_candidate_screen=processor_candidate_screen,
         )
         for source in monitor_rows
     ]
@@ -2185,6 +2551,7 @@ def main(argv: list[str] | None = None) -> int:
         health_state_error = None
         promotion_ack_error = None
         workflow_ids_by_path: dict[str, int] = {}
+        processor_candidate_screen = None
         if args.fixture_input:
             mode = "fixture"
             fixture = load_json(args.fixture_input)
@@ -2325,12 +2692,10 @@ def main(argv: list[str] | None = None) -> int:
                 except Exception as exc:  # Schema validation errors must become a health fault.
                     promotion_ack_error = str(exc)
                     promotion_ack = None
-            main_revision = args.main_revision
-            if not main_revision:
-                result = subprocess.run(["git", "rev-parse", "HEAD"], text=True, capture_output=True, check=False, timeout=10)
-                if result.returncode != 0:
-                    raise ValueError("main_revision_unavailable")
-                main_revision = result.stdout.strip()
+            main_revision = checked_out_main_revision(ROOT, args.main_revision)
+            registry_path = args.registry if args.registry.is_absolute() else ROOT / args.registry
+            verify_main_manifest_binding(ROOT, main_revision, ROOT / "manifest.json", registry_path)
+            processor_candidate_screen = build_processor_candidate_screen(ROOT, args.repository, main_revision)
             referenced_artifact_ids: set[str] = set()
             observed_run_ids: set[str] = set()
             for source in health_policy["sources"]:
@@ -2458,7 +2823,7 @@ def main(argv: list[str] | None = None) -> int:
             promotion_ack=promotion_ack if isinstance(promotion_ack, dict) else None,
             main_revision=main_revision,
             manifest_sha256=file_sha256(ROOT / "manifest.json"),
-            registry_path=args.registry,
+            registry_path=(registry_path if mode == "live" else args.registry),
             last_good=last_good if isinstance(last_good, dict) else None,
             mode=mode,
             workflow_run_id=args.workflow_run_id,
@@ -2484,6 +2849,7 @@ def main(argv: list[str] | None = None) -> int:
             workflow_ids_by_path=workflow_ids_by_path,
             promotion_ack_error=promotion_ack_error,
             health_state_error=health_state_error,
+            processor_candidate_screen=processor_candidate_screen,
         )
         validate_schema(receipt, HEALTH_RECEIPT_SCHEMA, "health_receipt")
         args.output.parent.mkdir(parents=True, exist_ok=True)

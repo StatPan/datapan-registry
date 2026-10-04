@@ -154,6 +154,54 @@ def checkpoint(
     return value
 
 
+def screenable_ready_checkpoint() -> dict:
+    value = checkpoint(status="ready", composer_status="ready")
+    value["generation_id"] = HEALTH.sha256_bytes(HEALTH.canonical_json(value["generation_inputs"]))
+    value["output_artifact"].update({
+        "run_id": "123456789",
+        "name": "upstream-catalogue-processing-123456789-2",
+        "artifact_id": "99887766",
+    })
+    value["checkpoint_sha256"] = HEALTH.sha256_bytes(HEALTH.canonical_json({
+        key: item for key, item in value.items() if key != "checkpoint_sha256"
+    }))
+    return value
+
+
+def synthetic_candidate_screen(
+    checkpoint_value: dict, bundle_dir: pathlib.Path, registry_bytes: bytes,
+    *, screened_overrides: dict | None = None, run_overrides: dict | None = None,
+) -> tuple[object, dict]:
+    candidate_path = bundle_dir / "composed-candidate.registry.json"
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    candidate_path.write_bytes(registry_bytes)
+    locator = checkpoint_value["output_artifact"]
+    registry_sha = HEALTH.sha256_bytes(registry_bytes)
+    screened = {
+        "generation_id": checkpoint_value["generation_id"],
+        "run_id": locator["run_id"],
+        "attempt": 2,
+        "artifact_id": locator["artifact_id"],
+        "run": {"id": locator["run_id"], "run_attempt": 2},
+        "bundle": {
+            "status": checkpoint_value["status"],
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": len(registry_bytes),
+            "registry_sha256": registry_sha,
+            "composition_outputs_dir": str(bundle_dir),
+        },
+    }
+    if screened_overrides:
+        screened.update(screened_overrides)
+    if run_overrides:
+        screened["run"].update(run_overrides)
+    return (lambda _checkpoint: copy.deepcopy(screened)), {
+        "registry_path": "data/data-go-kr.registry.json",
+        "registry_bytes": len(registry_bytes),
+        "registry_sha256": registry_sha,
+    }
+
+
 def promotion_attempt_evidence(
     run_id: int, completed_at: str, workflow_path: str, *, job_status: str = "completed",
     job_conclusion: str | None = "success", job_completed_at: str | None = None,
@@ -360,7 +408,8 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                    promotion_workflow_attempt_errors: set[str] | None = None,
                    promotion_workflow_api_error: str | None = None,
                    prior_promotion_execution_faults: list[dict] | None = None,
-                   workflow_ids_by_path: dict | None = None) -> dict:
+                   workflow_ids_by_path: dict | None = None,
+                   processor_candidate_screen: object | None = None) -> dict:
         checkpoints = cp if cp is not None else [checkpoint()]
         run_rows = runs if runs is not None else [collector_run()]
         artifact_rows = artifacts_by_run if artifacts_by_run is not None else {RUN_ID: [{"id": 101, "name": f"upstream-catalog-refresh-{RUN_ID}", "expired": False}]}
@@ -429,6 +478,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             promotion_workflow_attempt_errors=promotion_workflow_attempt_errors or set(),
             promotion_workflow_api_error=promotion_workflow_api_error,
             prior_promotion_execution_faults=prior_promotion_execution_faults or [],
+            processor_candidate_screen=processor_candidate_screen,
         )
 
     def run_live_health_cli(self, temp: pathlib.Path, journal: dict, *, cp: list[dict] | None = None) -> tuple[int, dict, mock.Mock]:
@@ -473,6 +523,13 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             return attempt_evidence[(str(run_id), attempt)]
 
         evaluator = HEALTH.evaluate
+        real_subprocess_run = HEALTH.subprocess.run
+
+        def local_git_only(command, *args, **kwargs):
+            if isinstance(command, (list, tuple)) and command and command[0] == "git":
+                return real_subprocess_run(command, *args, **kwargs)
+            raise AssertionError("unexpected non-git subprocess or network access in local intake test")
+
         with mock.patch.multiple(
             HEALTH,
             collect_workflow_identity=mock.DEFAULT,
@@ -487,7 +544,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         ) as patched, mock.patch.object(
             HEALTH, "gh_json", side_effect=AssertionError("unexpected GitHub API access in local intake test"),
         ), mock.patch.object(
-            HEALTH.subprocess, "run", side_effect=AssertionError("unexpected subprocess or network access in local intake test"),
+            HEALTH.subprocess, "run", side_effect=local_git_only,
         ):
             patched["collect_workflow_identity"].side_effect = workflow_identity
             patched["collect_workflow_runs"].return_value = []
@@ -505,7 +562,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                     "--processor-state-dir", str(state_dir),
                     "--promotion-ack", str(journal_path),
                     "--registry", str(ROOT / "data/data-go-kr.registry.json"),
-                    "--main-revision", "a" * 40,
+                    "--main-revision", HEALTH.checked_out_main_revision(ROOT),
                     "--workflow-run-id", "900",
                     "--workflow-run-attempt", "1",
                     "--output", str(output_path),
@@ -522,6 +579,217 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         self.assertEqual(source["observation"]["state"], "fresh")
         self.assertEqual(source["processor"]["state"], "no-change")
         self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
+
+    def test_live_verified_candidate_equal_to_main_suppresses_only_missing_ack_warnings(self) -> None:
+        payload = b"[\n  {\"name\":\"same-main-candidate\"}\n]\n"
+        checkpoint_value = screenable_ready_checkpoint()
+        failure = promotion_execution_run(
+            run_id=977, conclusion="failure", run_started_at="2026-09-30T21:00:00Z",
+        )
+        prior_last_good = {
+            "status": "read-back-confirmed", "source_id": "data_go_kr", "generation_id": "9" * 64,
+            "publication_revision": "9" * 40, "publication_pointer_revision": "8" * 40,
+            "artifact_identity": {"path": "data/data-go-kr.registry.json", "bytes": 123, "sha256": "d" * 64},
+            "verified": True, "publication_run_jobs_completed_at": "2026-09-29T00:00:00Z",
+            "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+            "publication_run_id": 90, "publication_run_attempt": 1,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_screen, identity = synthetic_candidate_screen(
+                checkpoint_value, pathlib.Path(directory) / "artifact", payload,
+            )
+            with mock.patch.object(HEALTH, "manifest_registry_identity", return_value=identity):
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint_value],
+                    promotion_workflow_runs=[failure],
+                    processor_candidate_screen=candidate_screen,
+                    last_good={"data_go_kr": prior_last_good},
+                )
+
+        source = report["sources"][0]
+        reasons = {row["reason"] for row in source["faults"]}
+        relation = source["canonical"]["already_canonical_candidate"]
+        self.assertTrue(relation["verified"])
+        self.assertEqual(relation["generation_id"], checkpoint_value["generation_id"])
+        self.assertEqual(relation["checkpoint_sha256"], checkpoint_value["checkpoint_sha256"])
+        self.assertEqual(relation["processor_run_id"], "123456789")
+        self.assertEqual(relation["processor_run_attempt"], 2)
+        self.assertEqual(relation["artifact_id"], "99887766")
+        self.assertEqual(relation["composed_registry_sha256"], HEALTH.sha256_bytes(payload))
+        self.assertEqual(relation["main_revision"], "a" * 40)
+        self.assertEqual(relation["main_manifest_sha256"], "b" * 64)
+        self.assertNotIn("promotion_ack_missing", reasons)
+        self.assertNotIn("promotion_record_for_different_generation", reasons)
+        self.assertIn("promotion_workflow_run_failed", reasons)
+        self.assertEqual(source["canonical"]["promotion_status"], "unavailable")
+        self.assertIsNone(source["canonical"]["publication"])
+        self.assertEqual(source["canonical"]["last_good"], prior_last_good)
+        self.assertEqual(source["observation"]["producer_run_id"], RUN_ID)
+        self.assertEqual(report["summary"]["live_fresh_observation_count"], 1)
+        HEALTH.validate_schema(report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "receipt")
+        legacy_receipt = copy.deepcopy(report)
+        legacy_receipt["sources"][0]["processor"].pop("checkpoint_sha256")
+        legacy_receipt["sources"][0]["canonical"].pop("already_canonical_candidate")
+        HEALTH.seal_receipt(legacy_receipt)
+        HEALTH.validate_schema(legacy_receipt, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "legacy receipt")
+
+    def test_candidate_relation_fails_closed_on_mismatched_screened_identity_or_bytes(self) -> None:
+        payload = b"main payload\n"
+        cases = (
+            ("run", {"run_id": "123456788"}, None),
+            ("artifact", {"artifact_id": "99887765"}, None),
+            ("generation", {"generation_id": "f" * 64}, None),
+        )
+        for label, overrides, run_overrides in cases:
+            with self.subTest(case=label), tempfile.TemporaryDirectory() as directory:
+                checkpoint_value = screenable_ready_checkpoint()
+                candidate_screen, identity = synthetic_candidate_screen(
+                    checkpoint_value, pathlib.Path(directory) / "artifact", payload,
+                    screened_overrides=overrides, run_overrides=run_overrides,
+                )
+                with mock.patch.object(HEALTH, "manifest_registry_identity", return_value=identity):
+                    report = self.run_health(
+                        pathlib.Path(directory), cp=[checkpoint_value],
+                        processor_candidate_screen=candidate_screen,
+                    )
+                source = report["sources"][0]
+                reasons = {row["reason"] for row in source["faults"]}
+                self.assertIsNone(source["canonical"]["already_canonical_candidate"])
+                self.assertIn("promotion_ack_missing", reasons)
+
+        with tempfile.TemporaryDirectory() as directory:
+            checkpoint_value = screenable_ready_checkpoint()
+            candidate_screen, _identity = synthetic_candidate_screen(
+                checkpoint_value, pathlib.Path(directory) / "artifact", payload,
+            )
+            different_identity = {
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": len(payload) + 1,
+                "registry_sha256": "0" * 64,
+            }
+            with mock.patch.object(HEALTH, "manifest_registry_identity", return_value=different_identity):
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint_value],
+                    processor_candidate_screen=candidate_screen,
+                )
+        source = report["sources"][0]
+        self.assertIsNone(source["canonical"]["already_canonical_candidate"])
+        self.assertIn("promotion_ack_missing", {row["reason"] for row in source["faults"]})
+
+    def test_already_canonical_new_generation_preserves_matching_historical_publication_deadline(self) -> None:
+        payload = b"x" * 123
+        checkpoint_value = screenable_ready_checkpoint()
+        historical = promotion_receipt("f" * 64, "publication-pending")
+        historical_sha = HEALTH.sha256_bytes(payload)
+        historical["candidate"]["registry_bytes"] = len(payload)
+        historical["candidate"]["registry_sha256"] = historical_sha
+        for item in historical["acknowledgements"]:
+            item["observed_at"] = "2026-09-28T00:00:00Z"
+            item["artifact_identity"] = {
+                "path": "data/data-go-kr.registry.json",
+                "bytes": len(payload),
+                "sha256": historical_sha,
+            }
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_screen, identity = synthetic_candidate_screen(
+                checkpoint_value, pathlib.Path(directory) / "artifact", payload,
+            )
+            with mock.patch.object(HEALTH, "manifest_registry_identity", return_value=identity):
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint_value], ack=historical,
+                    processor_candidate_screen=candidate_screen, last_good={},
+                )
+
+        source = report["sources"][0]
+        reasons = {row["reason"] for row in source["faults"]}
+        self.assertTrue(source["canonical"]["already_canonical_candidate"]["verified"])
+        self.assertIn("publication_or_readback_pending", reasons)
+        self.assertIn("publication_readback_lag_overdue", reasons)
+        self.assertNotIn("promotion_ack_missing", reasons)
+        self.assertNotIn("promotion_record_for_different_generation", reasons)
+        self.assertEqual(source["canonical"]["promotion_status"], "unavailable")
+        self.assertEqual(source["canonical"]["publication"]["status"], "publication-pending")
+        self.assertEqual(source["canonical"]["publication"]["generation_id"], "f" * 64)
+        self.assertFalse(source["canonical"]["publication"]["verified"])
+        self.assertIsNone(source["canonical"]["last_good"])
+        historical_fault = next(row for row in source["faults"] if row["reason"] == "publication_readback_lag_overdue")
+        self.assertEqual(historical_fault["generation_id"], "f" * 64)
+        expected_key = HEALTH.sha256_bytes(HEALTH.canonical_json({
+            "source_id": "data_go_kr",
+            "stage": "publication",
+            "reason": "publication_readback_lag_overdue",
+            "owner_ticket": 659,
+            "failure_identity": "f" * 64,
+        }))
+        self.assertEqual(historical_fault["fault_key"], expected_key)
+
+    def test_trusted_historical_readback_projects_publication_without_current_generation_ack(self) -> None:
+        payload = b"x" * 123
+        checkpoint_value = screenable_ready_checkpoint()
+        historical = promotion_receipt("f" * 64, "read-back-confirmed")
+        historical_sha = HEALTH.sha256_bytes(payload)
+        historical["candidate"]["registry_bytes"] = len(payload)
+        historical["candidate"]["registry_sha256"] = historical_sha
+        for item in historical["acknowledgements"]:
+            item["observed_at"] = "2026-09-28T00:00:00Z"
+            item["artifact_identity"] = {
+                "path": "data/data-go-kr.registry.json",
+                "bytes": len(payload),
+                "sha256": historical_sha,
+            }
+            if item["status"] == "read-back-confirmed":
+                item["read_back_sha256"] = historical_sha
+                item["read_back_bytes"] = len(payload)
+            if item["status"] == "read-back-confirmed":
+                item["observed_at"] = "2026-09-30T21:00:00Z"
+
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_screen, identity = synthetic_candidate_screen(
+                checkpoint_value, pathlib.Path(directory) / "artifact", payload,
+            )
+            with mock.patch.object(HEALTH, "manifest_registry_identity", return_value=identity):
+                report = self.run_health(
+                    pathlib.Path(directory), cp=[checkpoint_value], ack=historical,
+                    processor_candidate_screen=candidate_screen, last_good={},
+                )
+
+        source = report["sources"][0]
+        canonical = source["canonical"]
+        reasons = {row["reason"] for row in source["faults"]}
+        self.assertEqual(canonical["promotion_status"], "unavailable")
+        self.assertEqual(canonical["publication"]["status"], "read-back-confirmed")
+        self.assertEqual(canonical["publication"]["generation_id"], "f" * 64)
+        self.assertTrue(canonical["publication"]["verified"])
+        self.assertTrue(canonical["publication"]["publisher_run_verified"])
+        self.assertEqual(canonical["last_good"]["generation_id"], "f" * 64)
+        self.assertEqual(canonical["last_good"]["publication_revision"], "1" * 40)
+        self.assertNotIn("promotion_ack_missing", reasons)
+        self.assertNotIn("promotion_record_for_different_generation", reasons)
+        self.assertNotIn("publication_or_readback_pending", reasons)
+        self.assertNotIn("promotion_readback_run_unverified", reasons)
+
+    def test_fixture_mode_cannot_inject_an_already_canonical_relation(self) -> None:
+        checkpoint_value = screenable_ready_checkpoint()
+        def forbidden_screen(_checkpoint: dict) -> dict:
+            raise AssertionError("fixture mode must not execute or accept a live artifact screen")
+
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint_value], mode="fixture",
+                processor_candidate_screen=forbidden_screen,
+            )
+        source = report["sources"][0]
+        self.assertIsNone(source["canonical"]["already_canonical_candidate"])
+        self.assertIn("promotion_ack_missing", {row["reason"] for row in source["faults"]})
+
+    def test_live_main_manifest_identity_is_bound_to_checked_out_head(self) -> None:
+        revision = HEALTH.checked_out_main_revision(ROOT)
+        identity = HEALTH.verify_main_manifest_binding(
+            ROOT, revision, ROOT / "manifest.json", ROOT / "data/data-go-kr.registry.json",
+        )
+        self.assertEqual(identity["registry_path"], "data/data-go-kr.registry.json")
+        with self.assertRaisesRegex(ValueError, "main_revision_does_not_match_checked_out_head"):
+            HEALTH.checked_out_main_revision(ROOT, "a" * 40)
 
     def test_real_actions_run_shape_binds_plain_path_without_a_ref_field(self) -> None:
         run = collector_run()

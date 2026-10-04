@@ -22,6 +22,16 @@ OWNER_SCHEMA = ROOT / "schemas/datapan.upstream-catalogue-health-state-owner.v1.
 DIGEST = re.compile(r"^[a-f0-9]{64}$")
 SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 MAX_RETAINED_FAULTS = 5000
+PROCESSOR_OUTPUT_PATHS = (
+    "composed-candidate.registry.json",
+    "ready-scope.registry.json",
+    "semantic-diff.json",
+    "regeneration-queue.json",
+    "quarantine.json",
+    "composition-receipt.json",
+    "upstream-catalogue-enrichment-evidence.json",
+    "upstream-catalogue-processing-result.json",
+)
 
 
 def canonical_json(value: Any) -> bytes:
@@ -315,6 +325,130 @@ def merge_observations(state: dict[str, Any], receipt: dict[str, Any]) -> None:
         per_source[source["source_id"]] = history[-64:]
 
 
+def sealed_health_receipt(receipt: dict[str, Any]) -> bool:
+    claimed = receipt.get("receipt_sha256")
+    if not isinstance(claimed, str) or not DIGEST.fullmatch(claimed):
+        return False
+    unsigned = dict(receipt)
+    unsigned.pop("receipt_sha256", None)
+    return claimed == digest(unsigned)
+
+
+def verified_already_canonical_relation(source: dict[str, Any], receipt: dict[str, Any]) -> dict[str, Any] | None:
+    """Validate the checker relation against its sealed processor and main identities."""
+    if receipt.get("execution_mode") != "live" or not sealed_health_receipt(receipt):
+        return None
+    processor = source.get("processor")
+    canonical = source.get("canonical")
+    if not isinstance(processor, dict) or not isinstance(canonical, dict):
+        return None
+    relation = canonical.get("already_canonical_candidate")
+    main = canonical.get("main")
+    locator = processor.get("output_artifact")
+    digests = processor.get("output_digests")
+    if (
+        not isinstance(relation, dict) or relation.get("verified") is not True
+        or not isinstance(main, dict) or not isinstance(locator, dict)
+        or not isinstance(digests, list)
+    ):
+        return None
+    inventory_valid = (
+        [row.get("path") for row in digests if isinstance(row, dict)] == list(PROCESSOR_OUTPUT_PATHS)
+        and all(
+            isinstance(row, dict)
+            and set(row) == {"path", "sha256", "bytes"}
+            and isinstance(row.get("sha256"), str)
+            and DIGEST.fullmatch(row["sha256"])
+            and isinstance(row.get("bytes"), int)
+            and not isinstance(row.get("bytes"), bool)
+            and 0 <= row["bytes"] <= 536870912
+            for row in digests
+        )
+        and digest(digests) == locator.get("bundle_manifest_sha256")
+    )
+    if not inventory_valid:
+        return None
+    source_id = source.get("source_id")
+    generation_id = processor.get("generation_id")
+    checkpoint_sha = processor.get("checkpoint_sha256")
+    artifact_id = str(locator.get("artifact_id", ""))
+    run_id = str(locator.get("run_id", ""))
+    artifact_name = locator.get("name")
+    match = re.fullmatch(r"upstream-catalogue-processing-([0-9]{6,20})-([1-9][0-9]*)", str(artifact_name or ""))
+    main_revision = main.get("revision")
+    manifest_sha256 = main.get("manifest_sha256")
+    composition_rows = [
+        row for row in digests
+        if isinstance(row, dict) and row.get("path") == "composed-candidate.registry.json"
+    ]
+    health_workflow = receipt.get("health_workflow")
+    relation_attempt = relation.get("processor_run_attempt")
+    relation_bytes = relation.get("composed_registry_bytes")
+    registry_bytes = main.get("registry_bytes")
+    if (
+        source_id != "data_go_kr"
+        or processor.get("state") not in {"ready", "no-change"}
+        or not isinstance(generation_id, str) or not DIGEST.fullmatch(generation_id)
+        or not isinstance(checkpoint_sha, str) or not DIGEST.fullmatch(checkpoint_sha)
+        or match is None
+        or match.group(1) != run_id
+        or str(relation.get("source_id", "")) != source_id
+        or relation.get("generation_id") != generation_id
+        or relation.get("checkpoint_sha256") != checkpoint_sha
+        or str(relation.get("processor_run_id", "")) != run_id
+        or isinstance(relation_attempt, bool)
+        or not isinstance(relation_attempt, int)
+        or relation_attempt != int(match.group(2))
+        or str(relation.get("artifact_id", "")) != artifact_id
+        or not artifact_id.isdigit()
+        or not DIGEST.fullmatch(str(locator.get("bundle_manifest_sha256", "")))
+        or relation.get("output_bundle_sha256") != locator.get("bundle_manifest_sha256")
+        or len(composition_rows) != 1
+        or isinstance(relation_bytes, bool)
+        or not isinstance(relation_bytes, int)
+        or relation_bytes != composition_rows[0].get("bytes")
+        or relation.get("composed_registry_sha256") != composition_rows[0].get("sha256")
+        or isinstance(registry_bytes, bool)
+        or not isinstance(registry_bytes, int)
+        or relation_bytes != registry_bytes
+        or relation.get("composed_registry_sha256") != main.get("registry_sha256")
+        or not isinstance(main_revision, str) or not re.fullmatch(r"[a-f0-9]{40,64}", main_revision)
+        or relation.get("main_revision") != main_revision
+        or not isinstance(manifest_sha256, str) or not DIGEST.fullmatch(manifest_sha256)
+        or relation.get("main_manifest_sha256") != manifest_sha256
+        or not isinstance(health_workflow, dict)
+        or health_workflow.get("revision") != main_revision
+        or receipt.get("repository") != locator.get("repository")
+        or main.get("registry_path") != "data/data-go-kr.registry.json"
+    ):
+        return None
+    return relation
+
+
+def already_canonical_fault_key_valid(old_fault: dict[str, Any], generation_id: str) -> bool:
+    source_id = old_fault.get("source_id")
+    stage = old_fault.get("stage")
+    reason = old_fault.get("reason")
+    owner_ticket = old_fault.get("owner_ticket")
+    if (
+        not isinstance(source_id, str)
+        or stage != "promotion"
+        or reason not in {"promotion_ack_missing", "promotion_record_for_different_generation"}
+        or isinstance(owner_ticket, bool)
+        or not isinstance(owner_ticket, int)
+        or old_fault.get("severity") != "warning"
+    ):
+        return False
+    expected = digest({
+        "source_id": source_id,
+        "stage": stage,
+        "reason": reason,
+        "owner_ticket": owner_ticket,
+        "failure_identity": generation_id,
+    })
+    return old_fault.get("fault_key") == expected
+
+
 def recovery_evidence(
     old_fault: dict[str, Any], source: dict[str, Any] | None, current_faults: list[dict[str, Any]],
     receipt: dict[str, Any], processor_workflow_path: str, processor_workflow_events: set[str],
@@ -410,13 +544,26 @@ def recovery_evidence(
         )
     elif stage in {"promotion", "publication"}:
         publication = source.get("canonical", {}).get("publication")
-        cleared = (
+        relation = verified_already_canonical_relation(source, receipt) if (
+            stage == "promotion"
+            and old_fault.get("reason") in {"promotion_ack_missing", "promotion_record_for_different_generation"}
+        ) else None
+        processor_generation = source.get("processor", {}).get("generation_id")
+        canonical_recovery = (
+            relation is not None
+            and old_fault.get("severity") == "warning"
+            and old_fault.get("generation_id") == processor_generation == relation.get("generation_id")
+            and already_canonical_fault_key_valid(old_fault, str(relation.get("generation_id", "")))
+        )
+        publication_recovery = (
             isinstance(publication, dict)
             and publication.get("status") == "read-back-confirmed"
             and publication.get("verified") is True
             and publication.get("publisher_run_verified") is True
+            and publication.get("generation_id") == old_fault.get("generation_id")
             and not any(row.get("stage") in {"promotion", "publication"} and row.get("severity") == "error" for row in stage_faults)
         )
+        cleared = canonical_recovery or publication_recovery
     else:
         cleared = False
     if not cleared:
@@ -429,6 +576,30 @@ def recovery_evidence(
             "execution_run_id": execution["run_id"],
             "execution_run_attempt": execution["run_attempt"],
         }
+    if (
+        stage == "promotion"
+        and old_fault.get("reason") in {"promotion_ack_missing", "promotion_record_for_different_generation"}
+        and relation is not None
+        and canonical_recovery
+    ):
+        return {
+            "verified": True,
+            "stage": "promotion",
+            "basis": "exact_processor_payload_already_canonical",
+            "fault_reason": old_fault["reason"],
+            "health_receipt_sha256": receipt["receipt_sha256"],
+            "generation_id": relation["generation_id"],
+            "checkpoint_sha256": relation["checkpoint_sha256"],
+            "processor_run_id": relation["processor_run_id"],
+            "processor_run_attempt": relation["processor_run_attempt"],
+            "artifact_id": relation["artifact_id"],
+            "output_bundle_sha256": relation["output_bundle_sha256"],
+            "composed_registry_bytes": relation["composed_registry_bytes"],
+            "composed_registry_sha256": relation["composed_registry_sha256"],
+            "main_revision": relation["main_revision"],
+            "main_manifest_sha256": relation["main_manifest_sha256"],
+        }
+    publication = source.get("canonical", {}).get("publication") if source is not None else None
     return {
         "verified": True,
         "stage": stage,
@@ -436,7 +607,11 @@ def recovery_evidence(
         "observed_at": observation.get("observed_at"),
         "producer_run_id": observation.get("producer_run_id"),
         "refresh_evidence_sha256": observation.get("refresh_evidence_sha256"),
-        "generation_id": processor.get("generation_id"),
+        "generation_id": (
+            publication.get("generation_id")
+            if stage in {"promotion", "publication"} and isinstance(publication, dict)
+            else processor.get("generation_id")
+        ),
         "processor_status": processor.get("state"),
         "publication_revision": source.get("canonical", {}).get("publication", {}).get("publication_revision") if isinstance(source.get("canonical", {}).get("publication"), dict) else None,
         "publication_pointer_revision": source.get("canonical", {}).get("publication", {}).get("publication_pointer_revision") if isinstance(source.get("canonical", {}).get("publication"), dict) else None,
@@ -463,6 +638,13 @@ def merge_faults(
     for key, current in incoming.items():
         prior = by_key.get(key)
         same_receipt = prior is not None and prior.get("last_receipt_sha256") == receipt["receipt_sha256"]
+        declared_generation = current.get("generation_id")
+        if declared_generation is not None:
+            if current.get("stage") not in {"promotion", "publication"} or not isinstance(declared_generation, str) or not DIGEST.fullmatch(declared_generation):
+                raise ValueError("health_receipt_fault_generation_invalid")
+            if current.get("reason") in {"promotion_ack_missing", "promotion_record_for_different_generation"}:
+                if not already_canonical_fault_key_valid(current, declared_generation):
+                    raise ValueError("health_receipt_fault_generation_mismatch")
         by_key[key] = {
             **current,
             "status": "open",
@@ -470,7 +652,7 @@ def merge_faults(
             "last_seen_at": evaluated_at,
             "observation_count": int(prior.get("observation_count", 0)) + (0 if same_receipt else 1) if prior else 1,
             "last_receipt_sha256": receipt["receipt_sha256"],
-            "generation_id": source_by_id.get(current["source_id"], {}).get("processor", {}).get("generation_id"),
+            "generation_id": declared_generation if declared_generation is not None else source_by_id.get(current["source_id"], {}).get("processor", {}).get("generation_id"),
             "producer_run_id": source_by_id.get(current["source_id"], {}).get("observation", {}).get("producer_run_id"),
             "recovery_evidence": None,
         }
