@@ -349,6 +349,57 @@ class IdleProcessorResultTests(unittest.TestCase):
 
 
 class PublicationReconciliationTests(unittest.TestCase):
+    def test_open_pr_merge_metadata_is_replaced_by_the_later_merged_witness(self) -> None:
+        fixture_path = pathlib.Path(__file__).parent / "fixtures/canonical-update-promotion/attempt-4-pr-686-pending-recovery.json"
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        journal = copy.deepcopy(fixture["state"])
+        original = journal["records"][0]
+        open_readback = copy.deepcopy(fixture["pull_request_readback"])
+        self.assertEqual(open_readback["state"], "OPEN")
+        self.assertIsNotNone(open_readback["mergeCommit"].get("oid"))
+
+        open_observed = PR_HELPER.record_pr_readback(
+            copy.deepcopy(original), open_readback,
+            observed_at="2026-10-04T12:10:00Z",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/37200000001/attempts/1",
+        )
+        journal = PR_HELPER.append_journal_record(
+            journal, open_observed, repository=original["candidate"]["repository"],
+            observed_at="2026-10-04T12:10:00Z",
+        )
+        schema = json.loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text(encoding="utf-8")
+        )
+        PR_HELPER.validate_journal(journal, schema)
+        self.assertEqual(journal["records"][0]["pr"]["merge_commit_sha"], open_readback["mergeCommit"]["oid"])
+
+        merged_sha = "f" * 40
+        merged_readback = copy.deepcopy(open_readback)
+        merged_readback.update({"state": "MERGED", "mergeCommit": {"oid": merged_sha}})
+        merged = PR_HELPER.record_pr_readback(
+            copy.deepcopy(open_observed), merged_readback,
+            observed_at="2026-10-04T12:11:00Z",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/37200000002/attempts/1",
+        )
+        journal = PR_HELPER.append_journal_record(
+            journal, merged, repository=original["candidate"]["repository"],
+            observed_at="2026-10-04T12:11:00Z",
+        )
+        PR_HELPER.validate_journal(journal, schema)
+        stored = journal["records"][0]
+        self.assertEqual(stored["status"], "merged")
+        self.assertEqual(stored["pr"]["merge_commit_sha"], merged_sha)
+        self.assertEqual(stored["acknowledgements"][-1]["status"], "merged")
+        self.assertEqual(stored["acknowledgements"][-1]["source_sha"], merged_sha)
+
+        tampered = copy.deepcopy(merged)
+        tampered["pr"]["merge_commit_sha"] = "9" * 40
+        with self.assertRaisesRegex(PR_HELPER.AdmissionError, "changed the witnessed PR merge commit"):
+            PR_HELPER.append_journal_record(
+                journal, tampered, repository=original["candidate"]["repository"],
+                observed_at="2026-10-04T12:12:00Z",
+            )
+
     def test_runner_persists_the_complete_verified_publication_acknowledgement_chain(self) -> None:
         fixture_path = pathlib.Path(__file__).parent / "fixtures/canonical-update-promotion/attempt-4-pr-686-pending-recovery.json"
         fixture = json.loads(fixture_path.read_text(encoding="utf-8"))

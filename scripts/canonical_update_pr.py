@@ -1344,13 +1344,20 @@ def append_journal_record(
         if isinstance(old_pr, Mapping) and isinstance(new_pr, Mapping):
             if old_pr.get("number", 0) and new_pr.get("number") != old_pr.get("number"):
                 raise AdmissionError("promotion reconciliation changed the durable PR number")
-            witnessed_merge_sha = replayed.get("pr", {}).get("merge_commit_sha")
-            old_merge_sha = old_pr.get("merge_commit_sha")
-            if (
-                (witnessed_merge_sha is not None and new_pr.get("merge_commit_sha") != witnessed_merge_sha)
-                or (old_merge_sha is not None and new_pr.get("merge_commit_sha") != old_merge_sha)
-            ):
-                raise AdmissionError("promotion reconciliation changed the witnessed PR merge commit")
+            acknowledgements = replayed.get("acknowledgements", [])
+            merged_witnesses = [
+                acknowledgement
+                for acknowledgement in acknowledgements
+                if isinstance(acknowledgement, Mapping) and acknowledgement.get("status") == "merged"
+            ]
+            if len(merged_witnesses) > 1:
+                raise AdmissionError("promotion reconciliation has multiple durable merged acknowledgements")
+            if merged_witnesses:
+                witnessed_merge_sha = valid_sha(
+                    merged_witnesses[0].get("source_sha"), SHA1_RE, "merged acknowledgement source sha",
+                )
+                if new_pr.get("merge_commit_sha") != witnessed_merge_sha:
+                    raise AdmissionError("promotion reconciliation changed the witnessed PR merge commit")
         preserve_and_validate_ci(previous, updated)
         preserve_and_validate_revision_links(previous, updated)
         rows[matches[0]] = updated
