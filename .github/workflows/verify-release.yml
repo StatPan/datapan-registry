@@ -80,6 +80,15 @@ jobs:
         working-directory: datapan-registry
         run: git fetch --no-tags --depth=1 origin b49d66b97d8155c34649f4dd2040b884c4212d64
 
+      - name: Fetch pinned publication receipt fixture history
+        working-directory: datapan-registry
+        run: |
+          # Archived receipts are verified against exact historical source and
+          # publisher commits. Fetch only their bounded fixture history; the
+          # production verifier still checks the real manifest and ancestry.
+          git fetch --no-tags --depth=8 origin e34062309a48b0e0b6c0f38add32f0cdec088616
+          git fetch --no-tags --depth=1 origin 1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07
+
       - name: Validate external CLI checkout identity
         working-directory: datapan-registry
         run: |

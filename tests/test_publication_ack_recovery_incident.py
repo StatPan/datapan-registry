@@ -188,6 +188,28 @@ class PublicationAckRecoveryIncidentTests(unittest.TestCase):
         self.schema = read_json(ROOT / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json")
         self.state_sha = self.github.state_sha
 
+    def test_frozen_receipt_source_history_is_explicitly_available(self) -> None:
+        _, binding_raw = RECOVERY.extract_receipt_archive((FIXTURE / "publication-receipts.zip").read_bytes())
+        binding = RECOVERY.parse_json(binding_raw, label="fixture_source_binding")
+        source_sha = binding["source_sha"]
+        publisher_sha = binding["workflow_sha"]
+        for commit in (source_sha, publisher_sha, "1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07"):
+            result = subprocess.run(
+                ("git", "cat-file", "-e", f"{commit}^{{commit}}"),
+                cwd=ROOT, check=False, capture_output=True,
+            )
+            self.assertEqual(result.returncode, 0, f"pinned incident commit is unavailable: {commit}")
+        ancestry = subprocess.run(
+            ("git", "merge-base", "--is-ancestor", source_sha, publisher_sha),
+            cwd=ROOT, check=False, capture_output=True,
+        )
+        self.assertEqual(ancestry.returncode, 0, "frozen source must remain an ancestor of its publisher head")
+        tree = subprocess.run(
+            ("git", "rev-parse", f"{source_sha}^{{tree}}"),
+            cwd=ROOT, check=True, text=True, capture_output=True,
+        ).stdout.strip()
+        self.assertEqual(tree, binding["source_tree_sha"])
+
     def persist_cas(self, _root, _base, receipt, *, observed_at, expected_state_sha=RUNNER.STATE_EXPECTATION_UNSET, **_kwargs):
         if self.github.cas_conflict:
             raise RUNNER.PromotionError("promotion state compare-and-swap conflict: durable journal changed")
@@ -245,6 +267,17 @@ class PublicationAckRecoveryIncidentTests(unittest.TestCase):
         subprocess.run(("git", "--git-dir", str(remote), "symbolic-ref", "HEAD", "refs/heads/main"), check=True, capture_output=True)
         clone_env = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"}
         subprocess.run(("git", "clone", "--shared", "--branch", "main", str(remote), str(controller)), check=True, capture_output=True, env=clone_env)
+        # The local CAS clone does not inherit unreferenced, fetched fixture
+        # commits from the outer checkout. Hydrate the same bounded history
+        # windows that Verify Release fetches before running these tests.
+        for commit, depth in (
+            ("e34062309a48b0e0b6c0f38add32f0cdec088616", "8"),
+            ("1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07", "1"),
+        ):
+            subprocess.run(
+                ("git", "-C", str(controller), "fetch", "--no-tags", f"--depth={depth}", str(ROOT), commit),
+                check=True, capture_output=True,
+            )
         for relative in (
             "scripts/canonical_update_pr.py",
             "scripts/materialize-canonical-registry.py",
