@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import copy
 import importlib.util
+import json
 import pathlib
 import tempfile
 import unittest
@@ -55,6 +56,211 @@ class CanonicalUpdatePromotionTests(unittest.TestCase):
         }
         ack.update(overrides)
         return ack
+
+    def acknowledgement(
+        self, candidate: dict, status: str, source_sha: str, *, run_id: int, observed_at: str,
+        **overrides: object,
+    ) -> dict:
+        return self.ack(
+            candidate, status, source_sha,
+            run_id=run_id,
+            run_attempt=1,
+            run_url=f"https://github.com/StatPan/datapan-registry/actions/runs/{run_id}/attempts/1",
+            observed_at=observed_at,
+            **overrides,
+        )
+
+    def merged_receipt(self) -> dict:
+        candidate = self.candidate("publication-chain-generation")
+        owner = PROMOTION.owner_id(candidate["repository"], candidate["source_id"], candidate["scope"])
+        body = f"{PROMOTION.body_marker(owner, candidate['generation_id'])}\n\nPublication-chain fixture.\n"
+        receipt = {
+            "schema_version": PROMOTION.SCHEMA_VERSION,
+            "status": "prepared",
+            "action": "create",
+            "candidate": candidate,
+            "ownership": {
+                "owner_id": owner,
+                "branch": PROMOTION.automation_branch(candidate, "create"),
+                "expected_head_sha": candidate["head_sha"],
+                "body_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
+                "body": body,
+                "issue_number": 652,
+                "issue_url": "https://github.com/StatPan/datapan-registry/issues/652",
+            },
+            "pr": {
+                "number": 77,
+                "url": "https://github.com/StatPan/datapan-registry/pull/77",
+                "state": "open",
+                "merge_commit_sha": None,
+            },
+            "acknowledgements": [],
+            "blockers": [],
+        }
+        pending = PROMOTION.record_acknowledgement(
+            receipt,
+            self.acknowledgement(
+                candidate, "pending-review", candidate["head_sha"], run_id=2001,
+                observed_at="2026-10-01T12:00:00Z",
+            ),
+        )
+        return PROMOTION.record_acknowledgement(
+            pending,
+            self.acknowledgement(
+                candidate, "merged", "f" * 40, run_id=2002,
+                observed_at="2026-10-01T12:01:00Z",
+            ),
+        )
+
+    def advance_publication(self, receipt: dict, status: str, run_id: int, minute: int) -> dict:
+        candidate = receipt["candidate"]
+        source_sha = receipt["pr"]["merge_commit_sha"]
+        extra: dict[str, object] = {}
+        if status in {"published", "read-back-confirmed"}:
+            extra.update({"publication_revision": "1" * 40, "publication_pointer_revision": "2" * 40})
+        if status == "read-back-confirmed":
+            extra.update({
+                "read_back_verified": True,
+                "read_back_sha256": candidate["registry_sha256"],
+                "read_back_bytes": candidate["registry_bytes"],
+            })
+        acknowledgement = self.acknowledgement(
+            candidate, status, source_sha, run_id=run_id,
+            observed_at=f"2026-10-01T12:{minute:02d}:00Z", **extra,
+        )
+        return PROMOTION.record_acknowledgement(receipt, acknowledgement)
+
+    def test_journal_append_replays_complete_publication_acknowledgement_suffix(self) -> None:
+        merged = self.merged_receipt()
+        journal = PROMOTION.append_journal_record(
+            None, merged, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:01:00Z",
+        )
+        updated = copy.deepcopy(merged)
+        for status, run_id, minute in (
+            ("publication-pending", 2003, 2),
+            ("published", 2004, 3),
+            ("read-back-confirmed", 2005, 4),
+        ):
+            updated = self.advance_publication(updated, status, run_id, minute)
+        journal = PROMOTION.append_journal_record(
+            journal, updated, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:04:00Z",
+        )
+        schema = json.loads(
+            (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text()
+        )
+        PROMOTION.validate_journal(journal, schema)
+
+        stored = journal["records"][0]
+        self.assertEqual(stored["status"], "read-back-confirmed")
+        self.assertEqual(
+            [row["status"] for row in stored["acknowledgements"]],
+            ["pending-review", "merged", "publication-pending", "published", "read-back-confirmed"],
+        )
+        replayed = PROMOTION.append_journal_record(
+            journal, updated, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:04:00Z",
+        )
+        self.assertEqual(replayed["records"][0]["acknowledgements"], stored["acknowledgements"])
+        self.assertEqual(replayed["records"][0]["status"], stored["status"])
+
+    def test_journal_append_rejects_missing_reordered_forged_and_truncated_suffixes(self) -> None:
+        merged = self.merged_receipt()
+        journal = PROMOTION.append_journal_record(
+            None, merged, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:01:00Z",
+        )
+        candidate = merged["candidate"]
+
+        missing = copy.deepcopy(merged)
+        missing["status"] = "read-back-confirmed"
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "complete appended acknowledgement suffix"):
+            PROMOTION.append_journal_record(
+                journal, missing, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:02:00Z",
+            )
+
+        reordered = copy.deepcopy(merged)
+        reordered["acknowledgements"].extend([
+            self.acknowledgement(candidate, "published", "f" * 40, run_id=2004, observed_at="2026-10-01T12:02:00Z",
+                                 publication_revision="1" * 40, publication_pointer_revision="2" * 40),
+            self.acknowledgement(candidate, "publication-pending", "f" * 40, run_id=2003, observed_at="2026-10-01T12:03:00Z"),
+        ])
+        reordered["status"] = "publication-pending"
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "invalid promotion transition: merged -> published"):
+            PROMOTION.append_journal_record(
+                journal, reordered, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:03:00Z",
+            )
+
+        forged = copy.deepcopy(merged)
+        forged["acknowledgements"].append(
+            self.acknowledgement(candidate, "publication-pending", "e" * 40, run_id=2003, observed_at="2026-10-01T12:02:00Z")
+        )
+        forged["status"] = "publication-pending"
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "differs from the recorded merge sha"):
+            PROMOTION.append_journal_record(
+                journal, forged, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:02:00Z",
+            )
+
+        truncated = copy.deepcopy(merged)
+        truncated = self.advance_publication(truncated, "publication-pending", 2003, 2)
+        truncated = self.advance_publication(truncated, "published", 2004, 3)
+        truncated["status"] = "read-back-confirmed"
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "complete appended acknowledgement suffix"):
+            PROMOTION.append_journal_record(
+                journal, truncated, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:03:00Z",
+            )
+
+    def test_equal_terminal_status_still_replays_failed_pending_failed_witnesses(self) -> None:
+        merged = self.merged_receipt()
+        candidate = merged["candidate"]
+        failed = PROMOTION.record_acknowledgement(
+            PROMOTION.record_acknowledgement(
+                copy.deepcopy(merged),
+                self.acknowledgement(candidate, "publication-pending", "f" * 40, run_id=2003,
+                                      observed_at="2026-10-01T12:02:00Z"),
+            ),
+            self.acknowledgement(candidate, "failed", "f" * 40, run_id=2004,
+                                  observed_at="2026-10-01T12:03:00Z"),
+        )
+        journal = PROMOTION.append_journal_record(
+            None, failed, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:03:00Z",
+        )
+        recovered_failure = PROMOTION.record_acknowledgement(
+            PROMOTION.record_acknowledgement(
+                copy.deepcopy(failed),
+                self.acknowledgement(candidate, "publication-pending", "f" * 40, run_id=2005,
+                                      observed_at="2026-10-01T12:04:00Z"),
+            ),
+            self.acknowledgement(candidate, "failed", "f" * 40, run_id=2006,
+                                  observed_at="2026-10-01T12:05:00Z"),
+        )
+        journal = PROMOTION.append_journal_record(
+            journal, recovered_failure, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:05:00Z",
+        )
+        self.assertEqual(journal["records"][0]["status"], "failed")
+        self.assertEqual(
+            [row["status"] for row in journal["records"][0]["acknowledgements"]][-2:],
+            ["publication-pending", "failed"],
+        )
+
+        fabricated = copy.deepcopy(recovered_failure)
+        fabricated["acknowledgements"].append(
+            self.acknowledgement(candidate, "failed", "f" * 40, run_id=2007,
+                                  observed_at="2026-10-01T12:06:00Z")
+        )
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "invalid promotion transition: failed -> failed"):
+            PROMOTION.append_journal_record(
+                journal, fabricated, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:06:00Z",
+            )
+
+        recovered_success = self.advance_publication(recovered_failure, "publication-pending", 2007, 6)
+        recovered_success = self.advance_publication(recovered_success, "published", 2008, 7)
+        recovered_success = self.advance_publication(recovered_success, "read-back-confirmed", 2009, 8)
+        journal = PROMOTION.append_journal_record(
+            journal, recovered_success, repository="StatPan/datapan-registry", observed_at="2026-10-01T12:08:00Z",
+        )
+        self.assertEqual(journal["records"][0]["status"], "read-back-confirmed")
+        self.assertEqual(
+            [row["status"] for row in journal["records"][0]["acknowledgements"]][-3:],
+            ["publication-pending", "published", "read-back-confirmed"],
+        )
 
     def revision_receipt(
         self, *, registry_sha: str, head_sha: str, status: str,
