@@ -53,9 +53,13 @@ MAX_RECEIPT_DOWNLOADS = 20
 MAX_ARCHIVE_BYTES = 4 * 1024 * 1024
 MAX_EXTRACTED_BYTES = 8 * 1024 * 1024
 MAX_JSON_BYTES = 2 * 1024 * 1024
+MAX_COMMIT_ASSOCIATION_READS = MAX_PUBLISHER_RUNS
+MAX_PR_BODY_BYTES = 128 * 1024
 MAX_GITHUB_REQUESTS = 256
 MAX_RETRIES = 2
 REQUEST_TIMEOUT_SECONDS = 30
+CANONICAL_AUTOMATION_BRANCH_PREFIX = "automation/canonical-update/"
+CANONICAL_OWNER_MARKER_PREFIX = "datapan-canonical-update:v1:"
 SHA1 = re.compile(r"^[a-f0-9]{40}$")
 SHA256 = re.compile(r"^[a-f0-9]{64}$")
 
@@ -540,9 +544,11 @@ class PublicationAckRecovery:
             "receipt_downloads": 0,
             "github_requests": 0,
             "pull_request_readbacks": 0,
+            "commit_association_reads": 0,
             "git_cas_transactions": 0,
             "already_acknowledged": 0,
             "non_publishing_validations": 0,
+            "outside_c_publications": [],
             "unresolved_candidates": [],
             "selected_publisher": None,
         }
@@ -896,6 +902,7 @@ class PublicationAckRecovery:
             "run_id": run_id,
             "attempt": attempt,
             "head_sha": head_sha,
+            "publisher_job_started_at": job_start.isoformat(),
             "workflow_id": self.publisher_workflow_id,
             "artifact_id": artifact_id,
             "artifact_size": int(artifact["size_in_bytes"]),
@@ -906,10 +913,363 @@ class PublicationAckRecovery:
             "publication": publication,
         }
 
+    @staticmethod
+    def _source_claim_rows(
+        publication: Mapping[str, Any], journal: Mapping[str, Any],
+    ) -> list[Mapping[str, Any]]:
+        """Return journal rows that already assert this exact published source."""
+        source_sha = publication.get("source_sha")
+        manifest_sha = publication.get("manifest_sha256")
+        records = journal.get("records")
+        if not isinstance(records, list):
+            raise RecoveryError("promotion_journal_records_invalid")
+        claims: list[Mapping[str, Any]] = []
+        for row in records:
+            if not isinstance(row, Mapping):
+                raise RecoveryError("promotion_journal_record_invalid")
+            candidate = row.get("candidate")
+            pr = row.get("pr")
+            acknowledgements = row.get("acknowledgements")
+            if not isinstance(candidate, Mapping) or not isinstance(pr, Mapping) or not isinstance(acknowledgements, list):
+                raise RecoveryError("promotion_journal_record_identity_invalid")
+            claimed = pr.get("merge_commit_sha") == source_sha
+            for ack in acknowledgements:
+                if not isinstance(ack, Mapping):
+                    raise RecoveryError("promotion_journal_acknowledgement_invalid")
+                if (
+                    ack.get("status") in {"merged", "publication-pending", "published", "read-back-confirmed"}
+                    and ack.get("source_sha") == source_sha
+                ):
+                    if ack.get("manifest_sha256") != manifest_sha:
+                        raise RecoveryError("publication_journal_source_manifest_conflict")
+                    claimed = True
+            if claimed:
+                if candidate.get("manifest_sha256") != manifest_sha:
+                    raise RecoveryError("publication_journal_source_manifest_conflict")
+                claims.append(row)
+        if len(claims) > 1:
+            raise RecoveryError("publication_journal_source_claim_ambiguous")
+        return claims
+
+    @staticmethod
+    def _valid_git_ref(value: Any) -> bool:
+        if (
+            not isinstance(value, str)
+            or not value
+            or len(value.encode("utf-8")) > 255
+            or value.startswith("-")
+            or value.startswith("/")
+            or value.endswith(("/", ".", ".lock"))
+            or ".." in value
+            or "//" in value
+            or "@{" in value
+            or any(ord(character) < 32 or ord(character) == 127 or character in " ~^:?*[\\\\" for character in value)
+        ):
+            return False
+        return True
+
+    def _commit_pull_request(self, verified: Mapping[str, Any]) -> dict[str, Any]:
+        """Read the complete PR association for the authenticated published commit."""
+        publication = verified.get("publication")
+        if not isinstance(publication, Mapping):
+            raise RecoveryError("publication_identity_missing")
+        source_sha = exact_sha(publication.get("source_sha"), SHA1, "publication_source_sha")
+        if self.summary["commit_association_reads"] >= MAX_COMMIT_ASSOCIATION_READS:
+            raise RecoveryError("commit_association_read_limit_exceeded")
+        self.summary["commit_association_reads"] += 1
+        response = self.api.request(
+            f"repos/{self.repository}/commits/{source_sha}/pulls?per_page=100",
+        )
+        rows = parse_json(response.body, label="commit_pull_requests")
+        if (
+            not isinstance(rows, list)
+            or len(rows) > 100
+            or has_next_page(response.headers)
+            or any(not isinstance(row, Mapping) for row in rows)
+        ):
+            raise RecoveryError("commit_pull_request_association_incomplete")
+        matches = [row for row in rows if row.get("merge_commit_sha") == source_sha]
+        if len(matches) != 1:
+            raise RecoveryError("commit_pull_request_association_ambiguous_or_missing")
+        row = matches[0]
+        number = exact_positive_int(row.get("number"), "associated_pull_request_number")
+        expected_url = f"https://github.com/{self.repository}/pull/{number}"
+        url = row.get("html_url")
+        parsed_url = urllib.parse.urlsplit(url) if isinstance(url, str) else None
+        if (
+            not isinstance(url, str)
+            or url != expected_url
+            or parsed_url is None
+            or parsed_url.scheme != "https"
+            or parsed_url.netloc.casefold() != "github.com"
+            or parsed_url.path != f"/{self.repository}/pull/{number}"
+            or parsed_url.query
+            or parsed_url.fragment
+        ):
+            raise RecoveryError("associated_pull_request_url_invalid")
+        if row.get("state") != "closed" or row.get("merge_commit_sha") != source_sha:
+            raise RecoveryError("associated_pull_request_not_exactly_merged")
+        merged_at = parse_time(row.get("merged_at"), "associated_pull_request_merged_at")
+        publisher_started_at = parse_time(
+            verified.get("publisher_job_started_at"), "publisher_job_started_at",
+        )
+        if merged_at > publisher_started_at:
+            raise RecoveryError("associated_pull_request_merged_after_publisher")
+        base = row.get("base")
+        head = row.get("head")
+        if not isinstance(base, Mapping) or not isinstance(head, Mapping):
+            raise RecoveryError("associated_pull_request_refs_invalid")
+        base_repo = base.get("repo")
+        head_repo = head.get("repo")
+        if (
+            not isinstance(base_repo, Mapping)
+            or not isinstance(head_repo, Mapping)
+            or str(base_repo.get("full_name", "")).casefold() != self.repository.casefold()
+            or str(head_repo.get("full_name", "")).casefold() != self.repository.casefold()
+            or exact_positive_int(base_repo.get("id"), "associated_base_repository_id") != self.repository_id
+            or exact_positive_int(head_repo.get("id"), "associated_head_repository_id") != self.repository_id
+            or base.get("ref") != self.default_branch
+        ):
+            raise RecoveryError("associated_pull_request_repository_or_base_mismatch")
+        head_ref = head.get("ref")
+        if not self._valid_git_ref(head_ref):
+            raise RecoveryError("associated_pull_request_head_ref_invalid")
+        head_sha = exact_sha(head.get("sha"), SHA1, "associated_pull_request_head_sha")
+        base_sha = exact_sha(base.get("sha"), SHA1, "associated_pull_request_base_sha")
+        body = row.get("body")
+        if not isinstance(body, str) or len(body.encode("utf-8")) > MAX_PR_BODY_BYTES:
+            raise RecoveryError("associated_pull_request_body_invalid")
+        return {
+            "number": number,
+            "url": url,
+            "state": "MERGED",
+            "body": body,
+            "head_ref": head_ref,
+            "head_sha": head_sha,
+            "base_sha": base_sha,
+            "merge_sha": source_sha,
+            "merged_at": merged_at,
+        }
+
+    @staticmethod
+    def _candidate_identity(row: Mapping[str, Any]) -> tuple[Any, ...] | None:
+        candidate = row.get("candidate")
+        if not isinstance(candidate, Mapping):
+            return None
+        identity = tuple(candidate.get(field) for field in (
+            "repository", "source_id", "scope", "generation_id", "registry_sha256",
+            "manifest_sha256", "head_sha",
+        ))
+        return (str(identity[0]).casefold(), *identity[1:])
+
+    @classmethod
+    def _supersedes_row(cls, row: Mapping[str, Any], target: Mapping[str, Any], records: list[Any]) -> bool:
+        """Allow only validated journal-history predecessors of the live owner row."""
+        target_identity = cls._candidate_identity(target)
+        if target_identity is None:
+            return False
+        current: Mapping[str, Any] = row
+        visited: set[int] = set()
+        for _ in range(len(records)):
+            link = current.get("superseded_by")
+            if not isinstance(link, Mapping):
+                return False
+            identity = tuple(link.get(field) for field in (
+                "repository", "source_id", "scope", "generation_id", "registry_sha256",
+                "manifest_sha256", "head_sha",
+            ))
+            identity = (str(identity[0]).casefold(), *identity[1:])
+            matches = [
+                item for item in records
+                if isinstance(item, Mapping) and cls._candidate_identity(item) == identity
+            ]
+            if len(matches) != 1 or id(matches[0]) in visited:
+                return False
+            successor = matches[0]
+            if cls._candidate_identity(successor) == target_identity:
+                return True
+            visited.add(id(successor))
+            current = successor
+        return False
+
+    def _owned_c_candidate(
+        self,
+        verified: Mapping[str, Any],
+        journal: Mapping[str, Any],
+        association: Mapping[str, Any],
+    ) -> Mapping[str, Any] | None:
+        records = journal.get("records")
+        publication = verified.get("publication")
+        if not isinstance(records, list) or not isinstance(publication, Mapping):
+            raise RecoveryError("promotion_journal_record_identity_invalid")
+        associated_number = association["number"]
+        associated_head = association["head_sha"]
+        associated_ref = association["head_ref"]
+        associated_url = association["url"]
+        body = association["body"]
+        source_sha = publication["source_sha"]
+        manifest_sha = publication["manifest_sha256"]
+        helper = self.runner.load_module(
+            self.root / "scripts/canonical_update_pr.py", "canonical_publication_ack_owner_reader",
+        )
+        related: list[Mapping[str, Any]] = []
+        exact: list[Mapping[str, Any]] = []
+        for row in records:
+            if not isinstance(row, Mapping):
+                raise RecoveryError("promotion_journal_record_invalid")
+            candidate = row.get("candidate")
+            ownership = row.get("ownership")
+            pr = row.get("pr")
+            acknowledgements = row.get("acknowledgements")
+            if not isinstance(candidate, Mapping) or not isinstance(ownership, Mapping) or not isinstance(pr, Mapping) or not isinstance(acknowledgements, list):
+                raise RecoveryError("promotion_journal_record_identity_invalid")
+            candidate_head = candidate.get("head_sha")
+            branch = ownership.get("branch")
+            number = pr.get("number")
+            merge_sha = pr.get("merge_commit_sha")
+            shares_identity = (
+                number == associated_number
+                or candidate_head == associated_head
+                or branch == associated_ref
+                or merge_sha == source_sha
+            )
+            for ack in acknowledgements:
+                if not isinstance(ack, Mapping):
+                    raise RecoveryError("promotion_journal_acknowledgement_invalid")
+                if ack.get("source_sha") == source_sha and ack.get("status") in {
+                    "merged", "publication-pending", "published", "read-back-confirmed",
+                }:
+                    shares_identity = True
+            if not shares_identity:
+                continue
+            related.append(row)
+            if candidate.get("manifest_sha256") != manifest_sha:
+                continue
+            if candidate.get("repository") != self.repository or not isinstance(candidate.get("source_id"), str) or not isinstance(candidate.get("scope"), str):
+                continue
+            expected_owner = helper.owner_id(
+                candidate["repository"], candidate["source_id"], candidate["scope"],
+            )
+            generation_id = candidate.get("generation_id")
+            if (
+                number != associated_number
+                or pr.get("url") != associated_url
+                or candidate_head != associated_head
+                or ownership.get("expected_head_sha") != associated_head
+                or branch != associated_ref
+                or ownership.get("owner_id") != expected_owner
+                or ownership.get("body") != body
+                or ownership.get("body_sha256") != hashlib.sha256(body.encode("utf-8")).hexdigest()
+                or helper.body_marker(expected_owner, str(generation_id)) not in body
+                or pr.get("merge_commit_sha") not in {None, source_sha}
+                or row.get("status") not in {"prepared", "pending-review", "merged", "publication-pending", "published", "read-back-confirmed"}
+            ):
+                continue
+            exact.append(row)
+        if len(exact) > 1:
+            raise RecoveryError("canonical_publication_journal_match_ambiguous")
+        if not exact:
+            if related:
+                raise RecoveryError("canonical_publication_journal_identity_conflict")
+            return None
+        target = exact[0]
+        for row in related:
+            if row is target:
+                continue
+            if not self._supersedes_row(row, target, records):
+                raise RecoveryError("canonical_publication_journal_history_conflict")
+        manifest_rows = [
+            row for row in records
+            if isinstance(row, Mapping)
+            and isinstance(row.get("candidate"), Mapping)
+            and row["candidate"].get("manifest_sha256") == manifest_sha
+        ]
+        same_pr_rows = [
+            row for row in manifest_rows
+            if isinstance(row.get("pr"), Mapping) and row["pr"].get("number") == associated_number
+        ]
+        if len(same_pr_rows) != 1:
+            raise RecoveryError("canonical_publication_manifest_candidate_ambiguous")
+        self._cache_commit_association_readback(target, association)
+        return target
+
+    def _cache_commit_association_readback(
+        self, target: Mapping[str, Any], association: Mapping[str, Any],
+    ) -> None:
+        """Cache only the actual positive row in the complete association response."""
+        associated_number = association["number"]
+        source_sha = association["merge_sha"]
+        pr = target.get("pr")
+        if not isinstance(pr, Mapping) or pr.get("number") != associated_number:
+            raise RecoveryError("canonical_publication_journal_identity_conflict")
+        positive = {
+            "number": associated_number,
+            "url": association["url"],
+            "state": "MERGED",
+            "body": association["body"],
+            "headRefName": association["head_ref"],
+            "headRefOid": association["head_sha"],
+            "baseRefName": "main",
+            "baseRefOid": association["base_sha"],
+            "mergeCommit": {"oid": source_sha},
+            "repository": self.repository,
+            "headRepository": self.repository,
+        }
+        self._pr_readbacks[associated_number] = dict(positive)
+
+    def classify_publication(
+        self,
+        verified: Mapping[str, Any],
+        journal: Mapping[str, Any],
+        *,
+        source_claims: list[Mapping[str, Any]] | None = None,
+    ) -> tuple[str, dict[str, Any] | None]:
+        publication = verified.get("publication")
+        if not isinstance(publication, Mapping):
+            raise RecoveryError("publication_identity_missing")
+        if source_claims is None:
+            source_claims = self._source_claim_rows(publication, journal)
+        association = self._commit_pull_request(verified)
+        owner_match = self._owned_c_candidate(verified, journal, association)
+        if source_claims:
+            if len(source_claims) != 1 or owner_match is not source_claims[0]:
+                raise RecoveryError("publication_journal_source_association_conflict")
+        if owner_match is not None:
+            return "canonical", association
+        branch = association["head_ref"]
+        body = association["body"]
+        if (
+            branch.casefold() == CANONICAL_AUTOMATION_BRANCH_PREFIX.rstrip("/").casefold()
+            or branch.casefold().startswith(CANONICAL_AUTOMATION_BRANCH_PREFIX.casefold())
+            or CANONICAL_OWNER_MARKER_PREFIX.casefold() in body.casefold()
+        ):
+            raise RecoveryError("canonical_publication_owner_missing_from_journal")
+        return "outside_c", association
+
+    def _record_outside_c(self, verified: Mapping[str, Any], association: Mapping[str, Any]) -> None:
+        publication = verified["publication"]
+        self.summary["outside_c_publications"].append({
+            "run_id": verified["run_id"],
+            "run_attempt": verified["attempt"],
+            "artifact_id": verified["artifact_id"],
+            "receipt_sha256": verified["receipt_sha256"],
+            "source_sha": publication["source_sha"],
+            "manifest_sha256": publication["manifest_sha256"],
+            "payload_revision": publication["payload_revision"],
+            "pointer_revision": publication["pointer_revision"],
+            "pull_request_number": association["number"],
+            "pull_request_url": association["url"],
+            "merge_sha": association["merge_sha"],
+            "head_ref": association["head_ref"],
+            "head_sha": association["head_sha"],
+            "merged_at": association["merged_at"].isoformat(),
+        })
+
     def recover_one(
         self,
         verified: Mapping[str, Any],
         *,
+        expected_pr_number: int,
         current_ack_run_id: int,
         current_ack_attempt: int,
         journal_snapshot: tuple[Mapping[str, Any], str],
@@ -952,6 +1312,7 @@ class PublicationAckRecovery:
             result = self.runner.reconcile_publication(
                 self.root, receipt_path,
                 publisher_reference=reference,
+                expected_pr_number=expected_pr_number,
                 before_journal_write=before_write,
                 after_journal_write=lambda _state_sha: self._record_git_cas_transaction(),
                 journal_snapshot=journal_snapshot,
@@ -1040,6 +1401,9 @@ class PublicationAckRecovery:
         ):
             raise RecoveryError("promotion_journal_snapshot_unavailable")
         for initial, event_attempt in candidates:
+            # Commit-associated PR rows are scoped to a single receipt source;
+            # do not reuse a prior publisher's live read-back by PR number.
+            self._pr_readbacks.clear()
             try:
                 verified = self.authenticate_publisher(initial, expected_attempt=event_attempt)
             except RecoveryError as exc:
@@ -1057,10 +1421,33 @@ class PublicationAckRecovery:
                 return self.summary
             if verified is None:
                 continue
-            if self.already_acknowledged(verified["publication"], snapshot[0]):
-                self.summary["already_acknowledged"] += 1
+            try:
+                source_claims = self._source_claim_rows(verified["publication"], snapshot[0])
+                if self.already_acknowledged(verified["publication"], snapshot[0]):
+                    self.summary["already_acknowledged"] += 1
+                    self.summary["selected_publisher"] = None
+                    continue
+                disposition, association = self.classify_publication(
+                    verified, snapshot[0], source_claims=source_claims,
+                )
+            except RecoveryError as exc:
+                if mode == "workflow_run":
+                    raise
+                self.summary["unresolved_candidates"].append({
+                    "run_id": initial.get("id"),
+                    "reason": str(exc),
+                })
+                self.summary["outcome"] = "recovery_blocked"
+                self.summary["github_requests"] = self.api.request_count
+                return self.summary
+            if disposition == "outside_c":
+                if association is None:
+                    raise RecoveryError("outside_c_association_missing")
+                self._record_outside_c(verified, association)
                 self.summary["selected_publisher"] = None
                 continue
+            if disposition != "canonical" or association is None:
+                raise RecoveryError("publication_disposition_invalid")
             self.summary["selected_publisher"] = {
                 "run_id": verified["run_id"],
                 "run_attempt": verified["attempt"],
@@ -1070,6 +1457,7 @@ class PublicationAckRecovery:
             }
             result = self.recover_one(
                 verified,
+                expected_pr_number=association["number"],
                 current_ack_run_id=current_ack_run_id,
                 current_ack_attempt=current_ack_attempt,
                 journal_snapshot=snapshot,
@@ -1089,6 +1477,8 @@ class PublicationAckRecovery:
             self.summary["outcome"] = "no_publishing_receipt"
         elif self.summary["already_acknowledged"]:
             self.summary["outcome"] = "already_acknowledged"
+        elif self.summary["outside_c_publications"]:
+            self.summary["outcome"] = "outside_c_publications_only"
         elif self.summary["unresolved_candidates"]:
             self.summary["outcome"] = "recovery_blocked"
         else:

@@ -3799,6 +3799,7 @@ def reconcile_publication(
     receipt_path: pathlib.Path,
     *,
     publisher_reference: str | None = None,
+    expected_pr_number: int | None = None,
     before_journal_write: Any | None = None,
     after_journal_write: Any | None = None,
     journal_snapshot: tuple[Mapping[str, Any], str] | None = None,
@@ -3836,6 +3837,7 @@ def reconcile_publication(
         manifest_candidates,
         source_sha=source_sha,
         readback=pr_readback or (lambda number: gh_pr_readback(root, repo, number)),
+        expected_pr_number=expected_pr_number,
     )
     run_url = f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
     observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
@@ -3913,8 +3915,15 @@ def select_publication_candidate(
     *,
     source_sha: str,
     readback: Any,
+    expected_pr_number: int | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Resolve #592 against live PR API state, including before hourly PR reconciliation."""
+    if expected_pr_number is not None and (
+        isinstance(expected_pr_number, bool)
+        or not isinstance(expected_pr_number, int)
+        or expected_pr_number < 1
+    ):
+        raise PromotionError("publication expected PR number is invalid")
     matches: list[tuple[dict[str, Any], dict[str, Any]]] = []
     for candidate in candidates:
         if not isinstance(candidate, Mapping):
@@ -3922,6 +3931,8 @@ def select_publication_candidate(
         pr_record = candidate.get("pr")
         number = pr_record.get("number") if isinstance(pr_record, Mapping) else None
         if isinstance(number, bool) or not isinstance(number, int) or number < 1:
+            continue
+        if expected_pr_number is not None and number != expected_pr_number:
             continue
         pr = readback(number)
         merge = pr.get("mergeCommit")
