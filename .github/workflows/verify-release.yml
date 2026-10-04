@@ -139,6 +139,8 @@ jobs:
           python -m unittest tests/test_canonical_update_ci.py
           python -m unittest tests/test_refresh_canonical_snapshot_evidence.py
           python -m unittest tests/test_run_canonical_update_promotion.py
+          python -m unittest tests/test_publication_ack_recovery_transport.py
+          python -m unittest tests/test_publication_ack_recovery_incident.py
           python scripts/generate-release-version-decision.py --check
           python -m unittest tests/test_generate_release_version_decision.py
           python scripts/generate-health-probe-catalog.py --check

@@ -3794,7 +3794,16 @@ def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False)
     print(json.dumps({"status": "promotion-prs-reconciled", "run_url": run_url}, sort_keys=True))
 
 
-def reconcile_publication(root: pathlib.Path, receipt_path: pathlib.Path) -> None:
+def reconcile_publication(
+    root: pathlib.Path,
+    receipt_path: pathlib.Path,
+    *,
+    publisher_reference: str | None = None,
+    before_journal_write: Any | None = None,
+    after_journal_write: Any | None = None,
+    journal_snapshot: tuple[Mapping[str, Any], str] | None = None,
+    pr_readback: Any | None = None,
+) -> dict[str, Any]:
     repo = os.environ["GITHUB_REPOSITORY"]
     helper = load_module(root / "scripts/canonical_update_pr.py", "canonical_update_publication_reconcile")
     publication = load_object(receipt_path)
@@ -3811,7 +3820,12 @@ def reconcile_publication(root: pathlib.Path, receipt_path: pathlib.Path) -> Non
         or source.get("repository") != repo
     ):
         raise PromotionError("#592 receipt has no exact current-repository source and manifest binding")
-    journal = load_promotion_journal(root)
+    if journal_snapshot is None:
+        journal, state_sha = load_promotion_journal_snapshot(root)
+    else:
+        journal, state_sha = journal_snapshot
+        if not isinstance(journal, Mapping) or not re.fullmatch(r"[a-f0-9]{40}", state_sha):
+            raise PromotionError("publication recovery journal snapshot is invalid")
     if not isinstance(journal, Mapping):
         raise PromotionError("publication receipt has no matching durable promotion journal")
     manifest_candidates = [
@@ -3821,17 +3835,77 @@ def reconcile_publication(root: pathlib.Path, receipt_path: pathlib.Path) -> Non
     tracked, pr = select_publication_candidate(
         manifest_candidates,
         source_sha=source_sha,
-        readback=lambda number: gh_pr_readback(root, repo, number),
+        readback=pr_readback or (lambda number: gh_pr_readback(root, repo, number)),
     )
     run_url = f"https://github.com/{repo}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
     observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
+    if tracked.get("status") == "read-back-confirmed":
+        # Authenticate every immutable publication identity through the
+        # existing reconciliation rules, while keeping a repeated receipt a
+        # true zero-write no-op.
+        readback = helper.record_pr_readback(
+            tracked, pr, observed_at=observed_at, run_url=run_url,
+        )
+        if readback != tracked:
+            raise PromotionError("already-acknowledged publication PR read-back changed durable state")
+        checked = helper.reconcile_huggingface_publication(
+            tracked, receipt_path, observed_at=observed_at, run_url=run_url,
+            publisher_reference=publisher_reference,
+        )
+        if checked != tracked:
+            raise PromotionError("already-acknowledged publication receipt unexpectedly changed durable state")
+        print(json.dumps({
+            "status": "already_acknowledged",
+            "source_sha": source_sha,
+            "manifest_sha256": manifest_sha,
+            "run_url": run_url,
+            "journal_writes": 0,
+        }, sort_keys=True))
+        return {
+            "status": "already_acknowledged",
+            "source_sha": source_sha,
+            "manifest_sha256": manifest_sha,
+            "journal_writes": 0,
+        }
     observed = helper.record_pr_readback(tracked, pr, observed_at=observed_at, run_url=run_url)
-    persist_journal_record(root, command(("git", "rev-parse", "HEAD"), root).stdout.strip(), observed, observed_at=observed_at)
     if observed.get("pr", {}).get("state") != "merged" or observed.get("pr", {}).get("merge_commit_sha") != source_sha:
         raise PromotionError("#592 publication source is not the exact merge commit independently read from the canonical candidate PR")
-    updated = helper.reconcile_huggingface_publication(observed, receipt_path, observed_at=observed_at, run_url=run_url)
-    persist_journal_record(root, source_sha, updated, observed_at=observed_at)
+    # Validate the complete receipt and immutable publication/read-back chain
+    # before persisting even the intermediate live merge acknowledgement.
+    updated = helper.reconcile_huggingface_publication(
+        observed, receipt_path, observed_at=observed_at, run_url=run_url,
+        publisher_reference=publisher_reference,
+    )
+    controller_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    state_after_merge = state_sha
+    writes = 0
+    if observed != tracked:
+        if before_journal_write is not None:
+            before_journal_write()
+        state_after_merge = persist_journal_record(
+            root, controller_sha, observed, observed_at=observed_at,
+            expected_state_sha=state_sha,
+        )
+        writes += 1
+        if after_journal_write is not None:
+            after_journal_write(state_after_merge)
+    if updated != observed:
+        if before_journal_write is not None:
+            before_journal_write()
+        state_after_publication = persist_journal_record(
+            root, controller_sha, updated, observed_at=observed_at,
+            expected_state_sha=state_after_merge,
+        )
+        writes += 1
+        if after_journal_write is not None:
+            after_journal_write(state_after_publication)
     print(json.dumps({"status": updated["status"], "source_sha": source_sha, "manifest_sha256": manifest_sha, "run_url": run_url}, sort_keys=True))
+    return {
+        "status": updated["status"],
+        "source_sha": source_sha,
+        "manifest_sha256": manifest_sha,
+        "journal_writes": writes,
+    }
 
 
 def select_publication_candidate(

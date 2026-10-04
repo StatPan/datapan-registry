@@ -107,7 +107,7 @@ class PublicationAcknowledgementWorkflowDependencyTests(unittest.TestCase):
         )
         runner_index, runner_step = next(
             (index, step) for index, step in enumerate(steps)
-            if "scripts/run-canonical-update-promotion.py --mode reconcile-publication" in step.get("run", "")
+            if "scripts/recover-canonical-publication-ack.py --repository-root ." in step.get("run", "")
         )
 
         self.assertEqual(
@@ -115,6 +115,13 @@ class PublicationAcknowledgementWorkflowDependencyTests(unittest.TestCase):
             ["python", "-m", "pip", "install", "--disable-pip-version-check", "jsonschema", "PyYAML==6.0.2"],
         )
         self.assertLess(install_index, runner_index)
+        self.assertEqual(
+            runner_step.get("env", {}).get("GITHUB_EVENT_NAME"),
+            "${{ github.event_name }}",
+        )
+        self.assertEqual(workflow["on"]["schedule"], [{"cron": "57 * * * *"}])
+        self.assertEqual(workflow["concurrency"]["group"], "canonical-update-publication-ack")
+        self.assertFalse(workflow["concurrency"]["cancel-in-progress"] == "true")
 
 
 class GiraFinishReviewPolicyTests(unittest.TestCase):
@@ -435,6 +442,8 @@ class PublicationReconciliationTests(unittest.TestCase):
             (pathlib.Path(__file__).parents[1] / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json").read_text(encoding="utf-8")
         )
         writes: list[dict] = []
+        initial_state_sha = "a" * 40
+        state_cas_inputs: list[str] = []
         with tempfile.TemporaryDirectory(prefix="canonical-publication-reconcile-") as raw:
             root = pathlib.Path(raw)
             receipt_path = root / "publication-receipt.json"
@@ -446,14 +455,18 @@ class PublicationReconciliationTests(unittest.TestCase):
                 receipt: dict,
                 *,
                 observed_at: str,
+                expected_state_sha: str,
                 **_kwargs: object,
-            ) -> None:
+            ) -> str:
                 nonlocal journal
+                self.assertEqual(expected_state_sha, "a" * 40 if not writes else "b" * 40)
+                state_cas_inputs.append(expected_state_sha)
                 journal = PR_HELPER.append_journal_record(
                     journal, receipt, repository=candidate["repository"], observed_at=observed_at,
                 )
                 PR_HELPER.validate_journal(journal, schema)
                 writes.append(copy.deepcopy(receipt))
+                return "b" * 40 if len(writes) == 1 else "c" * 40
 
             def command(argv: tuple[str, ...], _root: pathlib.Path, **_kwargs: object) -> subprocess.CompletedProcess[str]:
                 self.assertEqual(argv, ("git", "rev-parse", "HEAD"))
@@ -466,7 +479,10 @@ class PublicationReconciliationTests(unittest.TestCase):
                     "GITHUB_RUN_ATTEMPT": "2",
                 }),
                 mock.patch.object(RUNNER, "load_module", return_value=PR_HELPER),
-                mock.patch.object(RUNNER, "load_promotion_journal", side_effect=lambda _root: copy.deepcopy(journal)),
+                mock.patch.object(
+                    RUNNER, "load_promotion_journal_snapshot",
+                    return_value=(copy.deepcopy(journal), initial_state_sha),
+                ),
                 mock.patch.object(RUNNER, "gh_pr_readback", return_value=merged_pr),
                 mock.patch.object(RUNNER, "command", side_effect=command),
                 mock.patch.object(RUNNER, "persist_journal_record", side_effect=persist),
@@ -474,6 +490,7 @@ class PublicationReconciliationTests(unittest.TestCase):
                 RUNNER.reconcile_publication(root, receipt_path)
 
         self.assertEqual(len(writes), 2)
+        self.assertEqual(state_cas_inputs, ["a" * 40, "b" * 40])
         self.assertEqual([receipt["status"] for receipt in writes], ["merged", "read-back-confirmed"])
         stored = journal["records"][0]
         self.assertEqual(stored["status"], "read-back-confirmed")

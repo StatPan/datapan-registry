@@ -41,6 +41,10 @@ MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS = 5
 MAX_COLLECTOR_EXECUTION_RUNS = 20
 MAX_COLLECTOR_EXECUTION_LOOKUPS = 25
 MAX_PROMOTION_EXECUTION_ATTEMPTS = 2
+MAX_PUBLICATION_RECOVERY_REFERENCES = 20
+MAX_PUBLICATION_RECOVERY_API_REQUESTS = 256
+PUBLICATION_RECOVERY_REFERENCE_PREFIX = "publication-recovery/v1 "
+PUBLICATION_WORKFLOW_PATH = ".github/workflows/huggingface-distribution.yml"
 PROMOTION_WORKFLOW_EVENTS = {"workflow_run", "schedule", "workflow_dispatch"}
 PROCESSOR_OUTPUT_PATHS = (
     "composed-candidate.registry.json",
@@ -1591,6 +1595,7 @@ def evaluate_source(
     mode: str, maximum_future_skew: int, max_checkpoint_bytes: int,
     producer_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_runs_by_id: dict[str, dict[str, Any]] | None = None,
+    recovery_publisher_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_workflow_paths: dict[str, str] | None = None,
     workflow_ids_by_path: dict[str, int] | None = None,
     promotion_ack_error: str | None = None,
@@ -2029,7 +2034,7 @@ def evaluate_source(
         claimed_publication = promotion_publication(final_item)
         trusted_run = trusted_promotion_run(
             final_item, promotion_runs, repository, promotion_workflow_paths or {}, workflow_ids_by_path or {},
-            as_of, maximum_future_skew,
+            as_of, maximum_future_skew, recovery_publisher_runs_by_id,
         )
         if claimed_publication is None or claimed_publication.get("verified") is not True:
             if record_generation == generation_id:
@@ -2134,7 +2139,7 @@ def evaluate_source(
             historical_status = str(historical_item.get("status", "unknown"))
             historical_run = None if historical_status == "prepared" else trusted_promotion_run(
                 historical_item, promotion_runs, repository, promotion_workflow_paths or {}, workflow_ids_by_path or {},
-                as_of, maximum_future_skew,
+                as_of, maximum_future_skew, recovery_publisher_runs_by_id,
             )
             if historical_status in {"merged", "publication-pending", "published", "read-back-confirmed"}:
                 publication = promotion_publication(historical_item)
@@ -2245,7 +2250,7 @@ def evaluate_source(
         promotion_state = str(current_item.get("status", "unknown"))
         current_run = None if promotion_state == "prepared" else trusted_promotion_run(
             current_item, promotion_runs, repository, promotion_workflow_paths or {}, workflow_ids_by_path or {},
-            as_of, maximum_future_skew,
+            as_of, maximum_future_skew, recovery_publisher_runs_by_id,
         )
         publication = None if promotion_state == "prepared" else promotion_publication(current_item)
         if publication is not None:
@@ -2609,10 +2614,175 @@ def promotion_run_references(journal: dict[str, Any] | None, source_ids: set[str
     return references
 
 
+def parse_publication_recovery_reference(reference: Any) -> dict[str, Any] | None:
+    if not isinstance(reference, str) or not reference.startswith(PUBLICATION_RECOVERY_REFERENCE_PREFIX):
+        return None
+    if len(reference.encode("utf-8")) > 4096:
+        raise ValueError("publication_recovery_reference_too_large")
+    body = reference[len(PUBLICATION_RECOVERY_REFERENCE_PREFIX):]
+
+    def unique_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        value: dict[str, Any] = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError("publication_recovery_reference_duplicate_key")
+            value[key] = item
+        return value
+
+    try:
+        value = json.loads(body, object_pairs_hook=unique_pairs)
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        raise ValueError("publication_recovery_reference_invalid_json") from exc
+    expected = {
+        "artifact_id", "manifest_sha256", "payload_revision", "pointer_revision",
+        "publisher_head_sha", "publisher_run_attempt", "publisher_run_id",
+        "publisher_workflow_id", "publisher_workflow_path", "receipt_sha256",
+        "repository", "source_sha",
+    }
+    if not isinstance(value, dict) or set(value) != expected or canonical_json(value).decode("utf-8") != body:
+        raise ValueError("publication_recovery_reference_fields_invalid")
+    for key in ("artifact_id", "publisher_run_id", "publisher_run_attempt", "publisher_workflow_id"):
+        number = value.get(key)
+        if isinstance(number, bool) or not isinstance(number, int) or number < 1:
+            raise ValueError("publication_recovery_reference_integer_invalid")
+    for key in ("publisher_head_sha", "source_sha", "payload_revision", "pointer_revision"):
+        if not isinstance(value.get(key), str) or not re.fullmatch(r"[a-f0-9]{40}", value[key]) or value[key] == "0" * 40:
+            raise ValueError("publication_recovery_reference_revision_invalid")
+    for key in ("manifest_sha256", "receipt_sha256"):
+        if not isinstance(value.get(key), str) or not DIGEST.fullmatch(value[key]) or value[key] == "0" * 64:
+            raise ValueError("publication_recovery_reference_digest_invalid")
+    if value.get("publisher_workflow_path") != PUBLICATION_WORKFLOW_PATH or not isinstance(value.get("repository"), str):
+        raise ValueError("publication_recovery_reference_identity_invalid")
+    return value
+
+
+def publication_recovery_references(
+    journal: dict[str, Any] | None, source_ids: set[str], repository: str,
+) -> dict[str, dict[str, Any]]:
+    references: dict[str, dict[str, Any]] = {}
+    for source_id in source_ids:
+        for record in promotion_records_for_source(journal, source_id):
+            acknowledgements = record.get("acknowledgements")
+            if not isinstance(acknowledgements, list) or not acknowledgements:
+                continue
+            final_item = acknowledgements[-1]
+            if not isinstance(final_item, dict):
+                continue
+            parsed = parse_publication_recovery_reference(final_item.get("evidence_reference"))
+            if parsed is None:
+                continue
+            if parsed["repository"].casefold() != repository.casefold():
+                raise ValueError("publication_recovery_reference_repository_mismatch")
+            identity = f"{parsed['publisher_run_id']}/{parsed['publisher_run_attempt']}"
+            prior = references.get(identity)
+            if prior is not None and prior != parsed:
+                raise ValueError("publication_recovery_reference_identity_conflict")
+            references[identity] = parsed
+    if len(references) > MAX_PUBLICATION_RECOVERY_REFERENCES:
+        raise ValueError("publication_recovery_reference_limit_exceeded")
+    return references
+
+
+def trusted_recovery_publisher(
+    item: dict[str, Any], recovery_reference: dict[str, Any],
+    recovery_runs_by_id: dict[str, dict[str, Any]], repository: str,
+    workflow_id: int | None, as_of: dt.datetime, maximum_future_skew: int,
+    acknowledgement_completed_at: dt.datetime,
+) -> dict[str, Any] | None:
+    publisher_id = recovery_reference.get("publisher_run_id")
+    attempt = recovery_reference.get("publisher_run_attempt")
+    identity = f"{publisher_id}/{attempt}"
+    evidence = recovery_runs_by_id.get(identity)
+    if not isinstance(evidence, dict) or evidence.get("availability_error") is True:
+        return None
+    run = evidence.get("run")
+    jobs = evidence.get("jobs")
+    if (
+        not isinstance(run, dict)
+        or evidence.get("attempt_number") != attempt
+        or evidence.get("jobs_api_endpoint") != f"repos/{repository}/actions/runs/{publisher_id}/attempts/{attempt}/jobs"
+        or str(run.get("id", "")) != str(publisher_id)
+        or run.get("run_attempt") != attempt
+        or run.get("workflow_id") != workflow_id
+        or run.get("path") != PUBLICATION_WORKFLOW_PATH
+        or run.get("head_sha") != recovery_reference.get("publisher_head_sha")
+        or run.get("event") != "workflow_dispatch"
+        or run.get("status") != "completed"
+        or run.get("conclusion") != "success"
+        or not trusted_main_workflow_run(run, repository, PUBLICATION_WORKFLOW_PATH, workflow_id, {"workflow_dispatch"})
+        or not isinstance(jobs, list)
+        or len(jobs) != evidence.get("job_count")
+        or evidence.get("job_count") != 1
+    ):
+        return None
+    job = jobs[0]
+    if (
+        not isinstance(job, dict)
+        or job.get("name") != "validate"
+        or job.get("run_id") != publisher_id
+        or job.get("run_attempt") != attempt
+        or job.get("head_sha") != recovery_reference.get("publisher_head_sha")
+        or job.get("status") != "completed"
+        or job.get("conclusion") != "success"
+    ):
+        return None
+    steps = job.get("steps")
+    if not isinstance(steps, list):
+        return None
+    required = {
+        "Publish two-phase immutable distribution",
+        "Verify published pointer anonymously",
+    }
+    selected = [step for step in steps if isinstance(step, dict) and step.get("name") in required]
+    if len(selected) != len(required) or {
+        step.get("name") for step in selected
+        if step.get("status") == "completed" and step.get("conclusion") == "success"
+    } != required:
+        return None
+    try:
+        publisher_started = parse_time(run.get("run_started_at") or run.get("created_at"), "recovery_publisher.run_started_at")
+        job_started = parse_time(job.get("started_at"), "recovery_publisher.job_started_at")
+        job_completed = parse_time(job.get("completed_at"), "recovery_publisher.job_completed_at")
+        acknowledgement_observed = parse_time(item.get("observed_at"), "recovery_acknowledgement.observed_at")
+        seconds_since(as_of, utc_timestamp(publisher_started), "recovery_publisher.run_started_at", maximum_future_skew)
+        seconds_since(as_of, utc_timestamp(job_started), "recovery_publisher.job_started_at", maximum_future_skew)
+        seconds_since(as_of, utc_timestamp(job_completed), "recovery_publisher.job_completed_at", maximum_future_skew)
+        seconds_since(as_of, item.get("observed_at"), "recovery_acknowledgement.observed_at", maximum_future_skew)
+    except ValueError:
+        return None
+    if (
+        job_started < publisher_started
+        or job_completed < job_started
+        or job_completed > acknowledgement_observed
+        or acknowledgement_observed > acknowledgement_completed_at
+    ):
+        return None
+    publisher_repository = run.get("repository")
+    publisher_head_repository = run.get("head_repository")
+    if not isinstance(publisher_repository, dict) or not isinstance(publisher_head_repository, dict):
+        return None
+    if not (
+        item.get("source_sha") == recovery_reference.get("source_sha")
+        and item.get("manifest_sha256") == recovery_reference.get("manifest_sha256")
+        and item.get("publication_revision") == recovery_reference.get("payload_revision")
+        and item.get("publication_pointer_revision") == recovery_reference.get("pointer_revision")
+        and publisher_repository.get("full_name", "").casefold() == recovery_reference.get("repository", "").casefold()
+        and publisher_head_repository.get("full_name", "").casefold() == recovery_reference.get("repository", "").casefold()
+    ):
+        return None
+    return {
+        "run_id": int(publisher_id),
+        "run_attempt": int(attempt),
+        "jobs_completed_at": utc_timestamp(job_completed),
+        "completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+    }
+
+
 def trusted_promotion_run(
     item: dict[str, Any], promotion_runs_by_id: dict[str, dict[str, Any]], repository: str,
     workflow_paths: dict[str, str], workflow_ids_by_path: dict[str, int],
     as_of: dt.datetime, maximum_future_skew: int,
+    recovery_publisher_runs_by_id: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any] | None:
     run_id = item.get("run_id")
     run_attempt = item.get("run_attempt")
@@ -2642,14 +2812,52 @@ def trusted_promotion_run(
         expected_path = next(path for path in allowed_paths if path and workflow_path_matches(run.get("path"), path))
     else:
         expected_path = workflow_paths.get("promotion_workflow_path")
+    event = run.get("event")
+    is_acknowledgement = bool(
+        workflow_paths.get("publication_ack_workflow_path")
+        and expected_path == workflow_paths.get("publication_ack_workflow_path")
+    )
+    recovery_reference: dict[str, Any] | None = None
+    if not is_acknowledgement:
+        trusted_event = event in PROMOTION_WORKFLOW_EVENTS
+    else:
+        trusted_event = event in {"workflow_run", "schedule"}
+        raw_reference = item.get("evidence_reference")
+        has_reference = raw_reference is not None
+        if has_reference and not isinstance(raw_reference, str):
+            trusted_event = False
+        elif isinstance(raw_reference, str) and raw_reference.startswith("publication-recovery/"):
+            try:
+                recovery_reference = parse_publication_recovery_reference(raw_reference)
+            except ValueError:
+                trusted_event = False
+            if recovery_reference is None:
+                trusted_event = False
+        elif event == "schedule":
+            # Scheduled recovery has no parent workflow_run event to bind the
+            # publisher, so a versioned authenticated reference is mandatory.
+            trusted_event = False
+        # Ordinary non-versioned workflow_run references remain compatible
+        # with the legacy event-triggered acknowledgement contract.
+        if recovery_reference is not None:
+            publisher_workflow_id = workflow_ids_by_path.get(PUBLICATION_WORKFLOW_PATH)
+            trusted_event = bool(
+                trusted_event
+                and recovery_reference.get("repository", "").casefold() == repository.casefold()
+                and recovery_reference.get("publisher_workflow_id") == publisher_workflow_id
+            )
+        elif event == "schedule":
+            trusted_event = False
     if (
         str(run.get("id", "")) != str(run_id)
         or run.get("run_attempt") != run_attempt
         or run.get("status") != "completed"
         or run.get("conclusion") != "success"
+        or not trusted_event
         or not expected_path
         or not trusted_main_workflow_run(
-            run, repository, expected_path, workflow_ids_by_path.get(expected_path), None,
+            run, repository, expected_path, workflow_ids_by_path.get(expected_path),
+            {event} if isinstance(event, str) else set(),
         )
     ):
         return None
@@ -2687,11 +2895,33 @@ def trusted_promotion_run(
             seconds_since(as_of, run.get("completed_at"), "promotion_run.completed_at", maximum_future_skew)
         except ValueError:
             return None
+    publication_run_id = int(run_id)
+    publication_run_attempt = int(run_attempt)
+    publication_jobs_completed_at = jobs_completed_at
+    if is_acknowledgement and event in {"workflow_run", "schedule"} and recovery_reference is not None:
+        publisher_workflow_id = workflow_ids_by_path.get(PUBLICATION_WORKFLOW_PATH)
+        trusted_publisher = trusted_recovery_publisher(
+            item,
+            recovery_reference or {},
+            recovery_publisher_runs_by_id or {},
+            repository,
+            publisher_workflow_id,
+            as_of,
+            maximum_future_skew,
+            jobs_completed_at,
+        )
+        if trusted_publisher is None:
+            return None
+        publication_run_id = trusted_publisher["run_id"]
+        publication_run_attempt = trusted_publisher["run_attempt"]
+        publication_jobs_completed_at = parse_time(
+            trusted_publisher["jobs_completed_at"], "recovery_publisher.jobs_completed_at",
+        )
     return {
-        "jobs_completed_at": utc_timestamp(jobs_completed_at),
+        "jobs_completed_at": utc_timestamp(publication_jobs_completed_at),
         "completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
-        "run_id": int(run_id),
-        "run_attempt": int(run_attempt),
+        "run_id": publication_run_id,
+        "run_attempt": publication_run_attempt,
     }
 
 
@@ -2817,6 +3047,7 @@ def evaluate(
     prior_promotion_execution_faults: list[dict[str, Any]] | None = None,
     producer_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_runs_by_id: dict[str, dict[str, Any]] | None = None,
+    recovery_publisher_runs_by_id: dict[str, dict[str, Any]] | None = None,
     promotion_workflow_paths: dict[str, str] | None = None,
     promotion_ack_error: str | None = None,
     health_state_error: str | None = None,
@@ -2908,6 +3139,7 @@ def evaluate(
             prior_promotion_execution_faults=prior_promotion_execution_faults or [],
             producer_runs_by_id=producer_runs_by_id,
             promotion_runs_by_id=promotion_runs_by_id,
+            recovery_publisher_runs_by_id=recovery_publisher_runs_by_id,
             promotion_workflow_paths=promotion_workflow_paths,
             workflow_ids_by_path=workflow_ids_by_path,
             promotion_ack_error=promotion_ack_error,
@@ -2991,6 +3223,7 @@ def main(argv: list[str] | None = None) -> int:
         health_state_error = None
         promotion_ack_error = None
         workflow_ids_by_path: dict[str, int] = {}
+        recovery_publisher_runs_by_id: dict[str, dict[str, Any]] = {}
         processor_candidate_screen = None
         collector_execution_attempts: dict[str, Any] = {}
         collector_execution_attempt_errors: set[str] = set()
@@ -3031,6 +3264,7 @@ def main(argv: list[str] | None = None) -> int:
             producer_runs_by_id = fixture.get("producer_runs_by_id", {}) if isinstance(fixture, dict) else {}
             promotion_ack = fixture.get("promotion_ack") if isinstance(fixture, dict) else None
             promotion_runs_by_id = fixture.get("promotion_runs_by_id", {}) if isinstance(fixture, dict) else {}
+            recovery_publisher_runs_by_id = fixture.get("recovery_publisher_runs_by_id", {}) if isinstance(fixture, dict) else {}
             workflow_ids_by_path = fixture.get("workflow_ids_by_path", {}) if isinstance(fixture, dict) else {}
             main_revision = args.main_revision or (fixture.get("main_revision", "") if isinstance(fixture, dict) else "")
             last_good = fixture.get("last_good") if isinstance(fixture, dict) else None
@@ -3221,6 +3455,34 @@ def main(argv: list[str] | None = None) -> int:
                     promotion_runs_by_id[key] = collect_run_attempt_evidence(args.repository, promotion_run_id, promotion_attempt)
                 except RuntimeError:
                     promotion_runs_by_id[key] = {"availability_error": True}
+            try:
+                recovery_references = publication_recovery_references(promotion_ack, source_ids, args.repository)
+            except ValueError:
+                recovery_references = {}
+            if recovery_references:
+                try:
+                    publisher_workflow_id = collect_workflow_identity(args.repository, PUBLICATION_WORKFLOW_PATH)
+                    workflow_ids_by_path[PUBLICATION_WORKFLOW_PATH] = publisher_workflow_id
+                except RuntimeError:
+                    publisher_workflow_id = None
+                worst_case_requests = 1 + len(recovery_references) * (1 + MAX_PROMOTION_JOB_PAGES)
+                if worst_case_requests <= MAX_PUBLICATION_RECOVERY_API_REQUESTS:
+                    for identity, reference in sorted(recovery_references.items()):
+                        if publisher_workflow_id is None or reference.get("publisher_workflow_id") != publisher_workflow_id:
+                            recovery_publisher_runs_by_id[identity] = {"availability_error": True}
+                            continue
+                        try:
+                            recovery_publisher_runs_by_id[identity] = collect_run_attempt_evidence(
+                                args.repository,
+                                str(reference["publisher_run_id"]),
+                                int(reference["publisher_run_attempt"]),
+                            )
+                        except RuntimeError:
+                            recovery_publisher_runs_by_id[identity] = {"availability_error": True}
+                else:
+                    recovery_publisher_runs_by_id = {
+                        identity: {"availability_error": True} for identity in recovery_references
+                    }
             for artifact_id in sorted(referenced_artifact_ids):
                 try:
                     metadata = collect_artifact(args.repository, artifact_id)
@@ -3324,6 +3586,7 @@ def main(argv: list[str] | None = None) -> int:
             promotion_ack_error=promotion_ack_error,
             health_state_error=health_state_error,
             processor_candidate_screen=processor_candidate_screen,
+            recovery_publisher_runs_by_id=recovery_publisher_runs_by_id,
         )
         validate_schema(receipt, HEALTH_RECEIPT_SCHEMA, "health_receipt")
         args.output.parent.mkdir(parents=True, exist_ok=True)
