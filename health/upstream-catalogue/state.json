@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "0e486ec4b5abcd370d7a4a456a3de67d0191f274614f7083e5de3e60f175c277",
-      "last_seen_at": "2026-10-04T06:59:32Z",
-      "observation_count": 50,
+      "last_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+      "last_seen_at": "2026-10-04T08:18:38Z",
+      "observation_count": 51,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -118,9 +118,9 @@
       "fault_key": "7678c24a0fcb40b7df3f32f828be41a70a046d2bad441e6cbeb50c1ec2b404b4",
       "first_seen_at": "2026-10-03T16:18:48Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "0e486ec4b5abcd370d7a4a456a3de67d0191f274614f7083e5de3e60f175c277",
-      "last_seen_at": "2026-10-04T06:59:32Z",
-      "observation_count": 16,
+      "last_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+      "last_seen_at": "2026-10-04T08:18:38Z",
+      "observation_count": 17,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_record_for_different_generation",
@@ -157,9 +157,9 @@
       "fault_key": "d36ca8b10f4fd57b22c47324edafd80fd8bc62bc39c9f6aae39d8ed0ff55d444",
       "first_seen_at": "2026-10-03T16:18:48Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "0e486ec4b5abcd370d7a4a456a3de67d0191f274614f7083e5de3e60f175c277",
-      "last_seen_at": "2026-10-04T06:59:32Z",
-      "observation_count": 16,
+      "last_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+      "last_seen_at": "2026-10-04T08:18:38Z",
+      "observation_count": 17,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_ack_missing",
@@ -187,11 +187,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -210,11 +216,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -262,11 +274,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -285,11 +303,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -337,11 +361,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -360,11 +390,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -383,11 +419,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "execution_identity": {
@@ -435,11 +477,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37188423950",
+        "health_receipt_sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "fault_key": "08935fabd4844fd68884115babf0e0ed785ac2502feb9a120d61336ddad594c8",
@@ -466,8 +514,8 @@
   ],
   "last_good_by_source": {},
   "latest_receipt": {
-    "path": "receipts/receipt-37184426549-1-0e486ec4b5abcd37.json",
-    "sha256": "0e486ec4b5abcd370d7a4a456a3de67d0191f274614f7083e5de3e60f175c277"
+    "path": "receipts/receipt-37188490762-1-b4a4df40d864ee10.json",
+    "sha256": "b4a4df40d864ee100eca70a4716dcb84379bd7ccaa72c2a9020b7efed99252ba"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -487,7 +535,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "8e8fbdcc6f866b4dbcdec42f07872626627b87aa20720d825ca626b552c65cd4",
-  "state_status": "blocked",
-  "updated_at": "2026-10-04T06:59:32Z"
+  "state_sha256": "80cceabcd49cb8f7659c8984d2f6ab9c78f6a3071444be3b5857a94e61682707",
+  "state_status": "degraded",
+  "updated_at": "2026-10-04T08:18:38Z"
 }
