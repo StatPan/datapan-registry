@@ -1,0 +1,734 @@
+{
+  "evaluated_at": "2026-10-04T22:51:03Z",
+  "execution_mode": "live",
+  "faults": [
+    {
+      "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+      "owner_ticket": 659,
+      "reason": "candidate_ready_with_pending_scope",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "candidate"
+    },
+    {
+      "fault_key": "1e9acb80bf5dbc2c38d1af2b0a190d1130f1e326a91c05078a307efc4f31d978",
+      "owner_ticket": 659,
+      "reason": "promotion_ack_missing",
+      "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "promotion"
+    },
+    {
+      "fault_key": "9628190eeb4972f421fcb6176ce6fcfdc9b7f6479df3ff05a0c89e0c786281ab",
+      "owner_ticket": 659,
+      "reason": "promotion_record_for_different_generation",
+      "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "promotion"
+    }
+  ],
+  "health_workflow": {
+    "revision": "341096464b6355e89adbc2690f0dbcaf51b8b8f8",
+    "run_attempt": 1,
+    "run_id": "37241560723"
+  },
+  "policy_sha256": "084ebb5730bc6e3d2c34e88683a490c0c976dd595e98e0a1aae6e163f1887b30",
+  "receipt_sha256": "01ef587085d915956cd9392c1044a71d1ce88b546c05bac972dd6278043f3a19",
+  "repository": "StatPan/datapan-registry",
+  "schema_version": "datapan.upstream-catalogue-health.v1",
+  "source_policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc",
+  "sources": [
+    {
+      "canonical": {
+        "already_canonical_candidate": null,
+        "last_good": {
+          "artifact_identity": {
+            "bytes": 139155499,
+            "path": "data/data-go-kr.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "observed_at": "2026-10-04T12:35:04.198997+00:00",
+          "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+          "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+          "publication_run_attempt": 2,
+          "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+          "publication_run_id": 37199709258,
+          "publication_run_jobs_completed_at": "2026-10-04T12:35:16Z",
+          "publisher_run_verified": true,
+          "source_id": "data_go_kr",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "status": "read-back-confirmed",
+          "verified": true
+        },
+        "main": {
+          "manifest_sha256": "c2e3477efa23b89a2335b11cd9517ba2a8a6bb37f795c2052caa48cd02f5c0b9",
+          "registry_bytes": 139155499,
+          "registry_path": "data/data-go-kr.registry.json",
+          "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+          "revision": "341096464b6355e89adbc2690f0dbcaf51b8b8f8"
+        },
+        "promotion_execution": {
+          "execution_failure": null,
+          "latest_execution_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-04T22:31:42Z",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "980d22f4d7ca9337d397d562d2700cabeddd3c7c",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37240354160",
+            "run_started_at": "2026-10-04T22:31:42Z",
+            "status": "completed",
+            "updated_at": "2026-10-04T22:32:37Z",
+            "workflow_id": 373708872
+          },
+          "latest_successful_execution_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-04T22:31:42Z",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "980d22f4d7ca9337d397d562d2700cabeddd3c7c",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37240354160",
+            "run_started_at": "2026-10-04T22:31:42Z",
+            "status": "completed",
+            "updated_at": "2026-10-04T22:32:37Z",
+            "workflow_id": 373708872
+          }
+        },
+        "promotion_stage": null,
+        "promotion_status": "unavailable",
+        "publication": null
+      },
+      "collector": {
+        "age_seconds": 428811,
+        "expected_interval_seconds": 604800,
+        "grace_seconds": 86400,
+        "latest_execution_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "latest_successful_execution_run": {
+            "attempt_evidence": {
+              "job_count": 1,
+              "jobs_api_endpoint": "repos/StatPan/datapan-registry/actions/runs/36646768289/attempts/1/jobs",
+              "jobs_sha256": "8d695da88da9f429cc550d42590b5577152b33699e50c7f6b7f71599ee6f59ca"
+            },
+            "conclusion": "success",
+            "disposition": "success",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+            "path": ".github/workflows/upstream-catalog-refresh.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "36646768289",
+            "run_started_at": "2026-09-29T23:44:12Z",
+            "status": "completed",
+            "workflow_id": 311036678
+          },
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        },
+        "latest_scheduled_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        }
+      },
+      "faults": [
+        {
+          "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+          "owner_ticket": 659,
+          "reason": "candidate_ready_with_pending_scope",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "candidate"
+        },
+        {
+          "fault_key": "1e9acb80bf5dbc2c38d1af2b0a190d1130f1e326a91c05078a307efc4f31d978",
+          "owner_ticket": 659,
+          "reason": "promotion_ack_missing",
+          "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "promotion"
+        },
+        {
+          "fault_key": "9628190eeb4972f421fcb6176ce6fcfdc9b7f6479df3ff05a0c89e0c786281ab",
+          "owner_ticket": 659,
+          "reason": "promotion_record_for_different_generation",
+          "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "promotion"
+        }
+      ],
+      "observation": {
+        "age_seconds": 428784,
+        "collection_status": "success",
+        "execution_mode": "live",
+        "max_age_seconds": 691200,
+        "observed_at": "2026-09-29T23:44:39Z",
+        "producer_run_id": "36646768289",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "state": "fresh"
+      },
+      "overall": "degraded",
+      "processor": {
+        "attempts_by_id": {
+          "15003164": 1,
+          "15005257": 1,
+          "15006273": 1,
+          "15007088": 1,
+          "15008409": 1,
+          "15008517": 1,
+          "15013677": 1,
+          "15013679": 1,
+          "15014832": 1,
+          "15015158": 1,
+          "15015163": 1,
+          "15015164": 1,
+          "15015212": 1,
+          "15019347": 1,
+          "15019666": 1,
+          "15020786": 1,
+          "15020843": 1,
+          "15020966": 1,
+          "15021305": 1,
+          "15024888": 1,
+          "15027423": 1,
+          "15027426": 1,
+          "15028101": 1,
+          "15029122": 1,
+          "15031993": 1,
+          "15031994": 1,
+          "15032073": 1,
+          "15032578": 1,
+          "15032581": 1,
+          "15032588": 1,
+          "15032592": 1,
+          "15032604": 1,
+          "15032613": 1,
+          "15032644": 1,
+          "15032647": 1,
+          "15032650": 1,
+          "15032652": 1,
+          "15032656": 1,
+          "15032657": 1,
+          "15032659": 1,
+          "15032678": 1,
+          "15032684": 1,
+          "15032685": 1,
+          "15032686": 1,
+          "15032687": 1,
+          "15032688": 1,
+          "15032691": 1,
+          "15032693": 1,
+          "15032694": 1,
+          "15032695": 1,
+          "15032696": 1,
+          "15032697": 1,
+          "15032703": 1,
+          "15032710": 1,
+          "15032712": 1,
+          "15032715": 1,
+          "15032716": 1,
+          "15032733": 1,
+          "15032735": 1,
+          "15032747": 1,
+          "15032794": 1,
+          "15032796": 1,
+          "15032807": 1,
+          "15032809": 1,
+          "15032813": 1,
+          "15032817": 1,
+          "15032826": 1,
+          "15032829": 1,
+          "15032835": 1,
+          "15032837": 1,
+          "15032848": 1,
+          "15032849": 1,
+          "15032850": 1,
+          "15032852": 1,
+          "15032855": 1,
+          "15032865": 1,
+          "15032866": 1,
+          "15032867": 1,
+          "15032868": 1,
+          "15032872": 1,
+          "15032912": 1,
+          "15032919": 1,
+          "15032920": 1,
+          "15032938": 1,
+          "15032941": 1,
+          "15032958": 1,
+          "15033015": 1,
+          "15033016": 1,
+          "15033017": 1,
+          "15033020": 1,
+          "15033021": 1,
+          "15033027": 1,
+          "15033028": 1,
+          "15033029": 1,
+          "15033030": 1,
+          "15033031": 1,
+          "15033032": 1,
+          "15033036": 1,
+          "15033040": 1,
+          "15033041": 1,
+          "15033042": 1,
+          "15033043": 1,
+          "15033044": 1,
+          "15033045": 1,
+          "15033047": 1,
+          "15033054": 1,
+          "15033055": 1,
+          "15033059": 1,
+          "15033065": 1,
+          "15033066": 1,
+          "15033067": 1,
+          "15033076": 1,
+          "15033077": 1,
+          "15033078": 1,
+          "15033079": 1,
+          "15033080": 1,
+          "15033095": 1,
+          "15033103": 1,
+          "15033104": 1,
+          "15033105": 1,
+          "15033116": 1,
+          "15033117": 1,
+          "15033128": 1,
+          "15033131": 1,
+          "15033143": 1,
+          "15033155": 1,
+          "15033159": 1,
+          "15033160": 1,
+          "15033161": 1,
+          "15033164": 1,
+          "15033170": 1,
+          "15033171": 1,
+          "15033172": 1,
+          "15033173": 1,
+          "15033174": 1,
+          "15033176": 1,
+          "15033177": 1,
+          "15033178": 1,
+          "15033184": 1,
+          "15033186": 1,
+          "15033188": 1,
+          "15033199": 1,
+          "15033212": 1,
+          "15033213": 1,
+          "15033219": 1,
+          "15033221": 1,
+          "15033226": 1,
+          "15033231": 1,
+          "15033496": 1,
+          "15033498": 1,
+          "15034324": 1,
+          "15037980": 1,
+          "15037982": 1,
+          "15038281": 1,
+          "15038284": 1,
+          "15038449": 1,
+          "15038450": 1,
+          "15038451": 1,
+          "15038496": 1,
+          "15038776": 1,
+          "15038873": 1,
+          "15038878": 1,
+          "15038880": 1,
+          "15038885": 1,
+          "15040263": 1,
+          "15040835": 1,
+          "15040836": 1,
+          "15040895": 1,
+          "15041698": 1,
+          "15041699": 1,
+          "15041700": 1,
+          "15041703": 1,
+          "15041764": 1,
+          "15041765": 1,
+          "15041766": 1,
+          "15041768": 1,
+          "15041769": 1,
+          "15041770": 1,
+          "15041771": 1,
+          "15041772": 1,
+          "15041773": 1,
+          "15041881": 1,
+          "15042319": 1,
+          "15043066": 1,
+          "15043204": 1,
+          "15043313": 1,
+          "15043314": 1,
+          "15043464": 1,
+          "15044244": 1,
+          "15045335": 1,
+          "15045467": 1,
+          "15047488": 1,
+          "15047612": 1,
+          "15054967": 1,
+          "15056017": 1,
+          "15056424": 1,
+          "15056513": 1,
+          "15056560": 1,
+          "15056566": 1,
+          "15056568": 1,
+          "15056579": 1,
+          "15056581": 1,
+          "15056627": 1,
+          "15056636": 1,
+          "15056647": 1,
+          "15056648": 1,
+          "15056663": 1,
+          "15056712": 1,
+          "15056777": 1,
+          "15056784": 1,
+          "15056797": 1,
+          "15056810": 1,
+          "15056811": 1,
+          "15056816": 1,
+          "15056821": 1,
+          "15056834": 1,
+          "15056854": 1,
+          "15056858": 1,
+          "15056865": 1,
+          "15056883": 1,
+          "15056911": 1,
+          "15056915": 1,
+          "15056931": 1,
+          "15056986": 1,
+          "15057007": 1,
+          "15057008": 1,
+          "15057017": 1,
+          "15057026": 1,
+          "15057028": 1,
+          "15057031": 1,
+          "15057038": 1,
+          "15057039": 1,
+          "15057041": 1,
+          "15057080": 1,
+          "15057092": 1,
+          "15057103": 1,
+          "15057123": 1,
+          "15057134": 1,
+          "15057144": 1,
+          "15057146": 1,
+          "15057150": 3,
+          "15057156": 3,
+          "15057160": 3,
+          "15057172": 3,
+          "15057226": 3,
+          "15057248": 3,
+          "15057261": 3,
+          "15057358": 3
+        },
+        "attempts_consumed": 24,
+        "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+        "checkpoint_observed_at": "2026-09-29T23:44:39Z",
+        "checkpoint_sha256": "1dd9dcfc6ab0e1c7a9661bb9e3d20fc64dd1a69275403a00c3d689300ed68fd2",
+        "detail_queue_cursor": 248,
+        "detail_records": [
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057150",
+            "source_sha256": "94e5ef130e4afb6eafb90200ff3d31802ff860431fe5c73cc86f7628dd18b02c",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057156",
+            "source_sha256": "ed257d089eb6766d512d146d024fbefb18646be031c57ec364763e39bf32a9fd",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057160",
+            "source_sha256": "c2ac21abfaec41dcd837a0e03751f2e497b4c7c849a4d1de43a6298a9159a9c7",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057172",
+            "source_sha256": "5f9065ac043ada38186f42568e326aedb3ead340b17e92560065a2c57beb8a5f",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057226",
+            "source_sha256": "5ea26a3c3a62a432ba54d26243286363ca2548fe4cfb6ea2f232c11ec24e5374",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057248",
+            "source_sha256": "6132a2e6525ce97a12a122067563d5540b748eef124e41f67e743c67872340e9",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057261",
+            "source_sha256": "608c483ed7a559921666f289c39819b633257ce9d5de1725a856a5c0784e14b0",
+            "status": "retry"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057358",
+            "source_sha256": "af7a45a51805ba5b766851b069e27c2ff6437220ea0a76fa1d6d56bcbe837baf",
+            "status": "retry"
+          }
+        ],
+        "execution_failure": null,
+        "generation_id": "9938e29ef963f799af3a15adf472e7a1fca119d5b075c578dfadbef2e11c7ead",
+        "last_heartbeat_at": "2026-10-04T21:31:26Z",
+        "last_observation": {
+          "collection_status": "success",
+          "execution_mode": "live",
+          "observed_at": "2026-09-29T23:44:39Z",
+          "producer_run_id": "36646768289",
+          "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+        },
+        "last_progress_at": "2026-10-04T21:22:05Z",
+        "latest_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-04T21:21:02Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "980d22f4d7ca9337d397d562d2700cabeddd3c7c",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37235734113",
+          "run_started_at": "2026-10-04T21:21:02Z",
+          "status": "completed",
+          "updated_at": "2026-10-04T21:31:39Z",
+          "workflow_id": 373610259
+        },
+        "latest_successful_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-04T21:21:02Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "980d22f4d7ca9337d397d562d2700cabeddd3c7c",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37235734113",
+          "run_started_at": "2026-10-04T21:21:02Z",
+          "status": "completed",
+          "updated_at": "2026-10-04T21:31:39Z",
+          "workflow_id": 373610259
+        },
+        "lease": null,
+        "outcome": {
+          "attempts_this_invocation": 24,
+          "composer_status": "ready_scoped",
+          "detail_failure_counts": {
+            "missing_link_detail_operations": 112,
+            "timeout": 64
+          },
+          "detail_reason_unavailable_count": 732,
+          "detail_retry_count": 908,
+          "detail_unattempted_count": 900,
+          "pending_count": 4382,
+          "reason": "scoped_candidate_ready_pending_outcomes_retained"
+        },
+        "output_artifact": {
+          "artifact_id": "11315424055",
+          "bundle_manifest_sha256": "de4087ea990b5681c692ac6ec6ca1a7f69b7a7094c2f045efee49b83e938e8d9",
+          "expires_at": "2026-11-03T21:31:27Z",
+          "name": "upstream-catalogue-processing-37235734113-1",
+          "repository": "StatPan/datapan-registry",
+          "run_id": "37235734113"
+        },
+        "output_digests": [
+          {
+            "bytes": 139155499,
+            "path": "composed-candidate.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          {
+            "bytes": 85703345,
+            "path": "ready-scope.registry.json",
+            "sha256": "1e82aa849995beb4a9c9d8eaca8d355dfd5fb9a78233af70e749b99f81b76084"
+          },
+          {
+            "bytes": 11553654,
+            "path": "semantic-diff.json",
+            "sha256": "7262a87d982c9da7ac3835262bec4c2b8978c0d05b3a6378856d4d43bd0af72b"
+          },
+          {
+            "bytes": 3502438,
+            "path": "regeneration-queue.json",
+            "sha256": "6d02bb488111f4fc01a86401b1cdcf1699c10188fbb0ac5acf388ecd918b2aee"
+          },
+          {
+            "bytes": 674955,
+            "path": "quarantine.json",
+            "sha256": "ac0c2f8bd714c857cafeaac6ec9518171e05cb8eba18685c37039d239a33e14f"
+          },
+          {
+            "bytes": 939105,
+            "path": "composition-receipt.json",
+            "sha256": "de21447272b0a857fc5d9ff9340f0e2da3834417cf7e6c05665245ace91f49e7"
+          },
+          {
+            "bytes": 247331,
+            "path": "upstream-catalogue-enrichment-evidence.json",
+            "sha256": "0b854ae89f895ad85f85e41eac6502779d14a7f8d93bbed9516c26abec6655df"
+          },
+          {
+            "bytes": 719,
+            "path": "upstream-catalogue-processing-result.json",
+            "sha256": "70ae1c2a386481e38250c8955605f05b6aa0c25c7d6ceb4ad92eb7d2bd993f84"
+          }
+        ],
+        "request_reservation": {
+          "attempt_budget": 24,
+          "attempts_made": 24,
+          "expires_at": "2026-10-04T22:06:59Z",
+          "fencing_token": 1,
+          "generation_id": "9938e29ef963f799af3a15adf472e7a1fca119d5b075c578dfadbef2e11c7ead",
+          "owner_run_id": "37235734113-1",
+          "records": [
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057150",
+              "source_sha256": "94e5ef130e4afb6eafb90200ff3d31802ff860431fe5c73cc86f7628dd18b02c"
+            },
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057156",
+              "source_sha256": "ed257d089eb6766d512d146d024fbefb18646be031c57ec364763e39bf32a9fd"
+            },
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057160",
+              "source_sha256": "c2ac21abfaec41dcd837a0e03751f2e497b4c7c849a4d1de43a6298a9159a9c7"
+            },
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057172",
+              "source_sha256": "5f9065ac043ada38186f42568e326aedb3ead340b17e92560065a2c57beb8a5f"
+            },
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057226",
+              "source_sha256": "5ea26a3c3a62a432ba54d26243286363ca2548fe4cfb6ea2f232c11ec24e5374"
+            },
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057248",
+              "source_sha256": "6132a2e6525ce97a12a122067563d5540b748eef124e41f67e743c67872340e9"
+            },
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057261",
+              "source_sha256": "608c483ed7a559921666f289c39819b633257ce9d5de1725a856a5c0784e14b0"
+            },
+            {
+              "attempts_reserved": 3,
+              "guide_sha256": null,
+              "id": "15057358",
+              "source_sha256": "af7a45a51805ba5b766851b069e27c2ff6437220ea0a76fa1d6d56bcbe837baf"
+            }
+          ],
+          "reserved_at": "2026-10-04T21:22:02Z",
+          "reserved_attempts": 24
+        },
+        "state": "ready"
+      },
+      "recommended_recovery": [
+        "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+        "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+        "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available."
+      ],
+      "source_id": "data_go_kr"
+    }
+  ],
+  "summary": {
+    "blocked": 0,
+    "degraded": 1,
+    "fault_count": 3,
+    "fixture": 0,
+    "healthy": 0,
+    "last_good_count": 1,
+    "live_fresh_observation_count": 1,
+    "source_count": 1
+  }
+}
