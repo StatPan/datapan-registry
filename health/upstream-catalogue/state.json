@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "8750dbaacb9304ac1d452f81f859752df88fcb783857cd4e6886bc880e36b19e",
-      "last_seen_at": "2026-10-04T11:44:25Z",
-      "observation_count": 56,
+      "last_receipt_sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d",
+      "last_seen_at": "2026-10-04T12:35:33Z",
+      "observation_count": 57,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -60,15 +60,23 @@
       "reason": "promotion_pending_review",
       "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
       "recovery_evidence": {
-        "checked_at": "2026-10-03T14:53:21Z",
-        "health_receipt_sha256": "007335e2aa2da1ad3cf4820c6668300b851473c4141c451d0119f0abe65a108c",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
+        "execution_run_attempt": null,
+        "execution_run_id": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "health_receipt_sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "processor_status": "ready",
+        "producer_run_id": "36646768289",
+        "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "stage": "promotion",
+        "verified": true
       },
       "severity": "info",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "recovery_pending_verification"
+      "status": "recovered"
     },
     {
       "fault_key": "6b027caf0a4cf6d1be78f0e0db3af682b6f20c63c59fa24f9a44ef4e4bda0261",
@@ -82,15 +90,23 @@
       "reason": "promotion_ack_missing",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
       "recovery_evidence": {
-        "checked_at": "2026-10-03T14:19:54Z",
-        "health_receipt_sha256": "f37c62f66a1c2d4f2627e11632602d7f423c5c2938964995b5ea30a80b6839c5",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
+        "execution_run_attempt": null,
+        "execution_run_id": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "health_receipt_sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "processor_status": "ready",
+        "producer_run_id": "36646768289",
+        "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "stage": "promotion",
+        "verified": true
       },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "recovery_pending_verification"
+      "status": "recovered"
     },
     {
       "fault_key": "6bb5fd16f1bdc17048a3aca0398816e51e51e668e866ff716086b2a162cced91",
@@ -104,15 +120,23 @@
       "reason": "promotion_journal_unavailable",
       "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
       "recovery_evidence": {
-        "checked_at": "2026-10-03T14:19:54Z",
-        "health_receipt_sha256": "f37c62f66a1c2d4f2627e11632602d7f423c5c2938964995b5ea30a80b6839c5",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
+        "execution_run_attempt": null,
+        "execution_run_id": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "health_receipt_sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "processor_status": "ready",
+        "producer_run_id": "36646768289",
+        "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "stage": "promotion",
+        "verified": true
       },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "recovery_pending_verification"
+      "status": "recovered"
     },
     {
       "fault_key": "7678c24a0fcb40b7df3f32f828be41a70a046d2bad441e6cbeb50c1ec2b404b4",
@@ -159,15 +183,23 @@
       "reason": "promotion_ack_missing",
       "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
       "recovery_evidence": {
-        "checked_at": "2026-10-03T08:05:33Z",
-        "health_receipt_sha256": "b2bad0536a907807dc123236eaa0faadd71a10c6cc8a36ad46471c9703c629c9",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
+        "execution_run_attempt": null,
+        "execution_run_id": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "health_receipt_sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "processor_status": "ready",
+        "producer_run_id": "36646768289",
+        "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "stage": "promotion",
+        "verified": true
       },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "recovery_pending_verification"
+      "status": "recovered"
     },
     {
       "fault_key": "d36ca8b10f4fd57b22c47324edafd80fd8bc62bc39c9f6aae39d8ed0ff55d444",
@@ -533,15 +565,23 @@
       "reason": "publication_or_readback_pending",
       "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
       "recovery_evidence": {
-        "checked_at": "2026-10-03T16:18:48Z",
-        "health_receipt_sha256": "5db846bf1104344c7fb4fa62f477b959a9ebd2a6c9ec77e5a78e43602b670245",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
+        "execution_run_attempt": null,
+        "execution_run_id": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "health_receipt_sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "processor_status": "ready",
+        "producer_run_id": "36646768289",
+        "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "stage": "publication",
+        "verified": true
       },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "publication",
-      "status": "recovery_pending_verification"
+      "status": "recovered"
     },
     {
       "fault_key": "2256af2c30e594474c69c20e00ad47e50c26837926eeb2a762a1241e5a85a7a7",
@@ -554,17 +594,52 @@
       "producer_run_id": "36646768289",
       "reason": "publication_or_readback_pending",
       "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": null,
+        "execution_run_id": null,
+        "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+        "health_receipt_sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d",
+        "observed_at": "2026-09-29T23:44:39Z",
+        "processor_status": "ready",
+        "producer_run_id": "36646768289",
+        "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "stage": "publication",
+        "verified": true
+      },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "publication",
-      "status": "open"
+      "status": "recovered"
     }
   ],
-  "last_good_by_source": {},
+  "last_good_by_source": {
+    "data_go_kr": {
+      "artifact_identity": {
+        "bytes": 139155499,
+        "path": "data/data-go-kr.registry.json",
+        "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+      },
+      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+      "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+      "observed_at": "2026-10-04T12:35:04.198997+00:00",
+      "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+      "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+      "publication_run_attempt": 2,
+      "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+      "publication_run_id": 37199709258,
+      "publication_run_jobs_completed_at": "2026-10-04T12:35:16Z",
+      "publisher_run_verified": true,
+      "source_id": "data_go_kr",
+      "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+      "status": "read-back-confirmed",
+      "verified": true
+    }
+  },
   "latest_receipt": {
-    "path": "receipts/receipt-37199736784-1-8750dbaacb9304ac.json",
-    "sha256": "8750dbaacb9304ac1d452f81f859752df88fcb783857cd4e6886bc880e36b19e"
+    "path": "receipts/receipt-37202626318-1-b63f2bc915de2c1c.json",
+    "sha256": "b63f2bc915de2c1c4d2cede3f9336eac38e18fb4f5a7843ddf3ba7388cefe29d"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -584,7 +659,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "aa6d3c50f5eea20692f8bee0c954a5530abc97c096cb5ba341b369255f7c3b17",
+  "state_sha256": "437306e68d908a444c4045288eef6daa9ec8e446c803aee77ad3416a6a237b3d",
   "state_status": "degraded",
-  "updated_at": "2026-10-04T11:44:25Z"
+  "updated_at": "2026-10-04T12:35:33Z"
 }
