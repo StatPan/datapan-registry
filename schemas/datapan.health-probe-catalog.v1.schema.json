@@ -96,12 +96,16 @@
     "endpoint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["host", "path", "dependency_class"],
+      "required": ["scheme", "host", "path", "dependency_class"],
       "properties": {
+        "scheme": {"enum": ["http", "https"]},
         "host": {"type": "string", "minLength": 1},
         "path": {"type": "string", "pattern": "^/"},
+        "source_path": {"type": "string", "enum": ["/openapi/service/weatherMoniterSvc", "/openapi/service/weatherMoniterSvc/getWeatherMoniterDataList"]},
+        "correction_source": {"const": "https://www.data.go.kr/data/15004206/openapi.do"},
         "dependency_class": {"enum": ["data_go_kr_gateway", "external_endpoint"]}
-      }
+      },
+      "dependentRequired": {"source_path": ["correction_source"], "correction_source": ["source_path"]}
     },
     "eligibility": {
       "type": "object",

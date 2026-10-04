@@ -10,7 +10,8 @@ import pathlib
 import sys
 from datetime import datetime
 from typing import Any
-from urllib.parse import urlsplit
+
+from health_probe_endpoint import resolve_endpoint
 
 import jsonschema
 
@@ -20,6 +21,7 @@ SCHEMA = pathlib.Path("schemas/datapan.health-probe-catalog.v1.schema.json")
 REGISTRY = pathlib.Path("data/data-go-kr.registry.json")
 MANIFEST = pathlib.Path("manifest.json")
 FIXTURE = pathlib.Path("fixtures/health-probe-catalog/cli-health-probe-v1.json")
+POLICY = pathlib.Path("policy/health-probe-canaries.json")
 AUTH_NAMES = {"servicekey", "service_key", "apikey", "api_key", "authorization"}
 FORBIDDEN_KEYS = {
     "credential",
@@ -92,6 +94,7 @@ def validate_catalog(catalog: dict[str, Any], schema: dict[str, Any], registry: 
     gateway = 0
     external = 0
     by_id: dict[str, dict[str, Any]] = {}
+    policy_canaries = load(POLICY)["canaries"]
     for entry in entries:
         operation_id = entry["operation_id"]
         by_id[operation_id] = entry
@@ -102,12 +105,14 @@ def validate_catalog(catalog: dict[str, Any], schema: dict[str, Any], registry: 
         dataset, operation = matches[0]
         raw = operation["source"]["raw"]
         fail(str(raw["operation_seq"]) == aliases["upstream_operation_seq"], f"{operation_id}: upstream operation seq drift")
-        parsed = urlsplit(operation["endpoint"])
         endpoint = entry["endpoint"]
-        fail((parsed.hostname, parsed.path) == (endpoint["host"], endpoint["path"]), f"{operation_id}: endpoint drift")
-        dependency = "data_go_kr_gateway" if parsed.hostname == "apis.data.go.kr" else "external_endpoint"
+        selections = [item for item in policy_canaries if item["operation_id"] == operation_id]
+        fail(len(selections) == 1, f"{operation_id}: policy selector must resolve exactly once")
+        resolved = resolve_endpoint(selections[0], dataset, operation)
+        dependency = "data_go_kr_gateway" if resolved["host"] == "apis.data.go.kr" else "external_endpoint"
+        fail(endpoint == {**resolved, "dependency_class": dependency}, f"{operation_id}: endpoint transport or correction drift")
         fail(endpoint["dependency_class"] == dependency, f"{operation_id}: dependency class mismatch")
-        fields = [dataset["provider"], dataset["id"], operation["name"], dependency, parsed.hostname.lower(), parsed.path]
+        fields = [dataset["provider"], dataset["id"], operation["name"], dependency, resolved["host"], resolved["path"]]
         fail(operation_key(fields) == aliases["cli_operation_key"], f"{operation_id}: CLI operation key drift")
         fail(entry["provider"] == dataset["provider"], f"{operation_id}: provider drift")
 
