@@ -1133,8 +1133,11 @@ def select_first_eligible_processor_bundle(
     current_head_sha: str,
     composition_schema: Mapping[str, Any],
     composition_helper: Any,
+    already_canonical: list[dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any] | None, list[dict[str, str]]]:
     """Screen generations in observation order and stop at the first valid bundle."""
+    already_canonical_rows = already_canonical if already_canonical is not None else []
+    canonical_identity: dict[str, Any] | None = None
     for checkpoint in candidates:
         generation_id = str(checkpoint.get("generation_id", ""))
         screened, reason = screen_processor_recovery_candidate(
@@ -1148,6 +1151,29 @@ def select_first_eligible_processor_bundle(
             blocked.append({"generation_id": generation_id, "reason": str(reason)})
             continue
         bundle = screened.get("bundle", {})
+        if canonical_identity is None:
+            canonical_identity = authenticated_current_canonical_registry(root, current_head_sha)
+        if bundle_matches_current_canonical(bundle, canonical_identity):
+            outcome = checkpoint.get("outcome", {})
+            already_canonical_rows.append({
+                "generation_id": generation_id,
+                "reason": "already_canonical_payload",
+                "registry_sha256": str(bundle.get("registry_sha256", "")),
+                "pending_count": outcome.get("pending_count"),
+                "detail_retry_count": outcome.get("detail_retry_count"),
+                "detail_unattempted_count": outcome.get("detail_unattempted_count"),
+                "candidate_available": False,
+            })
+            continue
+        if bundle.get("baseline_sha256") != canonical_identity.get("registry_sha256"):
+            # A different payload composed from an older immutable baseline
+            # cannot be rebased safely. Keep it visible as blocked, then let a
+            # later fresh observation compete for selection.
+            blocked.append({
+                "generation_id": generation_id,
+                "reason": "processor_baseline_stale_for_current_canonical",
+            })
+            continue
         already_active_payload = any(
             isinstance(row, Mapping)
             and row.get("superseded_by") is None
@@ -1197,6 +1223,143 @@ def registry_sha_from_path(path: pathlib.Path) -> tuple[int, str]:
     if not isinstance(value, list) or not value:
         raise PromotionError("baseline registry is not a nonempty canonical array")
     return len(data), hashlib.sha256(data).hexdigest()
+
+
+def authenticated_current_canonical_registry(
+    root: pathlib.Path,
+    expected_main_sha: str,
+) -> dict[str, Any]:
+    """Authenticate the current canonical bytes against the pinned main manifest."""
+    if not re.fullmatch(r"[a-f0-9]{40}", expected_main_sha):
+        raise PromotionError("current canonical registry check requires a full pinned main SHA")
+    local_head = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    if local_head != expected_main_sha:
+        raise PromotionError("stale_base: candidate checkout is not pinned to the expected main commit")
+    def verify_remote_main() -> None:
+        remote_main = command(("git", "ls-remote", "--heads", "origin", "refs/heads/main"), root)
+        main_rows = [
+            line.split("\t", 1)[0]
+            for line in remote_main.stdout.splitlines()
+            if line.endswith("\trefs/heads/main")
+        ]
+        if main_rows != [expected_main_sha]:
+            raise PromotionError("stale_base: main changed after the upstream observation; request a fresh catalogue observation")
+
+    verify_remote_main()
+
+    manifest_path = root / "manifest.json"
+    if manifest_path.is_symlink() or not manifest_path.is_file():
+        raise PromotionError("pinned release manifest is not a regular working-tree file")
+    working_manifest_bytes = manifest_path.read_bytes()
+    committed_manifest_bytes = command(
+        ("git", "show", f"{expected_main_sha}:manifest.json"), root,
+    ).stdout.encode("utf-8")
+    if working_manifest_bytes != committed_manifest_bytes:
+        raise PromotionError("release manifest working bytes do not match the pinned main commit")
+    try:
+        manifest = json.loads(committed_manifest_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PromotionError("pinned release manifest is not valid JSON") from exc
+    if not isinstance(manifest, Mapping):
+        raise PromotionError("pinned release manifest must be a JSON object")
+    registry_path = manifest.get("source_registry")
+    if not isinstance(registry_path, str) or not registry_path:
+        raise PromotionError("release manifest does not identify its canonical registry")
+    relative = pathlib.PurePosixPath(registry_path)
+    if relative.is_absolute() or ".." in relative.parts or "\\" in registry_path:
+        raise PromotionError("release manifest canonical registry path is unsafe")
+    registry_entries = [
+        row for row in manifest.get("artifacts", [])
+        if isinstance(row, Mapping)
+        and row.get("path") == registry_path
+        and row.get("kind") == "registry"
+    ]
+    if len(registry_entries) != 1:
+        raise PromotionError("release manifest does not have one canonical registry artifact")
+    entry = registry_entries[0]
+    expected_bytes = entry.get("bytes")
+    expected_sha = entry.get("sha256")
+    if (
+        type(expected_bytes) is not int
+        or expected_bytes < 1
+        or not isinstance(expected_sha, str)
+        or not re.fullmatch(r"[a-f0-9]{64}", expected_sha)
+    ):
+        raise PromotionError("release manifest canonical registry size or digest is invalid")
+    committed_pointer = command(
+        ("git", "show", f"{expected_main_sha}:{registry_path}"), root,
+    ).stdout.encode("utf-8")
+    if parse_git_lfs_pointer_identity(committed_pointer) != (expected_sha, expected_bytes):
+        raise PromotionError("pinned Git LFS registry pointer does not match the main manifest")
+    canonical_path = root / ".datapan/current-canonical" / pathlib.Path(*relative.parts)
+    try:
+        canonical_path.resolve(strict=False).relative_to(root.resolve(strict=True))
+    except (OSError, ValueError) as exc:
+        raise PromotionError("current canonical registry materialization path is outside the pinned checkout") from exc
+    if canonical_path.is_symlink():
+        raise PromotionError("current canonical registry materialization path is a symlink")
+    if not canonical_path.exists():
+        manifest_sha = hashlib.sha256(committed_manifest_bytes).hexdigest()
+        command((
+            sys.executable,
+            str(root / "scripts/materialize-canonical-registry.py"),
+            "--output", str(canonical_path),
+            "--backend", "github-git-lfs",
+            "--candidate-commit", expected_main_sha,
+            "--expected-manifest-sha256", manifest_sha,
+        ), root)
+    if not canonical_path.is_file() or canonical_path.is_symlink():
+        raise PromotionError("current canonical registry materialization is not a regular file")
+    actual_bytes, actual_sha = registry_sha_from_path(canonical_path)
+    if (actual_bytes, actual_sha) != (expected_bytes, expected_sha):
+        raise PromotionError("current canonical registry bytes do not match the pinned release manifest")
+    verify_remote_main()
+    return {
+        "main_sha": expected_main_sha,
+        "registry_path": registry_path,
+        "registry_bytes": actual_bytes,
+        "registry_sha256": actual_sha,
+    }
+
+
+def bundle_matches_current_canonical(
+    bundle: Mapping[str, Any],
+    canonical_identity: Mapping[str, Any],
+) -> bool:
+    return (
+        bundle.get("registry_path") == canonical_identity.get("registry_path")
+        and type(bundle.get("registry_bytes")) is int
+        and bundle.get("registry_bytes") == canonical_identity.get("registry_bytes")
+        and bundle.get("registry_sha256") == canonical_identity.get("registry_sha256")
+    )
+
+
+def parse_git_lfs_pointer_identity(pointer: bytes) -> tuple[str, int]:
+    try:
+        lines = pointer.decode("ascii").splitlines()
+    except UnicodeDecodeError as exc:
+        raise PromotionError("pinned Git LFS registry pointer is not ASCII") from exc
+    values: dict[str, str] = {}
+    for line in lines:
+        if " " not in line:
+            continue
+        key, value = line.split(" ", 1)
+        if key in values:
+            raise PromotionError("pinned Git LFS registry pointer contains duplicate fields")
+        values[key] = value
+    oid = values.get("oid", "")
+    if values.get("version") != "https://git-lfs.github.com/spec/v1" or not oid.startswith("sha256:"):
+        raise PromotionError("pinned main registry blob is not a supported Git LFS pointer")
+    digest = oid.removeprefix("sha256:")
+    if not re.fullmatch(r"[a-f0-9]{64}", digest):
+        raise PromotionError("pinned Git LFS registry pointer digest is invalid")
+    try:
+        size = int(values.get("size", ""))
+    except ValueError as exc:
+        raise PromotionError("pinned Git LFS registry pointer size is invalid") from exc
+    if size < 1:
+        raise PromotionError("pinned Git LFS registry pointer size is invalid")
+    return digest, size
 
 
 def candidate_generated_file_allowlist(root: pathlib.Path, generation_id: str) -> set[str]:
@@ -2847,6 +3010,9 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         root, checkpoint, args.workflow_run_head_sha, head_sha,
         composition_receipt=bundle.get("composition_receipt"),
     )
+    explicit_predecessor = getattr(args, "source_refresh_predecessor", None)
+    explicit_target_main = getattr(args, "source_refresh_target_main_sha", None)
+    explicit_source_refresh = isinstance(explicit_predecessor, Mapping)
     if bundle.get("status") in {"retry", "quarantined"}:
         print(json.dumps({
             "status": "no-candidate", "reason": bundle["reason"],
@@ -2855,10 +3021,27 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
             "candidate_available": False,
         }, sort_keys=True))
         return
-    remote_main = command(("git", "ls-remote", "--heads", "origin", "refs/heads/main"), root)
-    main_rows = [line.split("\t", 1)[0] for line in remote_main.stdout.splitlines() if line.endswith("\trefs/heads/main")]
-    if main_rows != [head_sha]:
-        raise PromotionError("stale_base: main changed after the upstream observation; request a fresh catalogue observation")
+    if explicit_source_refresh:
+        remote_main = command(("git", "ls-remote", "--heads", "origin", "refs/heads/main"), root)
+        main_rows = [line.split("\t", 1)[0] for line in remote_main.stdout.splitlines() if line.endswith("\trefs/heads/main")]
+        if main_rows != [head_sha]:
+            raise PromotionError("stale_base: main changed after the upstream observation; request a fresh catalogue observation")
+    else:
+        canonical_identity = authenticated_current_canonical_registry(root, head_sha)
+        if bundle_matches_current_canonical(bundle, canonical_identity):
+            outcome = checkpoint.get("outcome", {})
+            print(json.dumps({
+                "status": "already-canonical-payload",
+                "reason": "candidate_matches_current_manifest_bound_registry",
+                "candidate_available": False,
+                "source_id": checkpoint["source_id"],
+                "generation_id": checkpoint["generation_id"],
+                "registry_sha256": bundle["registry_sha256"],
+                "pending_count": outcome.get("pending_count"),
+                "detail_retry_count": outcome.get("detail_retry_count"),
+                "detail_unattempted_count": outcome.get("detail_unattempted_count"),
+            }, sort_keys=True))
+            return
 
     # The old immutable Hugging Face revision is materialized only to verify
     # the processor's precise observation baseline. Candidate preparation
@@ -2881,9 +3064,6 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         raise PromotionError("candidate checkout was not clean before staging; refusing to mix unrelated changes")
 
     prior_journal, journal_state_sha = load_promotion_journal_snapshot(root)
-    explicit_predecessor = getattr(args, "source_refresh_predecessor", None)
-    explicit_target_main = getattr(args, "source_refresh_target_main_sha", None)
-    explicit_source_refresh = isinstance(explicit_predecessor, Mapping)
     if explicit_source_refresh and journal_state_sha != getattr(args, "source_refresh_expected_state_sha", None):
         raise PromotionError("promotion state changed while the trusted source refresh was preparing its exact B input")
     prior = None
@@ -3345,6 +3525,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
     composition_helper = load_canonical_update_pr(root)
     current_head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    already_canonical: list[dict[str, Any]] = []
     screened, blocked = select_first_eligible_processor_bundle(
         root, repository, candidates, blocked,
         journal=journal,
@@ -3352,14 +3533,26 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
         current_head_sha=current_head_sha,
         composition_schema=composition_schema,
         composition_helper=composition_helper,
+        already_canonical=already_canonical,
     )
     if screened is None:
         print(json.dumps({
-            "status": "no-eligible-ready-processor-bundle",
+            "status": (
+                "already-canonical-payload"
+                if already_canonical and not blocked
+                else "no-eligible-ready-processor-bundle"
+            ),
             "candidate_available": False,
             "blocked_generations": blocked,
+            "already_canonical_generations": already_canonical,
         }, sort_keys=True))
         return
+    if already_canonical:
+        print(json.dumps({
+            "status": "skipped-already-canonical-processor-bundles",
+            "candidate_available": False,
+            "already_canonical_generations": already_canonical,
+        }, sort_keys=True))
     if blocked:
         print(json.dumps({"status": "skipped-unusable-older-generations", "blocked_generations": blocked}, sort_keys=True))
     args.bundle_dir = screened["bundle_dir"]
