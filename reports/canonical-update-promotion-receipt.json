@@ -1478,7 +1478,7 @@
     },
     {
       "schema_version": "datapan.canonical-update-promotion-receipt.v1",
-      "status": "merged",
+      "status": "read-back-confirmed",
       "action": "refresh_owned",
       "source_refresh_evidence": {
         "schema_version": "datapan.canonical-source-refresh-evidence.v1",
@@ -1938,6 +1938,66 @@
           "read_back_bytes": null,
           "publication_revision": null,
           "publication_pointer_revision": null
+        },
+        {
+          "status": "publication-pending",
+          "observed_at": "2026-10-04T12:35:04.198997+00:00",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "artifact_identity": {
+            "path": "data/data-go-kr.registry.json",
+            "bytes": 139155499,
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "evidence_reference": "existing_manual_publication_workflow_completed",
+          "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37199709258/attempts/2",
+          "run_id": 37199709258,
+          "run_attempt": 2,
+          "read_back_verified": false,
+          "read_back_sha256": null,
+          "read_back_bytes": null,
+          "publication_revision": null,
+          "publication_pointer_revision": null
+        },
+        {
+          "status": "published",
+          "observed_at": "2026-10-04T12:35:04.198997+00:00",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "artifact_identity": {
+            "path": "data/data-go-kr.registry.json",
+            "bytes": 139155499,
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "evidence_reference": "/home/runner/work/datapan-registry/datapan-registry/.datapan/publication-input/hf-publication-receipt.json sha256=6c14adf8f8717f939f6e901f2f4d135055f558a22c1edda0f90e95942280b88d",
+          "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37199709258/attempts/2",
+          "run_id": 37199709258,
+          "run_attempt": 2,
+          "read_back_verified": false,
+          "read_back_sha256": null,
+          "read_back_bytes": null,
+          "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+          "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9"
+        },
+        {
+          "status": "read-back-confirmed",
+          "observed_at": "2026-10-04T12:35:04.198997+00:00",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "artifact_identity": {
+            "path": "data/data-go-kr.registry.json",
+            "bytes": 139155499,
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "evidence_reference": "/home/runner/work/datapan-registry/datapan-registry/.datapan/publication-input/hf-publication-receipt.json sha256=6c14adf8f8717f939f6e901f2f4d135055f558a22c1edda0f90e95942280b88d",
+          "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37199709258/attempts/2",
+          "run_id": 37199709258,
+          "run_attempt": 2,
+          "read_back_verified": true,
+          "read_back_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+          "read_back_bytes": 139155499,
+          "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+          "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9"
         }
       ],
       "blockers": [
