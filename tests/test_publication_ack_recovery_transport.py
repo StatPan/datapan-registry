@@ -23,7 +23,27 @@ sys.modules[SPEC.name] = RECOVERY
 SPEC.loader.exec_module(RECOVERY)
 
 FIXTURE_DIR = ROOT / "tests" / "fixtures" / "canonical-publication-ack" / "incident-37199628001-1"
+REST_CONTRACT_2026_DIR = ROOT / "tests" / "fixtures" / "canonical-publication-ack" / "rest-version-contract-2026-03-10"
+REST_CONTRACT_2022_DIR = ROOT / "tests" / "fixtures" / "canonical-publication-ack" / "rest-version-contract-2022-11-28"
 REPOSITORY = "StatPan/datapan-registry"
+PEER_SOURCE_SHA = "849af2936a743573358820275df985b5809d0f7b"
+
+
+def load_contract_fixture(path: pathlib.Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+class FixtureRunner:
+    """Load the real journal identity helper used by publication classification."""
+
+    @staticmethod
+    def load_module(path: pathlib.Path, name: str):
+        spec = importlib.util.spec_from_file_location(name, path)
+        assert spec and spec.loader
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        spec.loader.exec_module(module)
+        return module
 
 
 class MemoryResponse:
@@ -276,6 +296,114 @@ class PublicationAckRecoveryTransportTests(unittest.TestCase):
 
         self.assertTrue(any(path.endswith("/zip") for path in requested))
         self.assertEqual(api.request_count, len(requested))
+
+    def test_all_recovery_rest_requests_pin_supported_api_version(self) -> None:
+        seen: list[tuple[str, str | None]] = []
+
+        def transport(request, _timeout, _maximum):
+            parsed = urllib.parse.urlsplit(request.full_url)
+            seen.append((parsed.path + ("?" + parsed.query if parsed.query else ""), request.get_header("X-github-api-version")))
+            return RECOVERY.HttpResponse(200, {}, b"{}")
+
+        api = self.api(transport)
+        api.request(f"repos/{REPOSITORY}/commits/{PEER_SOURCE_SHA}/pulls?per_page=100")
+        api.request(f"repos/{REPOSITORY}/pulls/720")
+
+        self.assertEqual(RECOVERY.GITHUB_REST_API_VERSION, "2022-11-28")
+        self.assertEqual([path.rsplit("/", 1)[-1] for path, _ in seen], ["pulls?per_page=100", "720"])
+        self.assertTrue(all(version == "2022-11-28" for _, version in seen))
+        self.assertEqual(api.request_count, 2)
+
+    def test_versioned_native_association_without_merge_sha_fails_closed_without_fallback(self) -> None:
+        fixture = load_contract_fixture(REST_CONTRACT_2026_DIR / "association-2026-03-10.json")
+        self.assertEqual(fixture["response_api_version_selected"], "2026-03-10")
+        self.assertEqual(fixture["response"][0]["number"], 720)
+        self.assertNotIn("merge_commit_sha", fixture["response"][0])
+        requests: list[str] = []
+
+        def transport(request, _timeout, _maximum):
+            requests.append(urllib.parse.urlsplit(request.full_url).path + "?" + urllib.parse.urlsplit(request.full_url).query)
+            return RECOVERY.HttpResponse(200, {}, json.dumps(fixture["response"]).encode("utf-8"))
+
+        recovery = RECOVERY.PublicationAckRecovery(ROOT, REPOSITORY, self.api(transport), FixtureRunner())
+        recovery.repository_id = 1278568329
+        recovery.default_branch = "main"
+        verified = {
+            "publisher_job_started_at": "2026-10-04T15:31:14Z",
+            "publication": {"source_sha": PEER_SOURCE_SHA, "manifest_sha256": "a" * 64},
+        }
+        with self.assertRaisesRegex(RECOVERY.RecoveryError, "commit_pull_request_association_ambiguous_or_missing"):
+            recovery._commit_pull_request(verified)
+
+        self.assertEqual(requests, [f"/repos/{REPOSITORY}/commits/{PEER_SOURCE_SHA}/pulls?per_page=100"])
+        self.assertEqual(recovery.summary["commit_association_reads"], 1)
+        self.assertEqual(recovery.summary["pull_request_readbacks"], 0)
+        self.assertEqual(recovery.summary["git_cas_transactions"], 0)
+
+    def test_supported_native_association_classifies_exact_peer_outside_c_without_journal_write(self) -> None:
+        fixture = load_contract_fixture(REST_CONTRACT_2022_DIR / "association-2022-11-28.json")
+        self.assertEqual(fixture["response_api_version_selected"], "2022-11-28")
+        association_row = fixture["response"][0]
+        self.assertEqual(association_row["merge_commit_sha"], PEER_SOURCE_SHA)
+        requests: list[urllib.request.Request] = []
+
+        def transport(request, _timeout, _maximum):
+            requests.append(request)
+            return RECOVERY.HttpResponse(200, {}, json.dumps(fixture["response"]).encode("utf-8"))
+
+        api = self.api(transport)
+        recovery = RECOVERY.PublicationAckRecovery(ROOT, REPOSITORY, api, FixtureRunner())
+        recovery.repository_id = 1278568329
+        recovery.default_branch = "main"
+        verified = {
+            "publisher_job_started_at": "2026-10-04T15:31:14Z",
+            "publication": {"source_sha": PEER_SOURCE_SHA, "manifest_sha256": "a" * 64},
+        }
+        disposition, association = recovery.classify_publication(verified, {"records": []})
+
+        self.assertEqual(disposition, "outside_c")
+        self.assertIsNotNone(association)
+        self.assertEqual(association["number"], 720)
+        self.assertEqual(association["merge_sha"], PEER_SOURCE_SHA)
+        self.assertEqual(association["head_ref"], "issue-719-preserve-health-endpoint-transport-and-correct-korad-operation-identity")
+        self.assertEqual(len(requests), 1)
+        self.assertEqual(requests[0].get_header("X-github-api-version"), "2022-11-28")
+        self.assertEqual(api.request_count, 1)
+        self.assertEqual(recovery.summary["git_cas_transactions"], 0)
+        self.assertEqual(recovery.summary["pull_request_readbacks"], 0)
+
+    def test_supported_native_single_pr_readback_retains_exact_merge_sha(self) -> None:
+        fixture = load_contract_fixture(REST_CONTRACT_2022_DIR / "pull-2022-11-28.json")
+        self.assertEqual(fixture["response_api_version_selected"], "2022-11-28")
+        self.assertEqual(fixture["response"]["merge_commit_sha"], PEER_SOURCE_SHA)
+        requests: list[urllib.request.Request] = []
+
+        def transport(request, _timeout, _maximum):
+            requests.append(request)
+            return RECOVERY.HttpResponse(200, {}, json.dumps(fixture["response"]).encode("utf-8"))
+
+        api = self.api(transport)
+        recovery = RECOVERY.PublicationAckRecovery(ROOT, REPOSITORY, api, FixtureRunner())
+        result = recovery.readback_pr(720)
+
+        self.assertEqual(result["state"], "MERGED")
+        self.assertEqual(result["mergeCommit"], {"oid": PEER_SOURCE_SHA})
+        self.assertEqual(result["baseRefName"], "main")
+        self.assertEqual(result["headRefName"], "issue-719-preserve-health-endpoint-transport-and-correct-korad-operation-identity")
+        self.assertEqual(len(requests), 1)
+        self.assertEqual(requests[0].get_header("X-github-api-version"), "2022-11-28")
+
+    def test_versioned_native_single_pr_readback_exposes_missing_merge_identity(self) -> None:
+        fixture = load_contract_fixture(REST_CONTRACT_2026_DIR / "pull-2026-03-10.json")
+        self.assertEqual(fixture["response_api_version_selected"], "2026-03-10")
+        self.assertNotIn("merge_commit_sha", fixture["response"])
+
+        api = self.api(lambda *_args: RECOVERY.HttpResponse(200, {}, json.dumps(fixture["response"]).encode("utf-8")))
+        recovery = RECOVERY.PublicationAckRecovery(ROOT, REPOSITORY, api, FixtureRunner())
+        result = recovery.readback_pr(720)
+
+        self.assertIsNone(result["mergeCommit"])
+        self.assertEqual(api.request_count, 1)
 
 
 if __name__ == "__main__":
