@@ -38,6 +38,8 @@ REVISION = re.compile(r"^[a-f0-9]{40,64}$")
 MAX_PROMOTION_JOB_PAGES = 5
 MAX_PROMOTION_JOBS = 500
 MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS = 5
+MAX_COLLECTOR_EXECUTION_RUNS = 20
+MAX_COLLECTOR_EXECUTION_LOOKUPS = 25
 MAX_PROMOTION_EXECUTION_ATTEMPTS = 2
 PROMOTION_WORKFLOW_EVENTS = {"workflow_run", "schedule", "workflow_dispatch"}
 PROCESSOR_OUTPUT_PATHS = (
@@ -730,6 +732,20 @@ def processor_run_disposition(run: dict[str, Any]) -> str:
     return "failure"
 
 
+def collector_execution_disposition(run: dict[str, Any]) -> str:
+    """Classify known Actions conclusions without treating unknown values as failures."""
+    if run.get("status") != "completed":
+        return "pending"
+    conclusion = run.get("conclusion")
+    if conclusion == "success":
+        return "success"
+    if conclusion in {"skipped", "neutral"}:
+        return "pending"
+    if conclusion in {"failure", "cancelled", "timed_out", "action_required", "startup_failure", "stale"}:
+        return "failure"
+    return "unavailable"
+
+
 def processor_run_hides_prior_attempt(run: dict[str, Any]) -> bool:
     return run.get("status") != "completed" or run.get("conclusion") in {None, "skipped", "neutral"}
 
@@ -823,6 +839,361 @@ def processor_attempt_evidence_run(
             return None
         seen_job_ids.add(job["id"])
     return run if run.get("status") == "completed" else None
+
+
+def trusted_collector_execution_run(
+    run: Any, repository: str, workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str],
+) -> bool:
+    if not isinstance(run, dict):
+        return False
+    attempt = run.get("run_attempt")
+    return bool(
+        trusted_main_workflow_run(run, repository, workflow_path, workflow_id, allowed_events)
+        and isinstance(attempt, int)
+        and not isinstance(attempt, bool)
+        and attempt > 0
+    )
+
+
+def collector_execution_order(run: Any) -> tuple[dt.datetime, int, int] | None:
+    """Use the exact run-attempt start; collector execution never falls back to created_at."""
+    if not isinstance(run, dict):
+        return None
+    try:
+        started = parse_time(run.get("run_started_at"), "collector_run.run_started_at")
+        run_id = int(run.get("id", run.get("run_id")))
+        attempt = run.get("run_attempt")
+    except (TypeError, ValueError):
+        return None
+    if run_id < 1 or isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+        return None
+    return started, run_id, attempt
+
+
+def collector_execution_identity_matches(
+    candidate: dict[str, Any], expected: dict[str, Any], repository: str, workflow_path: str,
+    workflow_id: int | None, allowed_events: set[str],
+) -> bool:
+    candidate_repository = candidate.get("repository")
+    candidate_head_repository = candidate.get("head_repository")
+    expected_repository = expected.get("repository")
+    expected_head_repository = expected.get("head_repository")
+    return bool(
+        trusted_collector_execution_run(candidate, repository, workflow_path, workflow_id, allowed_events)
+        and str(candidate.get("id")) == str(expected.get("id"))
+        and candidate.get("workflow_id") == expected.get("workflow_id")
+        and workflow_path_matches(candidate.get("path"), workflow_path)
+        and candidate.get("event") == expected.get("event")
+        and candidate.get("head_branch") == expected.get("head_branch")
+        and candidate.get("head_sha") == expected.get("head_sha")
+        and isinstance(candidate_repository, dict)
+        and isinstance(expected_repository, dict)
+        and str(candidate_repository.get("full_name", "")).casefold() == str(expected_repository.get("full_name", "")).casefold()
+        and isinstance(candidate_head_repository, dict)
+        and isinstance(expected_head_repository, dict)
+        and str(candidate_head_repository.get("full_name", "")).casefold() == str(expected_head_repository.get("full_name", "")).casefold()
+    )
+
+
+def collector_attempt_evidence_run(
+    evidence: Any, repository: str, workflow_path: str, workflow_id: int | None,
+    run_id: str, attempt: int, allowed_events: set[str], expected: dict[str, Any],
+    *, current_summary: bool, as_of: dt.datetime, maximum_future_skew: int,
+) -> dict[str, Any] | None:
+    """Validate one exact collector attempt and its complete, run-bound jobs response."""
+    if not isinstance(evidence, dict) or evidence.get("availability_error") is True:
+        return None
+    run = evidence.get("run")
+    jobs = evidence.get("jobs")
+    job_count = evidence.get("job_count")
+    if (
+        not isinstance(run, dict)
+        or str(run.get("id", "")) != run_id
+        or run.get("run_attempt") != attempt
+        or evidence.get("attempt_number") != attempt
+        or evidence.get("jobs_api_endpoint") != f"repos/{repository}/actions/runs/{run_id}/attempts/{attempt}/jobs"
+        or isinstance(job_count, bool)
+        or not isinstance(job_count, int)
+        or job_count < 1
+        or job_count > MAX_PROMOTION_JOBS
+        or not isinstance(jobs, list)
+        or len(jobs) != job_count
+        or run.get("status") != "completed"
+        or not collector_execution_identity_matches(run, expected, repository, workflow_path, workflow_id, allowed_events)
+    ):
+        return None
+    try:
+        started = parse_time(run.get("run_started_at"), "collector_attempt.run_started_at")
+        seconds_since(as_of, run.get("run_started_at"), "collector_attempt.run_started_at", maximum_future_skew)
+    except ValueError:
+        return None
+    if current_summary:
+        if (
+            run.get("status") != expected.get("status")
+            or run.get("conclusion") != expected.get("conclusion")
+            or run.get("run_attempt") != expected.get("run_attempt")
+        ):
+            return None
+        try:
+            if parse_time(expected.get("run_started_at"), "collector_summary.run_started_at") != started:
+                return None
+            seconds_since(as_of, expected.get("run_started_at"), "collector_summary.run_started_at", maximum_future_skew)
+        except ValueError:
+            return None
+    seen_job_ids: set[int] = set()
+    for job in jobs:
+        if (
+            not isinstance(job, dict)
+            or isinstance(job.get("id"), bool)
+            or not isinstance(job.get("id"), int)
+            or job["id"] < 1
+            or job["id"] in seen_job_ids
+            or str(job.get("run_id", "")) != run_id
+            or job.get("head_sha") != run.get("head_sha")
+            or job.get("status") != "completed"
+        ):
+            return None
+        seen_job_ids.add(job["id"])
+    return run
+
+
+def collector_summary_groups(
+    runs: list[dict[str, Any]], repository: str, workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str], as_of: dt.datetime, maximum_future_skew: int,
+) -> tuple[list[dict[str, Any]], set[str]]:
+    groups: dict[str, dict[int, dict[str, Any]]] = {}
+    errors: set[str] = set()
+    conflicting_run_ids: set[str] = set()
+    for row in runs:
+        if not isinstance(row, dict) or not trusted_main_workflow_run(row, repository, workflow_path, workflow_id, allowed_events):
+            continue
+        run_id = str(row.get("id", ""))
+        attempt = row.get("run_attempt")
+        if isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+            errors.add(f"{run_id}/invalid-attempt")
+            continue
+        try:
+            seconds_since(as_of, row.get("run_started_at"), "collector_summary.run_started_at", maximum_future_skew)
+        except ValueError:
+            errors.add(f"{run_id}/{attempt}")
+            continue
+        attempts = groups.setdefault(run_id, {})
+        previous = attempts.get(attempt)
+        if previous is not None:
+            comparable_fields = (
+                "id", "run_attempt", "workflow_id", "path", "event", "status", "conclusion",
+                "run_started_at", "head_branch", "head_sha", "repository", "head_repository",
+            )
+            if any(previous.get(field) != row.get(field) for field in comparable_fields):
+                errors.add(f"{run_id}/{attempt}")
+                conflicting_run_ids.add(run_id)
+                continue
+            continue
+        attempts[attempt] = row
+    latest: list[dict[str, Any]] = []
+    for run_id, attempts in groups.items():
+        rows = list(attempts.values())
+        immutable = {
+            (
+                row.get("workflow_id"), row.get("path"), row.get("event"), row.get("head_branch"), row.get("head_sha"),
+                str((row.get("repository") or {}).get("full_name", "")).casefold() if isinstance(row.get("repository"), dict) else "",
+                str((row.get("head_repository") or {}).get("full_name", "")).casefold() if isinstance(row.get("head_repository"), dict) else "",
+            )
+            for row in rows
+        }
+        if len(immutable) != 1:
+            errors.add(f"{run_id}/identity-conflict")
+            continue
+        latest.append(max(rows, key=lambda row: int(row["run_attempt"])))
+    latest = [row for row in latest if str(row.get("id", "")) not in conflicting_run_ids]
+    latest.sort(key=lambda row: collector_execution_order(row) or (dt.datetime.min.replace(tzinfo=dt.timezone.utc), 0, 0), reverse=True)
+    return latest, errors
+
+
+def collector_error_execution_identity(
+    errors: set[str], runs: list[dict[str, Any]], repository: str, workflow_path: str,
+    workflow_id: int | None, allowed_events: set[str], as_of: dt.datetime, maximum_future_skew: int,
+) -> dict[str, Any] | None:
+    """Bind an unavailable-attempt fault to one unambiguous trusted run identity when possible."""
+    for error in sorted(errors):
+        parts = error.split("/", 1)
+        if len(parts) != 2 or not parts[0].isdigit() or not parts[1].isdigit():
+            continue
+        run_id, attempt_text = parts
+        attempt = int(attempt_text)
+        candidates = [
+            row for row in runs
+            if isinstance(row, dict)
+            and str(row.get("id", "")) == run_id
+            and row.get("run_attempt") == attempt
+            and trusted_main_workflow_run(row, repository, workflow_path, workflow_id, allowed_events)
+        ]
+        identities: set[tuple[str, int, str, str]] = set()
+        for row in candidates:
+            started_at = row.get("run_started_at")
+            head_sha = row.get("head_sha")
+            try:
+                seconds_since(as_of, started_at, "collector_error.run_started_at", maximum_future_skew)
+            except ValueError:
+                continue
+            if not isinstance(started_at, str) or not isinstance(head_sha, str) or not re.fullmatch(r"[a-f0-9]{40,64}", head_sha):
+                continue
+            identities.add((run_id, attempt, started_at, head_sha))
+        if len(identities) == 1:
+            identity = next(iter(identities))
+            return {
+                "run_id": identity[0],
+                "run_attempt": identity[1],
+                "run_started_at": identity[2],
+                "head_sha": identity[3],
+            }
+    return None
+
+
+def collect_collector_execution_attempts(
+    repository: str, runs: list[dict[str, Any]], workflow_path: str, workflow_id: int | None,
+    allowed_events: set[str], as_of: dt.datetime, maximum_future_skew: int,
+) -> tuple[dict[str, Any], set[str]]:
+    """Collect bounded exact attempts for the recent trusted A-run summaries."""
+    groups, errors = collector_summary_groups(runs, repository, workflow_path, workflow_id, allowed_events, as_of, maximum_future_skew)
+    attempts: dict[str, Any] = {}
+    selected = groups[:MAX_COLLECTOR_EXECUTION_RUNS]
+    lookup_count = 0
+    for summary in selected:
+        run_id = str(summary["id"])
+        current_attempt = int(summary["run_attempt"])
+        disposition = collector_execution_disposition(summary)
+        attempt_numbers = [current_attempt] if disposition in {"success", "failure", "unavailable"} else list(
+            range(current_attempt - 1, max(0, current_attempt - MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS - 1), -1)
+        )
+        for attempt in attempt_numbers:
+            if attempt < 1:
+                break
+            identity = f"{run_id}/{attempt}"
+            if lookup_count >= MAX_COLLECTOR_EXECUTION_LOOKUPS:
+                errors.add(identity)
+                break
+            lookup_count += 1
+            try:
+                attempts[identity] = collect_run_attempt_evidence(repository, run_id, attempt)
+            except RuntimeError:
+                attempts[identity] = {"availability_error": True}
+                errors.add(identity)
+            evidence = attempts[identity]
+            exact = collector_attempt_evidence_run(
+                evidence, repository, workflow_path, workflow_id, run_id, attempt, allowed_events, summary,
+                current_summary=attempt == current_attempt, as_of=as_of, maximum_future_skew=maximum_future_skew,
+            )
+            if exact is None:
+                errors.add(identity)
+                if attempt == current_attempt or identity in errors:
+                    break
+            else:
+                exact_disposition = collector_execution_disposition(exact)
+                if exact_disposition == "unavailable":
+                    errors.add(identity)
+                    break
+                if exact_disposition in {"success", "failure"}:
+                    break
+        if lookup_count >= MAX_COLLECTOR_EXECUTION_LOOKUPS:
+            for remaining in selected[selected.index(summary) + 1:]:
+                errors.add(f"{remaining.get('id')}/{remaining.get('run_attempt')}")
+            break
+    return attempts, errors
+
+
+def collector_execution_state(
+    runs: list[dict[str, Any]], attempts: dict[str, Any], attempt_errors: set[str],
+    repository: str, workflow_path: str, workflow_id: int | None, allowed_events: set[str],
+    as_of: dt.datetime, maximum_future_skew: int,
+) -> dict[str, Any]:
+    groups, summary_errors = collector_summary_groups(runs, repository, workflow_path, workflow_id, allowed_events, as_of, maximum_future_skew)
+    selected = groups[:MAX_COLLECTOR_EXECUTION_RUNS]
+    truncated = len(groups) > len(selected)
+    boundary = collector_execution_order(groups[len(selected)]) if truncated else None
+    errors = set(summary_errors) | set(attempt_errors)
+    events: dict[str, dict[str, Any]] = {}
+    for summary in selected:
+        run_id = str(summary["id"])
+        current_attempt = int(summary["run_attempt"])
+        disposition = collector_execution_disposition(summary)
+        candidate_attempts = [current_attempt] if disposition in {"success", "failure", "unavailable"} else list(
+            range(current_attempt - 1, max(0, current_attempt - MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS - 1), -1)
+        )
+        for attempt in candidate_attempts:
+            if attempt < 1:
+                break
+            identity = f"{run_id}/{attempt}"
+            evidence = attempts.get(identity)
+            exact = collector_attempt_evidence_run(
+                evidence, repository, workflow_path, workflow_id, run_id, attempt, allowed_events, summary,
+                current_summary=attempt == current_attempt, as_of=as_of, maximum_future_skew=maximum_future_skew,
+            )
+            if exact is None:
+                if identity not in attempt_errors:
+                    errors.add(identity)
+                break
+            disposition = collector_execution_disposition(exact)
+            if disposition in {"success", "failure"}:
+                order = collector_execution_order(exact)
+                if order is None:
+                    errors.add(identity)
+                else:
+                    evidence_row = attempts.get(identity) if isinstance(attempts.get(identity), dict) else {}
+                    jobs = evidence_row.get("jobs") if isinstance(evidence_row.get("jobs"), list) else []
+                    repository_row = exact.get("repository") if isinstance(exact.get("repository"), dict) else {}
+                    head_repository_row = exact.get("head_repository") if isinstance(exact.get("head_repository"), dict) else {}
+                    events[run_id] = {
+                        "run_id": run_id,
+                        "run_attempt": attempt,
+                        "run_started_at": utc_timestamp(order[0]),
+                        "workflow_id": exact["workflow_id"],
+                        "path": exact["path"],
+                        "head_sha": exact["head_sha"],
+                        "head_branch": exact["head_branch"],
+                        "repository": str(repository_row.get("full_name", "")),
+                        "head_repository": str(head_repository_row.get("full_name", "")),
+                        "status": exact["status"],
+                        "conclusion": exact.get("conclusion"),
+                        "disposition": disposition,
+                        "event": exact["event"],
+                        "attempt_evidence": {
+                            "jobs_api_endpoint": evidence_row.get("jobs_api_endpoint"),
+                            "job_count": evidence_row.get("job_count"),
+                            "jobs_sha256": sha256_bytes(canonical_json(jobs)),
+                        },
+                    }
+                break
+            if disposition == "unavailable":
+                errors.add(identity)
+                break
+    ordered = sorted(events.values(), key=lambda row: collector_execution_order({**row, "id": int(row["run_id"])}) or (dt.datetime.min.replace(tzinfo=dt.timezone.utc), 0, 0))
+    if boundary is not None:
+        ordered = [row for row in ordered if (collector_execution_order({**row, "id": int(row["run_id"])}) or boundary) > boundary]
+    latest_success = next((row for row in reversed(ordered) if row["disposition"] == "success"), None)
+    unavailable_run_ids = {
+        error.split("/", 1)[0]
+        for error in errors
+        if "/" in error and error.split("/", 1)[0].isdigit()
+    }
+    if latest_success is not None and latest_success["run_id"] in unavailable_run_ids:
+        latest_success = None
+    failures_after_success: list[dict[str, Any]] = []
+    for row in ordered:
+        if row["disposition"] == "success":
+            failures_after_success = []
+        else:
+            failures_after_success.append(row)
+    return {
+        "events": ordered,
+        "failure_streak": failures_after_success,
+        "latest_success": latest_success,
+        "errors": sorted(errors),
+        "unavailable_run_ids": sorted(unavailable_run_ids),
+        "truncated": truncated,
+        "boundary": boundary,
+    }
 
 
 def processor_execution_state(
@@ -1232,6 +1603,9 @@ def evaluate_source(
     processor_workflow_id: int | None = None,
     processor_workflow_events: set[str] | None = None,
     prior_processor_execution_faults: list[dict[str, Any]] | None = None,
+    collector_execution_attempts: dict[str, Any] | None = None,
+    collector_execution_attempt_errors: set[str] | None = None,
+    prior_collector_execution_faults: list[dict[str, Any]] | None = None,
     promotion_workflow_runs: list[dict[str, Any]] | None = None,
     promotion_workflow_previous_attempts: dict[str, Any] | None = None,
     promotion_workflow_previous_attempt_errors: set[str] | None = None,
@@ -1248,13 +1622,15 @@ def evaluate_source(
 
     def add(
         stage: str, reason: str, severity: str, action: str, failure_identity: str = "",
-        *, generation_id: str | None = None,
+        *, generation_id: str | None = None, execution_identity: dict[str, Any] | None = None,
     ) -> None:
         item = fault(source_id, stage, reason, severity, owner_ticket, action, failure_identity)
         if generation_id is not None:
             if not DIGEST.fullmatch(generation_id):
                 raise ValueError("historical_fault_generation_invalid")
             item["generation_id"] = generation_id
+        if execution_identity is not None:
+            item["execution_identity"] = execution_identity
         faults.append(item)
 
     latest_processor_run, execution_failure, latest_processor_success, previous_attempt_error = processor_execution_state(
@@ -1359,6 +1735,75 @@ def evaluate_source(
     collector_runs = [row for row in matching_runs if row.get("event") in {"schedule", "workflow_dispatch"}]
     collector_runs.sort(key=workflow_run_order)
     latest_run = collector_runs[-1] if collector_runs else None
+    collector_execution = collector_execution_state(
+        workflow_runs,
+        collector_execution_attempts or {},
+        collector_execution_attempt_errors or set(),
+        repository,
+        collector_path,
+        collector_workflow_id,
+        {"schedule", "workflow_dispatch"},
+        as_of,
+        maximum_future_skew,
+    )
+    if collector_execution["errors"]:
+        attempt_identity = collector_execution["errors"][0]
+        add(
+            "collector-execution", "collector_run_attempt_unavailable", "error",
+            _fault_action(source, "schedule_missing"), attempt_identity,
+            execution_identity=collector_error_execution_identity(
+                {attempt_identity}, workflow_runs, repository, collector_path, collector_workflow_id,
+                {"schedule", "workflow_dispatch"}, as_of, maximum_future_skew,
+            ),
+        )
+    valid_prior_collector_faults = [
+        prior for prior in prior_collector_execution_faults or []
+        if isinstance(prior, dict)
+        and prior.get("source_id") == source_id
+        and prior.get("stage") == "collector-execution"
+        and prior.get("reason") == "repeated_collector_execution_failures"
+        and prior.get("severity") == "error"
+        and isinstance(prior.get("fault_key"), str)
+    ]
+    unresolved_prior_collector_faults: list[dict[str, Any]] = []
+    for prior in valid_prior_collector_faults:
+        prior_identity = prior.get("execution_identity")
+        prior_order = collector_execution_order(prior_identity) if isinstance(prior_identity, dict) else None
+        recovered_after_failure = (
+            not collector_execution["errors"]
+            and prior_order is not None
+            and any(
+                event["disposition"] == "success"
+                and (collector_execution_order({**event, "id": int(event["run_id"])}) or (dt.datetime.min.replace(tzinfo=dt.timezone.utc), 0, 0)) > prior_order
+                for event in collector_execution["events"]
+            )
+        )
+        if not recovered_after_failure:
+            unresolved_prior_collector_faults.append(prior)
+    execution_failure_streak = collector_execution["failure_streak"]
+    threshold = int(source["provider_failure_threshold"])
+    if (
+        not collector_execution["errors"]
+        and not unresolved_prior_collector_faults
+        and len(execution_failure_streak) >= threshold
+    ):
+        anchor = execution_failure_streak[0]
+        repeated = fault(
+            source_id, "collector-execution", "repeated_collector_execution_failures", "error", owner_ticket,
+            _fault_action(source, "schedule_missing"), f"{anchor['run_id']}/{anchor['run_attempt']}",
+        )
+        repeated["execution_identity"] = {
+            "run_id": anchor["run_id"],
+            "run_attempt": anchor["run_attempt"],
+            "run_started_at": anchor["run_started_at"],
+            "head_sha": anchor["head_sha"],
+        }
+        faults.append(repeated)
+    for prior in unresolved_prior_collector_faults:
+        if not any(row.get("fault_key") == prior["fault_key"] for row in faults):
+            faults.append({key: prior[key] for key in (
+                "source_id", "stage", "reason", "severity", "owner_ticket", "fault_key", "recommended_action", "execution_identity",
+            ) if key in prior})
     baseline_value = (refresh_source or {}).get("last_successful_observation")
     schedule_anchor = None
     if latest_scheduled_run is not None:
@@ -1392,7 +1837,7 @@ def evaluate_source(
             except ValueError as exc:
                 add("collector", str(exc), "error", _fault_action(source, "schedule_missing"))
         elif latest_run.get("conclusion") not in {"success", None}:
-            add("collector", "collector_run_failed", "error", _fault_action(source, "provider_failure"))
+            add("collector", "collector_run_failed", "error", _fault_action(source, "schedule_missing"))
         elif latest_run.get("conclusion") == "success":
             expected_artifact = f"upstream-catalog-refresh-{latest_run.get('id')}"
             if isinstance(latest_run_artifacts, dict) and latest_run_artifacts.get("availability_error"):
@@ -1416,8 +1861,9 @@ def evaluate_source(
         observation_state = "fixture_only"
         add("observation", "fixture_observation_excluded", "error", _fault_action(source, "provider_failure"))
     elif observation.get("collection_status") != "success":
-        observation_state = "provider_failure" if observation.get("collection_status") == "failure" else "collection_missing"
-        add("observation", observation_state, "error", _fault_action(source, "provider_failure"))
+        observation_state = "collection_missing"
+        reason = "source_collection_failed" if observation.get("collection_status") == "failure" else "collection_missing"
+        add("observation", reason, "error", _fault_action(source, "schedule_missing"))
     else:
         producer_id = str(observation.get("producer_run_id") or "")
         producer_run = (producer_runs_by_id or {}).get(producer_id)
@@ -1556,25 +2002,6 @@ def evaluate_source(
     already_canonical_candidate = already_canonical_candidate_relation(
         checkpoint, main_identity, str(main_identity.get("revision", "")), mode, processor_candidate_screen,
     )
-
-    ordered_checkpoints = []
-    for row in checkpoints:
-        current_observation = row.get("last_observation")
-        if isinstance(current_observation, dict):
-            try:
-                ordered_checkpoints.append((parse_time(current_observation.get("observed_at"), "last_observation.observed_at"), current_observation))
-            except ValueError:
-                continue
-    ordered_checkpoints.sort(key=lambda entry: entry[0], reverse=True)
-    repeated_failures = 0
-    for _, prior in ordered_checkpoints:
-        if prior.get("execution_mode") != "live" or prior.get("collection_status") != "failure":
-            break
-        repeated_failures += 1
-    if repeated_failures >= int(source["provider_failure_threshold"]):
-        latest_failure = checkpoint.get("outcome", {}).get("reason", "provider_failure") if checkpoint else "provider_failure"
-        safe_identity = latest_failure if isinstance(latest_failure, str) and re.fullmatch(r"[a-z0-9_-]{1,80}", latest_failure) else "provider_failure"
-        add("observation", "repeated_provider_failures", "error", _fault_action(source, "provider_failure"), safe_identity)
 
     promotion_state = "unavailable"
     publication = None
@@ -2007,6 +2434,13 @@ def evaluate_source(
     overall = "healthy" if worst == 0 else "degraded" if worst == 1 else "blocked"
     if mode == "fixture":
         overall = "fixture"
+    latest_execution_report = report_workflow_run(latest_run, latest_run_artifacts) if latest_run else None
+    if (
+        latest_execution_report is not None
+        and collector_execution.get("latest_success") is not None
+        and collector_execution["latest_success"]["run_id"] not in collector_execution.get("unavailable_run_ids", [])
+    ):
+        latest_execution_report["latest_successful_execution_run"] = collector_execution["latest_success"]
     return {
         "source_id": source_id,
         "overall": overall,
@@ -2044,7 +2478,7 @@ def evaluate_source(
         },
         "collector": {
             "latest_scheduled_run": report_workflow_run(latest_scheduled_run, latest_scheduled_artifacts) if latest_scheduled_run else None,
-            "latest_execution_run": report_workflow_run(latest_run, latest_run_artifacts) if latest_run else None,
+            "latest_execution_run": latest_execution_report,
             "age_seconds": schedule_age,
             "expected_interval_seconds": int(source["expected_interval_seconds"]),
             "grace_seconds": int(source["observation_grace_seconds"]),
@@ -2371,6 +2805,9 @@ def evaluate(
     processor_previous_attempt_errors: set[str] | None = None,
     processor_workflow_api_error: str | None = None,
     prior_processor_execution_faults: list[dict[str, Any]] | None = None,
+    collector_execution_attempts: dict[str, Any] | None = None,
+    collector_execution_attempt_errors: set[str] | None = None,
+    prior_collector_execution_faults: list[dict[str, Any]] | None = None,
     promotion_workflow_runs: list[dict[str, Any]] | None = None,
     promotion_workflow_previous_attempts: dict[str, Any] | None = None,
     promotion_workflow_previous_attempt_errors: set[str] | None = None,
@@ -2459,6 +2896,9 @@ def evaluate(
             processor_workflow_id=(workflow_ids_by_path or {}).get(health_policy["processor_state"]["workflow_path"]),
             processor_workflow_events=set(health_policy["processor_state"]["allowed_events"]),
             prior_processor_execution_faults=prior_processor_execution_faults or [],
+            collector_execution_attempts=collector_execution_attempts or {},
+            collector_execution_attempt_errors=collector_execution_attempt_errors or set(),
+            prior_collector_execution_faults=prior_collector_execution_faults or [],
             promotion_workflow_runs=promotion_workflow_runs or [],
             promotion_workflow_previous_attempts=promotion_workflow_previous_attempts or {},
             promotion_workflow_previous_attempt_errors=promotion_workflow_previous_attempt_errors or set(),
@@ -2552,10 +2992,19 @@ def main(argv: list[str] | None = None) -> int:
         promotion_ack_error = None
         workflow_ids_by_path: dict[str, int] = {}
         processor_candidate_screen = None
+        collector_execution_attempts: dict[str, Any] = {}
+        collector_execution_attempt_errors: set[str] = set()
+        prior_collector_execution_faults: list[dict[str, Any]] = []
         if args.fixture_input:
             mode = "fixture"
             fixture = load_json(args.fixture_input)
             workflow_runs = fixture.get("workflow_runs", []) if isinstance(fixture, dict) else []
+            collector_execution_attempts = fixture.get("collector_execution_attempts", {}) if isinstance(fixture, dict) else {}
+            raw_collector_errors = fixture.get("collector_execution_attempt_errors", []) if isinstance(fixture, dict) else []
+            collector_execution_attempt_errors = {
+                row for row in raw_collector_errors if isinstance(row, str)
+            } if isinstance(raw_collector_errors, list) else set()
+            prior_collector_execution_faults = fixture.get("prior_collector_execution_faults", []) if isinstance(fixture, dict) else []
             processor_workflow_runs = fixture.get("processor_workflow_runs", []) if isinstance(fixture, dict) else []
             processor_previous_attempts = fixture.get("processor_previous_attempts", {}) if isinstance(fixture, dict) else {}
             processor_previous_attempt_errors = fixture.get("processor_previous_attempt_errors", []) if isinstance(fixture, dict) else []
@@ -2596,6 +3045,16 @@ def main(argv: list[str] | None = None) -> int:
             except RuntimeError as exc:
                 workflow_runs = []
                 workflow_api_error = str(exc)
+            if workflow_api_error is None:
+                collector_execution_attempts, collector_execution_attempt_errors = collect_collector_execution_attempts(
+                    args.repository,
+                    workflow_runs,
+                    workflow["collector_workflow_path"],
+                    workflow_ids_by_path.get(workflow["collector_workflow_path"]),
+                    {"schedule", "workflow_dispatch"},
+                    as_of,
+                    int(health_policy["clock"]["maximum_future_skew_seconds"]),
+                )
             processor_policy = health_policy["processor_state"]
             processor_workflow_path = processor_policy["workflow_path"]
             processor_workflow_events = set(processor_policy["allowed_events"])
@@ -2770,6 +3229,7 @@ def main(argv: list[str] | None = None) -> int:
                 if metadata is not None:
                     artifact_by_id[artifact_id] = metadata
             prior_processor_execution_faults = []
+            prior_collector_execution_faults = []
             prior_promotion_execution_faults = []
             try:
                 health_state = read_health_state(args.health_state) if args.health_state else None
@@ -2783,6 +3243,13 @@ def main(argv: list[str] | None = None) -> int:
                         and row.get("reason") == "processor_run_failed"
                         and row.get("status") in {"open", "recovery_pending_verification"}
                     ]
+                    prior_collector_execution_faults = [
+                        row for row in state_faults
+                        if isinstance(row, dict)
+                        and row.get("stage") == "collector-execution"
+                        and row.get("reason") == "repeated_collector_execution_failures"
+                        and row.get("status") in {"open", "recovery_pending_verification"}
+                    ]
                     prior_promotion_execution_faults = [
                         row for row in state_faults
                         if isinstance(row, dict)
@@ -2793,10 +3260,14 @@ def main(argv: list[str] | None = None) -> int:
             except (OSError, ValueError, json.JSONDecodeError) as exc:
                 last_good = None
                 prior_processor_execution_faults = []
+                prior_collector_execution_faults = []
                 prior_promotion_execution_faults = []
                 health_state_error = str(exc)
         if mode == "fixture":
             workflow_runs = workflow_runs if isinstance(workflow_runs, list) else []
+            collector_execution_attempts = collector_execution_attempts if isinstance(collector_execution_attempts, dict) else {}
+            collector_execution_attempt_errors = collector_execution_attempt_errors if isinstance(collector_execution_attempt_errors, set) else set()
+            prior_collector_execution_faults = prior_collector_execution_faults if isinstance(prior_collector_execution_faults, list) else []
             processor_workflow_runs = processor_workflow_runs if isinstance(processor_workflow_runs, list) else []
             processor_previous_attempts = processor_previous_attempts if isinstance(processor_previous_attempts, dict) else {}
             prior_processor_execution_faults = prior_processor_execution_faults if isinstance(prior_processor_execution_faults, list) else []
@@ -2837,6 +3308,9 @@ def main(argv: list[str] | None = None) -> int:
             processor_previous_attempt_errors=processor_previous_attempt_errors,
             processor_workflow_api_error=processor_workflow_api_error,
             prior_processor_execution_faults=prior_processor_execution_faults,
+            collector_execution_attempts=collector_execution_attempts,
+            collector_execution_attempt_errors=collector_execution_attempt_errors,
+            prior_collector_execution_faults=prior_collector_execution_faults,
             promotion_workflow_runs=promotion_workflow_runs,
             promotion_workflow_previous_attempts=promotion_workflow_previous_attempts,
             promotion_workflow_previous_attempt_errors=promotion_workflow_previous_attempt_errors,
