@@ -40,6 +40,7 @@ jobs:
         with:
           ref: main
           path: datapan-registry
+          fetch-depth: 0
           lfs: false
           persist-credentials: true
 
@@ -51,7 +52,7 @@ jobs:
           date -u +'%Y-%m-%dT%H:%M:%SZ' > "${HEALTH_INPUTS}/as-of.txt"
           python3 -m venv .datapan/ci/upstream-health-venv
           . .datapan/ci/upstream-health-venv/bin/activate
-          python -m pip install --disable-pip-version-check jsonschema
+          python -m pip install --disable-pip-version-check jsonschema 'PyYAML==6.0.2'
 
       - name: Read processor, promotion, and prior health state branches
         id: state_inputs

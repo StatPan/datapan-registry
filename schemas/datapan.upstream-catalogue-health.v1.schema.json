@@ -41,6 +41,7 @@
         "owner_ticket": {"type": "integer", "minimum": 1},
         "fault_key": {"$ref": "#/$defs/digest"},
         "recommended_action": {"type": "string", "minLength": 1},
+        "generation_id": {"$ref": "#/$defs/digest"},
         "execution_identity": {"$ref": "#/$defs/execution_identity"}
       }
     },
@@ -88,6 +89,7 @@
       "properties": {
         "state": {"type": "string", "minLength": 1},
         "generation_id": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "checkpoint_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
         "candidate_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
         "checkpoint_observed_at": {"type": ["string", "null"]},
         "last_observation": {"type": ["object", "null"]},
@@ -157,7 +159,26 @@
         "promotion_status": {"type": "string", "minLength": 1},
         "publication": {"type": ["object", "null"]},
         "promotion_stage": {"$ref": "#/$defs/promotion_stage"},
-        "promotion_execution": {"$ref": "#/$defs/promotion_execution"}
+        "promotion_execution": {"$ref": "#/$defs/promotion_execution"},
+        "already_canonical_candidate": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/already_canonical_candidate"}]}
+      }
+    },
+    "already_canonical_candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["verified", "source_id", "generation_id", "checkpoint_sha256", "processor_run_id", "processor_run_attempt", "artifact_id", "output_bundle_sha256", "composed_registry_bytes", "composed_registry_sha256", "main_revision", "main_manifest_sha256"],
+      "properties": {
+        "verified": {"const": true},
+        "source_id": {"type": "string", "minLength": 1},
+        "generation_id": {"$ref": "#/$defs/digest"},
+        "checkpoint_sha256": {"$ref": "#/$defs/digest"},
+        "processor_run_id": {"type": "string", "pattern": "^[0-9]{6,20}$"},
+        "processor_run_attempt": {"type": "integer", "minimum": 1},
+        "artifact_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "output_bundle_sha256": {"$ref": "#/$defs/digest"},
+        "composed_registry_bytes": {"type": "integer", "minimum": 1},
+        "composed_registry_sha256": {"$ref": "#/$defs/digest"},
+        "main_revision": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+        "main_manifest_sha256": {"$ref": "#/$defs/digest"}
       }
     },
     "promotion_execution": {
