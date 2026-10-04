@@ -139,6 +139,52 @@ def enrichment_evidence(candidate_row: dict, operations: list[dict], *, candidat
 
 
 class CatalogueCompositionTests(unittest.TestCase):
+    def test_current_template_link_metadata_is_quarantined_and_never_promoted_as_operation(self):
+        candidate = link_api("2", operations=False)
+        baseline = link_api("2", endpoint="https://link.example.gov/v1/old")
+        resolved_url = "http://link.example.gov/catalogue/landing"
+        metadata = {
+            "method": "data_go_kr_select_api_link_url_v1",
+            "dataset_id": "2",
+            "public_data_pk": "2",
+            "public_data_detail_pk": "uddi:test-current-template",
+            "page": {
+                "url": "https://www.data.go.kr/data/2/openapi.do",
+                "effective_url": "https://www.data.go.kr/data/2/openapi.do",
+                "sha256": "a" * 64, "bytes": 100, "observed_at": "2026-10-01T00:00:00Z",
+            },
+            "resolver": {
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=2",
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=2",
+                "sha256": "b" * 64, "bytes": 190, "observed_at": "2026-10-01T00:00:00Z",
+                "public_data_detail_pk": "uddi:test-current-template",
+                "resolved_url": resolved_url,
+                "resolved_url_sha256": hashlib.sha256(resolved_url.encode()).hexdigest(),
+            },
+        }
+        outcome = worker_outcome(candidate, "quarantined")
+        outcome.update({
+            "failure_diagnostic": {
+                "code": "resolved_link_operation_contract_unproven", "phase": "resolver",
+            },
+            "link_metadata": metadata,
+        })
+        result = compose([baseline], [candidate], enrichment_evidence=worker_enrichment([outcome]))
+        self.assertEqual(result["composed_registry"][0]["operations"], baseline["operations"])
+        self.assertEqual(result["semantic_diff"]["quarantined_api_keys"], [
+            {"provider": "data.go.kr", "id": "2"},
+        ])
+
+        forged = copy.deepcopy(outcome)
+        forged["link_metadata"]["resolver"]["public_data_detail_pk"] = "uddi:other"
+        with self.assertRaisesRegex(composer.CompositionError, "link metadata"):
+            compose([baseline], [candidate], enrichment_evidence=worker_enrichment([forged]))
+
+        stripped = copy.deepcopy(outcome)
+        stripped.pop("link_metadata")
+        with self.assertRaisesRegex(composer.CompositionError, "without link metadata"):
+            compose([baseline], [candidate], enrichment_evidence=worker_enrichment([stripped]))
+
     def test_actual_failed_run_worker_quarantines_retain_baselines_and_allow_safe_partial_row(self):
         fixture_path = ROOT / "tests/fixtures/upstream_catalogue/failed-worker-scope-run-37091592758.json"
         fixture = json.loads(fixture_path.read_text(encoding="utf-8"))

@@ -713,6 +713,77 @@ class ProcessorBundleContractTests(unittest.TestCase):
             self.assertEqual(outcome["status"], "quarantined")
             self.assertEqual(outcome["reason"], "input_expired")
 
+    def test_c_bundle_validator_binds_resolver_metadata_to_quarantine_and_registered_host(self) -> None:
+        page_time = "2026-10-01T10:00:00Z"
+        resolved_url = "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109"
+        metadata = {
+            "method": "data_go_kr_select_api_link_url_v1",
+            "dataset_id": "2",
+            "public_data_pk": "2",
+            "public_data_detail_pk": "uddi:fixture-2",
+            "page": {
+                "url": "https://www.data.go.kr/data/2/openapi.do",
+                "effective_url": "https://www.data.go.kr/data/2/openapi.do",
+                "sha256": "a" * 64, "bytes": 100, "observed_at": page_time,
+            },
+            "resolver": {
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=2",
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=2",
+                "sha256": "b" * 64, "bytes": 190, "observed_at": page_time,
+                "public_data_detail_pk": "uddi:fixture-2",
+                "resolved_url": resolved_url,
+                "resolved_url_sha256": hashlib.sha256(resolved_url.encode()).hexdigest(),
+            },
+        }
+        source_sha = "c" * 64
+        guide_sha = "d" * 64
+        diagnostic = {"code": "resolved_link_operation_contract_unproven", "phase": "resolver"}
+        outcome = {
+            "api_key": {"provider": "data.go.kr", "id": "2"}, "status": "quarantined",
+            "source_sha256": source_sha, "guide_sha256": guide_sha,
+            "failure_diagnostic": diagnostic, "link_metadata": metadata,
+        }
+        checkpoint = {"detail_records": [{
+            "id": "2", "status": "quarantined", "source_sha256": source_sha,
+            "guide_sha256": guide_sha, "failure_diagnostic": diagnostic, "link_metadata": metadata,
+        }]}
+        evidence = {
+            "schema_version": "datapan.catalogue-enrichment-evidence.v1",
+            "original_candidate_sha256": "e" * 64,
+            "provider_index_sha256": "f" * 64,
+            "adapter_revision": "f" * 64,
+            "extractor_revision": "a" * 64,
+            "records": [], "worker_outcomes": [outcome],
+        }
+        with tempfile.TemporaryDirectory() as raw:
+            bundle = pathlib.Path(raw)
+            evidence_path = bundle / "upstream-catalogue-enrichment-evidence.json"
+            evidence_path.write_text(json.dumps(evidence), encoding="utf-8")
+            RUNNER.validate_processor_link_metadata(checkpoint, bundle, root=SCRIPT.parents[1])
+
+            invalid = copy.deepcopy(evidence)
+            bad_metadata = invalid["worker_outcomes"][0]["link_metadata"]
+            bad_metadata["resolver"]["resolved_url"] = "http://unregistered.example.test/guide"
+            bad_metadata["resolver"]["resolved_url_sha256"] = hashlib.sha256(
+                bad_metadata["resolver"]["resolved_url"].encode(),
+            ).hexdigest()
+            checkpoint["detail_records"][0]["link_metadata"] = bad_metadata
+            evidence_path.write_text(json.dumps(invalid), encoding="utf-8")
+            with self.assertRaisesRegex(RUNNER.PromotionError, "link metadata provenance is invalid"):
+                RUNNER.validate_processor_link_metadata(checkpoint, bundle, root=SCRIPT.parents[1])
+
+            stripped = copy.deepcopy(evidence)
+            stripped["worker_outcomes"][0].pop("link_metadata")
+            stripped_checkpoint = copy.deepcopy(checkpoint)
+            stripped_checkpoint["detail_records"][0].pop("link_metadata")
+            evidence_path.write_text(json.dumps(stripped), encoding="utf-8")
+            with self.assertRaisesRegex(RUNNER.PromotionError, "does not match the trusted schema"):
+                RUNNER.validate_processor_link_metadata(stripped_checkpoint, bundle, root=SCRIPT.parents[1])
+
+            evidence_path.unlink()
+            with self.assertRaisesRegex(RUNNER.PromotionError, "missing its enrichment evidence"):
+                RUNNER.validate_processor_link_metadata(checkpoint, bundle, root=SCRIPT.parents[1])
+
 
 class DurableProcessorRecoveryTests(unittest.TestCase):
     repository = "StatPan/datapan-registry"
@@ -1039,7 +1110,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
         def artifact_api(_root, _repository, _run_id, artifact_id):
             return self.artifact(artifact_by_id[artifact_id])
 
-        def validate_bundle(checkpoint, *_args):
+        def validate_bundle(checkpoint, *_args, **_kwargs):
             locator = checkpoint["output_artifact"]
             digest = (bundle_sha_by_artifact_id or {}).get(
                 locator["artifact_id"],
@@ -1710,7 +1781,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 mock.patch.object(RUNNER, "processor_run_api", side_effect=run_then_missing),
                 mock.patch.object(RUNNER, "processor_artifact_api", side_effect=artifact_api),
                 mock.patch.object(RUNNER, "download_processor_artifact", return_value=root / "downloaded-bundle"),
-                mock.patch.object(RUNNER, "validate_processor_bundle", side_effect=lambda checkpoint, *_args: {
+                mock.patch.object(RUNNER, "validate_processor_bundle", side_effect=lambda checkpoint, *_args, **_kwargs: {
                     "composition_receipt": {"input_digests": {}},
                     "registry_path": "data/data-go-kr.registry.json",
                     "registry_bytes": 37,

@@ -72,8 +72,8 @@
       "type": "object", "maxProperties": 24,
       "properties": {
         "detail_failure_counts": {
-          "type": "object", "maxProperties": 10,
-          "propertyNames": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error"]},
+          "type": "object", "maxProperties": 12,
+          "propertyNames": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error", "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven"]},
           "additionalProperties": {"type": "integer", "minimum": 0}
         },
         "detail_reason_unavailable_count": {"type": "integer", "minimum": 0},
@@ -163,15 +163,68 @@
         "source_sha256": {"$ref": "#/$defs/digest"},
         "guide_sha256": {"$ref": "#/$defs/nullable_digest"},
         "status": {"enum": ["retained_unchanged", "enriched", "retry", "quarantined"]},
-        "failure_diagnostic": {"$ref": "#/$defs/failure_diagnostic"}
+        "failure_diagnostic": {"$ref": "#/$defs/failure_diagnostic"},
+        "link_metadata": {"$ref": "#/$defs/link_metadata"}
+      },
+      "allOf": [{
+        "if": {"anyOf": [
+          {"required": ["failure_diagnostic"], "properties": {"failure_diagnostic": {"required": ["code"], "properties": {"code": {"const": "resolved_link_operation_contract_unproven"}}}}},
+          {"required": ["link_metadata"]}
+        ]},
+        "then": {
+          "required": ["link_metadata", "failure_diagnostic"],
+          "properties": {
+            "status": {"const": "quarantined"},
+            "failure_diagnostic": {
+              "required": ["code", "phase"],
+              "properties": {"code": {"const": "resolved_link_operation_contract_unproven"}, "phase": {"const": "resolver"}}
+            }
+          }
+        }
+      }]
+    },
+    "link_metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["method", "dataset_id", "public_data_pk", "public_data_detail_pk", "page", "resolver"],
+      "properties": {
+        "method": {"const": "data_go_kr_select_api_link_url_v1"},
+        "dataset_id": {"type": "string", "pattern": "^[0-9]+$"},
+        "public_data_pk": {"type": "string", "pattern": "^[0-9]+$"},
+        "public_data_detail_pk": {"type": ["string", "null"], "maxLength": 256},
+        "page": {
+          "type": "object", "additionalProperties": false,
+          "required": ["url", "effective_url", "sha256", "bytes", "observed_at"],
+          "properties": {
+            "url": {"type": "string", "format": "uri", "pattern": "^https://www\\.data\\.go\\.kr/data/[0-9]+/openapi\\.do$"},
+            "effective_url": {"type": "string", "format": "uri", "pattern": "^https://www\\.data\\.go\\.kr/data/[0-9]+/openapi\\.do$"},
+            "sha256": {"$ref": "#/$defs/digest"},
+            "bytes": {"type": "integer", "minimum": 1, "maximum": 1048576},
+            "observed_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "resolver": {
+          "type": "object", "additionalProperties": false,
+          "required": ["request_url", "effective_url", "sha256", "bytes", "observed_at", "public_data_detail_pk", "resolved_url", "resolved_url_sha256"],
+          "properties": {
+            "request_url": {"type": "string", "format": "uri", "pattern": "^https://www\\.data\\.go\\.kr/tcs/dss/selectApiLinkUrl\\.do\\?publicDataPk=[0-9]+$"},
+            "effective_url": {"type": "string", "format": "uri", "pattern": "^https://www\\.data\\.go\\.kr/tcs/dss/selectApiLinkUrl\\.do\\?publicDataPk=[0-9]+$"},
+            "sha256": {"$ref": "#/$defs/digest"},
+            "bytes": {"type": "integer", "minimum": 1, "maximum": 65536},
+            "observed_at": {"type": "string", "format": "date-time"},
+            "public_data_detail_pk": {"type": ["string", "null"], "maxLength": 256},
+            "resolved_url": {"type": "string", "format": "uri", "pattern": "^https?://", "maxLength": 4096},
+            "resolved_url_sha256": {"$ref": "#/$defs/digest"}
+          }
+        }
       }
     },
     "failure_diagnostic": {
       "type": "object", "additionalProperties": false,
       "required": ["code"],
       "properties": {
-        "code": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error"]},
-        "http_status": {"type": "integer", "minimum": 400, "maximum": 599}
+        "code": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error", "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven"]},
+        "http_status": {"type": "integer", "minimum": 400, "maximum": 599},
+        "phase": {"enum": ["page", "resolver"]}
       },
       "allOf": [{"if": {"properties": {"code": {"const": "provider_http_error"}}, "required": ["code"]}, "then": {}, "else": {"not": {"required": ["http_status"]}}}]
     }

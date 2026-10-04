@@ -49,7 +49,9 @@ DETAIL_FAILURE_CODES = frozenset({
     "timeout", "transport_error", "provider_http_error", "response_bytes_cap",
     "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations",
     "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error",
+    "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven",
 })
+DETAIL_FAILURE_PHASES = frozenset({"page", "resolver"})
 DEFAULT_TIMEOUT_SECONDS = 12
 DEFAULT_RETRIES_PER_DETAIL = 2
 DEFAULT_MAX_ATTEMPTS = 24
@@ -77,6 +79,33 @@ class DetailPageObservation:
         self.effective_url = effective_url
         self.page_sha256 = page_sha256
         self.observed_at = observed_at
+
+
+class LinkResolverObservation:
+    __slots__ = ("body", "request_url", "effective_url", "observed_at")
+
+    def __init__(self, *, body: bytes, request_url: str, effective_url: str, observed_at: str) -> None:
+        self.body = body
+        self.request_url = request_url
+        self.effective_url = effective_url
+        self.observed_at = observed_at
+
+
+def extract_current_template_dataset_id(page_html: str, expected_id: str) -> dict[str, str | None] | None:
+    return DETAIL_HELPERS.extract_current_template_dataset_id(page_html, expected_id)
+
+
+def validate_link_resolver_response(
+    raw_bytes: bytes,
+    expected_id: str,
+    observed_at: str,
+    *,
+    expected_public_data_detail_pk: str | None = None,
+) -> dict[str, Any]:
+    return DETAIL_HELPERS.validate_link_resolver_response(
+        raw_bytes, expected_id, observed_at,
+        expected_public_data_detail_pk=expected_public_data_detail_pk,
+    )
 
 
 def utc_now() -> dt.datetime:
@@ -301,6 +330,10 @@ class UnsafeDetailRedirectError(urllib.error.URLError):
         super().__init__("redirect_outside_allowed_public_detail_host")
 
 
+class LinkResolverContractError(ValueError):
+    """The fixed read-only link resolver violated its bounded response contract."""
+
+
 class SameHostRedirectHandler(urllib.request.HTTPRedirectHandler):
     def __init__(self, allowed_host: str = "www.data.go.kr") -> None:
         super().__init__()
@@ -308,15 +341,15 @@ class SameHostRedirectHandler(urllib.request.HTTPRedirectHandler):
         self.redirects = 0
 
     def redirect_request(self, request: urllib.request.Request, response: Any, code: int, message: str, headers: Any, new_url: str) -> urllib.request.Request | None:
+        # A redirect is another physical request, even when it repeats the
+        # same URL. Do not let urllib perform an unaccounted hidden GET.
         self.redirects += 1
-        parsed = urllib.parse.urlsplit(new_url)
-        if (
-            self.redirects > MAX_REDIRECTS or parsed.scheme != "https" or parsed.hostname != self.allowed_host
-            or parsed.username or parsed.password or parsed.query or parsed.fragment
-            or new_url != request.full_url
-        ):
-            raise UnsafeDetailRedirectError()
-        return super().redirect_request(request, response, code, message, headers, new_url)
+        raise UnsafeDetailRedirectError()
+
+
+class RejectRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, request: urllib.request.Request, response: Any, code: int, message: str, headers: Any, new_url: str) -> urllib.request.Request | None:
+        raise UnsafeDetailRedirectError()
 
 
 def fetch_public_detail(url: str, timeout: float = DEFAULT_TIMEOUT_SECONDS) -> DetailPageObservation:
@@ -324,7 +357,13 @@ def fetch_public_detail(url: str, timeout: float = DEFAULT_TIMEOUT_SECONDS) -> D
     if parsed.scheme != "https" or parsed.hostname != "www.data.go.kr" or parsed.username or parsed.password or parsed.query or parsed.fragment:
         raise ValueError("unsafe_detail_url")
     request = urllib.request.Request(url, headers={"User-Agent": "datapan-registry-continuous-catalogue/1.0"})
-    opener = urllib.request.build_opener(SameHostRedirectHandler())
+    # Ignore ambient proxy configuration as it may attach Proxy-Authorization.
+    # The worker's persisted physical-request accounting covers this single
+    # GET only; urllib must not follow any redirect internally.
+    opener = urllib.request.build_opener(
+        urllib.request.ProxyHandler({}),
+        SameHostRedirectHandler(),
+    )
     with opener.open(request, timeout=timeout) as response:
         final = urllib.parse.urlsplit(response.geturl())
         if final.scheme != "https" or final.hostname != "www.data.go.kr" or final.username or final.password or response.geturl() != url:
@@ -338,6 +377,58 @@ def fetch_public_detail(url: str, timeout: float = DEFAULT_TIMEOUT_SECONDS) -> D
     return DetailPageObservation(
         body=body_bytes.decode("utf-8", errors="replace"), page_url=url, effective_url=response.geturl(),
         page_sha256=sha256_bytes(body_bytes), observed_at=timestamp(), page_bytes=body_bytes,
+    )
+
+
+def fetch_link_resolver(url: str, timeout: float = DEFAULT_TIMEOUT_SECONDS) -> LinkResolverObservation:
+    parsed = urllib.parse.urlsplit(url)
+    if (
+        parsed.scheme != "https" or parsed.hostname != "www.data.go.kr"
+        or parsed.path != "/tcs/dss/selectApiLinkUrl.do"
+        or parsed.username or parsed.password or parsed.fragment
+        or parsed.query.count("=") != 1 or not re.fullmatch(r"publicDataPk=[0-9]+", parsed.query)
+        or parsed.netloc != "www.data.go.kr"
+    ):
+        raise LinkResolverContractError("unsafe_link_resolver_request_url")
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "datapan-registry-continuous-catalogue/1.0",
+            "Accept": "application/json",
+            "Accept-Encoding": "identity",
+        },
+        method="GET",
+    )
+    # A process-wide proxy can attach Proxy-Authorization even when the
+    # resolver request itself has no credentials. This fixed portal read must
+    # not inherit ambient proxy credentials or follow a redirect.
+    opener = urllib.request.build_opener(
+        urllib.request.ProxyHandler({}),
+        RejectRedirectHandler(),
+    )
+    with opener.open(request, timeout=timeout) as response:
+        if response.getcode() != 200 or response.geturl() != url:
+            raise UnsafeDetailRedirectError()
+        content_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
+        if content_type != "application/json":
+            raise LinkResolverContractError("link_resolver_content_type_invalid")
+        content_encoding = response.headers.get("Content-Encoding", "identity").strip().lower()
+        if content_encoding not in {"", "identity"}:
+            raise LinkResolverContractError("link_resolver_content_encoding_invalid")
+        content_length = response.headers.get("Content-Length")
+        if content_length:
+            try:
+                if int(content_length) > DETAIL_HELPERS.MAX_LINK_RESOLVER_RESPONSE_BYTES:
+                    raise DetailResponseBytesCapError()
+            except ValueError as exc:
+                if isinstance(exc, DetailResponseBytesCapError):
+                    raise
+                raise LinkResolverContractError("link_resolver_content_length_invalid") from exc
+        body = response.read(DETAIL_HELPERS.MAX_LINK_RESOLVER_RESPONSE_BYTES + 1)
+        if len(body) > DETAIL_HELPERS.MAX_LINK_RESOLVER_RESPONSE_BYTES:
+            raise DetailResponseBytesCapError()
+    return LinkResolverObservation(
+        body=body, request_url=url, effective_url=url, observed_at=timestamp(),
     )
 
 
@@ -463,27 +554,31 @@ def reserve_requests(
     attempts = checkpoint.setdefault("attempts_by_id", {})
     max_for_row = retries_per_detail + 1
     inspected: list[dict[str, Any]] = []
-    selected: list[dict[str, Any]] = []
+    budget_left = max_attempts
+    reserved: dict[str, int] = {}
+    # Reserve the complete remaining physical allowance for each inspected
+    # identity before moving on. With the production 24/48/2 profile this
+    # yields eight fresh identities with three request slots each, so a
+    # page+resolver chain and one retry can finish without a second claim.
+    # The same min(remaining, budget) rule applies to tiny budgets, allowing a
+    # single selected identity to complete a page+resolver chain when two
+    # physical slots remain. Exhausted rows still count as inspected for
+    # cursor fairness.
     for row in rotated[:max_queue]:
         inspected.append(row)
-        if int(attempts.get(row["id"], 0)) < max_for_row:
-            selected.append(row)
-            if len(selected) >= max_attempts:
-                break
-    reserved: dict[str, int] = {row["id"]: 0 for row in selected}
-    budget_left = max_attempts
-    # Give each selected identity one request before assigning retries. This
-    # keeps later records moving when several earlier pages are unavailable.
-    for _round in range(max_for_row):
-        for row in selected:
-            identity = row["id"]
-            already = int(attempts.get(identity, 0)) + reserved[identity]
-            if budget_left and already < max_for_row:
-                reserved[identity] += 1
-                budget_left -= 1
+        identity = row["id"]
+        remaining = max_for_row - int(attempts.get(identity, 0))
+        if remaining <= 0:
+            continue
+        allocation = min(remaining, budget_left)
+        if allocation:
+            reserved[identity] = allocation
+            budget_left -= allocation
+        if budget_left == 0:
+            break
     reservation_records = []
-    for row in selected:
-        count = reserved[row["id"]]
+    for row in inspected:
+        count = reserved.get(row["id"], 0)
         if count:
             reservation_records.append({
                 "id": row["id"], "attempts_reserved": count,
@@ -668,12 +763,17 @@ def safe_error_class(exc: BaseException) -> str:
 
 
 def validate_failure_diagnostic(value: Any) -> dict[str, Any]:
-    if not isinstance(value, dict) or set(value) not in ({"code"}, {"code", "http_status"}):
+    if not isinstance(value, dict) or "code" not in value or set(value) - {"code", "http_status", "phase"}:
         raise ValueError("invalid_detail_failure_diagnostic")
     code = value.get("code")
     if not isinstance(code, str) or code not in DETAIL_FAILURE_CODES:
         raise ValueError("invalid_detail_failure_diagnostic")
     result: dict[str, Any] = {"code": code}
+    if "phase" in value:
+        phase = value["phase"]
+        if not isinstance(phase, str) or phase not in DETAIL_FAILURE_PHASES:
+            raise ValueError("invalid_detail_failure_diagnostic")
+        result["phase"] = phase
     if "http_status" in value:
         status = value["http_status"]
         if (
@@ -697,6 +797,8 @@ def classify_detail_exception(exc: BaseException) -> dict[str, Any]:
         return {"code": "response_bytes_cap"}
     if isinstance(exc, UnsafeDetailRedirectError):
         return {"code": "unsafe_redirect"}
+    if isinstance(exc, (LinkResolverContractError, DETAIL_HELPERS.LinkDetailContractError)):
+        return {"code": "contract_or_parse_error"}
     if isinstance(exc, TimeoutError):
         return {"code": "timeout"}
     if isinstance(exc, urllib.error.URLError):
@@ -940,6 +1042,8 @@ def validated_resume_records(
                 or set(outcome) not in (
                     {"api_key", "status", "source_sha256", "guide_sha256"},
                     {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic"},
+                    {"api_key", "status", "source_sha256", "guide_sha256", "link_metadata"},
+                    {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic", "link_metadata"},
                 )
                 or not isinstance(outcome.get("api_key"), dict)
                 or outcome["api_key"].get("provider") != "data.go.kr"
@@ -950,9 +1054,30 @@ def validated_resume_records(
                 raise ValueError("resume_worker_outcome_invalid")
             if "failure_diagnostic" in outcome:
                 try:
-                    validate_failure_diagnostic(outcome["failure_diagnostic"])
+                    diagnostic = validate_failure_diagnostic(outcome["failure_diagnostic"])
                 except ValueError as exc:
                     raise ValueError("resume_worker_outcome_invalid") from exc
+            else:
+                diagnostic = None
+            if "link_metadata" in outcome:
+                try:
+                    DETAIL_HELPERS.validate_link_metadata(
+                        outcome["link_metadata"], str(outcome["api_key"].get("id") or ""), registered_hosts,
+                    )
+                except (ValueError, TypeError) as exc:
+                    raise ValueError("resume_worker_link_metadata_invalid") from exc
+                if (
+                    outcome.get("status") != "quarantined"
+                    or not isinstance(diagnostic, dict)
+                    or diagnostic.get("code") != "resolved_link_operation_contract_unproven"
+                    or diagnostic.get("phase") != "resolver"
+                ):
+                    raise ValueError("resume_worker_link_metadata_binding_invalid")
+            elif (
+                isinstance(diagnostic, dict)
+                and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
+            ):
+                raise ValueError("resume_worker_link_metadata_missing")
             identity = str(outcome["api_key"].get("id") or "")
             if not identity or identity in outcome_ids or identity in successful_ids:
                 raise ValueError("resume_worker_outcome_identity_invalid")
@@ -1544,6 +1669,7 @@ def mark_existing_generation_input_unavailable(
 
 def process(
     args: argparse.Namespace, *, fetcher: Callable[[str, float], str] = fetch_public_detail,
+    resolver_fetcher: Callable[[str, float], LinkResolverObservation] = fetch_link_resolver,
     sleeper: Callable[[float], None] = time.sleep,
     clock: Callable[[], dt.datetime] | None = None,
 ) -> tuple[int, dict[str, Any]]:
@@ -1957,14 +2083,18 @@ def process(
                 "source_sha256": queue_row["source_sha256"], "guide_sha256": queue_row["guide_sha256"],
             })
             continue
-        max_for_row = args.retries_per_detail + 1
         reserved_count = reserved_by_id.get(identity, 0)
-        used = max(0, int(attempt_counts.get(identity, 0)) - reserved_count)
         attempts_available = reserved_count
         row_status = "retry"
         row_operations: list[dict[str, Any]] = []
         failure_diagnostic = retained_failure_diagnostics.get(identity)
         source_provenance: dict[str, Any] | None = None
+        link_metadata: dict[str, Any] | None = None
+        observed_guide: str | None = None
+        observation: DetailPageObservation | None = None
+        current_template: dict[str, str | None] | None = None
+        resolver_attempts = 0
+        expected_page_url = ""
         if not identity.isdigit():
             row_status = "quarantined"
             failure_diagnostic = {"code": "contract_or_parse_error"}
@@ -1976,93 +2106,214 @@ def process(
             failure_diagnostic = {"code": "contract_or_parse_error"}
         if row_status != "quarantined" and reserved_count == 0:
             row_status = "quarantined"
-        while attempts_available > 0 and attempts_this_invocation < attempt_budget:
-            if row_status == "quarantined":
-                break
-            # The request was reserved durably before this invocation began
-            # network work, so cancellation cannot refund its retry budget.
-            used += 1
+
+        def consume_physical_slot() -> bool:
+            nonlocal attempts_available, attempts_this_invocation
+            if attempts_available <= 0 or attempts_this_invocation >= attempt_budget:
+                return False
+            ensure_fence(checkpoint, processor_run_id, token, now_fn())
             attempts_available -= 1
             attempts_this_invocation += 1
             attempted_by_id[identity] = attempted_by_id.get(identity, 0) + 1
+            reservation["attempts_made"] = attempts_this_invocation
             checkpoint["last_heartbeat_at"] = timestamp(now_fn())
             checkpoint["last_progress_at"] = timestamp(now_fn())
+            # The reservation and lifetime budget were durably charged before
+            # this physical request. An interruption cannot refund it.
             atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
-            failure_context = "fetch"
-            try:
-                expected_page_url = safe_public_page_url(identity)
-                fetched = fetcher(expected_page_url, float(args.timeout))
-                if isinstance(fetched, DetailPageObservation):
-                    observation = fetched
-                else:
-                    if args.execution_mode == "live":
-                        raise ValueError("live_fetch_missing_page_observation")
-                    body = str(fetched)
-                    observation = DetailPageObservation(
-                        body=body, page_url=expected_page_url, effective_url=expected_page_url,
-                        page_sha256=sha256_bytes(body.encode("utf-8")), observed_at=timestamp(now),
-                    )
-                body = observation.body
-                failure_context = "observation"
-                observation_valid = (
-                    observation.page_url == expected_page_url
-                    and observation.effective_url == expected_page_url
-                    and observation.page_sha256 == sha256_bytes(observation.page_bytes)
-                    and parse_timestamp(observation.observed_at) <= now_fn() + dt.timedelta(minutes=5)
-                )
-                if not observation_valid:
-                    row_status = "quarantined"
-                    failure_diagnostic = {"code": "observation_mismatch"}
-                    break
-                failure_context = "parser"
-                urls = DETAIL_HELPERS.extract_link_detail_operation_urls(body)
-                missing_hosts = {
-                    (urllib.parse.urlsplit(endpoint).hostname or "").lower()
-                    for endpoint in urls
-                    if not safe_operation(DETAIL_HELPERS.operation(row, endpoint, 0, len(urls)))
-                    or (urllib.parse.urlsplit(endpoint).hostname or "").lower() not in registered_hosts
-                }
-                if missing_hosts:
-                    row_status = "quarantined"
-                    failure_diagnostic = {"code": "unsafe_or_unregistered_operation_host"}
-                    break
-                observed_guide = observed_guide_url(body, page_url)
-                for index, endpoint in enumerate(urls):
-                    item = DETAIL_HELPERS.operation(row, endpoint, index, len(urls))
-                    item["source"]["url"] = page_url
-                    operation_raw = item["source"].get("raw") or {}
-                    if observed_guide is None:
-                        operation_raw.pop("guide_url", None)
-                    else:
-                        operation_raw["guide_url"] = observed_guide
-                    item["source"]["raw"] = redact_operation_raw(operation_raw)
-                    row_operations.append(item)
-                if row_operations:
-                    row_status = "enriched"
-                    failure_diagnostic = None
-                    source_provenance = {
-                        "system": "data.go.kr",
-                        "page_url": observation.page_url,
-                        "effective_url": observation.effective_url,
-                        "page_sha256": observation.page_sha256,
-                        "observed_at": observation.observed_at,
-                    }
-                else:
-                    row_status = "quarantined"
-                    failure_diagnostic = {"code": "missing_link_detail_operations"}
+            return True
+
+        def is_terminal_contract_error(exc: BaseException) -> bool:
+            return isinstance(exc, (LinkResolverContractError, DETAIL_HELPERS.LinkDetailContractError))
+
+        while attempts_available > 0 and attempts_this_invocation < attempt_budget:
+            if row_status == "quarantined":
                 break
-            except Exception as exc:  # network failures remain per-identity
-                if failure_context == "parser":
-                    failure_diagnostic = {"code": "contract_or_parse_error"}
-                elif failure_context == "observation":
-                    # A malformed observation is retryable under the existing
-                    # fetch exception path; only an explicit false validation
-                    # result above is quarantined.
-                    failure_diagnostic = {"code": "observation_mismatch"}
-                else:
-                    failure_diagnostic = classify_detail_exception(exc)
+            if observation is None:
+                if not consume_physical_slot():
+                    break
+                failure_context = "page_fetch"
+                try:
+                    expected_page_url = safe_public_page_url(identity)
+                    fetched = fetcher(expected_page_url, float(args.timeout))
+                    if isinstance(fetched, DetailPageObservation):
+                        observation = fetched
+                    else:
+                        if args.execution_mode == "live":
+                            raise ValueError("live_fetch_missing_page_observation")
+                        body = str(fetched)
+                        body_bytes = body.encode("utf-8")
+                        observation = DetailPageObservation(
+                            body=body, page_url=expected_page_url, effective_url=expected_page_url,
+                            page_sha256=sha256_bytes(body_bytes), observed_at=timestamp(now), page_bytes=body_bytes,
+                        )
+                    failure_context = "page_observation"
+                    body = observation.body
+                    observation_valid = (
+                        observation.page_url == expected_page_url
+                        and observation.effective_url == expected_page_url
+                        and observation.page_sha256 == sha256_bytes(observation.page_bytes)
+                        and len(observation.page_bytes) <= MAX_DETAIL_BYTES
+                        and parse_timestamp(observation.observed_at) <= now_fn() + dt.timedelta(minutes=5)
+                    )
+                    if not observation_valid:
+                        row_status = "quarantined"
+                        failure_diagnostic = {"code": "observation_mismatch"}
+                        break
+                    failure_context = "page_parser"
+                    current_template = extract_current_template_dataset_id(body, identity)
+                    if current_template is not None:
+                        continue
+
+                    # The old anchor extractor remains the only path for the
+                    # legacy template. A malformed current button raises above
+                    # and cannot fall through to an unrelated anchor.
+                    urls = DETAIL_HELPERS.extract_link_detail_operation_urls(body)
+                    missing_hosts = {
+                        (urllib.parse.urlsplit(endpoint).hostname or "").lower()
+                        for endpoint in urls
+                        if not safe_operation(DETAIL_HELPERS.operation(row, endpoint, 0, len(urls)))
+                        or (urllib.parse.urlsplit(endpoint).hostname or "").lower() not in registered_hosts
+                    }
+                    if missing_hosts:
+                        row_status = "quarantined"
+                        failure_diagnostic = {"code": "unsafe_or_unregistered_operation_host"}
+                        break
+                    observed_guide = observed_guide_url(body, page_url)
+                    for index, endpoint in enumerate(urls):
+                        item = DETAIL_HELPERS.operation(row, endpoint, index, len(urls))
+                        item["source"]["url"] = page_url
+                        operation_raw = item["source"].get("raw") or {}
+                        if observed_guide is None:
+                            operation_raw.pop("guide_url", None)
+                        else:
+                            operation_raw["guide_url"] = observed_guide
+                        item["source"]["raw"] = redact_operation_raw(operation_raw)
+                        row_operations.append(item)
+                    if row_operations:
+                        row_status = "enriched"
+                        failure_diagnostic = None
+                        source_provenance = {
+                            "system": "data.go.kr",
+                            "page_url": observation.page_url,
+                            "effective_url": observation.effective_url,
+                            "page_sha256": observation.page_sha256,
+                            "observed_at": observation.observed_at,
+                        }
+                    else:
+                        row_status = "quarantined"
+                        failure_diagnostic = {"code": "missing_link_detail_operations"}
+                    break
+                except Exception as exc:
+                    if failure_context == "page_parser":
+                        row_status = "quarantined"
+                        failure_diagnostic = {"code": "contract_or_parse_error"}
+                        break
+                    if failure_context == "page_observation":
+                        failure_diagnostic = {"code": "observation_mismatch"}
+                        row_status = "retry"
+                        observation = None
+                        current_template = None
+                    else:
+                        failure_diagnostic = classify_detail_exception(exc)
+                        row_status = "retry"
+                    if failure_context == "page_fetch" and is_terminal_contract_error(exc):
+                        row_status = "quarantined"
+                    if attempts_available > 0 and attempts_this_invocation < attempt_budget:
+                        sleeper(min(5.0, 0.25 * (2 ** max(0, attempted_by_id.get(identity, 1) - 1))))
+                    continue
+
+            if current_template is None:
+                # A successful page parse can only be absent here after a
+                # legacy result; those rows were finalized above.
+                row_status = "quarantined"
+                failure_diagnostic = {"code": "contract_or_parse_error", "phase": "page"}
+                break
+            if attempts_available <= 0 or attempts_this_invocation >= attempt_budget:
+                row_status = "retry"
+                failure_diagnostic = {"code": "insufficient_budget_for_link_resolver", "phase": "resolver"}
+                break
+            if not consume_physical_slot():
+                row_status = "retry"
+                failure_diagnostic = {"code": "insufficient_budget_for_link_resolver", "phase": "resolver"}
+                break
+            resolver_attempts += 1
+
+            resolver_url = DETAIL_HELPERS.CURRENT_LINK_RESOLVER_URL.format(dataset_id=identity)
+            failure_context = "resolver_fetch"
+            try:
+                resolver_observation = resolver_fetcher(resolver_url, float(args.timeout))
+                if not isinstance(resolver_observation, LinkResolverObservation):
+                    raise LinkResolverContractError("live_resolver_missing_observation")
+                if (
+                    resolver_observation.request_url != resolver_url
+                    or resolver_observation.effective_url != resolver_url
+                    or not isinstance(resolver_observation.body, bytes)
+                    or len(resolver_observation.body) > DETAIL_HELPERS.MAX_LINK_RESOLVER_RESPONSE_BYTES
+                    or parse_timestamp(resolver_observation.observed_at) > now_fn() + dt.timedelta(minutes=5)
+                ):
+                    row_status = "quarantined"
+                    failure_diagnostic = {"code": "observation_mismatch", "phase": "resolver"}
+                    break
+                failure_context = "resolver_validation"
+                resolved = validate_link_resolver_response(
+                    resolver_observation.body, identity, resolver_observation.observed_at,
+                    expected_public_data_detail_pk=current_template.get("public_data_detail_pk"),
+                )
+                candidate_link_metadata = {
+                    "method": DETAIL_HELPERS.CURRENT_LINK_RESOLVER_METHOD,
+                    "dataset_id": current_template["dataset_id"],
+                    "public_data_pk": current_template["public_data_pk"],
+                    "public_data_detail_pk": current_template.get("public_data_detail_pk"),
+                    "page": {
+                        "url": observation.page_url,
+                        "effective_url": observation.effective_url,
+                        "sha256": observation.page_sha256,
+                        "bytes": len(observation.page_bytes),
+                        "observed_at": observation.observed_at,
+                    },
+                    "resolver": {
+                        "request_url": resolver_url,
+                        "effective_url": resolver_observation.effective_url,
+                        "sha256": resolved["response_sha256"],
+                        "bytes": resolved["response_bytes"],
+                        "observed_at": resolver_observation.observed_at,
+                        "public_data_detail_pk": resolved["public_data_detail_pk"],
+                        "resolved_url": resolved["link_url"],
+                        "resolved_url_sha256": resolved["link_url_sha256"],
+                    },
+                }
+                link_metadata = DETAIL_HELPERS.validate_link_metadata(
+                    candidate_link_metadata, identity, registered_hosts,
+                )
+                row_status = "quarantined"
+                failure_diagnostic = {
+                    "code": "resolved_link_operation_contract_unproven",
+                    "phase": "resolver",
+                }
+                break
+            except Exception as exc:
+                diagnostic = classify_detail_exception(exc)
+                if failure_context == "resolver_validation" and is_terminal_contract_error(exc):
+                    reason = str(exc)
+                    code = (
+                        "unsafe_or_unregistered_operation_host"
+                        if "unsafe" in reason or "unregistered" in reason
+                        else "contract_or_parse_error"
+                    )
+                    row_status = "quarantined"
+                    failure_diagnostic = {"code": code, "phase": "resolver"}
+                    break
+                if failure_context == "resolver_fetch" and isinstance(exc, LinkResolverContractError):
+                    row_status = "quarantined"
+                    failure_diagnostic = {"code": "contract_or_parse_error", "phase": "resolver"}
+                    break
+                failure_diagnostic = {**diagnostic, "phase": "resolver"}
+                row_status = "retry"
                 if attempts_available > 0 and attempts_this_invocation < attempt_budget:
-                    sleeper(min(5.0, 0.25 * (2 ** (used - 1))))
+                    sleeper(min(5.0, 0.25 * (2 ** max(0, attempted_by_id.get(identity, 1) - 1))))
+        if current_template is not None and resolver_attempts == 0 and row_status == "retry":
+            failure_diagnostic = {"code": "insufficient_budget_for_link_resolver", "phase": "resolver"}
         # Request-budget exhaustion is accounted in the reservation counters;
         # it must not replace the last observed failure diagnostic.
         if row_status == "enriched":
@@ -2084,6 +2335,8 @@ def process(
         }
         if row_status != "enriched" and failure_diagnostic is not None:
             worker_record["failure_diagnostic"] = validate_failure_diagnostic(failure_diagnostic)
+        if row_status != "enriched" and link_metadata is not None:
+            worker_record["link_metadata"] = link_metadata
         worker_records.append(worker_record)
         if row_status == "enriched":
             enriched_records.append({
@@ -2126,6 +2379,10 @@ def process(
         }
         if "failure_diagnostic" in row:
             outcome["failure_diagnostic"] = validate_failure_diagnostic(row["failure_diagnostic"])
+        if "link_metadata" in row:
+            outcome["link_metadata"] = DETAIL_HELPERS.validate_link_metadata(
+                row["link_metadata"], row["id"], registered_hosts,
+            )
         unresolved_worker_outcomes.append(outcome)
     for row in unqueued:
         outcome = {
