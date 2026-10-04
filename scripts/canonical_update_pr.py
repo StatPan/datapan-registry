@@ -1501,6 +1501,7 @@ def reconcile_huggingface_publication(
     *,
     observed_at: str,
     run_url: str,
+    publisher_reference: str | None = None,
 ) -> dict[str, Any]:
     """Reconcile the existing #592 publish/anonymous-readback receipt without publishing."""
     publication_receipt = load_object(publication_receipt_path)
@@ -1518,7 +1519,9 @@ def reconcile_huggingface_publication(
         raise AdmissionError("#592 publication repository does not match the canonical update candidate")
     if publication_receipt.get("schema_version") != "datapan.registry-publication-receipt.v1":
         raise AdmissionError("unsupported #592 publication receipt schema")
-    run_reference = f"{publication_receipt_path.as_posix()} sha256={digest_bytes(publication_receipt_path.read_bytes())}"
+    run_reference = publisher_reference or (
+        f"{publication_receipt_path.as_posix()} sha256={digest_bytes(publication_receipt_path.read_bytes())}"
+    )
     publication = publication_receipt.get("publication")
     verification = publication_receipt.get("anonymous_verification")
     if not isinstance(publication, dict) or not isinstance(verification, dict):
@@ -1543,7 +1546,7 @@ def reconcile_huggingface_publication(
             receipt = record_acknowledgement(receipt, {
                 **failed,
                 "status": "publication-pending",
-                "evidence_reference": "awaiting_existing_manual_publication_workflow",
+                "evidence_reference": publisher_reference or "awaiting_existing_manual_publication_workflow",
                 "run_url": run_url,
                 "run_id": run_id,
                 "run_attempt": run_attempt,
@@ -1567,7 +1570,7 @@ def reconcile_huggingface_publication(
             "status": "publication-pending", "observed_at": observed_at, "source_sha": merge_sha,
             "manifest_sha256": candidate["manifest_sha256"],
             "artifact_identity": {"path": candidate["registry_path"], "bytes": candidate["registry_bytes"], "sha256": candidate["registry_sha256"]},
-            "evidence_reference": "existing_manual_publication_workflow_completed", "run_url": run_url,
+            "evidence_reference": publisher_reference or "existing_manual_publication_workflow_completed", "run_url": run_url,
             "run_id": run_id, "run_attempt": run_attempt,
             "read_back_verified": False, "read_back_sha256": None, "read_back_bytes": None,
             "publication_revision": None, "publication_pointer_revision": None,
@@ -1577,7 +1580,7 @@ def reconcile_huggingface_publication(
             "status": "publication-pending", "observed_at": observed_at, "source_sha": merge_sha,
             "manifest_sha256": candidate["manifest_sha256"],
             "artifact_identity": {"path": candidate["registry_path"], "bytes": candidate["registry_bytes"], "sha256": candidate["registry_sha256"]},
-            "evidence_reference": "existing_manual_publication_retry_observed", "run_url": run_url,
+            "evidence_reference": publisher_reference or "existing_manual_publication_retry_observed", "run_url": run_url,
             "run_id": run_id, "run_attempt": run_attempt,
             "read_back_verified": False, "read_back_sha256": None, "read_back_bytes": None,
             "publication_revision": None, "publication_pointer_revision": None,

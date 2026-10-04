@@ -33,8 +33,13 @@ RUN_ID = "100"
 COLLECTOR_PATH = ".github/workflows/upstream-catalog-refresh.yml"
 PROMOTION_PATH = ".github/workflows/canonical-update-promotion.yml"
 PUBLICATION_ACK_PATH = ".github/workflows/canonical-update-publication-ack.yml"
+PUBLISHER_PATH = ".github/workflows/huggingface-distribution.yml"
+PUBLISHER_WORKFLOW_ID = 311133646
 PROCESSOR_PATH = ".github/workflows/upstream-catalogue-process.yml"
-WORKFLOW_IDS_BY_PATH = {COLLECTOR_PATH: 1101, PROMOTION_PATH: 1102, PUBLICATION_ACK_PATH: 1103, PROCESSOR_PATH: 373610259}
+WORKFLOW_IDS_BY_PATH = {
+    COLLECTOR_PATH: 1101, PROMOTION_PATH: 1102, PUBLICATION_ACK_PATH: 1103,
+    PROCESSOR_PATH: 373610259, PUBLISHER_PATH: PUBLISHER_WORKFLOW_ID,
+}
 PROCESSOR_FAILURE_FIXTURE = json.loads((ROOT / "tests/fixtures/upstream-catalogue-health/processor-failure-active-reservation.json").read_text())
 EVIDENCE_SHA = "c" * 64
 GENERATION_ID = "a" * 64
@@ -224,6 +229,85 @@ def promotion_attempt_evidence(
     return {"run": run, "attempt_number": 1, "jobs_api_endpoint": endpoint, "job_count": 1, "jobs": [job]}
 
 
+def scheduled_publication_ack_fixture(
+    *, ack_run_id: int = 401, publisher_run_id: int = 501,
+    publisher_completed_at: str = "2026-09-30T20:02:00Z",
+    ack_observed_at: str = "2026-09-30T20:03:00Z",
+    ack_completed_at: str = "2026-09-30T20:05:00Z",
+) -> tuple[dict, dict, dict, dict]:
+    ack = promotion_receipt(GENERATION_ID, "read-back-confirmed")
+    for row in ack["acknowledgements"]:
+        row["observed_at"] = "2026-09-30T19:00:00Z"
+    item = ack["acknowledgements"][-1]
+    item["run_id"] = ack_run_id
+    item["run_attempt"] = 1
+    item["run_url"] = f"https://github.com/StatPan/datapan-registry/actions/runs/{ack_run_id}/attempts/1"
+    item["observed_at"] = ack_observed_at
+    reference = {
+        "artifact_id": 11301727720,
+        "manifest_sha256": item["manifest_sha256"],
+        "payload_revision": item["publication_revision"],
+        "pointer_revision": item["publication_pointer_revision"],
+        "publisher_head_sha": "e" * 40,
+        "publisher_run_attempt": 1,
+        "publisher_run_id": publisher_run_id,
+        "publisher_workflow_id": PUBLISHER_WORKFLOW_ID,
+        "publisher_workflow_path": PUBLISHER_PATH,
+        "receipt_sha256": "9" * 64,
+        "repository": "StatPan/datapan-registry",
+        "source_sha": item["source_sha"],
+    }
+    item["evidence_reference"] = (
+        HEALTH.PUBLICATION_RECOVERY_REFERENCE_PREFIX
+        + HEALTH.canonical_json(reference).decode("utf-8")
+    )
+    ack_evidence = promotion_attempt_evidence(
+        ack_run_id, ack_completed_at, PUBLICATION_ACK_PATH,
+        job_completed_at=ack_completed_at,
+    )
+    ack_evidence["run"]["event"] = "schedule"
+    ack_evidence["jobs"][0]["head_sha"] = ack_evidence["run"]["head_sha"]
+    publisher_head_sha = reference["publisher_head_sha"]
+    publisher_run = {
+        "id": publisher_run_id,
+        "workflow_id": PUBLISHER_WORKFLOW_ID,
+        "run_attempt": 1,
+        "path": PUBLISHER_PATH,
+        "event": "workflow_dispatch",
+        "status": "completed",
+        "conclusion": "success",
+        "repository": {"full_name": "StatPan/datapan-registry"},
+        "head_repository": {"full_name": "StatPan/datapan-registry"},
+        "head_branch": "main",
+        "head_sha": publisher_head_sha,
+        "run_started_at": "2026-09-30T19:58:00Z",
+        "created_at": "2026-09-30T19:58:00Z",
+    }
+    publisher_job = {
+        "id": publisher_run_id + 10000,
+        "run_id": publisher_run_id,
+        "run_attempt": 1,
+        "head_sha": publisher_head_sha,
+        "name": "validate",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-09-30T20:00:00Z",
+        "completed_at": publisher_completed_at,
+        "steps": [
+            {"name": "Publish two-phase immutable distribution", "status": "completed", "conclusion": "success"},
+            {"name": "Verify published pointer anonymously", "status": "completed", "conclusion": "success"},
+        ],
+    }
+    publisher_evidence = {
+        "run": publisher_run,
+        "attempt_number": 1,
+        "jobs_api_endpoint": f"repos/StatPan/datapan-registry/actions/runs/{publisher_run_id}/attempts/1/jobs",
+        "job_count": 1,
+        "jobs": [publisher_job],
+    }
+    return ack, ack_evidence, publisher_evidence, reference
+
+
 def promotion_execution_run(
     *, run_id: int = 700, attempt: int = 1, status: str = "completed", conclusion: str | None = "failure",
     event: str = "workflow_run", run_started_at: str = "2026-09-30T22:00:00Z",
@@ -401,7 +485,9 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                    artifacts_by_run: dict | None = None, artifacts_by_id: dict | None = None,
                    ack: dict | None = None, mode: str = "live", api_error: str | None = None,
                    as_of: dt.datetime = AS_OF, last_good: dict | None = None,
-                   promotion_runs: dict | None = None, processor_runs: list[dict] | None = None,
+                   promotion_runs: dict | None = None,
+                   recovery_publisher_runs: dict | None = None,
+                   processor_runs: list[dict] | None = None,
                    processor_previous_attempts: dict | None = None,
                    processor_previous_attempt_errors: set[str] | None = None,
                    processor_api_error: str | None = None,
@@ -479,6 +565,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             workflow_api_error=api_error,
             producer_runs_by_id={str(row.get("id")): row for row in run_rows if isinstance(row, dict)},
             promotion_runs_by_id=run_map,
+            recovery_publisher_runs_by_id=recovery_publisher_runs or {},
             promotion_workflow_paths=POLICY["promotion_state"],
             workflow_ids_by_path=workflow_ids_by_path or WORKFLOW_IDS_BY_PATH,
             processor_workflow_runs=processor_runs or [],
@@ -499,7 +586,12 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             processor_candidate_screen=processor_candidate_screen,
         )
 
-    def run_live_health_cli(self, temp: pathlib.Path, journal: dict, *, cp: list[dict] | None = None) -> tuple[int, dict, mock.Mock]:
+    def run_live_health_cli(
+        self, temp: pathlib.Path, journal: dict, *, cp: list[dict] | None = None,
+        additional_attempt_evidence: dict[tuple[str, int], dict] | None = None,
+        workflow_ids_by_path: dict | None = None,
+        as_of: dt.datetime = LIVE_CLI_AS_OF,
+    ) -> tuple[int, dict, mock.Mock]:
         """Exercise main's live promotion-journal intake with every remote API stubbed."""
         journal_path = temp / "promotion-journal.json"
         journal_path.write_text(json.dumps(journal, sort_keys=True), encoding="utf-8")
@@ -531,10 +623,12 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                     f"repos/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}/jobs"
                 )
                 attempt_evidence[(str(run_id), attempt)] = evidence
+        attempt_evidence.update(additional_attempt_evidence or {})
+        configured_workflow_ids = workflow_ids_by_path or WORKFLOW_IDS_BY_PATH
 
         def workflow_identity(repository: str, workflow_path: str) -> int:
             self.assertEqual(repository, "StatPan/datapan-registry")
-            return WORKFLOW_IDS_BY_PATH[workflow_path]
+            return configured_workflow_ids[workflow_path]
 
         def run_attempt(repository: str, run_id: str, attempt: int) -> dict:
             self.assertEqual(repository, "StatPan/datapan-registry")
@@ -575,7 +669,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             patched["evaluate"].side_effect = evaluator
             with contextlib.redirect_stdout(io.StringIO()):
                 result = HEALTH.main([
-                    "--as-of", LIVE_CLI_AS_OF.isoformat(),
+                    "--as-of", as_of.isoformat(),
                     "--repository", "StatPan/datapan-registry",
                     "--processor-state-dir", str(state_dir),
                     "--promotion-ack", str(journal_path),
@@ -2387,6 +2481,256 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         last_good = report["sources"][0]["canonical"]["last_good"]
         self.assertEqual(last_good["generation_id"], "9" * 64)
         self.assertEqual(last_good["publication_revision"], "7" * 40)
+
+    def test_scheduled_ack_uses_authenticated_original_publisher_for_publication_order(self) -> None:
+        ack, ack_evidence, publisher_evidence, reference = scheduled_publication_ack_fixture(
+            ack_observed_at="2026-10-01T00:03:00Z",
+            ack_completed_at="2026-10-01T00:05:00Z",
+        )
+        as_of = dt.datetime.fromisoformat("2026-10-01T00:10:00+00:00")
+        item = ack["acknowledgements"][-1]
+        trusted = HEALTH.trusted_promotion_run(
+            item,
+            {f"{item['run_id']}/1": ack_evidence},
+            "StatPan/datapan-registry",
+            POLICY["promotion_state"],
+            WORKFLOW_IDS_BY_PATH,
+            as_of,
+            300,
+            {f"{reference['publisher_run_id']}/1": publisher_evidence},
+        )
+        self.assertIsNotNone(trusted)
+        self.assertEqual(trusted["run_id"], reference["publisher_run_id"])
+        self.assertEqual(trusted["run_attempt"], reference["publisher_run_attempt"])
+        self.assertEqual(trusted["jobs_completed_at"], "2026-09-30T20:02:00Z")
+
+        newer_good = {
+            "status": "read-back-confirmed", "source_id": "data_go_kr", "generation_id": "9" * 64,
+            "publication_revision": "7" * 40, "publication_pointer_revision": "6" * 40,
+            "artifact_identity": {"path": "data/data-go-kr.registry.json", "bytes": 123, "sha256": "d" * 64},
+            "verified": True, "publication_run_jobs_completed_at": "2026-09-30T23:00:00Z",
+            "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+            "publication_run_id": 999, "publication_run_attempt": 1,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory),
+                cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=ack,
+                last_good={"data_go_kr": newer_good},
+                as_of=as_of,
+                promotion_runs={f"{item['run_id']}/1": ack_evidence},
+                recovery_publisher_runs={f"{reference['publisher_run_id']}/1": publisher_evidence},
+                workflow_ids_by_path=WORKFLOW_IDS_BY_PATH,
+            )
+        canonical = report["sources"][0]["canonical"]
+        self.assertTrue(canonical["publication"]["publisher_run_verified"])
+        self.assertEqual(canonical["last_good"]["generation_id"], "9" * 64)
+        self.assertEqual(canonical["last_good"]["publication_revision"], "7" * 40)
+
+    def test_event_ack_uses_authenticated_original_publisher_for_publication_order(self) -> None:
+        ack, ack_evidence, publisher_evidence, reference = scheduled_publication_ack_fixture(
+            ack_run_id=402, publisher_run_id=502,
+            ack_observed_at="2026-10-01T00:03:00Z",
+            ack_completed_at="2026-10-01T00:05:00Z",
+        )
+        ack_evidence["run"]["event"] = "workflow_run"
+        item = ack["acknowledgements"][-1]
+        trusted = HEALTH.trusted_promotion_run(
+            item,
+            {f"{item['run_id']}/1": ack_evidence},
+            "StatPan/datapan-registry",
+            POLICY["promotion_state"],
+            WORKFLOW_IDS_BY_PATH,
+            dt.datetime.fromisoformat("2026-10-01T00:10:00+00:00"),
+            300,
+            {f"{reference['publisher_run_id']}/1": publisher_evidence},
+        )
+        self.assertIsNotNone(trusted)
+        self.assertEqual(trusted["run_id"], reference["publisher_run_id"])
+        self.assertEqual(trusted["jobs_completed_at"], "2026-09-30T20:02:00Z")
+
+        newer_good = {
+            "status": "read-back-confirmed", "source_id": "data_go_kr", "generation_id": "9" * 64,
+            "publication_revision": "7" * 40, "publication_pointer_revision": "6" * 40,
+            "artifact_identity": {"path": "data/data-go-kr.registry.json", "bytes": 123, "sha256": "d" * 64},
+            "verified": True, "publication_run_jobs_completed_at": "2026-09-30T23:00:00Z",
+            "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+            "publication_run_id": 999, "publication_run_attempt": 1,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint(status="ready", composer_status="ready")],
+                ack=ack, last_good={"data_go_kr": newer_good},
+                as_of=dt.datetime.fromisoformat("2026-10-01T00:10:00+00:00"),
+                promotion_runs={f"{item['run_id']}/1": ack_evidence},
+                recovery_publisher_runs={f"{reference['publisher_run_id']}/1": publisher_evidence},
+                workflow_ids_by_path=WORKFLOW_IDS_BY_PATH,
+            )
+        canonical = report["sources"][0]["canonical"]
+        self.assertTrue(canonical["publication"]["publisher_run_verified"])
+        self.assertEqual(canonical["last_good"]["generation_id"], "9" * 64)
+        self.assertEqual(canonical["last_good"]["publication_revision"], "7" * 40)
+
+    def test_malformed_publisher_reference_cannot_fall_back_for_either_ack_event(self) -> None:
+        ack, ack_evidence, publisher_evidence, reference = scheduled_publication_ack_fixture()
+        item = copy.deepcopy(ack["acknowledgements"][-1])
+        malformed = HEALTH.PUBLICATION_RECOVERY_REFERENCE_PREFIX + "not-json"
+        item["evidence_reference"] = malformed
+        for event in ("schedule", "workflow_run"):
+            ack_evidence["run"]["event"] = event
+            with self.subTest(event=event):
+                self.assertIsNone(HEALTH.trusted_promotion_run(
+                    item,
+                    {f"{item['run_id']}/1": ack_evidence},
+                    "StatPan/datapan-registry", POLICY["promotion_state"],
+                    WORKFLOW_IDS_BY_PATH, AS_OF, 300,
+                    {f"{reference['publisher_run_id']}/1": publisher_evidence},
+                ))
+
+    def test_scheduled_ack_requires_the_bound_successful_publisher_attempt(self) -> None:
+        ack, ack_evidence, publisher_evidence, reference = scheduled_publication_ack_fixture()
+        item = ack["acknowledgements"][-1]
+        ack_runs = {f"{item['run_id']}/1": ack_evidence}
+        recovery_runs = {f"{reference['publisher_run_id']}/1": publisher_evidence}
+
+        missing_reference = copy.deepcopy(item)
+        missing_reference["evidence_reference"] = "workflow:legacy"
+        self.assertIsNone(HEALTH.trusted_promotion_run(
+            missing_reference, ack_runs, "StatPan/datapan-registry", POLICY["promotion_state"],
+            WORKFLOW_IDS_BY_PATH, AS_OF, 300, recovery_runs,
+        ))
+
+        for label, mutate in (
+            ("event", lambda value: value["run"].update({"event": "push"})),
+            ("workflow_id", lambda value: value["run"].update({"workflow_id": PUBLISHER_WORKFLOW_ID + 1})),
+            ("head_sha", lambda value: value["run"].update({"head_sha": "c" * 40})),
+            ("repository", lambda value: value["run"]["repository"].update({"full_name": "attacker/elsewhere"})),
+            ("job conclusion", lambda value: value["jobs"][0].update({"conclusion": "failure"})),
+            ("publish step", lambda value: value["jobs"][0]["steps"][0].update({"conclusion": "skipped"})),
+        ):
+            with self.subTest(mutation=label):
+                bad_evidence = copy.deepcopy(publisher_evidence)
+                mutate(bad_evidence)
+                self.assertIsNone(HEALTH.trusted_promotion_run(
+                    item, ack_runs, "StatPan/datapan-registry", POLICY["promotion_state"],
+                    WORKFLOW_IDS_BY_PATH, AS_OF, 300,
+                    {f"{reference['publisher_run_id']}/1": bad_evidence},
+                ))
+
+        unavailable = {f"{reference['publisher_run_id']}/1": {"availability_error": True}}
+        self.assertIsNone(HEALTH.trusted_promotion_run(
+            item, ack_runs, "StatPan/datapan-registry", POLICY["promotion_state"],
+            WORKFLOW_IDS_BY_PATH, AS_OF, 300, unavailable,
+        ))
+
+        late_publisher = copy.deepcopy(publisher_evidence)
+        late_publisher["jobs"][0]["completed_at"] = "2026-09-30T20:04:00Z"
+        self.assertIsNone(HEALTH.trusted_promotion_run(
+            item, ack_runs, "StatPan/datapan-registry", POLICY["promotion_state"],
+            WORKFLOW_IDS_BY_PATH, AS_OF, 300,
+            {f"{reference['publisher_run_id']}/1": late_publisher},
+        ))
+
+        future_ack = copy.deepcopy(item)
+        future_ack["observed_at"] = "2026-10-01T00:10:00Z"
+        self.assertIsNone(HEALTH.trusted_promotion_run(
+            future_ack, ack_runs, "StatPan/datapan-registry", POLICY["promotion_state"],
+            WORKFLOW_IDS_BY_PATH, AS_OF, 300, recovery_runs,
+        ))
+
+    def test_live_cli_threads_collected_recovery_publisher_evidence_into_health(self) -> None:
+        fixture_dir = ROOT / "tests/fixtures/canonical-publication-ack/incident-37199628001-1"
+        journal = json.loads((fixture_dir / "pre-recovery-journal.json").read_text(encoding="utf-8"))
+        publisher_run = json.loads((fixture_dir / "publisher-run.json").read_text(encoding="utf-8"))
+        publisher_jobs = json.loads((fixture_dir / "publisher-jobs.json").read_text(encoding="utf-8"))
+        publisher_artifacts = json.loads((fixture_dir / "publisher-artifacts.json").read_text(encoding="utf-8"))
+        receipt = json.loads((fixture_dir / "hf-publication-receipt.json").read_text(encoding="utf-8"))
+        receipt_artifact = next(
+            row for row in publisher_artifacts["artifacts"]
+            if row["name"] == "huggingface-registry-publication-receipts"
+        )
+        publication = receipt["publication"]
+        source = receipt["source_binding"]
+        reference_value = {
+            "artifact_id": receipt_artifact["id"],
+            "manifest_sha256": source["manifest_sha256"],
+            "payload_revision": publication["payload_revision"],
+            "pointer_revision": publication["pointer_revision"],
+            "publisher_head_sha": publisher_run["head_sha"],
+            "publisher_run_attempt": publisher_run["run_attempt"],
+            "publisher_run_id": publisher_run["id"],
+            "publisher_workflow_id": publisher_run["workflow_id"],
+            "publisher_workflow_path": PUBLISHER_PATH,
+            "receipt_sha256": HEALTH.file_sha256(fixture_dir / "publication-receipts.zip"),
+            "repository": "StatPan/datapan-registry",
+            "source_sha": source["source_sha"],
+        }
+        recovery_reference = (
+            HEALTH.PUBLICATION_RECOVERY_REFERENCE_PREFIX
+            + HEALTH.canonical_json(reference_value).decode("utf-8")
+        )
+        target_record = next(row for row in journal["records"] if row["status"] == "merged")
+        with tempfile.TemporaryDirectory() as receipt_dir:
+            publication_path = pathlib.Path(receipt_dir) / "publication-receipt.json"
+            publication_path.write_text(json.dumps(receipt), encoding="utf-8")
+            completed_at = "2026-10-04T11:45:00Z"
+            ack_run_id = 37199777777
+            reconciled = HEALTH.PROMOTION.reconcile_huggingface_publication(
+                target_record,
+                publication_path,
+                observed_at="2026-10-04T11:44:00Z",
+                run_url=f"https://github.com/StatPan/datapan-registry/actions/runs/{ack_run_id}/attempts/1",
+                publisher_reference=recovery_reference,
+            )
+        journal["records"][journal["records"].index(target_record)] = reconciled
+        journal["updated_at"] = completed_at
+        ack_evidence = promotion_attempt_evidence(
+            ack_run_id, completed_at, PUBLICATION_ACK_PATH, job_completed_at=completed_at,
+        )
+        ack_evidence["run"]["event"] = "schedule"
+        publisher_evidence = {
+            "run": publisher_run,
+            "attempt_number": publisher_run["run_attempt"],
+            "jobs_api_endpoint": (
+                f"repos/StatPan/datapan-registry/actions/runs/{publisher_run['id']}/attempts/"
+                f"{publisher_run['run_attempt']}/jobs"
+            ),
+            "job_count": publisher_jobs["total_count"],
+            "jobs": publisher_jobs["jobs"],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            _result, receipt, evaluator = self.run_live_health_cli(
+                pathlib.Path(directory), journal,
+                additional_attempt_evidence={
+                    (str(ack_run_id), 1): ack_evidence,
+                    (str(publisher_run["id"]), publisher_run["run_attempt"]): publisher_evidence,
+                },
+                as_of=dt.datetime.fromisoformat("2026-10-04T12:00:00+00:00"),
+            )
+        evaluated = evaluator.call_args.kwargs["recovery_publisher_runs_by_id"]
+        identity = f"{publisher_run['id']}/{publisher_run['run_attempt']}"
+        self.assertIn(identity, evaluated)
+        canonical = receipt["sources"][0]["canonical"]
+        self.assertEqual(canonical["last_good"]["publication_revision"], publication["payload_revision"])
+
+    def test_c_schedule_and_dispatch_events_remain_trusted(self) -> None:
+        item = promotion_receipt(GENERATION_ID, "pending-review")["acknowledgements"][0]
+        for event in ("schedule", "workflow_dispatch"):
+            evidence = promotion_attempt_evidence(item["run_id"], item["observed_at"], PROMOTION_PATH)
+            evidence["run"]["event"] = event
+            trusted = HEALTH.trusted_promotion_run(
+                item,
+                {f"{item['run_id']}/1": evidence},
+                "StatPan/datapan-registry",
+                POLICY["promotion_state"],
+                WORKFLOW_IDS_BY_PATH,
+                AS_OF,
+                300,
+                {},
+            )
+            with self.subTest(event=event):
+                self.assertIsNotNone(trusted)
 
     def test_append_order_wins_for_equal_timestamps_and_revision_mismatch_is_rejected(self) -> None:
         ack = promotion_receipt(GENERATION_ID, "read-back-confirmed")
