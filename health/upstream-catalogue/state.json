@@ -5,23 +5,18 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-      "last_receipt_sha256": "a695d6cfbaddb04696940a0c3539dcd482d520c5d0ba20fbeeda72c23afbeab4",
-      "last_seen_at": "2026-10-04T12:55:06Z",
-      "observation_count": 58,
+      "last_receipt_sha256": "18f9d5fdb140ce0cf9d01119896a723acfa69527a2ceff79aabaf895eb4cc244",
+      "last_seen_at": "2026-10-04T13:20:41Z",
+      "observation_count": 59,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
       "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
-      "recovery_evidence": {
-        "checked_at": "2026-10-04T13:15:45Z",
-        "health_receipt_sha256": "1784ab7624d66e01d087416447222d1d04328fce624c1ab5a99e465bd0d66b45",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
-      },
+      "recovery_evidence": null,
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "candidate",
-      "status": "recovery_pending_verification"
+      "status": "open"
     },
     {
       "fault_key": "c73e09872f5c9b6e3f9e5526c8d163567a10cc78c7700797bc04e72afb380ddf",
@@ -643,8 +638,8 @@
     }
   },
   "latest_receipt": {
-    "path": "receipts/receipt-37204975092-1-1784ab7624d66e01.json",
-    "sha256": "1784ab7624d66e01d087416447222d1d04328fce624c1ab5a99e465bd0d66b45"
+    "path": "receipts/receipt-37205271044-1-18f9d5fdb140ce0c.json",
+    "sha256": "18f9d5fdb140ce0cf9d01119896a723acfa69527a2ceff79aabaf895eb4cc244"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -664,7 +659,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "bb119e60a39f0c4a6599fb1265a469978a885141e023759dcec6f48242545a5c",
-  "state_status": "healthy",
-  "updated_at": "2026-10-04T13:15:45Z"
+  "state_sha256": "40478c12e72b6505f7985ea085df18307c584b806d59f387f9d91243090b0687",
+  "state_status": "degraded",
+  "updated_at": "2026-10-04T13:20:41Z"
 }
