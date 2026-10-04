@@ -9,7 +9,8 @@ import json
 import pathlib
 import sys
 from typing import Any
-from urllib.parse import urlsplit
+
+from health_probe_endpoint import resolve_endpoint
 
 
 POLICY = pathlib.Path("policy/health-probe-canaries.json")
@@ -47,12 +48,10 @@ def build(policy: dict[str, Any], registry: list[dict[str, Any]]) -> tuple[dict[
         if len(operations) != 1:
             raise ValueError(f"{selection['operation_id']}: operation selector must resolve exactly once")
         operation = operations[0]
-        parsed = urlsplit(operation["endpoint"])
-        if not parsed.hostname or not parsed.path:
-            raise ValueError(f"{selection['operation_id']}: endpoint must contain host and path")
-        dependency = "data_go_kr_gateway" if parsed.hostname == "apis.data.go.kr" else "external_endpoint"
+        endpoint = resolve_endpoint(selection, dataset, operation)
+        dependency = "data_go_kr_gateway" if endpoint["host"] == "apis.data.go.kr" else "external_endpoint"
         reason = "data_go_kr_service_key_required" if dependency == "data_go_kr_gateway" else "registered_external_adapter_service_key_required"
-        key = operation_key([dataset["provider"], dataset["id"], operation["name"], dependency, parsed.hostname.lower(), parsed.path])
+        key = operation_key([dataset["provider"], dataset["id"], operation["name"], dependency, endpoint["host"], endpoint["path"]])
         aliases = {
             "dataset_id": dataset["id"],
             "operation_name": operation["name"],
@@ -64,7 +63,7 @@ def build(policy: dict[str, Any], registry: list[dict[str, Any]]) -> tuple[dict[
             "policy": {"key": selection["operation_id"], "version": 1, "authority": "datapan-registry", "max_level": "L4"},
             "aliases": aliases,
             "provider": dataset["provider"],
-            "endpoint": {"host": parsed.hostname, "path": parsed.path, "dependency_class": dependency},
+            "endpoint": {**endpoint, "dependency_class": dependency},
             "eligibility": {"status": "credential_required", "reason_code": reason},
             "credential_requirement": {"required": True, "type": "service_key", "scope": "operation"},
             "execution": {"timeout_ceiling_ms": 10000, "request_budget": 1, "safe_parameters": selection["safe_parameters"]},

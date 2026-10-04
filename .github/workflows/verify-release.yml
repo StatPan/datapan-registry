@@ -143,6 +143,7 @@ jobs:
           python -m unittest tests/test_generate_release_version_decision.py
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
+          python -m unittest tests/test_health_probe_endpoint.py
           python -m unittest tests/test_validate_health_probe_catalog.py
           python scripts/generate-operation-assertion-policies.py --check
           python scripts/validate-operation-assertion-policies.py

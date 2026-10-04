@@ -10,7 +10,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("health_catalog", ROOT / "scripts/validate-health-probe-catalog.py")
 MODULE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader
+sys.path.insert(0, str(ROOT / "scripts"))
 SPEC.loader.exec_module(MODULE)
+sys.path.pop(0)
 
 
 class HealthProbeCatalogTest(unittest.TestCase):
@@ -41,6 +43,18 @@ class HealthProbeCatalogTest(unittest.TestCase):
         value = copy.deepcopy(self.catalog)
         value["entries"][1]["operation_id"] = value["entries"][0]["operation_id"]
         with self.assertRaisesRegex(ValueError, "operation_id must be unique"):
+            self.validate(value)
+
+    def test_scheme_drift_rejected(self):
+        value = copy.deepcopy(self.catalog)
+        value["entries"][0]["endpoint"]["scheme"] = "http" if value["entries"][0]["endpoint"]["scheme"] == "https" else "https"
+        with self.assertRaisesRegex(ValueError, "endpoint transport or correction drift"):
+            self.validate(value)
+
+    def test_korad_method_regression_rejected(self):
+        value = copy.deepcopy(self.catalog)
+        next(e for e in value["entries"] if e["operation_id"] == "dpr-op-00000007")["endpoint"]["path"] = "/openapi/service/weatherMoniterSvc"
+        with self.assertRaisesRegex(ValueError, "endpoint transport or correction drift"):
             self.validate(value)
 
     def test_selector_drift_rejected(self):
