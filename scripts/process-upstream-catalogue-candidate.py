@@ -24,6 +24,21 @@ import urllib.parse
 import urllib.request
 from typing import Any, Callable
 
+SCRIPT_DIR = pathlib.Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+from upstream_catalogue_handoff import (  # noqa: E402
+    HandoffError,
+    admission_id,
+    admission_order_key,
+    add_admission,
+    derive_legacy_floor,
+    empty_ledger,
+    find_admitted_observation,
+    validate_admission_row,
+    validate_ledger,
+)
+
 CHECKPOINT_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
 ENRICHMENT_SCHEMA = "datapan.catalogue-enrichment-evidence.v1"
 STATE_FILE_LIMIT = 256 * 1024
@@ -96,7 +111,12 @@ def file_sha256(path: pathlib.Path) -> str:
 
 
 def generator_revision() -> str:
-    return file_sha256(pathlib.Path(__file__))
+    source = pathlib.Path(__file__)
+    handoff = source.with_name("upstream_catalogue_handoff.py")
+    return sha256_bytes(canonical_json({
+        "processor_script_sha256": file_sha256(source),
+        "collector_handoff_helper_sha256": file_sha256(handoff),
+    }))
 
 
 def extractor_revision() -> str:
@@ -1181,7 +1201,12 @@ def call_composer(
     return 0, "composer_succeeded"
 
 
-def append_generation_index(index_path: pathlib.Path, checkpoint_path: pathlib.Path, checkpoint: dict[str, Any]) -> None:
+def append_generation_index(
+    index_path: pathlib.Path, checkpoint_path: pathlib.Path, checkpoint: dict[str, Any], *,
+    collector_admission: dict[str, Any] | None = None,
+    legacy_floor: dict[str, Any] | None = None,
+    admitted_at: str | None = None,
+) -> None:
     index = {"schema_version": CHECKPOINT_SCHEMA, "generations": [], "detail_queue_cursor": 0, "detail_retry_state": {}}
     if index_path.exists():
         loaded = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
@@ -1241,7 +1266,144 @@ def append_generation_index(index_path: pathlib.Path, checkpoint_path: pathlib.P
                 current["failure_diagnostic"] = validate_failure_diagnostic(record["failure_diagnostic"])
     if len(retry_state) > DEFAULT_MAX_RETRY_STATES:
         raise ValueError("detail_retry_state_capacity_exceeded")
+    if collector_admission is not None:
+        try:
+            add_admission(index, collector_admission, now=admitted_at or checkpoint["last_heartbeat_at"], legacy_floor=legacy_floor)
+        except HandoffError as exc:
+            raise ValueError(str(exc)) from exc
     atomic_write_json(index_path, index)
+
+
+def validate_collector_admission(
+    args: argparse.Namespace, *, evidence: Any, candidate_sha256: str | None,
+    evidence_sha256: str | None, generation_id: str, artifact_name: str,
+    artifact_expires_at: str, now: dt.datetime,
+) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
+    """Bind the processor's validated input bytes to the exact A run attempt."""
+    if not args.collector_admission_file:
+        if args.execution_mode == "live" and not args.input_error and candidate_sha256:
+            raise ValueError("collector_handoff_admission_metadata_missing")
+        return None, None
+    path = args.collector_admission_file
+    try:
+        envelope = load_json(path, maximum_bytes=64 * 1024)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("collector_handoff_admission_metadata_invalid") from exc
+    expected_keys = {
+        "schema_version", "repository", "producer_run_id", "run_attempt", "head_sha",
+        "run_started_at", "run_completed_at", "observe_job_started_at", "observe_job_completed_at",
+        "artifact_id", "artifact_name",
+        "artifact_expires_at", "artifact_created_at", "artifact_digest_sha256",
+        "artifact_size_bytes", "archive_sha256", "archive_size_bytes", "observed_at",
+        "refresh_evidence_sha256", "event",
+    }
+    if not isinstance(envelope, dict) or set(envelope) != expected_keys:
+        raise ValueError("collector_handoff_admission_metadata_shape_invalid")
+    if (
+        envelope.get("schema_version") != "datapan.upstream-catalogue-admission-envelope.v1"
+        or envelope.get("repository") != args.repository
+        or str(envelope.get("producer_run_id")) != str(args.producer_run_id)
+        or str(envelope.get("artifact_id")) != str(args.input_artifact_id or "")
+        or envelope.get("artifact_name") != artifact_name
+        or envelope.get("artifact_expires_at") != artifact_expires_at
+        or envelope.get("event") not in {"schedule", "workflow_dispatch"}
+        or envelope.get("head_sha") != args.producer_head_sha
+        or not re.fullmatch(r"[a-f0-9]{40}", str(envelope.get("head_sha") or ""))
+    ):
+        raise ValueError("collector_handoff_admission_identity_mismatch")
+    run_attempt = envelope.get("run_attempt")
+    artifact_size = envelope.get("artifact_size_bytes")
+    archive_size = envelope.get("archive_size_bytes")
+    if (
+        not isinstance(run_attempt, int) or isinstance(run_attempt, bool) or run_attempt < 1
+        or not isinstance(artifact_size, int) or isinstance(artifact_size, bool) or artifact_size <= 0
+        or not isinstance(archive_size, int) or isinstance(archive_size, bool) or archive_size <= 0
+        or artifact_size != archive_size
+        or not re.fullmatch(r"[a-f0-9]{64}", str(envelope.get("artifact_digest_sha256") or ""))
+        or not re.fullmatch(r"[a-f0-9]{64}", str(envelope.get("archive_sha256") or ""))
+        or envelope.get("archive_sha256") != envelope.get("artifact_digest_sha256")
+        or envelope.get("refresh_evidence_sha256") != evidence_sha256
+        or not evidence_sha256 or not candidate_sha256
+        or envelope.get("observed_at") != (evidence.get("observed_at") if isinstance(evidence, dict) else None)
+        or envelope.get("event") not in {"schedule", "workflow_dispatch"}
+    ):
+        raise ValueError("collector_handoff_admission_evidence_mismatch")
+    for field in (
+        "run_started_at", "run_completed_at", "observe_job_started_at", "observe_job_completed_at",
+        "artifact_created_at", "artifact_expires_at", "observed_at",
+    ):
+        try:
+            parse_timestamp(str(envelope[field]))
+        except (TypeError, ValueError) as exc:
+            raise ValueError("collector_handoff_admission_timestamp_invalid") from exc
+    started = parse_timestamp(envelope["run_started_at"])
+    completed = parse_timestamp(envelope["run_completed_at"])
+    job_started = parse_timestamp(envelope["observe_job_started_at"])
+    job_completed = parse_timestamp(envelope["observe_job_completed_at"])
+    created = parse_timestamp(envelope["artifact_created_at"])
+    if (
+        completed < started or job_started < started or job_completed < job_started or job_completed > completed
+        or created < job_started or created > job_completed
+        or parse_timestamp(envelope["artifact_expires_at"]) <= now
+    ):
+        raise ValueError("collector_handoff_artifact_attempt_interval_invalid")
+    if not args.collector_archive or not args.collector_archive.is_file():
+        raise ValueError("collector_handoff_archive_missing")
+    archive_sha = file_sha256(args.collector_archive)
+    archive_size_actual = args.collector_archive.stat().st_size
+    if archive_sha != envelope["archive_sha256"] or archive_size_actual != archive_size:
+        raise ValueError("collector_handoff_archive_digest_or_size_mismatch")
+    if args.producer_run_url != f"https://github.com/{args.repository}/actions/runs/{args.producer_run_id}":
+        raise ValueError("collector_handoff_producer_url_mismatch")
+    if not isinstance(evidence, dict) or evidence.get("source_id") != args.source or evidence.get("collection", {}).get("succeeded") is not True:
+        raise ValueError("collector_handoff_source_evidence_not_successful")
+    row = {
+        "admission_id": admission_id(str(args.producer_run_id), run_attempt, str(evidence_sha256)),
+        "producer_run_id": str(args.producer_run_id),
+        "run_attempt": run_attempt,
+        "head_sha": str(envelope["head_sha"]),
+        "run_started_at": str(envelope["run_started_at"]),
+        "artifact_id": str(args.input_artifact_id),
+        "artifact_name": artifact_name,
+        "artifact_expires_at": artifact_expires_at,
+        "artifact_digest_sha256": str(envelope["artifact_digest_sha256"]),
+        "artifact_size_bytes": archive_size,
+        "refresh_evidence_sha256": str(evidence_sha256),
+        "observed_at": str(envelope["observed_at"]),
+        "generation_id": generation_id,
+        "candidate_sha256": str(candidate_sha256),
+        "admitted_at": timestamp(now),
+    }
+    try:
+        validate_admission_row(row)
+    except HandoffError as exc:
+        raise ValueError(str(exc)) from exc
+    index_path = args.state_dir / "sources" / args.source / "index.json"
+    if index_path.exists():
+        index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+    else:
+        index = {"schema_version": CHECKPOINT_SCHEMA, "generations": [], "detail_queue_cursor": 0, "detail_retry_state": {}}
+    if not isinstance(index, dict) or index.get("schema_version") != CHECKPOINT_SCHEMA or not isinstance(index.get("generations"), list):
+        raise ValueError("corrupt_generation_index")
+    existing_ledger = index.get("collector_handoff")
+    if existing_ledger is not None:
+        try:
+            ledger = validate_ledger(existing_ledger)
+        except HandoffError as exc:
+            raise ValueError(str(exc)) from exc
+        legacy_floor = ledger["legacy_discovery_floor"]
+    else:
+        try:
+            legacy_floor = derive_legacy_floor(args.state_dir, index, now=now)
+        except HandoffError as exc:
+            raise ValueError(str(exc)) from exc
+        if index["generations"] and legacy_floor is None:
+            raise ValueError("legacy_discovery_floor_unverifiable")
+    try:
+        add_admission(index, row, now=timestamp(now), legacy_floor=legacy_floor)
+    except HandoffError as exc:
+        raise ValueError(str(exc)) from exc
+    return row, legacy_floor
 
 
 def bind_output_artifact_id(
@@ -1476,6 +1638,14 @@ def process(
     generation_dir = args.state_dir / "sources" / args.source / "generations"
     checkpoint_path = generation_dir / f"{generation_id}.json"
     index_path = args.state_dir / "sources" / args.source / "index.json"
+    collector_admission: dict[str, Any] | None = None
+    legacy_floor: dict[str, Any] | None = None
+    if not args.input_error and candidate_path is not None and candidate_path.is_file() and evidence_sha:
+        collector_admission, legacy_floor = validate_collector_admission(
+            args, evidence=evidence, candidate_sha256=candidate_sha,
+            evidence_sha256=evidence_sha, generation_id=generation_id,
+            artifact_name=artifact_name, artifact_expires_at=artifact_expires_at, now=now,
+        )
     schema = load_json(args.checkpoint_schema, maximum_bytes=1024 * 1024)
     if checkpoint_path.exists():
         try:
@@ -1507,16 +1677,21 @@ def process(
 
     if checkpoint.get("generation_inputs") != generation_inputs:
         raise ValueError("generation identity input mismatch")
-    if checkpoint.get("status") not in {"ready", "no-change", "quarantined"}:
-        refs = checkpoint.setdefault("input_artifacts", [])
-        if not any(isinstance(ref, dict) and ref.get("run_id") == args.producer_run_id for ref in refs):
-            refs.append({
-                "run_id": args.producer_run_id, "name": artifact_name, "artifact_id": args.input_artifact_id,
-                "expires_at": artifact_expires_at,
-                "candidate_sha256": candidate_sha, "evidence_sha256": evidence_sha,
-                "diff_sha256": file_sha256(diff_path) if diff_path and diff_path.is_file() else None,
-            })
-            del refs[:-8]
+    refs = checkpoint.setdefault("input_artifacts", [])
+    if not any(
+        isinstance(ref, dict)
+        and ref.get("run_id") == args.producer_run_id
+        and ref.get("artifact_id") == args.input_artifact_id
+        and ref.get("evidence_sha256") == evidence_sha
+        for ref in refs
+    ):
+        refs.append({
+            "run_id": args.producer_run_id, "name": artifact_name, "artifact_id": args.input_artifact_id,
+            "expires_at": artifact_expires_at,
+            "candidate_sha256": candidate_sha, "evidence_sha256": evidence_sha,
+            "diff_sha256": file_sha256(diff_path) if diff_path and diff_path.is_file() else None,
+        })
+        del refs[:-8]
     # A repeated delivery of a terminal generation is idempotent. Update only
     # heartbeat metadata; a no-change result remains distinct from observation.
     new_observation = {
@@ -1527,12 +1702,41 @@ def process(
         "execution_mode": args.execution_mode,
     }
     prior_observation = checkpoint.get("last_observation")
-    new_observation_received = not isinstance(prior_observation, dict) or any(
+    observation_is_older_replay = False
+    if isinstance(prior_observation, dict) and collector_admission is not None:
+        prior_artifact_id = None
+        matching_prior_refs = [
+            ref for ref in refs if isinstance(ref, dict)
+            and str(ref.get("run_id")) == str(prior_observation.get("producer_run_id"))
+            and ref.get("evidence_sha256") == prior_observation.get("refresh_evidence_sha256")
+        ]
+        if matching_prior_refs:
+            prior_artifact_id = str(matching_prior_refs[-1].get("artifact_id") or "") or None
+        prior_admission = None
+        if index_path.is_file():
+            current_index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+            current_ledger = current_index.get("collector_handoff") if isinstance(current_index, dict) else None
+            if current_ledger is not None:
+                prior_admission = find_admitted_observation(
+                    current_ledger,
+                    producer_run_id=str(prior_observation.get("producer_run_id") or ""),
+                    evidence_sha256=str(prior_observation.get("refresh_evidence_sha256") or ""),
+                    generation_id=str(checkpoint.get("generation_id") or ""),
+                    artifact_id=prior_artifact_id,
+                )
+        if prior_admission is not None:
+            observation_is_older_replay = admission_order_key(collector_admission) < admission_order_key(prior_admission)
+        else:
+            observation_is_older_replay = parse_timestamp(observed_at) < parse_timestamp(
+                str(prior_observation.get("observed_at") or "")
+            )
+    new_observation_received = not observation_is_older_replay and (not isinstance(prior_observation, dict) or any(
         prior_observation.get(key) != value for key, value in new_observation.items()
-    )
+    ))
     if new_observation_received:
         checkpoint["observation_count"] = int(checkpoint.get("observation_count", 0)) + 1
-    checkpoint["last_observation"] = new_observation
+    if not observation_is_older_replay:
+        checkpoint["last_observation"] = new_observation
     prior_outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), dict) else {}
     ready_has_detail_work = (
         checkpoint.get("status") == "ready"
@@ -1541,7 +1745,10 @@ def process(
     if checkpoint.get("status") in {"ready", "no-change", "quarantined"} and not new_observation_received and not ready_has_detail_work:
         checkpoint["last_heartbeat_at"] = timestamp(now)
         atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
-        append_generation_index(index_path, checkpoint_path, checkpoint)
+        append_generation_index(
+            index_path, checkpoint_path, checkpoint,
+            collector_admission=collector_admission, legacy_floor=legacy_floor, admitted_at=timestamp(now),
+        )
         args.exact_delivery_replay = True
         return (0 if checkpoint.get("status") in {"ready", "no-change"} else 3), checkpoint
     if checkpoint.get("status") in {"ready", "no-change"} and (new_observation_received or ready_has_detail_work):
@@ -1687,7 +1894,10 @@ def process(
             "last_heartbeat_at": timestamp(now_fn()), "last_progress_at": timestamp(now_fn()),
         })
         atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
-        append_generation_index(index_path, checkpoint_path, checkpoint)
+        append_generation_index(
+            index_path, checkpoint_path, checkpoint,
+            collector_admission=collector_admission, legacy_floor=legacy_floor, admitted_at=timestamp(now_fn()),
+        )
         return 0, checkpoint
 
     if args.require_durable_reservation:
@@ -2126,6 +2336,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--execution-mode", choices=["live", "fixture"], default="fixture")
     parser.add_argument("--producer-run-url", default=os.environ.get("GITHUB_SERVER_URL", "") + "/" + os.environ.get("GITHUB_REPOSITORY", "") + "/actions/runs/" + os.environ.get("GITHUB_RUN_ID", "local"))
     parser.add_argument("--artifact-name")
+    parser.add_argument("--producer-head-sha")
+    parser.add_argument("--collector-admission-file", type=pathlib.Path, help=argparse.SUPPRESS)
+    parser.add_argument("--collector-archive", type=pathlib.Path, help=argparse.SUPPRESS)
     parser.add_argument("--resume-enrichment-evidence", type=pathlib.Path)
     parser.add_argument("--input-artifact-id")
     parser.add_argument("--artifact-expires-at")

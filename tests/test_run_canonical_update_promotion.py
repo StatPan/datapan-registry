@@ -1847,6 +1847,13 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 for field, input_path in RUNNER.PROCESSOR_INPUT_PROVENANCE.items():
                     if input_path == source_path:
                         generation_inputs[field] = hashlib.sha256(content).hexdigest()
+            generator_material = {
+                "processor_script_sha256": hashlib.sha256((root / "scripts/process-upstream-catalogue-candidate.py").read_bytes()).hexdigest(),
+                "collector_handoff_helper_sha256": hashlib.sha256((root / "scripts/upstream_catalogue_handoff.py").read_bytes()).hexdigest(),
+            }
+            generation_inputs["generator_revision"] = hashlib.sha256(
+                json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            ).hexdigest()
             subprocess.run(("git", "add", "."), cwd=root, check=True)
             subprocess.run(("git", "commit", "-qm", "processor source"), cwd=root, check=True)
             processor_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
@@ -1864,6 +1871,18 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             checkpoint = {"generation_inputs": generation_inputs}
             composition = {"input_digests": receipt_digests}
             RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, current_head, composition)
+
+            handoff_path = root / "scripts/upstream_catalogue_handoff.py"
+            prior_handoff = handoff_path.read_bytes()
+            handoff_path.write_bytes(prior_handoff + b"\n# changed admission semantics\n")
+            subprocess.run(("git", "add", str(handoff_path)), cwd=root, check=True)
+            subprocess.run(("git", "commit", "-qm", "change collector handoff semantics"), cwd=root, check=True)
+            handoff_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
+            with self.assertRaisesRegex(RUNNER.PromotionError, "input contract changed since observation: scripts/upstream_catalogue_handoff.py"):
+                RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, handoff_head, composition)
+            handoff_path.write_bytes(prior_handoff)
+            subprocess.run(("git", "add", str(handoff_path)), cwd=root, check=True)
+            subprocess.run(("git", "commit", "-qm", "restore collector handoff"), cwd=root, check=True)
 
             tampered_composition = {"input_digests": {**receipt_digests, "registry_schema": {"bytes": 1, "sha256": "0" * 64}}}
             with self.assertRaisesRegex(RUNNER.PromotionError, "registry_schema digest"):
