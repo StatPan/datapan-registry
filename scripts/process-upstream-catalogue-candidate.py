@@ -2216,6 +2216,11 @@ def process(
                         current_template = None
                     else:
                         failure_diagnostic = classify_detail_exception(exc)
+                        if (
+                            failure_context == "page_fetch"
+                            and failure_diagnostic.get("code") in {"timeout", "transport_error"}
+                        ):
+                            failure_diagnostic["phase"] = "page"
                         row_status = "retry"
                     if failure_context == "page_fetch" and is_terminal_contract_error(exc):
                         row_status = "quarantined"

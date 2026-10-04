@@ -559,29 +559,70 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertNotEqual(first["generation_id"], second["generation_id"])
         self.assertEqual(first["generation_inputs"]["candidate_sha256"], second["generation_inputs"]["candidate_sha256"])
 
-    def test_failed_requests_consume_attempt_budget_before_call_and_keep_retry_state(self) -> None:
-        calls = []
-        def fail(url: str, timeout: float) -> str:
-            calls.append((url, timeout))
-            raise TimeoutError("secret URL must not be recorded")
-        code, checkpoint = self.invoke(fetcher=fail, **{"--retries-per-detail": 1, "--max-attempts": 2})
-        self.assertEqual(code, 2)
-        self.assertEqual(checkpoint["status"], "retry")
-        self.assertEqual(checkpoint["attempts_consumed"], 2)
-        self.assertEqual(len(calls), 2)
-        self.assertNotIn("secret", self.checkpoint_path(checkpoint).read_text())
-        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
-        self.assertEqual(evidence["worker_outcomes"], [{
-            "api_key": {"provider": "data.go.kr", "id": "2"},
-            "status": "retry",
-            "source_sha256": MODULE.source_fingerprint(self.new_link),
-            "guide_sha256": MODULE.guide_fingerprint(self.new_link),
-            "failure_diagnostic": {"code": "timeout"},
-        }])
-        self.assertEqual(checkpoint["detail_records"][-1]["failure_diagnostic"], {"code": "timeout"})
-        self.assertEqual(checkpoint["outcome"]["detail_failure_counts"], {"timeout": 1})
-        self.assertEqual(checkpoint["outcome"]["detail_reason_unavailable_count"], 0)
-        self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 0)
+    def test_page_fetch_transport_failures_keep_phase_and_retry_state(self) -> None:
+        cases = (
+            ("timeout", lambda: TimeoutError("SECRET direct timeout"), "timeout"),
+            ("wrapped_timeout", lambda: urllib.error.URLError(TimeoutError("SECRET wrapped timeout")), "timeout"),
+            ("transport", lambda: urllib.error.URLError("SECRET transport failure"), "transport_error"),
+        )
+        for index, (label, make_error, code_name) in enumerate(cases):
+            with self.subTest(case=label):
+                shutil.rmtree(self.state_dir, ignore_errors=True)
+                shutil.rmtree(self.output_dir, ignore_errors=True)
+                self.now = f"2026-10-01T10:0{index}:00Z"
+                self.write_observation(self.now)
+                calls: list[tuple[str, float]] = []
+                resolver_calls: list[str] = []
+                expected_url = "https://www.data.go.kr/data/2/openapi.do"
+
+                def fail(url: str, timeout: float) -> str:
+                    calls.append((url, timeout))
+                    raise make_error()
+
+                args = self.args(
+                    run_id=str(101 + index),
+                    **{"--retries-per-detail": 1, "--max-attempts": 2, "--timeout": 20},
+                )
+                code, checkpoint = MODULE.process(
+                    args,
+                    fetcher=fail,
+                    resolver_fetcher=lambda url, _timeout: resolver_calls.append(url),
+                    sleeper=lambda _delay: None,
+                )
+                diagnostic = {"code": code_name, "phase": "page"}
+                self.assertEqual(code, 2)
+                self.assertEqual(checkpoint["status"], "retry")
+                self.assertEqual(checkpoint["attempts_consumed"], 2)
+                self.assertEqual(checkpoint["attempts_by_id"], {"2": 2})
+                self.assertEqual(checkpoint["request_reservation"]["attempts_made"], 2)
+                self.assertEqual(calls, [(expected_url, 20.0), (expected_url, 20.0)])
+                self.assertEqual(resolver_calls, [])
+
+                checkpoint_path = self.checkpoint_path(checkpoint)
+                self.assertEqual(checkpoint["detail_records"][-1]["failure_diagnostic"], diagnostic)
+                self.assertEqual(checkpoint["detail_records"][-1]["source_sha256"], MODULE.source_fingerprint(self.new_link))
+                self.assertEqual(checkpoint["detail_records"][-1]["guide_sha256"], MODULE.guide_fingerprint(self.new_link))
+                schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+                self.assertIs(MODULE.verify_checkpoint(checkpoint, schema), checkpoint)
+
+                evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+                self.assertEqual(evidence["worker_outcomes"], [{
+                    "api_key": {"provider": "data.go.kr", "id": "2"},
+                    "status": "retry",
+                    "source_sha256": MODULE.source_fingerprint(self.new_link),
+                    "guide_sha256": MODULE.guide_fingerprint(self.new_link),
+                    "failure_diagnostic": diagnostic,
+                }])
+                index_value = json.loads((self.state_dir / "sources/data_go_kr/index.json").read_text())
+                retry_state = index_value["detail_retry_state"][MODULE.record_id(self.new_link)]
+                self.assertEqual(retry_state["attempts"], 2)
+                self.assertEqual(retry_state["source_sha256"], MODULE.source_fingerprint(self.new_link))
+                self.assertEqual(retry_state["guide_sha256"], MODULE.guide_fingerprint(self.new_link))
+                self.assertEqual(retry_state["failure_diagnostic"], diagnostic)
+                self.assertEqual(checkpoint["outcome"]["detail_failure_counts"], {code_name: 1})
+                self.assertEqual(checkpoint["outcome"]["detail_reason_unavailable_count"], 0)
+                self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 0)
+                self.assertNotIn("SECRET", checkpoint_path.read_text() + json.dumps(evidence) + json.dumps(index_value))
 
     def test_malformed_observation_timestamp_keeps_retry_budget_and_status(self) -> None:
         expected_url = "https://www.data.go.kr/data/2/openapi.do"
@@ -662,7 +703,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(code, 2)
         first_index = json.loads((self.state_dir / "sources/data_go_kr/index.json").read_text())
         identity = MODULE.record_id(self.new_link)
-        self.assertEqual(first_index["detail_retry_state"][identity]["failure_diagnostic"], {"code": "timeout"})
+        self.assertEqual(first_index["detail_retry_state"][identity]["failure_diagnostic"], {
+            "code": "timeout", "phase": "page",
+        })
 
         code, second = self.invoke(
             run_id="102", fetcher=lambda url, timeout: (calls.append(url) or self.successful_fetch(url, timeout)),
@@ -705,9 +748,47 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(len(calls), 1)
         self.assertEqual(second["attempts_consumed"], 0)
         self.assertEqual(second["detail_records"][-1]["status"], "quarantined")
-        self.assertEqual(second["detail_records"][-1]["failure_diagnostic"], {"code": "timeout"})
+        self.assertEqual(second["detail_records"][-1]["failure_diagnostic"], {
+            "code": "timeout", "phase": "page",
+        })
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"], {
+            "code": "timeout", "phase": "page",
+        })
+
+    def test_legacy_phase_less_retry_diagnostic_remains_readable_without_rewrite(self) -> None:
+        def fail(_url: str, _timeout: float) -> str:
+            raise TimeoutError("historical timeout")
+
+        code, first = self.invoke(fetcher=fail, **{"--retries-per-detail": 1, "--max-attempts": 1})
+        self.assertEqual(code, 2)
+        identity = MODULE.record_id(self.new_link)
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        index_value = json.loads(index_path.read_text(encoding="utf-8"))
+        index_value["detail_retry_state"][identity]["failure_diagnostic"] = {"code": "timeout"}
+        legacy_retry_row = copy.deepcopy(index_value["detail_retry_state"][identity])
+        index_path.write_text(json.dumps(index_value), encoding="utf-8")
+
+        policy = json.loads(self.policy_path.read_text(encoding="utf-8"))
+        policy["semantic_policy_revision"] = "legacy-phase-less-retry"
+        self.policy_path.write_text(json.dumps(policy), encoding="utf-8")
+        self.now = "2026-10-02T10:00:00Z"
+
+        def unexpected_fetch(*_args):
+            self.fail("unavailable historical retry must not issue another detail request")
+
+        code, resumed = self.invoke(
+            run_id="102", fetcher=unexpected_fetch,
+            **{"--retries-per-detail": 0, "--max-attempts": 1},
+        )
+        self.assertEqual(code, 2)
+        self.assertNotEqual(resumed["generation_id"], first["generation_id"])
+        self.assertEqual(resumed["attempts_consumed"], 0)
+        self.assertEqual(resumed["detail_records"][-1]["failure_diagnostic"], {"code": "timeout"})
         evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
         self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"], {"code": "timeout"})
+        updated_index = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertEqual(updated_index["detail_retry_state"][identity], legacy_retry_row)
 
     def test_checkpoint_and_retry_index_reject_malformed_diagnostics(self) -> None:
         code, checkpoint = self.invoke(
@@ -755,7 +836,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         identity = MODULE.record_id(self.new_link)
         index_path = self.state_dir / "sources/data_go_kr/index.json"
         initial_index = json.loads(index_path.read_text())
-        self.assertEqual(initial_index["detail_retry_state"][identity]["failure_diagnostic"], {"code": "timeout"})
+        self.assertEqual(initial_index["detail_retry_state"][identity]["failure_diagnostic"], {
+            "code": "timeout", "phase": "page",
+        })
 
         candidate = json.loads(self.candidate_path.read_text())
         candidate[-1]["source"]["raw"]["title"] = "Changed source contract"
@@ -780,7 +863,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         identity = MODULE.record_id(self.new_link)
         index_path = self.state_dir / "sources/data_go_kr/index.json"
         initial_index = json.loads(index_path.read_text())
-        self.assertEqual(initial_index["detail_retry_state"][identity]["failure_diagnostic"], {"code": "timeout"})
+        self.assertEqual(initial_index["detail_retry_state"][identity]["failure_diagnostic"], {
+            "code": "timeout", "phase": "page",
+        })
 
         self.write_observation("2026-10-22T10:00:00Z")
         self.now = "2026-10-22T10:00:01Z"
@@ -1420,6 +1505,15 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(first["status"], "ready")
         self.assertEqual(first["outcome"]["detail_retry_count"], 1)
         self.assertEqual(first["outcome"]["pending_count"], 1)
+        self.assertEqual(first["detail_records"][-1]["failure_diagnostic"], {
+            "code": "timeout", "phase": "page",
+        })
+        first_enrichment = json.loads(
+            (self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text()
+        )
+        self.assertEqual(first_enrichment["worker_outcomes"][0]["failure_diagnostic"], {
+            "code": "timeout", "phase": "page",
+        })
         self.assertEqual(json.loads((self.output_dir / "ready-scope.registry.json").read_text())[0]["id"], "11")
 
         self.now = "2026-10-01T11:00:00Z"
