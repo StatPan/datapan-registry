@@ -1344,8 +1344,6 @@ def append_journal_record(
         if isinstance(old_pr, Mapping) and isinstance(new_pr, Mapping):
             if old_pr.get("number", 0) and new_pr.get("number") != old_pr.get("number"):
                 raise AdmissionError("promotion reconciliation changed the durable PR number")
-            if old_pr.get("url") and new_pr.get("url") != old_pr.get("url"):
-                raise AdmissionError("promotion reconciliation changed the durable PR URL")
             witnessed_merge_sha = replayed.get("pr", {}).get("merge_commit_sha")
             old_merge_sha = old_pr.get("merge_commit_sha")
             if (
