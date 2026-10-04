@@ -372,15 +372,20 @@ def discover_oldest_unseen(
     trusted.sort(key=lambda item: (parse_time(str(item.get("run_started_at"))), int(str(item["id"]))))
     ledger = validate_ledger(ledger_value)
     floor = validate_floor(legacy_floor) if legacy_floor is not None else ledger["legacy_discovery_floor"]
-    if floor is not None and floor.get("run_started_at") is None and floor.get("producer_run_id"):
-        floor_summary = next((row for row in trusted if str(row.get("id")) == str(floor["producer_run_id"])), None)
-        if floor_summary is not None:
-            floor = dict(floor, run_started_at=str(floor_summary["run_started_at"]))
     floor_cutoff = None
+    floor_cutoff_by_completion = False
     if floor is not None:
-        floor_cutoff = parse_time(
-            floor.get("run_started_at") or floor.get("lookback_started_at") or floor.get("observed_at")
-        )
+        if floor.get("run_started_at"):
+            floor_cutoff = parse_time(floor["run_started_at"])
+        elif floor.get("basis") == "bounded_initial_lookback":
+            floor_cutoff = parse_time(floor["lookback_started_at"])
+        else:
+            # Legacy checkpoints bind the source observation, not the A run
+            # start. A later A run may have started before that observation
+            # and still complete with newer source bytes, so compare its
+            # authenticated completed-run timestamp instead.
+            floor_cutoff = parse_time(str(floor["observed_at"]))
+            floor_cutoff_by_completion = True
     unseen = []
     for row in trusted:
         run_id = str(row["id"])
@@ -389,8 +394,13 @@ def discover_oldest_unseen(
             if run_id == str(floor.get("producer_run_id")):
                 unseen.append(row)  # artifact identity decides whether this is the old floor or a new attempt
                 continue
-            if floor_cutoff is not None and start <= floor_cutoff:
-                continue
+            if floor_cutoff is not None:
+                if floor_cutoff_by_completion:
+                    completed = parse_time(str(row.get("updated_at") or ""))
+                    if completed <= floor_cutoff:
+                        continue
+                elif start <= floor_cutoff:
+                    continue
         unseen.append(row)
     if not unseen:
         return None, [], budget.requests
@@ -716,7 +726,7 @@ def add_admission(
             floor.get("producer_run_id") == admission["producer_run_id"]
             and floor.get("artifact_id") == admission["artifact_id"]
             and floor.get("evidence_sha256") == admission["refresh_evidence_sha256"]
-            and floor.get("generation_id") == admission["generation_id"]
+            and (floor.get("run_attempt") is None or floor.get("run_attempt") == admission["run_attempt"])
         )
         if (
             floor.get("basis") != "bounded_initial_lookback"
@@ -748,12 +758,17 @@ def find_admitted_observation(
     ledger_value: Any, *, producer_run_id: str, evidence_sha256: str,
     generation_id: str, artifact_id: str | None = None,
 ) -> dict[str, Any] | None:
+    """Find source observation identity even when processing generation changes.
+
+    ``generation_id`` remains in the signature for caller compatibility and in
+    ledger rows as provenance, but it is derived from the processor revision
+    and is not part of the producer observation's immutable identity.
+    """
     ledger = validate_ledger(ledger_value)
     matches = [
         row for row in ledger["admitted_observations"]
         if row["producer_run_id"] == str(producer_run_id)
         and row["refresh_evidence_sha256"] == evidence_sha256
-        and row["generation_id"] == generation_id
         and (artifact_id is None or row["artifact_id"] == str(artifact_id))
     ]
     return max(matches, key=admission_order_key) if matches else None
@@ -767,10 +782,14 @@ def choose_oldest_unseen(
     ledger = validate_ledger(ledger_value)
     floor = validate_floor(legacy_floor) if legacy_floor is not None else ledger["legacy_discovery_floor"]
     floor_started = None
+    floor_completed = None
     if floor is not None:
-        floor_started = parse_time(
-            floor.get("run_started_at") or floor.get("lookback_started_at") or floor["observed_at"]
-        )
+        if floor.get("run_started_at"):
+            floor_started = parse_time(floor["run_started_at"])
+        elif floor.get("basis") == "bounded_initial_lookback":
+            floor_started = parse_time(floor["lookback_started_at"])
+        else:
+            floor_completed = parse_time(str(floor["observed_at"]))
     ordered = sorted(
         (dict(item) for item in candidates),
         key=lambda item: (parse_time(str(item["run_started_at"])), int(str(item["producer_run_id"]))),
@@ -791,6 +810,12 @@ def choose_oldest_unseen(
                 continue
         if floor_started is not None and parse_time(str(candidate["run_started_at"])) <= floor_started:
             continue
+        if floor_completed is not None:
+            completed_at = candidate.get("run_completed_at") or candidate.get("run_updated_at")
+            if completed_at is None:
+                raise HandoffError("candidate_completion_time_required_for_legacy_floor")
+            if parse_time(str(completed_at)) <= floor_completed:
+                continue
         return candidate
     return None
 

@@ -40,12 +40,14 @@ class CollectorHandoffLedgerTests(unittest.TestCase):
 
     @staticmethod
     def candidate(run_id: str, started_at: str, attempt: int = 1) -> dict:
+        started = dt.datetime.fromisoformat(started_at.replace("Z", "+00:00"))
         return {
             "producer_run_id": run_id,
             "run_attempt": attempt,
             "artifact_id": str(int(run_id) + (1000 * attempt)),
             "artifact_digest_sha256": "b" * 64,
             "run_started_at": started_at,
+            "run_completed_at": (started + dt.timedelta(minutes=2)).isoformat().replace("+00:00", "Z"),
         }
 
     def test_old_ready_generation_does_not_hide_new_unseen_observation(self) -> None:
@@ -91,6 +93,25 @@ class CollectorHandoffLedgerTests(unittest.TestCase):
         changed = dict(row, artifact_id="9999")
         with self.assertRaisesRegex(MODULE.HandoffError, "identity_conflict"):
             MODULE.add_admission(index, changed, now="2026-10-04T00:00:00Z")
+
+    def test_legacy_floor_binds_observation_not_generator_derived_generation(self) -> None:
+        row = self.row("200", "2026-10-02T00:00:00Z")
+        floor = {
+            "producer_run_id": row["producer_run_id"],
+            "artifact_id": row["artifact_id"],
+            "observed_at": row["observed_at"],
+            "generation_id": "e" * 64,
+            "evidence_sha256": row["refresh_evidence_sha256"],
+            "basis": "sealed_checkpoint_input_reference",
+        }
+        index = {"schema_version": "v1", "generations": []}
+
+        MODULE.add_admission(index, row, now="2026-10-04T00:00:00Z", legacy_floor=floor)
+
+        ledger = MODULE.validate_ledger(index["collector_handoff"])
+        self.assertEqual(ledger["legacy_discovery_floor"], floor)
+        self.assertEqual(len(ledger["admitted_observations"]), 1)
+        self.assertEqual(ledger["admitted_observations"][0]["generation_id"], row["generation_id"])
 
     def test_conflicting_artifact_for_same_exact_attempt_is_rejected(self) -> None:
         index = {"schema_version": "v1", "generations": []}

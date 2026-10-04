@@ -170,14 +170,14 @@ class FakeProducerActionsApi:
         self.calls: list[str] = []
 
     @staticmethod
-    def summary(run_id: str, started_at: str) -> dict:
+    def summary(run_id: str, started_at: str, *, attempt: int = 1) -> dict:
         completed = "2026-10-03T10:04:00Z"
         return {
             "id": int(run_id), "workflow_id": FakeProducerActionsApi.workflow_id,
             "name": "Upstream catalog refresh",
             "path": ".github/workflows/upstream-catalog-refresh.yml",
             "event": "schedule", "status": "completed", "conclusion": "success",
-            "run_attempt": 1, "head_branch": "main", "head_sha": SOURCE_HEAD,
+            "run_attempt": attempt, "head_branch": "main", "head_sha": SOURCE_HEAD,
             "repository": {"id": 123, "full_name": REPOSITORY},
             "head_repository": {"id": 123, "full_name": REPOSITORY},
             "run_started_at": started_at, "updated_at": completed,
@@ -196,12 +196,13 @@ class FakeProducerActionsApi:
             run_endpoint = f"repos/{self.repo}/actions/runs/{run_id}"
             if endpoint == run_endpoint:
                 return dict(row)
-            if endpoint.startswith(f"{run_endpoint}/attempts/1/jobs?"):
+            attempt = int(row.get("run_attempt", 1))
+            if endpoint.startswith(f"{run_endpoint}/attempts/{attempt}/jobs?"):
                 started = datetime.fromisoformat(str(row["run_started_at"]).replace("Z", "+00:00"))
                 job_started = (started + timedelta(minutes=1)).isoformat().replace("+00:00", "Z")
                 return {"total_count": 1, "jobs": [{
                     "id": int(run_id) + 500_000, "name": "observe", "run_id": int(run_id),
-                    "run_attempt": 1, "head_sha": SOURCE_HEAD,
+                    "run_attempt": attempt, "head_sha": SOURCE_HEAD,
                     "status": "completed", "conclusion": "success",
                     "started_at": job_started,
                     "completed_at": "2026-10-03T10:03:00Z",
@@ -331,6 +332,42 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         self.assertEqual([item["producer_run_id"] for item in admitted], ["601002"])
         self.assertEqual(admitted[0]["generation_id"], current["generation_id"])
 
+    def test_legacy_floor_rerun_does_not_hide_an_unseen_producer_run(self):
+        handoff = load_module(ROOT / "scripts/upstream_catalogue_handoff.py", f"handoff_floor_rerun_{id(self)}")
+        with tempfile.TemporaryDirectory() as temporary:
+            state_dir = pathlib.Path(temporary)
+            index_path = state_dir / "sources/data_go_kr/index.json"
+            index_path.parent.mkdir(parents=True)
+            floor = {
+                "producer_run_id": "100", "artifact_id": "99100",
+                "observed_at": "2026-10-03T09:15:00Z",
+                "generation_id": "c" * 64, "evidence_sha256": "1" * 64,
+                "basis": "sealed_checkpoint_input_reference",
+            }
+            index_path.write_text(json.dumps({
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "generations": [], "detail_queue_cursor": 0,
+                "detail_retry_state": {}, "collector_handoff": handoff.empty_ledger(floor),
+            }), encoding="utf-8")
+            rows = [
+                FakeProducerActionsApi.summary("100", "2026-10-03T10:00:00Z", attempt=2),
+                FakeProducerActionsApi.summary("101", "2026-10-03T09:30:00Z"),
+            ]
+            api = FakeProducerActionsApi(rows, artifact_ids={"100": "99102"})
+            stdout = io.StringIO()
+            with mock.patch.object(handoff, "gh_api_json", side_effect=api.get), contextlib.redirect_stdout(stdout):
+                result = handoff.main([
+                    "--repository", REPOSITORY, "--default-branch", "main",
+                    "--state-dir", str(state_dir), "--now", "2026-10-03T10:10:00Z",
+                ])
+
+            self.assertEqual(result, 0)
+            output = dict(line.split("=", 1) for line in stdout.getvalue().splitlines() if "=" in line)
+            self.assertEqual(output["available"], "true")
+            self.assertEqual(output["producer_run_id"], "101")
+            self.assertTrue(any("/actions/runs/101/attempts/1/jobs" in item for item in api.calls))
+            self.assertFalse(any("/actions/runs/100/attempts/2/jobs" in item for item in api.calls))
+
     def test_same_generation_admits_distinct_producers_but_exact_replay_is_idempotent(self):
         _support, fixture, processor = processor_fixture(self)
         observed_at = "2026-10-03T10:02:00Z"
@@ -379,6 +416,96 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         rows = index["collector_handoff"]["admitted_observations"]
         self.assertEqual([row["producer_run_id"] for row in rows], ["701001", "701002"])
         self.assertEqual({row["generation_id"] for row in rows}, {snapshots["701001"]["generation_id"]})
+
+    @unittest.skipUnless(
+        (ROOT / "scripts/compose-upstream-catalogue-candidate.py").is_file(),
+        "legacy retry migration fixture requires the reviewed composer",
+    )
+    def test_generator_upgrade_replays_legacy_source_claim_without_resetting_retry_state(self):
+        support, fixture, processor = processor_fixture(self)
+        producer_run_id = "721001"
+        processor_run_id = "721002"
+        artifact_id = "9721001"
+        observed_at = "2026-10-03T10:02:00Z"
+        fixture.write_real_composer_inputs(
+            [], [support.UpstreamCatalogueProcessorTest.real_link_row(), rest_row("12")], observed_at,
+        )
+        fixture.now = "2026-10-03T10:00:00Z"
+        legacy_args = fixture.args(run_id=producer_run_id, **{
+            "--input-artifact-id": artifact_id,
+            "--artifact-name": f"upstream-catalog-refresh-{producer_run_id}",
+            "--artifact-expires-at": EXPIRES,
+            "--max-attempts": 1, "--max-queue": 1, "--retries-per-detail": 2,
+            "--composer": ROOT / "scripts/compose-upstream-catalogue-candidate.py",
+        })
+        legacy_args.fixture_composer = None
+        legacy_args.allow_fixture_composer = False
+        with mock.patch.object(processor, "generator_revision", return_value="a" * 64):
+            code, legacy = processor.process(
+                legacy_args,
+                fetcher=lambda *_: (_ for _ in ()).throw(TimeoutError("fixture retry")),
+                sleeper=lambda _delay: None,
+            )
+        self.assertEqual(code, 0, legacy.get("outcome"))
+        self.assertEqual(legacy["status"], "ready")
+        self.assertEqual(legacy["outcome"]["detail_retry_count"], 1)
+        legacy_generation = legacy["generation_id"]
+        legacy_checkpoint = fixture.checkpoint_path(legacy).read_bytes()
+        index_path = fixture.state_dir / "sources/data_go_kr/index.json"
+        old_index = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertNotIn("collector_handoff", old_index)
+        self.assertEqual(old_index["detail_retry_state"]["2"]["attempts"], 1)
+        old_cursor = old_index["detail_queue_cursor"]
+
+        fixture.now = "2026-10-03T10:10:00Z"
+        admission_path, archive, actual_artifact_id = write_admission_bundle(
+            fixture, processor, run_id=producer_run_id, observed_at=observed_at,
+            started_at="2026-10-03T09:00:00Z", artifact_id=artifact_id,
+        )
+        self.assertEqual(actual_artifact_id, artifact_id)
+        claim = admission_args(
+            fixture, run_id=producer_run_id, admission_path=admission_path,
+            archive=archive, artifact_id=artifact_id, claim_only=True,
+        )
+        claim.processor_run_id = processor_run_id
+        claim.retries_per_detail = 2
+        code, upgraded = processor.process(
+            claim, fetcher=lambda *_: self.fail("legacy migration claim must not make a provider request"),
+        )
+
+        self.assertEqual(code, 0, upgraded.get("outcome"))
+        self.assertNotEqual(upgraded["generation_id"], legacy_generation)
+        self.assertEqual(upgraded["generation_inputs"]["generator_revision"], processor.generator_revision())
+        self.assertEqual(upgraded["last_observation"]["producer_run_id"], producer_run_id)
+        self.assertEqual(upgraded["last_observation"]["observed_at"], observed_at)
+        self.assertEqual(upgraded["observation_count"], 1)
+        self.assertEqual(upgraded["request_reservation"]["owner_run_id"], processor_run_id)
+        self.assertEqual(upgraded["request_reservation"]["reserved_attempts"], 1)
+        self.assertEqual(upgraded["attempts_by_id"]["2"], 2)
+        self.assertEqual(fixture.checkpoint_path(legacy).read_bytes(), legacy_checkpoint)
+
+        migrated = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertEqual(migrated["detail_queue_cursor"], old_cursor)
+        self.assertEqual(migrated["detail_retry_state"]["2"]["attempts"], 2)
+        self.assertEqual(
+            migrated["detail_retry_state"]["2"]["source_sha256"],
+            old_index["detail_retry_state"]["2"]["source_sha256"],
+        )
+        self.assertEqual(
+            migrated["detail_retry_state"]["2"]["guide_sha256"],
+            old_index["detail_retry_state"]["2"]["guide_sha256"],
+        )
+        ledger = migrated["collector_handoff"]
+        self.assertEqual(ledger["legacy_discovery_floor"]["generation_id"], legacy_generation)
+        self.assertEqual(len(ledger["admitted_observations"]), 1)
+        admitted = ledger["admitted_observations"][0]
+        self.assertEqual(admitted["producer_run_id"], producer_run_id)
+        self.assertEqual(admitted["artifact_id"], artifact_id)
+        self.assertEqual(
+            admitted["refresh_evidence_sha256"],
+            legacy["last_observation"]["refresh_evidence_sha256"],
+        )
+        self.assertEqual(admitted["generation_id"], upgraded["generation_id"])
 
     def test_older_after_newer_replay_keeps_last_observation_and_count(self):
         _support, fixture, processor = processor_fixture(self)
@@ -434,6 +561,84 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         self.assertEqual(replay["observation_count"], 2)
         self.assertEqual(replay["last_observation"]["producer_run_id"], "801002")
         self.assertEqual(replay["last_observation"]["observed_at"], newer_at)
+
+    def test_equal_time_replay_across_generator_revision_keeps_admitted_timeline(self):
+        _support, fixture, processor = processor_fixture(self)
+        observed_at = "2026-10-03T10:02:00Z"
+        fixture.write_real_composer_inputs([], [rest_row()], observed_at)
+        fixture.now = "2026-10-03T10:05:00Z"
+        bundles = {}
+        first_generation = None
+
+        for run_id, started_at in (
+            ("731001", "2026-10-03T09:00:00Z"),
+            ("731002", "2026-10-03T09:30:00Z"),
+        ):
+            admission_path, archive, artifact_id = write_admission_bundle(
+                fixture, processor, run_id=run_id, observed_at=observed_at, started_at=started_at,
+            )
+            bundles[run_id] = (admission_path, archive, artifact_id)
+            claim = admission_args(
+                fixture, run_id=run_id, admission_path=admission_path,
+                archive=archive, artifact_id=artifact_id, claim_only=True,
+            )
+            code, checkpoint = processor.process(
+                claim, fetcher=lambda *_: self.fail("claim must not make provider requests"),
+            )
+            self.assertEqual(code, 0, checkpoint.get("outcome"))
+            worker = reserved_worker_args(fixture, run_id=run_id, artifact_id=artifact_id)
+            code, checkpoint = processor.process(
+                worker, fetcher=lambda *_: self.fail("REST-only worker must not make provider requests"),
+            )
+            self.assertEqual(code, 0, checkpoint.get("outcome"))
+            first_generation = first_generation or checkpoint["generation_id"]
+            self.assertEqual(checkpoint["generation_id"], first_generation)
+            fixture.now = "2026-10-03T10:06:00Z" if run_id == "731001" else "2026-10-03T10:07:00Z"
+
+        self.assertEqual(checkpoint["observation_count"], 2)
+        self.assertEqual(checkpoint["last_observation"]["producer_run_id"], "731002")
+        revised_generation = "f" * 64
+        fixture.now = "2026-10-03T10:08:00Z"
+        admission_path, archive, artifact_id = bundles["731002"]
+        with mock.patch.object(processor, "generator_revision", return_value=revised_generation):
+            current_claim = admission_args(
+                fixture, run_id="731002", admission_path=admission_path,
+                archive=archive, artifact_id=artifact_id, claim_only=True,
+            )
+            code, current = processor.process(
+                current_claim, fetcher=lambda *_: self.fail("migration replay must not make provider requests"),
+            )
+            self.assertEqual(code, 0, current.get("outcome"))
+            self.assertNotEqual(current["generation_id"], first_generation)
+            self.assertEqual(current["generation_inputs"]["generator_revision"], revised_generation)
+            self.assertEqual(current["observation_count"], 1)
+            self.assertEqual(current["last_observation"]["producer_run_id"], "731002")
+            worker = reserved_worker_args(fixture, run_id="731002", artifact_id=artifact_id)
+            code, current = processor.process(
+                worker, fetcher=lambda *_: self.fail("REST-only worker must not make provider requests"),
+            )
+            self.assertEqual(code, 0, current.get("outcome"))
+            self.assertEqual(current["observation_count"], 1)
+
+            fixture.now = "2026-10-03T10:09:00Z"
+            admission_path, archive, artifact_id = bundles["731001"]
+            older_claim = admission_args(
+                fixture, run_id="731001", admission_path=admission_path,
+                archive=archive, artifact_id=artifact_id, claim_only=True,
+            )
+            code, replay = processor.process(
+                older_claim, fetcher=lambda *_: self.fail("older exact replay must not make provider requests"),
+            )
+
+        self.assertEqual(code, 0, replay.get("outcome"))
+        self.assertEqual(replay["generation_id"], current["generation_id"])
+        self.assertEqual(replay["observation_count"], 1)
+        self.assertEqual(replay["last_observation"]["producer_run_id"], "731002")
+        self.assertEqual(replay["last_observation"]["observed_at"], observed_at)
+        index = json.loads((fixture.state_dir / "sources/data_go_kr/index.json").read_text(encoding="utf-8"))
+        ledger_rows = index["collector_handoff"]["admitted_observations"]
+        self.assertEqual([row["producer_run_id"] for row in ledger_rows], ["731001", "731002"])
+        self.assertEqual({row["generation_id"] for row in ledger_rows}, {first_generation})
 
     def test_handoff_cli_catches_missed_observation_ahead_of_old_ready_details(self):
         support, fixture, processor = processor_fixture(self)
@@ -520,6 +725,41 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             self.assertEqual(output["producer_run_id"], "105")
             self.assertLessEqual(int(output["api_requests"]), handoff.MAX_API_REQUESTS)
             self.assertFalse(any(call.endswith("/runs/100") or "/runs/101/" in call for call in api.calls))
+
+    def test_legacy_floor_rerun_uses_completion_cutoff_without_hiding_unseen_run(self):
+        handoff = load_module(ROOT / "scripts/upstream_catalogue_handoff.py", f"handoff_floor_rerun_{id(self)}")
+        with tempfile.TemporaryDirectory() as temporary:
+            state_dir = pathlib.Path(temporary)
+            index_path = state_dir / "sources/data_go_kr/index.json"
+            index_path.parent.mkdir(parents=True)
+            floor = {
+                "producer_run_id": "100", "artifact_id": "99100",
+                "observed_at": "2026-10-03T09:15:00Z",
+                "generation_id": "c" * 64, "evidence_sha256": "1" * 64,
+                "basis": "sealed_checkpoint_input_reference",
+            }
+            index_path.write_text(json.dumps({
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "generations": [], "detail_queue_cursor": 0,
+                "detail_retry_state": {}, "collector_handoff": handoff.empty_ledger(floor),
+            }), encoding="utf-8")
+            rows = [
+                FakeProducerActionsApi.summary("100", "2026-10-03T10:00:00Z", attempt=2),
+                FakeProducerActionsApi.summary("101", "2026-10-03T09:30:00Z"),
+            ]
+            api = FakeProducerActionsApi(rows, artifact_ids={"100": "99102"})
+            stdout = io.StringIO()
+            with mock.patch.object(handoff, "gh_api_json", side_effect=api.get), contextlib.redirect_stdout(stdout):
+                result = handoff.main([
+                    "--repository", REPOSITORY, "--default-branch", "main",
+                    "--state-dir", str(state_dir), "--now", "2026-10-03T10:10:00Z",
+                ])
+            self.assertEqual(result, 0)
+            output = dict(line.split("=", 1) for line in stdout.getvalue().splitlines() if "=" in line)
+            self.assertEqual(output["available"], "true")
+            self.assertEqual(output["producer_run_id"], "101")
+            self.assertTrue(any("/actions/runs/101/attempts/1/jobs" in item for item in api.calls))
+            self.assertFalse(any("/actions/runs/100/attempts/2/jobs" in item for item in api.calls))
 
     def test_state_branch_cas_conflict_keeps_claim_admission_remote_durable_state_unchanged(self):
         support, fixture, processor = processor_fixture(self)
