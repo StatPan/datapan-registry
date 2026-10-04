@@ -13,6 +13,7 @@ import unittest
 import urllib.error
 import urllib.request
 import jsonschema
+from typing import Any
 from datetime import datetime, timedelta, timezone
 from unittest import mock
 
@@ -51,7 +52,8 @@ class FakeOpener:
     def __init__(self, response: FakeResponse) -> None:
         self.response = response
 
-    def open(self, _request: urllib.request.Request, timeout: float):
+    def open(self, request: urllib.request.Request, timeout: float):
+        self.request = request
         self.timeout = timeout
         return self.response
 
@@ -138,9 +140,9 @@ enrichment=json.loads(pathlib.Path(a.enrichment_evidence).read_text())
 assert set(enrichment) in ({"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records"}, {"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records", "worker_outcomes"})
 for row in enrichment["records"]: assert set(row) == {"api_key", "status", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "source_provenance"}
 for row in enrichment.get("worker_outcomes", []):
-    assert set(row) in ({"api_key", "status", "source_sha256", "guide_sha256"}, {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic"})
+    assert set(row) in ({"api_key", "status", "source_sha256", "guide_sha256"}, {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic"}, {"api_key", "status", "source_sha256", "guide_sha256", "link_metadata"}, {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic", "link_metadata"})
     if "failure_diagnostic" in row:
-        assert set(row["failure_diagnostic"]) in ({"code"}, {"code", "http_status"})
+        assert set(row["failure_diagnostic"]) in ({"code"}, {"code", "http_status"}, {"code", "phase"}, {"code", "http_status", "phase"})
 (out/"composed-candidate.registry.json").write_bytes(pathlib.Path(a.candidate).read_bytes())
 (out/"ready-scope.registry.json").write_bytes(pathlib.Path(a.candidate).read_bytes())
 (out/"semantic-diff.json").write_text(json.dumps({"summary":{"added":1,"removed":0,"changed":0}}))
@@ -191,6 +193,217 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertRegex(url, r"^https://www\.data\.go\.kr/data/[0-9]+/openapi\.do$")
         self.assertLessEqual(timeout, 30)
         return '<a href="https://api.example.gov/detail" onclick="fn_LinkApiRequest()">API</a>'
+
+    def test_current_template_resolves_metadata_without_inventing_operation(self) -> None:
+        page_url = "https://www.data.go.kr/data/2/openapi.do"
+        page_bytes = (
+            '<button type="button" onclick="fn_goUrlLink(\'2\')">Open</button>'
+            '<input type="hidden" id="publicDataPk" value="2">'
+            '<input type="hidden" id="publicDataDetailPk" value="uddi:fixture-2">'
+        ).encode("utf-8")
+        resolver_bytes = json.dumps({
+            "publicDataDetailPk": "uddi:fixture-2",
+            "linkUrl": "http://api.example.gov/catalogue/landing",
+            "status": True,
+        }, separators=(",", ":")).encode("utf-8")
+        page_calls: list[str] = []
+        resolver_calls: list[str] = []
+
+        def page_fetch(url: str, _timeout: float):
+            page_calls.append(url)
+            return MODULE.DetailPageObservation(
+                body=page_bytes.decode("utf-8"), page_url=url, effective_url=url,
+                page_sha256=MODULE.sha256_bytes(page_bytes), observed_at=self.now, page_bytes=page_bytes,
+            )
+
+        def resolver_fetch(url: str, _timeout: float):
+            resolver_calls.append(url)
+            return MODULE.LinkResolverObservation(
+                body=resolver_bytes, request_url=url, effective_url=url, observed_at=self.now,
+            )
+
+        self.provider_index_path.write_text(json.dumps({
+            "adapters": [{"name": "example", "hosts": ["api.example.gov"]}],
+        }), encoding="utf-8")
+        code, checkpoint = MODULE.process(
+            self.args(), fetcher=page_fetch, resolver_fetcher=resolver_fetch, sleeper=lambda _delay: None,
+        )
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(code, 2)
+        self.assertEqual(page_calls, [page_url])
+        self.assertEqual(resolver_calls, ["https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=2"])
+        self.assertEqual(evidence["records"], [])
+        outcome = evidence["worker_outcomes"][0]
+        self.assertEqual(outcome["status"], "quarantined")
+        self.assertEqual(outcome["failure_diagnostic"], {
+            "code": "resolved_link_operation_contract_unproven", "phase": "resolver",
+        })
+        self.assertEqual(outcome["link_metadata"]["resolver"]["resolved_url"], "http://api.example.gov/catalogue/landing")
+        self.assertEqual(outcome["link_metadata"]["resolver"]["resolved_url_sha256"], MODULE.sha256_bytes(b"http://api.example.gov/catalogue/landing"))
+        self.assertEqual(checkpoint["attempts_consumed"], 2)
+
+    def test_resume_rejects_resolver_diagnostic_when_metadata_chain_is_missing(self) -> None:
+        page_url = "https://www.data.go.kr/data/2/openapi.do"
+        page_bytes = (
+            '<button onclick="fn_goUrlLink(\'2\')">Open</button>'
+            '<input type="hidden" id="publicDataPk" value="2">'
+            '<input type="hidden" id="publicDataDetailPk" value="uddi:fixture-2">'
+        ).encode("utf-8")
+        resolver_bytes = json.dumps({
+            "publicDataDetailPk": "uddi:fixture-2",
+            "linkUrl": "http://api.example.gov/catalogue/landing",
+            "status": True,
+        }, separators=(",", ":")).encode("utf-8")
+        self.provider_index_path.write_text(json.dumps({
+            "adapters": [{"name": "example", "hosts": ["api.example.gov"]}],
+        }), encoding="utf-8")
+
+        def page_fetch(url: str, _timeout: float):
+            return MODULE.DetailPageObservation(
+                body=page_bytes.decode("utf-8"), page_url=url, effective_url=url,
+                page_sha256=MODULE.sha256_bytes(page_bytes), observed_at=self.now, page_bytes=page_bytes,
+            )
+
+        def resolver_fetch(url: str, _timeout: float):
+            return MODULE.LinkResolverObservation(
+                body=resolver_bytes, request_url=url, effective_url=url, observed_at=self.now,
+            )
+
+        code, checkpoint = MODULE.process(
+            self.args(), fetcher=page_fetch, resolver_fetcher=resolver_fetch, sleeper=lambda _delay: None,
+        )
+        self.assertEqual(code, 2)
+        evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        self.assertEqual(
+            evidence["worker_outcomes"][0]["failure_diagnostic"]["code"],
+            "resolved_link_operation_contract_unproven",
+        )
+        original_evidence = copy.deepcopy(evidence)
+
+        def rebind_evidence(value: dict) -> None:
+            evidence_path.write_text(json.dumps(value), encoding="utf-8")
+            evidence_sha = MODULE.file_sha256(evidence_path)
+            for output in checkpoint["output_digests"]:
+                if output["path"] == evidence_path.name:
+                    output["sha256"] = evidence_sha
+                    break
+            checkpoint["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+                MODULE.canonical_json(checkpoint["output_digests"]),
+            )
+            owner_path = self.checkpoint_path(checkpoint)
+            owner_path.write_text(json.dumps(MODULE.seal_checkpoint(checkpoint)), encoding="utf-8")
+
+        secret_evidence = copy.deepcopy(original_evidence)
+        secret_metadata = secret_evidence["worker_outcomes"][0]["link_metadata"]
+        secret_url = "http://api.example.gov/catalogue/landing?client%5Fsecret=SYNTHETIC_TEST_VALUE"
+        secret_metadata["resolver"]["resolved_url"] = secret_url
+        secret_metadata["resolver"]["resolved_url_sha256"] = MODULE.sha256_bytes(secret_url.encode("utf-8"))
+        rebind_evidence(secret_evidence)
+
+        checkpoint_schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        )
+        with self.assertRaisesRegex(ValueError, "resume_worker_link_metadata_invalid"):
+            MODULE.validated_resume_records(
+                evidence_path,
+                checkpoint=checkpoint,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=checkpoint_schema,
+                provider_index_sha256=checkpoint["generation_inputs"]["adapter_revision"],
+                candidate_by_id={"2": self.new_link},
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+            )
+
+        evidence = copy.deepcopy(original_evidence)
+        evidence["worker_outcomes"][0].pop("link_metadata")
+        rebind_evidence(evidence)
+
+        # Rebind the altered bytes to an otherwise valid owner to exercise the
+        # resume validator's semantic rule, not only its digest guard.
+        stripped_checkpoint = copy.deepcopy(checkpoint)
+        stripped_checkpoint["detail_records"][0].pop("link_metadata")
+        MODULE.seal_checkpoint(stripped_checkpoint)
+        with self.assertRaises(jsonschema.ValidationError):
+            MODULE.verify_checkpoint(stripped_checkpoint, checkpoint_schema)
+        with self.assertRaisesRegex(ValueError, "resume_worker_link_metadata_missing"):
+            MODULE.validated_resume_records(
+                evidence_path,
+                checkpoint=checkpoint,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=checkpoint_schema,
+                provider_index_sha256=checkpoint["generation_inputs"]["adapter_revision"],
+                candidate_by_id={"2": self.new_link},
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+            )
+
+    def test_wrong_current_template_button_cannot_fall_back_to_legacy_anchor(self) -> None:
+        page_url = "https://www.data.go.kr/data/2/openapi.do"
+        body = (
+            '<button onclick="fn_goUrlLink(\'999\')">Open</button>'
+            '<input type="hidden" id="publicDataPk" value="2">'
+            '<input type="hidden" id="publicDataDetailPk" value="uddi:fixture-2">'
+            '<a href="https://api.example.gov/legacy" onclick="fn_LinkApiRequest()">Legacy</a>'
+        )
+        page_calls: list[str] = []
+
+        def page_fetch(url: str, _timeout: float):
+            page_calls.append(url)
+            raw = body.encode("utf-8")
+            return MODULE.DetailPageObservation(
+                body=body, page_url=url, effective_url=url,
+                page_sha256=MODULE.sha256_bytes(raw), observed_at=self.now, page_bytes=raw,
+            )
+
+        def forbidden_resolver(_url: str, _timeout: float):
+            self.fail("a mismatched current-template button must not invoke the resolver")
+
+        code, _checkpoint = MODULE.process(
+            self.args(), fetcher=page_fetch, resolver_fetcher=forbidden_resolver, sleeper=lambda _delay: None,
+        )
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(code, 2)
+        self.assertEqual(page_calls, [page_url])
+        self.assertEqual(evidence["records"], [])
+        self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"]["code"], "contract_or_parse_error")
+
+    def test_resolver_transport_disables_ambient_proxy_credentials(self) -> None:
+        class ResolverResponse(FakeResponse):
+            def __init__(self) -> None:
+                super().__init__(body=b'{"status":true}')
+                self.headers = {"Content-Type": "application/json", "Content-Length": str(len(self.body))}
+
+            def getcode(self) -> int:
+                return 200
+
+            def geturl(self) -> str:
+                return "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=2"
+
+        response = ResolverResponse()
+        opener = FakeOpener(response)
+        captured: dict[str, Any] = {}
+
+        def build_opener(*handlers):
+            captured["handlers"] = handlers
+            return opener
+
+        with mock.patch.dict(os.environ, {
+            "https_proxy": "https://user:secret@proxy.invalid:8443",
+            "HTTPS_PROXY": "https://user:secret@proxy.invalid:8443",
+        }), mock.patch.object(MODULE.urllib.request, "build_opener", side_effect=build_opener):
+            result = MODULE.fetch_link_resolver(
+                "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=2",
+            )
+        self.assertEqual(result.body, b'{"status":true}')
+        proxy_handlers = [item for item in captured["handlers"] if isinstance(item, urllib.request.ProxyHandler)]
+        self.assertEqual(len(proxy_handlers), 1)
+        self.assertEqual(proxy_handlers[0].proxies, {})
+        self.assertFalse(opener.request.has_header("Proxy-Authorization"))
+        self.assertEqual(opener.timeout, MODULE.DEFAULT_TIMEOUT_SECONDS)
 
     def invoke(self, *, run_id: str = "101", fetcher=None, **overrides):
         return MODULE.process(self.args(run_id=run_id, **overrides), fetcher=fetcher or self.successful_fetch, sleeper=lambda _delay: None)
@@ -760,13 +973,19 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             old_checkpoint["generation_inputs"]["generator_revision"],
         )
         self.assertEqual(checkpoint["attempts_consumed"], 24)
-        self.assertEqual(checkpoint["detail_queue_cursor"], 0)
-        self.assertEqual(checkpoint["attempts_by_id"], {identity: 2 for identity in old_retry_state})
+        self.assertEqual(checkpoint["detail_queue_cursor"], 12)
+        ordered_identities = sorted(old_retry_state)
+        expected_attempts = {
+            identity: (3 if index < 12 else 1)
+            for index, identity in enumerate(ordered_identities)
+        }
+        self.assertEqual(checkpoint["attempts_by_id"], expected_attempts)
         updated_index = json.loads((source_dir / "index.json").read_text(encoding="utf-8"))
         self.assertEqual(set(updated_index["detail_retry_state"]), set(old_retry_state))
-        for identity, previous in old_retry_state.items():
+        for index, identity in enumerate(ordered_identities):
+            previous = old_retry_state[identity]
             current = updated_index["detail_retry_state"][identity]
-            self.assertEqual(current["attempts"], previous["attempts"] + 1, identity)
+            self.assertEqual(current["attempts"], previous["attempts"] + (2 if index < 12 else 0), identity)
             self.assertEqual(current["source_sha256"], previous["source_sha256"], identity)
             self.assertEqual(current["guide_sha256"], previous["guide_sha256"], identity)
 
@@ -1294,7 +1513,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             if url.endswith("/3/openapi.do"):
                 raise TimeoutError("temporarily unavailable")
             return self.successful_fetch(url, timeout)
-        code, first = self.invoke(fetcher=first_fetch, **{"--retries-per-detail": 2, "--max-attempts": 2})
+        code, first = self.invoke(fetcher=first_fetch, **{"--retries-per-detail": 2, "--max-attempts": 4})
         self.assertEqual(code, 2)
         self.assertEqual(first["status"], "retry")
         self.assertEqual(calls, [

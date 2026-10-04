@@ -1,0 +1,81 @@
+{
+  "schema_version": "datapan.link-detail-resolver-manual-fixtures.v1",
+  "classification": {
+    "manual": true,
+    "operational": false,
+    "historical_b_evidence": false,
+    "new_a_observation": false,
+    "publication_evidence": false,
+    "purpose": "Sanitized excerpts of two manually fetched public data.go.kr detail pages and their same-origin metadata resolver responses. Resolver values are guide/catalogue metadata, not operation contracts."
+  },
+  "capture_policy": {
+    "detail_page_gets_per_identity": 1,
+    "resolver_gets_per_identity": 2,
+    "resolver_gets_without_body_capture": 1,
+    "physical_requests_per_identity": 3,
+    "credentials_cookies_or_service_keys": false,
+    "tracking_post_calls": 0,
+    "returned_target_requests": 0,
+    "detail_page_source_directory": ".datapan/preparation/continuous-spec-goal-20261004/scheduled-b-37220973604/detail-diagnostic-37220973604/"
+  },
+  "samples": [
+    {
+      "dataset_id": "15056854",
+      "detail_page": {
+        "requested_url": "https://www.data.go.kr/data/15056854/openapi.do",
+        "effective_url": "https://www.data.go.kr/data/15056854/openapi.do",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "request_started_at": "2026-10-04T18:24:07Z",
+        "observed_at": "2026-10-04T18:24:08Z",
+        "full_response_size_bytes": 178725,
+        "full_response_sha256": "41afbdceab2dd39ccc5b5ce5452cd10dabe65f2087b57d1edbdd0c12f4bc71b6",
+        "sanitized_html_excerpt": "<button type=\"button\" onclick=\"fn_goUrlLink('15056854')\" class=\"krds-btn medium primary wide-btn\" title=\"새창 열림\">바로가기<i class=\"svg-icon ico-edit\"></i></button>\n<input type=\"hidden\" id=\"publicDataDetailPk\" value=\"uddi:1ca4ede2-911d-486a-b374-e7cf8650d25c_201712281924\"/>\n<input type=\"hidden\" id=\"publicDataPk\" value=\"15056854\"/>"
+      },
+      "resolver": {
+        "requested_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15056854",
+        "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15056854",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json;charset=UTF-8",
+        "request_started_at": "2026-10-04T18:51:06.935150Z",
+        "observed_at": "2026-10-04T18:51:07.088834Z",
+        "response_body": "{\"publicDataDetailPk\":\"uddi:1ca4ede2-911d-486a-b374-e7cf8650d25c_201712281924\",\"linkUrl\":\"http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109&srvType=A&serviceKind=1\",\"status\":true}",
+        "response_size_bytes": 190,
+        "response_sha256": "bbfbf4c662e21ef6916dae03bd9cbe62f187ef77a39343e3cd3893586d0cbffa",
+        "resolved_url_classification": "catalogue_landing_metadata",
+        "historical_operation_count": 3,
+        "resolved_url_matches_historical_operation_count": 1
+      }
+    },
+    {
+      "dataset_id": "15056858",
+      "detail_page": {
+        "requested_url": "https://www.data.go.kr/data/15056858/openapi.do",
+        "effective_url": "https://www.data.go.kr/data/15056858/openapi.do",
+        "http_status": 200,
+        "content_type": "text/html; charset=UTF-8",
+        "request_started_at": "2026-10-04T18:24:08Z",
+        "observed_at": "2026-10-04T18:24:08Z",
+        "full_response_size_bytes": 176278,
+        "full_response_sha256": "bc40d4bed9b164464521657d80178493ad851a76ad915778bb8190bb745e14cb",
+        "sanitized_html_excerpt": "<button type=\"button\" onclick=\"fn_goUrlLink('15056858')\" class=\"krds-btn medium primary wide-btn\" title=\"새창 열림\">바로가기<i class=\"svg-icon ico-edit\"></i></button>\n<input type=\"hidden\" id=\"publicDataDetailPk\" value=\"uddi:1d006397-0007-41d6-b2c5-bed7ebf1173a\"/>\n<input type=\"hidden\" id=\"publicDataPk\" value=\"15056858\"/>"
+      },
+      "resolver": {
+        "requested_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15056858",
+        "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15056858",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json;charset=UTF-8",
+        "request_started_at": "2026-10-04T18:51:07.091958Z",
+        "observed_at": "2026-10-04T18:51:07.252102Z",
+        "response_body": "{\"publicDataDetailPk\":\"uddi:1d006397-0007-41d6-b2c5-bed7ebf1173a\",\"linkUrl\":\"http://www.jeju.go.kr/open/data/guide.htm?act=view&seq=1118392\",\"status\":true}",
+        "response_size_bytes": 155,
+        "response_sha256": "9f7b9bf0d5e775590b7f432d495edccc0b0e7dc833037c6fd6b9d98d93682f2c",
+        "resolved_url_classification": "provider_guide",
+        "historical_operation_count": 3,
+        "resolved_url_matches_historical_operation_count": 1
+      }
+    }
+  ]
+}
