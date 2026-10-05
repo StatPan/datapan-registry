@@ -59,6 +59,49 @@
       "authority_ticket": "StatPan/datapan-registry#631"
     },
     {
+      "path": "schemas/datapan.completeness-proof-identities.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
+      "path": "schemas/datapan.completeness-proof-inputs.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
+      "path": "schemas/datapan.completeness-proof-rollup.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
+      "path": "schemas/datapan.completeness-proof-scopes.v1.schema.json",
+      "kind": "schema",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
+      "path": "policy/completeness-proof-scopes.json",
+      "kind": "completeness_proof_scope_registry",
+      "schema": "https://schemas.datapan.dev/datapan.completeness-proof-scopes.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
+      "path": "reports/completeness-proof-inputs.json",
+      "kind": "completeness_proof_input_index",
+      "schema": "https://schemas.datapan.dev/datapan.completeness-proof-inputs.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
+      "path": "reports/completeness-proof-rollup.json",
+      "kind": "completeness_proof_rollup",
+      "schema": "https://schemas.datapan.dev/datapan.completeness-proof-rollup.v1.schema.json",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
+      "path": "reports/completeness-proof-rollup.md",
+      "kind": "completeness_proof_rollup_markdown",
+      "authority_ticket": "StatPan/datapan-registry#722"
+    },
+    {
       "path": "schemas/datapan.runtime-freshness-import-admission.v1.schema.json",
       "kind": "schema",
       "authority_ticket": "StatPan/datapan-registry#633"

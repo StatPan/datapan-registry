@@ -1,0 +1,164 @@
+{
+  "schema_version": "datapan.completeness-proof-scopes.v1",
+  "scope_registry_id": "datapan-registry-declared-public-data-scopes",
+  "completeness_policy": {
+    "path": "policy/completeness-proof.json",
+    "sha256": "f1199f36335bf0eb16a59279c30d03b819acfa8e1f833431d9a0c674adf896b6"
+  },
+  "source_registry": "policy/sustainable-coverage.json",
+  "scopes": [
+    {
+      "scope_id": "data-go-kr.api-catalog",
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "source_profile": "sources/data_go_kr.json",
+      "resource_kind": "api_catalog_metadata",
+      "selector": {"kind": "catalog", "value": "data/data-go-kr.registry.json"},
+      "identity_algorithm": "source-profile-identity-fields-v1",
+      "identity_fields": ["list_id", "operation_id", "endpoint_id"],
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-registry",
+      "authority_state": "unknown",
+      "inventory": {"kind": "registry_snapshot", "path": "data/data-go-kr.registry.json", "input_role": "source_catalog_snapshot"},
+      "blockers": [
+        {"code": "authoritative_catalog_snapshot_missing", "owner": "StatPan/datapan-data", "ticket": "StatPan/datapan-data#1190"}
+      ]
+    },
+    {
+      "scope_id": "data-go-kr.api-operations",
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "source_profile": "sources/data_go_kr.json",
+      "resource_kind": "api_operation_manifest",
+      "selector": {"kind": "manifest", "value": "reports/data-go-kr/operation-manifest.json"},
+      "identity_algorithm": "sha256-length-prefixed-utf8-v1",
+      "identity_fields": ["provider", "dataset_id", "protocol", "source_system", "upstream_operation_key", "endpoint", "method_or_action", "operation_name"],
+      "identity_owner": "StatPan/datapan-registry",
+      "evidence_owner": "StatPan/datapan-registry",
+      "authority_state": "unknown",
+      "inventory": {"kind": "operation_manifest", "path": "reports/data-go-kr/operation-manifest.json", "input_role": "local_operation_manifest"},
+      "blockers": [
+        {"code": "authoritative_catalog_observation_missing", "owner": "StatPan/datapan-data", "ticket": "StatPan/datapan-data#1190"}
+      ]
+    },
+    {
+      "scope_id": "ecos.api-operations",
+      "source_id": "ecos",
+      "provider": "ECOS",
+      "source_profile": "sources/ecos.json",
+      "resource_kind": "api_operation_manifest",
+      "selector": {"kind": "manifest", "value": "reports/ecos/operation-denominator.json"},
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_fields": ["operation_id"],
+      "identity_owner": "StatPan/datapan-registry",
+      "evidence_owner": "StatPan/datapan-registry",
+      "authority_state": "unknown",
+      "inventory": {"kind": "operation_denominator", "path": "reports/ecos/operation-denominator.json", "input_role": "local_operation_denominator"},
+      "blockers": [
+        {"code": "authoritative_source_identity_set_missing", "owner": "StatPan/datapan-registry", "ticket": "#630"}
+      ]
+    },
+    {
+      "scope_id": "kosis.api-operations",
+      "source_id": "kosis",
+      "provider": "KOSIS",
+      "source_profile": "sources/kosis.json",
+      "resource_kind": "api_operation_manifest",
+      "selector": {"kind": "manifest", "value": "reports/kosis/operation-denominator.json"},
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_fields": ["operation_id"],
+      "identity_owner": "StatPan/datapan-registry",
+      "evidence_owner": "StatPan/datapan-registry",
+      "authority_state": "unknown",
+      "inventory": {"kind": "operation_denominator", "path": "reports/kosis/operation-denominator.json", "input_role": "local_operation_denominator"},
+      "blockers": [
+        {"code": "authoritative_source_identity_set_missing", "owner": "StatPan/datapan-registry", "ticket": "#630"}
+      ]
+    },
+    {
+      "scope_id": "open-assembly.api-operations",
+      "source_id": "open_assembly",
+      "provider": "open.assembly.go.kr",
+      "source_profile": "sources/open_assembly.json",
+      "resource_kind": "api_operation_manifest",
+      "selector": {"kind": "manifest", "value": "reports/open-assembly/operation-denominator.json"},
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_fields": ["operation_id"],
+      "identity_owner": "StatPan/datapan-registry",
+      "evidence_owner": "StatPan/datapan-registry",
+      "authority_state": "unknown",
+      "inventory": {"kind": "operation_denominator", "path": "reports/open-assembly/operation-denominator.json", "input_role": "local_operation_denominator"},
+      "blockers": [
+        {"code": "authoritative_source_identity_set_missing", "owner": "StatPan/datapan-registry", "ticket": "#630"}
+      ]
+    },
+    {
+      "scope_id": "seoul-open-data.api-operations",
+      "source_id": "seoul_open_data",
+      "provider": "data.seoul.go.kr",
+      "source_profile": "sources/seoul_open_data.json",
+      "resource_kind": "api_operation_manifest",
+      "selector": {"kind": "manifest", "value": "reports/seoul-open-data/operation-denominator.json"},
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_fields": ["operation_id"],
+      "identity_owner": "StatPan/datapan-registry",
+      "evidence_owner": "StatPan/datapan-registry",
+      "authority_state": "unknown",
+      "inventory": {"kind": "operation_denominator", "path": "reports/seoul-open-data/operation-denominator.json", "input_role": "local_operation_denominator"},
+      "blockers": [
+        {"code": "authoritative_source_identity_set_missing", "owner": "StatPan/datapan-registry", "ticket": "#630"}
+      ]
+    },
+    {
+      "scope_id": "data-go-kr.file-datasets",
+      "source_id": "data_go_kr",
+      "provider": "data.go.kr",
+      "source_profile": "sources/data_go_kr.json",
+      "resource_kind": "file_dataset",
+      "selector": {"kind": "catalog", "value": "authoritative data.go.kr file-list snapshot (not admitted)"},
+      "identity_algorithm": "unknown-until-file-dataset-snapshot-admitted",
+      "identity_fields": [],
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-registry",
+      "authority_state": "unavailable",
+      "inventory": {"kind": "none", "path": null, "input_role": null},
+      "blockers": [
+        {"code": "authoritative_file_dataset_snapshot_missing", "owner": "StatPan/datapan-registry", "ticket": "#609"}
+      ]
+    },
+    {
+      "scope_id": "curated-payload.snapshot-portfolio",
+      "source_id": "curated_payload",
+      "provider": "StatPan/datapan-data",
+      "source_profile": null,
+      "resource_kind": "curated_payload_snapshot",
+      "selector": {"kind": "snapshot", "value": "declared curated payload portfolio (inventory absent)"},
+      "identity_algorithm": "unknown-until-snapshot-portfolio-is-registered",
+      "identity_fields": [],
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-data",
+      "authority_state": "unavailable",
+      "inventory": {"kind": "none", "path": null, "input_role": null},
+      "blockers": [
+        {"code": "curated_payload_portfolio_registration_missing", "owner": "StatPan/datapan-registry", "ticket": "#630"}
+      ]
+    },
+    {
+      "scope_id": "curated-payload.rows",
+      "source_id": "curated_payload",
+      "provider": "StatPan/datapan-data",
+      "source_profile": null,
+      "resource_kind": "payload_rows",
+      "selector": {"kind": "query", "value": "authoritative payload row identity set (not admitted)"},
+      "identity_algorithm": "unknown-until-row-authority-is-admitted",
+      "identity_fields": [],
+      "identity_owner": "StatPan/datapan-data",
+      "evidence_owner": "StatPan/datapan-data",
+      "authority_state": "unavailable",
+      "inventory": {"kind": "none", "path": null, "input_role": null},
+      "blockers": [
+        {"code": "payload_row_identity_authority_missing", "owner": "StatPan/datapan-registry", "ticket": "#630"}
+      ]
+    }
+  ]
+}

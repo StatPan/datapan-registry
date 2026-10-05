@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.completeness-proof-identities.v1.schema.json",
+  "title": "Datapan authoritative completeness identity set v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scope_id", "resource_kind", "source_sha256", "identity_algorithm", "identity_set_sha256", "authority_owner", "observed_at", "identities", "reconciliation"],
+  "properties": {
+    "schema_version": {"const": "datapan.completeness-proof-identities.v1"},
+    "scope_id": {"type": "string", "minLength": 1},
+    "resource_kind": {"enum": ["api_catalog_metadata", "api_operation_manifest", "file_dataset", "curated_payload_snapshot", "payload_rows"]},
+    "source_sha256": {"$ref": "#/$defs/sha256"},
+    "identity_algorithm": {"type": "string", "minLength": 1},
+    "identity_set_sha256": {"$ref": "#/$defs/sha256"},
+    "authority_owner": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "identities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "reconciliation": {"$ref": "#/$defs/reconciliation"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "reconciliation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["expected", "accepted", "missing", "extra", "duplicate", "rejected"],
+      "properties": {"expected": {"type": "integer", "minimum": 0}, "accepted": {"type": "integer", "minimum": 0}, "missing": {"type": "integer", "minimum": 0}, "extra": {"type": "integer", "minimum": 0}, "duplicate": {"type": "integer", "minimum": 0}, "rejected": {"type": "integer", "minimum": 0}}
+    }
+  }
+}

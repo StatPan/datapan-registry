@@ -26,11 +26,13 @@ class Command:
 
 WRITE_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-schema-artifacts.py", "--write")),
+    Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
     Command(("python3", "scripts/generate-diagnostic-current-source-applicability.py", "--write")),
     Command(("python3", "scripts/generate-source-contract-rollup.py")),
     Command(("python3", "scripts/generate-error-action-routing-rollup.py")),
     Command(("python3", "scripts/generate-failure-recovery-rollup.py")),
     Command(("python3", "scripts/generate-operation-denominator-rollup.py")),
+    Command(("python3", "scripts/generate-completeness-proof-rollup.py", "--write")),
     Command(("python3", "scripts/generate-data-go-kr-operation-manifest.py")),
     Command(("python3", "scripts/generate-current-runtime-evidence-projection.py")),
     Command(("python3", "scripts/generate-runtime-freshness-queue.py")),
@@ -95,6 +97,8 @@ CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-error-action-routing-rollup.py", "--check")),
     Command(("python3", "scripts/generate-failure-recovery-rollup.py", "--check")),
     Command(("python3", "scripts/generate-operation-denominator-rollup.py", "--check")),
+    Command(("python3", "scripts/generate-completeness-proof-rollup.py", "--check")),
+    Command(("python3", "-m", "unittest", "tests/test_generate_completeness_proof_rollup.py", "tests/test_completeness_publication_evidence.py", "tests/test_completeness_scope_registration.py", "tests/test_completeness_proof_rollup_cli.py")),
     Command(("python3", "scripts/validate-data-go-kr-operation-manifest.py")),
     Command(("python3", "scripts/generate-current-runtime-evidence-projection.py", "--check")),
     Command(("python3", "scripts/generate-runtime-freshness-queue.py", "--check")),

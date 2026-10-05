@@ -124,6 +124,25 @@ imports an ephemeral candidate, and emits schema-validated `no_change`,
 `material_change`, or `collection_failure` evidence plus a review work packet.
 It never publishes the candidate automatically.
 
+## Public-data completeness evidence
+
+`policy/completeness-proof-scopes.json` registers the resource scopes covered by
+the conservative completeness report. The report combines their configured
+identities, denominator/import evidence, and any independently validated
+pipeline or publication evidence. A local candidate inventory is context only;
+missing authority or stale evidence stays unknown or blocked, and historical
+publication does not imply that the current release was published or read back.
+
+Review the generated [scope report](reports/completeness-proof-rollup.md),
+[machine-readable rollup](reports/completeness-proof-rollup.json), and
+[hash-bound evidence input index](reports/completeness-proof-inputs.json).
+Regenerate and check it with:
+
+```bash
+python3 scripts/generate-completeness-proof-rollup.py --write
+python3 scripts/generate-completeness-proof-rollup.py --check
+```
+
 ## Verify
 
 Coverage is intentionally layered. `operation_routable` describes static
