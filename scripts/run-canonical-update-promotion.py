@@ -1136,8 +1136,38 @@ def validate_processor_seoul_declaration(
         raise PromotionError("processor Seoul declaration operation or provenance is missing")
     record_op = declared_operations(record)[0]
     try:
-        declaration.validate_committed_prefix_snapshot(root, verify_materialized_row=False)
-    except (AttributeError, OSError, ValueError) as exc:
+        snapshot_pin = declaration.validate_committed_prefix_snapshot(root, verify_materialized_row=False)
+        prefix_pin = declaration.DECLARATION["historical_operation_prefix"]
+        source_path_value = snapshot_pin.get("source_path")
+        if (
+            not isinstance(source_path_value, str)
+            or snapshot_pin.get("materialized_registry_bytes_verified") is not True
+            or snapshot_pin.get("materialized_registry_sha256") != prefix_pin.get("source_lfs_sha256")
+            or snapshot_pin.get("source_lfs_bytes") != prefix_pin.get("source_lfs_bytes")
+        ):
+            raise PromotionError("processor Seoul historical source payload is not materialized and verified")
+        source_payload = (root / source_path_value).read_bytes()
+        if (
+            len(source_payload) != prefix_pin.get("source_lfs_bytes")
+            or hashlib.sha256(source_payload).hexdigest() != prefix_pin.get("source_lfs_sha256")
+        ):
+            raise PromotionError("processor Seoul historical source changed during declaration validation")
+        source_registry = json.loads(source_payload.decode("utf-8", errors="strict"))
+        if not isinstance(source_registry, list):
+            raise PromotionError("processor Seoul historical source registry is invalid")
+        pinned_matches = [
+            row for row in source_registry
+            if isinstance(row, Mapping)
+            and row.get("provider") == "data.go.kr"
+            and str(row.get("id") or "") == target_id
+        ]
+        if len(pinned_matches) != 1:
+            raise PromotionError("processor Seoul historical source subject is missing or ambiguous")
+        pinned_source_row = copy.deepcopy(dict(pinned_matches[0]))
+        declaration.validate_subject_row(pinned_source_row)
+    except PromotionError:
+        raise
+    except (AttributeError, OSError, UnicodeError, ValueError, json.JSONDecodeError) as exc:
         raise PromotionError("processor Seoul historical prefix authority is unavailable or invalid") from exc
     composed_path = bundle_dir / "composed-candidate.registry.json"
     ready_path = bundle_dir / "ready-scope.registry.json"
@@ -1165,36 +1195,26 @@ def validate_processor_seoul_declaration(
         row_ops = declared_operations(row)
         if len(row_ops) != 1 or dict(row_ops[0]) != dict(record_op):
             raise PromotionError(f"processor {label} declaration operation differs from trusted enrichment evidence")
-        source = row.get("source")
-        raw = source.get("raw") if isinstance(source, Mapping) else None
-        if not isinstance(raw, Mapping):
-            raise PromotionError(f"processor {label} declaration source row is invalid")
-        observed_guide = record.get("observed_guide_url")
-        if observed_guide is None:
-            if "guide_url" in raw:
-                raise PromotionError(f"processor {label} guide transform differs from declaration evidence")
-        elif raw.get("guide_url") != observed_guide:
-            raise PromotionError(f"processor {label} guide transform differs from declaration evidence")
+    # Rebuild the only permitted output transform from the independently
+    # authenticated committed source row. This binds each final output's full
+    # subject/source/UDDI and ordered operation list; neither output is used as
+    # the authority for reconstructing the other's historical prefix.
+    if record.get("api_key") != {"provider": "data.go.kr", "id": target_id}:
+        raise PromotionError("processor Seoul declaration record identity differs from pinned subject")
+    expected_row = composer.apply_enrichment_record(copy.deepcopy(pinned_source_row), dict(record))
+    for label, row in (("composed candidate", composed_row), ("ready scope", ready_row)):
+        if dict(row) != expected_row:
+            raise PromotionError(
+                f"processor {label} full Seoul subject, source, guide, or ordered operation list differs from pinned declaration"
+            )
 
-    # The original A candidate is not part of the processor artifact. Rebuild
-    # only its documented local-enrichment transform, then verify its complete
-    # pinned historical prefix and exact source identity before validating the
-    # declaration record. The prefix pin is rooted in the reviewed committed
-    # canonical LFS snapshot, not inferred from these output rows.
-    original_row = copy.deepcopy(dict(composed_row))
-    original_row["operations"] = [
-        copy.deepcopy(item) for item in record.get("operations", [])
-        if not declared_operations({"operations": [item]})
-    ]
-    source = original_row.get("source")
-    source = copy.deepcopy(dict(source)) if isinstance(source, Mapping) else {}
-    raw = source.get("raw")
-    raw = copy.deepcopy(dict(raw)) if isinstance(raw, Mapping) else {}
-    raw["guide_url"] = declaration.DECLARATION["subject"]["source_guide_url"]
-    source["raw"] = raw
-    original_row["source"] = source
+    # The original A artifact itself is not part of the processor bundle. Bind
+    # the successful enrichment to the exact pinned local subject without
+    # claiming full A-file membership, and accept only the recorded guide
+    # transform plus the one declaration operation.
+    original_row = copy.deepcopy(pinned_source_row)
     try:
-        declaration.validate_subject_row(original_row)
+        declaration.validate_enriched_record(original_row, record)
         generation_inputs = checkpoint.get("generation_inputs")
         candidate_sha256 = generation_inputs.get("candidate_sha256") if isinstance(generation_inputs, Mapping) else None
         provider_index = load_object(root / "data/provider-index.json")
@@ -1226,7 +1246,6 @@ def validate_processor_seoul_declaration(
         validated_record = validated.get(("data.go.kr", target_id))
         if not isinstance(validated_record, Mapping) or validated_record.get("_binding_error"):
             raise PromotionError("processor Seoul declaration semantic binding was rejected")
-        declaration.validate_enriched_record(original_row, record)
         declaration.validate_declared_operation(original_row, record_op)
         composer.LINK_DETAIL_HELPERS.validate_link_metadata(
             record["declaration_provenance"]["page_resolver"],

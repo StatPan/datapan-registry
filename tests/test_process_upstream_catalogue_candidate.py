@@ -598,6 +598,28 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             target["operations"][-1]["name"] += " counterpart-only tampering"
             write_json(path, rows)
 
+        def mutate_final_prefix(
+            bundle_dir: pathlib.Path, *, targets: tuple[str, ...], kind: str,
+        ) -> None:
+            for filename in targets:
+                path = bundle_dir / filename
+                rows = json.loads(path.read_text(encoding="utf-8"))
+                target = next(row for row in rows if row.get("id") == "15056854")
+                operations = target["operations"]
+                if kind == "request":
+                    operations[0]["request_params"] = [{"name": "FORGED", "type": "string", "required": True}]
+                elif kind == "delete":
+                    operations.pop(0)
+                elif kind == "duplicate":
+                    operations.insert(0, copy.deepcopy(operations[0]))
+                elif kind == "source_url":
+                    target["source"]["url"] = "https://attacker.invalid/catalogue"
+                elif kind == "uddi":
+                    target["source"]["raw"]["id"] = "uddi:forged"
+                else:
+                    raise AssertionError(f"unknown final prefix mutation: {kind}")
+                write_json(path, rows)
+
         for mutation in (
             mutate_provenance_digest,
             mutate_review_clock,
@@ -612,6 +634,25 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                 checkpoint, baseline, [candidate], provider_index, evidence, composer,
                 bundle_mutator=mutation,
                 expected_rejection="processor .* declaration|historical prefix authority",
+            )
+
+        for target_files, kind in (
+            (("composed-candidate.registry.json",), "request"),
+            (("composed-candidate.registry.json",), "delete"),
+            (("composed-candidate.registry.json",), "duplicate"),
+            (("ready-scope.registry.json",), "request"),
+            (("ready-scope.registry.json",), "delete"),
+            (("ready-scope.registry.json",), "duplicate"),
+            (("composed-candidate.registry.json", "ready-scope.registry.json"), "request"),
+            (("ready-scope.registry.json",), "source_url"),
+            (("ready-scope.registry.json",), "uddi"),
+        ):
+            self.assert_c_processor_bundle_accepts(
+                checkpoint, baseline, [candidate], provider_index, evidence, composer,
+                bundle_mutator=lambda bundle_dir, target_files=target_files, kind=kind: mutate_final_prefix(
+                    bundle_dir, targets=target_files, kind=kind,
+                ),
+                expected_rejection="processor .* (full Seoul subject|declaration)",
             )
 
         def mutate_declared_operation(field_path: tuple[str, ...], value: Any) -> Any:
