@@ -192,11 +192,28 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     }
     target_id = args.target_generation_id
     if target_id not in indexed_ids:
-        return {"eligible": False, "reason": "selected_generation_not_durable"}
+        # A target ID is supplied by the authenticated processor selector. A
+        # selected-but-missing checkpoint is state corruption, not permission
+        # to fall back to the legacy generation identity.
+        raise ValueError("selected_generation_not_durable")
     target_path = source_state / "generations" / f"{target_id}.json"
     target = runner.verify_processor_checkpoint(load_json(target_path, 262144), checkpoint_schema)
     if target.get("source_id") != "data_go_kr" or not isinstance(target.get("source_scope"), str) or not target.get("source_scope"):
         raise ValueError("derivation_selected_source_mismatch")
+    target_inputs = target.get("generation_inputs") if isinstance(target.get("generation_inputs"), Mapping) else {}
+    stored_envelope_value = target_inputs.get("same_observation_derivation")
+    stored_envelope = (
+        derivation.validate_derivation_envelope(stored_envelope_value)
+        if stored_envelope_value is not None else None
+    )
+
+    def unavailable(reason: str) -> dict[str, Any]:
+        if stored_envelope is not None:
+            # Never let a selected derived checkpoint downgrade to the legacy
+            # B identity merely because one of its C/A prerequisites is now
+            # absent. The failing step prevents the workflow claim/CAS step.
+            raise ValueError(f"active_derivation_prerequisite_unavailable:{reason}")
+        return {"eligible": False, "reason": reason}
 
     candidate_path = args.candidate.resolve()
     evidence_path = args.refresh_evidence.resolve()
@@ -204,7 +221,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     admission = handoff.validate_admission_row(load_json(args.collector_admission, 2 * 1024 * 1024))
     evidence = load_json(evidence_path, 256 * 1024 * 1024)
     if not isinstance(evidence, Mapping) or evidence.get("collection", {}).get("succeeded") is not True:
-        return {"eligible": False, "reason": "current_observation_not_successful"}
+        return unavailable("current_observation_not_successful")
     producer_head = str(admission.get("head_sha") or "")
     if run_git(source_root, "rev-parse", "HEAD") != producer_head:
         raise ValueError("derivation_source_checkout_does_not_match_producer_head")
@@ -239,13 +256,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     target_admission = admission_for_checkpoint(target, index, handoff)
     target_original = derivation.original_observation_from_checkpoint(target, target_admission)
     if target_original != original:
-        return {"eligible": False, "reason": "selected_parent_is_different_source_observation"}
-    target_inputs = target.get("generation_inputs") if isinstance(target.get("generation_inputs"), Mapping) else {}
-    stored_envelope_value = target_inputs.get("same_observation_derivation")
-    stored_envelope = (
-        derivation.validate_derivation_envelope(stored_envelope_value)
-        if stored_envelope_value is not None else None
-    )
+        return unavailable("selected_parent_is_different_source_observation")
     active_statuses = {"queued", "validating", "enriching", "composing", "retry"}
     active_resume = stored_envelope is not None and target.get("status") in active_statuses
     outcome = target.get("outcome") if isinstance(target.get("outcome"), Mapping) else {}
@@ -265,7 +276,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
 
     journal, journal_ref_sha = runner.load_promotion_journal_snapshot(main_root)
     if not isinstance(journal, Mapping) or not isinstance(journal_ref_sha, str):
-        return {"eligible": False, "reason": "canonical_journal_unavailable"}
+        return unavailable("canonical_journal_unavailable")
     current_head = run_git(main_root, "rev-parse", "HEAD")
     current_identity = runner.authenticated_current_canonical_registry(main_root, current_head)
     active_rows = [
@@ -302,7 +313,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     if len(same_observation_rows) != 1:
         if len(same_observation_rows) > 1:
             raise ValueError("same_observation_canonical_lineage_ambiguous")
-        return {"eligible": False, "reason": "no_same_observation_merged_canonical_lineage"}
+        return unavailable("no_same_observation_merged_canonical_lineage")
 
     canonical_index, canonical_row, canonical_checkpoint, readback = same_observation_rows[0]
     if (
@@ -516,7 +527,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         ):
             raise ValueError("canonical_producer_resume_parent_invalid")
     if not has_work and target.get("output_artifact", {}).get("bundle_manifest_sha256") == canonical_checkpoint.get("output_artifact", {}).get("bundle_manifest_sha256"):
-        return {"eligible": False, "reason": "no_incremental_processor_work"}
+        return unavailable("no_incremental_processor_work")
 
     now = dt.datetime.now(dt.timezone.utc)
     target_expiry = runner.parse_utc_timestamp(target["output_artifact"].get("expires_at"), "resume parent artifact expiry")

@@ -1039,7 +1039,9 @@ jobs:
             --output-dir "${DERIVATION_OUTPUT}" --github-output "${GITHUB_OUTPUT}"
 
       - name: Claim bounded request budget
-        if: steps.select.outputs.decision == 'process'
+        if: >-
+          steps.select.outputs.decision == 'process' &&
+          steps.derivation.outcome != 'failure'
         id: claim
         working-directory: datapan-registry
         env:

@@ -1850,6 +1850,8 @@ def plan_generation_retention(
 
     protected: set[str] = set()
     derived_ids: list[str] = []
+    ancestors_by_generation: dict[str, set[str]] = {}
+    parents_by_generation: dict[str, tuple[str, str]] = {}
     for generation_id, checkpoint in checkpoints.items():
         inputs = checkpoint.get("generation_inputs")
         envelope_value = inputs.get("same_observation_derivation") if isinstance(inputs, Mapping) else None
@@ -1861,7 +1863,13 @@ def plan_generation_retention(
             raise ValueError("derivation_lineage_envelope_corrupt") from exc
         if generation_id in envelope["ancestor_generation_ids"]:
             raise ValueError("derivation_lineage_checkpoint_cycle")
-        protected.update(envelope["ancestor_generation_ids"])
+        ancestors = set(envelope["ancestor_generation_ids"])
+        protected.update(ancestors)
+        ancestors_by_generation[generation_id] = ancestors
+        parents_by_generation[generation_id] = (
+            envelope["resume_parent_processor"]["generation_id"],
+            envelope["canonical_parent_processor"]["generation_id"],
+        )
         derived_ids.append(generation_id)
 
     handoff_ledger = index.get("collector_handoff")
@@ -1924,12 +1932,36 @@ def plan_generation_retention(
 
     active_statuses = {"queued", "validating", "enriching", "composing", "retry"}
     active_ids: set[str] = set()
+    current_ancestors = ancestors_by_generation.get(current_id, set())
+    current_parents = parents_by_generation.get(current_id)
+    shadowed_ready_ancestors = set(current_ancestors)
+    if current_parents is not None and current_parents[0] != current_parents[1]:
+        # The selected B resume parent remains independently selectable when
+        # it differs from the already-merged C producer. The canonical
+        # producer and older same-A ancestors are shadowed by the exact C row;
+        # preserve a work slot for this distinct ready resume parent.
+        shadowed_ready_ancestors.discard(current_parents[0])
     for generation_id, checkpoint in checkpoints.items():
         outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), Mapping) else {}
-        if (
+        lease = checkpoint.get("lease")
+        ready_retry = (
+            checkpoint.get("status") == "ready"
+            and int(outcome.get("detail_retry_count", 0) or 0) > 0
+        )
+        # A ready retry ancestor named by the current authenticated derivation
+        # is retained as lineage evidence, but the C selector screens the
+        # derived continuation against the exact current canonical row. Such
+        # ancestors are not independent work slots once the continuation
+        # shadows them. A distinct resume parent is left selectable above.
+        # Keep any leased checkpoint active: a live lease must never be
+        # discounted as shadowed work.
+        shadowed_ready_ancestor = (
+            ready_retry and generation_id in shadowed_ready_ancestors and lease is None
+        )
+        if not shadowed_ready_ancestor and (
             checkpoint.get("status") in active_statuses
-            or checkpoint.get("status") == "ready" and int(outcome.get("detail_retry_count", 0) or 0) > 0
-            or checkpoint.get("lease") is not None
+            or ready_retry
+            or lease is not None
         ):
             active_ids.add(generation_id)
     if len(active_ids) > DEFAULT_MAX_ACTIVE_GENERATIONS:

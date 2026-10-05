@@ -1003,6 +1003,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         mutate_pr_readback: bool = False,
         current_main_sha: str | None = None,
         current_manifest_bytes: bytes | None = None,
+        journal_unavailable: bool = False,
+        current_identity_override: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Run the actual prepare CLI coordinator with remote boundaries stubbed."""
         main_root = self.helper.root / f"prepared-main-{label}"
@@ -1212,6 +1214,12 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                     "merged": True, "body": current_c["ownership"]["body"],
                 }
 
+        journal_snapshot = (None, None) if journal_unavailable else (journal, c["readback"]["journal_ref_sha"])
+        current_identity_patch = (
+            mock.patch.object(PROMOTION, "authenticated_current_canonical_registry", return_value=current_identity_override)
+            if current_identity_override is not None
+            else mock.patch.object(PROMOTION, "authenticated_current_canonical_registry", wraps=PROMOTION.authenticated_current_canonical_registry)
+        )
         with (
             mock.patch.object(PREPARATION, "load_module", side_effect=lambda path, _name: module_by_filename[path.name]),
             mock.patch.object(PREPARATION, "run_git", side_effect=fake_preparation_git),
@@ -1220,8 +1228,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 datetime=mock.Mock(now=mock.Mock(return_value=self.now)),
                 timezone=dt.timezone,
             )),
-            mock.patch.object(PROMOTION, "load_promotion_journal_snapshot", return_value=(journal, c["readback"]["journal_ref_sha"])),
-            mock.patch.object(PROMOTION, "authenticated_current_canonical_registry", wraps=PROMOTION.authenticated_current_canonical_registry),
+            mock.patch.object(PROMOTION, "load_promotion_journal_snapshot", return_value=journal_snapshot),
+            current_identity_patch,
             mock.patch.object(PROMOTION, "command", side_effect=fake_runner_command),
             mock.patch.object(PROMOTION, "processor_run_api", side_effect=lambda _root, _repo, run_id, _attempt: run_by_id[run_id]),
             mock.patch.object(PROMOTION, "processor_artifact_api", side_effect=lambda _root, _repo, _run_id, artifact_id: metadata_by_id.get(artifact_id)),
@@ -1610,12 +1618,26 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         # Recurse from exact B1 contribution history and the newly merged B2 C
         # baseline. The fourth synthetic LINK must be processed once; the first
         # three operations survive the real composer without deletion.
+        self.assertEqual(b2["status"], "ready")
+        self.assertGreater(b2["outcome"]["detail_retry_count"], 0)
         plan2 = self._prepare_authenticated_plan(b2, journal_after_b2, c2, label="second-recursive-intake")
         self.assertTrue(plan2["eligible"], plan2)
+        self.assertEqual(plan2["reason"], "same_observation_canonical_derivation_authenticated")
+        self.assertFalse(plan2.get("active_generation_resume", False))
+        self.assertNotEqual(plan2["generation_id"], b2["generation_id"])
         env2 = read_json(pathlib.Path(plan2["derivation_path"]))
         self.assertEqual(
             env2["resume_parent_processor"]["generation_id"],
             env2["canonical_parent_processor"]["generation_id"],
+        )
+        self.assertEqual(env2["canonical_parent_processor"]["generation_id"], b2["generation_id"])
+        self.assertEqual(
+            env2["canonical_parent_readback"]["canonical_producer_generation_id"],
+            b2["generation_id"],
+        )
+        self.assertEqual(
+            env2["composition_baseline"]["registry_sha256"],
+            c2["baseline"]["registry_sha256"],
         )
         b3 = self._run_claim_and_worker(
             4, derivation=env2, composition_baseline=pathlib.Path(plan2["composition_baseline_path"]),
@@ -2519,6 +2541,199 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             original_envelope,
         )
         self.assertEqual(len(calls), 1)
+
+    def test_active_derived_prerequisite_loss_fails_before_legacy_claim_or_state_change(self) -> None:
+        b0 = self._run_claim_and_worker(1)
+        journal, c = self._synthetic_c_journal(b0, 20)
+        initial = self._prepare_authenticated_plan(b0, journal, c, label="active-prerequisite-seed")
+        self.assertTrue(initial["eligible"], initial)
+        envelope = read_json(pathlib.Path(initial["derivation_path"]))
+        b1 = self._run_claim_and_worker(
+            2, derivation=envelope, expected_generation_id=initial["generation_id"],
+            composition_baseline=pathlib.Path(initial["composition_baseline_path"]),
+            resume_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            canonical_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            journal=journal, journal_ref_sha=c["readback"]["journal_ref_sha"],
+        )
+        self.assertIsNotNone(b1["generation_inputs"].get("same_observation_derivation"))
+        self.assertEqual(b1["status"], "ready")
+        self.assertGreater(b1["outcome"]["detail_retry_count"], 0)
+
+        state_index = self.helper.state_dir / "sources/data_go_kr/index.json"
+        checkpoint_path = self.helper.state_dir / "sources/data_go_kr/generations" / f"{b1['generation_id']}.json"
+        before_index = state_index.read_bytes()
+        before_checkpoint = checkpoint_path.read_bytes()
+        calls_before = (len(self.claim_runs), len(self.detail_calls))
+
+        unrelated_identity = dict(c["baseline"])
+        unrelated_identity.update({
+            "manifest_sha256": "f" * 64,
+            "registry_sha256": "e" * 64,
+            "registry_bytes": c["baseline"]["registry_bytes"] + 1,
+        })
+        unrelated_journal = copy.deepcopy(journal)
+        unrelated_journal["records"][0]["status"] = "pending-review"
+
+        blocked_cases = (
+            ("journal-unavailable", journal, {"journal_unavailable": True}, "canonical_journal_unavailable"),
+            ("canonical-row-missing", unrelated_journal, {}, "no_same_observation_merged_canonical_lineage"),
+            ("unrelated-current-canonical", journal, {"current_identity_override": unrelated_identity}, "no_same_observation_merged_canonical_lineage"),
+        )
+        for label, current_journal, options, reason in blocked_cases:
+            with self.subTest(case=label), self.assertRaisesRegex(
+                ValueError, rf"active_derivation_prerequisite_unavailable:{reason}",
+            ):
+                self._prepare_authenticated_plan(
+                    b1, current_journal, c, label=f"active-prerequisite-{label}", **options,
+                )
+            self.assertEqual(state_index.read_bytes(), before_index)
+            self.assertEqual(checkpoint_path.read_bytes(), before_checkpoint)
+            self.assertEqual((len(self.claim_runs), len(self.detail_calls)), calls_before)
+            output_dir = self.helper.root / f"prepared-output-active-prerequisite-{label}"
+            self.assertFalse(output_dir.exists())
+
+    def test_ninth_same_observation_continuation_keeps_shadowed_parents_out_of_active_slots(self) -> None:
+        # One fresh A and unchanged processor/extractor code produce eight
+        # derived generations. Each parent remains ready with retry work, but
+        # the authenticated derivation lineage makes those old outputs
+        # shadowed by the next same-A candidate in the canonical selector.
+        self._write_synthetic_observation([str(value) for value in range(1, 16)])
+        self.admission_path, self.archive_path = self._write_admission()
+        current = self._run_claim_and_worker(1, max_attempts=1, max_queue=1, retries_per_detail=2)
+        generator_revision = current["generation_inputs"]["generator_revision"]
+        extractor_revision = current["generation_inputs"]["extractor_revision"]
+        journal, c = self._synthetic_c_journal(current, 100)
+        canonical = current
+        generated = [current]
+
+        for continuation in range(1, 9):
+            plan = self._prepare_authenticated_plan(
+                current, journal, c, label=f"ninth-continuation-{continuation}-prepare",
+            )
+            self.assertTrue(plan["eligible"], plan)
+            derivation = read_json(pathlib.Path(plan["derivation_path"]))
+            next_checkpoint = self._run_claim_and_worker(
+                continuation + 1,
+                derivation=derivation,
+                expected_generation_id=plan["generation_id"],
+                composition_baseline=pathlib.Path(plan["composition_baseline_path"]),
+                resume_parent_bundle=self.output_by_generation[current["generation_id"]],
+                canonical_parent_bundle=self.output_by_generation[canonical["generation_id"]],
+                journal=journal, journal_ref_sha=c["readback"]["journal_ref_sha"],
+                max_attempts=1, max_queue=1, retries_per_detail=2,
+            )
+            self.assertEqual(next_checkpoint["generation_id"], plan["generation_id"])
+            self.assertEqual(next_checkpoint["status"], "ready")
+            self.assertGreater(next_checkpoint["outcome"]["detail_retry_count"], 0)
+            self.assertEqual(next_checkpoint["generation_inputs"]["generator_revision"], generator_revision)
+            self.assertEqual(next_checkpoint["generation_inputs"]["extractor_revision"], extractor_revision)
+            self.assertEqual(next_checkpoint["observation_count"], 1)
+            self.assertEqual(next_checkpoint["observed_at"], self.now_text)
+            generated.append(next_checkpoint)
+
+            # Add a normal authenticated subsequent C row while retaining the
+            # prior history. The current readback index/ref is the only row
+            # that can authorize the next composition baseline.
+            next_journal, next_c = self._synthetic_c_journal(next_checkpoint, 100 + continuation)
+            journal["records"].extend(copy.deepcopy(next_journal["records"]))
+            journal["updated_at"] = self.now_text
+            next_c["readback"] = DERIVATION.canonical_parent_readback_reference(
+                journal,
+                journal_ref_sha=next_c["readback"]["journal_ref_sha"],
+                record_index=len(journal["records"]) - 1,
+            )
+            current = next_checkpoint
+            canonical = next_checkpoint
+            c = next_c
+
+        self.assertEqual(len(generated), 9)
+        self.assertEqual(len(self.claim_runs), 9)
+        self.assertEqual(len(self.detail_calls), 9)
+        self.assertEqual({checkpoint["observation_count"] for checkpoint in generated}, {1})
+        self.assertEqual({checkpoint["observed_at"] for checkpoint in generated}, {self.now_text})
+        protected = PROCESSOR.protected_lineage_generations(
+            self.helper.state_dir / "sources/data_go_kr/generations",
+        )
+        self.assertTrue({checkpoint["generation_id"] for checkpoint in generated[:-1]}.issubset(protected))
+
+    def test_distinct_selectable_resume_parent_keeps_its_active_work_slot(self) -> None:
+        b0 = self._run_claim_and_worker(1)
+        journal, c = self._synthetic_c_journal(b0, 110)
+        initial = self._prepare_authenticated_plan(b0, journal, c, label="distinct-resume-seed")
+        self.assertTrue(initial["eligible"], initial)
+        b1 = self._run_claim_and_worker(
+            2, derivation=read_json(pathlib.Path(initial["derivation_path"])),
+            expected_generation_id=initial["generation_id"],
+            composition_baseline=pathlib.Path(initial["composition_baseline_path"]),
+            resume_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            canonical_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            journal=journal, journal_ref_sha=c["readback"]["journal_ref_sha"],
+        )
+        self.assertEqual(b1["status"], "ready")
+        self.assertGreater(b1["outcome"]["detail_retry_count"], 0)
+
+        # The current canonical producer B0 can be shadowed, but the distinct
+        # selected B1 resume parent is still a selectable ready candidate.
+        # Construct its exact two-role proof from the real sealed checkpoints
+        # and parent bundles, then exercise the real retention planner with a
+        # one-slot cap: B1 plus the prospective continuation must be rejected.
+        original = self._admitted_original(b1)
+        resume_parent = self._parent_ref(b1)
+        canonical_parent = self._parent_ref(b0)
+        resume_ancestors = DERIVATION.validate_processor_parent_graph(
+            [b1["generation_id"]],
+            load_checkpoint=lambda generation: self.checkpoints[generation],
+            admission_for=lambda _checkpoint: HANDOFF.validate_ledger(
+                PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")["collector_handoff"],
+            )["admitted_observations"][0],
+            original_observation=original,
+        ) - {b1["generation_id"]}
+        canonical_ancestors = DERIVATION.validate_processor_parent_graph(
+            [b0["generation_id"]],
+            load_checkpoint=lambda generation: self.checkpoints[generation],
+            admission_for=lambda _checkpoint: HANDOFF.validate_ledger(
+                PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")["collector_handoff"],
+            )["admitted_observations"][0],
+            original_observation=original,
+        ) - {b0["generation_id"]}
+        envelope = DERIVATION.build_derivation_envelope(
+            original_observation=original,
+            resume_parent_processor=resume_parent,
+            canonical_parent_processor=canonical_parent,
+            canonical_parent_readback=c["readback"],
+            composition_baseline=c["baseline"],
+            derivation_processor_revision_sha256=PROCESSOR.derivation_processor_revision(),
+            resume_parent_ancestors=sorted(resume_ancestors),
+            canonical_parent_ancestors=sorted(canonical_ancestors),
+        )
+        prospective_id, prospective_inputs = PROCESSOR.generation_identity(
+            original["source_id"], original["source_scope"], original["original_baseline_sha256"],
+            original["candidate_sha256"], None, original["source_policy_sha256"],
+            original["provider_index_sha256"], same_observation_derivation=envelope,
+        )
+        prospective = copy.deepcopy(b1)
+        prospective.update({
+            "generation_id": prospective_id,
+            "generation_inputs": prospective_inputs,
+            "status": "queued",
+            "lease": None,
+            "request_reservation": None,
+        })
+        PROCESSOR.seal_checkpoint(prospective)
+        index_path = self.helper.state_dir / "sources/data_go_kr/index.json"
+        index = PROCESSOR.load_json(index_path)
+        generation_dir = self.helper.state_dir / "sources/data_go_kr/generations"
+        with mock.patch.object(PROCESSOR, "DEFAULT_MAX_ACTIVE_GENERATIONS", 1):
+            with self.assertRaisesRegex(ValueError, "active_generation_queue_full"):
+                PROCESSOR.plan_generation_retention(index, generation_dir, prospective)
+
+        # If both roles are the already merged B0, B1 itself is the only
+        # selectable active slot and fits the same cap. This pins the
+        # distinction to exact parent roles rather than retained-lineage size.
+        with mock.patch.object(PROCESSOR, "DEFAULT_MAX_ACTIVE_GENERATIONS", 1):
+            retained = PROCESSOR.plan_generation_retention(index, generation_dir, b1)
+        self.assertIn(b0["generation_id"], retained)
+        self.assertIn(b1["generation_id"], retained)
 
     def test_expired_parent_artifact_blocks_authenticated_plan_without_claim_mutation(self) -> None:
         original_now = self.now
