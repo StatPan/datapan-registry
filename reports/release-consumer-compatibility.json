@@ -221,7 +221,7 @@
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2216,
-      "sha256": "0b693119a4c75bfa147ff25005f2f5015171877e029b092014e84dbaadca43eb",
+      "sha256": "562293b5391bb595ab1abd31de7b8c31b3a125fa3625b20c7be651c210862ef5",
       "required": true
     },
     {
@@ -476,7 +476,7 @@
     ],
     "release_distribution_footprint": "reports/release-distribution-footprint.json",
     "canonical_registry_bytes": 139155499,
-    "manifest_bound_bytes_excluding_self": 236729909,
+    "manifest_bound_bytes_excluding_self": 236729887,
     "large_monolith_threshold_bytes": 100000000,
     "registry_footprint_status": "large_monolith_shard_additive",
     "canonical_registry_required": true,
