@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 ROOT = pathlib.Path(__file__).parents[1]
@@ -147,6 +148,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
             source_revision = "6a5138c792f4b7402da0c5ab439646bd752a307f"
             operation_path = "reports/data-go-kr/operation-manifest.json"
             source_bytes = MODULE.git_read_only(temp_root, ["show", f"{source_revision}:{operation_path}"])
+            source_input_root = temp_root / ".test-proof-source-inputs"
+            source_snapshot_path = source_input_root / operation_path
+            source_snapshot_path.parent.mkdir(parents=True, exist_ok=True)
+            source_snapshot_path.write_bytes(source_bytes)
             source_sha = MODULE.sha256_bytes(source_bytes)
             observed_at = "2026-09-29T23:44:39Z"
             source_manifest = json.loads(source_bytes)
@@ -279,12 +284,13 @@ class CompletenessProofRollupTest(unittest.TestCase):
             def test_item(
                 input_id: str, role: str, artifact_type: str, path: str,
                 content: bytes, *, namespace: str = "live_operational",
+                root_label: str = "repository",
                 observed: str | None = None, producer_revision: str | None = None,
                 subject: dict[str, object] | None = None, producer: dict[str, object] | None = None,
             ) -> dict[str, object]:
                 return {
                     "input_id": input_id, "scope_id": scope["scope_id"], "role": role,
-                    "artifact_type": artifact_type, "root": "repository", "path": path,
+                    "artifact_type": artifact_type, "root": root_label, "path": path,
                     "bytes": len(content), "sha256": MODULE.sha256_bytes(content),
                     "namespace": namespace,
                     "producer": producer or {
@@ -301,7 +307,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             input_index["inputs"].extend([
                 test_item(
                     "e2e-authoritative-source", "authoritative_source_snapshot", "source_snapshot",
-                    operation_path, source_bytes, observed=observed_at,
+                    operation_path, source_bytes, root_label="evidence", observed=observed_at,
                     producer_revision=source_revision,
                     subject={
                         "scope_id": scope["scope_id"], "source_id": scope["source_id"],
@@ -342,7 +348,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             index_path.write_text(json.dumps(input_index, ensure_ascii=False, indent=2) + "\n")
 
             report = MODULE.build_report(
-                root=temp_root, input_root=temp_root, input_index_path=index_path,
+                root=temp_root, input_root=source_input_root, input_index_path=index_path,
             )
             row = next(item for item in report["scopes"] if item["scope_id"] == scope["scope_id"])
             self.assertEqual(row["claims"], {"complete": True, "current": True, "updated": True})
@@ -355,8 +361,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
             # history as proof for a different candidate subject.
             canonical_index_path = temp_root / MODULE.INPUT_INDEX_PATH
             canonical_index_path.parent.mkdir(parents=True, exist_ok=True)
-            candidate_baseline_index = copy.deepcopy(original_index)
-            candidate_baseline_index["evaluation_epoch"] = input_index["evaluation_epoch"]
+            # Retain the admitted proof in the immutable baseline index so
+            # candidate evaluation must validate its historical subject before
+            # suppressing applicability for the changed local inventory.
+            candidate_baseline_index = copy.deepcopy(input_index)
             canonical_index_path.write_text(json.dumps(candidate_baseline_index, ensure_ascii=False, indent=2) + "\n")
             baseline_main = self._commit_test_tree(
                 temp_root,
@@ -372,6 +380,8 @@ class CompletenessProofRollupTest(unittest.TestCase):
             )
             candidate_registry = temp_root / "data/data-go-kr.registry.json"
             baseline_registry_bytes = candidate_registry.read_bytes()
+            baseline_registry_path = temp_root / ".test-baseline.registry.json"
+            baseline_registry_path.write_bytes(baseline_registry_bytes)
             candidate_operation_manifest = temp_root / operation_path
             baseline_operation_manifest_bytes = candidate_operation_manifest.read_bytes()
             candidate_registry_copy = temp_root / "data/.candidate-registry.tmp"
@@ -394,25 +404,82 @@ class CompletenessProofRollupTest(unittest.TestCase):
             candidate_operation_manifest.unlink()
             candidate_operation_manifest.write_bytes(candidate_manifest_bytes)
             candidate_args = [
-                "--repo-root", str(temp_root), "--input-root", str(temp_root),
+                "--repo-root", str(temp_root), "--input-root", str(source_input_root),
                 "--candidate-registry", str(candidate_registry),
                 "--candidate-operation-manifest", str(candidate_operation_manifest),
+                "--candidate-baseline-registry", str(baseline_registry_path),
             ]
             self.assertEqual(MODULE.main([*candidate_args, "--write"]), 0)
             candidate_report = json.loads((temp_root / MODULE.OUTPUT_JSON_PATH).read_bytes())
             candidate_operations = next(row for row in candidate_report["scopes"] if row["scope_id"] == scope["scope_id"])
             self.assertEqual(candidate_operations["claims"], {"complete": False, "current": False, "updated": False})
-            self.assertIsNone(candidate_operations["proof"])
+            self.assertIsNotNone(candidate_operations["proof"])
+            self.assertEqual(candidate_operations["proof"]["claims"], {"complete": True, "current": True, "updated": True})
+            self.assertEqual(candidate_operations["proof_state"], "blocked")
             self.assertEqual(candidate_report["evaluation_context"]["mode"], "candidate")
             candidate_facets = {facet["facet_id"]: facet for facet in candidate_operations["facets"]}
             self.assertEqual(candidate_facets["candidate_inventory"]["state"], "blocked")
+            self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_proof_validated"])
+            self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_claims_suppressed"])
             self.assertEqual(candidate_facets["specification_pipeline"]["state"], "historical")
             self.assertEqual(candidate_facets["immutable_publication_read_back"]["state"], "historical")
+            rebuilt_candidate_index = json.loads(canonical_index_path.read_bytes())
+            _candidate_context, changed_scopes = MODULE.validate_candidate_input_index(
+                root=temp_root, index=rebuilt_candidate_index,
+                input_index_path=canonical_index_path,
+            )
+            catalog_scope = next(
+                item for item in scopes_by_id.values()
+                if item["source_id"] == "data_go_kr" and item["resource_kind"] == "api_catalog_metadata"
+            )
+            self.assertIn(catalog_scope["scope_id"], changed_scopes)
+            self.assertIn(scope["scope_id"], changed_scopes)
 
             watched_paths = [canonical_index_path, temp_root / MODULE.OUTPUT_JSON_PATH, temp_root / MODULE.OUTPUT_MARKDOWN_PATH]
             watched_before = [(path.read_bytes(), path.stat().st_mtime_ns) for path in watched_paths]
             self.assertEqual(MODULE.main([*candidate_args, "--check"]), 0)
             self.assertEqual(watched_before, [(path.read_bytes(), path.stat().st_mtime_ns) for path in watched_paths])
+
+            # A candidate delta must not short-circuit validation of an
+            # admitted baseline proof. A malformed but byte-bound proof in the
+            # pinned baseline is a hard failure, with outputs left untouched.
+            valid_candidate_index_bytes = canonical_index_path.read_bytes()
+            valid_proof_bytes = (temp_root / proof_path).read_bytes()
+            invalid_proof = copy.deepcopy(proof)
+            invalid_proof["claims"]["current"] = "true"
+            self._write_json_file(temp_root, proof_path, invalid_proof)
+            bad_proof_commit = self._commit_test_tree(
+                temp_root, [proof_path], baseline_main,
+                "test: pin a malformed baseline proof for candidate validation",
+            )
+            bad_baseline_index = copy.deepcopy(candidate_baseline_index)
+            bad_proof_item = next(item for item in bad_baseline_index["inputs"] if item["input_id"] == "e2e-proof")
+            bad_proof_item["bytes"] = (temp_root / proof_path).stat().st_size
+            bad_proof_item["sha256"] = MODULE.sha256_file(temp_root / proof_path)
+            bad_proof_item["producer"]["revision"] = bad_proof_commit
+            bad_proof_item["subject"]["admission_revision"] = bad_proof_commit
+            self._write_json_file(temp_root, MODULE.INPUT_INDEX_PATH, bad_baseline_index)
+            bad_index_commit = self._commit_test_tree(
+                temp_root, [MODULE.INPUT_INDEX_PATH], bad_proof_commit,
+                "test: bind malformed proof bytes into candidate baseline index",
+            )
+            self.assertEqual(bad_index_commit, subprocess.check_output(
+                ["git", "rev-parse", "refs/remotes/origin/main"], cwd=temp_root, text=True,
+            ).strip())
+            unchanged_before_bad_candidate = [
+                (path.read_bytes(), path.stat().st_mtime_ns) for path in watched_paths
+            ]
+            self.assertEqual(MODULE.main([*candidate_args, "--write"]), 1)
+            self.assertEqual(
+                unchanged_before_bad_candidate,
+                [(path.read_bytes(), path.stat().st_mtime_ns) for path in watched_paths],
+            )
+            # Restore the valid baseline so later independent subject-tamper
+            # controls continue from the same history.
+            (temp_root / proof_path).write_bytes(valid_proof_bytes)
+            canonical_index_path.write_bytes(valid_candidate_index_bytes)
+            subprocess.run(["git", "update-ref", "refs/heads/main", baseline_main], cwd=temp_root, check=True)
+            subprocess.run(["git", "update-ref", "refs/remotes/origin/main", baseline_main], cwd=temp_root, check=True)
 
             candidate_index = json.loads(canonical_index_path.read_bytes())
             tampered_candidate_index = copy.deepcopy(candidate_index)
@@ -469,7 +536,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     item["observed_at"] = consumer_readback["generated_at"]
             index_path.write_text(json.dumps(input_index, ensure_ascii=False, indent=2) + "\n")
             with self.assertRaisesRegex(ValueError, "no registered semantic subject adapter"):
-                MODULE.build_report(root=temp_root, input_root=temp_root, input_index_path=index_path)
+                MODULE.build_report(root=temp_root, input_root=source_input_root, input_index_path=index_path)
 
     def test_retained_633_import_receipt_matches_admitted_counts(self) -> None:
         admission = json.loads((ROOT / "reports/runtime-freshness-import-admissions/35798122454.json").read_text())
@@ -535,6 +602,97 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertFalse(result["publication"]["details"]["currentness_established"])
         self.assertIn("main_ancestry_checked_tip", result["promotion"])
         self.assertNotIn("main_sha", result["promotion"])
+
+        # Publication/ACK is a separate facet. Removing both must not discard
+        # the already complete and authenticated A/B/C/Health chain.
+        without_publication = [
+            item for item in scoped
+            if item.get("subject", {}).get("stage") not in {"publisher", "acknowledgement"}
+            and not item["role"].startswith(("publication_", "acknowledgement_"))
+        ]
+        partial = MODULE.validate_pipeline_evidence(
+            root=ROOT, operation_inputs=without_publication, all_inputs=checked,
+            resolved=resolved, evaluation_epoch=index["evaluation_epoch"],
+            scope_registry=scope_registry,
+        )
+        self.assertEqual(partial["status"], "verified_historical_chain")
+        self.assertEqual(partial["source"]["run_id"], result["source"]["run_id"])
+        self.assertEqual(partial["processor"]["generation_id"], result["processor"]["generation_id"])
+        self.assertEqual(partial["promotion"]["run_id"], result["promotion"]["run_id"])
+        self.assertEqual(partial["health"]["run_id"], result["health"]["run_id"])
+        self.assertIsNone(partial["publication"])
+        self.assertEqual(partial["publication_missing_stages"], ["publisher", "acknowledgement"])
+        historical_import = MODULE.validate_historical_import(
+            root=ROOT, inputs=without_publication, resolved=resolved,
+            scope=scope_by_id["data-go-kr.api-operations"],
+        )
+        operation_manifest_item = next(
+            item for item in without_publication if item["role"] == "local_operation_manifest"
+        )
+        facets = MODULE.scope_facets(
+            scope=scope_by_id["data-go-kr.api-operations"], scoped_inputs=without_publication,
+            resolved=resolved, current_manifest_sha256=operation_manifest_item["sha256"],
+            historical_import=historical_import, pipeline_evidence=partial,
+            updated_delivery=None,
+        )
+        by_facet = {item["facet_id"]: item for item in facets}
+        self.assertEqual(by_facet["specification_pipeline"]["state"], "historical")
+        self.assertEqual(by_facet["source_observation"]["state"], "historical")
+        self.assertEqual(by_facet["health_observation"]["state"], "historical")
+        self.assertEqual(by_facet["immutable_publication_read_back"]["state"], "missing")
+        self.assertEqual(
+            by_facet["immutable_publication_read_back"]["missing_evidence"][0]["code"],
+            "same_subject_publication_read_back_missing",
+        )
+
+        incomplete_ack = [
+            item for item in scoped
+            if not (item.get("subject", {}).get("stage") == "acknowledgement" and item["role"] == "acknowledgement_jobs")
+        ]
+        with self.assertRaisesRegex(ValueError, "pipeline stage acknowledgement is incomplete"):
+            MODULE.validate_pipeline_evidence(
+                root=ROOT, operation_inputs=incomplete_ack, all_inputs=checked,
+                resolved=resolved, evaluation_epoch=index["evaluation_epoch"],
+                scope_registry=scope_registry,
+            )
+
+        # A later native attempt must route through the parameterized #716
+        # validator, never through the packet-specific historical adapter.
+        original_stage_validator = MODULE.validate_stage_run
+
+        def future_attempt_stage_validator(**kwargs: object):
+            result = original_stage_validator(**kwargs)  # type: ignore[arg-type]
+            if kwargs["stage"] == "publisher":
+                run, job, started, completed = result
+                future_run = copy.deepcopy(run)
+                future_run["id"] = 99999999999
+                return future_run, job, started, completed
+            return result
+
+        future_native_attempt = {"run_id": "99999999999", "attempt": 1, "source_sha": "a" * 40}
+        original_import_module = MODULE.import_module
+
+        def reject_legacy_adapter(name: str, path: pathlib.Path):
+            loaded = original_import_module(name, path)
+            if name == "completeness_publication_evidence":
+                loaded.validate_historical_publication_facet = mock.Mock(
+                    side_effect=AssertionError("future attempt entered the legacy historical adapter")
+                )
+            return loaded
+
+        with (
+            mock.patch.object(MODULE, "validate_stage_run", side_effect=future_attempt_stage_validator),
+            mock.patch.object(MODULE, "validate_native_publisher_attempt", return_value=future_native_attempt),
+            mock.patch.object(MODULE, "import_module", side_effect=reject_legacy_adapter),
+        ):
+            future = MODULE.validate_pipeline_evidence(
+                root=ROOT, operation_inputs=scoped, all_inputs=checked,
+                resolved=resolved, evaluation_epoch=index["evaluation_epoch"],
+                scope_registry=scope_registry,
+            )
+        self.assertEqual(future["status"], "verified_historical_chain")
+        self.assertIsNone(future["publication"])
+        self.assertEqual(future["publisher_attempt"], future_native_attempt)
 
     def test_retained_full_chain_uses_registry_defined_catalog_scope_id(self) -> None:
         scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)

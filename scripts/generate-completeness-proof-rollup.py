@@ -431,16 +431,24 @@ def validate_candidate_input_index(
         and item["input_id"] in baseline_by_id
         and (item.get("sha256"), item.get("bytes")) != (baseline_by_id[item["input_id"]].get("sha256"), baseline_by_id[item["input_id"]].get("bytes"))
     }
-    changed_sources = {
+    changed_catalog_scope_ids = {
         item["scope_id"]
         for item in index.get("inputs", [])
         if item.get("role") == "source_catalog_snapshot" and item["scope_id"] in changed_scopes
     }
-    changed_source_ids = {
-        baseline_by_id[item["input_id"]].get("scope_id")
-        for item in index.get("inputs", [])
-        if item.get("role") == "source_catalog_snapshot" and item["input_id"] in baseline_by_id
-    } if changed_sources else set()
+    changed_source_ids: set[str] = set()
+    if changed_catalog_scope_ids:
+        scope_registry = object_at(root / SCOPE_REGISTRY_PATH, "scope registry")
+        source_by_scope_id = {
+            scope.get("scope_id"): scope.get("source_id")
+            for scope in scope_registry.get("scopes", [])
+            if isinstance(scope, dict)
+        }
+        changed_source_ids = {
+            source_by_scope_id[scope_id]
+            for scope_id in changed_catalog_scope_ids
+            if isinstance(source_by_scope_id.get(scope_id), str)
+        }
     if changed_source_ids:
         scope_registry = object_at(root / SCOPE_REGISTRY_PATH, "scope registry")
         changed_scopes.update(
@@ -998,6 +1006,7 @@ def validate_scope_publication_subject(
     publication_artifact: dict[str, Any], release_member: dict[str, Any],
     release_manifest: dict[str, Any], publication_source_sha: str,
     pipeline_evidence: dict[str, Any] | None = None,
+    retained_registry_payload_bytes: bytes | None = None,
 ) -> dict[str, Any]:
     """Join a native-verified release member to its registered proof subject.
 
@@ -1052,7 +1061,17 @@ def validate_scope_publication_subject(
             ]
             if len(registry_rows) == 1:
                 registry_member = registry_rows[0]
-                registry_bytes = (root / registry_member["path"]).read_bytes()
+                # Candidate mode may have replaced the working tree Registry.
+                # Reuse only an independently materialized retained payload;
+                # the committed LFS pointer and historical manifest below must
+                # still prove that these exact bytes belonged to this release.
+                registry_path = root / registry_member["path"]
+                if retained_registry_payload_bytes is not None:
+                    registry_bytes = retained_registry_payload_bytes
+                elif registry_path.is_file():
+                    registry_bytes = registry_path.read_bytes()
+                else:
+                    raise ValueError("published Registry payload is not locally available at its exact native identity")
                 if (
                     len(registry_bytes) != registry_member.get("bytes")
                     or sha256_bytes(registry_bytes) != registry_member.get("sha256")
@@ -1516,8 +1535,8 @@ def verify_main_committed_input(
     """
     subject = item.get("subject", {})
     revision = subject.get("admission_revision") or item["producer"].get("revision")
-    if item["root"] != "repository" or item["namespace"] == "fixture" or not isinstance(revision, str):
-        raise ValueError(f"{label} must be a non-fixture repository input with a recorded Registry admission revision")
+    if item["root"] not in {"repository", "evidence"} or item["namespace"] == "fixture" or not isinstance(revision, str):
+        raise ValueError(f"{label} must be non-fixture evidence with a recorded Registry admission revision")
     if not subject.get("admission_revision") and item["producer"]["repository"].lower() != "statpan/datapan-registry":
         raise ValueError(f"{label} external producer input lacks a separate Registry admission revision")
     if len(revision) not in {40, 64} or not re.fullmatch(r"[a-f0-9]+", revision):
@@ -2677,6 +2696,7 @@ def validate_denominator_attestation(
     scoped_inputs: list[dict[str, Any]],
     resolved: dict[str, pathlib.Path],
     proof: dict[str, Any],
+    baseline_registry_bytes: bytes | None = None,
 ) -> dict[str, Any]:
     item = single_role(scoped_inputs, "authoritative_denominator")
     assert item is not None
@@ -2706,7 +2726,14 @@ def validate_denominator_attestation(
     source_item = single_role(scoped_inputs, "authoritative_source_snapshot")
     assert source_item is not None
     source_path = resolved[source_item["input_id"]]
-    source_identities = derive_scope_identities(root=root, scope=scope, source_path=source_path)
+    source_manifest_bytes = receipt_path_bytes(source_path, source_item)
+    source_identities = derive_scope_identities(
+        root=root, scope=scope, source_path=source_path,
+        source_relative_path=source_item["path"],
+        source_manifest_bytes=source_manifest_bytes,
+        source_revision=proof["source_snapshot"].get("revision"),
+        registry_bytes=baseline_registry_bytes,
+    )
     if sorted(identities) != source_identities:
         raise ValueError("authoritative denominator identities differ from the registered source adapter")
     identity_set_sha = sha256_bytes(
@@ -2738,17 +2765,35 @@ def validate_denominator_attestation(
 
 
 def derive_scope_identities(
-    *, root: pathlib.Path, scope: dict[str, Any], source_path: pathlib.Path
+    *, root: pathlib.Path, scope: dict[str, Any], source_path: pathlib.Path,
+    source_relative_path: str | None = None,
+    source_manifest_bytes: bytes | None = None,
+    source_revision: str | None = None,
+    registry_bytes: bytes | None = None,
 ) -> list[str]:
     """Extract identities with the source adapter already registered for a scope."""
     inventory = scope["inventory"]
+    logical_path = normalize_relative_path(
+        source_relative_path if source_relative_path is not None else source_path.relative_to(root).as_posix(),
+        "authoritative source identity path",
+    ).as_posix()
     if inventory["kind"] == "operation_manifest" and scope["source_id"] == "data_go_kr":
-        if source_path != root / inventory["path"]:
+        if logical_path != inventory["path"]:
             raise ValueError("data.go.kr operation proof must use the registered #605 operation-manifest source")
-        manifest = validate_data_go_operation_manifest(root, source_path)
+        if registry_bytes is None:
+            manifest = validate_data_go_operation_manifest(root, source_path)
+        else:
+            if source_revision is None or not SHA256_RE.fullmatch(sha256_bytes(registry_bytes)):
+                raise ValueError("historical #605 proof validation lacks its exact source revision")
+            projected = project_registered_data_go_operation_manifest(
+                root=root, revision=source_revision, registry_bytes=registry_bytes,
+            )
+            if source_manifest_bytes is None or projected != source_manifest_bytes:
+                raise ValueError("historical operation manifest is not the exact pinned #605 projection of its source Registry")
+            manifest = json.loads(projected)
         identities = [item.get("operation_id") for item in manifest.get("operations", [])]
     elif inventory["kind"] == "operation_denominator":
-        if source_path != root / inventory["path"]:
+        if logical_path != inventory["path"]:
             raise ValueError("operation proof must use its registered source denominator path")
         denominator = validate_operation_denominator(root, source_path, scope["source_id"])
         identities = [item.get("operation_id") for item in denominator.get("operations", [])]
@@ -3299,6 +3344,7 @@ def validate_updated_claim_inputs(
     scope_registry: dict[str, Any],
     evaluation_epoch: str,
     pipeline_evidence: dict[str, Any] | None = None,
+    retained_registry_payload_bytes: bytes | None = None,
 ) -> dict[str, Any]:
     """Prove an updated claim from exact import, main, publisher, ACK, and readback evidence."""
     if proof["import_durability"]["state"] != "proven":
@@ -3384,8 +3430,8 @@ def validate_updated_claim_inputs(
     manifest_sha = publication["manifest_sha256"]
     source_snapshot = proof["source_snapshot"]
     source_bytes = exact_input(source_input, "authoritative source snapshot")
-    if source_input["root"] != "repository" or source_input["namespace"] == "fixture":
-        raise ValueError("updated claim source snapshot must be a committed Registry artifact, not local inventory")
+    if source_input["namespace"] == "fixture":
+        raise ValueError("updated claim source snapshot must be committed Registry evidence, not a fixture")
     if (
         source_snapshot.get("sha256") != source_input["sha256"]
         or source_input["bytes"] != len(source_bytes)
@@ -3559,6 +3605,7 @@ def validate_updated_claim_inputs(
         release_manifest=release_manifest,
         publication_source_sha=source_sha,
         pipeline_evidence=pipeline_evidence,
+        retained_registry_payload_bytes=retained_registry_payload_bytes,
     )
     imported = validate_scope_import_evidence(
         root=root, scope=scope, scoped_inputs=scoped_inputs, resolved=resolved,
@@ -3739,11 +3786,8 @@ def proof_for_scope(
     evaluation_epoch: str,
     pipeline_evidence: dict[str, Any] | None = None,
     candidate_subject_changed: bool = False,
+    candidate_baseline_registry_bytes: bytes | None = None,
 ) -> tuple[dict[str, Any] | None, dict[str, Any] | None]:
-    if candidate_subject_changed:
-        # A prior proof can still be useful historical context, but changed
-        # candidate inventory bytes need a proof admitted for that exact subject.
-        return None, None
     matches = [item for item in scoped_inputs if item["role"] == "proof_v1"]
     if not matches:
         return None, None
@@ -3798,6 +3842,7 @@ def proof_for_scope(
             raise ValueError("positive proof is unsupported while the registered scope authority remains unresolved")
         denominator = validate_denominator_attestation(
             root=root, scope=scope, scoped_inputs=scoped_inputs, resolved=resolved, proof=proof,
+            baseline_registry_bytes=(candidate_baseline_registry_bytes if candidate_subject_changed else None),
         )
         if proof["scope"]["authority"]["state"] != "available":
             raise ValueError("positive or authoritative proof must declare available authority")
@@ -3809,7 +3854,16 @@ def proof_for_scope(
             root=root, scope=scope, scoped_inputs=scoped_inputs, resolved=resolved,
             proof=proof, source_input=source_input, scope_registry=scope_registry,
             evaluation_epoch=evaluation_epoch, pipeline_evidence=pipeline_evidence,
+            retained_registry_payload_bytes=(
+                candidate_baseline_registry_bytes if candidate_subject_changed else None
+            ),
         )
+    if candidate_subject_changed:
+        # Validate the retained proof and its own admitted source/import chain
+        # before keeping it as historical context. A candidate-local inventory
+        # change suppresses applicability and claims; it never hides malformed
+        # or contradictory retained evidence.
+        return proof, None
     return proof, updated_delivery
 
 
@@ -3831,26 +3885,27 @@ def validate_pipeline_evidence(
     compared. The publication facet is separately historical and cannot make a
     #631 current/updated claim.
     """
-    relevant_stages = ("source", "processor", "promotion", "health", "publisher", "acknowledgement")
+    core_stages = ("source", "processor", "promotion", "health")
+    relevant_stages = (*core_stages, "publisher", "acknowledgement")
     stage_roles = {stage: stage_input_map(operation_inputs, stage) for stage in relevant_stages}
     if not any(stage_roles.values()):
         return None
-    missing_stages = [stage for stage, roles in stage_roles.items() if not roles]
-    if missing_stages:
+    stage_runs: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
+    for stage, roles in stage_roles.items():
+        if roles:
+            run, job, _started, _completed = validate_stage_run(
+                stage=stage, roles=roles, resolved=resolved,
+                evaluation_epoch=evaluation_epoch, root=root,
+            )
+            stage_runs[stage] = (run, job)
+    missing_core_stages = [stage for stage in core_stages if not stage_roles[stage]]
+    if missing_core_stages:
         return {
-            "status": "missing",
-            "missing_stages": missing_stages,
+            "status": "missing_core_chain",
+            "missing_stages": missing_core_stages,
             "evidence": [],
             "publication": None,
         }
-
-    stage_runs: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
-    for stage in relevant_stages:
-        run, job, _started, _completed = validate_stage_run(
-            stage=stage, roles=stage_roles[stage], resolved=resolved,
-            evaluation_epoch=evaluation_epoch, root=root,
-        )
-        stage_runs[stage] = (run, job)
 
     current_registry = validate_current_catalog_subject(
         root=root, inputs=all_inputs, resolved=resolved, scope_registry=scope_registry,
@@ -3885,61 +3940,23 @@ def validate_pipeline_evidence(
     )
 
     def raw_role(role: str) -> bytes:
-        item = single_role(operation_inputs, role)
-        assert item is not None
+        item = single_role(operation_inputs, role, required=False)
+        if item is None:
+            raise ValueError(f"publication evidence is missing role {role}")
         return receipt_path_bytes(resolved[item["input_id"]], item)
 
     def json_role(role: str) -> dict[str, Any]:
-        item = single_role(operation_inputs, role)
-        assert item is not None
+        item = single_role(operation_inputs, role, required=False)
+        if item is None:
+            raise ValueError(f"publication evidence is missing role {role}")
         return object_at(resolved[item["input_id"]], role)
 
-    publisher_run, _ = stage_runs["publisher"]
-    source_binding = json_role("publication_source_binding")
     publication_helper = import_module(
         "completeness_publication_evidence", root / "scripts/completeness_publication_evidence.py"
     )
-    publication = publication_helper.validate_historical_publication_facet(
-        inputs={
-            "publisher_run": publisher_run,
-            "publisher_jobs": json_role("publication_producer_jobs"),
-            "publisher_artifact_metadata": json_role("publication_output_artifact"),
-            "publisher_archive": raw_role("publication_artifact_archive"),
-            "publication_receipt": raw_role("publication_receipt"),
-            "source_binding": raw_role("publication_source_binding"),
-            "source_commit": json_role("publication_source_commit"),
-            "source_manifest": raw_role("publication_source_manifest"),
-            "publisher_workflow": json_role("publication_workflow"),
-            "pointer_before": {
-                "repo_metadata": json_role("publication_repo_metadata_before"),
-                "distribution_index": json_role("publication_pointer_before"),
-            },
-            "pointer_after": {
-                "repo_metadata": json_role("publication_repo_metadata_after"),
-                "distribution_index": json_role("publication_pointer_after"),
-            },
-            "pointer_immutable": json_role("publication_pointer_immutable"),
-            "anonymous_manifest": raw_role("publication_anonymous_manifest"),
-            "anonymous_payload": json_role("publication_anonymous_payload"),
-            "source_catalog_snapshot": current_registry,
-            "ack_run": stage_runs["acknowledgement"][0],
-            "ack_jobs": json_role("acknowledgement_jobs"),
-            "ack_log": raw_role("acknowledgement_log_archive"),
-            "journal_before": json_role("acknowledgement_journal_before"),
-            "journal_after": json_role("acknowledgement_journal_after"),
-        },
-        expected_source_sha=source_binding.get("source_sha"),
-        expected_manifest_sha256=source_binding.get("manifest_sha256"),
-        expected_registry_sha256=current_registry["sha256"],
-        expected_registry_bytes=current_registry["bytes"],
-        repo_root=root,
-        evaluation_epoch=evaluation_epoch,
-    )
-    if publication.get("status") != "verified":
-        raise ValueError("retained publication and acknowledgement packet is not authenticated")
-    assert_main_ancestor(root, publisher_run["head_sha"], "publisher workflow source commit")
-
-    publication_evidence = []
+    publication: dict[str, Any] | None = None
+    publisher_attempt: dict[str, Any] | None = None
+    publication_evidence: list[dict[str, Any]] = []
     publication_roles = (
         "publication_producer_run", "publication_producer_jobs", "publication_output_artifact",
         "publication_artifact_archive", "publication_receipt", "publication_source_binding",
@@ -3950,12 +3967,103 @@ def validate_pipeline_evidence(
         "acknowledgement_jobs", "acknowledgement_log_archive", "acknowledgement_journal_before",
         "acknowledgement_journal_after",
     )
-    for role in publication_roles:
-        item = single_role(operation_inputs, role)
-        assert item is not None
-        publication_evidence.append(
-            artifact(input_path(item), receipt_path_bytes(resolved[item["input_id"]], item))
+    publisher_roles = stage_roles["publisher"]
+    acknowledgement_roles = stage_roles["acknowledgement"]
+    publisher_run = stage_runs.get("publisher", ({}, {}))[0]
+    acknowledgement_run = stage_runs.get("acknowledgement", ({}, {}))[0]
+
+    # Keep the exact retained legacy packet as a historical adapter. New native
+    # attempts are validated through the generic #716 publisher checks in the
+    # updated-claim path; their presence can no longer make this legacy-only
+    # adapter reject the independently valid source→B→C→Health chain.
+    receipt_item = single_role(operation_inputs, "publication_receipt", required=False)
+    binding_item = single_role(operation_inputs, "publication_source_binding", required=False)
+    if (receipt_item is None) != (binding_item is None):
+        raise ValueError("native publisher receipt and source binding must be supplied together")
+    if publisher_roles and receipt_item is not None and binding_item is not None:
+        publisher_attempt = validate_native_publisher_attempt(
+            root=root,
+            run=publisher_run,
+            jobs=json_role("publication_producer_jobs"),
+            artifact_response=json_role("publication_output_artifact"),
+            archive=raw_role("publication_artifact_archive"),
+            receipt_raw=raw_role("publication_receipt"),
+            binding_raw=raw_role("publication_source_binding"),
+            evaluation_epoch=evaluation_epoch,
         )
+
+    legacy_packet_ids = (
+        publisher_run.get("id") == publication_helper.PUBLISHER_RUN_ID
+        and acknowledgement_run.get("id") == publication_helper.ACK_RUN_ID
+    )
+    legacy_roles_present = all(
+        single_role(operation_inputs, role, required=False) is not None
+        for role in publication_roles
+    )
+    if legacy_packet_ids:
+        if not publisher_roles or not acknowledgement_roles or not legacy_roles_present:
+            raise ValueError("retained legacy publisher/ACK packet is incomplete")
+        source_binding = json_role("publication_source_binding")
+        publication = publication_helper.validate_historical_publication_facet(
+            inputs={
+                "publisher_run": publisher_run,
+                "publisher_jobs": json_role("publication_producer_jobs"),
+                "publisher_artifact_metadata": json_role("publication_output_artifact"),
+                "publisher_archive": raw_role("publication_artifact_archive"),
+                "publication_receipt": raw_role("publication_receipt"),
+                "source_binding": raw_role("publication_source_binding"),
+                "source_commit": json_role("publication_source_commit"),
+                "source_manifest": raw_role("publication_source_manifest"),
+                "publisher_workflow": json_role("publication_workflow"),
+                "pointer_before": {
+                    "repo_metadata": json_role("publication_repo_metadata_before"),
+                    "distribution_index": json_role("publication_pointer_before"),
+                },
+                "pointer_after": {
+                    "repo_metadata": json_role("publication_repo_metadata_after"),
+                    "distribution_index": json_role("publication_pointer_after"),
+                },
+                "pointer_immutable": json_role("publication_pointer_immutable"),
+                "anonymous_manifest": raw_role("publication_anonymous_manifest"),
+                "anonymous_payload": json_role("publication_anonymous_payload"),
+                "source_catalog_snapshot": current_registry,
+                "ack_run": acknowledgement_run,
+                "ack_jobs": json_role("acknowledgement_jobs"),
+                "ack_log": raw_role("acknowledgement_log_archive"),
+                "journal_before": json_role("acknowledgement_journal_before"),
+                "journal_after": json_role("acknowledgement_journal_after"),
+            },
+            expected_source_sha=source_binding.get("source_sha"),
+            expected_manifest_sha256=source_binding.get("manifest_sha256"),
+            expected_registry_sha256=current_registry["sha256"],
+            expected_registry_bytes=current_registry["bytes"],
+            repo_root=root,
+            evaluation_epoch=evaluation_epoch,
+        )
+        if publication.get("status") != "verified":
+            raise ValueError("retained publication and acknowledgement packet is not authenticated")
+        assert_main_ancestor(root, publisher_run["head_sha"], "publisher workflow source commit")
+
+    if publication is not None:
+        for role in publication_roles:
+            item = single_role(operation_inputs, role)
+            assert item is not None
+            publication_evidence.append(
+                artifact(input_path(item), receipt_path_bytes(resolved[item["input_id"]], item))
+            )
+    elif publisher_attempt is not None:
+        # Preserve what the generic native producer actually proved without
+        # presenting it as a complete anonymous-readback/ACK facet.
+        for role in (
+            "publication_producer_run", "publication_producer_jobs",
+            "publication_output_artifact", "publication_artifact_archive",
+            "publication_receipt", "publication_source_binding",
+        ):
+            item = single_role(operation_inputs, role, required=False)
+            if item is not None:
+                publication_evidence.append(
+                    artifact(input_path(item), receipt_path_bytes(resolved[item["input_id"]], item))
+                )
 
     evidence_by_path: dict[str, dict[str, Any]] = {}
     for result in (source, processor, promotion, health):
@@ -3971,6 +4079,11 @@ def validate_pipeline_evidence(
         "health": health,
         "current_registry": current_registry,
         "publication": publication,
+        "publisher_attempt": publisher_attempt,
+        "publication_missing_stages": [
+            stage for stage, roles in (("publisher", publisher_roles), ("acknowledgement", acknowledgement_roles))
+            if not roles
+        ],
         "publication_evidence": publication_evidence,
         "evidence": [evidence_by_path[path] for path in sorted(evidence_by_path)],
     }
@@ -4119,35 +4232,54 @@ def scope_facets(
                 "missing_evidence": [missing_entry("health_producer_receipt_missing", "StatPan/datapan-health", "StatPan/datapan-health#33")],
             })
             publication = pipeline_evidence["publication"]
-            current_release_manifest_sha = pipeline_evidence["current_registry"]["release_manifest_sha256"]
-            publication_subject = publication["subject"]
-            same_release = candidate_context is None and publication_subject["manifest_sha256"] == current_release_manifest_sha
-            compared_registry = candidate_context["candidate_registry"] if candidate_context is not None else pipeline_evidence["current_registry"]
             if updated_delivery is None:
-                facets.append({
-                    "facet_id": "immutable_publication_read_back",
-                    "state": "proven" if same_release else "historical",
-                    "evidence": pipeline_evidence["publication_evidence"],
-                    "details": {
-                        **publication["details"],
-                        "subject": publication_subject,
-                        "current_release_manifest_sha256": None if candidate_context is not None else current_release_manifest_sha,
-                        "current_release_subject_applicable": same_release,
-                        "payload_equivalent_to_current_registry": (
-                            publication_subject["registry_sha256"] == compared_registry["sha256"]
-                            and publication_subject["registry_bytes"] == compared_registry["bytes"]
-                        ),
-                        "candidate_release_publication_unproven": candidate_context is not None,
-                        "receipt_cutover_required": False,
-                        "consumer_read_back_required_for_updated": True,
-                    },
-                    "missing_evidence": [] if same_release else [missing_entry("current_release_publication_read_back_missing", "StatPan/datapan-registry", "#659")],
-                })
+                if publication is None:
+                    facets.append({
+                        "facet_id": "immutable_publication_read_back",
+                        "state": "missing",
+                        "evidence": pipeline_evidence["publication_evidence"],
+                        "details": {
+                            "publisher_attempt": pipeline_evidence.get("publisher_attempt"),
+                            "missing_stages": pipeline_evidence.get("publication_missing_stages", []),
+                            "receipt_cutover_required": False,
+                            "consumer_read_back_required_for_updated": True,
+                        },
+                        "missing_evidence": [missing_entry("same_subject_publication_read_back_missing", "StatPan/datapan-registry", "#659")],
+                    })
+                else:
+                    current_release_manifest_sha = pipeline_evidence["current_registry"]["release_manifest_sha256"]
+                    publication_subject = publication["subject"]
+                    same_release = candidate_context is None and publication_subject["manifest_sha256"] == current_release_manifest_sha
+                    compared_registry = candidate_context["candidate_registry"] if candidate_context is not None else pipeline_evidence["current_registry"]
+                    facets.append({
+                        "facet_id": "immutable_publication_read_back",
+                        "state": "proven" if same_release else "historical",
+                        "evidence": pipeline_evidence["publication_evidence"],
+                        "details": {
+                            **publication["details"],
+                            "subject": publication_subject,
+                            "current_release_manifest_sha256": None if candidate_context is not None else current_release_manifest_sha,
+                            "current_release_subject_applicable": same_release,
+                            "payload_equivalent_to_current_registry": (
+                                publication_subject["registry_sha256"] == compared_registry["sha256"]
+                                and publication_subject["registry_bytes"] == compared_registry["bytes"]
+                            ),
+                            "candidate_release_publication_unproven": candidate_context is not None,
+                            "receipt_cutover_required": False,
+                            "consumer_read_back_required_for_updated": True,
+                        },
+                        "missing_evidence": [] if same_release else [missing_entry("current_release_publication_read_back_missing", "StatPan/datapan-registry", "#659")],
+                    })
             else:
                 # Keep the retained pipeline release identity visible alongside
                 # the distinct proof publication without conflating their subjects.
-                next(facet for facet in facets if facet["facet_id"] == "specification_pipeline")["details"]["retained_publication_subject"] = publication_subject
-                next(facet for facet in facets if facet["facet_id"] == "specification_pipeline")["details"]["retained_publication_current_release_applicable"] = same_release
+                if publication is not None:
+                    publication_subject = publication["subject"]
+                    current_release_manifest_sha = pipeline_evidence["current_registry"]["release_manifest_sha256"]
+                    same_release = candidate_context is None and publication_subject["manifest_sha256"] == current_release_manifest_sha
+                    pipeline_facet = next(facet for facet in facets if facet["facet_id"] == "specification_pipeline")
+                    pipeline_facet["details"]["retained_publication_subject"] = publication_subject
+                    pipeline_facet["details"]["retained_publication_current_release_applicable"] = same_release
         facets.append({
             "facet_id": "receipt_cutover", "state": "missing", "evidence": [],
             "details": {"cutover_active": False, "native_publication_scope_requires_cutover": False},
@@ -4191,6 +4323,7 @@ def build_scope_row(
     scope_registry: dict[str, Any],
     candidate_context: dict[str, Any] | None = None,
     candidate_changed_scopes: set[str] | None = None,
+    candidate_baseline_registry_bytes: bytes | None = None,
 ) -> dict[str, Any]:
     candidate_changed = scope["scope_id"] in (candidate_changed_scopes or set())
     inventory_context, evidence = local_inventory_context(
@@ -4222,14 +4355,19 @@ def build_scope_row(
         evaluation_epoch=evaluation_epoch,
         pipeline_evidence=pipeline_evidence,
         candidate_subject_changed=candidate_changed,
+        candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
     )
     claims = {"complete": False, "current": False, "updated": False}
     proof_state = "blocked"
     authority_state = scope["authority_state"]
     if proof is not None:
-        proof_state = proof["proof_state"]
         authority_state = proof["scope"]["authority"]["state"]
-        claims = dict(proof["claims"])
+        if candidate_changed:
+            proof_state = "blocked"
+            claims = {"complete": False, "current": False, "updated": False}
+        else:
+            proof_state = proof["proof_state"]
+            claims = dict(proof["claims"])
         evidence.append(artifact(
             input_path(next(item for item in scoped_inputs if item["role"] == "proof_v1")),
             read_bytes(resolved[next(item for item in scoped_inputs if item["role"] == "proof_v1")["input_id"]]),
@@ -4257,6 +4395,8 @@ def build_scope_row(
             "details": {
                 "baseline_main_sha": candidate_context["baseline_main_sha"],
                 "scope_inventory_changed": candidate_changed,
+                "historical_proof_validated": candidate_changed and proof is not None,
+                "historical_claims_suppressed": candidate_changed and proof is not None,
                 "candidate_registry_sha256": candidate_context["candidate_registry"]["sha256"],
                 "candidate_operation_manifest_sha256": candidate_context["candidate_operation_manifest"]["sha256"],
                 "local_inventory_is_not_authority": True,
@@ -4302,6 +4442,7 @@ def build_report(
     input_index_path: pathlib.Path,
     as_of: str | None = None,
     input_index_override: dict[str, Any] | None = None,
+    candidate_baseline_registry_bytes: bytes | None = None,
 ) -> dict[str, Any]:
     root = root.resolve()
     scope_registry, policy, scope_by_id = load_and_validate_registry(root)
@@ -4309,6 +4450,12 @@ def build_report(
     candidate_context, candidate_changed_scopes = validate_candidate_input_index(
         root=root, index=raw_index, input_index_path=input_index_path.resolve(),
     )
+    if candidate_context and candidate_baseline_registry_bytes is not None:
+        expected_baseline = candidate_context["baseline_registry"]
+        if (len(candidate_baseline_registry_bytes), sha256_bytes(candidate_baseline_registry_bytes)) != (
+            expected_baseline["bytes"], expected_baseline["sha256"],
+        ):
+            raise ValueError("candidate baseline Registry materialization differs from its pinned main payload")
     index, checked_inputs, resolved = validate_input_index(
         root=root, input_root=input_root.resolve(), index_path=input_index_path.resolve(),
         scope_by_id=scope_by_id, index_value=raw_index,
@@ -4327,6 +4474,7 @@ def build_report(
             scope_registry=scope_registry,
             candidate_context=candidate_context or None,
             candidate_changed_scopes=candidate_changed_scopes,
+            candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
         )
         for scope_id in sorted(scope_by_id)
     ]
@@ -4512,6 +4660,7 @@ def main(argv: list[str] | None = None) -> int:
         if (args.candidate_registry is None) != (args.candidate_operation_manifest is None):
             raise ValueError("candidate mode requires both --candidate-registry and --candidate-operation-manifest")
         candidate_index = None
+        candidate_baseline_registry_bytes = None
         if candidate_requested:
             if input_index.resolve() != (root / INPUT_INDEX_PATH).resolve():
                 raise ValueError("candidate mode writes only the registered completeness input index")
@@ -4523,6 +4672,8 @@ def main(argv: list[str] | None = None) -> int:
                 candidate_operation_manifest=args.candidate_operation_manifest.resolve(),
                 baseline_registry_file=args.candidate_baseline_registry.resolve() if args.candidate_baseline_registry else None,
             )
+            if args.candidate_baseline_registry is not None:
+                candidate_baseline_registry_bytes = read_bytes(args.candidate_baseline_registry.resolve())
             if args.check:
                 saved_index = object_at(input_index.resolve(), "input index")
                 normalize = lambda value: json.dumps(
@@ -4537,6 +4688,7 @@ def main(argv: list[str] | None = None) -> int:
             input_index_path=input_index,
             as_of=args.as_of,
             input_index_override=candidate_index,
+            candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
         )
         require_claims(report, args.require_claim)
         json_bytes = render_json(report)

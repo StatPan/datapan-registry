@@ -11,6 +11,7 @@ import sys
 import tempfile
 import unittest
 import jsonschema
+from unittest import mock
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -51,6 +52,7 @@ def load(path: str) -> dict:
 class ManualReviewScopeTest(unittest.TestCase):
     def setUp(self) -> None:
         self.decision = load("reports/credential-runtime-manual-review-decision.json")
+        self.acceptance = load("reports/credential-runtime-manual-review-acceptance.json")
         self.compatibility = load("reports/release-consumer-compatibility.json")
         self.historical_proof = scope._load_historical()
         self.historical_compatibility = self.historical_proof["compatibility.json"]
@@ -65,6 +67,56 @@ class ManualReviewScopeTest(unittest.TestCase):
         self.health_selection = load("policy/health-runtime-observation-selection.json")
         self.decision_bytes = (ROOT / "reports/credential-runtime-manual-review-decision.json").read_bytes()
         self.handoff_bytes = (ROOT / "reports/credential-runtime-review-handoff.json").read_bytes()
+
+    def build_current_packet(self) -> dict:
+        return packet_generator.build_report(
+            self.decision,
+            self.acceptance,
+            self.handoff,
+            self.compatibility,
+            decision_path=pathlib.Path("reports/credential-runtime-manual-review-decision.json"),
+            acceptance_path=pathlib.Path("reports/credential-runtime-manual-review-acceptance.json"),
+            handoff_path=pathlib.Path("reports/credential-runtime-review-handoff.json"),
+            compatibility_path=pathlib.Path("reports/release-consumer-compatibility.json"),
+        )
+
+    def decision_from_packet_template(self, packet: dict) -> dict:
+        decision = copy.deepcopy(self.decision)
+        body = copy.deepcopy(packet["accepted_decision_template"])
+        body.update(
+            reviewer="Test Accountable Reviewer",
+            reviewed_at="2026-09-30T12:00:00Z",
+            reason="Synthetic test review bound to the current manual-review scope.",
+            expires_at="2026-11-30T00:00:00Z",
+        )
+        decision["decision"] = body
+        return decision
+
+    def validate_test_decision(self, decision: dict, raw: pathlib.Path, *, as_of: dt.datetime) -> dict:
+        raw.write_text(json.dumps(decision, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        decision_validator.validate_schema(
+            decision,
+            ROOT / "schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json",
+        )
+        evaluate_review_scope = decision_validator.evaluate_review_scope
+
+        def evaluate_at_test_clock(**kwargs):
+            return evaluate_review_scope(**kwargs, as_of=as_of)
+
+        with mock.patch.object(
+            decision_validator,
+            "evaluate_review_scope",
+            side_effect=evaluate_at_test_clock,
+        ):
+            return decision_validator.validate_decision(
+                decision,
+                decision_path=raw,
+                handoff_path=pathlib.Path("reports/credential-runtime-review-handoff.json"),
+                compatibility_path=pathlib.Path("reports/release-consumer-compatibility.json"),
+                manifest_path=ROOT / "manifest.json",
+                health_plan_path=ROOT / "reports/health-runtime-observation-plan.v1.json",
+                health_selection_path=ROOT / "policy/health-runtime-observation-selection.json",
+            )
 
     def evaluate(
         self,
@@ -386,6 +438,174 @@ class ManualReviewScopeTest(unittest.TestCase):
         self.assertEqual(report["summary"]["acceptance_status"], "accepted")
         self.assertEqual(report["review_scope"]["scope_status"], "explicitly_revalidated")
 
+    def test_packet_cli_template_satisfies_real_decision_consumer(self):
+        with tempfile.TemporaryDirectory() as raw:
+            packet_path = pathlib.Path(raw) / "packet.json"
+            with mock.patch.object(
+                sys,
+                "argv",
+                [
+                    "generate-credential-runtime-manual-review-acceptance-packet.py",
+                    "--output",
+                    str(packet_path),
+                ],
+            ):
+                self.assertEqual(packet_generator.main(), 0)
+            packet = json.loads(packet_path.read_text(encoding="utf-8"))
+
+            expected_triggers = [
+                "credential_receipt_state_changes",
+                "consumer_compatibility_changes",
+                "source_runtime_blocker_changes",
+                "release_manifest_changes",
+                "acceptance_expiry",
+            ]
+            self.assertEqual(packet["revalidation_triggers"], expected_triggers)
+            self.assertEqual(packet["accepted_decision_template"]["revalidation_triggers"], expected_triggers)
+
+            # The generated template is consumed by the actual full decision
+            # schema and semantic validator using this checkout's real inputs.
+            synthetic = self.decision_from_packet_template(packet)
+            decision_path = pathlib.Path(raw) / "synthetic-decision.json"
+            accepted = self.validate_test_decision(
+                synthetic,
+                decision_path,
+                as_of=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc),
+            )
+            self.assertEqual(accepted["scope_status"], "explicitly_revalidated")
+            self.assertTrue(accepted["effective_accepted"])
+
+            # --check follows the same producer/consumer contract before it
+            # compares the temporary generated bytes.
+            with mock.patch.object(
+                sys,
+                "argv",
+                [
+                    "generate-credential-runtime-manual-review-acceptance-packet.py",
+                    "--output",
+                    str(packet_path),
+                    "--check",
+                ],
+            ):
+                self.assertEqual(packet_generator.main(), 0)
+
+        self.assertEqual(
+            hashlib.sha256(self.decision_bytes).hexdigest(),
+            "4d0bee81a67d4b49a1ccb022ab6be7a28a76b9613cbd7c2211d5f22ce9d69151",
+        )
+
+    def test_packet_trigger_contract_rejects_invalid_lists_and_consumer_drift(self):
+        packet = self.build_current_packet()
+        packet_generator.validate_invariants(packet)
+        packet_generator.validate_schema(
+            packet,
+            ROOT / "schemas/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json",
+        )
+
+        invalid_lists = []
+        old_names = [
+            "credential_runtime_review_handoff_changed",
+            "release_consumer_compatibility_changed",
+            "reviewed_credential_receipt_state_changed",
+            "release_consumer_decision_changed",
+        ]
+        wrong = copy.deepcopy(packet)
+        wrong["revalidation_triggers"] = old_names
+        wrong["accepted_decision_template"]["revalidation_triggers"] = old_names
+        invalid_lists.append(wrong)
+
+        omitted = copy.deepcopy(packet)
+        omitted["revalidation_triggers"] = omitted["revalidation_triggers"][:-1]
+        omitted["accepted_decision_template"]["revalidation_triggers"] = omitted["accepted_decision_template"]["revalidation_triggers"][:-1]
+        invalid_lists.append(omitted)
+
+        duplicated = copy.deepcopy(packet)
+        duplicated["revalidation_triggers"] = duplicated["revalidation_triggers"] + [duplicated["revalidation_triggers"][0]]
+        duplicated["accepted_decision_template"]["revalidation_triggers"] = (
+            duplicated["accepted_decision_template"]["revalidation_triggers"]
+            + [duplicated["accepted_decision_template"]["revalidation_triggers"][0]]
+        )
+        invalid_lists.append(duplicated)
+
+        disagreeing = copy.deepcopy(packet)
+        disagreeing["accepted_decision_template"]["revalidation_triggers"] = old_names
+        invalid_lists.append(disagreeing)
+
+        for invalid in invalid_lists:
+            with self.subTest(packet_triggers=invalid["revalidation_triggers"]):
+                with self.assertRaisesRegex(ValueError, "packet trigger lists must exactly match"):
+                    packet_generator.validate_invariants(invalid)
+
+        base_schema = load("schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json")
+        consumer_enum = base_schema["$defs"]["decision"]["properties"]["revalidation_triggers"]["items"]["enum"]
+        with tempfile.TemporaryDirectory() as raw:
+            schema_path = pathlib.Path(raw) / "decision-schema.json"
+
+            reordered_schema = copy.deepcopy(base_schema)
+            reordered_schema["$defs"]["decision"]["properties"]["revalidation_triggers"]["items"]["enum"] = list(
+                reversed(consumer_enum)
+            )
+            schema_path.write_text(json.dumps(reordered_schema), encoding="utf-8")
+            packet_generator.validate_invariants(packet, decision_schema_path=schema_path)
+
+            drifted_schemas = []
+            added = copy.deepcopy(base_schema)
+            added["$defs"]["decision"]["properties"]["revalidation_triggers"]["items"]["enum"].append(
+                "future_decision_trigger"
+            )
+            drifted_schemas.append(("addition", added))
+
+            omitted = copy.deepcopy(base_schema)
+            omitted["$defs"]["decision"]["properties"]["revalidation_triggers"]["items"]["enum"].pop()
+            drifted_schemas.append(("omission", omitted))
+
+            duplicated = copy.deepcopy(base_schema)
+            duplicate_enum = duplicated["$defs"]["decision"]["properties"]["revalidation_triggers"]["items"]["enum"]
+            duplicate_enum[-1] = duplicate_enum[0]
+            drifted_schemas.append(("duplicate", duplicated))
+
+            wrong_type = copy.deepcopy(base_schema)
+            wrong_type["$defs"]["decision"]["properties"]["revalidation_triggers"]["items"]["enum"][0] = 7
+            drifted_schemas.append(("wrong type", wrong_type))
+
+            wrong_shape = copy.deepcopy(base_schema)
+            wrong_shape["$defs"]["decision"]["properties"]["revalidation_triggers"]["items"]["enum"] = "not-an-array"
+            drifted_schemas.append(("wrong shape", wrong_shape))
+
+            for label, drifted_schema in drifted_schemas:
+                with self.subTest(consumer_schema=label):
+                    schema_path.write_text(json.dumps(drifted_schema), encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, "manual-review decision trigger contract drift"):
+                        packet_generator.validate_invariants(packet, decision_schema_path=schema_path)
+
+    def test_generated_decision_wrong_scope_or_expiry_remains_ineffective(self):
+        packet = self.build_current_packet()
+        valid = self.decision_from_packet_template(packet)
+        with tempfile.TemporaryDirectory() as raw:
+            raw_path = pathlib.Path(raw)
+
+            wrong_scope = copy.deepcopy(valid)
+            wrong_scope["decision"]["review_scope_sha256"] = "0" * 64
+            wrong_scope_result = self.validate_test_decision(
+                wrong_scope,
+                raw_path / "wrong-scope.json",
+                as_of=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc),
+            )
+            self.assertEqual(wrong_scope_result["scope_status"], "unproven")
+            self.assertFalse(wrong_scope_result["effective_accepted"])
+
+            expired = copy.deepcopy(valid)
+            expired["decision"]["reviewed_at"] = "2026-08-01T00:00:00Z"
+            expired["decision"]["expires_at"] = "2026-09-30T00:00:00Z"
+            expired_result = self.validate_test_decision(
+                expired,
+                raw_path / "expired.json",
+                as_of=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc),
+            )
+            self.assertEqual(expired_result["scope_status"], "revalidation_required")
+            self.assertFalse(expired_result["effective_accepted"])
+            self.assertIn("manual_review_decision_expired", expired_result["reason_codes"])
+
     def test_expired_decision_packet_stays_pending_and_schema_valid(self):
         acceptance = acceptance_generator.build_report(
             self.handoff,
@@ -415,6 +635,13 @@ class ManualReviewScopeTest(unittest.TestCase):
             ROOT / "schemas/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json",
         )
 
+        self.assertEqual(
+            hashlib.sha256(self.decision_bytes).hexdigest(),
+            "4d0bee81a67d4b49a1ccb022ab6be7a28a76b9613cbd7c2211d5f22ce9d69151",
+        )
+        self.assertEqual(acceptance["review_scope"]["scope_status"], "revalidation_required")
+        self.assertFalse(acceptance["review_scope"]["effective_accepted"])
+        self.assertTrue(acceptance["review_scope"]["decision_expired"])
         self.assertFalse(packet["summary"]["accepted"])
         self.assertEqual(packet["summary"]["acceptance_status"], "revalidation_required")
         self.assertEqual(packet["summary"]["packet_status"], "manual_review_revalidation_required")
