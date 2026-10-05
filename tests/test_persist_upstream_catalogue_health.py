@@ -314,6 +314,74 @@ def collector_success_summary(*, run_id: str = "37110000002", started_at: str = 
 
 
 class PromotionExecutionRecoveryTests(unittest.TestCase):
+    def test_legacy_live_receipt_without_terminal_outcome_replays_through_persister(self) -> None:
+        health_policy = json.loads((ROOT / "policy/upstream-catalogue-health.json").read_text(encoding="utf-8"))
+        source_policy = json.loads((ROOT / "policy/source-refresh.json").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            state_root = root / pathlib.Path(health_policy["health_state"]["root"])
+            receipt_path = root / "legacy-health-receipt.json"
+            main_identity = {
+                "revision": "a" * 40,
+                "manifest_sha256": "b" * 64,
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": 12,
+                "registry_sha256": "c" * 64,
+            }
+            with mock.patch.object(HEALTH, "manifest_registry_identity", return_value={
+                key: value for key, value in main_identity.items()
+                if key not in {"revision", "manifest_sha256"}
+            }):
+                receipt = HEALTH.evaluate(
+                    as_of=dt.datetime.fromisoformat("2026-10-03T08:10:00+00:00"),
+                    repository=REPOSITORY,
+                    health_policy=health_policy,
+                    source_policy=source_policy,
+                    workflow_runs=[],
+                    artifacts_by_run={},
+                    artifact_by_id={},
+                    processor_state_dir=root / "empty-processor-state",
+                    promotion_ack=None,
+                    main_revision=main_identity["revision"],
+                    manifest_sha256=main_identity["manifest_sha256"],
+                    registry_path=ROOT / "data/data-go-kr.registry.json",
+                    last_good=None,
+                    mode="live",
+                    workflow_run_id="37110000001",
+                    workflow_run_attempt=1,
+                    source_policy_sha256="d" * 64,
+                    health_policy_sha256="e" * 64,
+                    workflow_ids_by_path={".github/workflows/upstream-catalogue-health.yml": 1101},
+                )
+
+            # The new producer always writes this additive field, but an older
+            # sealed v1 receipt legitimately has no such key.
+            self.assertIn("promotion_terminal_evidence", receipt["sources"][0]["canonical"])
+            for source in receipt["sources"]:
+                source["canonical"].pop("promotion_terminal_evidence")
+            PERSIST.seal(receipt, "receipt_sha256")
+            PERSIST.validate_schema(receipt, PERSIST.RECEIPT_SCHEMA, "legacy_health_receipt")
+            receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+            original_receipt_bytes = receipt_path.read_bytes()
+
+            first = PERSIST.persist(
+                receipt_path, state_root, ROOT / "policy/upstream-catalogue-health.json", REPOSITORY,
+            )
+            state_path = state_root / "state.json"
+            first_state = PERSIST.load_json(state_path)
+            second = PERSIST.persist(
+                receipt_path, state_root, ROOT / "policy/upstream-catalogue-health.json", REPOSITORY,
+            )
+            second_state = PERSIST.load_json(state_path)
+
+            self.assertEqual(first["status"], "persisted")
+            self.assertEqual(second["status"], "persisted")
+            self.assertEqual(first["state_sha256"], second["state_sha256"])
+            self.assertEqual(first_state, second_state)
+            self.assertTrue(PERSIST.verify_seal(first_state, "state_sha256"))
+            self.assertEqual(receipt_path.read_bytes(), original_receipt_bytes)
+            self.assertNotIn("promotion_terminal_evidence", PERSIST.load_json(receipt_path)["sources"][0]["canonical"])
+
     def test_schema_valid_bad_seal_is_rejected_before_owned_state_initialization(self) -> None:
         health_policy = json.loads((ROOT / "policy/upstream-catalogue-health.json").read_text(encoding="utf-8"))
         source_policy = json.loads((ROOT / "policy/source-refresh.json").read_text(encoding="utf-8"))

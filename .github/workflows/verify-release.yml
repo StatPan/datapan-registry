@@ -199,6 +199,8 @@ jobs:
           python scripts/check-upstream-catalogue-health.py --help
           python scripts/persist-upstream-catalogue-health.py --help
           python -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py tests/test_persist_upstream_catalogue_health.py
+          python -m unittest tests/test_canonical_update_terminal_evidence.py tests/test_check_upstream_catalogue_terminal_intake.py
+          python3 -m py_compile scripts/canonical_update_terminal_evidence.py scripts/run-canonical-update-promotion.py scripts/check-upstream-catalogue-health.py
           python -m unittest tests/test_process_upstream_catalogue_candidate.py
           python3 -m py_compile scripts/upstream_catalogue_derivation.py scripts/prepare-upstream-catalogue-derivation.py
           python -m unittest tests/test_same_observation_derivation.py

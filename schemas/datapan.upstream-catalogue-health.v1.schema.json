@@ -160,7 +160,47 @@
         "publication": {"type": ["object", "null"]},
         "promotion_stage": {"$ref": "#/$defs/promotion_stage"},
         "promotion_execution": {"$ref": "#/$defs/promotion_execution"},
+        "promotion_terminal_evidence": {"$ref": "#/$defs/promotion_terminal_evidence"},
+        "current_candidate_evaluation": {"$ref": "#/$defs/current_candidate_evaluation"},
         "already_canonical_candidate": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/already_canonical_candidate"}]}
+      }
+    },
+    "current_candidate_evaluation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "stage", "reason_code", "revalidation_required", "evaluator_source_sha", "evaluated_main", "producer", "evaluation_mode"],
+      "properties": {
+        "status": {"enum": ["verified", "rejected", "unavailable", "not_applicable"]},
+        "stage": {"enum": ["eligibility", "screen_setup", "trusted_source", "processor_bundle_screen", "producer_identity", "candidate_payload", "canonical_payload", "candidate_relation", "complete"]},
+        "reason_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "revalidation_required": {"type": "boolean"},
+        "evaluator_source_sha": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40,64}$"},
+        "evaluated_main": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/current_main_identity"}]},
+        "producer": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/current_candidate_producer"}]},
+        "evaluation_mode": {"enum": ["live", "fixture"]}
+      }
+    },
+    "current_main_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["revision", "manifest_sha256", "registry_path", "registry_bytes", "registry_sha256"],
+      "properties": {
+        "revision": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+        "manifest_sha256": {"$ref": "#/$defs/digest"},
+        "registry_path": {"type": "string", "minLength": 1},
+        "registry_bytes": {"type": "integer", "minimum": 1},
+        "registry_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "current_candidate_producer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["generation_id", "checkpoint_sha256", "run_id", "run_attempt", "head_sha", "artifact_id", "bundle_manifest_sha256"],
+      "properties": {
+        "generation_id": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "checkpoint_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "run_id": {"type": ["string", "null"], "pattern": "^[0-9]{1,20}$"},
+        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
+        "head_sha": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40,64}$"},
+        "artifact_id": {"type": ["string", "null"], "pattern": "^[0-9]{1,20}$"},
+        "bundle_manifest_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]}
       }
     },
     "already_canonical_candidate": {
@@ -188,6 +228,78 @@
         "latest_execution_run": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]},
         "latest_successful_execution_run": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]},
         "execution_failure": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]}
+      }
+    },
+    "promotion_terminal_evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason_code", "attempts_considered", "records"],
+      "properties": {
+        "status": {"enum": ["not_applicable", "verified", "partially_verified", "unavailable", "rejected"]},
+        "reason_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "attempts_considered": {"type": "integer", "minimum": 0, "maximum": 2},
+        "records": {"type": "array", "maxItems": 6, "items": {"$ref": "#/$defs/promotion_terminal_record"}}
+      }
+    },
+    "promotion_terminal_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "run_attempt", "mode", "result"],
+      "properties": {
+        "run_id": {"type": ["string", "null"], "pattern": "^[0-9]{1,20}$"},
+        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
+        "mode": {"type": ["string", "null"], "enum": ["recover-ready", "reconcile-prs", "refresh-owned-source", "reconcile-publication", null]},
+        "result": {"$ref": "#/$defs/promotion_terminal_result"}
+      }
+    },
+    "promotion_terminal_result": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason_code", "invocation", "artifact", "execution_status", "started_at", "completed_at", "failure_code", "outcome", "run_status", "run_conclusion", "mode_step_conclusion", "current_applicability"],
+      "properties": {
+        "status": {"enum": ["verified", "unavailable", "rejected", "not_applicable"]},
+        "reason_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "invocation": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/promotion_terminal_invocation"}]},
+        "artifact": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/promotion_terminal_artifact"}]},
+        "execution_status": {"type": ["string", "null"], "enum": ["started", "completed", "failed", null]},
+        "started_at": {"type": ["string", "null"], "format": "date-time"},
+        "completed_at": {"type": ["string", "null"], "format": "date-time"},
+        "failure_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "outcome": {"type": ["object", "null"], "maxProperties": 12},
+        "run_status": {"type": ["string", "null"], "maxLength": 32},
+        "run_conclusion": {"type": ["string", "null"], "maxLength": 32},
+        "mode_step_conclusion": {"type": ["string", "null"], "enum": ["success", "failure", null]},
+        "current_applicability": {"$ref": "#/$defs/promotion_terminal_applicability"}
+      }
+    },
+    "promotion_terminal_invocation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "workflow_path", "run_id", "run_attempt", "event", "head_sha", "mode"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[^\\s/]+/[^\\s/]+$"},
+        "workflow_path": {"const": ".github/workflows/canonical-update-promotion.yml"},
+        "run_id": {"type": "string", "pattern": "^[0-9]{1,20}$"},
+        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
+        "event": {"type": ["string", "null"], "enum": ["schedule", "workflow_run", "workflow_dispatch", null]},
+        "head_sha": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40,64}$"},
+        "mode": {"type": ["string", "null"], "enum": ["recover-ready", "reconcile-prs", "refresh-owned-source", "reconcile-publication", null]}
+      }
+    },
+    "promotion_terminal_artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["artifact_id", "name", "expires_at", "sha256", "bytes"],
+      "properties": {
+        "artifact_id": {"type": "string", "pattern": "^[0-9]{1,20}$"},
+        "name": {"type": "string", "minLength": 1, "maxLength": 200},
+        "expires_at": {"type": "string", "format": "date-time"},
+        "sha256": {"$ref": "#/$defs/digest"},
+        "bytes": {"type": "integer", "minimum": 1, "maximum": 1048576}
+      }
+    },
+    "promotion_terminal_applicability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason_code", "matching_generations"],
+      "properties": {
+        "status": {"enum": ["current", "historical_only", "not_checked", "unavailable", "not_applicable"]},
+        "reason_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "matching_generations": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/digest"}}
       }
     },
     "promotion_stage": {

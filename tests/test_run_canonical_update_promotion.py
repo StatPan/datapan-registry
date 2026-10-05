@@ -19,6 +19,7 @@ import zipfile
 from unittest import mock
 
 import yaml
+import jsonschema
 
 
 SCRIPT = pathlib.Path(__file__).parents[1] / "scripts/run-canonical-update-promotion.py"
@@ -2844,6 +2845,29 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
         job_condition = workflow["jobs"]["reconcile"]["if"]
         self.assertIn("github.ref == format('refs/heads/{0}', github.event.repository.default_branch)", job_condition)
         steps = workflow["jobs"]["reconcile"]["steps"]
+        checkout = next(step for step in steps if step.get("name") == "Check out the current trusted default branch")
+        self.assertEqual(checkout["with"]["ref"], "${{ github.sha }}")
+        pin = next(step for step in steps if step.get("name") == "Pin the trusted evaluator source")
+        self.assertIn("git rev-parse HEAD", pin["run"])
+        self.assertIn("C_EVALUATOR_SOURCE_SHA=$EXPECTED_EVALUATOR_SHA", pin["run"])
+        for mode, invocation_name in (
+            ("reconcile-prs", "Reconcile owned PRs and exact-head CI"),
+            ("refresh-owned-source", "Refresh one explicitly bound owned source revision"),
+            ("recover-ready", "Recover at most one durable ready processor bundle"),
+        ):
+            invocation = next(step for step in steps if step.get("name") == invocation_name)
+            self.assertIn(f"--mode {mode}", invocation["run"])
+            self.assertIn("--evaluator-source-sha", invocation["run"])
+            self.assertIn(f"/{mode}/terminal-outcome.json", invocation["run"])
+            upload = next(step for step in steps if step.get("name") == f"Upload C terminal outcome ({mode})")
+            self.assertEqual(upload["if"], "always()")
+            self.assertEqual(
+                upload["with"]["name"],
+                "canonical-update-promotion-terminal-${{ github.run_id }}-${{ github.run_attempt }}-" + mode,
+            )
+            self.assertIn("terminal-outcome.json", upload["with"]["path"])
+            self.assertIn("terminal-outcome.sha256", upload["with"]["path"])
+            self.assertEqual(upload["with"]["retention-days"], "30")
         refresh = next(step for step in steps if step.get("name") == "Refresh one explicitly bound owned source revision")
         self.assertIn("inputs.refresh_pr_number != ''", refresh["if"])
         self.assertIn("inputs.processor_state_sha != ''", refresh["if"])
@@ -4417,6 +4441,161 @@ class RecoveredPendingExpectedHeadIntegrationTests(unittest.TestCase):
         self.assertEqual(recovered["ownership"]["expected_head_sha"], candidate["head_sha"])
         self.assertEqual(recovered["acknowledgements"], expected_acknowledgements)
         self.assertEqual(len([ack for ack in recovered["acknowledgements"] if ack["status"] == "pending-review"]), 1)
+
+
+class TerminalOutcomeReceiptTests(unittest.TestCase):
+    def make_source_root(self, root: pathlib.Path) -> None:
+        for relative in RUNNER.TERMINAL_EVALUATOR_SOURCE_PATHS:
+            source = pathlib.Path(__file__).parents[1].joinpath(*pathlib.PurePosixPath(relative).parts)
+            target = root.joinpath(*pathlib.PurePosixPath(relative).parts)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(source.read_bytes())
+
+    def fake_git_show(self, root: pathlib.Path):
+        def run(args, *, cwd, capture_output=False, check=False, timeout=None, **_kwargs):
+            if len(args) == 3 and args[0:2] == ("git", "show"):
+                _revision, relative = args[2].split(":", 1)
+                return subprocess.CompletedProcess(args, 0, stdout=(pathlib.Path(cwd) / relative).read_bytes(), stderr=b"")
+            raise AssertionError(f"unexpected subprocess during terminal receipt test: {args!r}")
+        return run
+
+    def test_recorder_writes_attempt_mode_bound_schema_valid_sealed_receipt(self) -> None:
+        source_sha = "a" * 40
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            self.make_source_root(root)
+            output = root / ".datapan/ci/canonical-update-promotion-outcomes/123456/2/reconcile-prs/terminal-outcome.json"
+            with contextlib.ExitStack() as stack:
+                stack.enter_context(mock.patch.object(
+                    RUNNER, "command",
+                    return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, stdout=f"{source_sha}\n", stderr=""),
+                ))
+                stack.enter_context(mock.patch.object(RUNNER.subprocess, "run", side_effect=self.fake_git_show(root)))
+                stack.enter_context(mock.patch.dict(RUNNER.os.environ, {
+                    "C_INITIAL_CHECKOUT_SHA": source_sha,
+                    "GITHUB_REPOSITORY": "StatPan/datapan-registry",
+                    "GITHUB_RUN_ID": "123456",
+                    "GITHUB_RUN_ATTEMPT": "2",
+                    "GITHUB_EVENT_NAME": "workflow_run",
+                }))
+                receipt = RUNNER.TerminalOutcomeRecorder(
+                    root, output, repository="StatPan/datapan-registry",
+                    mode="reconcile-prs", evaluator_source_sha=source_sha,
+                    run_id="123456", run_attempt="2", event_name="workflow_run",
+                )
+                self.assertTrue(receipt.source_matches)
+                receipt.finish(RUNNER.terminal_mode_result("reconcile-prs"))
+
+            document = json.loads(output.read_bytes())
+            jsonschema.Draft202012Validator(
+                receipt.schema, format_checker=jsonschema.FormatChecker(),
+            ).validate(document)
+            self.assertEqual(document["execution_status"], "completed")
+            self.assertEqual(document["invocation"], {
+                "mode": "reconcile-prs", "run_id": "123456", "run_attempt": 2,
+                "event": "workflow_run",
+            })
+            self.assertEqual(document["outcome"]["status"], "mode_completed_without_recovery_outcome")
+            self.assertEqual(document["outcome"]["generations"], [])
+            self.assertEqual(output.stat().st_mode & 0o777, 0o600)
+            sha_path = output.with_name("terminal-outcome.sha256")
+            self.assertEqual(sha_path.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(
+                sha_path.read_text(),
+                f"{hashlib.sha256(output.read_bytes()).hexdigest()}  terminal-outcome.json\n",
+            )
+            with self.assertRaisesRegex(RUNNER.PromotionError, "terminal_outcome_stale_output_present"):
+                RUNNER.TerminalOutcomeRecorder(
+                    root, output, repository="StatPan/datapan-registry",
+                    mode="reconcile-prs", evaluator_source_sha=source_sha,
+                    run_id="123456", run_attempt="2", event_name="workflow_run",
+                )
+
+    def test_recorder_rejects_output_for_a_different_attempt_path(self) -> None:
+        source_sha = "a" * 40
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            self.make_source_root(root)
+            output = root / ".datapan/ci/canonical-update-promotion-outcomes/123456/3/reconcile-prs/terminal-outcome.json"
+            with mock.patch.object(
+                RUNNER, "command",
+                return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, stdout=f"{source_sha}\n", stderr=""),
+            ):
+                with self.assertRaisesRegex(RUNNER.PromotionError, "terminal_outcome_output_path_invalid"):
+                    RUNNER.TerminalOutcomeRecorder(
+                        root, output, repository="StatPan/datapan-registry",
+                        mode="reconcile-prs", evaluator_source_sha=source_sha,
+                        run_id="123456", run_attempt="2", event_name="workflow_run",
+                    )
+
+    def test_mixed_terminal_generation_rows_preserve_blocked_and_noop_without_aggregate_upgrade(self) -> None:
+        canonical = {"generation_id": "a" * 64, "status": "already_canonical", "reason_code": "already_canonical_payload"}
+        blocked = {"generation_id": "b" * 64, "status": "blocked", "reason_code": "processor_bundle_or_input_contract_incompatible"}
+        result = RUNNER.terminal_recovery_result(
+            status="no-eligible-ready-processor-bundle", candidate_available=False,
+            generations=[canonical, blocked], evaluated_main={
+                "revision": "c" * 40, "manifest_sha256": "d" * 64,
+                "registry_path": "data/data-go-kr.registry.json", "registry_bytes": 1,
+                "registry_sha256": "e" * 64,
+            },
+        )
+        self.assertEqual(result["status"], "no-eligible-ready-processor-bundle")
+        self.assertEqual([row["status"] for row in result["generations"]], ["already_canonical", "blocked"])
+        self.assertFalse(result["candidate_available"])
+
+    def test_blocked_no_eligible_recovery_seals_schema_valid_terminal_artifact(self) -> None:
+        source_sha = "a" * 40
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            self.make_source_root(root)
+            blocked = [{
+                "generation_id": "b" * 64,
+                "reason": "processor_bundle_or_input_contract_incompatible",
+            }]
+            output = root / ".datapan/ci/canonical-update-promotion-outcomes/123456/2/recover-ready/terminal-outcome.json"
+            args = types.SimpleNamespace(
+                state_root=root / ".datapan/processor-state/.datapan/upstream-catalogue-state",
+                datapan_cli="datapan",
+                event_run_id=None,
+            )
+            with contextlib.ExitStack() as stack:
+                stack.enter_context(mock.patch.object(
+                    RUNNER, "command",
+                    return_value=subprocess.CompletedProcess(["git", "rev-parse", "HEAD"], 0, stdout=f"{source_sha}\n", stderr=""),
+                ))
+                stack.enter_context(mock.patch.object(RUNNER.subprocess, "run", side_effect=self.fake_git_show(root)))
+                stack.enter_context(mock.patch.dict(RUNNER.os.environ, {
+                    "C_INITIAL_CHECKOUT_SHA": source_sha,
+                    "GITHUB_REPOSITORY": "StatPan/datapan-registry",
+                    "GITHUB_RUN_ID": "123456",
+                    "GITHUB_RUN_ATTEMPT": "2",
+                    "GITHUB_EVENT_NAME": "schedule",
+                    "GITHUB_DEFAULT_BRANCH": "main",
+                }))
+                stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(None, None)))
+                stack.enter_context(mock.patch.object(RUNNER, "list_recoverable_processor_checkpoints", return_value=([], blocked)))
+                recorder = RUNNER.TerminalOutcomeRecorder(
+                    root, output, repository="StatPan/datapan-registry",
+                    mode="recover-ready", evaluator_source_sha=source_sha,
+                    run_id="123456", run_attempt="2", event_name="schedule",
+                )
+                result = RUNNER.recover_ready_processor_candidate(args, root)
+                recorder.finish(result)
+
+            document = json.loads(output.read_bytes())
+            jsonschema.Draft202012Validator(
+                recorder.schema, format_checker=jsonschema.FormatChecker(),
+            ).validate(document)
+            self.assertEqual(document["execution_status"], "completed")
+            self.assertEqual(document["outcome"]["status"], "no-eligible-ready-processor-bundle")
+            self.assertIsNone(document["outcome"]["evaluated_main"])
+            self.assertEqual(document["outcome"]["generations"][0]["status"], "blocked")
+            self.assertIsNone(document["outcome"]["generations"][0]["checkpoint_observation"])
+            self.assertNotIn("original_a_observation", document["outcome"]["generations"][0])
+            self.assertEqual(
+                (root / ".datapan/ci/canonical-update-promotion-outcomes/123456/2/recover-ready/terminal-outcome.sha256").read_text(),
+                f"{hashlib.sha256(output.read_bytes()).hexdigest()}  terminal-outcome.json\n",
+            )
 
 
 if __name__ == "__main__":

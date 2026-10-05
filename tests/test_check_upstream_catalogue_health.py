@@ -7,6 +7,7 @@ import importlib.util
 import io
 import json
 import pathlib
+import subprocess
 import tempfile
 import unittest
 from unittest import mock
@@ -504,7 +505,8 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
                    collector_execution_attempt_errors: set[str] | None = None,
                    prior_collector_execution_faults: list[dict] | None = None,
                    workflow_ids_by_path: dict | None = None,
-                   processor_candidate_screen: object | None = None) -> dict:
+                   processor_candidate_screen: object | None = None,
+                   evaluator_source_sha: str | None = None) -> dict:
         checkpoints = cp if cp is not None else [checkpoint()]
         run_rows = runs if runs is not None else [collector_run()]
         collector_attempt_rows = dict(collector_execution_attempts or {})
@@ -585,6 +587,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             promotion_workflow_api_error=promotion_workflow_api_error,
             prior_promotion_execution_faults=prior_promotion_execution_faults or [],
             processor_candidate_screen=processor_candidate_screen,
+            evaluator_source_sha=evaluator_source_sha,
         )
 
     def run_live_health_cli(
@@ -788,6 +791,105 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         source = report["sources"][0]
         self.assertIsNone(source["canonical"]["already_canonical_candidate"])
         self.assertIn("promotion_ack_missing", {row["reason"] for row in source["faults"]})
+
+    def test_current_candidate_evaluation_preserves_screen_rejection_once(self) -> None:
+        checkpoint_value = screenable_ready_checkpoint()
+        calls = 0
+
+        def rejected_screen(_checkpoint: dict) -> dict:
+            nonlocal calls
+            calls += 1
+            return {
+                "status": "rejected",
+                "stage": "processor_bundle_screen",
+                "reason_code": "processor_bundle_or_input_contract_incompatible",
+                "screened": None,
+            }
+
+        with tempfile.TemporaryDirectory() as directory:
+            report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint_value],
+                processor_candidate_screen=rejected_screen,
+            )
+
+        source = report["sources"][0]
+        canonical = source["canonical"]
+        evaluation = canonical["current_candidate_evaluation"]
+        self.assertEqual(calls, 1)
+        self.assertEqual(evaluation["status"], "rejected")
+        self.assertEqual(evaluation["stage"], "processor_bundle_screen")
+        self.assertEqual(evaluation["reason_code"], "processor_bundle_or_input_contract_incompatible")
+        self.assertTrue(evaluation["revalidation_required"])
+        self.assertIsNone(evaluation["evaluator_source_sha"])
+        self.assertEqual(evaluation["producer"]["run_id"], "123456789")
+        self.assertEqual(evaluation["producer"]["artifact_id"], "99887766")
+        self.assertIsNone(canonical["already_canonical_candidate"])
+        self.assertEqual(source["observation"]["producer_run_id"], RUN_ID)
+        self.assertTrue(canonical["last_good"]["verified"])
+        self.assertIsNone(canonical["publication"])
+        HEALTH.validate_schema(report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "receipt")
+
+    def test_evaluator_and_evaluated_main_are_separate_and_fixture_never_claims_source(self) -> None:
+        evaluator = "9" * 40
+        checkpoint_value = screenable_ready_checkpoint()
+        payload = b"candidate payload differs from the current canonical bytes"
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_screen, _identity = synthetic_candidate_screen(
+                checkpoint_value, pathlib.Path(directory) / "bundle", payload,
+            )
+            # The fully screened B bundle is based on this same current baseline,
+            # so the nonmatching output is promotion-required rather than a bad B.
+            candidate_screen_inner = candidate_screen(None)
+            current_registry = HEALTH.manifest_registry_identity(
+                ROOT / "manifest.json", ROOT / "data/data-go-kr.registry.json",
+            )
+            candidate_screen_inner["bundle"]["baseline_sha256"] = current_registry["registry_sha256"]
+            candidate_screen = lambda _checkpoint: copy.deepcopy(candidate_screen_inner)
+            report = self.run_health(
+                pathlib.Path(directory) / "live", cp=[checkpoint_value],
+                processor_candidate_screen=candidate_screen, evaluator_source_sha=evaluator,
+            )
+        canonical = report["sources"][0]["canonical"]
+        evaluation = canonical["current_candidate_evaluation"]
+        self.assertIsNone(canonical["already_canonical_candidate"])
+        self.assertEqual(evaluation["status"], "rejected")
+        self.assertEqual(evaluation["reason_code"], "candidate_payload_requires_promotion")
+        self.assertFalse(evaluation["revalidation_required"])
+        self.assertEqual(evaluation["evaluator_source_sha"], evaluator)
+        self.assertEqual(evaluation["evaluated_main"]["revision"], "a" * 40)
+        self.assertNotEqual(evaluation["evaluator_source_sha"], evaluation["evaluated_main"]["revision"])
+
+        with tempfile.TemporaryDirectory() as directory:
+            fixture_report = self.run_health(
+                pathlib.Path(directory), cp=[checkpoint_value], mode="fixture",
+                processor_candidate_screen=candidate_screen, evaluator_source_sha=evaluator,
+            )
+        fixture_evaluation = fixture_report["sources"][0]["canonical"]["current_candidate_evaluation"]
+        self.assertEqual(fixture_evaluation["evaluation_mode"], "fixture")
+        self.assertIsNone(fixture_evaluation["evaluator_source_sha"])
+        self.assertFalse(fixture_evaluation["revalidation_required"])
+
+    def test_health_evaluator_source_requires_exact_checkout_and_loaded_files(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            for relative in HEALTH.HEALTH_EVALUATOR_SOURCE_PATHS:
+                path = root.joinpath(*pathlib.PurePosixPath(relative).parts)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"trusted evaluator source\n")
+            subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+            subprocess.run(["git", "config", "user.name", "Health test"], cwd=root, check=True)
+            subprocess.run(["git", "config", "user.email", "health-test@example.invalid"], cwd=root, check=True)
+            subprocess.run(["git", "add", "."], cwd=root, check=True)
+            subprocess.run(["git", "commit", "-qm", "pin health evaluator fixture"], cwd=root, check=True)
+            revision = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=root, text=True,
+                capture_output=True, check=True,
+            ).stdout.strip()
+            self.assertEqual(HEALTH.verified_health_evaluator_source(root, revision), revision)
+            self.assertIsNone(HEALTH.verified_health_evaluator_source(root, "f" * 40))
+            changed = root / "scripts/run-canonical-update-promotion.py"
+            changed.write_bytes(b"unbound candidate-side replacement\n")
+            self.assertIsNone(HEALTH.verified_health_evaluator_source(root, revision))
 
     def test_already_canonical_new_generation_preserves_matching_historical_publication_deadline(self) -> None:
         payload = b"x" * 123

@@ -4,15 +4,19 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import contextlib
 import datetime as dt
 import hashlib
 import importlib.util
 import json
+import os
 import pathlib
 import re
+import selectors
 import subprocess
 import sys
+import time
 import urllib.parse
 from typing import Any
 
@@ -29,6 +33,14 @@ assert PROMOTION_SPEC and PROMOTION_SPEC.loader
 PROMOTION = importlib.util.module_from_spec(PROMOTION_SPEC)
 sys.modules[PROMOTION_SPEC.name] = PROMOTION
 PROMOTION_SPEC.loader.exec_module(PROMOTION)
+TERMINAL_EVIDENCE_PATH = ROOT / "scripts" / "canonical_update_terminal_evidence.py"
+TERMINAL_EVIDENCE_SPEC = importlib.util.spec_from_file_location(
+    "canonical_update_terminal_evidence_health", TERMINAL_EVIDENCE_PATH,
+)
+assert TERMINAL_EVIDENCE_SPEC and TERMINAL_EVIDENCE_SPEC.loader
+TERMINAL_EVIDENCE = importlib.util.module_from_spec(TERMINAL_EVIDENCE_SPEC)
+sys.modules[TERMINAL_EVIDENCE_SPEC.name] = TERMINAL_EVIDENCE
+TERMINAL_EVIDENCE_SPEC.loader.exec_module(TERMINAL_EVIDENCE)
 PROMOTION_RUNNER_PATH = ROOT / "scripts" / "run-canonical-update-promotion.py"
 COMPOSITION_SCHEMA_PATH = ROOT / "schemas" / "datapan.catalogue-composition-receipt.v1.schema.json"
 SOURCE_POLICY_DEFAULT = pathlib.Path("policy/source-refresh.json")
@@ -41,6 +53,10 @@ MAX_PROCESSOR_PRIOR_ATTEMPT_LOOKUPS = 5
 MAX_COLLECTOR_EXECUTION_RUNS = 20
 MAX_COLLECTOR_EXECUTION_LOOKUPS = 25
 MAX_PROMOTION_EXECUTION_ATTEMPTS = 2
+MAX_TERMINAL_OUTCOME_ATTEMPTS = 2
+MAX_TERMINAL_ARTIFACT_PAGES = 5
+MAX_TERMINAL_ARTIFACTS = 500
+MAX_TERMINAL_ARCHIVE_BYTES = 1024 * 1024
 MAX_PUBLICATION_RECOVERY_REFERENCES = 20
 MAX_PUBLICATION_RECOVERY_API_REQUESTS = 256
 PUBLICATION_RECOVERY_REFERENCE_PREFIX = "publication-recovery/v1 "
@@ -56,6 +72,56 @@ PROCESSOR_OUTPUT_PATHS = (
     "upstream-catalogue-enrichment-evidence.json",
     "upstream-catalogue-processing-result.json",
 )
+C_TERMINAL_EVALUATOR_SOURCE_PATHS = (
+    ".github/workflows/canonical-update-promotion.yml",
+    "scripts/run-canonical-update-promotion.py",
+    "scripts/canonical_update_pr.py",
+    "scripts/canonical_update_ci.py",
+    "scripts/refresh-canonical-snapshot-evidence.py",
+    "scripts/upstream-catalogue-state-branch.py",
+    "scripts/upstream_catalogue_handoff.py",
+    "scripts/compose-upstream-catalogue-candidate.py",
+    "scripts/generate-batch-link-detail-registry-patches.py",
+    "scripts/seoul_oa109_operation_declaration.py",
+    "scripts/upstream_catalogue_derivation.py",
+    "scripts/materialize-canonical-registry.py",
+    "scripts/check-upstream-catalogue-health.py",
+    "scripts/canonical_update_terminal_evidence.py",
+    "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "schemas/datapan.specs.v1.schema.json",
+    "schemas/datapan.provider-index.v1.schema.json",
+    "schemas/datapan.catalog-diff.v1.schema.json",
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "policy/upstream-catalogue-health.json",
+)
+HEALTH_EVALUATOR_SOURCE_PATHS = (
+    ".github/workflows/upstream-catalogue-health.yml",
+    "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+    *C_TERMINAL_EVALUATOR_SOURCE_PATHS,
+)
+C_TERMINAL_MODE_STEPS = {
+    "reconcile-prs": {
+        "invocation_step": "Reconcile owned PRs and exact-head CI",
+        "upload_step": "Upload C terminal outcome (reconcile-prs)",
+    },
+    "refresh-owned-source": {
+        "invocation_step": "Refresh one explicitly bound owned source revision",
+        "upload_step": "Upload C terminal outcome (refresh-owned-source)",
+    },
+    "recover-ready": {
+        "invocation_step": "Recover at most one durable ready processor bundle",
+        "upload_step": "Upload C terminal outcome (recover-ready)",
+    },
+}
+MAX_TERMINAL_SOURCE_BYTES = 8 * 1024 * 1024
+MAX_TERMINAL_API_TIMEOUT_SECONDS = 30
 
 
 def canonical_json(value: Any) -> bytes:
@@ -134,6 +200,31 @@ def checked_out_main_revision(root: pathlib.Path, requested_revision: str = "") 
     return revision
 
 
+def verified_health_evaluator_source(root: pathlib.Path, expected_revision: str) -> str | None:
+    """Return the pinned Health evaluator revision only when every loaded source file matches it."""
+    if not REVISION.fullmatch(expected_revision):
+        return None
+    try:
+        checked_out = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=root, text=True,
+            capture_output=True, check=False, timeout=10,
+        )
+        if checked_out.returncode != 0 or checked_out.stdout.strip() != expected_revision:
+            return None
+        for relative in HEALTH_EVALUATOR_SOURCE_PATHS:
+            path = root.joinpath(*pathlib.PurePosixPath(relative).parts)
+            local_bytes = path.read_bytes()
+            trusted = subprocess.run(
+                ["git", "show", f"{expected_revision}:{relative}"], cwd=root,
+                capture_output=True, check=False, timeout=10,
+            )
+            if trusted.returncode != 0 or trusted.stdout != local_bytes:
+                return None
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    return expected_revision
+
+
 def verify_main_manifest_binding(
     root: pathlib.Path, revision: str, manifest_path: pathlib.Path, registry_path: pathlib.Path,
 ) -> dict[str, Any]:
@@ -191,64 +282,127 @@ def load_promotion_runner() -> Any:
     return module
 
 
-def build_processor_candidate_screen(root: pathlib.Path, repository: str, main_revision: str) -> Any | None:
-    """Use the promotion worker's full, read-only B bundle screen for one Health candidate."""
+def _candidate_screen_result(
+    *, status: str, stage: str, reason_code: str | None,
+    screened: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Use a closed, value-free envelope around the promotion worker's screen."""
+    return {
+        "status": status,
+        "stage": stage,
+        "reason_code": reason_code,
+        "screened": screened,
+    }
+
+
+def _candidate_screen_status(reason_code: str | None) -> str:
+    if reason_code in {"processor_run_unavailable", "processor_artifact_listing_unavailable", "processor_artifact_unavailable"}:
+        return "unavailable"
+    return "rejected"
+
+
+def build_processor_candidate_screen(root: pathlib.Path, repository: str, main_revision: str) -> Any:
+    """Use the promotion worker's full, read-only B bundle screen and preserve its reason."""
+    setup_failure = _candidate_screen_result(
+        status="unavailable", stage="screen_setup", reason_code="processor_screen_unavailable",
+    )
     try:
         runner = load_promotion_runner()
         screen = getattr(runner, "screen_processor_recovery_candidate", None)
         if not callable(screen):
-            return None
+            return lambda _checkpoint: setup_failure
         compatibility_paths = getattr(runner, "PROCESSOR_COMPATIBILITY_FILES", None)
         if not isinstance(compatibility_paths, (tuple, list)) or not compatibility_paths:
-            return None
+            return lambda _checkpoint: setup_failure
         paths = ["manifest.json", "data/data-go-kr.registry.json", *compatibility_paths]
         diff = subprocess.run(
             ["git", "diff", "--quiet", main_revision, "--", *paths],
             cwd=root, capture_output=True, check=False, timeout=20,
         )
         if diff.returncode != 0:
-            return None
+            reason = "processor_screen_source_mismatch" if diff.returncode == 1 else "processor_screen_unavailable"
+            failure = _candidate_screen_result(
+                status="rejected" if diff.returncode == 1 else "unavailable",
+                stage="trusted_source", reason_code=reason,
+            )
+            return lambda _checkpoint: failure
         composition_schema = load_json(COMPOSITION_SCHEMA_PATH)
     except Exception:
-        return None
+        return lambda _checkpoint: setup_failure
 
-    def screen_candidate(checkpoint: dict[str, Any]) -> dict[str, Any] | None:
+    def screen_candidate(checkpoint: dict[str, Any]) -> dict[str, Any]:
         try:
             with contextlib.redirect_stdout(sys.stderr):
-                screened, _reason = screen(
+                screened, reason = screen(
                     root, repository, checkpoint,
                     default_branch="main",
                     current_head_sha=main_revision,
                     composition_schema=composition_schema,
                     composition_helper=PROMOTION,
                 )
-            return screened if isinstance(screened, dict) else None
         except Exception:
-            return None
+            return _candidate_screen_result(
+                status="unavailable", stage="processor_bundle_screen",
+                reason_code="processor_screen_unavailable",
+            )
+        if isinstance(screened, dict):
+            return _candidate_screen_result(
+                status="verified", stage="complete", reason_code=None, screened=screened,
+            )
+        stable_reason = reason if isinstance(reason, str) and re.fullmatch(r"[a-z0-9_]{1,96}", reason) else "processor_screen_rejected"
+        return _candidate_screen_result(
+            status=_candidate_screen_status(stable_reason),
+            stage="processor_bundle_screen", reason_code=stable_reason,
+        )
 
     return screen_candidate
 
 
 def already_canonical_candidate_relation(
     checkpoint: dict[str, Any] | None, main_identity: dict[str, Any], main_revision: str,
-    mode: str, candidate_screen: Any | None,
+    mode: str, candidate_screen: Any | None, *, diagnostic: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     """Return a relation only when the complete B screen proves exact current-main bytes."""
+    def reject(reason_code: str, stage: str) -> None:
+        if diagnostic is not None:
+            diagnostic.update({"status": "rejected", "stage": stage, "reason_code": reason_code})
+
     if (
         mode != "live"
         or checkpoint is None
         or checkpoint.get("status") not in {"ready", "no-change"}
         or not callable(candidate_screen)
     ):
+        if diagnostic is not None:
+            diagnostic.update({"status": "not_applicable", "stage": "eligibility", "reason_code": "candidate_not_screenable"})
         return None
     try:
-        screened = candidate_screen(checkpoint)
+        screen_result = candidate_screen(checkpoint)
+        if isinstance(screen_result, dict) and "status" in screen_result and "screened" in screen_result:
+            if screen_result.get("status") != "verified":
+                status = screen_result.get("status")
+                if status not in {"rejected", "unavailable", "not_applicable"}:
+                    status = "unavailable"
+                if diagnostic is not None:
+                    diagnostic.update({
+                        "status": status,
+                        "stage": screen_result.get("stage", "processor_bundle_screen"),
+                        "reason_code": screen_result.get("reason_code") or "processor_screen_unavailable",
+                    })
+                return None
+            screened = screen_result.get("screened")
+        else:
+            # Compatibility for existing read-only callers/tests that provide
+            # the previously documented successful screened bundle mapping.
+            screened = screen_result
         if not isinstance(screened, dict):
+            reject("processor_screen_result_invalid", "processor_bundle_screen")
             return None
         bundle = screened.get("bundle")
         run = screened.get("run")
         locator = checkpoint.get("output_artifact")
         if not isinstance(bundle, dict) or not isinstance(run, dict) or not isinstance(locator, dict):
+            reject("candidate_relation_identity_invalid", "producer_identity")
             return None
         generation_id = checkpoint.get("generation_id")
         checkpoint_sha = checkpoint.get("checkpoint_sha256")
@@ -278,10 +432,12 @@ def already_canonical_candidate_relation(
             or bundle.get("status") != checkpoint.get("status")
             or bundle.get("registry_path") != main_identity.get("registry_path")
         ):
+            reject("candidate_relation_identity_mismatch", "producer_identity")
             return None
         bundle_dir = pathlib.Path(str(bundle.get("composition_outputs_dir", "")))
         candidate_path = bundle_dir / "composed-candidate.registry.json"
         if not candidate_path.is_file() or candidate_path.is_symlink():
+            reject("candidate_composition_unavailable", "candidate_payload")
             return None
         composed_bytes = candidate_path.stat().st_size
         composed_sha256 = file_sha256(candidate_path)
@@ -295,7 +451,13 @@ def already_canonical_candidate_relation(
             or main_identity.get("revision") != main_revision
             or not DIGEST.fullmatch(str(main_identity.get("manifest_sha256", "")))
         ):
+            if bundle.get("baseline_sha256") == main_identity.get("registry_sha256"):
+                reject("candidate_payload_requires_promotion", "canonical_payload")
+            else:
+                reject("candidate_baseline_stale_for_current_main", "canonical_payload")
             return None
+        if diagnostic is not None:
+            diagnostic.update({"status": "verified", "stage": "complete", "reason_code": None})
         return {
             "verified": True,
             "source_id": checkpoint.get("source_id"),
@@ -311,7 +473,92 @@ def already_canonical_candidate_relation(
             "main_manifest_sha256": main_identity["manifest_sha256"],
         }
     except Exception:
+        reject("candidate_relation_unavailable", "candidate_relation")
         return None
+
+
+def current_candidate_evaluation_record(
+    checkpoint: dict[str, Any] | None,
+    main_identity: dict[str, Any],
+    main_revision: str,
+    mode: str,
+    diagnostic: dict[str, Any],
+    screen_result: Any,
+    evaluator_source_sha: str | None,
+) -> dict[str, Any]:
+    """Serialize the current screen outcome without embedding bundle paths or exception text."""
+    allowed_statuses = {"verified", "rejected", "unavailable", "not_applicable"}
+    status = diagnostic.get("status")
+    if status not in allowed_statuses:
+        status = "unavailable"
+    reason_code = diagnostic.get("reason_code")
+    if reason_code is not None and (not isinstance(reason_code, str) or not re.fullmatch(r"[a-z0-9_]{1,96}", reason_code)):
+        reason_code = "processor_screen_unavailable"
+    stage = diagnostic.get("stage")
+    if not isinstance(stage, str) or not re.fullmatch(r"[a-z0-9_]{1,64}", stage):
+        stage = "screen_setup"
+
+    checkpoint_value = checkpoint if isinstance(checkpoint, dict) else {}
+    locator = checkpoint_value.get("output_artifact") if isinstance(checkpoint_value.get("output_artifact"), dict) else {}
+    artifact_name = locator.get("name")
+    name_match = re.fullmatch(r"upstream-catalogue-processing-([0-9]{1,20})-([1-9][0-9]*)", str(artifact_name or ""))
+    producer_run_id = str(locator.get("run_id", ""))
+    run_attempt: int | None = int(name_match.group(2)) if name_match and name_match.group(1) == producer_run_id else None
+    screened = screen_result.get("screened") if isinstance(screen_result, dict) and "screened" in screen_result else None
+    screened_run = screened.get("run") if isinstance(screened, dict) and isinstance(screened.get("run"), dict) else {}
+    producer = {
+        "generation_id": checkpoint_value.get("generation_id"),
+        "checkpoint_sha256": checkpoint_value.get("checkpoint_sha256"),
+        "run_id": producer_run_id if re.fullmatch(r"[0-9]{1,20}", producer_run_id) else None,
+        "run_attempt": run_attempt,
+        "head_sha": screened_run.get("head_sha") if isinstance(screened_run.get("head_sha"), str) and REVISION.fullmatch(screened_run.get("head_sha", "")) else None,
+        "artifact_id": str(locator.get("artifact_id")) if str(locator.get("artifact_id", "")).isdigit() else None,
+        "bundle_manifest_sha256": locator.get("bundle_manifest_sha256"),
+    }
+    if not isinstance(producer["generation_id"], str) or not DIGEST.fullmatch(producer["generation_id"]):
+        producer["generation_id"] = None
+    if not isinstance(producer["checkpoint_sha256"], str) or not DIGEST.fullmatch(producer["checkpoint_sha256"]):
+        producer["checkpoint_sha256"] = None
+    if not isinstance(producer["bundle_manifest_sha256"], str) or not DIGEST.fullmatch(producer["bundle_manifest_sha256"]):
+        producer["bundle_manifest_sha256"] = None
+
+    evaluated_main = None
+    if (
+        isinstance(main_identity, dict)
+        and main_identity.get("revision") == main_revision
+        and REVISION.fullmatch(main_revision)
+        and DIGEST.fullmatch(str(main_identity.get("manifest_sha256", "")))
+        and isinstance(main_identity.get("registry_path"), str)
+        and isinstance(main_identity.get("registry_bytes"), int)
+        and not isinstance(main_identity.get("registry_bytes"), bool)
+        and main_identity.get("registry_bytes", 0) > 0
+        and DIGEST.fullmatch(str(main_identity.get("registry_sha256", "")))
+    ):
+        evaluated_main = {
+            "revision": main_revision,
+            "manifest_sha256": main_identity["manifest_sha256"],
+            "registry_path": main_identity["registry_path"],
+            "registry_bytes": main_identity["registry_bytes"],
+            "registry_sha256": main_identity["registry_sha256"],
+        }
+    revalidation_required = mode == "live" and (
+        status == "unavailable"
+        or (status == "rejected" and reason_code != "candidate_payload_requires_promotion")
+    )
+    return {
+        "status": status,
+        "stage": stage,
+        "reason_code": reason_code,
+        "revalidation_required": revalidation_required,
+        "evaluator_source_sha": (
+            evaluator_source_sha
+            if mode == "live" and isinstance(evaluator_source_sha, str) and REVISION.fullmatch(evaluator_source_sha)
+            else None
+        ),
+        "evaluated_main": evaluated_main,
+        "producer": producer if producer["generation_id"] is not None else None,
+        "evaluation_mode": mode,
+    }
 
 
 def load_json(path: pathlib.Path, *, maximum_bytes: int = 4 * 1024 * 1024) -> Any:
@@ -519,6 +766,725 @@ def collect_run_attempt_evidence(repository: str, run_id: str, run_attempt: int)
     run = collect_run_attempt(repository, run_id, run_attempt)
     jobs = collect_run_attempt_jobs(repository, run_id, run_attempt)
     return {"run": run, **jobs}
+
+
+def _terminal_result_stub(
+    status: str, reason_code: str, *, invocation: dict[str, Any] | None = None,
+    run: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    if isinstance(invocation, dict):
+        run_id = invocation.get("run_id")
+        attempt = invocation.get("run_attempt")
+        repository = invocation.get("repository")
+        event = invocation.get("event")
+        head_sha = invocation.get("head_sha")
+        if not (
+            isinstance(repository, str) and re.fullmatch(r"[^\s/]+/[^\s/]+", repository)
+            and isinstance(run_id, str) and run_id.isdigit() and 0 < len(run_id) <= 20
+            and isinstance(attempt, int) and not isinstance(attempt, bool) and attempt > 0
+            and event in {"schedule", "workflow_run", "workflow_dispatch"}
+            and isinstance(head_sha, str) and REVISION.fullmatch(head_sha)
+            and invocation.get("mode") in TERMINAL_EVIDENCE.MODE_STEPS
+        ):
+            invocation = None
+    return {
+        "status": status,
+        "reason_code": reason_code,
+        "invocation": invocation,
+        "artifact": None,
+        "execution_status": None,
+        "started_at": None,
+        "completed_at": None,
+        "failure_code": None,
+        "outcome": None,
+        "run_status": run.get("status") if isinstance(run, dict) and isinstance(run.get("status"), str) and len(run["status"]) <= 32 else None,
+        "run_conclusion": run.get("conclusion") if isinstance(run, dict) and isinstance(run.get("conclusion"), str) and len(run["conclusion"]) <= 32 else None,
+        "mode_step_conclusion": None,
+        "current_applicability": {
+            "status": "not_checked", "reason_code": reason_code, "matching_generations": [],
+        },
+    }
+
+
+def _bounded_gh_archive(endpoint: str, maximum_bytes: int) -> bytes:
+    """Read one GH artifact ZIP without allowing an unbounded subprocess output."""
+    if (
+        not isinstance(endpoint, str) or not endpoint.startswith("repos/")
+        or "\n" in endpoint or maximum_bytes < 1
+    ):
+        raise RuntimeError("terminal_archive_request_invalid")
+    argv = [
+        "gh", "api", "--header", "X-GitHub-Api-Version: 2022-11-28",
+        "--header", "Accept: application/vnd.github+json", endpoint,
+    ]
+    try:
+        process = subprocess.Popen(
+            argv, cwd=ROOT, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL, close_fds=True,
+        )
+    except OSError as exc:
+        raise RuntimeError("terminal_archive_unavailable") from exc
+    assert process.stdout is not None
+    selector = selectors.DefaultSelector()
+    chunks: list[bytes] = []
+    total = 0
+    eof = False
+    deadline = time.monotonic() + MAX_TERMINAL_API_TIMEOUT_SECONDS
+    try:
+        os.set_blocking(process.stdout.fileno(), False)
+        selector.register(process.stdout, selectors.EVENT_READ)
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise RuntimeError("terminal_archive_timeout")
+            if not eof:
+                events = selector.select(min(remaining, 0.25))
+                if events:
+                    chunk = os.read(process.stdout.fileno(), min(65536, maximum_bytes + 1 - total))
+                    if not chunk:
+                        eof = True
+                        selector.unregister(process.stdout)
+                    else:
+                        total += len(chunk)
+                        if total > maximum_bytes:
+                            raise RuntimeError("terminal_archive_size_limit")
+                        chunks.append(chunk)
+            if process.poll() is not None and eof:
+                break
+        if process.returncode != 0 or total == 0:
+            raise RuntimeError("terminal_archive_unavailable")
+        return b"".join(chunks)
+    except BaseException:
+        if process.poll() is None:
+            process.kill()
+        process.wait(timeout=5)
+        raise
+    finally:
+        selector.close()
+        process.stdout.close()
+
+
+def collect_terminal_artifact_inventory(repository: str, run_id: str) -> dict[str, Any]:
+    """Fetch a complete, bounded exact-run artifact listing and detail snapshots."""
+    if not run_id.isdigit():
+        raise RuntimeError("terminal_run_id_invalid")
+    endpoint = f"repos/{repository}/actions/runs/{run_id}/artifacts"
+    rows: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    expected_count: int | None = None
+    for page in range(1, MAX_TERMINAL_ARTIFACT_PAGES + 1):
+        payload = gh_json(f"{endpoint}?per_page=100&page={page}")
+        page_rows = payload.get("artifacts") if isinstance(payload, dict) else None
+        total_count = payload.get("total_count") if isinstance(payload, dict) else None
+        if (
+            not isinstance(page_rows, list)
+            or isinstance(total_count, bool) or not isinstance(total_count, int)
+            or total_count < 0 or total_count > MAX_TERMINAL_ARTIFACTS
+        ):
+            raise RuntimeError("terminal_artifact_listing_invalid")
+        if expected_count is None:
+            expected_count = total_count
+        elif expected_count != total_count:
+            raise RuntimeError("terminal_artifact_listing_changed")
+        if not page_rows and len(rows) < total_count:
+            raise RuntimeError("terminal_artifact_listing_incomplete")
+        for row in page_rows:
+            if not isinstance(row, dict):
+                raise RuntimeError("terminal_artifact_listing_invalid")
+            artifact_id = row.get("id")
+            if isinstance(artifact_id, bool) or not isinstance(artifact_id, int) or artifact_id < 1 or str(artifact_id) in seen:
+                raise RuntimeError("terminal_artifact_listing_identity_invalid")
+            seen.add(str(artifact_id))
+            rows.append(row)
+        if len(rows) > total_count:
+            raise RuntimeError("terminal_artifact_listing_excess")
+        if len(rows) == total_count:
+            break
+    else:
+        raise RuntimeError("terminal_artifact_listing_page_limit")
+    if expected_count is None or len(rows) != expected_count:
+        raise RuntimeError("terminal_artifact_listing_incomplete")
+    return {"run_id": run_id, "total_count": expected_count, "artifacts": rows, "details_by_id": {}}
+
+
+def _terminal_git_blob(root: pathlib.Path, source_sha: str, relative: str) -> bytes:
+    path = pathlib.PurePosixPath(relative)
+    if (
+        not REVISION.fullmatch(source_sha)
+        or path.is_absolute()
+        or path.as_posix() != relative
+        or not path.parts
+        or any(part in {"", ".", ".."} for part in path.parts)
+        or "\\" in relative
+    ):
+        raise RuntimeError("terminal_source_path_invalid")
+    try:
+        entry = subprocess.run(
+            ["git", "ls-tree", "-z", source_sha, "--", relative], cwd=root,
+            capture_output=True, check=False, timeout=15,
+        )
+        if entry.returncode != 0:
+            raise RuntimeError("terminal_source_tree_entry_unavailable")
+        entries = [row for row in entry.stdout.split(b"\0") if row]
+        if len(entries) != 1 or b"\t" not in entries[0]:
+            raise RuntimeError("terminal_source_tree_entry_invalid")
+        metadata, raw_path = entries[0].split(b"\t", 1)
+        fields = metadata.split()
+        if (
+            len(fields) != 3
+            or fields[0] not in {b"100644", b"100755"}
+            or fields[1] != b"blob"
+            or raw_path.decode("utf-8") != relative
+        ):
+            raise RuntimeError("terminal_source_tree_entry_not_regular_blob")
+        result = subprocess.run(
+            ["git", "show", f"{source_sha}:{relative}"], cwd=root,
+            capture_output=True, check=False, timeout=15,
+        )
+    except (OSError, subprocess.TimeoutExpired, UnicodeDecodeError) as exc:
+        raise RuntimeError("terminal_source_unavailable") from exc
+    if result.returncode != 0 or len(result.stdout) > MAX_TERMINAL_SOURCE_BYTES:
+        raise RuntimeError("terminal_source_unavailable")
+    return result.stdout
+
+
+def _terminal_runner_declared_paths(runner_bytes: bytes) -> tuple[str, ...]:
+    """Read one top-level literal-only C dependency tuple without executing source."""
+    try:
+        tree = ast.parse(runner_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, SyntaxError) as exc:
+        raise RuntimeError("terminal_source_runner_invalid") from exc
+
+    def binds(node: ast.AST) -> bool:
+        targets: list[ast.AST] = []
+        if isinstance(node, ast.Assign):
+            targets = list(node.targets)
+        elif isinstance(node, ast.AnnAssign):
+            targets = [node.target]
+        return any(
+            isinstance(target, ast.Name) and target.id == "TERMINAL_EVALUATOR_SOURCE_PATHS"
+            for target in targets
+        )
+
+    declarations = [node for node in ast.walk(tree) if binds(node)]
+    top_level = [node for node in tree.body if binds(node)]
+    if len(declarations) != 1 or len(top_level) != 1 or declarations[0] is not top_level[0]:
+        raise RuntimeError("terminal_source_runner_dependency_declaration_invalid")
+    node = top_level[0]
+    value = node.value if isinstance(node, (ast.Assign, ast.AnnAssign)) else None
+    if not isinstance(value, ast.Tuple) or not value.elts:
+        raise RuntimeError("terminal_source_runner_dependency_tuple_invalid")
+    paths: list[str] = []
+    for element in value.elts:
+        if not isinstance(element, ast.Constant) or not isinstance(element.value, str):
+            raise RuntimeError("terminal_source_runner_dependency_not_literal")
+        path_text = element.value
+        path = pathlib.PurePosixPath(path_text)
+        if (
+            path.is_absolute()
+            or path.as_posix() != path_text
+            or not path.parts
+            or any(part in {"", ".", ".."} for part in path.parts)
+            or "\\" in path_text
+        ):
+            raise RuntimeError("terminal_source_runner_dependency_path_invalid")
+        paths.append(path_text)
+    if len(paths) != len(set(paths)):
+        raise RuntimeError("terminal_source_runner_dependency_duplicate")
+    return tuple(paths)
+
+
+def _terminal_workflow_contract(workflow_bytes: bytes) -> dict[str, dict[str, str]]:
+    """Check the pinned C workflow's exact mode, output and always-upload steps."""
+    try:
+        import yaml
+
+        workflow = yaml.load(workflow_bytes.decode("utf-8"), Loader=yaml.BaseLoader)
+    except Exception as exc:
+        raise RuntimeError("terminal_workflow_source_invalid") from exc
+    if not isinstance(workflow, dict):
+        raise RuntimeError("terminal_workflow_source_invalid")
+    jobs = workflow.get("jobs")
+    reconcile = jobs.get("reconcile") if isinstance(jobs, dict) else None
+    steps = reconcile.get("steps") if isinstance(reconcile, dict) else None
+    if not isinstance(steps, list):
+        raise RuntimeError("terminal_workflow_step_contract_missing")
+    checkout = [row for row in steps if isinstance(row, dict) and row.get("uses", "").startswith("actions/checkout@")]
+    if not checkout or checkout[0].get("with", {}).get("ref") != "${{ github.sha }}":
+        raise RuntimeError("terminal_workflow_checkout_contract_mismatch")
+    by_name: dict[str, list[dict[str, Any]]] = {}
+    for step in steps:
+        if isinstance(step, dict) and isinstance(step.get("name"), str):
+            by_name.setdefault(step["name"], []).append(step)
+    result: dict[str, dict[str, str]] = {}
+    for mode, contract in C_TERMINAL_MODE_STEPS.items():
+        invocations = by_name.get(contract["invocation_step"], [])
+        uploads = by_name.get(contract["upload_step"], [])
+        if len(invocations) != 1 or len(uploads) != 1:
+            raise RuntimeError("terminal_workflow_step_contract_mismatch")
+        invocation = invocations[0]
+        upload = uploads[0]
+        run_text = invocation.get("run")
+        upload_with = upload.get("with")
+        if (
+            not isinstance(run_text, str)
+            or f"--mode {mode}" not in run_text
+            or "--terminal-outcome-output" not in run_text
+            or upload.get("if") != "always()"
+            or not isinstance(upload.get("uses"), str)
+            or not upload["uses"].startswith("actions/upload-artifact@")
+            or not isinstance(upload_with, dict)
+            or upload_with.get("name") != f"canonical-update-promotion-terminal-${{{{ github.run_id }}}}-${{{{ github.run_attempt }}}}-{mode}"
+            or upload_with.get("if-no-files-found") != "ignore"
+            or upload_with.get("include-hidden-files") != "true"
+        ):
+            raise RuntimeError("terminal_workflow_step_contract_mismatch")
+        upload_path = upload_with.get("path")
+        if not isinstance(upload_path, str) or "terminal-outcome.json" not in upload_path or "terminal-outcome.sha256" not in upload_path:
+            raise RuntimeError("terminal_workflow_upload_contract_mismatch")
+        result[mode] = dict(contract)
+    helper_modes = TERMINAL_EVIDENCE.MODE_STEPS
+    if any(helper_modes.get(mode) != contract for mode, contract in result.items()):
+        raise RuntimeError("terminal_health_helper_mode_contract_mismatch")
+    return {mode: dict(contract) for mode, contract in helper_modes.items()}
+
+
+def terminal_source_contract(
+    root: pathlib.Path, repository: str, workflow_id: int, source_sha: str,
+    current_main_sha: str,
+) -> dict[str, Any]:
+    """Build a C source contract only from exact, pinned Git blobs and workflow structure."""
+    if not REVISION.fullmatch(source_sha) or not REVISION.fullmatch(current_main_sha):
+        raise RuntimeError("terminal_source_revision_invalid")
+    try:
+        commit = subprocess.run(
+            ["git", "cat-file", "-e", f"{source_sha}^{{commit}}"], cwd=root,
+            capture_output=True, check=False, timeout=10,
+        )
+        ancestor = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", source_sha, current_main_sha], cwd=root,
+            capture_output=True, check=False, timeout=10,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise RuntimeError("terminal_source_history_unavailable") from exc
+    if commit.returncode != 0 or ancestor.returncode != 0:
+        raise RuntimeError("terminal_source_not_in_trusted_main_history")
+    helper_paths = set(TERMINAL_EVIDENCE.EVALUATOR_SOURCE_PATHS)
+    if helper_paths != set(C_TERMINAL_EVALUATOR_SOURCE_PATHS):
+        raise RuntimeError("terminal_health_helper_source_set_mismatch")
+    source_files: dict[str, bytes] = {}
+    total_bytes = 0
+    for relative in sorted(helper_paths):
+        raw = _terminal_git_blob(root, source_sha, relative)
+        total_bytes += len(raw)
+        if total_bytes > 32 * 1024 * 1024:
+            raise RuntimeError("terminal_source_closure_size_limit")
+        source_files[relative] = raw
+    declared_paths = _terminal_runner_declared_paths(source_files["scripts/run-canonical-update-promotion.py"])
+    if declared_paths != C_TERMINAL_EVALUATOR_SOURCE_PATHS:
+        raise RuntimeError("terminal_source_runner_dependency_set_mismatch")
+    mode_steps = _terminal_workflow_contract(source_files[".github/workflows/canonical-update-promotion.yml"])
+    if any(mode_steps.get(mode) != contract for mode, contract in C_TERMINAL_MODE_STEPS.items()):
+        raise RuntimeError("terminal_source_mode_contract_mismatch")
+    schema_path = TERMINAL_EVIDENCE.SCHEMA_PATH
+    schema_bytes = source_files[schema_path]
+    return {
+        "repository": repository,
+        "workflow_id": workflow_id,
+        "workflow_path": TERMINAL_EVIDENCE.WORKFLOW_PATH,
+        "source_sha": source_sha,
+        "schema_path": schema_path,
+        "schema_bytes": schema_bytes,
+        "schema_sha256": sha256_bytes(schema_bytes),
+        "source_files": {path: sha256_bytes(raw) for path, raw in source_files.items()},
+        "mode_steps": mode_steps,
+    }
+
+
+def _terminal_run_identity(run: dict[str, Any]) -> dict[str, Any]:
+    identity = {
+        key: run.get(key) for key in (
+            "id", "run_attempt", "workflow_id", "path", "event", "head_sha",
+            "head_branch", "status", "conclusion", "created_at", "run_started_at",
+        )
+    }
+    for key in ("repository", "head_repository"):
+        value = run.get(key)
+        identity[key] = {
+            nested: value.get(nested) for nested in ("id", "full_name")
+        } if isinstance(value, dict) else None
+    return identity
+
+
+def _terminal_jobs_identity(jobs: dict[str, Any]) -> dict[str, Any]:
+    rows = jobs.get("jobs")
+    return {
+        "attempt_number": jobs.get("attempt_number"),
+        "jobs_api_endpoint": jobs.get("jobs_api_endpoint"),
+        "job_count": jobs.get("job_count"),
+        "jobs": rows,
+    }
+
+
+def _terminal_attempt_modes(jobs: dict[str, Any]) -> list[str]:
+    rows = jobs.get("jobs")
+    if not isinstance(rows, list):
+        return []
+    steps = [
+        step for job in rows if isinstance(job, dict) and job.get("name") == "reconcile"
+        for step in (job.get("steps") if isinstance(job.get("steps"), list) else [])
+        if isinstance(step, dict)
+    ]
+    selected: list[str] = []
+    for mode, contract in C_TERMINAL_MODE_STEPS.items():
+        matches = [step for step in steps if step.get("name") == contract["invocation_step"]]
+        if len(matches) > 1:
+            raise RuntimeError("terminal_mode_step_not_unique")
+        if matches and matches[0].get("status") == "completed" and matches[0].get("conclusion") in {"success", "failure"}:
+            selected.append(mode)
+    return selected
+
+
+def _terminal_unavailable_result(
+    reason_code: str, run: dict[str, Any], mode: str,
+) -> dict[str, Any]:
+    return _terminal_result_stub(
+        "unavailable", reason_code,
+        invocation={
+            "repository": str((run.get("repository") or {}).get("full_name", "")),
+            "workflow_path": TERMINAL_EVIDENCE.WORKFLOW_PATH,
+            "run_id": str(run.get("id", "")),
+            "run_attempt": run.get("run_attempt"),
+            "event": run.get("event"),
+            "head_sha": run.get("head_sha"),
+            "mode": mode,
+        },
+        run=run,
+    )
+
+
+def _terminal_current_subject(
+    checkpoint: dict[str, Any] | None, screen_result: Any,
+    main_identity: dict[str, Any], relation: dict[str, Any] | None, mode: str,
+) -> dict[str, Any] | None:
+    """Expose a current B row only after the normal full screen proved exact canonical bytes."""
+    if mode != "live" or relation is None or not isinstance(checkpoint, dict):
+        return None
+    if not isinstance(screen_result, dict) or screen_result.get("status") != "verified":
+        return None
+    screened = screen_result.get("screened")
+    if not isinstance(screened, dict):
+        return None
+    try:
+        runner = load_promotion_runner()
+        project = getattr(runner, "terminal_generation_record", None)
+        if not callable(project):
+            return None
+        row = project(
+            checkpoint, status="already_canonical",
+            reason_code="already_canonical_payload", screened=screened,
+        )
+    except Exception:
+        return None
+    if not isinstance(row, dict) or row.get("generation_id") != relation.get("generation_id"):
+        return None
+    return {"main_identity": main_identity, "generations": [row]}
+
+
+def _terminal_artifact_projection(value: Any) -> dict[str, Any] | None:
+    """Expose an artifact identity only after the archive digest and size were verified."""
+    if not isinstance(value, dict):
+        return None
+    artifact_id = value.get("artifact_id")
+    name = value.get("name")
+    expires_at = value.get("expires_at")
+    sha256 = value.get("sha256")
+    size = value.get("bytes")
+    if (
+        not isinstance(artifact_id, str) or re.fullmatch(r"[0-9]{1,20}", artifact_id) is None or artifact_id == "0"
+        or not isinstance(name, str) or not name or len(name) > 200
+        or not isinstance(expires_at, str)
+        or not isinstance(sha256, str) or not DIGEST.fullmatch(sha256)
+        or not isinstance(size, int) or isinstance(size, bool) or size < 1
+        or size > TERMINAL_EVIDENCE.MAX_ARCHIVE_BYTES
+    ):
+        return None
+    try:
+        parse_time(expires_at, "promotion_terminal_evidence.artifact.expires_at")
+    except ValueError:
+        return None
+    return {
+        "artifact_id": artifact_id,
+        "name": name,
+        "expires_at": expires_at,
+        "sha256": sha256,
+        "bytes": size,
+    }
+
+
+def finalize_terminal_outcome_records(
+    collection: dict[str, Any] | None, *, current_subject: dict[str, Any] | None,
+    as_of: dt.datetime, mode: str,
+) -> dict[str, Any]:
+    """Validate collected native inputs and return only the closed, bounded result projection."""
+    if mode != "live" or not isinstance(collection, dict):
+        return {"status": "not_applicable", "reason_code": "fixture_or_collection_not_applicable", "attempts_considered": 0, "records": []}
+    if collection.get("status") in {"unavailable", "rejected"}:
+        return {
+            "status": collection["status"],
+            "reason_code": collection.get("reason_code"),
+            "attempts_considered": collection.get("attempts_considered", 0),
+            "records": [],
+        }
+    normalized: list[dict[str, Any]] = []
+    for row in collection.get("records", []):
+        if not isinstance(row, dict):
+            continue
+        result = row.get("result")
+        terminal_input = row.get("_terminal_input")
+        if isinstance(terminal_input, dict):
+            result = TERMINAL_EVIDENCE.validate_terminal_evidence(
+                archive_bytes=terminal_input["archive_bytes"],
+                run=terminal_input["run"],
+                exact_attempt=terminal_input["exact_attempt"],
+                jobs=terminal_input["jobs"],
+                artifact_inventory=terminal_input["artifact_inventory"],
+                expected_context=terminal_input["expected_context"],
+                source_contract=terminal_input["source_contract"],
+                as_of=as_of,
+                current_subject=current_subject,
+            )
+        if not isinstance(result, dict):
+            continue
+        result = dict(result)
+        artifact = _terminal_artifact_projection(result.get("artifact"))
+        result["artifact"] = artifact
+        if result.get("status") == "verified" and artifact is None:
+            result.update({
+                "status": "rejected",
+                "reason_code": "terminal_artifact_identity_incomplete",
+                "outcome": None,
+                "current_applicability": {
+                    "status": "unavailable",
+                    "reason_code": "terminal_artifact_identity_incomplete",
+                    "matching_generations": [],
+                },
+            })
+        for field in ("run_status", "run_conclusion"):
+            value = result.get(field)
+            result[field] = value if isinstance(value, str) and len(value) <= 32 else None
+        normalized.append({
+            "run_id": row.get("run_id") if isinstance(row.get("run_id"), str) and re.fullmatch(r"[0-9]{1,20}", row["run_id"]) else None,
+            "run_attempt": row.get("run_attempt") if isinstance(row.get("run_attempt"), int) and not isinstance(row.get("run_attempt"), bool) and row.get("run_attempt", 0) > 0 else None,
+            "mode": row.get("mode") if row.get("mode") in TERMINAL_EVIDENCE.MODE_STEPS else None,
+            "result": result,
+        })
+    if not normalized:
+        return {"status": "not_applicable", "reason_code": None, "attempts_considered": collection.get("attempts_considered", 0), "records": []}
+    verified = sum(row["result"].get("status") == "verified" for row in normalized)
+    if all(row["result"].get("status") == "not_applicable" for row in normalized):
+        status = "not_applicable"
+        reason = None
+    elif verified == len(normalized):
+        status = "verified"
+        reason = None
+    elif verified:
+        status = "partially_verified"
+        reason = "some_terminal_evidence_unavailable_or_rejected"
+    else:
+        status = "unavailable"
+        reason = "terminal_evidence_unavailable_or_rejected"
+    return {
+        "status": status,
+        "reason_code": reason,
+        "attempts_considered": collection.get("attempts_considered", 0),
+        "records": normalized,
+    }
+
+
+def collect_terminal_outcome_records(
+    *, root: pathlib.Path, repository: str, workflow_id: int | None,
+    runs: list[dict[str, Any]], previous_attempts: dict[str, Any],
+    previous_attempt_errors: set[str], attempt_evidence: dict[str, Any],
+    current_main_sha: str, as_of: dt.datetime, maximum_future_skew: int,
+) -> dict[str, Any]:
+    """Read bounded terminal artifacts for the selected exact C failure/success attempts."""
+    base = {"status": "not_applicable", "reason_code": None, "attempts_considered": 0, "records": []}
+    latest, failure, success, errors = promotion_execution_references(
+        runs, previous_attempts, previous_attempt_errors, repository,
+        TERMINAL_EVIDENCE.WORKFLOW_PATH, workflow_id, PROMOTION_WORKFLOW_EVENTS,
+        as_of, maximum_future_skew,
+    )
+    selected: dict[str, dict[str, Any]] = {}
+    for summary in (failure, success):
+        if isinstance(summary, dict):
+            selected[f"{summary.get('run_id')}/{summary.get('run_attempt')}"] = summary
+    if not selected:
+        if errors:
+            return {**base, "status": "unavailable", "reason_code": "terminal_attempt_listing_incomplete"}
+        return base
+    base["attempts_considered"] = len(selected)
+    records: list[dict[str, Any]] = []
+    try:
+        native_repository = gh_json(f"repos/{repository}")
+        repo_id = native_repository.get("id") if isinstance(native_repository, dict) else None
+        default_branch = native_repository.get("default_branch") if isinstance(native_repository, dict) else None
+        full_name = native_repository.get("full_name") if isinstance(native_repository, dict) else None
+        if (
+            isinstance(repo_id, bool) or not isinstance(repo_id, int) or repo_id < 1
+            or not isinstance(default_branch, str) or not default_branch.strip()
+            or not isinstance(full_name, str) or full_name.casefold() != repository.casefold()
+        ):
+            raise RuntimeError("terminal_repository_identity_unavailable")
+    except RuntimeError:
+        return {**base, "status": "unavailable", "reason_code": "terminal_repository_identity_unavailable"}
+
+    source_contracts: dict[str, dict[str, Any] | str] = {}
+    for identity, summary in sorted(selected.items()):
+        run_id = str(summary.get("run_id", ""))
+        try:
+            attempt = int(summary.get("run_attempt"))
+        except (TypeError, ValueError):
+            attempt = 0
+        evidence = attempt_evidence.get(identity)
+        run = evidence.get("run") if isinstance(evidence, dict) else None
+        jobs = {
+            key: evidence.get(key) for key in ("attempt_number", "jobs_api_endpoint", "job_count", "jobs")
+        } if isinstance(evidence, dict) else {}
+        if not isinstance(run, dict) or not isinstance(jobs.get("jobs"), list):
+            records.append({"run_id": run_id, "run_attempt": attempt or None, "modes": [], "result": _terminal_result_stub("unavailable", "exact_attempt_unavailable", run=run)})
+            continue
+        try:
+            modes = _terminal_attempt_modes(jobs)
+        except RuntimeError:
+            records.append({"run_id": run_id, "run_attempt": attempt or None, "modes": [], "result": _terminal_result_stub("rejected", "terminal_mode_step_not_unique", run=run)})
+            continue
+        if not modes:
+            records.append({"run_id": run_id, "run_attempt": attempt, "modes": [], "result": _terminal_result_stub("not_applicable", "no_terminal_mode_invoked", run=run)})
+            continue
+        source_sha = run.get("head_sha")
+        contract: dict[str, Any] | None = None
+        contract_error: str | None = None
+        if isinstance(source_sha, str) and source_sha not in source_contracts:
+            try:
+                source_contracts[source_sha] = terminal_source_contract(
+                    root, repository, int(workflow_id or 0), source_sha, current_main_sha,
+                )
+            except RuntimeError as exc:
+                reason = str(exc)
+                source_contracts[source_sha] = (
+                    reason if re.fullmatch(r"terminal_[a-z0-9_]{1,80}", reason)
+                    else "terminal_source_contract_unavailable"
+                )
+        cached_contract = source_contracts.get(source_sha) if isinstance(source_sha, str) else None
+        if isinstance(cached_contract, dict):
+            contract = cached_contract
+        else:
+            contract_error = cached_contract if isinstance(cached_contract, str) else "terminal_source_contract_unavailable"
+        if contract_error is not None:
+            for mode in modes:
+                records.append({"run_id": run_id, "run_attempt": attempt, "mode": mode, "result": _terminal_unavailable_result(contract_error, run, mode)})
+            continue
+
+        context = {
+            "repository": repository,
+            "repository_id": repo_id,
+            "workflow_id": workflow_id,
+            "workflow_path": TERMINAL_EVIDENCE.WORKFLOW_PATH,
+            "default_branch": default_branch,
+            "run_id": run_id,
+            "run_attempt": attempt,
+            "event": run.get("event"),
+            "head_sha": source_sha,
+        }
+        try:
+            latest_before = collect_run(repository, run_id)
+            exact_before = collect_run_attempt(repository, run_id, attempt)
+            jobs_before = collect_run_attempt_jobs(repository, run_id, attempt)
+            if (
+                latest_before.get("run_attempt") != attempt
+                or _terminal_run_identity(exact_before) != _terminal_run_identity(run)
+                or _terminal_run_identity(latest_before) != _terminal_run_identity(run)
+                or _terminal_jobs_identity(jobs_before) != _terminal_jobs_identity(jobs)
+            ):
+                raise RuntimeError("terminal_attempt_changed_before_intake")
+            inventory = collect_terminal_artifact_inventory(repository, run_id)
+            expected_names = {
+                mode: f"canonical-update-promotion-terminal-{run_id}-{attempt}-{mode}"
+                for mode in modes
+            }
+            candidate_rows = [row for row in inventory["artifacts"] if row.get("name") in set(expected_names.values())]
+            if len(candidate_rows) > len(modes):
+                raise RuntimeError("terminal_artifact_identity_ambiguous")
+            for row in candidate_rows:
+                detail = collect_artifact(repository, str(row["id"]))
+                if not isinstance(detail, dict):
+                    raise RuntimeError("terminal_artifact_detail_unavailable")
+                inventory["details_by_id"][str(row["id"])] = detail
+            archives: dict[str, bytes] = {}
+            for mode, expected_name in expected_names.items():
+                mode_rows = [row for row in candidate_rows if row.get("name") == expected_name]
+                if len(mode_rows) == 1:
+                    artifact_id = str(mode_rows[0]["id"])
+                    detail = inventory["details_by_id"].get(artifact_id)
+                    size = detail.get("size_in_bytes") if isinstance(detail, dict) else None
+                    if isinstance(size, int) and not isinstance(size, bool) and 0 < size <= MAX_TERMINAL_ARCHIVE_BYTES:
+                        archives[mode] = _bounded_gh_archive(
+                            f"repos/{repository}/actions/artifacts/{artifact_id}/zip", size,
+                        )
+            latest_after = collect_run(repository, run_id)
+            exact_after = collect_run_attempt(repository, run_id, attempt)
+            jobs_after = collect_run_attempt_jobs(repository, run_id, attempt)
+            inventory_after = collect_terminal_artifact_inventory(repository, run_id)
+            details_after: dict[str, dict[str, Any]] = {}
+            for row in candidate_rows:
+                artifact_id = str(row["id"])
+                detail_after = collect_artifact(repository, artifact_id)
+                if not isinstance(detail_after, dict):
+                    raise RuntimeError("terminal_artifact_detail_unavailable")
+                details_after[artifact_id] = detail_after
+            if (
+                latest_after.get("run_attempt") != attempt
+                or _terminal_run_identity(exact_after) != _terminal_run_identity(run)
+                or _terminal_run_identity(latest_after) != _terminal_run_identity(run)
+                or _terminal_jobs_identity(jobs_after) != _terminal_jobs_identity(jobs)
+                or canonical_json(inventory_after["artifacts"]) != canonical_json(inventory["artifacts"])
+                or inventory_after["total_count"] != inventory["total_count"]
+                or any(
+                    canonical_json(inventory["details_by_id"].get(artifact_id))
+                    != canonical_json(detail_after)
+                    for artifact_id, detail_after in details_after.items()
+                )
+            ):
+                raise RuntimeError("terminal_attempt_changed_during_intake")
+        except RuntimeError as exc:
+            reason = str(exc)
+            allowed_reason = reason if re.fullmatch(r"terminal_[a-z0-9_]{1,80}", reason) else "terminal_intake_unavailable"
+            for mode in modes:
+                records.append({"run_id": run_id, "run_attempt": attempt, "mode": mode, "result": _terminal_unavailable_result(allowed_reason, run, mode)})
+            continue
+
+        for mode in modes:
+            records.append({
+                "run_id": run_id,
+                "run_attempt": attempt,
+                "mode": mode,
+                "_terminal_input": {
+                    "archive_bytes": archives.get(mode, b""),
+                    "run": run,
+                    "exact_attempt": attempt,
+                    "jobs": jobs,
+                    "artifact_inventory": inventory,
+                    "expected_context": {**context, "mode": mode},
+                    "source_contract": contract,
+                },
+            })
+    return {
+        "status": "pending_validation",
+        "reason_code": None,
+        "attempts_considered": len(selected),
+        "records": records,
+    }
 
 
 def collect_artifact(repository: str, artifact_id: str) -> dict[str, Any] | None:
@@ -1620,6 +2586,8 @@ def evaluate_source(
     prior_promotion_execution_faults: list[dict[str, Any]] | None = None,
     health_state_error: str | None = None,
     processor_candidate_screen: Any | None = None,
+    evaluator_source_sha: str | None = None,
+    promotion_terminal_collection: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     source_id = str(source["source_id"])
     owner_ticket = int(source["owner_ticket"])
@@ -2004,8 +2972,38 @@ def evaluate_source(
             if not bundle_valid:
                 add("candidate", bundle_issue, "error", _fault_action(source, "processor_stalled"))
 
+    main_revision = str(main_identity.get("revision", ""))
+    screen_result: Any = None
+    screen_once: Any | None = processor_candidate_screen
+    if (
+        mode == "live"
+        and isinstance(checkpoint, dict)
+        and checkpoint.get("status") in {"ready", "no-change"}
+        and callable(processor_candidate_screen)
+    ):
+        try:
+            screen_result = processor_candidate_screen(checkpoint)
+        except Exception:
+            screen_result = _candidate_screen_result(
+                status="unavailable", stage="processor_bundle_screen",
+                reason_code="processor_screen_unavailable",
+            )
+        screen_once = lambda _checkpoint: screen_result
+    candidate_diagnostic: dict[str, Any] = {}
     already_canonical_candidate = already_canonical_candidate_relation(
-        checkpoint, main_identity, str(main_identity.get("revision", "")), mode, processor_candidate_screen,
+        checkpoint, main_identity, main_revision, mode, screen_once,
+        diagnostic=candidate_diagnostic,
+    )
+    current_candidate_evaluation = current_candidate_evaluation_record(
+        checkpoint, main_identity, main_revision, mode, candidate_diagnostic, screen_result,
+        evaluator_source_sha,
+    )
+    terminal_current_subject = _terminal_current_subject(
+        checkpoint, screen_result, main_identity, already_canonical_candidate, mode,
+    )
+    promotion_terminal_evidence = finalize_terminal_outcome_records(
+        promotion_terminal_collection, current_subject=terminal_current_subject,
+        as_of=as_of, mode=mode,
     )
 
     promotion_state = "unavailable"
@@ -2430,6 +3428,8 @@ def evaluate_source(
             "latest_successful_execution_run": c_success,
             "execution_failure": c_failure,
         },
+        "promotion_terminal_evidence": promotion_terminal_evidence,
+        "current_candidate_evaluation": current_candidate_evaluation,
         "already_canonical_candidate": already_canonical_candidate,
     }
     unique_faults = {row["fault_key"]: row for row in faults}
@@ -3052,6 +4052,8 @@ def evaluate(
     promotion_ack_error: str | None = None,
     health_state_error: str | None = None,
     processor_candidate_screen: Any | None = None,
+    evaluator_source_sha: str | None = None,
+    promotion_terminal_collection: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if mode not in {"live", "fixture"}:
         raise ValueError("invalid_execution_mode")
@@ -3145,6 +4147,8 @@ def evaluate(
             promotion_ack_error=promotion_ack_error,
             health_state_error=health_state_error,
             processor_candidate_screen=processor_candidate_screen,
+            evaluator_source_sha=evaluator_source_sha if mode == "live" else None,
+            promotion_terminal_collection=promotion_terminal_collection if mode == "live" else None,
         )
         for source in monitor_rows
     ]
@@ -3202,6 +4206,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--health-state", type=pathlib.Path)
     parser.add_argument("--registry", type=pathlib.Path, default=pathlib.Path("data/data-go-kr.registry.json"))
     parser.add_argument("--main-revision", default="")
+    parser.add_argument("--evaluator-source-sha", default="", help="Pinned workflow source SHA that loaded this Health evaluator")
     parser.add_argument("--workflow-run-id", default="local")
     parser.add_argument("--workflow-run-attempt", type=int, default=1)
     parser.add_argument("--fixture-input", type=pathlib.Path, help="Explicit local-only inputs; never persisted as live health state.")
@@ -3225,6 +4230,8 @@ def main(argv: list[str] | None = None) -> int:
         workflow_ids_by_path: dict[str, int] = {}
         recovery_publisher_runs_by_id: dict[str, dict[str, Any]] = {}
         processor_candidate_screen = None
+        evaluator_source_sha: str | None = None
+        promotion_terminal_collection: dict[str, Any] | None = None
         collector_execution_attempts: dict[str, Any] = {}
         collector_execution_attempt_errors: set[str] = set()
         prior_collector_execution_faults: list[dict[str, Any]] = []
@@ -3388,7 +4395,32 @@ def main(argv: list[str] | None = None) -> int:
             main_revision = checked_out_main_revision(ROOT, args.main_revision)
             registry_path = args.registry if args.registry.is_absolute() else ROOT / args.registry
             verify_main_manifest_binding(ROOT, main_revision, ROOT / "manifest.json", registry_path)
-            processor_candidate_screen = build_processor_candidate_screen(ROOT, args.repository, main_revision)
+            evaluator_source_sha = verified_health_evaluator_source(ROOT, args.evaluator_source_sha)
+            if evaluator_source_sha is not None:
+                processor_candidate_screen = build_processor_candidate_screen(ROOT, args.repository, main_revision)
+                try:
+                    promotion_terminal_collection = collect_terminal_outcome_records(
+                        root=ROOT,
+                        repository=args.repository,
+                        workflow_id=workflow_ids_by_path.get(promotion_workflow_path),
+                        runs=promotion_workflow_runs,
+                        previous_attempts=promotion_workflow_previous_attempts,
+                        previous_attempt_errors=promotion_workflow_previous_attempt_errors,
+                        attempt_evidence=promotion_workflow_attempt_evidence,
+                        current_main_sha=main_revision,
+                        as_of=as_of,
+                        maximum_future_skew=int(health_policy["clock"]["maximum_future_skew_seconds"]),
+                    )
+                except Exception:
+                    promotion_terminal_collection = {
+                        "status": "unavailable", "reason_code": "terminal_intake_unavailable",
+                        "attempts_considered": 0, "records": [],
+                    }
+            else:
+                processor_candidate_screen = lambda _checkpoint: _candidate_screen_result(
+                    status="unavailable", stage="trusted_source",
+                    reason_code="health_evaluator_source_unavailable",
+                )
             referenced_artifact_ids: set[str] = set()
             observed_run_ids: set[str] = set()
             for source in health_policy["sources"]:
@@ -3587,6 +4619,8 @@ def main(argv: list[str] | None = None) -> int:
             health_state_error=health_state_error,
             processor_candidate_screen=processor_candidate_screen,
             recovery_publisher_runs_by_id=recovery_publisher_runs_by_id,
+            evaluator_source_sha=evaluator_source_sha,
+            promotion_terminal_collection=promotion_terminal_collection,
         )
         validate_schema(receipt, HEALTH_RECEIPT_SCHEMA, "health_receipt")
         args.output.parent.mkdir(parents=True, exist_ok=True)
