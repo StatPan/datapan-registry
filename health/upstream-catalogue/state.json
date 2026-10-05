@@ -4,24 +4,19 @@
     {
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
-      "generation_id": "9938e29ef963f799af3a15adf472e7a1fca119d5b075c578dfadbef2e11c7ead",
-      "last_receipt_sha256": "01ef587085d915956cd9392c1044a71d1ce88b546c05bac972dd6278043f3a19",
-      "last_seen_at": "2026-10-04T22:51:03Z",
-      "observation_count": 83,
+      "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
+      "last_receipt_sha256": "6288237b5d583f6843f74c366e47dc77ab85885fe9f8faf86955a29269746442",
+      "last_seen_at": "2026-10-05T01:04:58Z",
+      "observation_count": 84,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
       "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
-      "recovery_evidence": {
-        "checked_at": "2026-10-05T00:55:56Z",
-        "health_receipt_sha256": "3b29cd2b9e0bd85ab14ccf3e9daa0a15cbf6c1b1b4b191a127e73e1eb484a98f",
-        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
-        "verified": false
-      },
+      "recovery_evidence": null,
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "candidate",
-      "status": "recovery_pending_verification"
+      "status": "open"
     },
     {
       "fault_key": "c73e09872f5c9b6e3f9e5526c8d163567a10cc78c7700797bc04e72afb380ddf",
@@ -731,8 +726,8 @@
     }
   },
   "latest_receipt": {
-    "path": "receipts/receipt-37249678528-1-6e9b5d6f552d22e9.json",
-    "sha256": "6e9b5d6f552d22e9e6c1cbba5c6e57107a9c548aa155d86f46dfd831b3a8a06e"
+    "path": "receipts/receipt-37249968932-1-6288237b5d583f68.json",
+    "sha256": "6288237b5d583f6843f74c366e47dc77ab85885fe9f8faf86955a29269746442"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -752,7 +747,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "0d6ebd9a11bbe8833664a319b089385752514e3780c45924450183cd7befa5e3",
-  "state_status": "healthy",
-  "updated_at": "2026-10-05T01:00:37Z"
+  "state_sha256": "6a572bd23be385bde93f97838df1d9d9a521843d13e31f24bc586e2e429c45ff",
+  "state_status": "degraded",
+  "updated_at": "2026-10-05T01:04:58Z"
 }
