@@ -101,7 +101,7 @@ CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-failure-recovery-rollup.py", "--check")),
     Command(("python3", "scripts/generate-operation-denominator-rollup.py", "--check")),
     Command(("python3", "scripts/generate-completeness-proof-rollup.py", "--check")),
-    Command(("python3", "-m", "unittest", "tests/test_generate_completeness_proof_rollup.py", "tests/test_completeness_publication_evidence.py", "tests/test_completeness_scope_registration.py", "tests/test_completeness_proof_rollup_cli.py")),
+    Command(("python3", "-m", "unittest", "tests/test_generate_completeness_proof_rollup.py", "tests/test_completeness_publication_evidence.py", "tests/test_completeness_scope_registration.py", "tests/test_completeness_proof_rollup_cli.py", "tests/test_completeness_future_observation_chain.py")),
     Command(("python3", "scripts/validate-data-go-kr-operation-manifest.py")),
     Command(("python3", "scripts/generate-current-runtime-evidence-projection.py", "--check")),
     Command(("python3", "scripts/generate-runtime-freshness-queue.py", "--check")),
