@@ -80,6 +80,10 @@ jobs:
         working-directory: datapan-registry
         run: git fetch --no-tags --depth=1 origin b49d66b97d8155c34649f4dd2040b884c4212d64
 
+      - name: Fetch pinned Seoul historical subject source commit
+        working-directory: datapan-registry
+        run: git fetch --no-tags --depth=1 origin 0085b357289755d6b3fb60a7259bd85da42d2962
+
       - name: Fetch pinned publication receipt fixture history
         working-directory: datapan-registry
         run: |

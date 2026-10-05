@@ -3151,6 +3151,83 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(checkpoint["status"], "quarantined")
         self.assertIn("composer_output_missing", checkpoint["outcome"]["reason"])
 
+    def test_shallow_verify_checkout_requires_only_the_pinned_subject_commit(self) -> None:
+        helper = MODULE.SEOUL_DECLARATION
+        prefix = helper.DECLARATION["historical_operation_prefix"]
+        pinned_commit = prefix["source_main_commit"]
+        source_path = prefix["source_path"]
+
+        # The Verify workflow's exact fetch makes this the admitted-pin control.
+        admitted = helper.validate_committed_prefix_snapshot(ROOT)
+        self.assertEqual(admitted["commit"], pinned_commit)
+        self.assertEqual(admitted["source_manifest_sha256"], prefix["source_manifest_sha256"])
+        workflow = (ROOT / ".github/workflows/verify-release.yml").read_text(encoding="utf-8")
+        exact_fetch = f"git fetch --no-tags --depth=1 origin {pinned_commit}"
+        self.assertIn(exact_fetch, workflow)
+        self.assertLess(
+            workflow.index(exact_fetch),
+            workflow.index("python -m unittest tests/test_process_upstream_catalogue_candidate.py"),
+        )
+
+        with tempfile.TemporaryDirectory(prefix="seoul-historical-pin-shallow-") as temp:
+            temp_root = pathlib.Path(temp)
+            seed = temp_root / "seed"
+            shallow = temp_root / "shallow"
+            seed.mkdir()
+            env = os.environ.copy()
+            env["GIT_LFS_SKIP_SMUDGE"] = "1"
+
+            def git(*args: str, cwd: pathlib.Path | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
+                return subprocess.run(
+                    ("git", *args), cwd=cwd, env=env, text=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=check,
+                )
+
+            pointer = git("show", f"{pinned_commit}:{source_path}", cwd=ROOT).stdout.encode("ascii")
+            registry = seed / source_path
+            registry.parent.mkdir(parents=True)
+            registry.write_bytes(pointer)
+            git("init", "--quiet", cwd=seed)
+            git("checkout", "--quiet", "-b", "current", cwd=seed)
+            git("add", source_path, cwd=seed)
+            git(
+                "-c", "user.name=Datapan test", "-c", "user.email=datapan-test@example.invalid",
+                "commit", "--quiet", "-m", "current source fixture", cwd=seed,
+            )
+            (seed / "README").write_text("second commit creates a real shallow boundary\n", encoding="utf-8")
+            git("add", "README", cwd=seed)
+            git(
+                "-c", "user.name=Datapan test", "-c", "user.email=datapan-test@example.invalid",
+                "commit", "--quiet", "-m", "shallow checkout head", cwd=seed,
+            )
+            git(
+                "clone", "--quiet", "--depth=1", "--no-tags", "--single-branch", "--branch", "current",
+                seed.as_uri(), str(shallow),
+            )
+            git("-C", str(shallow), "remote", "set-url", "origin", str(ROOT))
+
+            self.assertTrue((shallow / ".git/shallow").is_file())
+            absent = git(
+                "-C", str(shallow), "rev-parse", "--verify", f"{pinned_commit}^{{commit}}", check=False,
+            )
+            self.assertNotEqual(absent.returncode, 0, "depth-1 checkout unexpectedly contains the historical pin")
+            with self.assertRaises(helper.DeclarationError) as missing:
+                helper.validate_committed_prefix_snapshot(shallow)
+            self.assertEqual(str(missing.exception), "portal_historical_source_commit_unavailable")
+
+            git(
+                "-C", str(shallow), "fetch", "--quiet", "--no-tags", "--depth=1", "origin", pinned_commit,
+            )
+            present = git(
+                "-C", str(shallow), "rev-parse", "--verify", f"{pinned_commit}^{{commit}}",
+            )
+            self.assertEqual(present.stdout.strip(), pinned_commit)
+            source_pin = helper.validate_committed_prefix_snapshot(shallow)
+            self.assertEqual(source_pin["commit"], pinned_commit)
+            self.assertEqual(source_pin["source_manifest_sha256"], prefix["source_manifest_sha256"])
+            self.assertEqual(source_pin["source_file_git_blob_sha1"], prefix["source_file_git_blob_sha1"])
+            self.assertFalse(source_pin["materialized_registry_verified"])
+
 
 if __name__ == "__main__":
     unittest.main()
