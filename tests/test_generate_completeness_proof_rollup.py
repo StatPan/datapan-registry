@@ -835,17 +835,198 @@ class CompletenessProofRollupTest(unittest.TestCase):
         # separately fetched origin/main ref or all of that ref's reachable
         # tree objects. Transfer only the already authenticated exact SHA from
         # this local checkout; never consult its remote URL or substitute HEAD.
-        subprocess.run(
-            [
-                "git", "fetch", "--no-tags", "--depth=64", str(source_root),
-                f"{trusted_main}:refs/remotes/origin/main",
-            ],
-            cwd=repository,
-            check=True,
-            env=environment,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
+        fetch_args = [
+            "git", "fetch", "--no-tags", "--depth=64", str(source_root),
+            f"{trusted_main}:refs/remotes/origin/main",
+        ]
+        try:
+            subprocess.run(
+                fetch_args,
+                cwd=repository,
+                check=True,
+                env=environment,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        except subprocess.CalledProcessError as error:
+            # Keep the original failure and fetch argv, but retain enough
+            # local topology context to diagnose shallow linked-worktree
+            # transport failures in Verify. This runs only on fetch failure;
+            # it never consults a remote URL or changes the fetch behavior.
+            def git_value(repo: pathlib.Path, *args: str) -> str:
+                try:
+                    result = subprocess.run(
+                        ["git", *args], cwd=repo, text=True,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False, timeout=2,
+                    )
+                except (OSError, ValueError, subprocess.TimeoutExpired):
+                    return "<unavailable>"
+                if result.returncode != 0:
+                    return f"<unavailable:{result.returncode}>"
+                return result.stdout.strip()
+
+            def repository_context(repo: pathlib.Path) -> dict[str, object]:
+                common_dir = git_value(repo, "rev-parse", "--path-format=absolute", "--git-common-dir")
+                git_dir = git_value(repo, "rev-parse", "--path-format=absolute", "--git-dir")
+                shallow_path = git_value(repo, "rev-parse", "--path-format=absolute", "--git-path", "shallow")
+                alternates_path = git_value(
+                    repo, "rev-parse", "--path-format=absolute", "--git-path", "objects/info/alternates",
+                )
+
+                def file_metadata(value: str) -> dict[str, object]:
+                    if value.startswith("<unavailable"):
+                        return {"path": value, "exists": False}
+                    try:
+                        path = pathlib.Path(value)
+                        size = path.stat().st_size
+                        with path.open("rb") as stream:
+                            sample = stream.read(4096)
+                    except OSError:
+                        return {"path": value, "exists": False}
+                    return {
+                        "path": value,
+                        "exists": True,
+                        "bytes": size,
+                        "sampled_bytes": len(sample),
+                        "sampled_lines": len(sample.splitlines()),
+                        "truncated": size > len(sample),
+                    }
+
+                main = git_value(repo, "rev-parse", "--verify", "refs/remotes/origin/main^{commit}")
+                main_tree = (
+                    git_value(repo, "rev-parse", "--verify", f"{main}^{{tree}}")
+                    if not main.startswith("<unavailable") else "<unavailable>"
+                )
+                try:
+                    filesystem_free_bytes: int | str = shutil.disk_usage(repo).free
+                except Exception as metadata_error:
+                    filesystem_free_bytes = f"<unavailable:{type(metadata_error).__name__}>"
+                return {
+                    "path": str(repo),
+                    "head": git_value(repo, "rev-parse", "--verify", "HEAD^{commit}"),
+                    "origin_main": main,
+                    "origin_main_tree": main_tree,
+                    "is_shallow": git_value(repo, "rev-parse", "--is-shallow-repository"),
+                    "git_dir": git_dir,
+                    "common_dir": common_dir,
+                    "shallow": file_metadata(shallow_path),
+                    "alternates": file_metadata(alternates_path),
+                    "filesystem_free_bytes": filesystem_free_bytes,
+                }
+
+            prefix = "bounded exact-main fetch diagnostics: "
+            note_limit = 2800
+            stderr = error.stderr
+            if isinstance(stderr, bytes):
+                stderr_bytes = stderr
+            elif isinstance(stderr, str):
+                stderr_bytes = stderr.encode("utf-8", errors="replace")
+            else:
+                stderr_bytes = b""
+            stderr_tail = stderr_bytes[-1024:].decode("utf-8", errors="replace")
+            diagnostic: dict[str, object] = {
+                "expected_main": trusted_main,
+                "expected_main_tree": source_tree,
+                "stderr_tail_bytes": min(len(stderr_bytes), 1024),
+                "stderr_truncated": len(stderr_bytes) > 1024,
+                "stderr_tail": stderr_tail,
+            }
+
+            def render_note(value: dict[str, object]) -> str:
+                return prefix + json.dumps(value, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+
+            def fit_required_note() -> None:
+                # Keep exact source identities and the most recent stderr. The
+                # original CalledProcessError.stderr remains untouched; this
+                # only bounds the human-readable exception note after JSON
+                # escaping, including control characters from Git/path output.
+                while len(render_note(diagnostic)) >= note_limit:
+                    tail = diagnostic.get("stderr_tail")
+                    if not isinstance(tail, str) or not tail:
+                        break
+                    drop = max(1, len(tail) // 8)
+                    diagnostic["stderr_tail"] = tail[drop:]
+                    diagnostic["stderr_truncated"] = True
+
+            def bounded_optional_text(value: str, encoded_limit: int = 128) -> str:
+                if len(json.dumps(value, ensure_ascii=True)) <= encoded_limit:
+                    return value
+                marker = "<snip>"
+                left = len(value) // 2
+                right = len(value) - left
+                while left or right:
+                    candidate = value[:left] + marker + value[len(value) - right:]
+                    if len(json.dumps(candidate, ensure_ascii=True)) <= encoded_limit:
+                        return candidate
+                    if left >= right and left:
+                        left -= max(1, left // 8)
+                    elif right:
+                        right -= max(1, right // 8)
+                return marker
+
+            def bounded_optional(value: object) -> object:
+                if isinstance(value, str):
+                    return bounded_optional_text(value)
+                if isinstance(value, dict):
+                    return {key: bounded_optional(item) for key, item in value.items()}
+                if isinstance(value, list):
+                    return [bounded_optional(item) for item in value]
+                return value
+
+            fit_required_note()
+            # Optional diagnostics are evaluated only after the mandatory
+            # identity/stderr payload exists. Each field is admitted separately
+            # so unusually long paths cannot push the final note over budget.
+            try:
+                git_version = bounded_optional(git_value(source_root, "--version"))
+                candidate = dict(diagnostic)
+                candidate["git_version"] = git_version
+                if len(render_note(candidate)) < note_limit:
+                    diagnostic = candidate
+                for role, repo in (("source", source_root), ("destination", repository)):
+                    try:
+                        context = repository_context(repo)
+                    except Exception as metadata_error:
+                        context = {"context_unavailable": type(metadata_error).__name__}
+                    context = bounded_optional(context)
+                    selected: dict[str, object] = {}
+                    for key, value in context.items():
+                        trial = dict(diagnostic)
+                        partial = dict(selected)
+                        partial[key] = value
+                        trial[role] = partial
+                        if len(render_note(trial)) < note_limit:
+                            selected = partial
+                            diagnostic = trial
+            except Exception as metadata_error:  # optional metadata never replaces mandatory evidence
+                trial = dict(diagnostic)
+                trial["optional_metadata_error"] = type(metadata_error).__name__
+                if len(render_note(trial)) < note_limit:
+                    diagnostic = trial
+
+            fit_required_note()
+            note = render_note(diagnostic)
+            if len(note) >= note_limit:
+                # Exact Git identities are fixed-length here; this final
+                # fallback protects the cap if an unexpected optional value
+                # bypasses the per-field admission checks.
+                diagnostic = {
+                    "expected_main": trusted_main,
+                    "expected_main_tree": source_tree,
+                    "stderr_truncated": True,
+                    "stderr_tail": str(diagnostic.get("stderr_tail", ""))[-256:],
+                }
+                note = render_note(diagnostic)
+            try:
+                if hasattr(error, "add_note"):
+                    error.add_note(note)
+                else:
+                    print(note, file=sys.stderr)
+            except Exception:
+                # Adding diagnostics is best-effort and cannot replace the
+                # original Git fetch error.
+                pass
+            raise
         copied_main = subprocess.check_output(
             ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
             cwd=repository,
@@ -1626,6 +1807,196 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     checkout, root / "wrong-main-checkout", expected_main=source_sha,
                 )
             self.assertFalse((root / "wrong-main-checkout").exists())
+
+    def test_nested_linked_worktree_fetch_preserves_authenticated_main(self) -> None:
+        """The disposable reader can fetch exact main from a shallow linked worktree."""
+        integration = importlib.import_module("tests.test_apply_runtime_freshness_import_integration")
+        fixture = integration.ApplyRuntimeFreshnessImportIntegrationTest
+        # setUpClass allocates its TemporaryDirectory before building the
+        # repository. Keep even a partial setup inside this cleanup boundary,
+        # and never let teardown mask the original setup/test failure.
+        fixture.temporary = None
+        setup_or_test_failed = False
+        try:
+            fixture.setUpClass()
+            source_root = fixture.repo
+            base = fixture.temp_root
+            linked = base / "nested-linked-source"
+            disposable = base / "nested-disposable-main"
+            subprocess.run(
+                ["git", "-c", "core.hooksPath=/dev/null", "worktree", "add", "--detach", str(linked), "HEAD"],
+                cwd=source_root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            self.assertTrue((linked / ".git").is_file())
+            self.assertEqual(
+                subprocess.check_output(
+                    ["git", "rev-parse", "--is-shallow-repository"], cwd=linked, text=True,
+                ).strip(),
+                "true",
+            )
+            trusted_main = subprocess.check_output(
+                ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
+                cwd=linked,
+                text=True,
+            ).strip()
+            trusted_tree = subprocess.check_output(
+                ["git", "rev-parse", "--verify", f"{trusted_main}^{{tree}}"], cwd=linked, text=True,
+            ).strip()
+            common_dir = pathlib.Path(subprocess.check_output(
+                ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], cwd=linked, text=True,
+            ).strip())
+
+            cloned_main, cloned_tree = self._clone_disposable_at_verified_main(linked, disposable)
+
+            self.assertEqual(cloned_main, trusted_main)
+            self.assertEqual(cloned_tree, trusted_tree)
+            self.assertEqual(
+                subprocess.check_output(["git", "rev-parse", "HEAD^{commit}"], cwd=disposable, text=True).strip(),
+                trusted_main,
+            )
+            self.assertEqual(
+                subprocess.check_output(
+                    ["git", "rev-parse", "--is-shallow-repository"], cwd=disposable, text=True,
+                ).strip(),
+                "true",
+            )
+            alternates = disposable / ".git/objects/info/alternates"
+            self.assertTrue(alternates.is_file())
+            self.assertEqual(pathlib.Path(alternates.read_text(encoding="utf-8").strip()), common_dir / "objects")
+
+            wrong_main = base / "nested-wrong-main"
+            with self.assertRaisesRegex(ValueError, "expected trusted main does not match source origin/main"):
+                self._clone_disposable_at_verified_main(linked, wrong_main, expected_main="0" * 40)
+            self.assertFalse(wrong_main.exists())
+        except BaseException:
+            setup_or_test_failed = True
+            raise
+        finally:
+            if getattr(fixture, "temporary", None) is not None:
+                try:
+                    fixture.tearDownClass()
+                except BaseException:
+                    if not setup_or_test_failed:
+                        raise
+
+    def test_failed_local_main_fetch_keeps_original_error_and_bounded_diagnostics(self) -> None:
+        """A real local fetch failure surfaces its stderr without replacing the Git error."""
+        with tempfile.TemporaryDirectory(prefix="completeness-fetch-diagnostic-") as name:
+            root = pathlib.Path(name)
+            source = root / "source"
+            destination = root / "disposable"
+            source.mkdir()
+            subprocess.run(["git", "init", "--quiet", "--initial-branch=main", str(source)], check=True)
+            subprocess.run(["git", "config", "user.name", "Completeness fetch test"], cwd=source, check=True)
+            subprocess.run(["git", "config", "user.email", "completeness-fetch@example.invalid"], cwd=source, check=True)
+            subprocess.run(["git", "config", "gc.auto", "0"], cwd=source, check=True)
+            (source / "main.txt").write_text("trusted main\n", encoding="utf-8")
+            subprocess.run(["git", "add", "main.txt"], cwd=source, check=True)
+            subprocess.run(["git", "commit", "--quiet", "-m", "trusted main"], cwd=source, check=True)
+            trusted_main = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
+            subprocess.run(
+                ["git", "update-ref", "refs/remotes/origin/main", trusted_main], cwd=source, check=True,
+            )
+            loose_commit = source / ".git/objects" / trusted_main[:2] / trusted_main[2:]
+            self.assertTrue(loose_commit.is_file())
+            real_run = subprocess.run
+            removed_commit = False
+
+            def remove_commit_after_shared_clone(*args: object, **kwargs: object) -> subprocess.CompletedProcess[bytes]:
+                nonlocal removed_commit
+                argv = list(args[0]) if args and isinstance(args[0], (list, tuple)) else []
+                result = real_run(*args, **kwargs)
+                if (
+                    argv[:2] == ["git", "clone"]
+                    and str(source) in argv
+                    and str(destination) in argv
+                    and result.returncode == 0
+                ):
+                    loose_commit.unlink()
+                    removed_commit = True
+                return result
+
+            with mock.patch.object(subprocess, "run", side_effect=remove_commit_after_shared_clone):
+                with self.assertRaises(subprocess.CalledProcessError) as captured:
+                    self._clone_disposable_at_verified_main(source, destination)
+
+            error = captured.exception
+            self.assertTrue(removed_commit)
+            self.assertNotEqual(error.returncode, 0)
+            self.assertIn(b"not our ref", error.stderr)
+            notes = "\n".join(getattr(error, "__notes__", []))
+            self.assertIn("bounded exact-main fetch diagnostics", notes)
+            self.assertIn(trusted_main, notes)
+            self.assertIn(str(source), notes)
+            self.assertIn(str(destination), notes)
+            self.assertIn("filesystem_free_bytes", notes)
+            self.assertIn("not our ref", notes)
+            self.assertLess(len(notes), 4000)
+
+    def test_fetch_diagnostics_bound_long_control_paths_and_keep_stderr_on_metadata_error(self) -> None:
+        """Optional filesystem diagnostics cannot hide stderr or exceed the serialized note budget."""
+        with tempfile.TemporaryDirectory(prefix="completeness-fetch-long-path-") as name:
+            root = pathlib.Path(name)
+            for index in range(5):
+                root = root / (str(index) + "-" + ("p" * 74))
+            root = root / "control-\x01-path"
+            root.mkdir(parents=True)
+            source = root / "source"
+            destination = root / "disposable"
+            source.mkdir()
+            subprocess.run(["git", "init", "--quiet", "--initial-branch=main", str(source)], check=True)
+            subprocess.run(["git", "config", "user.name", "Completeness fetch test"], cwd=source, check=True)
+            subprocess.run(["git", "config", "user.email", "completeness-fetch@example.invalid"], cwd=source, check=True)
+            subprocess.run(["git", "config", "gc.auto", "0"], cwd=source, check=True)
+            (source / "main.txt").write_text("trusted main\n", encoding="utf-8")
+            subprocess.run(["git", "add", "main.txt"], cwd=source, check=True)
+            subprocess.run(["git", "commit", "--quiet", "-m", "trusted main"], cwd=source, check=True)
+            trusted_main = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
+            trusted_tree = subprocess.check_output(
+                ["git", "rev-parse", "--verify", f"{trusted_main}^{{tree}}"], cwd=source, text=True,
+            ).strip()
+            subprocess.run(
+                ["git", "update-ref", "refs/remotes/origin/main", trusted_main], cwd=source, check=True,
+            )
+            loose_commit = source / ".git/objects" / trusted_main[:2] / trusted_main[2:]
+            self.assertTrue(loose_commit.is_file())
+            real_run = subprocess.run
+            removed_commit = False
+
+            def remove_commit_after_shared_clone(*args: object, **kwargs: object) -> subprocess.CompletedProcess[bytes]:
+                nonlocal removed_commit
+                argv = list(args[0]) if args and isinstance(args[0], (list, tuple)) else []
+                result = real_run(*args, **kwargs)
+                if (
+                    argv[:2] == ["git", "clone"]
+                    and str(source) in argv
+                    and str(destination) in argv
+                    and result.returncode == 0
+                ):
+                    loose_commit.unlink()
+                    removed_commit = True
+                return result
+
+            with mock.patch.object(shutil, "disk_usage", side_effect=FileNotFoundError("fixture path vanished")):
+                with mock.patch.object(subprocess, "run", side_effect=remove_commit_after_shared_clone):
+                    with self.assertRaises(subprocess.CalledProcessError) as captured:
+                        self._clone_disposable_at_verified_main(source, destination)
+
+            error = captured.exception
+            self.assertTrue(removed_commit)
+            self.assertIsInstance(error, subprocess.CalledProcessError)
+            self.assertIn(b"not our ref", error.stderr)
+            notes = "\n".join(getattr(error, "__notes__", []))
+            self.assertIn("bounded exact-main fetch diagnostics", notes)
+            self.assertIn(trusted_main, notes)
+            self.assertIn(trusted_tree, notes)
+            self.assertIn("not our ref", notes)
+            self.assertIn("FileNotFoundError", notes)
+            self.assertLess(len(notes), 3000)
+            self.assertTrue(notes.isascii(), "JSON escaping should keep control characters out of the note")
 
     def test_projection_rejects_an_unreviewed_published_605_contract(self) -> None:
         """A real newer generator revision is not executed until its source contract is reviewed."""
