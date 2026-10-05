@@ -4244,6 +4244,14 @@ def acknowledged_journal_witness(
         raise ValueError("ACK replay does not identify one active exact-subject read-back witness")
     row, witness = matches[0]
     candidate = row["candidate"]
+    selected_pr = row.get("pr")
+    selected_pr_number = selected_pr.get("number") if isinstance(selected_pr, dict) else None
+    if (
+        isinstance(selected_pr_number, bool)
+        or not isinstance(selected_pr_number, int)
+        or selected_pr_number < 1
+    ):
+        raise ValueError("ACK replay's selected PR number is not a positive integer")
     identity = witness.get("artifact_identity")
     witness_run_id = witness.get("run_id")
     witness_attempt = witness.get("run_attempt")

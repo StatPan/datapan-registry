@@ -21,6 +21,7 @@ SPEC = importlib.util.spec_from_file_location("generate_completeness_proof_rollu
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+_PRESERVE_REPLAY_PR_NUMBER = object()
 
 
 class CompletenessProofRollupTest(unittest.TestCase):
@@ -73,6 +74,8 @@ class CompletenessProofRollupTest(unittest.TestCase):
         acknowledgement_identity: tuple[int, int] | None = None,
         acknowledgement_event: str = "schedule",
         predecessor_status: str | None = None,
+        standalone_replay: bool = False,
+        replay_pr_number: object = _PRESERVE_REPLAY_PR_NUMBER,
     ) -> tuple[pathlib.Path, str]:
         """Build an indexed native publisher/ACK packet with a nonlegacy ACK identity."""
         registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
@@ -214,6 +217,28 @@ class CompletenessProofRollupTest(unittest.TestCase):
         if outcome == "already_acknowledged":
             journal_before = copy.deepcopy(actual_after)
             journal_after = copy.deepcopy(actual_after)
+            if standalone_replay:
+                active_rows = [
+                    row for row in actual_after.get("records", [])
+                    if isinstance(row, dict)
+                    and row.get("status") == "read-back-confirmed"
+                    and row.get("superseded_by") is None
+                    and row.get("candidate", {}).get("source_id") == "data_go_kr"
+                    and row.get("candidate", {}).get("manifest_sha256") == manifest_sha
+                    and row.get("pr", {}).get("merge_commit_sha") == source_sha
+                ]
+                if len(active_rows) != 1:
+                    raise AssertionError("retained journal must identify one active standalone replay witness")
+                standalone_row = copy.deepcopy(active_rows[0])
+                for key in ("refresh_from", "refresh_target_main_sha", "superseded_by", "ci"):
+                    standalone_row.pop(key, None)
+                if replay_pr_number is not _PRESERVE_REPLAY_PR_NUMBER:
+                    if replay_pr_number is None:
+                        standalone_row["pr"].pop("number", None)
+                    else:
+                        standalone_row["pr"]["number"] = replay_pr_number
+                journal_before["records"] = [standalone_row]
+                journal_after = copy.deepcopy(journal_before)
             log_status = "already_acknowledged"
             journal_writes = 0
         elif outcome == "read-back-confirmed":
@@ -3124,6 +3149,82 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 self.assertEqual(delivery["details"]["acknowledgement_replay_status"], "already_acknowledged")
                 self.assertEqual(delivery["details"]["acknowledgement_replay_journal_writes"], 0)
                 self.assertTrue(delivery["details"]["acknowledgement_replay_state_unchanged"])
+
+    def test_build_report_replay_requires_positive_pr_without_ci_or_optional_links(self) -> None:
+        """A standalone zero-write witness still needs its own positive selected PR number."""
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        valid_cases: list[object] = [_PRESERVE_REPLAY_PR_NUMBER]
+        invalid_cases: list[tuple[str, object]] = [
+            ("zero", 0), ("boolean", True), ("missing", None), ("negative", -1),
+        ]
+        for label, replay_pr_number, expected_valid in [
+            ("valid", valid_cases[0], True),
+            *((label, number, False) for label, number in invalid_cases),
+        ]:
+            with self.subTest(pr_number=label), tempfile.TemporaryDirectory(
+                prefix=f"completeness-ack-standalone-replay-pr-{label}-"
+            ) as name:
+                input_root = pathlib.Path(name) / "evidence"
+                input_root.mkdir()
+                index_path, expected_source = self._build_synthetic_native_ack_packet(
+                    input_root,
+                    outcome="already_acknowledged",
+                    acknowledgement_identity=(99972290001, 1),
+                    acknowledgement_event="schedule",
+                    standalone_replay=True,
+                    replay_pr_number=replay_pr_number,
+                )
+                index = json.loads(index_path.read_bytes())
+                indexed = {
+                    item["role"]: item for item in index["inputs"]
+                    if item.get("scope_id") == operation_id
+                }
+                self.assertNotIn("acknowledgement_ci", indexed)
+                before_raw = (input_root / indexed["acknowledgement_journal_before"]["path"]).read_bytes()
+                after_raw = (input_root / indexed["acknowledgement_journal_after"]["path"]).read_bytes()
+                self.assertEqual(before_raw, after_raw)
+                journal = json.loads(after_raw)
+                self.assertEqual(len(journal["records"]), 1)
+                witness_row = journal["records"][0]
+                self.assertNotIn("ci", witness_row)
+                self.assertNotIn("refresh_from", witness_row)
+                self.assertNotIn("refresh_target_main_sha", witness_row)
+                self.assertNotIn("superseded_by", witness_row)
+                if expected_valid:
+                    self.assertIsInstance(witness_row["pr"].get("number"), int)
+                    self.assertNotIsInstance(witness_row["pr"]["number"], bool)
+                    self.assertGreater(witness_row["pr"]["number"], 0)
+                for role in (
+                    "acknowledgement_state_ref", "acknowledgement_state_commit",
+                    "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+                    "acknowledgement_state_ref_before", "acknowledgement_state_commit_before",
+                    "acknowledgement_state_tree_before", "acknowledgement_journal_blob_api_before",
+                ):
+                    self.assertIn(role, indexed)
+
+                if expected_valid:
+                    report = MODULE.build_report(
+                        root=ROOT, input_root=input_root, input_index_path=index_path,
+                    )
+                    row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
+                    self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                    delivery = next(
+                        facet for facet in row["facets"]
+                        if facet["facet_id"] == "immutable_publication_read_back"
+                    )
+                    self.assertEqual(delivery["details"]["delivery_status"], "publisher_readback_acknowledged")
+                    self.assertEqual(delivery["details"]["acknowledgement_replay_run_id"], "99972290001")
+                    self.assertEqual(delivery["details"]["acknowledgement_replay_journal_writes"], 0)
+                    self.assertEqual(delivery["details"]["subject"]["source_sha"], expected_source)
+                else:
+                    with self.assertRaisesRegex(ValueError, "selected PR number is not a positive integer"):
+                        MODULE.build_report(
+                            root=ROOT, input_root=input_root, input_index_path=index_path,
+                        )
 
     def test_build_report_admits_ack_suffixes_from_all_selected_owner_states(self) -> None:
         """Full indexed admission follows the owning runner from each selected predecessor state."""
