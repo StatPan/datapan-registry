@@ -1431,6 +1431,15 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 cwd=checkout, check=True,
             )
 
+    def test_projection_rejects_an_unreviewed_published_605_contract(self) -> None:
+        """A real newer generator revision is not executed until its source contract is reviewed."""
+        with self.assertRaisesRegex(ValueError, "published source revision has an unreviewed #605 projection contract"):
+            MODULE.project_registered_data_go_operation_manifest(
+                root=ROOT,
+                revision="fc96da30db8773d1e0b91394ca931436694c1503",
+                registry_bytes=b"[]\n",
+            )
+
     def test_build_report_admits_exact_subject_and_rejects_borrowed_release_member(self) -> None:
         """Exercise proof -> index -> native publisher/C admission without changing live authority."""
         original_index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
@@ -1502,6 +1511,14 @@ class CompletenessProofRollupTest(unittest.TestCase):
             )
 
             source_revision = "6a5138c792f4b7402da0c5ab439646bd752a307f"
+            published_generator = MODULE.git_read_only(
+                temp_root, ["show", f"{source_revision}:scripts/generate-data-go-kr-operation-manifest.py"],
+            )
+            self.assertNotEqual(
+                (temp_root / "scripts/generate-data-go-kr-operation-manifest.py").read_bytes(),
+                published_generator,
+                "fixture must exercise a newer local generator against the exact older published contract",
+            )
             operation_path = "reports/data-go-kr/operation-manifest.json"
             source_bytes = MODULE.git_read_only(temp_root, ["show", f"{source_revision}:{operation_path}"])
             source_input_root = temp_root / ".test-proof-source-inputs"

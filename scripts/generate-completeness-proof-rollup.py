@@ -1212,16 +1212,15 @@ def project_registered_data_go_operation_manifest(
     if not isinstance(registry, list):
         raise ValueError("published Registry payload has an unsupported #605 source shape")
 
-    module = import_module(
-        "pinned_data_go_operation_projection", root / "scripts/generate-data-go-kr-operation-manifest.py"
-    )
-    if (root / "scripts/generate-data-go-kr-operation-manifest.py").read_bytes() != source_bytes[
-        "scripts/generate-data-go-kr-operation-manifest.py"
-    ]:
-        raise ValueError("local #605 projection code differs from the published source revision")
     with tempfile.TemporaryDirectory(prefix="completeness-605-projection-") as directory:
-        registry_path = pathlib.Path(directory) / "registry.json"
+        projection_root = pathlib.Path(directory)
+        script_path = projection_root / "scripts/generate-data-go-kr-operation-manifest.py"
+        script_path.parent.mkdir(parents=True)
+        script_path.write_bytes(source_bytes["scripts/generate-data-go-kr-operation-manifest.py"])
+        registry_path = projection_root / "data/data-go-kr.registry.json"
+        registry_path.parent.mkdir(parents=True)
         registry_path.write_bytes(registry_bytes)
+        module = import_module("pinned_data_go_operation_projection", script_path)
         previous_registry = module.REGISTRY
         module.REGISTRY = registry_path
         try:
