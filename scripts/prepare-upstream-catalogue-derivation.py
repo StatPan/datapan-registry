@@ -10,6 +10,7 @@ never changes a checkpoint, consumes detail budget, creates a PR, or publishes.
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import hashlib
 import importlib.util
@@ -90,8 +91,17 @@ def admission_for_checkpoint(
 def authenticate_parent_bundle(
     root: pathlib.Path, repository: str, default_branch: str, state_root: pathlib.Path,
     checkpoint: Mapping[str, Any], bundle_dir: pathlib.Path, runner: Any,
+    *, canonical_context: Mapping[str, Any] | None = None,
+    canonical_parent_authorization: "CanonicalParentAuthorization | None" = None,
 ) -> dict[str, Any]:
-    """Bind one terminal checkpoint to a trusted exact B attempt and archive."""
+    """Bind one terminal checkpoint to its exact B attempt and archived outputs.
+
+    A canonical-parent authorization is created only after the selected C row's
+    current payload, merged PR readback, and exact successful acknowledgement
+    have been authenticated. It can exempt only that same B generation from
+    historical-baseline membership when the complete B output is already the
+    current C payload. Other parents keep ordinary baseline validation.
+    """
     run_id, attempt, _name = runner.processor_attempt_from_locator(checkpoint)
     run = runner.processor_run_api(root, repository, run_id, attempt)
     runner.validate_trusted_processor_run(
@@ -109,12 +119,171 @@ def authenticate_parent_bundle(
     )
     composition_schema = runner.load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
     composition_helper = runner.load_canonical_update_pr(root)
+    allow_terminal_noop = False
+    authorized_candidate: Mapping[str, Any] | None = None
+    if (
+        canonical_parent_authorization is not None
+        and checkpoint.get("generation_id") == canonical_parent_authorization.generation_id
+    ):
+        if not isinstance(canonical_context, Mapping):
+            raise ValueError("canonical_parent_current_context_missing")
+        identity = canonical_context.get("identity")
+        authorized_candidate = canonical_parent_authorization.candidate
+        if not isinstance(identity, Mapping) or not isinstance(authorized_candidate, Mapping):
+            raise ValueError("canonical_parent_authorization_invalid")
+        expected_registry = (
+            identity.get("registry_path"), identity.get("registry_bytes"), identity.get("registry_sha256"),
+        )
+        candidate_registry = (
+            authorized_candidate.get("registry_path"), authorized_candidate.get("registry_bytes"),
+            authorized_candidate.get("registry_sha256"),
+        )
+        if (
+            authorized_candidate.get("generation_id") != checkpoint.get("generation_id")
+            or candidate_registry != expected_registry
+            or not isinstance(authorized_candidate.get("composition_receipt_sha256"), str)
+            or not re.fullmatch(r"[a-f0-9]{64}", authorized_candidate["composition_receipt_sha256"])
+            or canonical_parent_authorization.readback.get("canonical_producer_generation_id")
+            != checkpoint.get("generation_id")
+        ):
+            raise ValueError("canonical_parent_authorization_identity_mismatch")
+        allow_terminal_noop = True
     validated = runner.validate_processor_bundle(
         checkpoint, bundle_dir, composition_schema, composition_helper, root=root,
+        canonical_context=canonical_context,
+        allow_terminal_noop=allow_terminal_noop,
     )
     if validated.get("status") not in {"ready", "no-change"}:
         raise ValueError("derivation_parent_is_not_reviewable")
+    if allow_terminal_noop:
+        assert isinstance(canonical_context, Mapping)
+        identity = canonical_context["identity"]
+        candidate_registry = (
+            authorized_candidate.get("registry_path"), authorized_candidate.get("registry_bytes"),
+            authorized_candidate.get("registry_sha256"),
+        )
+        validated_registry = (
+            validated.get("registry_path"), validated.get("registry_bytes"),
+            validated.get("registry_sha256"),
+        )
+        current_registry = (
+            identity.get("registry_path"), identity.get("registry_bytes"), identity.get("registry_sha256"),
+        )
+        if (
+            validated_registry != candidate_registry
+            or validated_registry != current_registry
+            or validated.get("composition_receipt_sha256")
+            != authorized_candidate.get("composition_receipt_sha256")
+        ):
+            raise ValueError("canonical_parent_bundle_does_not_match_authenticated_C_output")
     return dict(validated)
+
+
+class CanonicalParentAuthorization:
+    """Proof that one B checkpoint is the exact, live-authenticated C producer."""
+
+    __slots__ = ("generation_id", "candidate", "readback")
+
+    def __init__(
+        self, *, generation_id: str, candidate: Mapping[str, Any], readback: Mapping[str, Any],
+    ) -> None:
+        self.generation_id = generation_id
+        self.candidate = candidate
+        self.readback = readback
+
+
+def authenticate_live_canonical_parent(
+    root: pathlib.Path,
+    repository: str,
+    default_branch: str,
+    checkpoint: Mapping[str, Any],
+    row: Mapping[str, Any],
+    readback: Mapping[str, Any],
+    canonical_context: Mapping[str, Any],
+    runner: Any,
+    derivation: Any,
+    *,
+    now: dt.datetime,
+) -> CanonicalParentAuthorization:
+    """Authenticate the selected C row before using it to validate parent B."""
+    candidate = row.get("candidate") if isinstance(row.get("candidate"), Mapping) else None
+    identity = canonical_context.get("identity") if isinstance(canonical_context, Mapping) else None
+    if not isinstance(candidate, Mapping) or not isinstance(identity, Mapping):
+        raise ValueError("canonical_parent_selected_row_or_context_invalid")
+    generation_id = candidate.get("generation_id")
+    candidate_repository = candidate.get("repository")
+    if not isinstance(candidate_repository, str):
+        raise ValueError("canonical_parent_selected_row_identity_mismatch")
+    if (
+        not isinstance(generation_id, str)
+        or checkpoint.get("generation_id") != generation_id
+        or candidate_repository.casefold() != repository.casefold()
+        or candidate.get("source_id") != checkpoint.get("source_id")
+        or candidate.get("scope") != checkpoint.get("source_scope")
+        or (
+            candidate.get("registry_path"), candidate.get("registry_bytes"), candidate.get("registry_sha256"),
+        ) != (
+            identity.get("registry_path"), identity.get("registry_bytes"), identity.get("registry_sha256"),
+        )
+        or readback.get("canonical_producer_generation_id") != generation_id
+        or readback.get("repository") != repository
+        or readback.get("source_id") != candidate.get("source_id")
+        or readback.get("source_scope") != candidate.get("scope")
+        or readback.get("registry_path") != candidate.get("registry_path")
+        or readback.get("registry_bytes") != candidate.get("registry_bytes")
+        or readback.get("registry_sha256") != candidate.get("registry_sha256")
+        or readback.get("manifest_sha256") != candidate.get("manifest_sha256")
+        or readback.get("pr_number") != row.get("pr", {}).get("number")
+        or readback.get("pr_branch") != row.get("ownership", {}).get("branch")
+        or readback.get("pr_head_sha") != row.get("ownership", {}).get("expected_head_sha")
+        or readback.get("pr_body_sha256") != row.get("ownership", {}).get("body_sha256")
+        or readback.get("merge_sha") != row.get("pr", {}).get("merge_commit_sha")
+        or not isinstance(candidate.get("composition_receipt_sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", candidate["composition_receipt_sha256"])
+    ):
+        raise ValueError("canonical_parent_selected_row_identity_mismatch")
+
+    number = readback.get("pr_number")
+    if isinstance(number, bool) or not isinstance(number, int) or number < 1:
+        raise ValueError("canonical_parent_PR_identity_invalid")
+    live = runner.gh_pr_readback(root, repository, number)
+    if not isinstance(live, Mapping):
+        raise ValueError("canonical_parent_PR_live_readback_mismatch")
+    merge_commit = live.get("mergeCommit") if isinstance(live, Mapping) else None
+    merge_sha = merge_commit.get("oid") if isinstance(merge_commit, Mapping) else None
+    body = live.get("body") if isinstance(live, Mapping) else None
+    if (
+        live.get("number") != number
+        or live.get("state") != "CLOSED"
+        or live.get("repository") != repository
+        or live.get("headRepository") != repository
+        or live.get("headRefName") != readback.get("pr_branch")
+        or live.get("headRefOid") != readback.get("pr_head_sha")
+        or live.get("baseRefName") != default_branch
+        or merge_sha != readback.get("merge_sha")
+        or live.get("merged") is not True
+        or not isinstance(body, str)
+        or sha256_bytes(body.encode("utf-8")) != readback.get("pr_body_sha256")
+        or body != row.get("ownership", {}).get("body")
+    ):
+        raise ValueError("canonical_parent_PR_live_readback_mismatch")
+    exact_ack_run(
+        root, repository, row,
+        runner.load_object(root / "policy/upstream-catalogue-health.json"), now, derivation,
+    )
+    import subprocess
+
+    ancestry = subprocess.run(
+        ("git", "merge-base", "--is-ancestor", str(readback.get("merge_sha") or ""), str(identity.get("main_sha") or "")),
+        cwd=root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    if ancestry.returncode != 0:
+        raise ValueError("canonical_parent_merge_is_not_in_authenticated_current_main")
+    return CanonicalParentAuthorization(
+        generation_id=generation_id,
+        candidate=copy.deepcopy(dict(candidate)),
+        readback=copy.deepcopy(dict(readback)),
+    )
 
 
 def download_parent_bundle(
@@ -278,7 +447,10 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     if not isinstance(journal, Mapping) or not isinstance(journal_ref_sha, str):
         return unavailable("canonical_journal_unavailable")
     current_head = run_git(main_root, "rev-parse", "HEAD")
-    current_identity = runner.authenticated_current_canonical_registry(main_root, current_head)
+    canonical_context = runner.authenticated_current_canonical_context(main_root, current_head)
+    current_identity = canonical_context.get("identity") if isinstance(canonical_context, Mapping) else None
+    if not isinstance(current_identity, Mapping):
+        raise ValueError("authenticated_current_canonical_context_invalid")
     active_rows = [
         row for row in journal.get("records", []) if isinstance(row, Mapping)
         and row.get("superseded_by") is None
@@ -316,6 +488,8 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         return unavailable("no_same_observation_merged_canonical_lineage")
 
     canonical_index, canonical_row, canonical_checkpoint, readback = same_observation_rows[0]
+    now = dt.datetime.now(dt.timezone.utc)
+    canonical_parent_authorization: CanonicalParentAuthorization | None = None
     if (
         stored_envelope is not None and ready_has_detail_work
         and canonical_checkpoint.get("generation_id") != target_id
@@ -350,11 +524,6 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
             raise ValueError("active_derivation_canonical_snapshot_changed") from exc
         if stored_row != canonical_row:
             raise ValueError("active_derivation_canonical_row_changed")
-        exact_ack_run(
-            main_root, repository, canonical_row,
-            load_json(main_root / "policy/upstream-catalogue-health.json"), dt.datetime.now(dt.timezone.utc), derivation,
-        )
-
         baseline = stored_envelope["composition_baseline"]
         if (
             current_identity["registry_path"] != baseline["registry_path"]
@@ -452,6 +621,11 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         except (derivation.DerivationError, OSError, ValueError, json.JSONDecodeError) as exc:
             raise ValueError("active_derivation_parent_graph_invalid") from exc
 
+        canonical_parent_authorization = authenticate_live_canonical_parent(
+            main_root, repository, args.default_branch, canonical_checkpoint,
+            canonical_row, readback, canonical_context, runner, derivation, now=now,
+        )
+
         processor = load_module(main_root / "scripts/process-upstream-catalogue-candidate.py", "active_derivation_processor")
         generation_id, inputs = processor.generation_identity(
             original["source_id"], original["source_scope"], original["original_baseline_sha256"],
@@ -473,6 +647,8 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
             download_parent_bundle(main_root, repository, args.default_branch, state_root, parent, destination, runner)
             authenticate_parent_bundle(
                 main_root, repository, args.default_branch, state_root, parent, destination, runner,
+                canonical_context=canonical_context,
+                canonical_parent_authorization=canonical_parent_authorization,
             )
             parent_bundles[parent_id] = destination
 
@@ -529,11 +705,14 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     if not has_work and target.get("output_artifact", {}).get("bundle_manifest_sha256") == canonical_checkpoint.get("output_artifact", {}).get("bundle_manifest_sha256"):
         return unavailable("no_incremental_processor_work")
 
-    now = dt.datetime.now(dt.timezone.utc)
     target_expiry = runner.parse_utc_timestamp(target["output_artifact"].get("expires_at"), "resume parent artifact expiry")
     canonical_expiry = runner.parse_utc_timestamp(canonical_checkpoint["output_artifact"].get("expires_at"), "canonical parent artifact expiry")
     if min(target_expiry, canonical_expiry) <= now:
         raise ValueError("derivation_parent_artifact_expired")
+    canonical_parent_authorization = authenticate_live_canonical_parent(
+        main_root, repository, args.default_branch, canonical_checkpoint,
+        canonical_row, readback, canonical_context, runner, derivation, now=now,
+    )
 
     # Reuse the workflow's downloaded archive when it is the selected parent;
     # otherwise fetch the exact retained artifact named by the stored parent.
@@ -549,7 +728,8 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         )
     target_bundle = authenticate_parent_bundle(
         main_root, repository, args.default_branch, state_root, target,
-        target_bundle_dir, runner,
+        target_bundle_dir, runner, canonical_context=canonical_context,
+        canonical_parent_authorization=canonical_parent_authorization,
     )
     target_evidence = load_json(target_bundle_dir / "upstream-catalogue-enrichment-evidence.json", 256 * 1024 * 1024)
     target_reference = derivation.processor_parent_reference(
@@ -572,7 +752,8 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         )
     canonical_bundle = authenticate_parent_bundle(
         main_root, repository, args.default_branch, state_root, canonical_checkpoint,
-        canonical_dir, runner,
+        canonical_dir, runner, canonical_context=canonical_context,
+        canonical_parent_authorization=canonical_parent_authorization,
     )
     canonical_evidence = load_json(canonical_dir / "upstream-catalogue-enrichment-evidence.json", 256 * 1024 * 1024)
     canonical_reference = derivation.processor_parent_reference(
@@ -580,31 +761,20 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         enrichment_evidence=canonical_evidence,
         enrichment_evidence_bytes=(canonical_dir / "upstream-catalogue-enrichment-evidence.json").read_bytes(),
     )
-    if canonical_bundle.get("registry_sha256") != readback["registry_sha256"]:
-        raise ValueError("canonical_parent_bundle_differs_from_merged_C_candidate")
-
-    readback_row = runner.gh_pr_readback(main_root, repository, int(readback["pr_number"]))
-    merge_commit = readback_row.get("mergeCommit")
-    observed_merge_sha = merge_commit.get("oid") if isinstance(merge_commit, Mapping) else None
     if (
-        readback_row.get("number") != readback["pr_number"]
-        or readback_row.get("state") != "CLOSED"
-        or readback_row.get("repository") != repository
-        or readback_row.get("headRepository") != repository
-        or readback_row.get("headRefName") != readback["pr_branch"]
-        or readback_row.get("headRefOid") != readback["pr_head_sha"]
-        or readback_row.get("baseRefName") != args.default_branch
-        or observed_merge_sha != readback["merge_sha"]
-        or readback_row.get("merged") is not True
-        or not isinstance(readback_row.get("body"), str)
-        or sha256_bytes(readback_row["body"].encode("utf-8")) != readback["pr_body_sha256"]
-        or readback_row["body"] != canonical_row.get("ownership", {}).get("body")
+        canonical_bundle.get("registry_path") != readback["registry_path"]
+        or canonical_bundle.get("registry_bytes") != readback["registry_bytes"]
+        or canonical_bundle.get("registry_sha256") != readback["registry_sha256"]
+        or canonical_bundle.get("composition_receipt_sha256")
+        != canonical_row.get("candidate", {}).get("composition_receipt_sha256")
+        or (
+            current_identity.get("registry_path"), current_identity.get("registry_bytes"),
+            current_identity.get("registry_sha256"),
+        ) != (
+            readback["registry_path"], readback["registry_bytes"], readback["registry_sha256"],
+        )
     ):
-        raise ValueError("canonical_parent_PR_live_readback_mismatch")
-    exact_ack_run(
-        main_root, repository, canonical_row,
-        load_json(main_root / "policy/upstream-catalogue-health.json"), now, derivation,
-    )
+        raise ValueError("canonical_parent_bundle_differs_from_merged_C_candidate")
 
     composition_baseline_path = main_root / ".datapan/current-canonical" / pathlib.Path(*current_identity["registry_path"].split("/"))
     baseline_bytes = composition_baseline_path.read_bytes()

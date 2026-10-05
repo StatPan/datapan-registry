@@ -728,6 +728,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         max_queue: int = 1,
         retries_per_detail: int = 2,
         fetcher: Any | None = None,
+        resolver_fetcher: Any | None = None,
         expected_worker_code: int = 0,
         expected_worker_status: str = "ready",
         expected_claim_code: int = 0,
@@ -784,11 +785,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             if expected_claim_error is not None:
                 with self.assertRaisesRegex(ValueError, expected_claim_error):
                     PROCESSOR.process(
-                        args, fetcher=worker_fetcher, sleeper=lambda _delay: None, clock=fixed_clock,
+                        args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
+                        sleeper=lambda _delay: None, clock=fixed_clock,
                     )
                 return {}
             claim_code, claim = PROCESSOR.process(
-                args, fetcher=worker_fetcher, sleeper=lambda _delay: None, clock=fixed_clock,
+                args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
+                sleeper=lambda _delay: None, clock=fixed_clock,
             )
             self.assertEqual(claim_code, expected_claim_code, json.dumps(claim, sort_keys=True))
             self.assertEqual(claim["status"], expected_claim_status)
@@ -800,11 +803,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             args.require_durable_reservation = True
             if derivation is None:
                 worker_code, worker = PROCESSOR.process(
-                    args, fetcher=worker_fetcher, sleeper=lambda _delay: None, clock=fixed_clock,
+                    args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
+                    sleeper=lambda _delay: None, clock=fixed_clock,
                 )
             else:
                 worker_code, worker = PROCESSOR.process(
-                    args, fetcher=worker_fetcher, sleeper=lambda _delay: None, clock=fixed_clock,
+                    args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
+                    sleeper=lambda _delay: None, clock=fixed_clock,
                 )
         self.assertEqual(worker_code, expected_worker_code, worker.get("outcome"))
         self.assertEqual(worker["status"], expected_worker_status)
@@ -891,7 +896,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             if len(command) == 3 and command[:2] == ("git", "show"):
                 revision = command[2]
                 if revision.endswith(":manifest.json"):
-                    data = main_manifest
+                    observed_main = revision.split(":", 1)[0]
+                    data = self.current_manifests.get(observed_main, main_manifest)
                 elif revision.endswith(":data/data-go-kr.registry.json"):
                     data = (
                         f"version https://git-lfs.github.com/spec/v1\n"
@@ -961,6 +967,9 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "head_sha": source_head, "manifest_sha256": merge_manifest_sha,
             "registry_path": DERIVATION.SAFE_PATH, "registry_bytes": len(payload),
             "registry_sha256": registry_sha,
+            "composition_receipt_sha256": hashlib.sha256(
+                (bundle / "composition-receipt.json").read_bytes(),
+            ).hexdigest(),
         })
         row["ownership"].update({
             "branch": f"automation/canonical-update/synthetic-{number}",
@@ -1014,6 +1023,10 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         source_root.mkdir(parents=True, exist_ok=True)
         for name in ("scripts", "schemas", "policy"):
             (main_root / name).symlink_to(ROOT / name, target_is_directory=True)
+        # The production snapshot loader rejects paths escaping a checkout via
+        # symlinked parents, so this test checkout needs the pinned source files
+        # as ordinary local files rather than a contracts symlink.
+        shutil.copytree(ROOT / "contracts", main_root / "contracts")
         (main_root / "data").mkdir()
         (main_root / "data/provider-index.json").write_bytes(self.helper.provider_index_path.read_bytes())
 
@@ -1220,6 +1233,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             if current_identity_override is not None
             else mock.patch.object(PROMOTION, "authenticated_current_canonical_registry", wraps=PROMOTION.authenticated_current_canonical_registry)
         )
+        canonical_context_calls: list[tuple[Any, ...]] = []
+        original_canonical_context = PROMOTION.authenticated_current_canonical_context
+
+        def record_canonical_context(*context_args: Any, **context_kwargs: Any) -> Any:
+            canonical_context_calls.append(context_args)
+            return original_canonical_context(*context_args, **context_kwargs)
+
         with (
             mock.patch.object(PREPARATION, "load_module", side_effect=lambda path, _name: module_by_filename[path.name]),
             mock.patch.object(PREPARATION, "run_git", side_effect=fake_preparation_git),
@@ -1230,6 +1250,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             )),
             mock.patch.object(PROMOTION, "load_promotion_journal_snapshot", return_value=journal_snapshot),
             current_identity_patch,
+            mock.patch.object(PROMOTION, "authenticated_current_canonical_context", side_effect=record_canonical_context),
             mock.patch.object(PROMOTION, "command", side_effect=fake_runner_command),
             mock.patch.object(PROMOTION, "processor_run_api", side_effect=lambda _root, _repo, run_id, _attempt: run_by_id[run_id]),
             mock.patch.object(PROMOTION, "processor_artifact_api", side_effect=lambda _root, _repo, _run_id, artifact_id: metadata_by_id.get(artifact_id)),
@@ -1253,6 +1274,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             outputs = dict(line.split("=", 1) for line in args.github_output.read_text(encoding="utf-8").splitlines())
             self.assertEqual(outputs["derivation_enabled"], str(plan.get("eligible") is True).lower())
             if plan.get("eligible") is True:
+                self.assertEqual(len(canonical_context_calls), 1)
                 self.assertEqual(outputs["derivation_path"], plan["derivation_path"])
                 self.assertEqual(outputs["generation_id"], plan["generation_id"])
         self.assertEqual((self.helper.state_dir / "sources/data_go_kr/index.json").read_bytes(), original_index)
@@ -1404,6 +1426,9 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             mock.patch.object(PROMOTION, "download_processor_artifact", return_value=self.output_by_generation[checkpoint["generation_id"]]),
             mock.patch.object(PROMOTION, "verify_processor_input_compatibility", return_value=None),
             mock.patch.object(PROMOTION, "authenticated_current_canonical_registry", return_value=c["baseline"]),
+            mock.patch.object(PROMOTION, "authenticated_current_canonical_context", return_value={
+                "identity": c["baseline"], "rows": json.loads(c["payload"]),
+            }),
             mock.patch.object(PROMOTION, "gh_pr_readback", side_effect=read_pr),
         ):
             selected, blocked = PROMOTION.select_first_eligible_processor_bundle(
@@ -1585,6 +1610,9 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "processor_artifact_id": b2["output_artifact"]["artifact_id"],
             "source_refresh_predecessor": None,
             "source_refresh_target_main_sha": None,
+            "_authenticated_canonical_context": {
+                "identity": c2["baseline"], "rows": json.loads(c2["payload"]),
+            },
         })()
 
         def no_extra_candidate_git_command(argv, _root, **_kwargs):
@@ -2616,11 +2644,15 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         blocked_cases = (
             ("journal-unavailable", journal, {"journal_unavailable": True}, "canonical_journal_unavailable"),
             ("canonical-row-missing", unrelated_journal, {}, "no_same_observation_merged_canonical_lineage"),
-            ("unrelated-current-canonical", journal, {"current_identity_override": unrelated_identity}, "no_same_observation_merged_canonical_lineage"),
+            ("unrelated-current-canonical", journal, {"current_identity_override": unrelated_identity}, "authenticated current-canonical bytes changed after manifest verification"),
         )
         for label, current_journal, options, reason in blocked_cases:
+            expected_reason = (
+                reason if label == "unrelated-current-canonical"
+                else f"active_derivation_prerequisite_unavailable:{reason}"
+            )
             with self.subTest(case=label), self.assertRaisesRegex(
-                ValueError, rf"active_derivation_prerequisite_unavailable:{reason}",
+                ValueError, expected_reason,
             ):
                 self._prepare_authenticated_plan(
                     b1, current_journal, c, label=f"active-prerequisite-{label}", **options,

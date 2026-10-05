@@ -576,6 +576,134 @@ class RequestReservationAccountingTest(unittest.TestCase):
         finally:
             self.fixture.state_dir = original_state_dir
 
+    def test_seoul_declaration_state_branch_cas_conflict_keeps_both_reserved_calls_spent(self) -> None:
+        subject = json.loads(
+            (candidate_tests.ROOT / "data/data-go-kr.registry.json").read_text(encoding="utf-8"),
+        )
+        candidate = next(row for row in subject if row["id"] == "15056854")
+        now = "2026-10-06T10:00:00Z"
+        self.fixture.now = now
+        self.fixture.write_real_composer_inputs([], [candidate], now)
+        self.fixture.provider_index_path.write_bytes(
+            (candidate_tests.ROOT / "data/provider-index.json").read_bytes(),
+        )
+        declaration = MODULE.SEOUL_DECLARATION
+        detail_id = candidate["source"]["raw"]["id"]
+        page_body = (
+            "<button type=\"button\" onclick=\"fn_goUrlLink('15056854')\">Open</button>"
+            "<input type=\"hidden\" id=\"publicDataPk\" value=\"15056854\">"
+            f"<input type=\"hidden\" id=\"publicDataDetailPk\" value=\"{detail_id}\">"
+        ).encode("utf-8")
+        resolver_body = json.dumps({
+            "publicDataDetailPk": detail_id,
+            "linkUrl": declaration.DECLARATION["subject"]["source_metadata_target"],
+            "status": True,
+        }, separators=(",", ":")).encode("utf-8")
+
+        branch = workflow_tests.StateBranchWorkflowFixture("runTest")
+        branch.setUp()
+        self.addCleanup(branch.tearDown)
+        original_state_dir = self.fixture.state_dir
+        self.fixture.state_dir = branch.state / workflow_tests.STATE_ROOT
+        try:
+            old_sha, _ = branch.prepare()
+            claim_args = self.fixture.args(run_id="701", **{
+                "--claim-only": None,
+                "--max-attempts": 2,
+                "--max-queue": 1,
+                "--retries-per-detail": 1,
+            })
+            claim_code, claim = MODULE.process(
+                claim_args,
+                fetcher=lambda *_: self.fail("claim must reserve without a page request"),
+                resolver_fetcher=lambda *_: self.fail("claim must reserve without resolver I/O"),
+            )
+            self.assertEqual(claim_code, 0, claim)
+            self.assertEqual(claim["attempts_by_id"], {"15056854": 2})
+            self.assertEqual(claim["request_reservation"]["reserved_attempts"], 2)
+            claim_push = branch.push(branch.state, old_sha)
+            claim_sha = claim_push["new_sha"]
+
+            workflow_tests.git(branch.root, "clone", str(branch.remote), str(branch.competitor))
+            workflow_tests.git(branch.competitor, "checkout", "--track", "-b", workflow_tests.BRANCH,
+                               f"origin/{workflow_tests.BRANCH}")
+            workflow_tests.git(branch.competitor, "config", "user.name", "fixture")
+            workflow_tests.git(branch.competitor, "config", "user.email", "fixture@example.test")
+            unrelated = branch.competitor / workflow_tests.STATE_ROOT / "quarantine" / f"{'f' * 64}.json"
+            unrelated.parent.mkdir(parents=True)
+            unrelated.write_text('{"concurrent":true}\n', encoding="utf-8")
+            workflow_tests.git(branch.competitor, "add", workflow_tests.STATE_ROOT)
+            workflow_tests.git(branch.competitor, "commit", "-m", "concurrent state writer")
+            workflow_tests.git(branch.competitor, "push", "origin", f"HEAD:refs/heads/{workflow_tests.BRANCH}")
+            winner_sha = workflow_tests.git(branch.competitor, "rev-parse", "HEAD").stdout.strip()
+
+            physical_calls: list[str] = []
+
+            def fetch_page(url: str, _timeout: float):
+                self.assertEqual(url, declaration.PAGE_URL)
+                physical_calls.append("page")
+                return MODULE.DetailPageObservation(
+                    body=page_body.decode("utf-8"), page_url=url, effective_url=url,
+                    page_sha256=MODULE.sha256_bytes(page_body), observed_at=now, page_bytes=page_body,
+                )
+
+            def fetch_resolver(url: str, _timeout: float):
+                self.assertEqual(url, declaration.RESOLVER_URL)
+                physical_calls.append("resolver")
+                return MODULE.LinkResolverObservation(
+                    body=resolver_body, request_url=url, effective_url=url, observed_at=now,
+                )
+
+            worker_args = self.fixture.args(run_id="701", **{
+                "--max-attempts": 2,
+                "--max-queue": 1,
+                "--retries-per-detail": 1,
+                "--require-durable-reservation": None,
+            })
+            worker_code, worker = MODULE.process(
+                worker_args, fetcher=fetch_page, resolver_fetcher=fetch_resolver, sleeper=lambda _delay: None,
+            )
+            self.assertEqual(worker_code, 0, worker)
+            self.assertEqual(physical_calls, ["page", "resolver"])
+            self.assertEqual(worker["request_reservation"]["attempts_made"], 2)
+            self.assertEqual(worker["attempts_consumed"], 2)
+
+            stale_push, _ = branch.run_state(
+                "commit-push", "--worktree", str(branch.state), "--branch", workflow_tests.BRANCH,
+                "--repository", workflow_tests.REPOSITORY, "--expected-old-sha", claim_sha,
+                "--message", "stale Seoul worker result", ok=False,
+            )
+            self.assertNotEqual(stale_push.returncode, 0)
+            self.assertIn("compare_and_swap_conflict", stale_push.stderr)
+            remote_sha = workflow_tests.git(
+                branch.competitor, "ls-remote", "origin", f"refs/heads/{workflow_tests.BRANCH}",
+            ).stdout.split()[0]
+            self.assertEqual(remote_sha, winner_sha)
+
+            replay_state = branch.root / "replay-state"
+            fresh_sha, _ = branch.prepare(replay_state)
+            self.assertEqual(fresh_sha, winner_sha)
+            self.fixture.state_dir = replay_state / workflow_tests.STATE_ROOT
+            self.fixture.now = "2026-10-06T11:00:00Z"
+            replay_args = self.fixture.args(run_id="702", **{
+                "--claim-only": None,
+                "--max-attempts": 2,
+                "--max-queue": 1,
+                "--retries-per-detail": 1,
+            })
+            replay_code, replay = MODULE.process(
+                replay_args,
+                fetcher=lambda *_: self.fail("replayed declaration must not refetch the page"),
+                resolver_fetcher=lambda *_: self.fail("replayed declaration must not refetch the resolver"),
+            )
+            self.assertEqual(replay_code, 0, replay)
+            self.assertEqual(replay["attempts_by_id"], {"15056854": 2})
+            self.assertEqual(replay["attempts_consumed"], 2)
+            self.assertEqual(replay["request_reservation"]["reserved_attempts"], 0)
+            self.assertEqual(replay["request_reservation"]["records"], [])
+        finally:
+            self.fixture.state_dir = original_state_dir
+
 
 if __name__ == "__main__":
     unittest.main()

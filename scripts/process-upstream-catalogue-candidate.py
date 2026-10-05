@@ -8,6 +8,7 @@ as separate digest-bound evidence for the reviewed composer interface.
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import html
 import hashlib
@@ -144,9 +145,17 @@ def file_sha256(path: pathlib.Path) -> str:
 def generator_revision() -> str:
     source = pathlib.Path(__file__)
     handoff = source.with_name("upstream_catalogue_handoff.py")
+    declaration_helper = source.with_name("seoul_oa109_operation_declaration.py")
+    snapshot_generator = source.with_name("generate-seoul-oa109-subject-snapshot.py")
+    declaration = source.parent.parent / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+    historical_snapshot = source.parent.parent / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
     return sha256_bytes(canonical_json({
         "processor_script_sha256": file_sha256(source),
         "collector_handoff_helper_sha256": file_sha256(handoff),
+        "seoul_operation_declaration_helper_sha256": file_sha256(declaration_helper),
+        "seoul_historical_subject_snapshot_generator_sha256": file_sha256(snapshot_generator),
+        "seoul_operation_declaration_sha256": file_sha256(declaration),
+        "seoul_historical_subject_snapshot_sha256": file_sha256(historical_snapshot),
     }))
 
 
@@ -202,7 +211,18 @@ def load_detail_helpers() -> Any:
     return module
 
 
+def load_seoul_declaration_helper() -> Any:
+    helper_path = pathlib.Path(__file__).with_name("seoul_oa109_operation_declaration.py")
+    spec = importlib.util.spec_from_file_location("seoul_oa109_operation_declaration", helper_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("cannot load pinned Seoul operation declaration")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 DETAIL_HELPERS = load_detail_helpers()
+SEOUL_DECLARATION = load_seoul_declaration_helper()
 
 
 def load_registry(path: pathlib.Path) -> list[dict[str, Any]]:
@@ -612,7 +632,9 @@ def reserve_requests(
     elif queue:
         checkpoint["detail_queue_cursor"] = (cursor + cursor_advance) % len(queue)
     else:
-        checkpoint["detail_queue_cursor"] = 0
+        # An empty queue has no position to advance over. Preserve the source
+        # cursor so a cached/local-only pass cannot reset fairness state.
+        checkpoint["detail_queue_cursor"] = cursor
     reservation = {
         "owner_run_id": processor_run_id,
         "generation_id": checkpoint["generation_id"],
@@ -980,6 +1002,68 @@ def verify_worker_scope(
     return True, "", len(pending | quarantined)
 
 
+def materialize_cached_seoul_declaration(
+    row: dict[str, Any], outcome: dict[str, Any], *, now: dt.datetime, registered_hosts: set[str],
+) -> dict[str, Any] | None:
+    """Resolve a pinned declaration locally from a verified cached resolver chain.
+
+    This path spends no detail-request budget. It only upgrades the exact
+    previously quarantined OA-109 metadata outcome, and only while the
+    digest-bound page/resolver observations remain within the ordinary detail
+    freshness window. It does not turn an absent guide into a positive claim.
+    """
+    identity = str(outcome.get("api_key", {}).get("id") or "")
+    if identity != SEOUL_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]:
+        return None
+    if guide_fingerprint(row) is not None:
+        return None
+    metadata = outcome.get("link_metadata")
+    if not isinstance(metadata, dict):
+        return None
+    try:
+        SEOUL_DECLARATION.validate_subject_row(row)
+        DETAIL_HELPERS.validate_link_metadata(metadata, identity, registered_hosts)
+        page = metadata["page"]
+        observed_at = parse_timestamp(str(page["observed_at"]))
+        if observed_at > now + dt.timedelta(minutes=5) or now - observed_at >= dt.timedelta(days=DETAIL_OBSERVATION_TTL_DAYS):
+            return None
+        operation = SEOUL_DECLARATION.build_operation(row, None)
+        provenance = SEOUL_DECLARATION.build_provenance(
+            row,
+            source_sha256=str(outcome["source_sha256"]),
+            guide_sha256=outcome.get("guide_sha256"),
+            observed_guide_url=None,
+            observed_guide_url_sha256=None,
+            link_metadata=metadata,
+            operation=operation,
+        )
+        operations = [copy.deepcopy(item) for item in row.get("operations", [])]
+        operations.append(operation)
+        source_provenance = {
+            "system": "data.go.kr",
+            "page_url": page["url"],
+            "effective_url": page["effective_url"],
+            "page_sha256": page["sha256"],
+            "observed_at": page["observed_at"],
+        }
+        record = {
+            "api_key": {"provider": "data.go.kr", "id": identity},
+            "status": "enriched",
+            "source_sha256": outcome["source_sha256"],
+            "guide_sha256": outcome.get("guide_sha256"),
+            "observed_guide_url": None,
+            "observed_guide_url_sha256": None,
+            "operations": operations,
+            "operations_sha256": sha256_bytes(canonical_json(operations)),
+            "source_provenance": source_provenance,
+            "declaration_provenance": provenance,
+        }
+        SEOUL_DECLARATION.validate_enriched_record(row, record)
+        return record
+    except (AttributeError, KeyError, TypeError, ValueError) as exc:
+        raise ValueError("resume_seoul_cached_declaration_binding_invalid") from exc
+
+
 def validated_resume_records(
     path: pathlib.Path | None,
     *,
@@ -1052,6 +1136,7 @@ def validated_resume_records(
         or not isinstance(evidence.get("records"), list)
     ):
         raise ValueError("resume_enrichment_binding_mismatch")
+    locally_materialized_declarations: dict[str, dict[str, Any]] = {}
     if "worker_outcomes" in evidence:
         outcomes = evidence["worker_outcomes"]
         if not isinstance(outcomes, list):
@@ -1114,6 +1199,16 @@ def validated_resume_records(
             ):
                 raise ValueError("resume_worker_outcome_binding_mismatch")
             outcome_ids.add(identity)
+            if (
+                isinstance(diagnostic, dict)
+                and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
+                and isinstance(outcome.get("link_metadata"), dict)
+            ):
+                materialized = materialize_cached_seoul_declaration(
+                    row, outcome, now=now, registered_hosts=registered_hosts,
+                )
+                if materialized is not None:
+                    locally_materialized_declarations[identity] = materialized
     owner_inputs = owner.get("generation_inputs", {}) if isinstance(owner, dict) else {}
     expected_extractor_revision = (
         owner_inputs.get("extractor_revision") if allow_parent_extractor_revision
@@ -1132,7 +1227,11 @@ def validated_resume_records(
     }
     resumed: dict[str, dict[str, Any]] = {}
     for record in evidence["records"]:
-        if not isinstance(record, dict) or set(record) != expected_record_fields or record.get("status") != "enriched":
+        if (
+            not isinstance(record, dict)
+            or set(record) not in (expected_record_fields, expected_record_fields | {"declaration_provenance"})
+            or record.get("status") != "enriched"
+        ):
             raise ValueError("resume_enrichment_record_invalid")
         api_key = record.get("api_key")
         if not isinstance(api_key, dict) or api_key.get("provider") != "data.go.kr":
@@ -1174,7 +1273,32 @@ def validated_resume_records(
             or observed_guide_digest != sha256_bytes(observed_guide.encode("utf-8"))
         ):
             raise ValueError("resume_enrichment_guide_binding_mismatch")
-        for operation in operations:
+        declaration_provenance = record.get("declaration_provenance")
+        has_declared_operation = any(
+            isinstance(operation, dict)
+            and isinstance(operation.get("source"), dict)
+            and isinstance(operation["source"].get("raw"), dict)
+            and operation["source"]["raw"].get("operation_declaration_id") == SEOUL_DECLARATION.DECLARATION_ID
+            for operation in operations
+        )
+        if declaration_provenance is not None or has_declared_operation:
+            if declaration_provenance is None:
+                raise ValueError("resume_seoul_declaration_provenance_missing")
+            try:
+                SEOUL_DECLARATION.validate_enriched_record(row, record)
+                link_metadata = declaration_provenance.get("page_resolver")
+                DETAIL_HELPERS.validate_link_metadata(link_metadata, identity, registered_hosts)
+            except (AttributeError, KeyError, TypeError, ValueError) as exc:
+                raise ValueError("resume_seoul_declaration_binding_invalid") from exc
+        historical_operations = row.get("operations", [])
+        operations_to_validate = operations
+        if declaration_provenance is not None:
+            # A pinned declaration is additive: its three historical metadata
+            # links retain their original catalogue provenance.  The exact
+            # prefix was already verified by validate_enriched_record, so only
+            # the new operation is bound to this observed page/resolver pair.
+            operations_to_validate = operations[len(historical_operations):]
+        for operation in operations_to_validate:
             source = operation.get("source") if isinstance(operation, dict) else None
             raw = source.get("raw") if isinstance(source, dict) else None
             endpoint = str(operation.get("endpoint") or "") if isinstance(operation, dict) else ""
@@ -1188,7 +1312,15 @@ def validated_resume_records(
                 or (observed_guide is not None and raw.get("guide_url") != observed_guide)
             ):
                 raise ValueError("resume_enrichment_operation_binding_mismatch")
+            if raw.get("operation_declaration_id") is not None:
+                try:
+                    SEOUL_DECLARATION.validate_declared_operation(row, operation)
+                except (TypeError, ValueError) as exc:
+                    raise ValueError("resume_seoul_declared_operation_invalid") from exc
         resumed[identity] = record
+    for identity, record in locally_materialized_declarations.items():
+        if identity not in resumed:
+            resumed[identity] = record
     return resumed
 
 
@@ -2847,6 +2979,7 @@ def process(
         row_operations: list[dict[str, Any]] = []
         failure_diagnostic = retained_failure_diagnostics.get(identity)
         source_provenance: dict[str, Any] | None = None
+        declaration_provenance: dict[str, Any] | None = None
         link_metadata: dict[str, Any] | None = None
         observed_guide: str | None = None
         observation: DetailPageObservation | None = None
@@ -2921,6 +3054,7 @@ def process(
                     failure_context = "page_parser"
                     current_template = extract_current_template_dataset_id(body, identity)
                     if current_template is not None:
+                        observed_guide = observed_guide_url(body, expected_page_url)
                         continue
 
                     # The old anchor extractor remains the only path for the
@@ -3049,11 +3183,55 @@ def process(
                 link_metadata = DETAIL_HELPERS.validate_link_metadata(
                     candidate_link_metadata, identity, registered_hosts,
                 )
-                row_status = "quarantined"
-                failure_diagnostic = {
-                    "code": "resolved_link_operation_contract_unproven",
-                    "phase": "resolver",
-                }
+                try:
+                    if identity != SEOUL_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]:
+                        raise SEOUL_DECLARATION.DeclarationError("no_pinned_operation_declaration_for_subject")
+                    declared_operation = SEOUL_DECLARATION.build_operation(row, observed_guide)
+                    declaration_provenance = SEOUL_DECLARATION.build_provenance(
+                        row,
+                        source_sha256=queue_row["source_sha256"],
+                        guide_sha256=queue_row["guide_sha256"],
+                        observed_guide_url=observed_guide,
+                        observed_guide_url_sha256=(
+                            sha256_bytes(observed_guide.encode("utf-8")) if observed_guide else None
+                        ),
+                        link_metadata=link_metadata,
+                        operation=declared_operation,
+                    )
+                    row_operations = [copy.deepcopy(item) for item in row.get("operations", [])]
+                    row_operations.append(declared_operation)
+                    source_provenance = {
+                        "system": "data.go.kr",
+                        "page_url": observation.page_url,
+                        "effective_url": observation.effective_url,
+                        "page_sha256": observation.page_sha256,
+                        "observed_at": observation.observed_at,
+                    }
+                    declaration_record = {
+                        "api_key": {"provider": "data.go.kr", "id": identity},
+                        "source_sha256": queue_row["source_sha256"],
+                        "guide_sha256": queue_row["guide_sha256"],
+                        "observed_guide_url": observed_guide,
+                        "observed_guide_url_sha256": (
+                            sha256_bytes(observed_guide.encode("utf-8")) if observed_guide else None
+                        ),
+                        "operations": row_operations,
+                        "operations_sha256": sha256_bytes(canonical_json(row_operations)),
+                        "status": "enriched",
+                        "source_provenance": source_provenance,
+                        "declaration_provenance": declaration_provenance,
+                    }
+                    SEOUL_DECLARATION.validate_enriched_record(row, declaration_record)
+                    failure_diagnostic = None
+                    row_status = "enriched"
+                except (SEOUL_DECLARATION.DeclarationError, KeyError, TypeError, ValueError):
+                    row_operations = []
+                    declaration_provenance = None
+                    row_status = "quarantined"
+                    failure_diagnostic = {
+                        "code": "resolved_link_operation_contract_unproven",
+                        "phase": "resolver",
+                    }
                 break
             except Exception as exc:
                 diagnostic = classify_detail_exception(exc)
@@ -3102,7 +3280,7 @@ def process(
             worker_record["link_metadata"] = link_metadata
         worker_records.append(worker_record)
         if row_status == "enriched":
-            enriched_records.append({
+            enriched_record = {
                 "api_key": {"provider": "data.go.kr", "id": identity},
                 "status": "enriched",
                 "source_sha256": fingerprint,
@@ -3112,7 +3290,10 @@ def process(
                 "operations": row_operations,
                 "operations_sha256": sha256_bytes(canonical_json(row_operations)),
                 "source_provenance": source_provenance,
-            })
+            }
+            if declaration_provenance is not None:
+                enriched_record["declaration_provenance"] = declaration_provenance
+            enriched_records.append(enriched_record)
         checkpoint["detail_records"] = worker_records[-128:]
         checkpoint["last_heartbeat_at"] = timestamp(now_fn())
         checkpoint["last_progress_at"] = timestamp(now_fn())

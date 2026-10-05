@@ -293,6 +293,7 @@ class PromotionRepo:
         self.current_candidate_receipt: dict[str, Any] | None = None
         self.canonical_parent_receipt: dict[str, Any] | None = None
         self.canonical_parent_pr_number: int | None = None
+        self.merged_pr_receipts: dict[int, dict[str, Any]] = {}
         self.issue_rows: list[dict[str, Any]] = []
         self.pr_number = 9901
         self.pr_create_count = 0
@@ -316,7 +317,10 @@ class PromotionRepo:
             shutil.copy2(source, target)
 
     def _copy_fixture_tree(self) -> None:
-        for relative in ("scripts", "schemas", "policy", ".gitattributes", ".gitignore", "manifest.json"):
+        for relative in (
+            "scripts", "schemas", "policy", "contracts/provider-operation-declarations",
+            ".gitattributes", ".gitignore", "manifest.json",
+        ):
             self._copy_path(relative)
         for relative in (
             ".github/workflows/upstream-catalogue-process.yml",
@@ -419,8 +423,10 @@ class PromotionRepo:
             return subprocess.CompletedProcess(argv, 0, url + "\n", "")
         if values[:3] == ("gh", "pr", "create"):
             self.pr_create_count += 1
-            if self.pr_create_count > 1:
-                self.pr_number = 9900 + self.pr_create_count
+            # The synthetic canonical parent already owns PR 9901. Each new
+            # candidate gets a distinct number so historical merged API
+            # readbacks remain immutable across later candidate delivery.
+            self.pr_number += 1
             self.pr_created = True
             return subprocess.CompletedProcess(argv, 0, "", "")
         if values[:2] == ("gh", "api"):
@@ -455,6 +461,19 @@ class PromotionRepo:
         }]
 
     def pr_readback(self, _root: pathlib.Path, _repository: str, number: int) -> dict[str, Any]:
+        historical = self.merged_pr_receipts.get(number)
+        if historical is not None:
+            candidate = historical["candidate"]
+            ownership = historical["ownership"]
+            pr = historical["pr"]
+            return {
+                "number": number,
+                "url": f"https://github.com/StatPan/datapan-registry/pull/{number}",
+                "state": "CLOSED", "merged": True, "repository": "StatPan/datapan-registry",
+                "headRepository": "StatPan/datapan-registry", "headRefName": ownership["branch"],
+                "headRefOid": candidate["head_sha"], "baseRefName": "main",
+                "mergeCommit": {"oid": pr["merge_commit_sha"]}, "body": ownership["body"],
+            }
         if self.canonical_parent_receipt is not None and number == self.canonical_parent_pr_number:
             row = self.canonical_parent_receipt
             candidate = row["candidate"]
@@ -481,6 +500,10 @@ class PromotionRepo:
             "mergeCommit": None, "body": ownership["body"],
         }
 
+    def remember_merged_pr(self, receipt: dict[str, Any]) -> None:
+        number = int(receipt["pr"]["number"])
+        self.merged_pr_receipts[number] = copy.deepcopy(receipt)
+
 
 class SameObservationCDeliveryTests(unittest.TestCase):
     """Run the ordinary derived B → C delivery/readback path with local boundaries."""
@@ -494,7 +517,14 @@ class SameObservationCDeliveryTests(unittest.TestCase):
             # Candidate promotion must validate a nonempty canonical baseline.
             # Retain one already-enriched LINK baseline row so it does not
             # consume a detail slot and only the synthetic identities queue.
-            candidate_rows = read_json(flow.helper.candidate_path)
+            synthetic_rows = read_json(flow.helper.candidate_path)
+            synthetic_rows = [
+                {**row, "id": f"9000000{index + 1}"}
+                for index, row in enumerate(synthetic_rows[:3])
+            ]
+            declaration = PROCESSOR.SEOUL_DECLARATION
+            pinned_subject = declaration.load_historical_subject_snapshot(ROOT)["subject_row"]
+            seoul_row = copy.deepcopy(pinned_subject)
             baseline_row = copy.deepcopy(flow.helper.old_link)
             baseline_row["id"] = "0"
             baseline_row["priority"] = "medium"
@@ -504,19 +534,64 @@ class SameObservationCDeliveryTests(unittest.TestCase):
                 "api_id": "0", "meta_url": "https://www.data.go.kr/data/0/openapi.do",
             })
             flow.helper.write_real_composer_inputs(
-                [baseline_row], [baseline_row, *candidate_rows], flow.now_text,
+                [baseline_row], [baseline_row, seoul_row, *synthetic_rows], flow.now_text,
             )
             flow.admission_path, flow.archive_path = flow._write_admission()
+
+            resolver_calls: list[str] = []
+            detail_id = str(seoul_row["source"]["raw"]["id"])
+            page_body = (
+                "<button type=\"button\" onclick=\"fn_goUrlLink('15056854')\">Open</button>"
+                "<input type=\"hidden\" id=\"publicDataPk\" value=\"15056854\">"
+                f"<input type=\"hidden\" id=\"publicDataDetailPk\" value=\"{detail_id}\">"
+            ).encode("utf-8")
+            resolver_body = json.dumps({
+                "publicDataDetailPk": detail_id,
+                "linkUrl": declaration.DECLARATION["subject"]["source_metadata_target"],
+                "status": True,
+            }, separators=(",", ":")).encode("utf-8")
+
+            def fetch_page(url: str, timeout: float) -> Any:
+                if url != declaration.PAGE_URL:
+                    return flow._fetch(url, timeout)
+                flow.detail_calls.append(url)
+                return PROCESSOR.DetailPageObservation(
+                    body=page_body.decode("utf-8"), page_bytes=page_body,
+                    page_url=url, effective_url=url,
+                    page_sha256=PROCESSOR.sha256_bytes(page_body), observed_at=flow.now_text,
+                )
+
+            def fetch_resolver(url: str, _timeout: float) -> Any:
+                resolver_calls.append(url)
+                if url != declaration.RESOLVER_URL:
+                    raise AssertionError(f"unexpected Seoul resolver request: {url}")
+                return PROCESSOR.LinkResolverObservation(
+                    body=resolver_body, request_url=url, effective_url=url, observed_at=flow.now_text,
+                )
 
             # Keep C0 intentionally behind the observation: B0 accepts the
             # first queued guide, then derived B2 accepts the next one. Its
             # real C delivery advances main; B3 continues from that exact C1.
-            b0 = flow._run_claim_and_worker(1, max_queue=1)
+            b0 = flow._run_claim_and_worker(
+                1, max_queue=1, max_attempts=2,
+                fetcher=fetch_page, resolver_fetcher=fetch_resolver,
+            )
+            b0_evidence = read_json(
+                flow.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json",
+            )
+            seoul_enrichment = next(
+                row for row in b0_evidence["records"]
+                if row.get("api_key", {}).get("id") == "15056854"
+            )
+            self.assertEqual(len(seoul_enrichment["operations"]), 4)
+            self.assertEqual(seoul_enrichment["declaration_provenance"]["source_review_record"]["review_decision_recorded_at"], "2026-10-05T03:14:39Z")
+            self.assertEqual(len(resolver_calls), 1)
             journal0, c0 = flow._synthetic_c_journal(b0, 1)
             repo = PromotionRepo(flow, c0["payload"])
             repo.synthetic_merge_sha = c0["readback"]["merge_sha"]
             repo.canonical_parent_receipt = copy.deepcopy(journal0["records"][0])
             repo.canonical_parent_pr_number = int(journal0["records"][0]["pr"]["number"])
+            repo.remember_merged_pr(journal0["records"][0])
             c0["baseline"]["main_sha"] = repo.current_main
             c0["baseline"]["manifest_sha256"] = hashlib.sha256(repo.initial_manifest).hexdigest()
             flow.current_manifests[repo.current_main] = repo.initial_manifest
@@ -598,6 +673,7 @@ class SameObservationCDeliveryTests(unittest.TestCase):
             state["sha"] = hashlib.sha1(DERIVATION.canonical_json(journal1)).hexdigest()
             repo.canonical_parent_receipt = copy.deepcopy(c1_receipt)
             repo.canonical_parent_pr_number = int(c1_receipt["pr"]["number"])
+            repo.remember_merged_pr(c1_receipt)
             repo.pr_created = False  # The exact B2 PR is merged, so no open row remains.
             repo.update_canonical_baseline(
                 (flow.output_by_generation[b2["generation_id"]] / "composed-candidate.registry.json").read_bytes(),
@@ -624,6 +700,17 @@ class SameObservationCDeliveryTests(unittest.TestCase):
             plan3 = flow._prepare_authenticated_plan(b2, journal1, c1, label="c-delivery-b3")
             self.assertTrue(plan3["eligible"], plan3)
             env3 = FLOW_TESTS.read_json(pathlib.Path(plan3["derivation_path"]))
+            self.assertNotEqual(
+                env3["original_observation"]["original_baseline_sha256"],
+                env3["composition_baseline"]["registry_sha256"],
+                "the B lineage must preserve A's baseline separately from the effective post-C baseline",
+            )
+            wrong_selected_parent = copy.deepcopy(journal1)
+            wrong_selected_parent["records"][1]["candidate"]["generation_id"] = b0["generation_id"]
+            with self.assertRaisesRegex(ValueError, "canonical_parent_bundle_does_not_match_authenticated_C_output"):
+                flow._prepare_authenticated_plan(
+                    b0, wrong_selected_parent, c1, label="wrong-canonical-parent-cannot-use-terminal-proof",
+                )
             b3 = flow._run_claim_and_worker(
                 3, derivation=env3,
                 composition_baseline=pathlib.Path(plan3["composition_baseline_path"]),
@@ -718,6 +805,7 @@ class SameObservationCDeliveryTests(unittest.TestCase):
             state["sha"] = hashlib.sha1(DERIVATION.canonical_json(journal2)).hexdigest()
             repo.canonical_parent_receipt = copy.deepcopy(c2_receipt)
             repo.canonical_parent_pr_number = int(c2_receipt["pr"]["number"])
+            repo.remember_merged_pr(c2_receipt)
             repo.current_candidate_receipt = copy.deepcopy(c2_receipt)
             repo.pr_created = False
             b3_payload = (
@@ -809,7 +897,8 @@ class SameObservationCDeliveryTests(unittest.TestCase):
             ]
             self.assertEqual(len(selected_detail_ids), 3)
             self.assertEqual(len(set(selected_detail_ids)), 3)
-            self.assertCountEqual(selected_detail_ids, ["1", "2", "3"])
+            self.assertCountEqual(selected_detail_ids, ["15056854", "90000001", "90000002"])
+            self.assertEqual(len(resolver_calls), 1, "the derivative reused the admitted Seoul declaration without a new resolver call")
         finally:
             if repo is not None:
                 repo.close()
@@ -902,7 +991,11 @@ class SameObservationCDeliveryTests(unittest.TestCase):
                 return repo.pr_readback(repo.root, "StatPan/datapan-registry", int(argv[2]))
             raise AssertionError(f"unexpected external GitHub read in C adapter: {argv!r}")
 
-        selected_row = state["journal"]["records"][c["readback"]["journal_record_index"]]
+        derivation = checkpoint["generation_inputs"].get("same_observation_derivation")
+        canonical_readback = derivation.get("canonical_parent_readback") if isinstance(derivation, dict) else None
+        if not isinstance(canonical_readback, dict):
+            raise AssertionError("derived C fixture has no canonical-parent readback reference")
+        selected_row = state["journal"]["records"][canonical_readback["journal_record_index"]]
         merged_ack = next(
             row for row in selected_row["acknowledgements"] if row.get("status") == "merged"
         )
@@ -913,6 +1006,12 @@ class SameObservationCDeliveryTests(unittest.TestCase):
         ack_completed_at = merged_ack["observed_at"]
         ack_source_sha = merged_ack["source_sha"]
         original_subprocess_run = subprocess.run
+        original_canonical_context = PROMOTION.authenticated_current_canonical_context
+        canonical_context_calls: list[tuple[Any, ...]] = []
+
+        def authenticated_context(*context_args: Any, **context_kwargs: Any) -> Any:
+            canonical_context_calls.append(context_args)
+            return original_canonical_context(*context_args, **context_kwargs)
 
         def github_health_transport(argv: Any, *args: Any, **kwargs: Any) -> subprocess.CompletedProcess[str]:
             values = tuple(str(part) for part in argv)
@@ -942,7 +1041,10 @@ class SameObservationCDeliveryTests(unittest.TestCase):
                         }],
                     }
                 else:
-                    raise AssertionError(f"unexpected strict C Health API request: {endpoint}")
+                    raise AssertionError(
+                        f"unexpected strict C Health API request: {endpoint}; "
+                        f"expected run={ack_run_id}/attempts/{ack_attempt}"
+                    )
                 return subprocess.CompletedProcess(argv, 0, json.dumps(value), "")
             return original_subprocess_run(argv, *args, **kwargs)
 
@@ -954,6 +1056,10 @@ class SameObservationCDeliveryTests(unittest.TestCase):
             mock.patch.object(PROMOTION, "command", side_effect=repo.command),
             mock.patch.object(PROMOTION, "load_module", side_effect=load_module),
             mock.patch.object(PROMOTION, "load_canonical_update_pr", return_value=runner["helper"]),
+            mock.patch.object(
+                PROMOTION, "authenticated_current_canonical_context",
+                side_effect=authenticated_context,
+            ),
             mock.patch.object(PROMOTION, "load_promotion_journal_snapshot", return_value=(state["journal"], state["sha"])),
             mock.patch.object(PROMOTION, "persist_journal_record", side_effect=runner["persist"]),
             mock.patch.object(PROMOTION, "gh_open_prs", side_effect=repo.open_pr_rows),
@@ -972,6 +1078,7 @@ class SameObservationCDeliveryTests(unittest.TestCase):
                 contextlib.chdir(repo.root),
             ):
                 PROMOTION.execute_candidate_preparation(args, repo.root)
+        self.assertEqual(len(canonical_context_calls), 1)
         lines = [line for line in stdout.getvalue().splitlines() if line.startswith("{")]
         self.assertEqual(len(lines), 1, stdout.getvalue())
         return json.loads(lines[0])

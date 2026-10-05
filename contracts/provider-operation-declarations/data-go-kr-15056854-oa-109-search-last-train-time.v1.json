@@ -1,0 +1,390 @@
+{
+  "authentication": {
+    "credential_value_stored": false,
+    "kind": "issued API key",
+    "location": "path",
+    "parameter": "KEY",
+    "required": true
+  },
+  "declaration_id": "data-go-kr:OA-109:SearchLastTrainTimeByIDService:v1",
+  "enums": {
+    "INOUT_TAG": {
+      "1": "상행,내선",
+      "2": "하행,외선"
+    },
+    "WEEK_TAG": {
+      "1": "평일",
+      "2": "토요일",
+      "3": "휴일/일요일"
+    }
+  },
+  "native_documents": {
+    "guide": {
+      "bytes": 52468,
+      "path": "provider-operation-declarations-726-seoul-useguide-document/spent-capture-001/seoul_public_useguide_document.response.raw",
+      "sha256": "d8cbf3291c5f8b21f759fe2b281e1acf96a05165140c03540ed916173c52928d",
+      "acquisition_provenance": {
+        "ledger_sha256": "002a40b9cd868263626c8caf3ce879bec9a493bafc4f1208aef28374f9c9eda4",
+        "capture_completed_at": "2026-10-05T02:32:18Z",
+        "authorization_comment_id": 5987061598,
+        "authorization_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5987061598",
+        "authorization_decision_sha256": "2986ba9533a87d14099fad67ab78244051a769e5bcc7421ac6411ac3af94f6c4",
+        "authorization_applied_at": "2026-10-05T02:27:16Z"
+      }
+    },
+    "service_download": {
+      "bytes": 7662,
+      "path": "provider-operation-declarations-726-seoul-openapi-form-post/spent-capture-001/seoul_oa109_openapi_document_post.response.raw",
+      "sha256": "2bcdfb9ef5a07a942f363b46938c57a61c25e28faf0048e93b6fd53fce5ab62d",
+      "acquisition_provenance": {
+        "ledger_sha256": "1280013fd7eaf6f12116dfddf65a32ca62b76b272b268d3b9a60fd0a6fcd8c0b",
+        "capture_completed_at": "2026-10-05T01:04:11Z",
+        "authorization_comment_id": 5986309497,
+        "authorization_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5986309497",
+        "authorization_decision_sha256": "a70523dcaf7fd4e038f1a910a3b9022f7232f2c7604a5a950dd617bf653e674f",
+        "authorization_applied_at": "2026-10-05T00:58:26Z"
+      }
+    },
+    "service_fragment": {
+      "bytes": 22557,
+      "path": "provider-operation-declarations-726-seoul-openapi-document/spent-capture-001/seoul_oa109_openapi_document.response.raw",
+      "sha256": "dde0f9448e16c6122524316f9d162d85e437f70089b2ff156f1b96f05e53c6fe",
+      "acquisition_provenance": {
+        "ledger_sha256": "3d13bb343086a06f6cfd62cc12f37f350c95dad82cc95837c95680f7378f23dc",
+        "capture_completed_at": "2026-10-05T00:12:42Z",
+        "authorization_comment_id": 5985901774,
+        "authorization_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5985901774",
+        "authorization_decision_sha256": "cacd2c2e90024e0ba2ade632bfad164b70478437ba2e3b52ec01495d53f1458d",
+        "authorization_applied_at": "2026-10-05T00:10:34Z"
+      }
+    }
+  },
+  "request_parameters": [
+    {
+      "evidence": {
+        "byte_end_exclusive": 2538,
+        "byte_start_inclusive": 2434,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "7e6984750d13db3f7e62c65a99199869263462d94e681dfc0315166ae127b292"
+      },
+      "label": "인증키",
+      "location": "path",
+      "name": "KEY",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "evidence": {
+        "byte_end_exclusive": 2686,
+        "byte_start_inclusive": 2538,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "b8b42ac09d835b1e14b76a08ae6586602a82bf10592d07377cf419ab10124398"
+      },
+      "label": "요청파일 타입",
+      "location": "path",
+      "name": "TYPE",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "evidence": {
+        "byte_end_exclusive": 2794,
+        "byte_start_inclusive": 2686,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "8d45d14f81bcd843ab477d446453a14c3878c091e1e465a69ba2252e7d4bc764"
+      },
+      "label": "서비스명",
+      "location": "path",
+      "name": "SERVICE",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "evidence": {
+        "byte_end_exclusive": 2896,
+        "byte_start_inclusive": 2794,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "a3f24b9db0dfe76fe90e25170d5808c8904aade076fb0ec450a0ffa786030f6f"
+      },
+      "label": "요청시작위치",
+      "location": "path",
+      "name": "START_INDEX",
+      "required": true,
+      "type": "integer"
+    },
+    {
+      "evidence": {
+        "byte_end_exclusive": 2996,
+        "byte_start_inclusive": 2896,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "fe34d5c485934907de001f763086c9cc1d3e87c7acde4d83adc607a95b76fe89"
+      },
+      "label": "요청종료위치",
+      "location": "path",
+      "name": "END_INDEX",
+      "required": true,
+      "type": "integer"
+    },
+    {
+      "evidence": {
+        "byte_end_exclusive": 3106,
+        "byte_start_inclusive": 2996,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "06c91d61d9ca12fdd59a9aecc32d09308179f9076ab45485fe56bc6eaf1d6b73"
+      },
+      "label": "전철역코드",
+      "location": "path",
+      "name": "STATION_CD",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "evidence": {
+        "byte_end_exclusive": 3221,
+        "byte_start_inclusive": 3106,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "b0cbb4a2fb6c3f15af1aa88cafdb68fb791e2a4c0d1e663f2683e9c7a5f8a75e"
+      },
+      "label": "요일",
+      "location": "path",
+      "name": "WEEK_TAG",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "evidence": {
+        "byte_end_exclusive": 3335,
+        "byte_start_inclusive": 3221,
+        "document": "service_download",
+        "line_end_one_based": 4,
+        "line_start_one_based": 4,
+        "sha256": "c7f1a65e68e35bc6f9ad8b3b42924bb663842cfe9ae894cb2d036e85e2f0396c"
+      },
+      "label": "상/하행선",
+      "location": "path",
+      "name": "INOUT_TAG",
+      "required": true,
+      "type": "string"
+    }
+  ],
+  "response_parameters": [
+    {
+      "label": "외부코드",
+      "name": "FR_CODE",
+      "nullable": null,
+      "required": null,
+      "type": null
+    },
+    {
+      "label": "전철역코드",
+      "name": "STATION_CD",
+      "nullable": null,
+      "required": null,
+      "type": null
+    },
+    {
+      "label": "전철역명",
+      "name": "STATION_NM",
+      "nullable": null,
+      "required": null,
+      "type": null
+    },
+    {
+      "label": "종착역명",
+      "name": "SUBWAYENAME",
+      "nullable": null,
+      "required": null,
+      "type": null
+    },
+    {
+      "label": "출발시간",
+      "name": "LEFTTIME",
+      "nullable": null,
+      "required": null,
+      "type": null
+    },
+    {
+      "label": "요일",
+      "name": "WEEK_TAG",
+      "nullable": null,
+      "required": null,
+      "type": null
+    },
+    {
+      "label": "상/하행선",
+      "name": "INOUT_TAG",
+      "nullable": null,
+      "required": null,
+      "type": null
+    },
+    {
+      "label": "데이터 수집일시",
+      "name": "WORK_DTTM",
+      "nullable": null,
+      "required": null,
+      "type": null
+    }
+  ],
+  "schema_version": "datapan.provider-operation-declaration.v1",
+  "source_review": {
+    "facts_sha256": "86c3d5f57fe4bd03c23e72f98db1cc695ea188f4fa3950a6f6878d63568ff31b",
+    "navigation_review_sha256": "05b98551a908018053796845a393564c6b961351391bbc57e49abbdd09ad126c",
+    "review_facts_schema": "astra.seoul-combined-document-review.v2",
+    "verdict": "usable_source_declared_GET_contract_with_optional_response_details_unknown_not_execution_verified",
+    "review_decision_comment_id": 5987467565,
+    "review_decision_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5987467565",
+    "review_decision_recorded_at": "2026-10-05T03:14:39Z",
+    "review_decision_author": "StatPan",
+    "review_decision_author_association": "OWNER",
+    "review_decision_body_sha256": "4c1d12657f355d3c2134cf8b9771f6b57979ee59328497cb46ff61673d652692",
+    "review_decision_native_readback_sha256": "6c12eefda06025011a316261afd12a0de49c4befee9bdce79c6f2e48d0f4099b"
+  },
+  "subject": {
+    "portal_dataset_id": "15056854",
+    "provider": "data.go.kr",
+    "provider_dataset_id": "OA-109",
+    "service_name": "SearchLastTrainTimeByIDService",
+    "source_api_type": "LINK",
+    "source_guide_url": "",
+    "source_meta_url": "https://www.data.go.kr/catalog/15056854/openapi.json",
+    "source_metadata_target": "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109&srvType=A&serviceKind=1",
+    "source_system": "data.go.kr",
+    "source_uddi": "uddi:1ca4ede2-911d-486a-b374-e7cf8650d25c_201712281924",
+    "source_url": "https://www.data.go.kr/catalog/15056854/openapi.json"
+  },
+  "transport": {
+    "endpoint_template": "http://openAPI.seoul.go.kr:8088/{KEY}/{TYPE}/SearchLastTrainTimeByIDService/{START_INDEX}/{END_INDEX}/{STATION_CD}/{WEEK_TAG}/{INOUT_TAG}/",
+    "evidence": {
+      "anchors": [
+        {
+          "byte_end_exclusive": 10483,
+          "byte_start_inclusive": 10243,
+          "document": "service_fragment",
+          "line_start_one_based": 299,
+          "sha256": "163487cd254aa464b63589af52a7e8e819099a6c3f81b64a25d8e0c429d304ed"
+        },
+        {
+          "byte_end_exclusive": 11569,
+          "byte_start_inclusive": 11329,
+          "document": "service_fragment",
+          "line_start_one_based": 326,
+          "sha256": "d81a8a57e21215765e4b19d14c927bea0b3a64a36b32173b0ad85a141c12398c"
+        },
+        {
+          "byte_end_exclusive": 12655,
+          "byte_start_inclusive": 12415,
+          "document": "service_fragment",
+          "line_start_one_based": 353,
+          "sha256": "bd66edd019583cee4a82fa50f9b0ca5e3d83f091ffe4b58fe37653605a616380"
+        }
+      ],
+      "basis": "Three native target-service hyperlinks plus exact-service requestSend URL construction producing a direct hyperlink; normal HTTP(S) hyperlink navigation uses GET. No JavaScript, anchor, sample key or API was executed.",
+      "classification": "standard-dependent static navigation semantics, not a literal target-service HTTP method string or observed operation request",
+      "dataflow": [
+        {
+          "byte_end_exclusive": 5500,
+          "byte_start_inclusive": 5435,
+          "document": "service_fragment",
+          "line_start_one_based": 140,
+          "sha256": "5fad607a63c61fcad60f7cddba23b53e90eb5738c4b477d06bdcf204bc0da788"
+        },
+        {
+          "byte_end_exclusive": 5595,
+          "byte_start_inclusive": 5548,
+          "document": "service_fragment",
+          "line_start_one_based": 144,
+          "sha256": "57045b91562dbc22bc16fc32bc0768504cd6ab7b8b992284e18f3f6bbb545af9"
+        },
+        {
+          "byte_end_exclusive": 5682,
+          "byte_start_inclusive": 5646,
+          "document": "service_fragment",
+          "line_start_one_based": 147,
+          "sha256": "855176673465045e7720ea11d1f38ac59c909171fffb7c7d2eed55e074f4dcb3"
+        },
+        {
+          "byte_end_exclusive": 7802,
+          "byte_start_inclusive": 7767,
+          "document": "service_fragment",
+          "line_start_one_based": 213,
+          "sha256": "4b13029bf0bf5e0730558847581909ff03d57b8c402a8d906a3b608f1fb110ec"
+        },
+        {
+          "byte_end_exclusive": 7946,
+          "byte_start_inclusive": 7850,
+          "document": "service_fragment",
+          "line_start_one_based": 216,
+          "sha256": "53b4fc3d21e4c2d6a3f3f9482f1dbfd1340b1c605d308a5028c24bae88473d7d"
+        }
+      ],
+      "generic_GET_examples": "corroboration only, not substitute service authority",
+      "proxy_excluded": {
+        "byte_end_exclusive": 8062,
+        "byte_start_inclusive": 8022,
+        "document": "service_fragment",
+        "line_start_one_based": 220,
+        "sha256": "f62da47346333ecee3980c4389a37a63007d4249623f931ea6312f208fefbd9f"
+      }
+    },
+    "execution_verified": false,
+    "format_selectors": [
+      "xml",
+      "xmlf",
+      "xls",
+      "json"
+    ],
+    "get_exclusive": false,
+    "host": "openAPI.seoul.go.kr",
+    "method": "GET",
+    "method_evidence": "target-service-hyperlink-navigation-v1",
+    "method_evidence_basis": "Three target-service hyperlinks and exact-service requestSend URL construction produce a direct hyperlink; ordinary HTTP(S) hyperlink navigation uses GET. No script or target operation request was executed.",
+    "method_evidence_classification": "standard-dependent-static-navigation-semantics",
+    "port": 8088,
+    "scheme": "http"
+  },
+  "unknowns": [
+    "response field datatypes/requiredness/nullability",
+    "response envelope/items path",
+    "response media types/default format"
+  ],
+  "historical_operation_prefix": {
+    "schema": "datapan.seoul-historical-operation-prefix.v1",
+    "source_main_commit": "0085b357289755d6b3fb60a7259bd85da42d2962",
+    "source_path": "data/data-go-kr.registry.json",
+    "source_file_git_blob_sha1": "fcd4a814348b7beff832737402b5ec22642d4228",
+    "source_file_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+    "source_manifest_sha256": "89afa12758dd3eded5ce5a96275572a8826574d4e7ead020412f7a76d6bb60ba",
+    "source_lfs_bytes": 139155499,
+    "source_lfs_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+    "provider": "data.go.kr",
+    "api_id": "15056854",
+    "source_url": "https://www.data.go.kr/catalog/15056854/openapi.json",
+    "operation_count": 3,
+    "ordered_endpoints": [
+      "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109&srvType=A&serviceKind=1",
+      "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-101&srvType=A&serviceKind=1",
+      "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-108&srvType=A&serviceKind=1"
+    ],
+    "canonical_operations_sha256": "a22776819f63f30f9294f21dcacfd2447577e700425c02fb25e0e5e2c5f05def",
+    "subject_snapshot_path": "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+    "subject_snapshot_sha256": "9336a1fe033af542b270364969264a26ae021906ed0f9e988f79775833119739",
+    "subject_snapshot_bytes": 13937,
+    "subject_snapshot_row_sha256": "2146cee4cdeeeef451611c4e7edfba8962d02e4896145d021dc7ddde04ee8ca4",
+    "subject_snapshot_row_index": 1131,
+    "source_registry_rows": 12282
+  }
+}

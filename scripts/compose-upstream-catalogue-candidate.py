@@ -61,6 +61,19 @@ def load_link_detail_helpers() -> Any:
 LINK_DETAIL_HELPERS = load_link_detail_helpers()
 
 
+def load_seoul_operation_declaration() -> Any:
+    helper_path = pathlib.Path(__file__).with_name("seoul_oa109_operation_declaration.py")
+    spec = importlib.util.spec_from_file_location("catalogue_seoul_oa109_declaration", helper_path)
+    if spec is None or spec.loader is None:
+        raise CompositionError("pinned Seoul operation declaration is unavailable")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+SEOUL_OPERATION_DECLARATION = load_seoul_operation_declaration()
+
+
 def stable_json_bytes(value: Any) -> bytes:
     return (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
@@ -188,7 +201,7 @@ def operation_identity(row: dict[str, Any], operation: dict[str, Any]) -> str:
             raise CompositionError("safetydata operation lacks source_interface_id/data_sn")
         return f"safetydata.go.kr:{str(upstream_key).strip()}"
     if system == "data.go.kr":
-        upstream_key = raw.get("operation_seq")
+        upstream_key = raw.get("operation_seq") or raw.get("operation_declaration_key")
         if upstream_key is None or not str(upstream_key).strip():
             raise CompositionError("data.go.kr operation lacks immutable operation_seq")
         if api_type not in {"REST", "SOAP"}:
@@ -413,6 +426,29 @@ def validate_enrichment_evidence(
         if not ops:
             binding_errors.append("enrichment_operations_empty")
         evidence_row = apply_enrichment_record(candidate_row, record)
+        declaration_provenance = record.get("declaration_provenance")
+        declared_operations = [
+            operation for operation in ops
+            if isinstance(operation, dict)
+            and isinstance(operation.get("source"), dict)
+            and isinstance(operation["source"].get("raw"), dict)
+            and operation["source"]["raw"].get("operation_declaration_id") is not None
+        ]
+        declaration_subject = (
+            str(candidate_row.get("id"))
+            == SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]
+        )
+        if declaration_subject or declared_operations or declaration_provenance is not None:
+            try:
+                if not declaration_subject or len(declared_operations) != 1 or declaration_provenance is None:
+                    raise SEOUL_OPERATION_DECLARATION.DeclarationError("declaration_subject_or_operation_mismatch")
+                SEOUL_OPERATION_DECLARATION.validate_enriched_record(candidate_row, record)
+                SEOUL_OPERATION_DECLARATION.validate_declared_operation(candidate_row, declared_operations[0])
+                LINK_DETAIL_HELPERS.validate_link_metadata(
+                    declaration_provenance.get("page_resolver"), key[1], hosts,
+                )
+            except (AttributeError, KeyError, TypeError, ValueError):
+                binding_errors.append("enrichment_pinned_declaration_binding_mismatch")
         errors = [*api_provenance_errors(evidence_row, allow_missing_link_guide=True)]
         op_errors, _ = _validate_operation_set(
             evidence_row,
@@ -569,6 +605,7 @@ def operation_provenance_errors(
     source, raw = operation_source(operation)
     system = source.get("system")
     endpoint = operation.get("endpoint")
+    declared_operation = raw.get("operation_declaration_id") is not None
     if not isinstance(operation.get("name"), str) or not operation["name"].strip():
         errors.append("operation_name_missing")
     if not valid_http_url(endpoint):
@@ -579,6 +616,11 @@ def operation_provenance_errors(
         errors.append("operation_source_url_missing")
     if not isinstance(source.get("raw"), dict):
         errors.append("operation_source_raw_missing")
+    if raw.get("operation_declaration_id") is not None:
+        try:
+            SEOUL_OPERATION_DECLARATION.validate_declared_operation(row, operation)
+        except (AttributeError, KeyError, TypeError, ValueError):
+            errors.append("operation_pinned_declaration_mismatch")
     try:
         operation_identity(row, operation)
     except CompositionError as exc:
@@ -586,29 +628,60 @@ def operation_provenance_errors(
         errors.append(code[:80] or "operation_identity_invalid")
     api_source = row.get("source") if isinstance(row.get("source"), dict) else {}
     api_raw = raw_source(row)
+    exact_historical_stored_operation = False
+    if not declared_operation and row.get("provider") == PROVIDER and str(row.get("id") or "") == "15056854":
+        try:
+            SEOUL_OPERATION_DECLARATION.validate_historical_operation(
+                row, operation,
+                observed_guide_url=api_raw.get("guide_url") if isinstance(api_raw.get("guide_url"), str) else None,
+            )
+            exact_historical_stored_operation = True
+        except (AttributeError, KeyError, TypeError, ValueError):
+            pass
     if system == "data.go.kr":
         expected_source_url = source_page_url or api_source.get("url")
         recognized_stored_detail = False
-        if source_page_url is None and source.get("url") != expected_source_url:
+        if source.get("url") != expected_source_url:
             try:
                 recognized_stored_detail = source.get("url") == canonical_detail_page_url(row)
             except CompositionError:
                 pass
-        if source.get("url") != expected_source_url and not recognized_stored_detail:
+        recognized_historical_catalogue_source = (
+            source_page_url == SEOUL_OPERATION_DECLARATION.PAGE_URL
+            and exact_historical_stored_operation
+            and source.get("url") == api_source.get("url")
+        )
+        if (
+            source.get("url") != expected_source_url
+            and not recognized_stored_detail
+            and not recognized_historical_catalogue_source
+        ):
             errors.append("operation_source_url_differs_from_api")
         if source_page_url is None:
-            for field in ("meta_url", "guide_url"):
-                if field in api_raw and raw.get(field) != api_raw.get(field):
-                    errors.append(f"operation_{field}_provenance_mismatch")
+            if not declared_operation:
+                for field in ("meta_url", "guide_url"):
+                    if field in api_raw and raw.get(field) != api_raw.get(field):
+                        if field == "guide_url" and exact_historical_stored_operation:
+                            continue
+                        errors.append(f"operation_{field}_provenance_mismatch")
         else:
-            if "guide_url" in raw and raw.get("guide_url") != observed_guide_url:
+            operation_guide_url = raw.get("guide_url")
+            if observed_guide_url is not None and operation_guide_url != observed_guide_url:
+                errors.append("operation_observed_guide_provenance_mismatch")
+            elif observed_guide_url is None and operation_guide_url not in {None, ""}:
                 errors.append("operation_observed_guide_provenance_mismatch")
             if observed_guide_url is not None:
                 if observed_guide_url_sha256 != sha256_bytes(observed_guide_url.encode("utf-8")):
                     errors.append("operation_observed_guide_digest_mismatch")
     api_type = raw_source(row).get("api_type") or raw.get("api_type")
-    if valid_http_url(endpoint) and (system == "safetydata.go.kr" or (system == "data.go.kr" and api_type == "LINK")):
-        host = (urlsplit(endpoint).hostname or "").casefold()
+    if valid_http_url(endpoint) and (
+        system == "safetydata.go.kr"
+        or (system == "data.go.kr" and (api_type == "LINK" or declared_operation))
+    ):
+        parsed_endpoint = urlsplit(endpoint)
+        host = (parsed_endpoint.hostname or "").casefold()
+        if declared_operation and parsed_endpoint.port is not None:
+            host = f"{host}:{parsed_endpoint.port}"
         if host not in hosts:
             errors.append("operation_host_not_registered")
     return sorted(set(errors))
@@ -636,7 +709,18 @@ def api_provenance_errors(row: dict[str, Any], *, allow_missing_link_guide: bool
         if not valid_http_url(raw.get("meta_url")):
             errors.append("link_meta_url_missing")
         if not allow_missing_link_guide and not valid_http_url(raw.get("guide_url")):
-            errors.append("link_guide_url_missing")
+            exact_stored_declaration = False
+            if (
+                provider == PROVIDER
+                and str(row.get("id") or "") == SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]
+            ):
+                try:
+                    SEOUL_OPERATION_DECLARATION.validate_stored_subject_row(row)
+                    exact_stored_declaration = True
+                except (AttributeError, KeyError, TypeError, ValueError):
+                    pass
+            if not exact_stored_declaration:
+                errors.append("link_guide_url_missing")
     return sorted(set(errors))
 
 
@@ -652,6 +736,8 @@ def operation_counts(registry: list[dict[str, Any]]) -> dict[str, int]:
             source, raw = operation_source(operation)
             if source.get("system") == "safetydata.go.kr":
                 result["safetydata"] += 1
+            elif raw.get("operation_declaration_id") is not None:
+                result["gateway"] += 1
             elif raw.get("api_type") == "LINK" or raw_source(row).get("api_type") == "LINK":
                 result["data_go_kr_link"] += 1
             else:
