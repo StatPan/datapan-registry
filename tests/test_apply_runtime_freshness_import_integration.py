@@ -82,19 +82,100 @@ class ApplyRuntimeFreshnessImportIntegrationTest(unittest.TestCase):
         return result
 
     @classmethod
+    def _create_ci_like_shallow_source(cls) -> tuple[pathlib.Path, str, list[tuple[str, int]]]:
+        source_git = cls.temp_root / "ci-like-source.git"
+        initialized = run(["git", "init", "--bare", str(source_git)], cwd=cls.temp_root)
+        if initialized.returncode:
+            raise AssertionError(f"local shallow source init failed: {initialized.stderr[-1000:]}")
+
+        source_head = run(["git", "rev-parse", "HEAD"], cwd=ROOT)
+        if source_head.returncode:
+            raise AssertionError(f"cannot resolve source fixture HEAD: {source_head.stderr[-1000:]}")
+        source_revision = source_head.stdout.strip()
+        # This is a synthetic local checkout baseline for the disposable
+        # transaction fixture, not an origin/main trust or provenance claim.
+        fetched_baseline = run(
+            ["git", "--git-dir", str(source_git), "fetch", "--no-tags", "--depth=64",
+             str(ROOT), f"{source_revision}:refs/heads/ci-fixture-main-baseline"],
+            cwd=cls.temp_root,
+        )
+        if fetched_baseline.returncode:
+            raise AssertionError(f"local shallow synthetic baseline fetch failed: {fetched_baseline.stderr[-1000:]}")
+
+        historical = json.loads(
+            (ROOT / "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.provenance.v1.json")
+            .read_text(encoding="utf-8")
+        )
+        history_pins = [
+            (historical["git_commit"], 1),
+            ("e34062309a48b0e0b6c0f38add32f0cdec088616", 8),
+            ("1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07", 1),
+        ]
+        for commit, depth in history_pins:
+            fetched_pin = run(
+                ["git", "--git-dir", str(source_git), "fetch", "--no-tags", f"--depth={depth}",
+                 str(ROOT), commit],
+                cwd=cls.temp_root,
+            )
+            if fetched_pin.returncode:
+                raise AssertionError(f"local shallow source pin fetch failed for {commit}: {fetched_pin.stderr[-1000:]}")
+        head_ref = run(
+            ["git", "--git-dir", str(source_git), "symbolic-ref", "HEAD", "refs/heads/ci-fixture-main-baseline"],
+            cwd=cls.temp_root,
+        )
+        if head_ref.returncode:
+            raise AssertionError(f"local shallow source HEAD setup failed: {head_ref.stderr[-1000:]}")
+        return source_git, source_revision, history_pins
+
+    @classmethod
     def _create_offline_repo(cls) -> None:
-        # Copy the exact local source commit, then use the already cached LFS
-        # payload as an ordinary test-only blob. The real materializer therefore
-        # reuses local bytes and never contacts a provider.
-        result = run(["git", "clone", "--shared", "--no-checkout", "--quiet", str(ROOT), str(cls.repo)], cwd=cls.temp_root)
+        # Reproduce checkout depth and exact-history fetches from Verify Release
+        # without network access. A shallow local clone can omit commits that
+        # exist only in the parent's FETCH_HEAD.
+        source_git, source_revision, history_pins = cls._create_ci_like_shallow_source()
+        result = run(
+            ["git", "clone", "--shared", "--no-checkout", "--quiet", str(source_git), str(cls.repo)],
+            cwd=cls.temp_root,
+        )
         if result.returncode:
             raise AssertionError(f"local fixture clone failed: {result.stderr[-2000:]}")
+        origin_main = run(["git", "show-ref", "--verify", "--quiet", "refs/remotes/origin/main"], cwd=cls.repo)
+        if origin_main.returncode == 0:
+            raise AssertionError("CI-like fixture unexpectedly contains origin/main")
+        if origin_main.returncode != 1:
+            raise AssertionError(f"cannot verify origin/main absence in CI-like fixture: {origin_main.stderr[-1000:]}")
+
+        historical = json.loads(
+            (ROOT / "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.provenance.v1.json")
+            .read_text(encoding="utf-8")
+        )
+        historical_commit = historical["git_commit"]
+        historical_path = "reports/health-probe-catalog.json"
+        unavailable = run(["git", "rev-parse", f"{historical_commit}:{historical_path}"], cwd=cls.repo)
+        if unavailable.returncode == 0:
+            raise AssertionError("CI-like shallow clone unexpectedly inherited the FETCH_HEAD-only historical health pin")
+
+        # Transfer the explicitly fetched CI pins into this clone's own object
+        # database so linked transaction worktrees can verify historical Git evidence.
+        for commit, depth in history_pins:
+            fetched_pin = run(
+                ["git", "fetch", "--no-tags", f"--depth={depth}", str(source_git), commit],
+                cwd=cls.repo,
+            )
+            if fetched_pin.returncode:
+                raise AssertionError(f"fixture history-pin fetch failed for {commit}: {fetched_pin.stderr[-1000:]}")
+        resolved_history_blob = cls._git("rev-parse", f"{historical_commit}:{historical_path}").stdout.strip()
+        if resolved_history_blob != historical["git_blob"]:
+            raise AssertionError("fixture history-pin fetch did not preserve the pinned historical health blob")
+
         checkout = run(
             ["git", "checkout", "--detach", "HEAD"], cwd=cls.repo,
             env={**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"},
         )
         if checkout.returncode:
             raise AssertionError(f"local fixture checkout failed: {checkout.stderr[-2000:]}")
+        if cls._git("rev-parse", "HEAD").stdout.strip() != source_revision:
+            raise AssertionError("shallow fixture checkout differs from the exact source revision")
 
         pointer = subprocess.run(
             ["git", "show", "HEAD:data/data-go-kr.registry.json"], cwd=ROOT,
