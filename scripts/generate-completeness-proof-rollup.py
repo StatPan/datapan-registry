@@ -2579,6 +2579,18 @@ def promotion_log_results(raw_log: bytes) -> list[dict[str, Any]]:
     return found
 
 
+def canonical_update_pr_contract_at_revision(*, root: pathlib.Path, revision: str) -> Any:
+    relative = "scripts/canonical_update_pr.py"
+    try:
+        helper_source = git_read_only(root, ["show", f"{revision}:{relative}"])
+    except ValueError as exc:
+        raise ValueError("promotion journal validator is unavailable at its authenticated execution revision") from exc
+    with tempfile.TemporaryDirectory(prefix="completeness-journal-contract-") as temporary:
+        helper_path = pathlib.Path(temporary) / "canonical_update_pr.py"
+        helper_path.write_bytes(helper_source)
+        return import_module("completeness_journal_contract", helper_path)
+
+
 def validate_promotion_journal_at_revision(
     *, root: pathlib.Path, revision: str, journal: dict[str, Any],
 ) -> None:
@@ -2588,7 +2600,7 @@ def validate_promotion_journal_at_revision(
     except (ValueError, json.JSONDecodeError) as exc:
         raise ValueError("promotion journal schema is unavailable at its authenticated execution revision") from exc
     validate_schema_value(journal, schema, "promotion journal")
-    helper = import_module("completeness_journal_contract", root / "scripts/canonical_update_pr.py")
+    helper = canonical_update_pr_contract_at_revision(root=root, revision=revision)
     try:
         helper.validate_journal(journal, schema)
     except Exception as exc:
@@ -4278,7 +4290,14 @@ def validate_acknowledgement_transition(
     ack_run: dict[str, Any], ack_job: dict[str, Any],
     publisher: dict[str, Any], publisher_receipt_raw: bytes,
     release_manifest: dict[str, Any], evaluation_epoch: str,
+    local_transition: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    if local_transition is None:
+        local_transition = validate_acknowledgement_local_transition(
+            root=root, scope=scope, scoped_inputs=scoped_inputs, roles=roles,
+            resolved=resolved, ack_run=ack_run, ack_job=ack_job,
+            evaluation_epoch=evaluation_epoch,
+        )
     supplied_state_roles = ACKNOWLEDGEMENT_STATE_AFTER_ROLES & set(roles)
     supplied_before_state_roles = ACKNOWLEDGEMENT_STATE_BEFORE_ROLES & set(roles)
     before_item = single_role(scoped_inputs, "acknowledgement_journal_before")
@@ -4338,7 +4357,7 @@ def validate_acknowledgement_transition(
         raise ValueError("ACK subject release does not uniquely contain the canonical Registry payload")
     registry_artifact = registry_rows[0]
 
-    def matching_rows(journal: dict[str, Any]) -> list[dict[str, Any]]:
+    def matching_rows(journal: dict[str, Any], *, allow_unmerged: bool) -> list[dict[str, Any]]:
         records = journal.get("records")
         if not isinstance(records, list):
             return []
@@ -4353,20 +4372,19 @@ def validate_acknowledgement_transition(
             and row["candidate"].get("registry_path") == registry_artifact.get("path")
             and row["candidate"].get("registry_sha256") == registry_artifact.get("sha256")
             and row["candidate"].get("registry_bytes") == registry_artifact.get("bytes")
-            and row["pr"].get("merge_commit_sha") == source_sha
+            and (
+                row["pr"].get("merge_commit_sha") == source_sha
+                or allow_unmerged and row["pr"].get("merge_commit_sha") is None
+            )
         ]
 
-    before_matches = matching_rows(before)
-    after_matches = matching_rows(after)
+    before_matches = matching_rows(before, allow_unmerged=True)
+    after_matches = matching_rows(after, allow_unmerged=False)
     if len(before_matches) != 1 or len(after_matches) != 1:
         raise ValueError("ACK journal does not uniquely identify the exact published source subject")
     before_row, after_row = before_matches[0], after_matches[0]
     if log_result.get("status") == "already_acknowledged":
-        local = validate_acknowledgement_local_transition(
-            root=root, scope=scope, scoped_inputs=scoped_inputs, roles=roles,
-            resolved=resolved, ack_run=ack_run, ack_job=ack_job,
-            evaluation_epoch=evaluation_epoch,
-        )
+        local = local_transition
         if (
             before_raw != after_raw or before_row != after_row
             or before_row.get("status") != "read-back-confirmed"
@@ -4413,30 +4431,16 @@ def validate_acknowledgement_transition(
             "state_replay_unchanged": True,
         }
     if (
-        before_row.get("status") != "merged" or after_row.get("status") != "read-back-confirmed"
+        local_transition.get("status") != "read-back-confirmed"
+        or after_row.get("status") != "read-back-confirmed"
         or after_row.get("superseded_by") is not None
+        or after_row.get("pr", {}).get("state") != "merged"
+        or after_row.get("pr", {}).get("merge_commit_sha") != source_sha
     ):
-        raise ValueError("ACK journal does not transition the exact merged candidate to read-back-confirmed")
-    immutable_keys = (set(before_row) | set(after_row)) - {"status", "acknowledgements"}
-    if any(before_row.get(key) != after_row.get(key) for key in immutable_keys):
-        raise ValueError("ACK transition mutates an immutable candidate or PR field")
-    before_records, after_records = before.get("records"), after.get("records")
-    if not isinstance(before_records, list) or not isinstance(after_records, list):
-        raise ValueError("ACK journal records are missing")
-    if [row for row in before_records if row is not before_row] != [row for row in after_records if row is not after_row]:
-        raise ValueError("ACK transition changed unrelated promotion records")
-    old_acks, new_acks = before_row.get("acknowledgements"), after_row.get("acknowledgements")
-    if (
-        not isinstance(old_acks, list) or not isinstance(new_acks, list)
-        or new_acks[:len(old_acks)] != old_acks
-        or len(new_acks) - len(old_acks) != 3
-    ):
-        raise ValueError("ACK transition does not preserve prior acknowledgements and append its bounded suffix")
-    added = new_acks[len(old_acks):]
-    if [item.get("status") if isinstance(item, dict) else None for item in added] != [
-        "publication-pending", "published", "read-back-confirmed",
-    ]:
-        raise ValueError("ACK transition appended an unsupported state sequence")
+        raise ValueError("ACK owning transition does not confirm this active merged publication subject")
+    new_acks = after_row.get("acknowledgements")
+    if not isinstance(new_acks, list) or not new_acks or not isinstance(new_acks[-1], dict):
+        raise ValueError("ACK owning transition has no final read-back acknowledgement")
     log_item = roles["acknowledgement_log_archive"]
     log_result = acknowledgement_log_result(receipt_path_bytes(resolved[log_item["input_id"]], log_item))
     ack_started = parse_time(ack_job["started_at"], "ACK job start")
@@ -4452,11 +4456,7 @@ def validate_acknowledgement_transition(
         or log_result.get("run_url") != ack_run_url
     ):
         raise ValueError("native ACK attempt does not follow and acknowledge this exact publisher subject")
-    for acknowledgement in added:
-        observed = parse_time(acknowledgement.get("observed_at"), "ACK journal observation time")
-        if not ack_started <= observed <= ack_completed:
-            raise ValueError("ACK journal observation is outside the exact successful ACK attempt")
-    final = added[-1]
+    final = new_acks[-1]
     evidence_reference = final.get("evidence_reference")
     if (
         final.get("source_sha") != source_sha
@@ -4480,7 +4480,7 @@ def validate_acknowledgement_transition(
         "workflow_head_sha": ack_run["head_sha"],
         "state_commit": state["after"]["commit"]["sha"] if state["after"] else None,
         "state_tree_sha": state["after"]["tree"]["sha"] if state["after"] else None,
-        "journal_sha256": sha256_bytes(after_raw), "journal_record_count": len(after_records),
+        "journal_sha256": sha256_bytes(after_raw), "journal_record_count": len(after["records"]),
         "acknowledgement_observed_at": final["observed_at"],
     }
 
@@ -4536,6 +4536,20 @@ def validate_acknowledgement_local_transition(
         raise ValueError("ACK before/after journal snapshot is not valid JSON") from exc
     validate_schema(before, root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json", "ACK journal before")
     validate_schema(after, root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json", "ACK journal after")
+    ack_revision = str(ack_run.get("head_sha", ""))
+    try:
+        ack_schema = json.loads(git_read_only(
+            root, ["show", f"{ack_revision}:schemas/datapan.canonical-update-promotion-journal.v1.schema.json"],
+        ))
+        ack_contract = canonical_update_pr_contract_at_revision(root=root, revision=ack_revision)
+    except (ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("ACK journal contract is unavailable at its authenticated workflow revision") from exc
+    for label, journal in (("before", before), ("after", after)):
+        try:
+            validate_schema_value(journal, ack_schema, f"ACK journal {label}")
+            ack_contract.validate_journal(journal, ack_schema)
+        except Exception as exc:
+            raise ValueError(f"ACK journal {label} fails its authenticated producer contract: {exc}") from exc
     if (
         str(before.get("repository", "")).casefold() != "statpan/datapan-registry"
         or str(after.get("repository", "")).casefold() != "statpan/datapan-registry"
@@ -4642,7 +4656,7 @@ def validate_acknowledgement_local_transition(
     if len(before_records) != len(after["records"]):
         raise ValueError("ACK transition changes the promotion-journal record inventory")
     before_row = before_records[target_index]
-    if not isinstance(before_row, dict):
+    if not isinstance(before_row, dict) or not isinstance(before_row.get("candidate"), dict):
         raise ValueError("ACK before journal target record is malformed")
     candidate = after_row["candidate"]
     pr = after_row["pr"]
@@ -4650,34 +4664,90 @@ def validate_acknowledgement_local_transition(
     before_pr = before_row.get("pr")
     if (
         not isinstance(before_candidate, dict) or not isinstance(before_pr, dict)
-        or candidate != before_candidate or pr != before_pr
-        or before_row.get("status") != "merged"
         or after_row.get("status") != "read-back-confirmed"
         or pr.get("state") != "merged"
         or not isinstance(pr.get("merge_commit_sha"), str)
         or not re.fullmatch(r"[a-f0-9]{40}", pr["merge_commit_sha"])
     ):
-        raise ValueError("ACK transition does not preserve one already-merged candidate and PR identity")
+        raise ValueError("ACK transition does not identify one merged candidate and exact read-back PR")
+    predecessor_suffixes = {
+        "prepared": ["pending-review", "merged", "publication-pending", "published", "read-back-confirmed"],
+        "pending-review": ["merged", "publication-pending", "published", "read-back-confirmed"],
+        "merged": ["publication-pending", "published", "read-back-confirmed"],
+        "publication-pending": ["published", "read-back-confirmed"],
+        "published": ["read-back-confirmed"],
+    }
+    predecessor_status = before_row.get("status")
+    expected_suffix = predecessor_suffixes.get(predecessor_status)
+    if expected_suffix is None:
+        raise ValueError("ACK transition starts from a status not selected by the publication recovery workflow")
     before_acks, after_acks = before_row.get("acknowledgements"), after_row.get("acknowledgements")
     if (
         not isinstance(before_acks, list) or not isinstance(after_acks, list)
         or after_acks[:len(before_acks)] != before_acks
-        or len(after_acks) - len(before_acks) != 3
         or [row.get("status") if isinstance(row, dict) else None for row in after_acks[len(before_acks):]]
-        != ["publication-pending", "published", "read-back-confirmed"]
+        != expected_suffix
     ):
-        raise ValueError("ACK transition is not one bounded append-only publication/read-back suffix")
+        raise ValueError("ACK transition is not the exact bounded suffix for its selected producer status")
     previous_observation = parse_time(before_acks[-1].get("observed_at"), "ACK prior observation time") if before_acks else None
     for appended in after_acks[len(before_acks):]:
         observed_at = parse_time(appended.get("observed_at"), "ACK appended observation time")
         if not job_started <= observed_at <= job_completed or (previous_observation and observed_at < previous_observation):
             raise ValueError("ACK journal observation is outside the exact attempt or out of order")
+        if (
+            appended.get("run_id") != ack_run.get("id")
+            or isinstance(appended.get("run_attempt"), bool)
+            or appended.get("run_attempt") != attempt
+            or appended.get("run_url") != ack_url
+        ):
+            raise ValueError("ACK suffix is not attributed to the exact successful workflow attempt")
         previous_observation = observed_at
     for index, (old_row, new_row) in enumerate(zip(before_records, after["records"], strict=True)):
         if index == target_index:
             continue
         if old_row != new_row:
             raise ValueError("ACK transition changed an unrelated promotion-journal record")
+
+    # Reconstruct the target row with the exact owner helpers from the trusted
+    # ACK workflow revision. This admits only producer-supported PR-readback
+    # and publication suffixes, rather than treating the status sequence as a
+    # mutable whitelist.
+    expected_row = copy.deepcopy(before_row)
+    if predecessor_status in {"prepared", "pending-review"}:
+        ownership = expected_row.get("ownership")
+        expected_candidate = expected_row.get("candidate")
+        if not isinstance(ownership, dict) or not isinstance(expected_candidate, dict):
+            raise ValueError("ACK PR read-back lacks its durable candidate ownership")
+        first_observation = after_acks[len(before_acks)].get("observed_at")
+        pr_state = str(pr.get("state", "")).upper()
+        readback = {
+            "number": pr.get("number"),
+            "url": pr.get("url"),
+            "body": ownership.get("body"),
+            "headRefName": ownership.get("branch"),
+            "baseRefName": "main",
+            "headRefOid": expected_candidate.get("head_sha"),
+            "state": pr_state,
+            "mergeCommit": {"oid": pr.get("merge_commit_sha")},
+        }
+        try:
+            expected_row = ack_contract.record_pr_readback(
+                expected_row, readback, observed_at=first_observation, run_url=ack_url,
+            )
+        except Exception as exc:
+            raise ValueError("ACK PR read-back does not satisfy the owning canonical-update contract") from exc
+    expected_ack_count = len(expected_row.get("acknowledgements", []))
+    if after_acks[:expected_ack_count] != expected_row.get("acknowledgements"):
+        raise ValueError("ACK PR-readback prefix differs from the owning canonical-update contract")
+    for acknowledgement in after_acks[expected_ack_count:]:
+        try:
+            expected_row = ack_contract.record_acknowledgement(
+                expected_row, copy.deepcopy(acknowledgement),
+            )
+        except Exception as exc:
+            raise ValueError("ACK publication suffix fails the owning canonical-update transition contract") from exc
+    if expected_row != after_row:
+        raise ValueError("ACK journal target differs from the owning PR/publication reconciliation result")
 
     identity = final_ack.get("artifact_identity")
     source_sha = pr["merge_commit_sha"]
@@ -4721,6 +4791,7 @@ def validate_acknowledgement_local_transition(
     )
 
     return {
+        "status": "read-back-confirmed",
         "run_id": run_id, "attempt": attempt, "source_sha": source_sha,
         "manifest_sha256": candidate["manifest_sha256"],
         "journal_sha256": sha256_bytes(after_raw),
@@ -5381,6 +5452,7 @@ def validate_pipeline_evidence(
                 publisher=publisher_attempt,
                 publisher_receipt_raw=raw_role("publication_receipt"),
                 release_manifest=publisher_manifest, evaluation_epoch=evaluation_epoch,
+                local_transition=acknowledgement_local,
             )
     orphan_ack_rows = [
         item for item in operation_inputs
@@ -5511,7 +5583,9 @@ def validate_pipeline_evidence(
     # adapter reject the independently valid source→B→C→Health chain.
     legacy_packet_ids = (
         publisher_run.get("id") == publication_helper.PUBLISHER_RUN_ID
+        and publisher_run.get("run_attempt") == publication_helper.PUBLISHER_ATTEMPT
         and acknowledgement_run.get("id") == publication_helper.ACK_RUN_ID
+        and acknowledgement_run.get("run_attempt") == publication_helper.ACK_ATTEMPT
     )
     legacy_required_roles = set(publication_roles) - ACKNOWLEDGEMENT_STATE_AFTER_ROLES - ACKNOWLEDGEMENT_STATE_BEFORE_ROLES
     legacy_roles_present = all(

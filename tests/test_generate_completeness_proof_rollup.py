@@ -70,6 +70,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
     def _build_synthetic_native_ack_packet(
         self, input_root: pathlib.Path, *, outcome: str = "already_acknowledged",
         publisher_identity: tuple[int, int] | None = None,
+        acknowledgement_identity: tuple[int, int] | None = None,
+        acknowledgement_event: str = "schedule",
+        predecessor_status: str | None = None,
     ) -> tuple[pathlib.Path, str]:
         """Build an indexed native publisher/ACK packet with a nonlegacy ACK identity."""
         registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
@@ -100,8 +103,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             )
         ]
         ack_roles = {item["role"]: item for item in ack_rows}
-        current_run_id = 99972290001
-        current_attempt = 1
+        current_run_id, current_attempt = acknowledgement_identity or (99972290001, 1)
         current_url = (
             f"https://github.com/StatPan/datapan-registry/actions/runs/{current_run_id}"
             f"/attempts/{current_attempt}"
@@ -185,7 +187,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
 
         run = json.loads((ROOT / source_by_role["acknowledgement_run"]["path"]).read_bytes())
         run.update({
-            "id": current_run_id, "event": "schedule", "run_attempt": current_attempt,
+            "id": current_run_id, "event": acknowledgement_event, "run_attempt": current_attempt,
             "status": "completed", "conclusion": "success", "head_sha": current_revision,
             "head_branch": "main", "created_at": current_start,
             "updated_at": job_finish, "run_started_at": current_start,
@@ -215,32 +217,126 @@ class CompletenessProofRollupTest(unittest.TestCase):
             log_status = "already_acknowledged"
             journal_writes = 0
         elif outcome == "read-back-confirmed":
-            journal_before = copy.deepcopy(actual_before)
-            journal_after = copy.deepcopy(actual_after)
-            catalog_rows = [
-                row for row in journal_after["records"]
-                if row.get("candidate", {}).get("manifest_sha256") == manifest_sha
-                and row.get("pr", {}).get("merge_commit_sha") == source_sha
-            ]
-            if len(catalog_rows) != 1:
-                raise AssertionError("retained journal must identify the exact publisher source once")
-            old_acks = journal_before["records"][journal_after["records"].index(catalog_rows[0])]["acknowledgements"]
-            row = catalog_rows[0]
-            appended = row["acknowledgements"][len(old_acks):]
-            if [item.get("status") for item in appended] != [
-                "publication-pending", "published", "read-back-confirmed",
-            ]:
-                raise AssertionError("retained first ACK must have its exact three-event suffix")
-            observation_times = [
-                "2026-10-04T13:20:20Z", "2026-10-04T13:21:00Z", "2026-10-04T13:21:40Z",
-            ]
-            for acknowledgement, observed_at in zip(appended, observation_times, strict=True):
-                acknowledgement.update({
-                    "run_id": current_run_id, "run_attempt": current_attempt,
-                    "run_url": current_url, "observed_at": observed_at,
-                })
-            journal_before["updated_at"] = "2026-10-04T12:00:00Z"
-            journal_after["updated_at"] = "2026-10-04T13:21:45Z"
+            if predecessor_status is None:
+                journal_before = copy.deepcopy(actual_before)
+                journal_after = copy.deepcopy(actual_after)
+                catalog_rows = [
+                    row for row in journal_after["records"]
+                    if row.get("candidate", {}).get("manifest_sha256") == manifest_sha
+                    and row.get("pr", {}).get("merge_commit_sha") == source_sha
+                ]
+                if len(catalog_rows) != 1:
+                    raise AssertionError("retained journal must identify the exact publisher source once")
+                old_acks = journal_before["records"][journal_after["records"].index(catalog_rows[0])]["acknowledgements"]
+                row = catalog_rows[0]
+                appended = row["acknowledgements"][len(old_acks):]
+                if [item.get("status") for item in appended] != [
+                    "publication-pending", "published", "read-back-confirmed",
+                ]:
+                    raise AssertionError("retained first ACK must have its exact three-event suffix")
+                observation_times = [
+                    "2026-10-04T13:20:20Z", "2026-10-04T13:21:00Z", "2026-10-04T13:21:40Z",
+                ]
+                for acknowledgement, observed_at in zip(appended, observation_times, strict=True):
+                    acknowledgement.update({
+                        "run_id": current_run_id, "run_attempt": current_attempt,
+                        "run_url": current_url, "observed_at": observed_at,
+                    })
+                journal_before["updated_at"] = "2026-10-04T12:00:00Z"
+                journal_after["updated_at"] = "2026-10-04T13:21:45Z"
+            else:
+                if predecessor_status not in {
+                    "prepared", "pending-review", "merged", "publication-pending", "published",
+                }:
+                    raise AssertionError(f"unsupported synthetic ACK predecessor: {predecessor_status}")
+                owner_source = MODULE.git_read_only(
+                    ROOT, ["show", f"{current_revision}:scripts/canonical_update_pr.py"],
+                )
+                with tempfile.TemporaryDirectory(prefix="completeness-owner-ack-fixture-") as temporary:
+                    owner_path = pathlib.Path(temporary) / "canonical_update_pr.py"
+                    owner_path.write_bytes(owner_source)
+                    owner = MODULE.import_module("synthetic_ack_owner", owner_path)
+                exact_merged_rows = [
+                    row for row in actual_before["records"]
+                    if row.get("candidate", {}).get("manifest_sha256") == manifest_sha
+                    and row.get("pr", {}).get("merge_commit_sha") == source_sha
+                ]
+                if len(exact_merged_rows) != 1:
+                    raise AssertionError("retained journal must identify the exact publisher source once")
+                prepared = copy.deepcopy(exact_merged_rows[0])
+                pr_number = prepared.get("pr", {}).get("number")
+                if isinstance(pr_number, bool) or not isinstance(pr_number, int) or pr_number < 1:
+                    raise AssertionError("retained candidate must have an exact positive PR number")
+                prepared["status"] = "prepared"
+                prepared["acknowledgements"] = []
+                prepared["pr"] = {
+                    "number": pr_number,
+                    "url": f"https://github.com/StatPan/datapan-registry/pull/{pr_number}",
+                    "state": "open", "merge_commit_sha": None,
+                }
+                for key in ("refresh_from", "refresh_target_main_sha", "superseded_by"):
+                    prepared.pop(key, None)
+                prior_url = "https://github.com/StatPan/datapan-registry/actions/runs/99972289999/attempts/1"
+                prior_observed = "2026-10-04T13:19:20Z"
+                pr_readback = {
+                    "number": pr_number,
+                    "url": f"https://github.com/StatPan/datapan-registry/pull/{pr_number}",
+                    "body": prepared["ownership"]["body"],
+                    "headRefName": prepared["ownership"]["branch"],
+                    "baseRefName": "main",
+                    "headRefOid": prepared["candidate"]["head_sha"],
+                    "state": "MERGED",
+                    "mergeCommit": {"oid": source_sha},
+                }
+                if predecessor_status == "prepared":
+                    before_row = prepared
+                elif predecessor_status == "pending-review":
+                    before_row = owner.record_pr_readback(
+                        copy.deepcopy(prepared), {**pr_readback, "state": "OPEN", "mergeCommit": None},
+                        observed_at=prior_observed, run_url=prior_url,
+                    )
+                else:
+                    merged_row = owner.record_pr_readback(
+                        copy.deepcopy(prepared), pr_readback,
+                        observed_at=prior_observed, run_url=prior_url,
+                    )
+                    if predecessor_status == "merged":
+                        before_row = merged_row
+                    else:
+                        receipt_path = ROOT / source_by_role["publication_receipt"]["path"]
+                        reconciled = owner.reconcile_huggingface_publication(
+                            copy.deepcopy(merged_row), receipt_path,
+                            observed_at=prior_observed, run_url=prior_url,
+                        )
+                        prior_suffix_length = 1 if predecessor_status == "publication-pending" else 2
+                        prefix_length = len(merged_row["acknowledgements"]) + prior_suffix_length
+                        before_row = copy.deepcopy(reconciled)
+                        before_row["status"] = predecessor_status
+                        before_row["acknowledgements"] = reconciled["acknowledgements"][:prefix_length]
+
+                before_updated = "2026-10-04T13:19:45Z"
+                after_row = copy.deepcopy(before_row)
+                if predecessor_status in {"prepared", "pending-review"}:
+                    after_row = owner.record_pr_readback(
+                        after_row, pr_readback,
+                        observed_at="2026-10-04T13:20:20Z", run_url=current_url,
+                    )
+                after_row = owner.reconcile_huggingface_publication(
+                    after_row, ROOT / source_by_role["publication_receipt"]["path"],
+                    observed_at="2026-10-04T13:20:30Z", run_url=current_url,
+                )
+                journal_before = {
+                    "schema_version": actual_before["schema_version"],
+                    "repository": actual_before["repository"],
+                    "updated_at": before_updated,
+                    "records": [before_row],
+                }
+                journal_after = {
+                    "schema_version": actual_after["schema_version"],
+                    "repository": actual_after["repository"],
+                    "updated_at": "2026-10-04T13:21:45Z",
+                    "records": [after_row],
+                }
             log_status = "read-back-confirmed"
             journal_writes = None
         else:
@@ -402,7 +498,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 "run_id": str(current_run_id),
                 "attempt": current_attempt, "workflow_id": 373708873,
                 "workflow_path": ".github/workflows/canonical-update-publication-ack.yml",
-                "event": "schedule", "revision": current_revision,
+                "event": acknowledgement_event, "revision": current_revision,
             })
             self._write_rebound_evidence(input_root, existing, f"synthetic-{role}.bin", raw)
 
@@ -416,7 +512,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 "run_id": str(current_run_id),
                 "attempt": current_attempt, "workflow_id": 373708873,
                 "workflow_path": ".github/workflows/canonical-update-publication-ack.yml",
-                "event": "schedule", "revision": current_revision,
+                "event": acknowledgement_event, "revision": current_revision,
             })
 
         index_path = input_root / "input-index.json"
@@ -3029,6 +3125,177 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 self.assertEqual(delivery["details"]["acknowledgement_replay_journal_writes"], 0)
                 self.assertTrue(delivery["details"]["acknowledgement_replay_state_unchanged"])
 
+    def test_build_report_admits_ack_suffixes_from_all_selected_owner_states(self) -> None:
+        """Full indexed admission follows the owning runner from each selected predecessor state."""
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        current_ack_run = 99972290001
+        for predecessor in (
+            "prepared", "pending-review", "merged", "publication-pending", "published",
+        ):
+            with self.subTest(predecessor=predecessor), tempfile.TemporaryDirectory(
+                prefix=f"completeness-ack-owner-state-{predecessor}-"
+            ) as name:
+                input_root = pathlib.Path(name) / "evidence"
+                input_root.mkdir()
+                index_path, source_sha = self._build_synthetic_native_ack_packet(
+                    input_root, outcome="read-back-confirmed", predecessor_status=predecessor,
+                )
+                report = MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+
+            row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
+            delivery = next(
+                facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back"
+            )
+            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(delivery["details"]["delivery_status"], "publisher_readback_acknowledged")
+            self.assertEqual(delivery["details"]["acknowledgement_run_id"], str(current_ack_run))
+            self.assertEqual(delivery["details"]["acknowledgement_attempt"], 1)
+            self.assertEqual(delivery["details"]["subject"]["source_sha"], source_sha)
+
+        # The sixth selected state is the no-write replay of an already
+        # read-back-confirmed row. This intentionally reuses the original run
+        # ID with a later attempt, so legacy dispatch must not swallow it.
+        with tempfile.TemporaryDirectory(prefix="completeness-ack-owner-state-read-back-confirmed-") as name:
+            input_root = pathlib.Path(name) / "evidence"
+            input_root.mkdir()
+            index_path, source_sha = self._build_synthetic_native_ack_packet(
+                input_root, outcome="already_acknowledged",
+                acknowledgement_identity=(37199709258, 3), acknowledgement_event="workflow_run",
+            )
+            report = MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+        row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
+        delivery = next(
+            facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back"
+        )
+        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(delivery["details"]["subject"]["source_sha"], source_sha)
+        self.assertEqual(delivery["details"]["acknowledgement_run_id"], "37199709258")
+        self.assertEqual(delivery["details"]["acknowledgement_attempt"], 2)
+        self.assertEqual(delivery["details"]["acknowledgement_replay_run_id"], "37199709258")
+        self.assertEqual(delivery["details"]["acknowledgement_replay_attempt"], 3)
+        self.assertEqual(delivery["details"]["acknowledgement_replay_journal_writes"], 0)
+
+    def test_build_report_rejects_failed_ack_predecessor_as_unselected(self) -> None:
+        """A real owning-runner failure row is not an ACK recovery predecessor."""
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        with tempfile.TemporaryDirectory(prefix="completeness-ack-failed-predecessor-") as name:
+            input_root = pathlib.Path(name) / "evidence"
+            input_root.mkdir()
+            index_path, _source = self._build_synthetic_native_ack_packet(
+                input_root, outcome="read-back-confirmed", predecessor_status="merged",
+            )
+            index = json.loads(index_path.read_bytes())
+            before_item = next(
+                item for item in index["inputs"]
+                if item.get("scope_id") == operation_id and item["role"] == "acknowledgement_journal_before"
+            )
+            before = json.loads((input_root / before_item["path"]).read_bytes())
+            run_item = next(
+                item for item in index["inputs"]
+                if item.get("scope_id") == operation_id and item["role"] == "acknowledgement_run"
+            )
+            ack_run = json.loads((input_root / run_item["path"]).read_bytes())
+            owner_source = MODULE.git_read_only(
+                ROOT, ["show", f"{ack_run['head_sha']}:scripts/canonical_update_pr.py"],
+            )
+            with tempfile.TemporaryDirectory(prefix="completeness-failed-owner-contract-") as temporary:
+                owner_path = pathlib.Path(temporary) / "canonical_update_pr.py"
+                owner_path.write_bytes(owner_source)
+                owner = MODULE.import_module("synthetic_failed_ack_owner", owner_path)
+            receipt_item = next(
+                item for item in index["inputs"]
+                if item.get("scope_id") == operation_id and item["role"] == "publication_receipt"
+            )
+            failed_receipt = json.loads((ROOT / receipt_item["path"]).read_bytes())
+            failed_receipt["status"] = "failed"
+            failure_path = input_root / "prior-publication-failure.json"
+            failure_path.write_text(json.dumps(failed_receipt, ensure_ascii=False, indent=2) + "\n")
+            ack_url = "https://github.com/StatPan/datapan-registry/actions/runs/99972289999/attempts/1"
+            before["records"][0] = owner.reconcile_huggingface_publication(
+                before["records"][0], failure_path,
+                observed_at="2026-10-04T13:19:20Z", run_url=ack_url,
+            )
+            self._write_rebound_evidence(
+                input_root, before_item, "failed-before-journal.json",
+                (json.dumps(before, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+            )
+            before_state_roles = {
+                "acknowledgement_state_ref_before", "acknowledgement_state_commit_before",
+                "acknowledgement_state_tree_before", "acknowledgement_journal_blob_api_before",
+            }
+            index["inputs"] = [
+                item for item in index["inputs"]
+                if not (item.get("scope_id") == operation_id and item.get("role") in before_state_roles)
+            ]
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            with self.assertRaisesRegex(ValueError, "starts from a status not selected"):
+                MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+
+    def test_build_report_rejects_ack_source_payload_manifest_pr_history_and_ci_mutations(self) -> None:
+        """Rebound indexed journals still fail each independent native subject or history join."""
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        cases = ("source", "payload", "manifest", "pr", "history", "ci")
+        for mutation in cases:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory(
+                prefix=f"completeness-ack-mutation-{mutation}-"
+            ) as name:
+                input_root = pathlib.Path(name) / "evidence"
+                input_root.mkdir()
+                index_path, _source = self._build_synthetic_native_ack_packet(
+                    input_root, outcome="read-back-confirmed", predecessor_status="merged",
+                )
+                index = json.loads(index_path.read_bytes())
+                state_bundle_roles = {
+                    "acknowledgement_state_ref", "acknowledgement_state_commit",
+                    "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+                    "acknowledgement_state_ref_before", "acknowledgement_state_commit_before",
+                    "acknowledgement_state_tree_before", "acknowledgement_journal_blob_api_before",
+                }
+                index["inputs"] = [
+                    item for item in index["inputs"]
+                    if not (item.get("scope_id") == operation_id and item.get("role") in state_bundle_roles)
+                ]
+                after_item = next(
+                    item for item in index["inputs"]
+                    if item.get("scope_id") == operation_id
+                    and item["role"] == "acknowledgement_journal_after"
+                )
+                after = json.loads((input_root / after_item["path"]).read_bytes())
+                row = after["records"][0]
+                last_ack = row["acknowledgements"][-1]
+                if mutation == "source":
+                    last_ack["source_sha"] = "a" * 40
+                elif mutation == "payload":
+                    last_ack["read_back_bytes"] += 1
+                elif mutation == "manifest":
+                    last_ack["manifest_sha256"] = "f" * 64
+                elif mutation == "pr":
+                    row["pr"]["number"] += 1
+                elif mutation == "history":
+                    row["acknowledgements"][0]["run_id"] = 99972289998
+                else:
+                    self.assertIsInstance(row.get("ci"), dict)
+                    row["ci"]["head_sha"] = "f" * 40
+                self._write_rebound_evidence(
+                    input_root, after_item, f"mutated-after-{mutation}.json",
+                    (json.dumps(after, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+                )
+                index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+                with self.assertRaises(ValueError):
+                    MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+
     def test_build_report_keeps_payload_equivalence_separate_from_manifest_metadata(self) -> None:
         """A metadata-only current manifest change cannot make an older delivery current."""
         base_main = subprocess.check_output(
@@ -3240,6 +3507,50 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertEqual(result, 1)
             self.assertEqual(json_output.read_bytes(), b"prior-json-report\n")
             self.assertEqual(markdown_output.read_bytes(), b"prior-markdown-report\n")
+
+        with tempfile.TemporaryDirectory(prefix="completeness-ack-invalid-owned-body-") as name:
+            input_root = pathlib.Path(name)
+            index = partial_index()
+            for role in ("acknowledgement_journal_before", "acknowledgement_journal_after"):
+                item = next(
+                    row for row in index["inputs"]
+                    if row.get("scope_id") == operation_id and row["role"] == role
+                )
+                original_path = ROOT / item["path"]
+                journal = json.loads(original_path.read_bytes())
+                target = next(
+                    row for row in journal["records"]
+                    if row.get("pr", {}).get("state") == "merged"
+                )
+                target["ownership"]["body"] += "\nTampered without updating the durable body digest."
+                self._write_rebound_evidence(
+                    input_root, item, f"invalid-owned-body-{role}.json",
+                    (json.dumps(journal, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+                )
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            json_output = input_root / "existing-rollup.json"
+            markdown_output = input_root / "existing-rollup.md"
+            json_output.write_bytes(b"prior-json-report\n")
+            markdown_output.write_bytes(b"prior-markdown-report\n")
+            output_paths = {"rollup.json": json_output, "rollup.md": markdown_output}
+            with mock.patch.object(
+                MODULE, "output_path",
+                side_effect=lambda _root, value, _label: output_paths[value],
+            ):
+                result = MODULE.main([
+                    "--repo-root", str(ROOT),
+                    "--input-root", str(input_root),
+                    "--input-index", str(index_path),
+                    "--output-json", "rollup.json",
+                    "--output-markdown", "rollup.md",
+                    "--write",
+                ])
+            self.assertEqual(result, 1)
+            self.assertEqual(json_output.read_bytes(), b"prior-json-report\n")
+            self.assertEqual(markdown_output.read_bytes(), b"prior-markdown-report\n")
+            with self.assertRaisesRegex(ValueError, "fails its authenticated producer contract"):
+                MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
 
             index = partial_index()
             log_item = next(
