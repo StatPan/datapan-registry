@@ -2049,48 +2049,80 @@
     },
     "15057366": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "49c1b30a3a56b7badb1d7884b180df2846b7b8b2f49f759338da2f768ee4a64c"
     },
     "15057370": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "6f4f5f97ff353d2646ff8f239d873350d85d283bec6a55acf55348846a23bb37"
     },
     "15057413": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "dfeb13a2466e5ed83031b2f748c7bbde161dac3f5adad302c17dbc89c658ec32"
     },
     "15057429": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": "ecac7bde12fc5d2a855aaefeecf84cf1233aeb8499015fa6cad558974aba87b4",
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "661bfce4ac34a7e4089ca5a9f3750ff7786ae349cf824a7370d0dae772b45c89"
     },
     "15057430": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "660a78efb8948b709857ac360a43a243f90161418409890a104d5fb5a9b12a0a"
     },
     "15057472": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": "979ccb6da5d0f4f45e358d40d68b4dd4d0dc5d33c8f9a0eaf971d8bf3bd21782",
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "2c2b83f402552a0f163cd8952482f41f6484659a5172150a46b71abeec16ef3c"
     },
     "15057476": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "0f4e3985f0a5f4594de1fcfc49e3da3e11abfd36e49c1bc99f3f1d7aa18fe51d"
     },
     "15057477": {
       "attempts": 3,
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "09b6a86af1d8af42733ca7e7dc2a96014b575d5a98f5007f2ad61db9d9c5199c"
@@ -2136,8 +2168,8 @@
       "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
       "checkpoint": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5.json",
       "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
-      "status": "enriching",
-      "updated_at": "2026-10-05T00:55:05Z"
+      "status": "ready",
+      "updated_at": "2026-10-05T01:04:30Z"
     }
   ],
   "schema_version": "datapan.upstream-catalogue-checkpoint.v1"

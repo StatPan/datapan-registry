@@ -258,9 +258,162 @@
     "15057477": 3
   },
   "attempts_consumed": 24,
-  "checkpoint_sha256": "3d3bdc9437a0564dc800cbe85d6c8e9bbd34b3a682e3d5bcf4ed4c53b4e13455",
+  "checkpoint_sha256": "84298f9cecb322819a17caa46ab1e488eeb5d7df1116fc76e03f3e4681ba2749",
   "detail_queue_cursor": 256,
-  "detail_records": [],
+  "detail_records": [
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": null,
+      "id": "15057366",
+      "source_sha256": "49c1b30a3a56b7badb1d7884b180df2846b7b8b2f49f759338da2f768ee4a64c",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": null,
+      "id": "15057370",
+      "source_sha256": "6f4f5f97ff353d2646ff8f239d873350d85d283bec6a55acf55348846a23bb37",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": null,
+      "id": "15057413",
+      "source_sha256": "dfeb13a2466e5ed83031b2f748c7bbde161dac3f5adad302c17dbc89c658ec32",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": "ecac7bde12fc5d2a855aaefeecf84cf1233aeb8499015fa6cad558974aba87b4",
+      "id": "15057429",
+      "source_sha256": "661bfce4ac34a7e4089ca5a9f3750ff7786ae349cf824a7370d0dae772b45c89",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": null,
+      "id": "15057430",
+      "source_sha256": "660a78efb8948b709857ac360a43a243f90161418409890a104d5fb5a9b12a0a",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": "979ccb6da5d0f4f45e358d40d68b4dd4d0dc5d33c8f9a0eaf971d8bf3bd21782",
+      "id": "15057472",
+      "source_sha256": "2c2b83f402552a0f163cd8952482f41f6484659a5172150a46b71abeec16ef3c",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": null,
+      "id": "15057476",
+      "source_sha256": "0f4e3985f0a5f4594de1fcfc49e3da3e11abfd36e49c1bc99f3f1d7aa18fe51d",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout",
+        "phase": "page"
+      },
+      "guide_sha256": null,
+      "id": "15057477",
+      "source_sha256": "09b6a86af1d8af42733ca7e7dc2a96014b575d5a98f5007f2ad61db9d9c5199c",
+      "status": "retry"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057150",
+      "source_sha256": "94e5ef130e4afb6eafb90200ff3d31802ff860431fe5c73cc86f7628dd18b02c",
+      "status": "quarantined"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057156",
+      "source_sha256": "ed257d089eb6766d512d146d024fbefb18646be031c57ec364763e39bf32a9fd",
+      "status": "quarantined"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057160",
+      "source_sha256": "c2ac21abfaec41dcd837a0e03751f2e497b4c7c849a4d1de43a6298a9159a9c7",
+      "status": "quarantined"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057172",
+      "source_sha256": "5f9065ac043ada38186f42568e326aedb3ead340b17e92560065a2c57beb8a5f",
+      "status": "quarantined"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057226",
+      "source_sha256": "5ea26a3c3a62a432ba54d26243286363ca2548fe4cfb6ea2f232c11ec24e5374",
+      "status": "quarantined"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057248",
+      "source_sha256": "6132a2e6525ce97a12a122067563d5540b748eef124e41f67e743c67872340e9",
+      "status": "quarantined"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057261",
+      "source_sha256": "608c483ed7a559921666f289c39819b633257ce9d5de1725a856a5c0784e14b0",
+      "status": "quarantined"
+    },
+    {
+      "failure_diagnostic": {
+        "code": "timeout"
+      },
+      "guide_sha256": null,
+      "id": "15057358",
+      "source_sha256": "af7a45a51805ba5b766851b069e27c2ff6437220ea0a76fa1d6d56bcbe837baf",
+      "status": "quarantined"
+    }
+  ],
   "detail_retry_reset_ids": [],
   "fencing_token": 1,
   "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
@@ -286,7 +439,7 @@
       "run_id": "36646768289"
     }
   ],
-  "last_heartbeat_at": "2026-10-05T00:55:05Z",
+  "last_heartbeat_at": "2026-10-05T01:04:30Z",
   "last_observation": {
     "collection_status": "success",
     "execution_mode": "live",
@@ -294,32 +447,76 @@
     "producer_run_id": "36646768289",
     "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
   },
-  "last_progress_at": "2026-10-05T00:55:05Z",
-  "lease": {
-    "expires_at": "2026-10-05T01:40:02Z",
-    "fencing_token": 1,
-    "owner_run_id": "37249281150-1"
-  },
+  "last_progress_at": "2026-10-05T00:55:08Z",
+  "lease": null,
   "observation_count": 1,
   "observed_at": "2026-09-29T23:44:39Z",
   "outcome": {
-    "pending_count": 900,
-    "reason": "request_budget_reserved",
-    "reserved_attempts": 24,
-    "reserved_records": 8
+    "attempts_this_invocation": 24,
+    "composer_status": "ready_scoped",
+    "detail_failure_counts": {
+      "missing_link_detail_operations": 112,
+      "timeout": 72
+    },
+    "detail_reason_unavailable_count": 724,
+    "detail_retry_count": 900,
+    "detail_unattempted_count": 900,
+    "pending_count": 4382,
+    "reason": "scoped_candidate_ready_pending_outcomes_retained"
   },
   "output_artifact": {
-    "artifact_id": null,
-    "bundle_manifest_sha256": null,
-    "expires_at": "2026-11-04T00:54:58Z",
+    "artifact_id": "11320217240",
+    "bundle_manifest_sha256": "24f7e614a19d415cc575cf79393186d7a8bebf72e3bb9bb2c59d8e7066397722",
+    "expires_at": "2026-11-04T01:04:30Z",
     "name": "upstream-catalogue-processing-37249281150-1",
     "repository": "StatPan/datapan-registry",
     "run_id": "37249281150"
   },
-  "output_digests": [],
+  "output_digests": [
+    {
+      "bytes": 139155499,
+      "path": "composed-candidate.registry.json",
+      "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+    },
+    {
+      "bytes": 85703345,
+      "path": "ready-scope.registry.json",
+      "sha256": "1e82aa849995beb4a9c9d8eaca8d355dfd5fb9a78233af70e749b99f81b76084"
+    },
+    {
+      "bytes": 11553710,
+      "path": "semantic-diff.json",
+      "sha256": "f6fe9e149fffb331e114721ac43376561711f794fd6fcf3bce40407d0d5c314d"
+    },
+    {
+      "bytes": 3502486,
+      "path": "regeneration-queue.json",
+      "sha256": "cae8b242a30a09349e4c6aef42be828b7b829b030cd9d631bae244b35404fe55"
+    },
+    {
+      "bytes": 676643,
+      "path": "quarantine.json",
+      "sha256": "55b330a2041cc479f9b49df2cc6a065efc1233f884276a1cf4e967466d32fba4"
+    },
+    {
+      "bytes": 939105,
+      "path": "composition-receipt.json",
+      "sha256": "f9be7e6890b08acffca8dcb386ff055b2393ddc098a319095feed7f0604a22c1"
+    },
+    {
+      "bytes": 248099,
+      "path": "upstream-catalogue-enrichment-evidence.json",
+      "sha256": "561eb620d9128255c63195ae6d6398072552fdd21e0bcb05361b8de049bf221d"
+    },
+    {
+      "bytes": 719,
+      "path": "upstream-catalogue-processing-result.json",
+      "sha256": "3549c861c180d2e0db76dc5e9eb1b4a107cea2c48f6915ccb9f356c1bb24ea05"
+    }
+  ],
   "request_reservation": {
     "attempt_budget": 24,
-    "attempts_made": 0,
+    "attempts_made": 24,
     "expires_at": "2026-10-05T01:40:02Z",
     "fencing_token": 1,
     "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
@@ -380,5 +577,5 @@
   "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
   "source_id": "data_go_kr",
   "source_scope": "aggregate_supported_catalog",
-  "status": "enriching"
+  "status": "ready"
 }
