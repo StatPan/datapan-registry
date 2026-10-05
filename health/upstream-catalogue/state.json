@@ -12,11 +12,16 @@
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
       "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "checked_at": "2026-10-05T00:55:56Z",
+        "health_receipt_sha256": "3b29cd2b9e0bd85ab14ccf3e9daa0a15cbf6c1b1b4b191a127e73e1eb484a98f",
+        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
+        "verified": false
+      },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "candidate",
-      "status": "open"
+      "status": "recovery_pending_verification"
     },
     {
       "fault_key": "c73e09872f5c9b6e3f9e5526c8d163567a10cc78c7700797bc04e72afb380ddf",
@@ -81,11 +86,16 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_ack_missing",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "checked_at": "2026-10-05T00:55:56Z",
+        "health_receipt_sha256": "3b29cd2b9e0bd85ab14ccf3e9daa0a15cbf6c1b1b4b191a127e73e1eb484a98f",
+        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
+        "verified": false
+      },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "open"
+      "status": "recovery_pending_verification"
     },
     {
       "fault_key": "43ee60fa2c26b99c60ab25fee25a75303bfeb43ad3207db2b2c8f8b3c5c2beb6",
@@ -221,11 +231,16 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_record_for_different_generation",
       "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "checked_at": "2026-10-05T00:55:56Z",
+        "health_receipt_sha256": "3b29cd2b9e0bd85ab14ccf3e9daa0a15cbf6c1b1b4b191a127e73e1eb484a98f",
+        "reason": "fault_absent_but_stage_specific_evidence_not_yet_sufficient",
+        "verified": false
+      },
       "severity": "warning",
       "source_id": "data_go_kr",
       "stage": "promotion",
-      "status": "open"
+      "status": "recovery_pending_verification"
     },
     {
       "fault_key": "b11a123169de28c7edb7e3befcd3b95fffd1fa32420015358d751226d6fa0e41",
@@ -716,8 +731,8 @@
     }
   },
   "latest_receipt": {
-    "path": "receipts/receipt-37241560723-1-01ef587085d91595.json",
-    "sha256": "01ef587085d915956cd9392c1044a71d1ce88b546c05bac972dd6278043f3a19"
+    "path": "receipts/receipt-37249388690-1-3b29cd2b9e0bd85a.json",
+    "sha256": "3b29cd2b9e0bd85ab14ccf3e9daa0a15cbf6c1b1b4b191a127e73e1eb484a98f"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -737,7 +752,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "2b5d0139927db9eeb2b28e6707847e765ae326386477e26acbd3557921920447",
-  "state_status": "degraded",
-  "updated_at": "2026-10-04T22:51:03Z"
+  "state_sha256": "6fc50a89d7b03232f4b93facbce8fc37c94dd2c8bb3d7c0883a02b42aa12b5af",
+  "state_status": "healthy",
+  "updated_at": "2026-10-05T00:55:56Z"
 }
