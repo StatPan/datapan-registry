@@ -394,6 +394,43 @@ class RequestReservationAccountingTest(unittest.TestCase):
         self.assertEqual(completed["request_reservation"]["attempts_made"], 6)
         self.assertEqual(completed["attempts_consumed"], 6)
 
+    def test_resolver_timeout_replaces_prior_page_timeout_phase(self) -> None:
+        self.prepare([self.row(2)])
+        self.claim(max_attempts=3, max_queue=1, retries=2)
+        pages: list[str] = []
+        resolvers: list[str] = []
+
+        def fetch_page(url: str, _timeout: float) -> str:
+            pages.append(url)
+            if len(pages) == 1:
+                raise TimeoutError("page timeout detail must not persist")
+            return self.page("2")
+
+        def fetch_resolver(url: str, _timeout: float):
+            resolvers.append(url)
+            raise TimeoutError("resolver timeout detail must not persist")
+
+        code, completed = MODULE.process(
+            self.worker_args("701", max_attempts=3, max_queue=1, retries=2),
+            fetcher=fetch_page, resolver_fetcher=fetch_resolver, sleeper=lambda _delay: None,
+        )
+        self.assertEqual(code, 2)
+        self.assertEqual(len(pages), 2)
+        self.assertEqual(len(resolvers), 1)
+        self.assertEqual(completed["request_reservation"]["attempts_made"], 3)
+        self.assertEqual(completed["attempts_consumed"], 3)
+        expected = {"code": "timeout", "phase": "resolver"}
+        self.assertEqual(completed["detail_records"][-1]["failure_diagnostic"], expected)
+        self.assertEqual(completed["detail_records"][-1]["source_sha256"], MODULE.source_fingerprint(self.row(2)))
+        self.assertEqual(completed["detail_records"][-1]["guide_sha256"], MODULE.guide_fingerprint(self.row(2)))
+        evidence = json.loads((self.fixture.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"], expected)
+        index_value = json.loads((self.fixture.state_dir / "sources/data_go_kr/index.json").read_text())
+        retry = index_value["detail_retry_state"][MODULE.record_id(self.row(2))]
+        self.assertEqual(retry["failure_diagnostic"], expected)
+        serialized = json.dumps(completed) + json.dumps(evidence) + json.dumps(index_value)
+        self.assertNotIn("timeout detail", serialized)
+
     def test_interruption_at_page_resolver_and_post_response_keeps_precharged_slots(self) -> None:
         cases = (("before", 1, 0, 0), ("between", 1, 1, 0), ("after", 2, 1, 1))
         for mode, expected_made, expected_pages, expected_resolvers in cases:
