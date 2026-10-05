@@ -54,6 +54,56 @@
         "observed_at": {"type": "string", "format": "date-time"}
       }
     },
+    "declaration_provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["method", "declaration_id", "declaration_sha256", "subject", "native_document_sha256s", "method_derivation", "source_binding", "page_resolver", "operation_sha256"],
+      "properties": {
+        "method": {"const": "data_go_kr_seoul_target_navigation_declaration_v1"},
+        "declaration_id": {"const": "data-go-kr:OA-109:SearchLastTrainTimeByIDService:v1"},
+        "declaration_sha256": {"$ref": "#/$defs/sha256"},
+        "subject": {
+          "type": "object", "additionalProperties": false,
+          "required": ["provider", "portal_dataset_id", "source_system", "source_url", "source_api_type", "source_uddi", "source_meta_url", "source_guide_url", "provider_dataset_id", "service_name", "source_metadata_target"],
+          "properties": {
+            "provider": {"const": "data.go.kr"}, "portal_dataset_id": {"const": "15056854"},
+            "source_system": {"const": "data.go.kr"}, "source_url": {"type": "string", "format": "uri"},
+            "source_api_type": {"const": "LINK"}, "source_uddi": {"type": "string", "minLength": 1},
+            "source_meta_url": {"type": "string", "format": "uri"}, "source_guide_url": {"type": "string", "format": "uri"},
+            "provider_dataset_id": {"const": "OA-109"}, "service_name": {"const": "SearchLastTrainTimeByIDService"},
+            "source_metadata_target": {"type": "string", "format": "uri"}
+          }
+        },
+        "native_document_sha256s": {
+          "type": "object", "additionalProperties": false,
+          "required": ["guide", "service_download", "service_fragment"],
+          "properties": {
+            "guide": {"$ref": "#/$defs/sha256"},
+            "service_download": {"$ref": "#/$defs/sha256"},
+            "service_fragment": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "method_derivation": {
+          "type": "object", "additionalProperties": false,
+          "required": ["id", "classification", "execution_verified", "exclusive_method_claim"],
+          "properties": {
+            "id": {"const": "target-service-hyperlink-navigation-v1"},
+            "classification": {"const": "standard-dependent-static-navigation-semantics"},
+            "execution_verified": {"const": false}, "exclusive_method_claim": {"const": false}
+          }
+        },
+        "source_binding": {
+          "type": "object", "additionalProperties": false,
+          "required": ["source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256"],
+          "properties": {
+            "source_sha256": {"$ref": "#/$defs/sha256"}, "guide_sha256": {"$ref": "#/$defs/nullableSha256"},
+            "observed_guide_url": {"$ref": "#/$defs/nullableHttpUrl"},
+            "observed_guide_url_sha256": {"$ref": "#/$defs/nullableSha256"}
+          }
+        },
+        "page_resolver": {"$ref": "#/$defs/link_metadata"},
+        "operation_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
     "link_metadata": {
       "type": "object", "additionalProperties": false,
       "required": ["method", "dataset_id", "public_data_pk", "public_data_detail_pk", "page", "resolver"],
@@ -102,7 +152,8 @@
         "operations": {"type": "array", "items": {"type": "object"}},
         "operations_sha256": {"$ref": "#/$defs/sha256"},
         "status": {"const": "enriched"},
-        "source_provenance": {"$ref": "#/$defs/source_provenance"}
+        "source_provenance": {"$ref": "#/$defs/source_provenance"},
+        "declaration_provenance": {"$ref": "#/$defs/declaration_provenance"}
       }
     },
     "workerOutcome": {

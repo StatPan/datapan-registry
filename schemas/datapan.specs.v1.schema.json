@@ -96,6 +96,12 @@
         },
         "source": {
           "$ref": "#/$defs/source"
+        },
+        "http_method": {
+          "enum": ["GET"]
+        },
+        "method_evidence": {
+          "enum": ["target-service-hyperlink-navigation-v1"]
         }
       }
     },
@@ -110,6 +116,27 @@
         },
         "label": {
           "type": "string"
+        },
+        "type": {
+          "enum": ["string", "integer"]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "location": {
+          "enum": ["path"]
+        },
+        "auth": {
+          "type": "boolean"
+        },
+        "enum_values": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string"}
+        },
+        "enum_labels": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
         }
       }
     },

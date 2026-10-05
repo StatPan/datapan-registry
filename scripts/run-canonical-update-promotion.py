@@ -73,10 +73,12 @@ PROCESSOR_COMPOSITION_INPUTS = {
 }
 PROCESSOR_COMPATIBILITY_FILES = (
     *PROCESSOR_INPUT_PROVENANCE.values(),
+    "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
     ".github/workflows/upstream-catalogue-process.yml",
     ".github/workflows/upstream-catalog-refresh.yml",
     "scripts/upstream-catalogue-state-branch.py",
     "scripts/upstream_catalogue_handoff.py",
+    "scripts/seoul_oa109_operation_declaration.py",
     "scripts/compose-upstream-catalogue-candidate.py",
     "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
@@ -657,19 +659,25 @@ def verify_processor_input_compatibility(
             raise PromotionError(f"processor input contract changed since observation: {raw_path}")
     processor_path = PROCESSOR_INPUT_PROVENANCE["generator_revision"]
     handoff_path = "scripts/upstream_catalogue_handoff.py"
+    declaration_helper_path = "scripts/seoul_oa109_operation_declaration.py"
+    declaration_path = "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
     processor_bytes = historical_bytes.get(processor_path)
     handoff_bytes = historical_bytes.get(handoff_path)
-    if processor_bytes is None or handoff_bytes is None:
-        raise PromotionError("processor source is missing its collector handoff compatibility input")
+    declaration_helper_bytes = historical_bytes.get(declaration_helper_path)
+    declaration_bytes = historical_bytes.get(declaration_path)
+    if any(value is None for value in (processor_bytes, handoff_bytes, declaration_helper_bytes, declaration_bytes)):
+        raise PromotionError("processor source is missing a collector handoff or operation declaration compatibility input")
     generator_material = {
         "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
         "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
+        "seoul_operation_declaration_helper_sha256": hashlib.sha256(declaration_helper_bytes).hexdigest(),
+        "seoul_operation_declaration_sha256": hashlib.sha256(declaration_bytes).hexdigest(),
     }
     expected_generator_revision = hashlib.sha256(
         json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
     if generation_inputs.get("generator_revision") != expected_generator_revision:
-        raise PromotionError("processor checkpoint generator revision does not bind its handoff helper")
+        raise PromotionError("processor checkpoint generator revision does not bind its handoff and declaration inputs")
     if composition_receipt is not None:
         input_digests = composition_receipt.get("input_digests")
         if not isinstance(input_digests, Mapping):

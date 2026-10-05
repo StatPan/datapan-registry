@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import pathlib
 import sys
@@ -21,6 +22,14 @@ REGISTRY = ROOT / "data/data-go-kr.registry.json"
 OUTPUT = ROOT / "reports/data-go-kr/operation-manifest.json"
 AUTH_NAMES = {"servicekey", "service_key", "apikey", "api_key", "authorization", "authkey", "auth_key"}
 IDENTITY_FIELDS = ["provider", "dataset_id", "protocol", "source_system", "upstream_operation_key", "endpoint", "method_or_action", "operation_name"]
+DECLARATION_SPEC = importlib.util.spec_from_file_location(
+    "seoul_oa109_operation_declaration",
+    pathlib.Path(__file__).resolve().with_name("seoul_oa109_operation_declaration.py"),
+)
+if DECLARATION_SPEC is None or DECLARATION_SPEC.loader is None:
+    raise RuntimeError("pinned Seoul operation declaration helper is unavailable")
+DECLARATION_HELPER = importlib.util.module_from_spec(DECLARATION_SPEC)
+DECLARATION_SPEC.loader.exec_module(DECLARATION_HELPER)
 
 
 def load(path: pathlib.Path) -> Any:
@@ -45,21 +54,33 @@ def protocol_for(dataset: dict[str, Any], operation: dict[str, Any]) -> str | No
     raw = source.get("raw", {}) if isinstance(source, dict) else {}
     if source.get("system") == "safetydata.go.kr" and raw.get("source_api_type") == "REST":
         return "REST"
+    if raw.get("operation_declaration_id") is not None:
+        try:
+            DECLARATION_HELPER.validate_declared_operation(dataset, operation)
+        except (TypeError, ValueError):
+            raise ValueError(f"{dataset.get('id')}: declared operation does not match its pinned source declaration")
+        return "REST"
+    if source.get("system") == "data.go.kr" and raw.get("api_type") == "REST":
+        return "REST"
     dataset_raw = dataset.get("source", {}).get("raw", {})
     value = dataset_raw.get("api_type")
     return value if value in {"REST", "SOAP"} else None
 
 
-def parameter_rows(operation: dict[str, Any]) -> tuple[list[dict[str, str]], list[str], list[str]]:
-    all_parameters: list[dict[str, str]] = []
+def parameter_rows(operation: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str], list[str]]:
+    all_parameters: list[dict[str, Any]] = []
     auth: list[str] = []
     approval: list[str] = []
     for item in operation.get("request_params", []):
         if not isinstance(item, dict) or not isinstance(item.get("name"), str) or not item["name"]:
             continue
         name = item["name"]
-        all_parameters.append({"name": name, "label": str(item.get("label") or "")})
-        if name.lower().replace("-", "_") in AUTH_NAMES:
+        parameter: dict[str, Any] = {"name": name, "label": str(item.get("label") or "")}
+        for field in ("type", "required", "location", "auth", "enum_values", "enum_labels"):
+            if field in item:
+                parameter[field] = item[field]
+        all_parameters.append(parameter)
+        if item.get("auth") is True or name.lower().replace("-", "_") in AUTH_NAMES:
             auth.append(name)
         else:
             approval.append(name)
@@ -89,6 +110,8 @@ def build(registry: list[dict[str, Any]]) -> dict[str, Any]:
             endpoint = operation.get("endpoint") if isinstance(operation.get("endpoint"), str) and operation.get("endpoint") else None
             if source.get("system") == "safetydata.go.kr":
                 upstream_key = str(source_raw.get("source_interface_id") or source_raw.get("data_sn") or "")
+            elif source_raw.get("operation_declaration_id") is not None:
+                upstream_key = str(source_raw.get("operation_declaration_key") or "")
             else:
                 upstream_key = str(source_raw.get("operation_seq") or "")
             if not upstream_key:
@@ -96,6 +119,12 @@ def build(registry: list[dict[str, Any]]) -> dict[str, Any]:
             if protocol == "SOAP":
                 action = str(source_raw.get("operation_url") or operation.get("name") or "")
                 method, method_evidence, method_or_action = None, "soap_action", action
+            elif source_raw.get("operation_declaration_id") is not None:
+                expected_method = operation.get("http_method")
+                expected_evidence = DECLARATION_HELPER.DECLARATION["transport"]["method_evidence"]
+                if expected_method != "GET" or operation.get("method_evidence") != expected_evidence:
+                    raise ValueError(f"{dataset.get('id')}: declared REST method evidence is invalid")
+                action, method, method_evidence, method_or_action = None, "GET", expected_evidence, "GET"
             else:
                 action, method, method_evidence, method_or_action = None, "GET", "registry_default_get", "GET"
             params, auth, approval = parameter_rows(operation)

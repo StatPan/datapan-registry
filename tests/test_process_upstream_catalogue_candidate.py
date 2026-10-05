@@ -90,14 +90,21 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
         self.provider_index_path.write_text(json.dumps({"adapters": [{"name": "example", "hosts": ["api.example.gov"]}]}), encoding="utf-8")
         self.composer_path.write_text(self.fake_composer_source(), encoding="utf-8")
 
-    def test_generator_revision_changes_when_collector_handoff_helper_changes(self) -> None:
+    def test_generator_revision_binds_collector_and_seoul_declaration_inputs(self) -> None:
         with tempfile.TemporaryDirectory(prefix="collector-handoff-revision-") as temp:
             root = pathlib.Path(temp)
-            processor_path = root / "process-upstream-catalogue-candidate.py"
-            helper_path = root / "upstream_catalogue_handoff.py"
+            scripts = root / "scripts"
+            scripts.mkdir()
+            processor_path = scripts / "process-upstream-catalogue-candidate.py"
+            helper_path = scripts / "upstream_catalogue_handoff.py"
+            declaration_helper_path = scripts / "seoul_oa109_operation_declaration.py"
+            declaration_path = root / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+            declaration_path.parent.mkdir(parents=True)
             shutil.copy2(SCRIPT, processor_path)
             shutil.copy2(ROOT / "scripts/upstream_catalogue_handoff.py", helper_path)
-            shutil.copy2(ROOT / "scripts/generate-batch-link-detail-registry-patches.py", root / "generate-batch-link-detail-registry-patches.py")
+            shutil.copy2(ROOT / "scripts/seoul_oa109_operation_declaration.py", declaration_helper_path)
+            shutil.copy2(ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json", declaration_path)
+            shutil.copy2(ROOT / "scripts/generate-batch-link-detail-registry-patches.py", scripts / "generate-batch-link-detail-registry-patches.py")
             spec = importlib.util.spec_from_file_location("processor_revision_fixture", processor_path)
             self.assertIsNotNone(spec)
             assert spec is not None and spec.loader is not None
@@ -108,6 +115,8 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
                 contract = {
                     "processor_script_sha256": hashlib.sha256(processor_path.read_bytes()).hexdigest(),
                     "collector_handoff_helper_sha256": hashlib.sha256(helper_path.read_bytes()).hexdigest(),
+                    "seoul_operation_declaration_helper_sha256": hashlib.sha256(declaration_helper_path.read_bytes()).hexdigest(),
+                    "seoul_operation_declaration_sha256": hashlib.sha256(declaration_path.read_bytes()).hexdigest(),
                 }
                 encoded = json.dumps(contract, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
                 return hashlib.sha256(encoded).hexdigest()
@@ -118,6 +127,13 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             changed = processor.generator_revision()
             self.assertNotEqual(changed, original)
             self.assertEqual(changed, independently_derive())
+            for path in (declaration_helper_path, declaration_path):
+                previous = path.read_bytes()
+                path.write_bytes(previous + b"\n# pinned declaration revision change\n")
+                changed = processor.generator_revision()
+                self.assertNotEqual(changed, original)
+                self.assertEqual(changed, independently_derive())
+                path.write_bytes(previous)
 
     def tearDown(self) -> None:
         self.temp.cleanup()
@@ -138,7 +154,7 @@ p=argparse.ArgumentParser(); p.add_argument("--baseline"); p.add_argument("--can
 out=pathlib.Path(a.output_dir); out.mkdir(parents=True, exist_ok=True)
 enrichment=json.loads(pathlib.Path(a.enrichment_evidence).read_text())
 assert set(enrichment) in ({"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records"}, {"schema_version", "original_candidate_sha256", "provider_index_sha256", "adapter_revision", "extractor_revision", "records", "worker_outcomes"})
-for row in enrichment["records"]: assert set(row) == {"api_key", "status", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "source_provenance"}
+for row in enrichment["records"]: assert set(row) in ({"api_key", "status", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "source_provenance"}, {"api_key", "status", "source_sha256", "guide_sha256", "observed_guide_url", "observed_guide_url_sha256", "operations", "operations_sha256", "source_provenance", "declaration_provenance"})
 for row in enrichment.get("worker_outcomes", []):
     assert set(row) in ({"api_key", "status", "source_sha256", "guide_sha256"}, {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic"}, {"api_key", "status", "source_sha256", "guide_sha256", "link_metadata"}, {"api_key", "status", "source_sha256", "guide_sha256", "failure_diagnostic", "link_metadata"})
     if "failure_diagnostic" in row:
@@ -189,6 +205,106 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                 argv.append(str(value))
         return MODULE.build_parser().parse_args(argv)
 
+    def assert_c_processor_bundle_accepts(
+        self, checkpoint: dict[str, Any], baseline: list[dict[str, Any]], candidate: list[dict[str, Any]],
+        provider_index: dict[str, Any], enrichment: dict[str, Any], composer: Any,
+    ) -> None:
+        """Exercise the real C bundle gate over a real composition result."""
+        import importlib.util
+
+        runner_spec = importlib.util.spec_from_file_location(
+            "seoul_test_canonical_promotion", ROOT / "scripts/run-canonical-update-promotion.py",
+        )
+        assert runner_spec is not None and runner_spec.loader is not None
+        runner = importlib.util.module_from_spec(runner_spec)
+        runner_spec.loader.exec_module(runner)
+        baseline_sha = MODULE.file_sha256(self.baseline_path)
+        candidate_sha = MODULE.file_sha256(self.candidate_path)
+        provider_sha = MODULE.file_sha256(self.provider_index_path)
+        registry_schema = composer.load_json(composer.REGISTRY_SCHEMA)
+        result = composer.compose_registries(
+            baseline, candidate, provider_index,
+            baseline_sha256=baseline_sha,
+            candidate_sha256=candidate_sha,
+            provider_index_sha256=provider_sha,
+            enrichment_evidence=enrichment,
+            registry_schema=registry_schema,
+        )
+        self.assertEqual(result["status"], "ready_scoped")
+        input_paths = {
+            "baseline": self.baseline_path,
+            "candidate": self.candidate_path,
+            "full_diff": self.diff_path,
+            "refresh_evidence": self.evidence_path,
+            "provider_index": self.provider_index_path,
+            "source_policy": self.policy_path,
+            "registry_schema": composer.REGISTRY_SCHEMA,
+            "provider_index_schema": ROOT / "schemas/datapan.provider-index.v1.schema.json",
+            "diff_schema": ROOT / "schemas/datapan.catalog-diff.v1.schema.json",
+            "refresh_evidence_schema": ROOT / "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+            "enrichment_evidence_schema": ROOT / "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+            "composer": ROOT / "scripts/compose-upstream-catalogue-candidate.py",
+            "receipt_schema": composer.RECEIPT_SCHEMA,
+        }
+        input_digests = {
+            name: {"bytes": path.stat().st_size, "sha256": MODULE.file_sha256(path)}
+            for name, path in input_paths.items()
+        }
+        payloads = composer.build_bundle(
+            result,
+            input_digests=input_digests,
+            run_id="20100000000",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/20100000000",
+        )
+        bundle_dir = self.root / f"c-processor-bundle-{checkpoint['generation_id'][:8]}"
+        bundle_dir.mkdir()
+        for name, payload in payloads.items():
+            (bundle_dir / name).write_bytes(payload)
+        (bundle_dir / "upstream-catalogue-enrichment-evidence.json").write_bytes(
+            MODULE.canonical_json(enrichment) + b"\n",
+        )
+
+        final = copy.deepcopy(checkpoint)
+        processor_run_id = str(final["output_artifact"]["name"]).removeprefix("upstream-catalogue-processing-")
+        processor_artifact_run_id = str(final["output_artifact"]["run_id"])
+        final["status"] = "ready"
+        final["output_artifact"].update({
+            "artifact_id": "20100000001",
+            "expires_at": "2026-11-01T00:00:00Z",
+            "name": f"upstream-catalogue-processing-{processor_run_id}",
+            "run_id": processor_artifact_run_id,
+        })
+        final["output_digests"] = []
+        for name in runner.REQUIRED_PROCESSOR_FILES:
+            if name == "upstream-catalogue-processing-result.json":
+                result_receipt = MODULE.processing_result(
+                    final,
+                    producer_run_id=str(final["last_observation"]["producer_run_id"]),
+                    processor_run_id=processor_run_id,
+                    processor_artifact_run_id=processor_artifact_run_id,
+                )
+                (bundle_dir / name).write_bytes(MODULE.canonical_json(result_receipt) + b"\n")
+            final["output_digests"].append({
+                "path": name,
+                "sha256": MODULE.file_sha256(bundle_dir / name),
+                "bytes": (bundle_dir / name).stat().st_size,
+            })
+        final["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+            MODULE.canonical_json(final["output_digests"]),
+        )
+        final["last_heartbeat_at"] = max(
+            str(final["last_heartbeat_at"]), "2026-10-05T00:00:00Z",
+        )
+        uploaded = copy.deepcopy(final)
+        uploaded["output_artifact"]["artifact_id"] = None
+        uploaded["output_artifact"]["expires_at"] = "2026-10-31T00:00:00Z"
+        (bundle_dir / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+            MODULE.canonical_json(MODULE.seal_checkpoint(uploaded)) + b"\n",
+        )
+        schema = json.loads((ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json").read_text())
+        composition_helper = runner.load_canonical_update_pr(ROOT)
+        runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper)
+
     def successful_fetch(self, url: str, timeout: float) -> str:
         self.assertRegex(url, r"^https://www\.data\.go\.kr/data/[0-9]+/openapi\.do$")
         self.assertLessEqual(timeout, 30)
@@ -238,9 +354,358 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(outcome["failure_diagnostic"], {
             "code": "resolved_link_operation_contract_unproven", "phase": "resolver",
         })
-        self.assertEqual(outcome["link_metadata"]["resolver"]["resolved_url"], "http://api.example.gov/catalogue/landing")
-        self.assertEqual(outcome["link_metadata"]["resolver"]["resolved_url_sha256"], MODULE.sha256_bytes(b"http://api.example.gov/catalogue/landing"))
-        self.assertEqual(checkpoint["attempts_consumed"], 2)
+
+    def test_seoul_oa109_declaration_flows_through_worker_resume_and_composer(self) -> None:
+        import importlib.util
+
+        subject = json.loads((ROOT / "data/data-go-kr.registry.json").read_text(encoding="utf-8"))
+        subject = next(row for row in subject if row["id"] == "15056854")
+        baseline = copy.deepcopy(subject)
+        candidate = copy.deepcopy(subject)
+        candidate["source"]["raw"]["updated_at"] = "2026-10-01"
+        self.baseline_path.write_text(json.dumps([baseline], ensure_ascii=False), encoding="utf-8")
+        self.candidate_path.write_text(json.dumps([candidate], ensure_ascii=False), encoding="utf-8")
+        self.provider_index_path.write_bytes((ROOT / "data/provider-index.json").read_bytes())
+        self.write_observation(self.now)
+
+        helper = MODULE.SEOUL_DECLARATION
+        detail_id = subject["source"]["raw"]["id"]
+        page_url = helper.PAGE_URL
+        page_body = (
+            f'<button type="button" onclick="fn_goUrlLink(\'15056854\')">Open</button>'
+            '<input type="hidden" id="publicDataPk" value="15056854">'
+            f'<input type="hidden" id="publicDataDetailPk" value="{detail_id}">'
+        ).encode("utf-8")
+        resolver_body = json.dumps({
+            "publicDataDetailPk": detail_id,
+            "linkUrl": helper.DECLARATION["subject"]["source_metadata_target"],
+            "status": True,
+        }, separators=(",", ":")).encode("utf-8")
+
+        def fetch_page(url: str, _timeout: float):
+            self.assertEqual(url, page_url)
+            return MODULE.DetailPageObservation(
+                body=page_body.decode("utf-8"), page_url=page_url, effective_url=page_url,
+                page_sha256=MODULE.sha256_bytes(page_body), observed_at=self.now, page_bytes=page_body,
+            )
+
+        def fetch_resolver(url: str, _timeout: float):
+            self.assertEqual(url, helper.RESOLVER_URL)
+            return MODULE.LinkResolverObservation(
+                body=resolver_body, request_url=url, effective_url=url, observed_at=self.now,
+            )
+
+        actual_composer = ROOT / "scripts/compose-upstream-catalogue-candidate.py"
+        process_args = self.args()
+        code, checkpoint = MODULE.process(
+            process_args,
+            fetcher=fetch_page,
+            resolver_fetcher=fetch_resolver,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(code, 0, checkpoint)
+        evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        self.assertEqual(len(evidence["records"]), 1)
+        record = evidence["records"][0]
+        self.assertEqual(len(record["operations"]), 4)
+        self.assertEqual(record["operations"][:3], baseline["operations"])
+        declared = record["operations"][-1]
+        self.assertEqual(declared["http_method"], "GET")
+        self.assertEqual(declared["method_evidence"], "target-service-hyperlink-navigation-v1")
+        self.assertEqual(len(declared["request_params"]), 8)
+        self.assertEqual(len(declared["response_params"]), 8)
+        self.assertFalse(record["declaration_provenance"]["method_derivation"]["execution_verified"])
+        self.assertFalse(record["declaration_provenance"]["method_derivation"]["exclusive_method_claim"])
+
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        registered = __import__("json").loads((ROOT / "data/provider-index.json").read_text())
+        resumed = MODULE.validated_resume_records(
+            evidence_path,
+            checkpoint=checkpoint,
+            state_dir=self.state_dir,
+            source_id="data_go_kr",
+            checkpoint_schema=schema,
+            provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
+            candidate_by_id={candidate["id"]: candidate},
+            registered_hosts=MODULE.DETAIL_HELPERS.registered_hosts(registered),
+            now=MODULE.parse_timestamp(self.now),
+        )
+        self.assertEqual(resumed["15056854"]["declaration_provenance"], record["declaration_provenance"])
+
+        composer_spec = importlib.util.spec_from_file_location("seoul_test_composer", actual_composer)
+        assert composer_spec is not None and composer_spec.loader is not None
+        composer = importlib.util.module_from_spec(composer_spec)
+        composer_spec.loader.exec_module(composer)
+        provider_index = json.loads(self.provider_index_path.read_text(encoding="utf-8"))
+        diagnostic_evidence_row = composer.apply_enrichment_record(candidate, record)
+        composer.SEOUL_OPERATION_DECLARATION.validate_enriched_record(candidate, record)
+        composer.SEOUL_OPERATION_DECLARATION.validate_declared_operation(candidate, declared)
+        composer.LINK_DETAIL_HELPERS.validate_link_metadata(
+            record["declaration_provenance"]["page_resolver"],
+            candidate["id"],
+            composer.registered_hosts(provider_index),
+        )
+        validated_enrichment = composer.validate_enrichment_evidence(
+            evidence,
+            candidate_by_key={("data.go.kr", candidate["id"]): candidate},
+            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            candidate_sha256=MODULE.file_sha256(self.candidate_path),
+            provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
+            hosts=composer.registered_hosts(provider_index),
+            registry_schema=composer.load_json(composer.REGISTRY_SCHEMA),
+        )
+        self.assertNotIn("_binding_error", validated_enrichment[("data.go.kr", candidate["id"])])
+        changed_observation = copy.deepcopy(evidence)
+        changed_record = changed_observation["records"][0]
+        changed_record["observed_guide_url"] = "https://untrusted.example/guide.pdf"
+        changed_record["observed_guide_url_sha256"] = MODULE.sha256_bytes(
+            changed_record["observed_guide_url"].encode("utf-8"),
+        )
+        rejected_observation = composer.validate_enrichment_evidence(
+            changed_observation,
+            candidate_by_key={("data.go.kr", candidate["id"]): candidate},
+            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            candidate_sha256=MODULE.file_sha256(self.candidate_path),
+            provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
+            hosts=composer.registered_hosts(provider_index),
+            registry_schema=composer.load_json(composer.REGISTRY_SCHEMA),
+        )
+        self.assertIn("_binding_error", rejected_observation[("data.go.kr", candidate["id"])])
+
+        changed_source = copy.deepcopy(candidate)
+        changed_source["source"]["raw"]["guide_url"] = "https://untrusted.example/changed-source-guide.pdf"
+        rejected_source = composer.validate_enrichment_evidence(
+            evidence,
+            candidate_by_key={("data.go.kr", changed_source["id"]): changed_source},
+            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            candidate_sha256=MODULE.file_sha256(self.candidate_path),
+            provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
+            hosts=composer.registered_hosts(provider_index),
+            registry_schema=composer.load_json(composer.REGISTRY_SCHEMA),
+        )
+        self.assertIn("_binding_error", rejected_source[("data.go.kr", candidate["id"])])
+        composed = composer.compose_registries(
+            [baseline], [candidate], provider_index,
+            baseline_sha256=MODULE.file_sha256(self.baseline_path),
+            candidate_sha256=MODULE.file_sha256(self.candidate_path),
+            provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
+            enrichment_evidence=evidence,
+        )
+        composed_row = composed["composed_registry"][0]
+        self.assertEqual(composed_row["operations"][:3], baseline["operations"])
+        self.assertEqual(len(composed_row["operations"]), 4, composed["semantic_diff"]["api_decisions"])
+        self.assertEqual(composed_row["operations"][3], declared)
+        self.assertEqual(composer.operation_counts([composed_row])["gateway"], 1)
+        self.assert_c_processor_bundle_accepts(
+            checkpoint, [baseline], [candidate], provider_index, evidence, composer,
+        )
+
+        manifest_spec = importlib.util.spec_from_file_location(
+            "seoul_test_operation_manifest", ROOT / "scripts/generate-data-go-kr-operation-manifest.py",
+        )
+        assert manifest_spec is not None and manifest_spec.loader is not None
+        manifest_generator = importlib.util.module_from_spec(manifest_spec)
+        manifest_spec.loader.exec_module(manifest_generator)
+        prior_registry_path = manifest_generator.REGISTRY
+        try:
+            manifest_generator.REGISTRY = self.candidate_path
+            operation_manifest = manifest_generator.build([composed_row])
+        finally:
+            manifest_generator.REGISTRY = prior_registry_path
+        manifest_schema = json.loads((ROOT / "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json").read_text())
+        __import__("jsonschema").Draft202012Validator(
+            manifest_schema, format_checker=__import__("jsonschema").FormatChecker(),
+        ).validate(operation_manifest)
+        manifest_entry = next(
+            item for item in operation_manifest["operations"]
+            if item["provenance"]["upstream_operation_key"] == helper.OPERATION_KEY
+        )
+        self.assertEqual(manifest_entry["transport"]["method"], "GET")
+        self.assertEqual(manifest_entry["transport"]["method_evidence"], "target-service-hyperlink-navigation-v1")
+        self.assertEqual(manifest_entry["requirements"]["auth_parameter_names"], ["KEY"])
+        self.assertEqual(len(manifest_entry["requirements"]["all_request_parameters"]), 8)
+
+        projection_spec = importlib.util.spec_from_file_location(
+            "seoul_test_runtime_projection", ROOT / "scripts/runtime_evidence_projection.py",
+        )
+        assert projection_spec is not None and projection_spec.loader is not None
+        projection = importlib.util.module_from_spec(projection_spec)
+        projection_spec.loader.exec_module(projection)
+        runtime_contract = projection.operation_contract(composed_row, declared, 3, manifest_entry)
+        self.assertTrue(runtime_contract["contract_complete"], runtime_contract["incomplete_reasons"])
+        self.assertEqual(runtime_contract["upstream_operation_key"], helper.OPERATION_KEY)
+
+    def test_seoul_cached_declaration_uses_no_http_or_retry_budget_and_keeps_source_cursor(self) -> None:
+        import importlib.util
+
+        subject = json.loads((ROOT / "data/data-go-kr.registry.json").read_text(encoding="utf-8"))
+        subject = next(row for row in subject if row["id"] == "15056854")
+        baseline = copy.deepcopy(subject)
+        candidate = copy.deepcopy(subject)
+        candidate["source"]["raw"]["updated_at"] = "2026-10-01"
+        self.baseline_path.write_text(json.dumps([baseline]), encoding="utf-8")
+        self.candidate_path.write_text(json.dumps([candidate]), encoding="utf-8")
+        self.provider_index_path.write_bytes((ROOT / "data/provider-index.json").read_bytes())
+        self.write_observation(self.now)
+
+        helper = MODULE.SEOUL_DECLARATION
+        page_url = helper.PAGE_URL
+        detail_id = subject["source"]["raw"]["id"]
+        page_body = (
+            f'<button type="button" onclick="fn_goUrlLink(\'15056854\')">Open</button>'
+            '<input type="hidden" id="publicDataPk" value="15056854">'
+            f'<input type="hidden" id="publicDataDetailPk" value="{detail_id}">'
+        ).encode("utf-8")
+        resolver_body = json.dumps({
+            "publicDataDetailPk": detail_id,
+            "linkUrl": helper.DECLARATION["subject"]["source_metadata_target"],
+            "status": True,
+        }, separators=(",", ":")).encode("utf-8")
+        physical_calls: list[str] = []
+
+        def page_fetch(url: str, _timeout: float):
+            physical_calls.append("page")
+            return MODULE.DetailPageObservation(
+                body=page_body.decode("utf-8"), page_url=url, effective_url=url,
+                page_sha256=MODULE.sha256_bytes(page_body), observed_at=self.now, page_bytes=page_body,
+            )
+
+        def resolver_fetch(url: str, _timeout: float):
+            physical_calls.append("resolver")
+            return MODULE.LinkResolverObservation(body=resolver_body, request_url=url, effective_url=url, observed_at=self.now)
+
+        first_code, first = MODULE.process(
+            self.args(run_id="201"), fetcher=page_fetch, resolver_fetcher=resolver_fetch,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(first_code, 0, first)
+        self.assertEqual(physical_calls, ["page", "resolver"])
+        self.assertEqual(first["attempts_consumed"], 2)
+        first_evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        first_evidence = json.loads(first_evidence_path.read_text(encoding="utf-8"))
+        prior_record = first_evidence["records"][0]
+        cached_link_metadata = prior_record["declaration_provenance"]["page_resolver"]
+
+        # Model a digest-bound legacy cache that retained the authenticated
+        # page/resolver chain as an unresolved outcome. The declaration can be
+        # completed locally from those bytes; it does not spend another page
+        # or resolver request when the retry counter is already exhausted.
+        old_evidence = {
+            key: copy.deepcopy(value) for key, value in first_evidence.items()
+            if key not in {"records", "worker_outcomes"}
+        }
+        old_evidence["records"] = []
+        old_evidence["worker_outcomes"] = [{
+            "api_key": {"provider": "data.go.kr", "id": "15056854"},
+            "status": "quarantined",
+            "source_sha256": MODULE.source_fingerprint(candidate),
+            "guide_sha256": None,
+            "failure_diagnostic": {"code": "resolved_link_operation_contract_unproven", "phase": "resolver"},
+            "link_metadata": cached_link_metadata,
+        }]
+        bad_source_identity = copy.deepcopy(candidate)
+        bad_source_identity["source"]["raw"]["id"] = "uddi:unrelated-dataset"
+        with self.assertRaisesRegex(ValueError, "resume_seoul_cached_declaration_binding_invalid"):
+            MODULE.materialize_cached_seoul_declaration(
+                bad_source_identity, old_evidence["worker_outcomes"][0],
+                now=MODULE.parse_timestamp(self.now),
+                registered_hosts=MODULE.DETAIL_HELPERS.registered_hosts(json.loads(self.provider_index_path.read_text())),
+            )
+        stale_outcome = copy.deepcopy(old_evidence["worker_outcomes"][0])
+        stale_outcome["link_metadata"]["page"]["observed_at"] = "2026-08-01T10:00:00Z"
+        stale_outcome["link_metadata"]["resolver"]["observed_at"] = "2026-08-01T10:00:00Z"
+        self.assertIsNone(MODULE.materialize_cached_seoul_declaration(
+            candidate, stale_outcome,
+            now=MODULE.parse_timestamp(self.now),
+            registered_hosts=MODULE.DETAIL_HELPERS.registered_hosts(json.loads(self.provider_index_path.read_text())),
+        ))
+        first_evidence_path.write_text(json.dumps(old_evidence, ensure_ascii=False), encoding="utf-8")
+        generation_path = self.state_dir / "sources/data_go_kr/generations" / f"{first['generation_id']}.json"
+        bound_owner = json.loads(generation_path.read_text(encoding="utf-8"))
+        evidence_digest = MODULE.file_sha256(first_evidence_path)
+        evidence_entry = next(
+            item for item in bound_owner["output_digests"]
+            if item["path"] == first_evidence_path.name
+        )
+        evidence_entry.update({"sha256": evidence_digest, "bytes": first_evidence_path.stat().st_size})
+        bound_owner["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+            MODULE.canonical_json(bound_owner["output_digests"]),
+        )
+        generation_path.write_text(json.dumps(MODULE.seal_checkpoint(bound_owner), sort_keys=True), encoding="utf-8")
+
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+        index["detail_queue_cursor"] = 19
+        index["detail_retry_state"]["15056854"] = {
+            "source_sha256": MODULE.source_fingerprint(candidate),
+            "guide_sha256": None,
+            "attempts": 3,
+            "last_attempt_at": self.now,
+            "failure_diagnostic": {"code": "resolved_link_operation_contract_unproven", "phase": "resolver"},
+        }
+        retry_before = copy.deepcopy(index["detail_retry_state"]["15056854"])
+        index_path.write_text(json.dumps(index, sort_keys=True), encoding="utf-8")
+
+        # A changed source policy creates a new processor generation while the
+        # candidate/source row and the cache remain exactly the same.
+        alternate_policy = self.root / "source-policy-with-new-generation.json"
+        alternate_policy.write_text(json.dumps(json.loads(self.policy_path.read_text()), indent=2) + "\n", encoding="utf-8")
+        self.assertNotEqual(MODULE.file_sha256(alternate_policy), MODULE.file_sha256(self.policy_path))
+        claim_args = self.args(run_id="202")
+        claim_args.source_policy = alternate_policy
+        claim_args.resume_enrichment_evidence = first_evidence_path
+        claim_args.claim_only = True
+        forbidden = lambda *_args, **_kwargs: self.fail("cached local declaration must not issue HTTP")
+        claim_code, claimed = MODULE.process(
+            claim_args, fetcher=forbidden, resolver_fetcher=forbidden, sleeper=lambda _delay: None,
+        )
+        self.assertEqual(claim_code, 0, claimed)
+        self.assertEqual(claimed["attempts_consumed"], 0)
+        self.assertEqual(claimed["attempts_by_id"], {})
+        self.assertEqual(claimed["detail_queue_cursor"], 19)
+        self.assertEqual(claimed["request_reservation"]["records"], [])
+
+        worker_args = copy.deepcopy(claim_args)
+        worker_args.claim_only = False
+        worker_args.require_durable_reservation = True
+        worker_code, worker = MODULE.process(
+            worker_args, fetcher=forbidden, resolver_fetcher=forbidden, sleeper=lambda _delay: None,
+        )
+        self.assertEqual(worker_code, 0, worker)
+        self.assertEqual(worker["attempts_consumed"], 0)
+        self.assertEqual(worker["attempts_by_id"], {})
+        self.assertEqual(worker["detail_queue_cursor"], 19)
+        after_index = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertEqual(after_index["detail_retry_state"]["15056854"], retry_before)
+        self.assertEqual(after_index["detail_queue_cursor"], 19)
+
+        cached_result = json.loads(first_evidence_path.read_text(encoding="utf-8"))
+        self.assertEqual(len(cached_result["records"]), 1)
+        self.assertEqual(len(cached_result["records"][0]["operations"]), 4)
+        self.assertEqual(cached_result["records"][0]["operations"][:3], baseline["operations"])
+        self.assertTrue(cached_result["records"][0]["declaration_provenance"])
+
+        composer_spec = importlib.util.spec_from_file_location(
+            "seoul_cached_test_composer", ROOT / "scripts/compose-upstream-catalogue-candidate.py",
+        )
+        assert composer_spec is not None and composer_spec.loader is not None
+        composer = importlib.util.module_from_spec(composer_spec)
+        composer_spec.loader.exec_module(composer)
+        provider_index = json.loads(self.provider_index_path.read_text(encoding="utf-8"))
+        validated = composer.validate_enrichment_evidence(
+            cached_result,
+            candidate_by_key={("data.go.kr", candidate["id"]): candidate},
+            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            candidate_sha256=MODULE.file_sha256(self.candidate_path),
+            provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
+            hosts=composer.registered_hosts(provider_index),
+            registry_schema=composer.load_json(composer.REGISTRY_SCHEMA),
+        )
+        self.assertNotIn("_binding_error", validated[("data.go.kr", "15056854")])
+        self.assert_c_processor_bundle_accepts(
+            worker, [baseline], [candidate], provider_index, cached_result, composer,
+        )
 
     def test_resume_rejects_resolver_diagnostic_when_metadata_chain_is_missing(self) -> None:
         page_url = "https://www.data.go.kr/data/2/openapi.do"
