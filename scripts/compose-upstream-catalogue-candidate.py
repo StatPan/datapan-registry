@@ -1342,6 +1342,7 @@ def build_bundle(
     input_digests: dict[str, Any],
     run_id: str,
     run_url: str,
+    same_observation_derivation: dict[str, Any] | None = None,
 ) -> dict[str, bytes]:
     names = {
         "composed-candidate.registry.json": result["composed_registry"],
@@ -1356,6 +1357,7 @@ def build_bundle(
         "schema_version": SCHEMA_VERSION,
         "producer": {"repository": "StatPan/datapan-registry", "run_id": run_id, "run_url": run_url},
         "input_digests": input_digests,
+        **({"same_observation_derivation": same_observation_derivation} if same_observation_derivation is not None else {}),
         "status": result["status"],
         "scope": {
             "full_scope_fresh": False,
@@ -1417,6 +1419,8 @@ def main() -> int:
     parser.add_argument("--provider-index", type=pathlib.Path, default=ROOT / "data/provider-index.json")
     parser.add_argument("--source-policy", type=pathlib.Path, default=DEFAULT_REFRESH_POLICY)
     parser.add_argument("--enrichment-evidence", type=pathlib.Path)
+    parser.add_argument("--composition-baseline", type=pathlib.Path)
+    parser.add_argument("--same-observation-derivation", type=pathlib.Path)
     parser.add_argument("--producer-run-id", required=True)
     parser.add_argument("--producer-run-url", required=True)
     parser.add_argument("--output-dir", required=True, type=pathlib.Path)
@@ -1433,6 +1437,18 @@ def main() -> int:
         provider_index_digest = file_digest(args.provider_index)
         source_policy_digest = file_digest(args.source_policy)
         enrichment_digest = file_digest(args.enrichment_evidence) if args.enrichment_evidence else None
+        composition_baseline_path = args.composition_baseline or args.baseline
+        composition_baseline_digest = file_digest(composition_baseline_path)
+        derivation = None
+        if args.same_observation_derivation:
+            from upstream_catalogue_derivation import validate_derivation_envelope
+            derivation = validate_derivation_envelope(load_json(args.same_observation_derivation))
+            expected = derivation["composition_baseline"]
+            if (
+                expected["registry_bytes"] != composition_baseline_digest["bytes"]
+                or expected["registry_sha256"] != composition_baseline_digest["sha256"]
+            ):
+                raise CompositionError("derived composition baseline differs from its authenticated envelope")
         script_digest = file_digest(pathlib.Path(__file__))
         receipt_schema_digest = file_digest(RECEIPT_SCHEMA)
         registry_schema_digest = file_digest(REGISTRY_SCHEMA)
@@ -1447,7 +1463,8 @@ def main() -> int:
         ):
             if expected and expected != actual:
                 raise CompositionError(f"{label} sha256 does not match the pinned expected digest")
-        baseline = load_json(args.baseline)
+        original_baseline = load_json(args.baseline)
+        baseline = load_json(composition_baseline_path)
         candidate = load_json(args.candidate)
         diff = load_json(args.diff)
         evidence = load_json(args.refresh_evidence)
@@ -1468,14 +1485,14 @@ def main() -> int:
             enrichment_schema = load_json(ENRICHMENT_EVIDENCE_SCHEMA)
             jsonschema.Draft202012Validator(enrichment_schema, format_checker=jsonschema.FormatChecker()).validate(enrichment_evidence)
         verify_refresh_inputs(
-            baseline, candidate, diff, evidence, baseline_digest, candidate_digest, diff_digest,
+            original_baseline, candidate, diff, evidence, baseline_digest, candidate_digest, diff_digest,
             args.producer_run_id, args.producer_run_url,
         )
         if not isinstance(provider_index, dict):
             raise CompositionError("provider index must be an object")
         result = compose_registries(
             baseline, candidate, provider_index,
-            baseline_sha256=baseline_digest["sha256"], candidate_sha256=candidate_digest["sha256"],
+            baseline_sha256=composition_baseline_digest["sha256"], candidate_sha256=candidate_digest["sha256"],
             provider_index_sha256=provider_index_digest["sha256"], enrichment_evidence=enrichment_evidence,
             registry_schema=schema,
         )
@@ -1496,9 +1513,14 @@ def main() -> int:
             "composer": script_digest,
             "receipt_schema": receipt_schema_digest,
         }
+        if derivation is not None:
+            input_digests["composition_baseline"] = composition_baseline_digest
         if enrichment_digest:
             input_digests["enrichment_evidence"] = enrichment_digest
-        payloads = build_bundle(result, input_digests=input_digests, run_id=args.producer_run_id, run_url=args.producer_run_url)
+        payloads = build_bundle(
+            result, input_digests=input_digests, run_id=args.producer_run_id, run_url=args.producer_run_url,
+            same_observation_derivation=derivation,
+        )
         publish_status = publish_bundle(args.output_dir, payloads)
         print(json.dumps({"status": result["status"], "output": args.output_dir.as_posix(), "publish_status": publish_status, "counts": result["semantic_diff"]["summary"]}, ensure_ascii=False, sort_keys=True))
         return 0

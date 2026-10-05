@@ -255,6 +255,56 @@ def validate_checks(checks: Mapping[str, Any]) -> None:
         raise AdmissionError("candidate validation is incomplete: " + ", ".join(missing))
 
 
+def source_refresh_previous_registry_sha(
+    composition: Mapping[str, Any], *, expected_registry_path: str,
+) -> str:
+    """Return the exact registry the admitted source diff must compare against.
+
+    For ordinary generations, the composer baseline is the immutable A
+    baseline. Same-observation derivatives retain that original A identity in
+    ``input_digests.baseline`` while composing against a separately authenticated
+    canonical C payload. The native ``catalog diff --old`` receipt must bind to
+    the latter without replacing the former.
+    """
+    input_digests = composition.get("input_digests")
+    if not isinstance(input_digests, Mapping):
+        raise AdmissionError("composition receipt lacks exact source-refresh input digests")
+    original_input = input_digests.get("baseline")
+    if not isinstance(original_input, Mapping):
+        raise AdmissionError("composition receipt does not bind the immutable original baseline digest")
+    original_sha = valid_sha(original_input.get("sha256"), SHA256_RE, "immutable original baseline registry digest")
+
+    derivation = composition.get("same_observation_derivation")
+    if derivation is None:
+        return original_sha
+    if not isinstance(derivation, Mapping):
+        raise AdmissionError("same-observation composition lineage is malformed")
+    original_observation = derivation.get("original_observation")
+    if (
+        not isinstance(original_observation, Mapping)
+        or original_observation.get("original_baseline_sha256") != original_sha
+    ):
+        raise AdmissionError("same-observation composition changed the immutable original A baseline")
+
+    baseline = derivation.get("composition_baseline")
+    baseline_input = input_digests.get("composition_baseline")
+    if not isinstance(baseline, Mapping) or not isinstance(baseline_input, Mapping):
+        raise AdmissionError("same-observation composition lacks its exact canonical comparison baseline")
+    baseline_path = baseline.get("registry_path")
+    baseline_bytes = baseline.get("registry_bytes")
+    baseline_sha = valid_sha(baseline.get("registry_sha256"), SHA256_RE, "composition baseline registry digest")
+    if (
+        baseline_path != expected_registry_path
+        or isinstance(baseline_bytes, bool)
+        or not isinstance(baseline_bytes, int)
+        or baseline_bytes < 1
+        or baseline_input.get("bytes") != baseline_bytes
+        or baseline_input.get("sha256") != baseline_sha
+    ):
+        raise AdmissionError("same-observation composition baseline digest differs from its exact input")
+    return baseline_sha
+
+
 def validate_candidate(
     candidate: Mapping[str, Any],
     observed_base_sha: str,
@@ -387,10 +437,9 @@ def validate_candidate(
     }
     if not isinstance(commands, list) or len(commands) != len(expected_outputs):
         raise AdmissionError("source-refresh evidence must include the complete nine-report native source generator set")
-    baseline_digest = composition.get("input_digests", {}).get("baseline", {}).get("sha256")
-    if not isinstance(baseline_digest, str):
-        raise AdmissionError("composition receipt does not bind the immutable baseline registry digest")
-    valid_sha(baseline_digest, SHA256_RE, "composition baseline registry digest")
+    baseline_digest = source_refresh_previous_registry_sha(
+        composition, expected_registry_path=candidate["registry_path"],
+    )
     seen_outputs: set[tuple[str, ...]] = set()
 
     def has_repository_suffix(argument: str, expected: str) -> bool:
@@ -423,7 +472,7 @@ def validate_candidate(
             if "--old" not in argv or argv.index("--old") + 1 >= len(argv) or not has_repository_suffix(argv[argv.index("--old") + 1], ".datapan/previous/data-go-kr.registry.json"):
                 raise AdmissionError("catalog diff does not use the materialized immutable baseline path")
             if item.get("input_previous_registry_sha256") != baseline_digest:
-                raise AdmissionError("catalog diff does not bind the exact immutable composition baseline")
+                raise AdmissionError("catalog diff does not bind the exact composition comparison baseline")
         elif item.get("input_previous_registry_sha256") is not None:
             raise AdmissionError("non-diff source report unexpectedly claims a previous registry input")
         if command_key != ("catalog", "diff"):

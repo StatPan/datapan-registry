@@ -100,3 +100,17 @@ The workflow's automatic expected-revision receipt verifies baseline immutable
 distribution integrity but does not supply the checked-in required PATH/SHA-256
 set. It therefore does not replace or satisfy the separate post-public Web
 adoption gate.
+
+## Same-observation incremental catalogue composition (prepared)
+
+The catalogue processor can carry additional validated specification
+contributions from one authenticated source observation into a later candidate
+after a same-source canonical update has been merged. It retains the original
+observation time and identity, existing operations, and the physical request
+limits. Derived candidates continue through the ordinary owned pull request,
+CI, and review process; this capability does not create a new source
+observation or bypass publication and manual acceptance gates.
+
+This source change is prepared for review. It does not by itself establish
+runtime activation, a new unattended source observation, or publication and
+read-back acceptance.
