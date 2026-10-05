@@ -1216,6 +1216,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 identity = RUNNER.authenticated_current_canonical_registry(root, self.source_sha)
             self.assertEqual(identity, {
                 "main_sha": self.source_sha,
+                "manifest_sha256": hashlib.sha256((root / "manifest.json").read_bytes()).hexdigest(),
                 "registry_path": registry_path,
                 "registry_bytes": len(payload),
                 "registry_sha256": digest,
@@ -1663,7 +1664,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 "refresh_evidence": {"bytes": 1, "sha256": candidate_sha},
             }
             bundle, checkpoint, _uploaded = self.ready_bundle(root, input_digests=receipt_digests)
-            with self.assertRaisesRegex(RUNNER.PromotionError, "exact baseline digest"):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "exact original baseline digest"):
                 RUNNER.validate_processor_bundle(checkpoint, bundle, {}, mock.Mock())
 
     def test_schedule_recovers_the_checkpoint_locator_after_an_idle_replay(self) -> None:

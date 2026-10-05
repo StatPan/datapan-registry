@@ -40,6 +40,7 @@ jobs:
     permissions:
       actions: read
       contents: write
+      pull-requests: read
     outputs:
       processing_status: ${{ steps.publish_result.outputs.status }}
       generation_id: ${{ steps.publish_result.outputs.generation_id }}
@@ -56,6 +57,9 @@ jobs:
         with:
           path: bootstrap
           lfs: false
+          # The derivation guard verifies that the acknowledged C merge is an
+          # ancestor of this exact main revision.
+          fetch-depth: 0
 
       - name: Record trusted processor revision
         id: processor_revision
@@ -124,6 +128,9 @@ jobs:
           import re
           import sys
 
+          sys.path.insert(0, str(pathlib.Path.cwd() / "scripts"))
+          import upstream_catalogue_derivation as derivation
+
           state = pathlib.Path(sys.argv[1])
           producer_id = sys.argv[2]
           index_path = state / "sources/data_go_kr/index.json"
@@ -133,12 +140,38 @@ jobs:
           index = json.loads(index_path.read_text(encoding="utf-8"))
           if index.get("schema_version") != "datapan.upstream-catalogue-checkpoint.v1" or not isinstance(index.get("generations"), list):
               raise SystemExit("FAIL corrupt state index while resolving producer redelivery")
+          shadowed = set()
+          for indexed in index["generations"]:
+              if not isinstance(indexed, dict) or not isinstance(indexed.get("generation_id"), str):
+                  continue
+              parent_id = indexed["generation_id"]
+              if not re.fullmatch(r"[a-f0-9]{64}", parent_id):
+                  raise SystemExit("FAIL invalid generation id while resolving derivation lineage")
+              parent_path = state / "sources/data_go_kr/generations" / f"{parent_id}.json"
+              if not parent_path.is_file():
+                  continue
+              parent = json.loads(parent_path.read_text(encoding="utf-8"))
+              unsigned = dict(parent)
+              claimed = unsigned.pop("checkpoint_sha256", None)
+              canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+              if hashlib.sha256(canonical).hexdigest() != claimed or parent.get("generation_id") != parent_id:
+                  raise SystemExit("FAIL corrupt checkpoint while resolving derivation lineage")
+              inputs = parent.get("generation_inputs") if isinstance(parent.get("generation_inputs"), dict) else {}
+              envelope = inputs.get("same_observation_derivation")
+              if envelope is None:
+                  continue
+              try:
+                  shadowed.update(derivation.validate_derivation_envelope(envelope)["ancestor_generation_ids"])
+              except (TypeError, ValueError) as exc:
+                  raise SystemExit("FAIL invalid derivation envelope while resolving producer redelivery") from exc
           artifact_name = f"upstream-catalog-refresh-{producer_id}"
           matches = []
           for row in index["generations"]:
               if not isinstance(row, dict) or not isinstance(row.get("generation_id"), str):
                   continue
               generation_id = row["generation_id"]
+              if generation_id in shadowed:
+                  continue
               if not re.fullmatch(r"[a-f0-9]{64}", generation_id):
                   raise SystemExit("FAIL invalid generation id while resolving producer redelivery")
               path = state / "sources/data_go_kr/generations" / f"{generation_id}.json"
@@ -324,6 +357,9 @@ jobs:
           import re
           import sys
 
+          sys.path.insert(0, str(pathlib.Path.cwd() / "scripts"))
+          import upstream_catalogue_derivation as derivation
+
           state = pathlib.Path(os.environ["STATE_DIR"])
           index_path = state / "sources/data_go_kr/index.json"
           if not index_path.is_file():
@@ -338,11 +374,37 @@ jobs:
           schema = json.loads(schema_path.read_text(encoding="utf-8"))
           del schema  # The source processor revalidates the complete schema before use.
           candidates = []
+          shadowed = set()
+          for indexed in rows:
+              if not isinstance(indexed, dict) or not isinstance(indexed.get("generation_id"), str):
+                  continue
+              parent_id = indexed["generation_id"]
+              if not re.fullmatch(r"[a-f0-9]{64}", parent_id):
+                  raise SystemExit("FAIL invalid generation id in derivation lineage")
+              parent_path = state / "sources/data_go_kr/generations" / f"{parent_id}.json"
+              if not parent_path.is_file():
+                  continue
+              parent = json.loads(parent_path.read_text(encoding="utf-8"))
+              unsigned = dict(parent)
+              claimed = unsigned.pop("checkpoint_sha256", None)
+              canonical = json.dumps(unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+              if hashlib.sha256(canonical).hexdigest() != claimed or parent.get("generation_id") != parent_id:
+                  raise SystemExit("FAIL corrupt checkpoint in derivation lineage")
+              inputs = parent.get("generation_inputs") if isinstance(parent.get("generation_inputs"), dict) else {}
+              envelope = inputs.get("same_observation_derivation")
+              if envelope is None:
+                  continue
+              try:
+                  shadowed.update(derivation.validate_derivation_envelope(envelope)["ancestor_generation_ids"])
+              except (TypeError, ValueError) as exc:
+                  raise SystemExit("FAIL invalid derivation envelope in checkpoint") from exc
           for row in rows:
               if not isinstance(row, dict) or not isinstance(row.get("generation_id"), str):
                   continue
               if not re.fullmatch(r"[a-f0-9]{64}", row["generation_id"]):
                   raise SystemExit("FAIL invalid generation id in upstream catalogue state index")
+              if row["generation_id"] in shadowed:
+                  continue
               cp_path = state / "sources/data_go_kr/generations" / f"{row['generation_id']}.json"
               if not cp_path.is_file():
                   continue
@@ -948,11 +1010,40 @@ jobs:
           echo "available=true" >> "${GITHUB_OUTPUT}"
           echo "evidence_path=.datapan/ci/detail-cache/upstream-catalogue-enrichment-evidence.json" >> "${GITHUB_OUTPUT}"
 
+      - name: Authenticate same-observation B and merged-C parents before reservation
+        id: derivation
+        if: >-
+          steps.select.outputs.decision == 'process' &&
+          steps.input_artifact.outputs.input_error == '' &&
+          steps.select.outputs.generation_id != ''
+        working-directory: bootstrap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
+          TARGET_GENERATION_ID: ${{ steps.select.outputs.generation_id }}
+          COLLECTOR_ADMISSION: ${{ steps.input_artifact.outputs.admission_file }}
+          DERIVATION_OUTPUT: .datapan/ci/same-observation-derivation
+        run: |
+          set -euo pipefail
+          python3 scripts/prepare-upstream-catalogue-derivation.py \
+            --main-root . --source-root ../datapan-registry --state-dir "${STATE_DIR}" \
+            --target-generation-id "${TARGET_GENERATION_ID}" \
+            --repository "${REPOSITORY}" --default-branch "${DEFAULT_BRANCH}" \
+            --collector-admission "../datapan-registry/${COLLECTOR_ADMISSION}" \
+            --candidate ../datapan-registry/.datapan/ci/upstream-refresh/candidate.registry.json \
+            --refresh-evidence ../datapan-registry/.datapan/ci/upstream-refresh/upstream-refresh-evidence.json \
+            --diff ../datapan-registry/.datapan/ci/upstream-refresh/catalog-diff.json \
+            --resume-bundle ../datapan-registry/.datapan/ci/detail-cache \
+            --output-dir "${DERIVATION_OUTPUT}" --github-output "${GITHUB_OUTPUT}"
+
       - name: Claim bounded request budget
         if: steps.select.outputs.decision == 'process'
         id: claim
         working-directory: datapan-registry
         env:
+          GH_TOKEN: ${{ github.token }}
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
           PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
@@ -970,9 +1061,18 @@ jobs:
           PROCESSOR_ARTIFACT_EXPIRES_AT: ${{ steps.expiry.outputs.at }}
           REPOSITORY: ${{ github.repository }}
           RESUME_EVIDENCE: ${{ steps.cache.outputs.evidence_path }}
+          DERIVATION_ENABLED: ${{ steps.derivation.outputs.derivation_enabled }}
+          DERIVATION_BASELINE: ${{ steps.derivation.outputs.composition_baseline_path }}
+          DERIVATION_FILE: ${{ steps.derivation.outputs.derivation_path }}
+          DERIVATION_JOURNAL: ${{ steps.derivation.outputs.journal_path }}
+          DERIVATION_JOURNAL_REF_SHA: ${{ steps.derivation.outputs.journal_ref_sha }}
+          RESUME_PARENT_BUNDLE: ${{ steps.derivation.outputs.resume_parent_bundle_dir }}
+          DERIVATION_RESUME_EVIDENCE: ${{ steps.derivation.outputs.resume_enrichment_evidence_path }}
+          CANONICAL_PARENT_BUNDLE: ${{ steps.derivation.outputs.canonical_parent_bundle_dir }}
         run: |
           set -euo pipefail
           mkdir -p .datapan/ci/upstream-catalogue-processing
+          if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then RESUME_EVIDENCE="${DERIVATION_RESUME_EVIDENCE}"; fi
           args=(
             --baseline data/data-go-kr.registry.json
             --source-policy policy/source-refresh.json
@@ -996,6 +1096,19 @@ jobs:
           if [ -n "${PRODUCER_HEAD_SHA}" ]; then args+=(--producer-head-sha "${PRODUCER_HEAD_SHA}"); fi
           if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
           if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
+          if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then
+            args+=(
+              --composition-baseline "${DERIVATION_BASELINE}"
+              --same-observation-derivation "${DERIVATION_FILE}"
+              --current-main-root ../bootstrap
+              --derivation-journal "${DERIVATION_JOURNAL}"
+              --derivation-journal-ref-sha "${DERIVATION_JOURNAL_REF_SHA}"
+              --resume-parent-bundle-dir "${RESUME_PARENT_BUNDLE}"
+              --canonical-parent-bundle-dir "${CANONICAL_PARENT_BUNDLE}"
+              --canonical-update-pr-helper ../bootstrap/scripts/canonical_update_pr.py
+              --canonical-update-journal-schema ../bootstrap/schemas/datapan.canonical-update-promotion-journal.v1.schema.json
+            )
+          fi
           if [ -n "${TARGET_GENERATION_ID}" ] && [ -n "${INPUT_ERROR}" ]; then
             args+=(--target-generation-id "${TARGET_GENERATION_ID}")
             if [ "${INPUT_EXPIRED}" = "true" ]; then
@@ -1044,6 +1157,7 @@ jobs:
         id: run_processor
         working-directory: datapan-registry
         env:
+          GH_TOKEN: ${{ github.token }}
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
           PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
@@ -1060,9 +1174,18 @@ jobs:
           PROCESSOR_ARTIFACT_EXPIRES_AT: ${{ steps.expiry.outputs.at }}
           REPOSITORY: ${{ github.repository }}
           RESUME_EVIDENCE: ${{ steps.cache.outputs.evidence_path }}
+          DERIVATION_ENABLED: ${{ steps.derivation.outputs.derivation_enabled }}
+          DERIVATION_BASELINE: ${{ steps.derivation.outputs.composition_baseline_path }}
+          DERIVATION_FILE: ${{ steps.derivation.outputs.derivation_path }}
+          DERIVATION_JOURNAL: ${{ steps.derivation.outputs.journal_path }}
+          DERIVATION_JOURNAL_REF_SHA: ${{ steps.derivation.outputs.journal_ref_sha }}
+          RESUME_PARENT_BUNDLE: ${{ steps.derivation.outputs.resume_parent_bundle_dir }}
+          DERIVATION_RESUME_EVIDENCE: ${{ steps.derivation.outputs.resume_enrichment_evidence_path }}
+          CANONICAL_PARENT_BUNDLE: ${{ steps.derivation.outputs.canonical_parent_bundle_dir }}
         run: |
           set -euo pipefail
           output=.datapan/ci/upstream-catalogue-processing
+          if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then RESUME_EVIDENCE="${DERIVATION_RESUME_EVIDENCE}"; fi
           mkdir -p "${output}"
           result="${output}/upstream-catalogue-processing-result.json"
           generation_id="$(python3 - "${result}" <<'PY'
@@ -1118,6 +1241,19 @@ jobs:
           if [ -n "${PRODUCER_HEAD_SHA}" ]; then args+=(--producer-head-sha "${PRODUCER_HEAD_SHA}"); fi
           if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
           if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
+            if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then
+              args+=(
+                --composition-baseline "${DERIVATION_BASELINE}"
+                --same-observation-derivation "${DERIVATION_FILE}"
+                --current-main-root ../bootstrap
+                --derivation-journal "${DERIVATION_JOURNAL}"
+                --derivation-journal-ref-sha "${DERIVATION_JOURNAL_REF_SHA}"
+                --resume-parent-bundle-dir "${RESUME_PARENT_BUNDLE}"
+                --canonical-parent-bundle-dir "${CANONICAL_PARENT_BUNDLE}"
+                --canonical-update-pr-helper ../bootstrap/scripts/canonical_update_pr.py
+                --canonical-update-journal-schema ../bootstrap/schemas/datapan.canonical-update-promotion-journal.v1.schema.json
+              )
+            fi
             if [ -n "${RESUME_EVIDENCE}" ] && [ -f "${RESUME_EVIDENCE}" ]; then args+=(--resume-enrichment-evidence "${RESUME_EVIDENCE}"); fi
             set +e
             python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py "${args[@]}"

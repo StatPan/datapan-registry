@@ -1,0 +1,98 @@
+{
+  "fixture_kind": "native C merge identity copied from a retained journal row; not proof of current GitHub state when this test runs",
+  "journal_record": {
+    "acknowledgements": [
+      {
+        "artifact_identity": {
+          "bytes": 139155499,
+          "path": "data/data-go-kr.registry.json",
+          "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+        },
+        "evidence_reference": "GitHub PR API read-back",
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+        "observed_at": "2026-10-03T14:38:48.430560+00:00",
+        "publication_pointer_revision": null,
+        "publication_revision": null,
+        "read_back_bytes": null,
+        "read_back_sha256": null,
+        "read_back_verified": false,
+        "run_attempt": 10,
+        "run_id": 37101245239,
+        "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/10",
+        "source_sha": "8b086826fb1e30ea949cfb8222a252e7aa09fa40",
+        "status": "pending-review"
+      },
+      {
+        "artifact_identity": {
+          "bytes": 139155499,
+          "path": "data/data-go-kr.registry.json",
+          "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+        },
+        "evidence_reference": "GitHub PR API merge read-back",
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+        "observed_at": "2026-10-03T14:52:44.916636+00:00",
+        "publication_pointer_revision": null,
+        "publication_revision": null,
+        "read_back_bytes": null,
+        "read_back_sha256": null,
+        "read_back_verified": false,
+        "run_attempt": 12,
+        "run_id": 37101245239,
+        "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37101245239/attempts/12",
+        "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+        "status": "merged"
+      }
+    ],
+    "candidate": {
+      "base_sha": "cbd138bf63569c3a273165ee53b53703d2fdaf08",
+      "composition_receipt_sha256": "1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c",
+      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+      "head_sha": "8b086826fb1e30ea949cfb8222a252e7aa09fa40",
+      "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+      "manual_review_acceptance_status": "revalidation_required",
+      "payload_readback": {
+        "bytes": 139155499,
+        "lfs_oid": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+        "observed_at": "2026-10-03T14:34:17.145002+00:00",
+        "path": "data/data-go-kr.registry.json",
+        "policy_bytes": 1292,
+        "policy_path": "policy/registry-distribution.json",
+        "policy_sha256": "e49e7d8d7474ff8233d7470c4138207689d7a9c20713b8da3dee302f33cbb031",
+        "provider": "github-git-lfs",
+        "readback": "isolated_lfs_storage_verified",
+        "remote": "origin",
+        "repository": "StatPan/datapan-registry",
+        "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+        "source_sha": "8b086826fb1e30ea949cfb8222a252e7aa09fa40",
+        "status": "verified",
+        "upload_attempted": true
+      },
+      "registry_bytes": 139155499,
+      "registry_path": "data/data-go-kr.registry.json",
+      "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+      "repository": "StatPan/datapan-registry",
+      "scope": "aggregate_supported_catalog",
+      "source_id": "data_go_kr"
+    },
+    "ownership": {
+      "body": "<!-- datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a generation=66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4 -->\n\n## Canonical registry update\n\n- Source: `data_go_kr`; scope: `aggregate_supported_catalog`\n- Candidate base commit: `cbd138bf63569c3a273165ee53b53703d2fdaf08`\n- Registry artifact: `data/data-go-kr.registry.json` (139155499 bytes, sha256 `0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0`)\n- Manifest sha256: `71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50`\n- Composition receipt sha256: `1af99ad2e3a553a9be8c99ab9aca040d4c73691f1a05d49dd0a43668c0a8a31c`\n- Global API denominator: 12300\n- Applied: 7918; pending: 1183; quarantined: 3199\n- Disposition counts: `{\"accept_changed\": 6639, \"accept_new\": 222, \"quarantine\": 3199, \"retain_deletion_pending\": 275, \"retain_worker_pending\": 908, \"unchanged\": 1057}`\n- Full-scope freshness: `false`; publication allowed: `false`\n\n## Validation and promotion state\n- composition: `passed`\n- registry_manifest: `passed`\n- denominator: `passed`\n- adapter: `passed`\n- ledger: `passed`\n- release: `passed`\n- consumer: `passed`\n- finish_review_policy: `configured`\n- diagnostic_current_source_applicability: `revalidation_required`\n- manual review acceptance: `revalidation_required`\n\nThe candidate passed source-snapshot validation and an isolated Git LFS remote read-back before this branch was advanced. Publication and merge remain behind the repository's reviewed gates.\n\nCloses #685\n",
+      "body_sha256": "9a3621a40073a168047f10befe3063277aa50163f4b5d98659333ed7f16dddb1",
+      "branch": "automation/canonical-update/data-go-kr-bca0f6429512-126f7dd4dbc9f5acf6eb",
+      "expected_head_sha": "8b086826fb1e30ea949cfb8222a252e7aa09fa40",
+      "issue_number": 685,
+      "issue_url": "https://github.com/StatPan/datapan-registry/issues/685",
+      "owner_id": "datapan-canonical-update:v1:045f947a711dbc464c9bb74f7426aef95c200eaa1c5cc66bcbc95d685fb8c42a"
+    },
+    "pr": {
+      "merge_commit_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+      "number": 686,
+      "state": "merged",
+      "url": "https://github.com/StatPan/datapan-registry/pull/686"
+    },
+    "schema_version": "datapan.canonical-update-promotion-receipt.v1",
+    "status": "merged",
+    "superseded_by": null
+  },
+  "test_disclaimer": "Any candidate operations introduced by tests are synthetic and are not represented by this retained C row."
+}

@@ -411,6 +411,10 @@ class WorkflowContractTests(unittest.TestCase):
         select_step = next(step for step in self.workflow["jobs"]["process"]["steps"] if step.get("id") == "select")
         with tempfile.TemporaryDirectory(prefix="catalogue-redelivery-select-") as temp:
             root = pathlib.Path(temp)
+            (root / "scripts").mkdir()
+            (root / "scripts/upstream_catalogue_derivation.py").write_bytes(
+                (ROOT / "scripts/upstream_catalogue_derivation.py").read_bytes(),
+            )
             state = root / "state"
             generation_id = "a" * 64
             expires_at = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=5)).replace(microsecond=0).isoformat().replace("+00:00", "Z")

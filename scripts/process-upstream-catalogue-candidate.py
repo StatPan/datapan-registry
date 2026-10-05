@@ -22,6 +22,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections.abc import Mapping
 from typing import Any, Callable
 
 SCRIPT_DIR = pathlib.Path(__file__).resolve().parent
@@ -38,6 +39,7 @@ from upstream_catalogue_handoff import (  # noqa: E402
     validate_admission_row,
     validate_ledger,
 )
+import upstream_catalogue_derivation as DERIVATION  # noqa: E402
 
 CHECKPOINT_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
 ENRICHMENT_SCHEMA = "datapan.catalogue-enrichment-evidence.v1"
@@ -145,6 +147,17 @@ def generator_revision() -> str:
     return sha256_bytes(canonical_json({
         "processor_script_sha256": file_sha256(source),
         "collector_handoff_helper_sha256": file_sha256(handoff),
+    }))
+
+
+def derivation_processor_revision() -> str:
+    source = pathlib.Path(__file__)
+    handoff = source.with_name("upstream_catalogue_handoff.py")
+    derivation = source.with_name("upstream_catalogue_derivation.py")
+    return sha256_bytes(canonical_json({
+        "processor_script_sha256": file_sha256(source),
+        "collector_handoff_helper_sha256": file_sha256(handoff),
+        "same_observation_derivation_helper_sha256": file_sha256(derivation),
     }))
 
 
@@ -541,7 +554,7 @@ def source_retry_state(index_path: pathlib.Path) -> dict[str, dict[str, Any]]:
 def reserve_requests(
     checkpoint: dict[str, Any], queue: list[dict[str, Any]], *, cursor: int,
     processor_run_id: str, max_attempts: int, max_queue: int,
-    retries_per_detail: int, now: dt.datetime,
+    retries_per_detail: int, now: dt.datetime, no_advance_when_empty: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     """Durably account a fair bounded request slice before any network call."""
     if not queue:
@@ -591,8 +604,13 @@ def reserve_requests(
     # weekly candidate digest does not restart from the first catalogue page.
     # Advance past every inspected row, including those already at their
     # per-identity retry cap, or an exhausted prefix can pin the cursor forever.
-    cursor_advance = len(inspected)
-    if queue:
+    cursor_advance = 0 if no_advance_when_empty and reserved_attempts == 0 else len(inspected)
+    if no_advance_when_empty and reserved_attempts == 0:
+        # Pure same-observation recomposition does not own the durable retry
+        # cursor. Preserve its exact value, even when the queue is empty or an
+        # exhausted queue has a cursor outside the current queue length.
+        checkpoint["detail_queue_cursor"] = cursor
+    elif queue:
         checkpoint["detail_queue_cursor"] = (cursor + cursor_advance) % len(queue)
     else:
         checkpoint["detail_queue_cursor"] = 0
@@ -645,6 +663,7 @@ def generation_identity(
     observation_failure_sha256: str | None,
     policy_sha256: str,
     adapter_sha256: str,
+    same_observation_derivation: dict[str, Any] | None = None,
 ) -> tuple[str, dict[str, Any]]:
     inputs = {
         "source_id": source_id,
@@ -661,6 +680,8 @@ def generation_identity(
         "generator_revision": generator_revision(),
         "extractor_revision": extractor_revision(),
     }
+    if same_observation_derivation is not None:
+        inputs["same_observation_derivation"] = DERIVATION.validate_derivation_envelope(same_observation_derivation)
     return sha256_bytes(canonical_json(inputs)), inputs
 
 
@@ -971,6 +992,9 @@ def validated_resume_records(
     candidate_by_id: dict[str, dict[str, Any]],
     registered_hosts: set[str],
     now: dt.datetime,
+    allow_parent_extractor_revision: bool = False,
+    expected_owner_generation_id: str | None = None,
+    reject_stale_source_or_guide_contract: bool = False,
 ) -> dict[str, dict[str, Any]]:
     if path is None or not path.is_file():
         return {}
@@ -995,6 +1019,8 @@ def validated_resume_records(
     owner: dict[str, Any] | None = None
     evidence_digest: str | None = None
     for old in owner_checkpoints:
+        if expected_owner_generation_id is not None and old.get("generation_id") != expected_owner_generation_id:
+            continue
         locator = old.get("output_artifact")
         outputs = old.get("output_digests")
         if not isinstance(locator, dict) or not isinstance(outputs, list):
@@ -1089,11 +1115,16 @@ def validated_resume_records(
             ):
                 raise ValueError("resume_worker_outcome_binding_mismatch")
             outcome_ids.add(identity)
+    owner_inputs = owner.get("generation_inputs", {}) if isinstance(owner, dict) else {}
+    expected_extractor_revision = (
+        owner_inputs.get("extractor_revision") if allow_parent_extractor_revision
+        else extractor_revision()
+    )
     if (
         evidence.get("provider_index_sha256") != provider_index_sha256
         or evidence.get("adapter_revision") != provider_index_sha256
-        or evidence.get("extractor_revision") != extractor_revision()
-        or owner.get("generation_inputs", {}).get("candidate_sha256") is None
+        or evidence.get("extractor_revision") != expected_extractor_revision
+        or owner_inputs.get("candidate_sha256") is None
     ):
         return {}
     expected_record_fields = {
@@ -1117,6 +1148,8 @@ def validated_resume_records(
         observed_guide = record.get("observed_guide_url")
         observed_guide_digest = record.get("observed_guide_url_sha256")
         if record.get("source_sha256") != source_fingerprint(row) or record.get("guide_sha256") != guide_fingerprint(row):
+            if reject_stale_source_or_guide_contract:
+                raise ValueError("resume_enrichment_source_or_guide_identity_mismatch")
             continue
         if (
             not isinstance(provenance, dict)
@@ -1158,6 +1191,31 @@ def validated_resume_records(
                 raise ValueError("resume_enrichment_operation_binding_mismatch")
         resumed[identity] = record
     return resumed
+
+
+def merge_derivation_enrichment_records(
+    resume_records: dict[str, dict[str, Any]],
+    canonical_records: dict[str, dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Union verified A-bound contributions without choosing between conflicts."""
+    merged = dict(resume_records)
+    for identity, candidate in canonical_records.items():
+        prior = merged.get(identity)
+        if prior is None:
+            merged[identity] = candidate
+            continue
+        if (
+            prior.get("source_sha256") != candidate.get("source_sha256")
+            or prior.get("guide_sha256") != candidate.get("guide_sha256")
+            or prior.get("operations_sha256") != candidate.get("operations_sha256")
+            or prior.get("operations") != candidate.get("operations")
+        ):
+            raise ValueError("derivation_parent_enrichment_contribution_conflict")
+        prior_time = parse_timestamp(str((prior.get("source_provenance") or {}).get("observed_at") or ""))
+        candidate_time = parse_timestamp(str((candidate.get("source_provenance") or {}).get("observed_at") or ""))
+        if candidate_time > prior_time:
+            merged[identity] = candidate
+    return merged
 
 
 def set_output_artifact_locator(checkpoint: dict[str, Any], args: argparse.Namespace, expires_at: str, bundle: list[dict[str, Any]]) -> None:
@@ -1309,6 +1367,8 @@ def call_composer(
     *, baseline: pathlib.Path, candidate: pathlib.Path, diff: pathlib.Path,
     refresh_evidence: pathlib.Path, provider_index: pathlib.Path, source_policy: pathlib.Path,
     producer_run_id: str, producer_run_url: str, output_dir: pathlib.Path, enrichment: pathlib.Path,
+    composition_baseline: pathlib.Path | None = None,
+    same_observation_derivation: pathlib.Path | None = None,
 ) -> tuple[int, str]:
     if not command.is_file():
         return 127, "composer_cli_missing"
@@ -1320,10 +1380,297 @@ def call_composer(
         "--producer-run-id", producer_run_id, "--producer-run-url", producer_run_url,
         "--output-dir", str(output_dir), "--enrichment-evidence", str(enrichment),
     ]
+    if composition_baseline is not None:
+        args.extend(["--composition-baseline", str(composition_baseline)])
+    if same_observation_derivation is not None:
+        args.extend(["--same-observation-derivation", str(same_observation_derivation)])
     result = subprocess.run(args, text=True, capture_output=True, check=False, timeout=300)  # noqa: S603
     if result.returncode != 0:
         return result.returncode, "composer_failed"
     return 0, "composer_succeeded"
+
+
+def _git_bytes(root: pathlib.Path, revision_path: str) -> bytes:
+    import subprocess
+
+    result = subprocess.run(
+        ("git", "show", revision_path), cwd=root, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, check=False,
+    )
+    if result.returncode != 0:
+        raise ValueError("derivation_main_revision_unavailable")
+    return result.stdout
+
+
+def _assert_git_ancestor(root: pathlib.Path, ancestor: str, descendant: str) -> None:
+    import subprocess
+
+    result = subprocess.run(
+        ("git", "merge-base", "--is-ancestor", ancestor, descendant), cwd=root,
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False,
+    )
+    if result.returncode != 0:
+        raise ValueError("derivation_canonical_merge_not_ancestor")
+
+
+def validate_derivation_before_claim(
+    args: argparse.Namespace,
+    *,
+    generation_id: str,
+    derivation: Mapping[str, Any],
+    composition_baseline_path: pathlib.Path,
+    collector_admission: Mapping[str, Any] | None,
+    state_index_path: pathlib.Path,
+    schema: Mapping[str, Any],
+    original_baseline_sha256: str,
+    candidate_sha256: str,
+    evidence_sha256: str,
+    diff_sha256: str,
+    policy_sha256: str,
+    adapter_sha256: str,
+    current_main_root: pathlib.Path,
+    resume_parent_bundle_dir: pathlib.Path,
+    canonical_parent_bundle_dir: pathlib.Path,
+) -> dict[str, Any]:
+    """Authenticate both B parents and the exact merged-C snapshot before claim."""
+    import subprocess
+
+    envelope = DERIVATION.validate_derivation_envelope(derivation)
+    if args.execution_mode != "live" or collector_admission is None:
+        raise ValueError("same_observation_derivation_requires_live_admission")
+    if (
+        args.resume_parent_bundle_dir is None or args.canonical_parent_bundle_dir is None
+        or args.derivation_journal is None or args.derivation_journal_ref_sha is None
+    ):
+        raise ValueError("same_observation_derivation_parent_archive_or_journal_missing")
+    if not state_index_path.is_file():
+        raise ValueError("derivation_state_index_missing")
+    state_index = load_json(state_index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+    if not isinstance(state_index, dict) or state_index.get("schema_version") != CHECKPOINT_SCHEMA:
+        raise ValueError("derivation_state_index_invalid")
+    ledger = state_index.get("collector_handoff")
+    if not isinstance(ledger, Mapping):
+        raise ValueError("derivation_admission_ledger_missing")
+    try:
+        validated_ledger = validate_ledger(ledger)
+    except HandoffError as exc:
+        raise ValueError("derivation_admission_ledger_invalid") from exc
+    admitted_rows = validated_ledger["admitted_observations"]
+    original = envelope["original_observation"]
+    def admission_for(checkpoint: Mapping[str, Any]) -> dict[str, Any]:
+        observed = checkpoint.get("last_observation") if isinstance(checkpoint.get("last_observation"), Mapping) else {}
+        refs = checkpoint.get("input_artifacts") if isinstance(checkpoint.get("input_artifacts"), list) else []
+        matches = [
+            row for row in admitted_rows
+            if row.get("producer_run_id") == str(observed.get("producer_run_id") or "")
+            and row.get("refresh_evidence_sha256") == observed.get("refresh_evidence_sha256")
+            and any(
+                isinstance(ref, Mapping)
+                and str(ref.get("run_id")) == row["producer_run_id"]
+                and str(ref.get("artifact_id")) == row["artifact_id"]
+                and ref.get("evidence_sha256") == row["refresh_evidence_sha256"]
+                for ref in refs
+            )
+        ]
+        if len(matches) != 1:
+            raise ValueError("derivation_parent_admission_ambiguous_or_missing")
+        return matches[0]
+
+    if (
+        str(collector_admission.get("producer_run_id")) != original["producer_run_id"]
+        or collector_admission.get("run_attempt") != original["producer_run_attempt"]
+        or collector_admission.get("head_sha") != original["producer_head_sha"]
+        or str(collector_admission.get("artifact_id")) != original["producer_artifact_id"]
+        or collector_admission.get("artifact_digest_sha256") != original["producer_artifact_sha256"]
+        or collector_admission.get("observed_at") != original["observed_at"]
+        or collector_admission.get("candidate_sha256") != candidate_sha256
+        or collector_admission.get("refresh_evidence_sha256") != evidence_sha256
+        or candidate_sha256 != original["candidate_sha256"]
+        or evidence_sha256 != original["evidence_sha256"]
+        or diff_sha256 != original["diff_sha256"]
+        or original_baseline_sha256 != original["original_baseline_sha256"]
+        or args.source != original["source_id"]
+        or args.source_scope != original["source_scope"]
+        or derivation_processor_revision() != envelope["derivation_processor_revision_sha256"]
+    ):
+        raise ValueError("derivation_incoming_observation_or_contract_mismatch")
+
+    parents: dict[str, dict[str, Any]] = {}
+    for field in ("resume_parent_processor", "canonical_parent_processor"):
+        ref = envelope[field]
+        cp_path = args.state_dir / "sources" / args.source / "generations" / f"{ref['generation_id']}.json"
+        if not cp_path.is_file():
+            raise ValueError("derivation_parent_checkpoint_unavailable")
+        try:
+            cp = verify_checkpoint(load_json(cp_path, maximum_bytes=STATE_FILE_LIMIT), dict(schema))
+            DERIVATION.validate_processor_parent_checkpoint(ref, cp, original_observation=original)
+            parent_admission = admission_for(cp)
+            parent_subject = DERIVATION.original_observation_from_checkpoint(cp, parent_admission)
+        except Exception as exc:
+            raise ValueError("derivation_parent_checkpoint_invalid") from exc
+        if parent_subject != original:
+            raise ValueError("derivation_parent_original_observation_mismatch")
+        if parse_timestamp(str(ref["artifact_expires_at"])) <= utc_now():
+            raise ValueError("derivation_parent_artifact_expired")
+        parents[field] = cp
+    try:
+        DERIVATION.validate_processor_parent_bundle(
+            envelope["resume_parent_processor"], parents["resume_parent_processor"],
+            resume_parent_bundle_dir,
+        )
+        DERIVATION.validate_processor_parent_bundle(
+            envelope["canonical_parent_processor"], parents["canonical_parent_processor"],
+            canonical_parent_bundle_dir,
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("derivation_parent_archived_bundle_invalid") from exc
+    if envelope["resume_parent_processor"]["generation_id"] == envelope["canonical_parent_processor"]["generation_id"]:
+        if parents["resume_parent_processor"] != parents["canonical_parent_processor"]:
+            raise ValueError("derivation_parent_checkpoint_conflict")
+
+    indexed = {
+        row.get("generation_id") for row in state_index.get("generations", [])
+        if isinstance(row, Mapping)
+    }
+    def load_lineage_checkpoint(generation: str) -> dict[str, Any]:
+        if generation not in indexed:
+            raise ValueError("derivation_parent_graph_checkpoint_unavailable")
+        path = args.state_dir / "sources" / args.source / "generations" / f"{generation}.json"
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("derivation_parent_graph_checkpoint_unavailable")
+        return verify_checkpoint(load_json(path, maximum_bytes=STATE_FILE_LIMIT), dict(schema))
+
+    try:
+        expected_ancestors = DERIVATION.validate_processor_parent_graph(
+            [
+                envelope["resume_parent_processor"]["generation_id"],
+                envelope["canonical_parent_processor"]["generation_id"],
+            ],
+            load_checkpoint=load_lineage_checkpoint,
+            admission_for=admission_for,
+            original_observation=original,
+            expected_ancestor_generation_ids=envelope["ancestor_generation_ids"],
+            forbidden_generation_id=generation_id,
+        )
+    except (DERIVATION.DerivationError, OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("derivation_parent_graph_checkpoint_invalid") from exc
+
+    journal_path = args.derivation_journal
+    journal_ref_sha = args.derivation_journal_ref_sha
+    if journal_path is None or not journal_path.is_file() or not journal_ref_sha:
+        raise ValueError("derivation_promotion_journal_snapshot_missing")
+    journal = load_json(journal_path, maximum_bytes=16 * 1024 * 1024)
+    if not isinstance(journal, Mapping):
+        raise ValueError("derivation_promotion_journal_invalid")
+    if not re.fullmatch(r"[a-f0-9]{40}", str(journal_ref_sha)):
+        raise ValueError("derivation_promotion_journal_ref_invalid")
+    live_journal_ref = subprocess.run(
+        ("git", "ls-remote", "--heads", "origin", "refs/heads/automation/canonical-update-state"),
+        cwd=current_main_root, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    live_journal_shas = [
+        line.split("\t", 1)[0] for line in live_journal_ref.stdout.splitlines()
+        if line.endswith("\trefs/heads/automation/canonical-update-state")
+    ]
+    if live_journal_ref.returncode != 0 or live_journal_shas != [journal_ref_sha]:
+        raise ValueError("derivation_promotion_journal_ref_changed")
+    spec = importlib.util.spec_from_file_location(
+        "upstream_catalogue_derivation_canonical_update_pr", args.canonical_update_pr_helper,
+    )
+    if spec is None or spec.loader is None:
+        raise ValueError("derivation_promotion_validator_unavailable")
+    helper = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(helper)
+    helper.validate_journal(journal, load_json(args.canonical_update_journal_schema, maximum_bytes=1024 * 1024))
+    try:
+        row = DERIVATION.validate_readback_against_journal(
+            envelope, journal, journal_ref_sha=journal_ref_sha,
+        )
+    except DERIVATION.DerivationError as exc:
+        raise ValueError("derivation_canonical_readback_invalid") from exc
+    try:
+        health_policy = load_json(current_main_root / "policy/upstream-catalogue-health.json", maximum_bytes=4 * 1024 * 1024)
+        DERIVATION.authenticate_canonical_merge_ack(
+            current_main_root, args.repository, row, health_policy, now=utc_now(),
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("derivation_canonical_merge_ack_untrusted") from exc
+    active_same_a = []
+    for index, record in enumerate(journal.get("records", [])):
+        if not isinstance(record, Mapping):
+            continue
+        candidate = record.get("candidate") if isinstance(record.get("candidate"), Mapping) else {}
+        if (
+            record.get("superseded_by") is not None
+            or record.get("status") not in {"merged", "publication-pending", "published", "read-back-confirmed"}
+            or candidate.get("source_id") != original["source_id"]
+            or candidate.get("scope") != original["source_scope"]
+            or candidate.get("registry_sha256") != envelope["composition_baseline"]["registry_sha256"]
+        ):
+            continue
+        generation = str(candidate.get("generation_id") or "")
+        cp_path = args.state_dir / "sources" / args.source / "generations" / f"{generation}.json"
+        if not cp_path.is_file():
+            continue
+        try:
+            cp = verify_checkpoint(load_json(cp_path, maximum_bytes=STATE_FILE_LIMIT), dict(schema))
+            admission = admission_for(cp)
+            if DERIVATION.original_observation_from_checkpoint(cp, admission) == original:
+                active_same_a.append(index)
+        except Exception:
+            continue
+    if active_same_a != [int(envelope["canonical_parent_readback"]["journal_record_index"])]:
+        raise ValueError("derivation_canonical_lineage_is_ambiguous_or_not_current")
+    if row.get("candidate", {}).get("generation_id") != envelope["canonical_parent_processor"]["generation_id"]:
+        raise ValueError("derivation_canonical_producer_generation_mismatch")
+
+    baseline_identity = envelope["composition_baseline"]
+    current_head = subprocess.run(
+        ("git", "rev-parse", "HEAD"), cwd=current_main_root, text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    if current_head.returncode != 0 or current_head.stdout.strip() != baseline_identity["main_sha"]:
+        raise ValueError("derivation_current_main_head_mismatch")
+    live_main = subprocess.run(
+        ("git", "ls-remote", "--heads", "origin", "refs/heads/main"), cwd=current_main_root,
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    live_main_shas = [line.split("\t", 1)[0] for line in live_main.stdout.splitlines() if line.endswith("\trefs/heads/main")]
+    if live_main.returncode != 0 or live_main_shas != [baseline_identity["main_sha"]]:
+        raise ValueError("derivation_current_main_moved")
+    current_manifest = _git_bytes(current_main_root, f"{baseline_identity['main_sha']}:manifest.json")
+    if sha256_bytes(current_manifest) != baseline_identity["manifest_sha256"]:
+        raise ValueError("derivation_current_manifest_mismatch")
+    try:
+        manifest = json.loads(current_manifest)
+    except json.JSONDecodeError as exc:
+        raise ValueError("derivation_current_manifest_invalid") from exc
+    if not isinstance(manifest, Mapping) or manifest.get("source_registry") != baseline_identity["registry_path"]:
+        raise ValueError("derivation_current_manifest_path_mismatch")
+    entries = [
+        item for item in manifest.get("artifacts", []) if isinstance(item, Mapping)
+        and item.get("path") == baseline_identity["registry_path"] and item.get("kind") == "registry"
+    ]
+    if len(entries) != 1 or (entries[0].get("bytes"), entries[0].get("sha256")) != (
+        baseline_identity["registry_bytes"], baseline_identity["registry_sha256"],
+    ):
+        raise ValueError("derivation_current_manifest_registry_mismatch")
+    pointer = _git_bytes(current_main_root, f"{baseline_identity['main_sha']}:{baseline_identity['registry_path']}")
+    pointer_text = pointer.decode("ascii", errors="strict").splitlines()
+    if (
+        f"oid sha256:{baseline_identity['registry_sha256']}" not in pointer_text
+        or f"size {baseline_identity['registry_bytes']}" not in pointer_text
+    ):
+        raise ValueError("derivation_current_lfs_pointer_mismatch")
+    if composition_baseline_path.is_symlink() or not composition_baseline_path.is_file():
+        raise ValueError("derivation_composition_baseline_missing")
+    composition_bytes = composition_baseline_path.read_bytes()
+    if (len(composition_bytes), sha256_bytes(composition_bytes)) != (
+        baseline_identity["registry_bytes"], baseline_identity["registry_sha256"],
+    ):
+        raise ValueError("derivation_composition_baseline_digest_mismatch")
+    _assert_git_ancestor(current_main_root, envelope["canonical_parent_readback"]["merge_sha"], baseline_identity["main_sha"])
+    return envelope
 
 
 def append_generation_index(
@@ -1344,7 +1691,30 @@ def append_generation_index(
         "checkpoint": checkpoint_path.name, "updated_at": checkpoint["last_heartbeat_at"],
         "candidate_sha256": checkpoint["generation_inputs"].get("candidate_sha256"),
     })
-    index["generations"] = rows[-DEFAULT_MAX_GENERATIONS:]
+    protected = protected_lineage_generations(checkpoint_path.parent)
+    protected.add(str(checkpoint["generation_id"]))
+    row_by_id = {row.get("generation_id"): row for row in rows if isinstance(row, dict)}
+    if not protected.issubset(row_by_id):
+        raise ValueError("derivation_parent_index_entry_missing")
+    active_ids = {
+        row.get("generation_id") for row in rows if isinstance(row, dict)
+        and row.get("status") in {"queued", "validating", "enriching", "composing", "retry"}
+    }
+    required_ids = protected | active_ids | {str(checkpoint["generation_id"])}
+    if len(required_ids) > DEFAULT_MAX_GENERATIONS:
+        raise ValueError("derivation_lineage_generation_capacity_exceeded")
+    retained_ids = set(required_ids)
+    # Keep lineage/active/current generations first, then fill remaining
+    # capacity newest-first. An old protected parent must not force failure
+    # merely because it sits just outside the recent window.
+    for row in reversed(rows):
+        generation_id = row.get("generation_id") if isinstance(row, dict) else None
+        if generation_id in retained_ids:
+            continue
+        if len(retained_ids) >= DEFAULT_MAX_GENERATIONS:
+            break
+        retained_ids.add(generation_id)
+    index["generations"] = [row for row in rows if row.get("generation_id") in retained_ids]
     index["detail_queue_cursor"] = int(checkpoint.get("detail_queue_cursor", index.get("detail_queue_cursor", 0)))
     retry_state = index.setdefault("detail_retry_state", {})
     if not isinstance(retry_state, dict):
@@ -1557,10 +1927,43 @@ def bind_output_artifact_id(
     )
 
 
-def prune_generation_files(generation_dir: pathlib.Path, current_path: pathlib.Path, max_generations: int = DEFAULT_MAX_GENERATIONS) -> None:
+def protected_lineage_generations(generation_dir: pathlib.Path) -> set[str]:
+    """Return all parent IDs referenced by any durable derived checkpoint."""
+    protected: set[str] = set()
+    for path in generation_dir.glob("*.json"):
+        try:
+            value = load_json(path, maximum_bytes=STATE_FILE_LIMIT)
+        except (OSError, ValueError, json.JSONDecodeError):
+            continue
+        if not isinstance(value, dict) or value.get("schema_version") != CHECKPOINT_SCHEMA:
+            continue
+        claimed = value.get("checkpoint_sha256")
+        unsigned = dict(value)
+        unsigned.pop("checkpoint_sha256", None)
+        if claimed != checkpoint_digest(unsigned):
+            raise ValueError("derivation_lineage_checkpoint_corrupt")
+        inputs = value.get("generation_inputs")
+        envelope = inputs.get("same_observation_derivation") if isinstance(inputs, dict) else None
+        if envelope is None:
+            continue
+        try:
+            validated = DERIVATION.validate_derivation_envelope(envelope)
+        except ValueError as exc:
+            raise ValueError("derivation_lineage_envelope_corrupt") from exc
+        protected.update(validated["ancestor_generation_ids"])
+    return protected
+
+
+def prune_generation_files(
+    generation_dir: pathlib.Path,
+    current_path: pathlib.Path,
+    max_generations: int = DEFAULT_MAX_GENERATIONS,
+) -> None:
     checkpoints = sorted(generation_dir.glob("*.json"), key=lambda path: path.stat().st_mtime, reverse=True)
-    if len(checkpoints) <= max_generations:
-        return
+    protected_ids = protected_lineage_generations(generation_dir)
+    by_id = {path.stem: path for path in checkpoints}
+    if not protected_ids.issubset(by_id):
+        raise ValueError("derivation_lineage_parent_checkpoint_unavailable")
     active = []
     for path in checkpoints:
         try:
@@ -1571,7 +1974,9 @@ def prune_generation_files(generation_dir: pathlib.Path, current_path: pathlib.P
             continue
     if len(active) > DEFAULT_MAX_ACTIVE_GENERATIONS:
         raise ValueError("active_generation_queue_full")
-    retained = {path for path in checkpoints if path in active or path == current_path}
+    retained = {path for path in checkpoints if path in active or path == current_path or path.stem in protected_ids}
+    if len(retained) > max_generations:
+        raise ValueError("derivation_lineage_generation_capacity_exceeded")
     for path in checkpoints:
         if len(retained) >= max_generations:
             break
@@ -1715,6 +2120,16 @@ def process(
     source = sources[0]
     baseline_path = args.baseline or pathlib.Path(source["canonical_registry"])
     baseline_rows = load_registry(baseline_path)
+    composition_baseline_path = args.composition_baseline or baseline_path
+    derivation: dict[str, Any] | None = None
+    if args.same_observation_derivation:
+        if not args.composition_baseline:
+            raise ValueError("same_observation_derivation_requires_composition_baseline")
+        derivation = DERIVATION.validate_derivation_envelope(
+            load_json(args.same_observation_derivation, maximum_bytes=256 * 1024),
+        )
+    elif args.composition_baseline or args.derivation_journal or args.derivation_journal_ref_sha:
+        raise ValueError("composition_baseline_requires_same_observation_derivation")
     candidate_rows: list[dict[str, Any]] | None = None
     candidate_path = args.candidate
     evidence = load_json(args.refresh_evidence, maximum_bytes=8 * 1024 * 1024) if args.refresh_evidence and args.refresh_evidence.exists() else None
@@ -1760,10 +2175,35 @@ def process(
     generation_id, generation_inputs = generation_identity(
         args.source, source_scope, baseline_sha, candidate_sha,
         evidence_sha if candidate_sha is None else None, policy_sha, adapter_sha,
+        same_observation_derivation=derivation,
     )
     generation_dir = args.state_dir / "sources" / args.source / "generations"
-    checkpoint_path = generation_dir / f"{generation_id}.json"
     index_path = args.state_dir / "sources" / args.source / "index.json"
+    schema = load_json(args.checkpoint_schema, maximum_bytes=1024 * 1024)
+    derivation_parent_checkpoint: dict[str, Any] | None = None
+    if derivation is not None:
+        resume_id = derivation["resume_parent_processor"]["generation_id"]
+        parent_path = generation_dir / f"{resume_id}.json"
+        if not parent_path.is_file():
+            raise ValueError("derivation_resume_parent_checkpoint_unavailable")
+        derivation_parent_checkpoint = verify_checkpoint(load_json(parent_path, maximum_bytes=STATE_FILE_LIMIT), schema)
+        parent_inputs = derivation_parent_checkpoint.get("generation_inputs")
+        if not isinstance(parent_inputs, dict):
+            raise ValueError("derivation_resume_parent_inputs_missing")
+        if (
+            parent_inputs.get("source_id") != args.source
+            or parent_inputs.get("source_scope") != source_scope
+            or parent_inputs.get("baseline_sha256") != baseline_sha
+            or parent_inputs.get("candidate_sha256") != candidate_sha
+            or parent_inputs.get("observation_failure_sha256") is not None
+        ):
+            raise ValueError("derivation_resume_parent_source_contract_changed")
+        if (
+            derivation["resume_parent_processor"]["checkpoint_sha256"] != derivation_parent_checkpoint.get("checkpoint_sha256")
+            or derivation["resume_parent_processor"]["generation_id"] != derivation_parent_checkpoint.get("generation_id")
+        ):
+            raise ValueError("derivation_resume_parent_checkpoint_reference_mismatch")
+    checkpoint_path = generation_dir / f"{generation_id}.json"
     collector_admission: dict[str, Any] | None = None
     legacy_floor: dict[str, Any] | None = None
     if not args.input_error and candidate_path is not None and candidate_path.is_file() and evidence_sha:
@@ -1772,7 +2212,28 @@ def process(
             evidence_sha256=evidence_sha, generation_id=generation_id,
             artifact_name=artifact_name, artifact_expires_at=artifact_expires_at, now=now,
         )
-    schema = load_json(args.checkpoint_schema, maximum_bytes=1024 * 1024)
+    if derivation is not None:
+        if not args.current_main_root or not args.current_main_root.is_dir():
+            raise ValueError("derivation_current_main_checkout_missing")
+        assert derivation_parent_checkpoint is not None
+        validate_derivation_before_claim(
+            args,
+            generation_id=generation_id,
+            derivation=derivation,
+            composition_baseline_path=composition_baseline_path,
+            collector_admission=collector_admission,
+            state_index_path=index_path,
+            schema=schema,
+            original_baseline_sha256=baseline_sha,
+            candidate_sha256=str(candidate_sha or ""),
+            evidence_sha256=str(evidence_sha or ""),
+            diff_sha256=file_sha256(diff_path) if diff_path and diff_path.is_file() else "",
+            policy_sha256=policy_sha,
+            adapter_sha256=adapter_sha,
+            current_main_root=args.current_main_root.resolve(),
+            resume_parent_bundle_dir=args.resume_parent_bundle_dir,
+            canonical_parent_bundle_dir=args.canonical_parent_bundle_dir,
+        )
     if checkpoint_path.exists():
         try:
             checkpoint = verify_checkpoint(load_json(checkpoint_path, maximum_bytes=STATE_FILE_LIMIT), schema)
@@ -1799,6 +2260,14 @@ def process(
             diff_sha256=file_sha256(diff_path) if diff_path and diff_path.is_file() else None,
             status="queued",
         )
+        if derivation is not None:
+            assert derivation_parent_checkpoint is not None
+            # A derivative is still the same immutable A observation. Carry
+            # its observation clock/count verbatim; retry counters and cursor
+            # continue to come from the current state index below.
+            checkpoint["observed_at"] = derivation_parent_checkpoint["observed_at"]
+            checkpoint["last_observation"] = dict(derivation_parent_checkpoint["last_observation"])
+            checkpoint["observation_count"] = int(derivation_parent_checkpoint["observation_count"])
         checkpoint["detail_queue_cursor"] = source_queue_cursor(index_path, 0)
 
     if checkpoint.get("generation_inputs") != generation_inputs:
@@ -1958,7 +2427,29 @@ def process(
             candidate_by_id=candidate_asset,
             registered_hosts=registered_hosts,
             now=now,
+            allow_parent_extractor_revision=derivation is not None,
+            expected_owner_generation_id=(
+                derivation["resume_parent_processor"]["generation_id"] if derivation is not None else None
+            ),
+            reject_stale_source_or_guide_contract=derivation is not None,
         )
+        if derivation is not None:
+            canonical_evidence_path = args.canonical_parent_bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            canonical_records = validated_resume_records(
+                canonical_evidence_path,
+                checkpoint=checkpoint,
+                state_dir=args.state_dir,
+                source_id=args.source,
+                checkpoint_schema=schema,
+                provider_index_sha256=adapter_sha,
+                candidate_by_id=candidate_asset,
+                registered_hosts=registered_hosts,
+                now=now,
+                allow_parent_extractor_revision=True,
+                expected_owner_generation_id=derivation["canonical_parent_processor"]["generation_id"],
+                reject_stale_source_or_guide_contract=True,
+            )
+            all_cached_records = merge_derivation_enrichment_records(all_cached_records, canonical_records)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         checkpoint.update({"status": "quarantined", "outcome": {"reason": safe_error_class(exc)}, "lease": None})
         checkpoint["last_heartbeat_at"] = timestamp(now)
@@ -2009,6 +2500,7 @@ def process(
             checkpoint, queued, cursor=queue_cursor, processor_run_id=processor_run_id,
             max_attempts=args.max_attempts, max_queue=args.max_queue,
             retries_per_detail=args.retries_per_detail, now=now_fn(),
+            no_advance_when_empty=derivation is not None,
         )
         checkpoint.update({
             "status": "enriching",
@@ -2044,6 +2536,7 @@ def process(
             checkpoint, queued, cursor=queue_cursor, processor_run_id=processor_run_id,
             max_attempts=args.max_attempts, max_queue=args.max_queue,
             retries_per_detail=args.retries_per_detail, now=now_fn(),
+            no_advance_when_empty=derivation is not None,
         )
     reserved_by_id = {
         str(row["id"]): int(row["attempts_reserved"])
@@ -2454,6 +2947,8 @@ def process(
         refresh_evidence=args.refresh_evidence, provider_index=args.provider_index,
         source_policy=args.source_policy, producer_run_id=args.producer_run_id,
         producer_run_url=args.producer_run_url, output_dir=composer_output_dir, enrichment=enrichment_path,
+        composition_baseline=composition_baseline_path if derivation is not None else None,
+        same_observation_derivation=args.same_observation_derivation if derivation is not None else None,
     )
     ensure_fence(checkpoint, processor_run_id, token, now_fn())
     if code == 0:
@@ -2580,6 +3075,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--source", default="data_go_kr")
     parser.add_argument("--source-scope", default="aggregate_supported_catalog")
     parser.add_argument("--baseline", type=pathlib.Path)
+    parser.add_argument("--composition-baseline", type=pathlib.Path)
+    parser.add_argument("--same-observation-derivation", type=pathlib.Path)
+    parser.add_argument("--current-main-root", type=pathlib.Path)
+    parser.add_argument("--derivation-journal", type=pathlib.Path)
+    parser.add_argument("--derivation-journal-ref-sha")
+    parser.add_argument("--resume-parent-bundle-dir", type=pathlib.Path)
+    parser.add_argument("--canonical-parent-bundle-dir", type=pathlib.Path)
+    parser.add_argument("--canonical-update-pr-helper", type=pathlib.Path, default=pathlib.Path("scripts/canonical_update_pr.py"))
+    parser.add_argument("--canonical-update-journal-schema", type=pathlib.Path, default=pathlib.Path("schemas/datapan.canonical-update-promotion-journal.v1.schema.json"))
     parser.add_argument("--candidate", type=pathlib.Path)
     parser.add_argument("--diff", type=pathlib.Path)
     parser.add_argument("--refresh-evidence", type=pathlib.Path)
