@@ -853,8 +853,8 @@
       "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
       "kind": "credential_runtime_manual_review_acceptance_packet",
       "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json",
-      "bytes": 4540,
-      "sha256": "d7058b3a7523ebe3bc3031d6f3111bf0e17812e02dc37086a7f0e65233a02f3f"
+      "bytes": 4518,
+      "sha256": "db0219e0a1f2e080e7f504836e49c228bf6409743d0bc5611950c6778eb82196"
     },
     {
       "path": "reports/registry-impact-plan.json",
@@ -959,21 +959,21 @@
       "kind": "consumer_compatibility",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json",
       "bytes": 26719,
-      "sha256": "1b9f73df80c4b10157b35f46872b2aa740773aeeaca84f9969ea729b2b4d287d"
+      "sha256": "eb81e0b187b6dc83eed216b62eedb464c8a7bf9c845a624adde71eda2f884b98"
     },
     {
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json",
       "bytes": 1811,
-      "sha256": "c59580503674802242c299ed8d1fd00609331cd879d06e0d3d8a84dab3b70c9a"
+      "sha256": "7451c26a4d0ccb0860acbb73d0e3448f16501dd38e96215e4265c67d97e82be6"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json",
       "bytes": 2216,
-      "sha256": "0b693119a4c75bfa147ff25005f2f5015171877e029b092014e84dbaadca43eb"
+      "sha256": "562293b5391bb595ab1abd31de7b8c31b3a125fa3625b20c7be651c210862ef5"
     },
     {
       "path": "reports/release-shard-consumer-proof.json",
@@ -1022,7 +1022,7 @@
       "kind": "release_assembly_receipt",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json",
       "bytes": 34969,
-      "sha256": "fde77cb042eedf5a07d844d2ce75e075c9225c9c7f0d1898e291e657c3ef1dc0"
+      "sha256": "a6958492812b5e2263143cf0785575c3ce48a4d95baf7d69d1a9bd7a6eaf3ac4"
     },
     {
       "path": "reports/unadapted-external-probe.json",
@@ -1192,7 +1192,7 @@
       "kind": "verification_plan",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json",
       "bytes": 11290,
-      "sha256": "86b500cae6846abb637c6dca044cf8606aba294468a1f4f83c5924b1ffc5be5f"
+      "sha256": "c70e2145a6a81c6bf66b4820dcf79392e81b5138803ce49f6453f73be520cbde"
     },
     {
       "path": "reports/diagnostic-current-source-applicability.json",

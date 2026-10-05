@@ -24,6 +24,7 @@ DEFAULT_ACCEPTANCE = pathlib.Path("reports/credential-runtime-manual-review-acce
 DEFAULT_HANDOFF = pathlib.Path("reports/credential-runtime-review-handoff.json")
 DEFAULT_COMPATIBILITY = pathlib.Path("reports/release-consumer-compatibility.json")
 DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json")
+DEFAULT_DECISION_SCHEMA = pathlib.Path("schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json")
 DEFAULT_OUTPUT = pathlib.Path("reports/credential-runtime-manual-review-acceptance-packet.json")
 SCHEMA_VERSION = "datapan.credential-runtime-manual-review-acceptance-packet.v1"
 PACKET_TICKET = 407
@@ -38,10 +39,11 @@ SECRET_VALUE_PATTERNS = [
 ]
 
 REQUIRED_REVALIDATION_TRIGGERS = [
-    "credential_runtime_review_handoff_changed",
-    "release_consumer_compatibility_changed",
-    "reviewed_credential_receipt_state_changed",
-    "release_consumer_decision_changed",
+    "credential_receipt_state_changes",
+    "consumer_compatibility_changes",
+    "source_runtime_blocker_changes",
+    "release_manifest_changes",
+    "acceptance_expiry",
 ]
 
 POST_DECISION_COMMANDS = [
@@ -151,7 +153,7 @@ def accepted_decision_template(
         "review_scope_version": review_scope_version,
         "review_scope_sha256": review_scope_sha256,
         "expires_at": "<ISO-8601 UTC timestamp>",
-        "revalidation_triggers": REQUIRED_REVALIDATION_TRIGGERS,
+        "revalidation_triggers": list(REQUIRED_REVALIDATION_TRIGGERS),
     }
 
 
@@ -258,7 +260,7 @@ def build_report(
             review_scope_version=review_scope.get("scope_version"),
             review_scope_sha256=current_binding.get("review_scope_sha256"),
         ),
-        "revalidation_triggers": REQUIRED_REVALIDATION_TRIGGERS,
+        "revalidation_triggers": list(REQUIRED_REVALIDATION_TRIGGERS),
         "operator_commands": {
             "validate_current_decision": "python3 scripts/validate-credential-runtime-manual-review-decision.py",
             "generate_acceptance_boundary": "python3 scripts/generate-credential-runtime-manual-review-acceptance.py",
@@ -280,7 +282,67 @@ def build_report(
     }
 
 
-def validate_invariants(report: dict[str, Any]) -> None:
+def validate_decision_template_contract(
+    report: dict[str, Any],
+    *,
+    decision_schema_path: pathlib.Path = DEFAULT_DECISION_SCHEMA,
+) -> None:
+    """Bind the operator template to the real decision consumer schema."""
+    decision_schema = load_json(decision_schema_path)
+    definitions = decision_schema.get("$defs")
+    decision_definition = definitions.get("decision") if isinstance(definitions, dict) else None
+    if not isinstance(decision_definition, dict):
+        raise ValueError(
+            "manual-review decision contract drift: consumer schema must define #/$defs/decision"
+        )
+
+    properties = decision_definition.get("properties")
+    trigger_schema = properties.get("revalidation_triggers") if isinstance(properties, dict) else None
+    items_schema = trigger_schema.get("items") if isinstance(trigger_schema, dict) else None
+    consumer_triggers = items_schema.get("enum") if isinstance(items_schema, dict) else None
+    if (
+        not isinstance(consumer_triggers, list)
+        or any(not isinstance(trigger, str) for trigger in consumer_triggers)
+        or len(consumer_triggers) != len(set(consumer_triggers))
+        or set(consumer_triggers) != set(REQUIRED_REVALIDATION_TRIGGERS)
+    ):
+        raise ValueError(
+            "manual-review decision trigger contract drift: consumer schema must contain exactly the "
+            "five canonical trigger values"
+        )
+
+    template = as_dict(report.get("accepted_decision_template"), "accepted_decision_template")
+    if (
+        report.get("revalidation_triggers") != REQUIRED_REVALIDATION_TRIGGERS
+        or template.get("revalidation_triggers") != REQUIRED_REVALIDATION_TRIGGERS
+    ):
+        raise ValueError(
+            "manual-review packet trigger lists must exactly match the canonical decision schema contract"
+        )
+
+    template_schema = {
+        "$schema": decision_schema.get("$schema", "https://json-schema.org/draft/2020-12/schema"),
+        "$defs": definitions,
+        "$ref": "#/$defs/decision",
+    }
+    errors = sorted(
+        jsonschema.Draft202012Validator(template_schema).iter_errors(template),
+        key=lambda error: list(error.path),
+    )
+    if errors:
+        error = errors[0]
+        location = ".".join(str(part) for part in error.path) or "<template>"
+        raise ValueError(
+            "accepted_decision_template violates the actual manual-review decision schema "
+            f"at {location}: {error.message}"
+        )
+
+
+def validate_invariants(
+    report: dict[str, Any],
+    *,
+    decision_schema_path: pathlib.Path = DEFAULT_DECISION_SCHEMA,
+) -> None:
     summary = as_dict(report.get("summary"), "summary")
     if summary.get("default_ci_requires_credentials") is not False:
         raise ValueError("manual-review acceptance packet must preserve secret-free default CI")
@@ -311,6 +373,7 @@ def validate_invariants(report: dict[str, Any]) -> None:
         raise ValueError("accepted decision template scope version must match current scope")
     if template.get("review_scope_sha256") != digests.get("review_scope_sha256"):
         raise ValueError("accepted decision template scope digest must match current scope")
+    validate_decision_template_contract(report, decision_schema_path=decision_schema_path)
 
 
 def validate_schema(report: dict[str, Any], schema_path: pathlib.Path) -> None:
