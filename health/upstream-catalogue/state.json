@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
-      "last_receipt_sha256": "b481e2625675f2f3e48a9c99226e1b24466f62aaa5ab7f3ebc6dd1fcca694786",
-      "last_seen_at": "2026-10-05T01:06:52Z",
-      "observation_count": 86,
+      "last_receipt_sha256": "38be7008fa6e1133e6b22f6eb400f3a0165579179dd1d5e12720c93907dca773",
+      "last_seen_at": "2026-10-05T01:18:10Z",
+      "observation_count": 87,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -658,11 +658,17 @@
       "producer_run_id": "36646768289",
       "reason": "promotion_workflow_run_failed",
       "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
-      "recovery_evidence": null,
+      "recovery_evidence": {
+        "execution_run_attempt": 1,
+        "execution_run_id": "37250803343",
+        "health_receipt_sha256": "38be7008fa6e1133e6b22f6eb400f3a0165579179dd1d5e12720c93907dca773",
+        "stage": "promotion-execution",
+        "verified": true
+      },
       "severity": "error",
       "source_id": "data_go_kr",
       "stage": "promotion-execution",
-      "status": "open"
+      "status": "recovered"
     },
     {
       "fault_key": "08935fabd4844fd68884115babf0e0ed785ac2502feb9a120d61336ddad594c8",
@@ -749,8 +755,8 @@
     }
   },
   "latest_receipt": {
-    "path": "receipts/receipt-37250100106-1-b481e2625675f2f3.json",
-    "sha256": "b481e2625675f2f3e48a9c99226e1b24466f62aaa5ab7f3ebc6dd1fcca694786"
+    "path": "receipts/receipt-37250884232-1-38be7008fa6e1133.json",
+    "sha256": "38be7008fa6e1133e6b22f6eb400f3a0165579179dd1d5e12720c93907dca773"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -770,7 +776,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "5979dcbb9257619a5809acb85eb9de232c39eb7305451de528dd52812cd794c1",
-  "state_status": "blocked",
-  "updated_at": "2026-10-05T01:06:52Z"
+  "state_sha256": "65730748ea234216c2b728a50d04b44fae169d60e5f658bc745fb51080513c88",
+  "state_status": "degraded",
+  "updated_at": "2026-10-05T01:18:10Z"
 }
