@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
-      "last_receipt_sha256": "3b5be602ff8f12a7c72d021c55e13db2a660aedcf3806820127dbbc437b5cbe4",
-      "last_seen_at": "2026-10-05T15:52:37Z",
-      "observation_count": 102,
+      "last_receipt_sha256": "c01a68f8af53775ef9076b2fc5b37124ef33f88bd5b02c3c20b53aa89685d318",
+      "last_seen_at": "2026-10-05T15:59:47Z",
+      "observation_count": 103,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -49,6 +49,29 @@
       "status": "recovered"
     },
     {
+      "execution_identity": {
+        "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+        "run_attempt": 1,
+        "run_id": "37337128325",
+        "run_started_at": "2026-10-05T15:58:21Z"
+      },
+      "fault_key": "bea9771887d0ff86628005286019cb0a0036ac9fcdb69f7d8e72888ce864a136",
+      "first_seen_at": "2026-10-05T15:59:47Z",
+      "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
+      "last_receipt_sha256": "c01a68f8af53775ef9076b2fc5b37124ef33f88bd5b02c3c20b53aa89685d318",
+      "last_seen_at": "2026-10-05T15:59:47Z",
+      "observation_count": 1,
+      "owner_ticket": 659,
+      "producer_run_id": "36646768289",
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "recovery_evidence": null,
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution",
+      "status": "open"
+    },
+    {
       "fault_key": "0154e0ccd971a3c44aa7eb6bca6212ee2d682fbdd1ff6b57a5725f37464730e4",
       "first_seen_at": "2026-10-04T21:04:03Z",
       "generation_id": "694cf97f842ef4beab214a8dbfb66bec061f2f153e2f8bb26ca2578e6f2ec5c7",
@@ -74,9 +97,9 @@
       "fault_key": "121fc2b2229e014199160ec2ec285a75023a2a2eea0db0f7c02777a3295dfaad",
       "first_seen_at": "2026-10-05T13:00:41Z",
       "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
-      "last_receipt_sha256": "3b5be602ff8f12a7c72d021c55e13db2a660aedcf3806820127dbbc437b5cbe4",
-      "last_seen_at": "2026-10-05T15:52:37Z",
-      "observation_count": 6,
+      "last_receipt_sha256": "c01a68f8af53775ef9076b2fc5b37124ef33f88bd5b02c3c20b53aa89685d318",
+      "last_seen_at": "2026-10-05T15:59:47Z",
+      "observation_count": 7,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_ack_missing",
@@ -91,9 +114,9 @@
       "fault_key": "1cec466b94b9cd7bcab633b30b3d3ce46c31776f50323f1a6dee49ab705f81b2",
       "first_seen_at": "2026-10-05T13:00:41Z",
       "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
-      "last_receipt_sha256": "3b5be602ff8f12a7c72d021c55e13db2a660aedcf3806820127dbbc437b5cbe4",
-      "last_seen_at": "2026-10-05T15:52:37Z",
-      "observation_count": 6,
+      "last_receipt_sha256": "c01a68f8af53775ef9076b2fc5b37124ef33f88bd5b02c3c20b53aa89685d318",
+      "last_seen_at": "2026-10-05T15:59:47Z",
+      "observation_count": 7,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "promotion_record_for_different_generation",
@@ -789,8 +812,8 @@
     }
   },
   "latest_receipt": {
-    "path": "receipts/receipt-37336309981-1-3b5be602ff8f12a7.json",
-    "sha256": "3b5be602ff8f12a7c72d021c55e13db2a660aedcf3806820127dbbc437b5cbe4"
+    "path": "receipts/receipt-37337276322-1-c01a68f8af53775e.json",
+    "sha256": "c01a68f8af53775ef9076b2fc5b37124ef33f88bd5b02c3c20b53aa89685d318"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -810,7 +833,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "2617eb4c588ad33e6367418dba3424d2b0260d6d88c2f4d5138d837d47199266",
-  "state_status": "degraded",
-  "updated_at": "2026-10-05T15:52:37Z"
+  "state_sha256": "1d2d5d55d5940429005a85f167195a51b11caa4a0b7d11315d527c7e512592db",
+  "state_status": "blocked",
+  "updated_at": "2026-10-05T15:59:47Z"
 }
