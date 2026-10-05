@@ -73,11 +73,12 @@ def run_pipeline(
         "--output", admission.as_posix(),
     ]
     execute(admission_command, cwd=worktree)
-    execute([python, "scripts/generate-runtime-evidence-growth.py"], cwd=worktree)
     pointer = worktree / "data/data-go-kr.registry.json"
     pointer_bytes = pointer.read_bytes()
     try:
         execute([python, "scripts/materialize-canonical-registry.py"], cwd=worktree)
+        execute([python, "scripts/generate-current-runtime-evidence-projection.py"], cwd=worktree)
+        execute([python, "scripts/generate-runtime-evidence-growth.py"], cwd=worktree)
         for script in (
             "generate-coverage-backlog.py", "generate-operation-materialization-plan.py",
             "generate-institution-api-overview.py", "generate-institution-runtime-plan.py",
