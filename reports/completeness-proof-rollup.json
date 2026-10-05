@@ -334,11 +334,17 @@
             "candidate_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
             "current_input_contract_changed_paths": [
               ".github/workflows/upstream-catalogue-process.yml",
+              "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+              "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
+              "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
               "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+              "schemas/datapan.specs.v1.schema.json",
               "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
               "scripts/compose-upstream-catalogue-candidate.py",
               "scripts/generate-batch-link-detail-registry-patches.py",
+              "scripts/generate-seoul-oa109-subject-snapshot.py",
               "scripts/process-upstream-catalogue-candidate.py",
+              "scripts/seoul_oa109_operation_declaration.py",
               "scripts/upstream_catalogue_handoff.py"
             ],
             "current_input_contract_compatible": false,
@@ -362,8 +368,10 @@
             "processor_generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
             "processor_run_attempt": 1,
             "processor_run_id": "37204681028",
+            "promotion_candidate_acknowledgement_statuses": [],
             "promotion_candidate_available": false,
             "promotion_candidate_key": null,
+            "promotion_candidate_lifecycle_status": null,
             "promotion_journal_sha256": "9c992fbcaa05c071a37509622f0e396775e60102b6f22efd555ad849b04875cf",
             "promotion_processor_generation_matches": true,
             "promotion_run_id": "37205271032",
@@ -609,7 +617,7 @@
             "candidate_release_publication_unproven": false,
             "classification": "historical_delivery_only",
             "consumer_read_back_required_for_updated": true,
-            "current_release_manifest_sha256": "89afa12758dd3eded5ce5a96275572a8826574d4e7ead020412f7a76d6bb60ba",
+            "current_release_manifest_sha256": "274469e73b8893bb6ba458e07db92c2e745cf1732dd13c5233a4b22e2b25740d",
             "current_release_subject_applicable": false,
             "currentness_established": false,
             "cutover_established": false,
@@ -931,7 +939,8 @@
         },
         {
           "details": {
-            "missing_stages": []
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
           },
           "evidence": [],
           "facet_id": "specification_pipeline",
@@ -946,7 +955,11 @@
         },
         {
           "details": {
+            "acknowledgement_local": null,
             "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
             "receipt_cutover_required": false
           },
           "evidence": [],
@@ -1082,7 +1095,8 @@
         },
         {
           "details": {
-            "missing_stages": []
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
           },
           "evidence": [],
           "facet_id": "specification_pipeline",
@@ -1097,7 +1111,11 @@
         },
         {
           "details": {
+            "acknowledgement_local": null,
             "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
             "receipt_cutover_required": false
           },
           "evidence": [],
@@ -1233,7 +1251,8 @@
         },
         {
           "details": {
-            "missing_stages": []
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
           },
           "evidence": [],
           "facet_id": "specification_pipeline",
@@ -1248,7 +1267,11 @@
         },
         {
           "details": {
+            "acknowledgement_local": null,
             "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
             "receipt_cutover_required": false
           },
           "evidence": [],
@@ -1384,7 +1407,8 @@
         },
         {
           "details": {
-            "missing_stages": []
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
           },
           "evidence": [],
           "facet_id": "specification_pipeline",
@@ -1399,7 +1423,11 @@
         },
         {
           "details": {
+            "acknowledgement_local": null,
             "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
             "receipt_cutover_required": false
           },
           "evidence": [],
