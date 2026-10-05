@@ -1062,6 +1062,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           RESUME_EVIDENCE: ${{ steps.cache.outputs.evidence_path }}
           DERIVATION_ENABLED: ${{ steps.derivation.outputs.derivation_enabled }}
+          DERIVATION_GENERATION_ID: ${{ steps.derivation.outputs.generation_id }}
           DERIVATION_BASELINE: ${{ steps.derivation.outputs.composition_baseline_path }}
           DERIVATION_FILE: ${{ steps.derivation.outputs.derivation_path }}
           DERIVATION_JOURNAL: ${{ steps.derivation.outputs.journal_path }}
@@ -1072,6 +1073,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .datapan/ci/upstream-catalogue-processing
+          rm -f .datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json
           if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then RESUME_EVIDENCE="${DERIVATION_RESUME_EVIDENCE}"; fi
           args=(
             --baseline data/data-go-kr.registry.json
@@ -1097,7 +1099,9 @@ jobs:
           if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
           if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
           if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then
+            if [ -z "${DERIVATION_GENERATION_ID}" ]; then echo "FAIL derivation plan omitted its exact generation identity" >&2; exit 2; fi
             args+=(
+              --expected-generation-id "${DERIVATION_GENERATION_ID}"
               --composition-baseline "${DERIVATION_BASELINE}"
               --same-observation-derivation "${DERIVATION_FILE}"
               --current-main-root ../bootstrap
@@ -1135,9 +1139,26 @@ jobs:
           status="$?"
           set -e
           echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
+          checkpoint_persisted=false
+          receipt=.datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json
+          if [ "${status}" != "1" ] && [ -s "${receipt}" ] && jq -e '
+            .schema_version == "datapan.upstream-catalogue-checkpoint.v1" and
+            (.generation_id | type == "string") and
+            (.checkpoint_sha256 | type == "string" and test("^[a-f0-9]{64}$"))
+          ' "${receipt}" >/dev/null; then
+            checkpoint_persisted=true
+          fi
+          echo "checkpoint_persisted=${checkpoint_persisted}" >> "${GITHUB_OUTPUT}"
+          if [ "${status}" = "1" ]; then
+            echo "FAIL bounded claim made no committable checkpoint" >&2
+            exit 1
+          fi
 
       - name: Commit the request reservation with exact remote-SHA compare-and-swap
-        if: steps.select.outputs.decision == 'process'
+        if: >-
+          steps.select.outputs.decision == 'process' &&
+          steps.claim.outputs.checkpoint_persisted == 'true' &&
+          steps.claim.outputs.exit_code != '1'
         id: claim_push
         working-directory: bootstrap
         env:
@@ -1175,6 +1196,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           RESUME_EVIDENCE: ${{ steps.cache.outputs.evidence_path }}
           DERIVATION_ENABLED: ${{ steps.derivation.outputs.derivation_enabled }}
+          DERIVATION_GENERATION_ID: ${{ steps.derivation.outputs.generation_id }}
           DERIVATION_BASELINE: ${{ steps.derivation.outputs.composition_baseline_path }}
           DERIVATION_FILE: ${{ steps.derivation.outputs.derivation_path }}
           DERIVATION_JOURNAL: ${{ steps.derivation.outputs.journal_path }}
@@ -1242,7 +1264,9 @@ jobs:
           if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
           if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
             if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then
+              if [ -z "${DERIVATION_GENERATION_ID}" ]; then echo "FAIL derivation plan omitted its exact generation identity" >&2; exit 2; fi
               args+=(
+                --expected-generation-id "${DERIVATION_GENERATION_ID}"
                 --composition-baseline "${DERIVATION_BASELINE}"
                 --same-observation-derivation "${DERIVATION_FILE}"
                 --current-main-root ../bootstrap

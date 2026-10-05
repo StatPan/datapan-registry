@@ -569,25 +569,24 @@ def reserve_requests(
     inspected: list[dict[str, Any]] = []
     budget_left = max_attempts
     reserved: dict[str, int] = {}
-    # Reserve the complete remaining physical allowance for each inspected
-    # identity before moving on. With the production 24/48/2 profile this
-    # yields eight fresh identities with three request slots each, so a
-    # page+resolver chain and one retry can finish without a second claim.
-    # The same min(remaining, budget) rule applies to tiny budgets, allowing a
-    # single selected identity to complete a page+resolver chain when two
-    # physical slots remain. Exhausted rows still count as inspected for
-    # cursor fairness.
-    for row in rotated[:max_queue]:
+    # `max_queue` caps identities selected for this request slice, not local
+    # inspection of already exhausted rows. Scan past exhausted identities
+    # so an exhausted prefix cannot starve a later eligible identity forever.
+    # This loop performs no network I/O; physical calls remain bounded by the
+    # pre-reserved `max_attempts` and each row's lifetime allowance.
+    eligible_inspected = 0
+    for row in rotated:
         inspected.append(row)
         identity = row["id"]
         remaining = max_for_row - int(attempts.get(identity, 0))
         if remaining <= 0:
             continue
+        eligible_inspected += 1
         allocation = min(remaining, budget_left)
         if allocation:
             reserved[identity] = allocation
             budget_left -= allocation
-        if budget_left == 0:
+        if budget_left == 0 or eligible_inspected >= max_queue:
             break
     reservation_records = []
     for row in inspected:
@@ -1240,6 +1239,14 @@ def persist_result_only_checkpoint(
     output_expires_at: str,
 ) -> dict[str, Any]:
     """Publish a sealed checkpoint and its small, digest-bound result artifact."""
+    retention_index = (
+        load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+        if index_path.is_file() else {
+            "schema_version": CHECKPOINT_SCHEMA, "generations": [],
+            "detail_queue_cursor": 0, "detail_retry_state": {},
+        }
+    )
+    plan_generation_retention(retention_index, checkpoint_path.parent, checkpoint)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     result_path = atomic_output(
         args.output_dir,
@@ -1431,6 +1438,8 @@ def validate_derivation_before_claim(
     current_main_root: pathlib.Path,
     resume_parent_bundle_dir: pathlib.Path,
     canonical_parent_bundle_dir: pathlib.Path,
+    allow_source_only_main_advance: bool = False,
+    allow_monotonic_journal_successor: bool = False,
 ) -> dict[str, Any]:
     """Authenticate both B parents and the exact merged-C snapshot before claim."""
     import subprocess
@@ -1585,6 +1594,7 @@ def validate_derivation_before_claim(
     try:
         row = DERIVATION.validate_readback_against_journal(
             envelope, journal, journal_ref_sha=journal_ref_sha,
+            allow_monotonic_successor=allow_monotonic_journal_successor,
         )
     except DERIVATION.DerivationError as exc:
         raise ValueError("derivation_canonical_readback_invalid") from exc
@@ -1629,39 +1639,67 @@ def validate_derivation_before_claim(
         ("git", "rev-parse", "HEAD"), cwd=current_main_root, text=True,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
     )
-    if current_head.returncode != 0 or current_head.stdout.strip() != baseline_identity["main_sha"]:
+    if current_head.returncode != 0 or not re.fullmatch(r"[a-f0-9]{40}", current_head.stdout.strip()):
+        raise ValueError("derivation_current_main_head_mismatch")
+    current_main_sha = current_head.stdout.strip()
+    if not allow_source_only_main_advance and current_main_sha != baseline_identity["main_sha"]:
         raise ValueError("derivation_current_main_head_mismatch")
     live_main = subprocess.run(
         ("git", "ls-remote", "--heads", "origin", "refs/heads/main"), cwd=current_main_root,
         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
     )
     live_main_shas = [line.split("\t", 1)[0] for line in live_main.stdout.splitlines() if line.endswith("\trefs/heads/main")]
-    if live_main.returncode != 0 or live_main_shas != [baseline_identity["main_sha"]]:
+    if live_main.returncode != 0 or live_main_shas != [current_main_sha]:
         raise ValueError("derivation_current_main_moved")
-    current_manifest = _git_bytes(current_main_root, f"{baseline_identity['main_sha']}:manifest.json")
-    if sha256_bytes(current_manifest) != baseline_identity["manifest_sha256"]:
-        raise ValueError("derivation_current_manifest_mismatch")
-    try:
-        manifest = json.loads(current_manifest)
-    except json.JSONDecodeError as exc:
-        raise ValueError("derivation_current_manifest_invalid") from exc
-    if not isinstance(manifest, Mapping) or manifest.get("source_registry") != baseline_identity["registry_path"]:
-        raise ValueError("derivation_current_manifest_path_mismatch")
-    entries = [
-        item for item in manifest.get("artifacts", []) if isinstance(item, Mapping)
-        and item.get("path") == baseline_identity["registry_path"] and item.get("kind") == "registry"
-    ]
-    if len(entries) != 1 or (entries[0].get("bytes"), entries[0].get("sha256")) != (
-        baseline_identity["registry_bytes"], baseline_identity["registry_sha256"],
+
+    def manifest_registry_identity(revision: str, *, expected_manifest_sha: str | None = None) -> tuple[str, int, str]:
+        manifest_bytes = _git_bytes(current_main_root, f"{revision}:manifest.json")
+        if expected_manifest_sha is not None and sha256_bytes(manifest_bytes) != expected_manifest_sha:
+            raise ValueError("derivation_composition_baseline_manifest_mismatch")
+        try:
+            manifest = json.loads(manifest_bytes)
+        except json.JSONDecodeError as exc:
+            raise ValueError("derivation_current_manifest_invalid") from exc
+        if not isinstance(manifest, Mapping) or manifest.get("source_registry") != baseline_identity["registry_path"]:
+            raise ValueError("derivation_current_manifest_path_mismatch")
+        entries = [
+            item for item in manifest.get("artifacts", []) if isinstance(item, Mapping)
+            and item.get("path") == baseline_identity["registry_path"] and item.get("kind") == "registry"
+        ]
+        if len(entries) != 1:
+            raise ValueError("derivation_current_manifest_registry_mismatch")
+        entry = entries[0]
+        if not isinstance(entry.get("bytes"), int) or isinstance(entry.get("bytes"), bool) or not isinstance(entry.get("sha256"), str):
+            raise ValueError("derivation_current_manifest_registry_mismatch")
+        pointer = _git_bytes(current_main_root, f"{revision}:{baseline_identity['registry_path']}")
+        try:
+            pointer_text = pointer.decode("ascii", errors="strict").splitlines()
+        except UnicodeDecodeError as exc:
+            raise ValueError("derivation_current_lfs_pointer_mismatch") from exc
+        if (
+            f"oid sha256:{entry['sha256']}" not in pointer_text
+            or f"size {entry['bytes']}" not in pointer_text
+        ):
+            raise ValueError("derivation_current_lfs_pointer_mismatch")
+        return str(entry["sha256"]), int(entry["bytes"]), sha256_bytes(manifest_bytes)
+
+    baseline_sha, baseline_bytes, _baseline_manifest_sha = manifest_registry_identity(
+        baseline_identity["main_sha"], expected_manifest_sha=baseline_identity["manifest_sha256"],
+    )
+    if (baseline_sha, baseline_bytes) != (
+        baseline_identity["registry_sha256"], baseline_identity["registry_bytes"],
+    ):
+        raise ValueError("derivation_composition_baseline_manifest_registry_mismatch")
+    current_sha, current_bytes, _current_manifest_sha = manifest_registry_identity(current_main_sha)
+    if (current_sha, current_bytes) != (
+        baseline_identity["registry_sha256"], baseline_identity["registry_bytes"],
     ):
         raise ValueError("derivation_current_manifest_registry_mismatch")
-    pointer = _git_bytes(current_main_root, f"{baseline_identity['main_sha']}:{baseline_identity['registry_path']}")
-    pointer_text = pointer.decode("ascii", errors="strict").splitlines()
-    if (
-        f"oid sha256:{baseline_identity['registry_sha256']}" not in pointer_text
-        or f"size {baseline_identity['registry_bytes']}" not in pointer_text
-    ):
-        raise ValueError("derivation_current_lfs_pointer_mismatch")
+    _assert_git_ancestor(
+        current_main_root, envelope["canonical_parent_readback"]["merge_sha"], baseline_identity["main_sha"],
+    )
+    _assert_git_ancestor(current_main_root, baseline_identity["main_sha"], current_main_sha)
+    _assert_git_ancestor(current_main_root, envelope["canonical_parent_readback"]["merge_sha"], current_main_sha)
     if composition_baseline_path.is_symlink() or not composition_baseline_path.is_file():
         raise ValueError("derivation_composition_baseline_missing")
     composition_bytes = composition_baseline_path.read_bytes()
@@ -1669,7 +1707,6 @@ def validate_derivation_before_claim(
         baseline_identity["registry_bytes"], baseline_identity["registry_sha256"],
     ):
         raise ValueError("derivation_composition_baseline_digest_mismatch")
-    _assert_git_ancestor(current_main_root, envelope["canonical_parent_readback"]["merge_sha"], baseline_identity["main_sha"])
     return envelope
 
 
@@ -1678,7 +1715,7 @@ def append_generation_index(
     collector_admission: dict[str, Any] | None = None,
     legacy_floor: dict[str, Any] | None = None,
     admitted_at: str | None = None,
-) -> None:
+) -> set[str]:
     index = {"schema_version": CHECKPOINT_SCHEMA, "generations": [], "detail_queue_cursor": 0, "detail_retry_state": {}}
     if index_path.exists():
         loaded = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
@@ -1691,29 +1728,8 @@ def append_generation_index(
         "checkpoint": checkpoint_path.name, "updated_at": checkpoint["last_heartbeat_at"],
         "candidate_sha256": checkpoint["generation_inputs"].get("candidate_sha256"),
     })
-    protected = protected_lineage_generations(checkpoint_path.parent)
-    protected.add(str(checkpoint["generation_id"]))
-    row_by_id = {row.get("generation_id"): row for row in rows if isinstance(row, dict)}
-    if not protected.issubset(row_by_id):
-        raise ValueError("derivation_parent_index_entry_missing")
-    active_ids = {
-        row.get("generation_id") for row in rows if isinstance(row, dict)
-        and row.get("status") in {"queued", "validating", "enriching", "composing", "retry"}
-    }
-    required_ids = protected | active_ids | {str(checkpoint["generation_id"])}
-    if len(required_ids) > DEFAULT_MAX_GENERATIONS:
-        raise ValueError("derivation_lineage_generation_capacity_exceeded")
-    retained_ids = set(required_ids)
-    # Keep lineage/active/current generations first, then fill remaining
-    # capacity newest-first. An old protected parent must not force failure
-    # merely because it sits just outside the recent window.
-    for row in reversed(rows):
-        generation_id = row.get("generation_id") if isinstance(row, dict) else None
-        if generation_id in retained_ids:
-            continue
-        if len(retained_ids) >= DEFAULT_MAX_GENERATIONS:
-            break
-        retained_ids.add(generation_id)
+    index["generations"] = rows
+    retained_ids = plan_generation_retention(index, checkpoint_path.parent, checkpoint)
     index["generations"] = [row for row in rows if row.get("generation_id") in retained_ids]
     index["detail_queue_cursor"] = int(checkpoint.get("detail_queue_cursor", index.get("detail_queue_cursor", 0)))
     retry_state = index.setdefault("detail_retry_state", {})
@@ -1767,6 +1783,196 @@ def append_generation_index(
         except HandoffError as exc:
             raise ValueError(str(exc)) from exc
     atomic_write_json(index_path, index)
+    return retained_ids
+
+
+def plan_generation_retention(
+    index: Mapping[str, Any], generation_dir: pathlib.Path,
+    prospective_checkpoint: Mapping[str, Any], *, max_generations: int = DEFAULT_MAX_GENERATIONS,
+) -> set[str]:
+    """Plan one validated index/file keep-set without mutating either store."""
+    rows_value = index.get("generations")
+    if not isinstance(rows_value, list):
+        raise ValueError("corrupt_generation_index")
+    current_id = prospective_checkpoint.get("generation_id")
+    if not isinstance(current_id, str) or not re.fullmatch(r"[a-f0-9]{64}", current_id):
+        raise ValueError("generation_retention_current_identity_invalid")
+    rows: list[dict[str, Any]] = []
+    seen_rows: set[str] = set()
+    for raw in rows_value:
+        if not isinstance(raw, Mapping):
+            raise ValueError("corrupt_generation_index")
+        generation_id = raw.get("generation_id")
+        if not isinstance(generation_id, str) or not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+            raise ValueError("corrupt_generation_index")
+        if generation_id in seen_rows:
+            raise ValueError("duplicate_generation_index_identity")
+        seen_rows.add(generation_id)
+        rows.append(dict(raw))
+    rows = [row for row in rows if row["generation_id"] != current_id]
+    rows.append({
+        "generation_id": current_id,
+        "status": prospective_checkpoint.get("status"),
+        "checkpoint": f"{current_id}.json",
+        "updated_at": prospective_checkpoint.get("last_heartbeat_at"),
+        "candidate_sha256": (
+            prospective_checkpoint.get("generation_inputs", {}).get("candidate_sha256")
+            if isinstance(prospective_checkpoint.get("generation_inputs"), Mapping) else None
+        ),
+    })
+    index_ids = {row["generation_id"] for row in rows}
+
+    schema_path = pathlib.Path(__file__).resolve().parent.parent / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    schema = load_json(schema_path, maximum_bytes=1024 * 1024)
+    checkpoints: dict[str, dict[str, Any]] = {}
+    for path in generation_dir.glob("*.json"):
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("derivation_lineage_checkpoint_file_invalid")
+        generation_id = path.stem
+        if not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+            raise ValueError("derivation_lineage_checkpoint_filename_invalid")
+        try:
+            checkpoint = verify_checkpoint(load_json(path, maximum_bytes=STATE_FILE_LIMIT), schema)
+        except Exception as exc:
+            raise ValueError("derivation_lineage_checkpoint_corrupt") from exc
+        if checkpoint.get("generation_id") != generation_id:
+            raise ValueError("derivation_lineage_checkpoint_identity_mismatch")
+        checkpoints[generation_id] = checkpoint
+
+    prospective = dict(prospective_checkpoint)
+    prospective.pop("checkpoint_sha256", None)
+    prospective = seal_checkpoint(prospective)
+    try:
+        verify_checkpoint(prospective, schema)
+    except Exception as exc:
+        raise ValueError("generation_retention_prospective_checkpoint_invalid") from exc
+    checkpoints[current_id] = prospective
+
+    protected: set[str] = set()
+    derived_ids: list[str] = []
+    for generation_id, checkpoint in checkpoints.items():
+        inputs = checkpoint.get("generation_inputs")
+        envelope_value = inputs.get("same_observation_derivation") if isinstance(inputs, Mapping) else None
+        if envelope_value is None:
+            continue
+        try:
+            envelope = DERIVATION.validate_derivation_envelope(envelope_value)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("derivation_lineage_envelope_corrupt") from exc
+        if generation_id in envelope["ancestor_generation_ids"]:
+            raise ValueError("derivation_lineage_checkpoint_cycle")
+        protected.update(envelope["ancestor_generation_ids"])
+        derived_ids.append(generation_id)
+
+    handoff_ledger = index.get("collector_handoff")
+    admitted_rows: list[dict[str, Any]] = []
+    if handoff_ledger is not None:
+        try:
+            admitted_rows = validate_ledger(handoff_ledger)["admitted_observations"]
+        except HandoffError as exc:
+            raise ValueError("derivation_lineage_admission_ledger_invalid") from exc
+
+    def admission_for(checkpoint: Mapping[str, Any]) -> Mapping[str, Any]:
+        observation = checkpoint.get("last_observation")
+        refs = checkpoint.get("input_artifacts")
+        if not isinstance(observation, Mapping) or not isinstance(refs, list):
+            raise ValueError("derivation_lineage_admission_identity_missing")
+        matches = [
+            row for row in admitted_rows
+            if str(row.get("producer_run_id")) == str(observation.get("producer_run_id") or "")
+            and row.get("refresh_evidence_sha256") == observation.get("refresh_evidence_sha256")
+            and any(
+                isinstance(ref, Mapping)
+                and str(ref.get("run_id")) == str(row.get("producer_run_id"))
+                and str(ref.get("artifact_id")) == str(row.get("artifact_id"))
+                and ref.get("evidence_sha256") == row.get("refresh_evidence_sha256")
+                for ref in refs
+            )
+        ]
+        if len(matches) != 1:
+            raise ValueError("derivation_lineage_admission_ambiguous_or_missing")
+        return matches[0]
+
+    if derived_ids:
+        if not admitted_rows:
+            raise ValueError("derivation_lineage_admission_ledger_missing")
+        for generation_id in derived_ids:
+            checkpoint = checkpoints[generation_id]
+            envelope = DERIVATION.validate_derivation_envelope(
+                checkpoint["generation_inputs"]["same_observation_derivation"],
+            )
+            try:
+                DERIVATION.validate_processor_parent_graph(
+                    [
+                        envelope["resume_parent_processor"]["generation_id"],
+                        envelope["canonical_parent_processor"]["generation_id"],
+                    ],
+                    load_checkpoint=lambda parent_id: checkpoints[parent_id],
+                    admission_for=admission_for,
+                    original_observation=envelope["original_observation"],
+                    expected_ancestor_generation_ids=envelope["ancestor_generation_ids"],
+                    forbidden_generation_id=generation_id,
+                )
+            except (KeyError, DERIVATION.DerivationError, OSError, ValueError) as exc:
+                raise ValueError("derivation_lineage_parent_graph_invalid") from exc
+
+    missing_files = protected - checkpoints.keys()
+    if missing_files:
+        raise ValueError("derivation_lineage_parent_checkpoint_unavailable")
+    if not protected.issubset(index_ids):
+        raise ValueError("derivation_parent_index_entry_missing")
+
+    active_statuses = {"queued", "validating", "enriching", "composing", "retry"}
+    active_ids: set[str] = set()
+    for generation_id, checkpoint in checkpoints.items():
+        outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), Mapping) else {}
+        if (
+            checkpoint.get("status") in active_statuses
+            or checkpoint.get("status") == "ready" and int(outcome.get("detail_retry_count", 0) or 0) > 0
+            or checkpoint.get("lease") is not None
+        ):
+            active_ids.add(generation_id)
+    if len(active_ids) > DEFAULT_MAX_ACTIVE_GENERATIONS:
+        raise ValueError("active_generation_queue_full")
+    if not active_ids.issubset(index_ids):
+        raise ValueError("active_generation_index_entry_missing")
+
+    required_ids = protected | active_ids | {current_id}
+    if len(required_ids) > max_generations:
+        raise ValueError("derivation_lineage_generation_capacity_exceeded")
+    if not required_ids.issubset(index_ids):
+        raise ValueError("generation_retention_required_index_entry_missing")
+
+    retained_ids = set(required_ids)
+    # The index row order is the durable recency order used by both the index
+    # writer and the checkpoint-file pruner.
+    for row in reversed(rows):
+        generation_id = row["generation_id"]
+        if generation_id in retained_ids or generation_id not in checkpoints:
+            continue
+        if len(retained_ids) >= max_generations:
+            break
+        retained_ids.add(generation_id)
+    return retained_ids
+
+
+def preflight_generation_retention(
+    index_path: pathlib.Path, generation_dir: pathlib.Path,
+    prospective_checkpoint: Mapping[str, Any],
+) -> set[str]:
+    """Read the durable snapshot and reject unsafe capacity before mutation."""
+    if index_path.is_symlink():
+        raise ValueError("generation_retention_index_path_invalid")
+    if index_path.is_file():
+        index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+    else:
+        index = {
+            "schema_version": CHECKPOINT_SCHEMA, "generations": [],
+            "detail_queue_cursor": 0, "detail_retry_state": {},
+        }
+    if not isinstance(index, Mapping) or index.get("schema_version") != CHECKPOINT_SCHEMA:
+        raise ValueError("corrupt_generation_index")
+    return plan_generation_retention(index, generation_dir, prospective_checkpoint)
 
 
 def validate_collector_admission(
@@ -1919,6 +2125,11 @@ def bind_output_artifact_id(
     expiry = parse_timestamp(artifact_expires_at)
     if expiry <= utc_now():
         raise ValueError("output_artifact_expired")
+    preflight_generation_retention(
+        state_dir / "sources" / source_id / "index.json",
+        checkpoint_path.parent,
+        checkpoint,
+    )
     locator["artifact_id"] = artifact_id
     locator["expires_at"] = timestamp(expiry)
     atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
@@ -1958,31 +2169,19 @@ def prune_generation_files(
     generation_dir: pathlib.Path,
     current_path: pathlib.Path,
     max_generations: int = DEFAULT_MAX_GENERATIONS,
+    *, retained_ids: set[str] | None = None,
 ) -> None:
-    checkpoints = sorted(generation_dir.glob("*.json"), key=lambda path: path.stat().st_mtime, reverse=True)
-    protected_ids = protected_lineage_generations(generation_dir)
-    by_id = {path.stem: path for path in checkpoints}
-    if not protected_ids.issubset(by_id):
-        raise ValueError("derivation_lineage_parent_checkpoint_unavailable")
-    active = []
-    for path in checkpoints:
-        try:
-            value = load_json(path, maximum_bytes=STATE_FILE_LIMIT)
-            if isinstance(value, dict) and value.get("status") in {"queued", "validating", "enriching", "composing", "retry"}:
-                active.append(path)
-        except (OSError, ValueError, json.JSONDecodeError):
-            continue
-    if len(active) > DEFAULT_MAX_ACTIVE_GENERATIONS:
-        raise ValueError("active_generation_queue_full")
-    retained = {path for path in checkpoints if path in active or path == current_path or path.stem in protected_ids}
-    if len(retained) > max_generations:
-        raise ValueError("derivation_lineage_generation_capacity_exceeded")
-    for path in checkpoints:
-        if len(retained) >= max_generations:
-            break
-        retained.add(path)
-    for path in checkpoints:
-        if path not in retained:
+    if retained_ids is None:
+        index_path = generation_dir.parent / "index.json"
+        index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+        current_checkpoint = verify_checkpoint(load_json(current_path, maximum_bytes=STATE_FILE_LIMIT))
+        retained_ids = plan_generation_retention(
+            index, generation_dir, current_checkpoint, max_generations=max_generations,
+        )
+    if current_path.stem not in retained_ids:
+        raise ValueError("generation_retention_current_checkpoint_not_retained")
+    for path in generation_dir.glob("*.json"):
+        if path.stem not in retained_ids:
             path.unlink(missing_ok=True)
 
 
@@ -2038,6 +2237,12 @@ def mark_existing_generation_input_unavailable(
         raise ValueError("target_generation_not_active")
     if active_lease(checkpoint, now):
         return 2, checkpoint
+
+    preflight_generation_retention(
+        args.state_dir / "sources" / args.source / "index.json",
+        args.state_dir / "sources" / args.source / "generations",
+        checkpoint,
+    )
 
     if status != "quarantined":
         checkpoint["status"] = "quarantined"
@@ -2177,6 +2382,8 @@ def process(
         evidence_sha if candidate_sha is None else None, policy_sha, adapter_sha,
         same_observation_derivation=derivation,
     )
+    if args.expected_generation_id and generation_id != args.expected_generation_id:
+        raise ValueError("prepared_generation_identity_mismatch")
     generation_dir = args.state_dir / "sources" / args.source / "generations"
     index_path = args.state_dir / "sources" / args.source / "index.json"
     schema = load_json(args.checkpoint_schema, maximum_bytes=1024 * 1024)
@@ -2216,6 +2423,20 @@ def process(
         if not args.current_main_root or not args.current_main_root.is_dir():
             raise ValueError("derivation_current_main_checkout_missing")
         assert derivation_parent_checkpoint is not None
+        existing_target: dict[str, Any] | None = None
+        if checkpoint_path.is_file() and not checkpoint_path.is_symlink():
+            existing_target = verify_checkpoint(
+                load_json(checkpoint_path, maximum_bytes=STATE_FILE_LIMIT), schema,
+            )
+        existing_outcome = existing_target.get("outcome") if isinstance(existing_target, Mapping) and isinstance(existing_target.get("outcome"), Mapping) else {}
+        can_resume_advanced_main = bool(
+            isinstance(existing_target, Mapping)
+            and existing_target.get("generation_inputs", {}).get("same_observation_derivation") == derivation
+            and (
+                existing_target.get("status") in {"queued", "validating", "enriching", "composing", "retry"}
+                or existing_target.get("status") == "ready" and int(existing_outcome.get("detail_retry_count", 0) or 0) > 0
+            )
+        )
         validate_derivation_before_claim(
             args,
             generation_id=generation_id,
@@ -2233,6 +2454,8 @@ def process(
             current_main_root=args.current_main_root.resolve(),
             resume_parent_bundle_dir=args.resume_parent_bundle_dir,
             canonical_parent_bundle_dir=args.canonical_parent_bundle_dir,
+            allow_source_only_main_advance=can_resume_advanced_main,
+            allow_monotonic_journal_successor=can_resume_advanced_main,
         )
     if checkpoint_path.exists():
         try:
@@ -2337,6 +2560,12 @@ def process(
         checkpoint.get("status") == "ready"
         and int(prior_outcome.get("detail_retry_count", 0) or 0) > 0
     )
+    retention_candidate = dict(checkpoint)
+    if checkpoint.get("status") in {"ready", "no-change"} and (new_observation_received or ready_has_detail_work):
+        retention_candidate["status"] = "retry"
+    # Plan the exact required/retained generation set before terminal replay,
+    # quarantine, lease acquisition, or request reservation can write state.
+    preflight_generation_retention(index_path, generation_dir, retention_candidate)
     if checkpoint.get("status") in {"ready", "no-change", "quarantined"} and not new_observation_received and not ready_has_detail_work:
         checkpoint["last_heartbeat_at"] = timestamp(now)
         atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
@@ -3065,8 +3294,10 @@ def process(
     set_output_artifact_locator(checkpoint, args, output_artifact_expires_at, bundle)
     atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
     atomic_write_json(output_dir / "upstream-catalogue-checkpoint-receipt.json", checkpoint)
-    append_generation_index(index_path, checkpoint_path, checkpoint)
-    prune_generation_files(generation_dir, checkpoint_path)
+    retained_generation_ids = append_generation_index(index_path, checkpoint_path, checkpoint)
+    prune_generation_files(
+        generation_dir, checkpoint_path, retained_ids=retained_generation_ids,
+    )
     return (0 if terminal_status in {"ready", "no-change"} else 2 if terminal_status == "retry" else 3), checkpoint
 
 
@@ -3077,6 +3308,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--baseline", type=pathlib.Path)
     parser.add_argument("--composition-baseline", type=pathlib.Path)
     parser.add_argument("--same-observation-derivation", type=pathlib.Path)
+    parser.add_argument("--expected-generation-id")
     parser.add_argument("--current-main-root", type=pathlib.Path)
     parser.add_argument("--derivation-journal", type=pathlib.Path)
     parser.add_argument("--derivation-journal-ref-sha")

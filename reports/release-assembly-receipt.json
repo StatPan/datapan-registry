@@ -481,8 +481,8 @@
         },
         {
           "path": "reports/credential-runtime-manual-review-acceptance-packet.json",
-          "bytes": 4540,
-          "sha256": "d7058b3a7523ebe3bc3031d6f3111bf0e17812e02dc37086a7f0e65233a02f3f",
+          "bytes": 4518,
+          "sha256": "db0219e0a1f2e080e7f504836e49c228bf6409743d0bc5611950c6778eb82196",
           "manifest_bound": true,
           "kind": "credential_runtime_manual_review_acceptance_packet",
           "schema": "https://schemas.datapan.dev/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json"
@@ -525,7 +525,7 @@
         {
           "path": "reports/release-distribution-footprint.json",
           "bytes": 2216,
-          "sha256": "8d1e872863c051aa60e3c14aaba7ed321e31368e264c5139bf62e6e264ff8811",
+          "sha256": "3ebb23bd8342b6ad89b26d3e98df29a12d382d2edc58eef822f1827ef97c4480",
           "manifest_bound": true,
           "kind": "release_distribution_footprint",
           "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
@@ -533,7 +533,7 @@
         {
           "path": "reports/release-consumer-compatibility.json",
           "bytes": 26719,
-          "sha256": "37c7cbd74b13da102600766ccfac28f9b300b5686b8c3a69f4fb3bd4df75afc2",
+          "sha256": "9ffd405d750438077c8f30dd48bfee61dafc2770816ece3efd091b619ba54b6d",
           "manifest_bound": true,
           "kind": "consumer_compatibility",
           "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
@@ -728,7 +728,7 @@
         {
           "path": "docs/release-ledger-goal-completion-audit.json",
           "bytes": 25642,
-          "sha256": "1036373fd434faff7aa2a4c94d18e7077de2fce26edc8a4a91627d4a39395e13",
+          "sha256": "26188c02d4abdb4ad877594e90707816e61adcd00d1e81d62dae972adcd48919",
           "manifest_bound": false
         },
         {

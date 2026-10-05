@@ -42,13 +42,21 @@ def sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
-def run_git(root: pathlib.Path, *argv: str) -> str:
+def run_git_bytes(root: pathlib.Path, *argv: str) -> bytes:
     import subprocess
 
-    result = subprocess.run(("git", *argv), cwd=root, text=True, capture_output=True, check=False)
+    result = subprocess.run(("git", *argv), cwd=root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if result.returncode != 0:
         raise ValueError("derivation_git_identity_unavailable")
-    return result.stdout.strip()
+    return result.stdout
+
+
+def run_git(root: pathlib.Path, *argv: str) -> str:
+    """Read textual Git metadata; use run_git_bytes for content-addressed files."""
+    try:
+        return run_git_bytes(root, *argv).decode("utf-8").strip()
+    except UnicodeDecodeError as exc:
+        raise ValueError("derivation_git_identity_unavailable") from exc
 
 
 def admission_for_checkpoint(
@@ -206,7 +214,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         ("policy/source-refresh.json", policy_bytes),
         ("data/provider-index.json", adapter_bytes),
     ):
-        if run_git(main_root, "show", f"{producer_head}:{relative}").encode("utf-8") != working_bytes:
+        if run_git_bytes(main_root, "show", f"{producer_head}:{relative}") != working_bytes:
             raise ValueError("derivation_original_A_policy_or_provider_identity_unbound")
     original = derivation.validate_original_observation({
         "source_id": "data_go_kr",
@@ -232,11 +240,28 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     target_original = derivation.original_observation_from_checkpoint(target, target_admission)
     if target_original != original:
         return {"eligible": False, "reason": "selected_parent_is_different_source_observation"}
-    if target.get("status") not in {"ready", "no-change"}:
+    target_inputs = target.get("generation_inputs") if isinstance(target.get("generation_inputs"), Mapping) else {}
+    stored_envelope_value = target_inputs.get("same_observation_derivation")
+    stored_envelope = (
+        derivation.validate_derivation_envelope(stored_envelope_value)
+        if stored_envelope_value is not None else None
+    )
+    active_statuses = {"queued", "validating", "enriching", "composing", "retry"}
+    active_resume = stored_envelope is not None and target.get("status") in active_statuses
+    outcome = target.get("outcome") if isinstance(target.get("outcome"), Mapping) else {}
+    ready_has_detail_work = (
+        target.get("status") == "ready"
+        and int(outcome.get("detail_retry_count", 0) or 0) > 0
+    )
+    if stored_envelope is not None and stored_envelope["original_observation"] != original:
+        raise ValueError("active_derivation_original_observation_mismatch")
+    if target.get("status") not in {"ready", "no-change"} and not active_resume:
+        if stored_envelope is not None:
+            raise ValueError("active_derivation_status_not_resumable")
         return {"eligible": False, "reason": "selected_parent_not_reviewable"}
     selected_target = target
     prior_outcome = target.get("outcome") if isinstance(target.get("outcome"), Mapping) else {}
-    has_work = int(prior_outcome.get("detail_retry_count", 0) or 0) > 0
+    has_work = active_resume or int(prior_outcome.get("detail_retry_count", 0) or 0) > 0
 
     journal, journal_ref_sha = runner.load_promotion_journal_snapshot(main_root)
     if not isinstance(journal, Mapping) or not isinstance(journal_ref_sha, str):
@@ -280,40 +305,204 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         return {"eligible": False, "reason": "no_same_observation_merged_canonical_lineage"}
 
     canonical_index, canonical_row, canonical_checkpoint, readback = same_observation_rows[0]
-    if canonical_checkpoint["generation_id"] == selected_target["generation_id"]:
-        # Once a derived B is itself the current C producer, reuse that B as
-        # the canonical parent and retain its authenticated resume parent.
-        # Durable retry counters still come from the current index; this old
-        # parent supplies only A-bound cache/provenance bytes.
-        selected_inputs = selected_target.get("generation_inputs")
-        prior_envelope = selected_inputs.get("same_observation_derivation") if isinstance(selected_inputs, Mapping) else None
-        if prior_envelope is not None:
-            prior = derivation.validate_derivation_envelope(prior_envelope)
-            if prior["original_observation"] != original:
-                raise ValueError("canonical_producer_parent_crosses_original_observation")
-            resume_generation_id = prior["resume_parent_processor"]["generation_id"]
-        else:
-            resume_generation_id = ""
-            for indexed in reversed(index.get("generations", [])):
-                generation_id = indexed.get("generation_id") if isinstance(indexed, Mapping) else None
-                if not isinstance(generation_id, str) or generation_id == selected_target["generation_id"]:
-                    continue
+    if (
+        stored_envelope is not None and ready_has_detail_work
+        and canonical_checkpoint.get("generation_id") != target_id
+    ):
+        # A ready derived generation with pending detail can be resumed in
+        # place only while its own recorded C baseline remains current. When
+        # that exact generation is itself the newly merged canonical producer,
+        # it becomes the parent of a fresh derivative against the new C
+        # baseline; replaying its older envelope would reject that legitimate
+        # same-A continuation.
+        active_resume = True
+    if active_resume:
+        assert stored_envelope is not None
+        expected_readback = stored_envelope["canonical_parent_readback"]
+        if (
+            expected_readback["canonical_producer_generation_id"] != canonical_checkpoint["generation_id"]
+            or expected_readback["journal_record_index"] != canonical_index
+            or expected_readback["repository"] != readback["repository"]
+            or expected_readback["pr_number"] != readback["pr_number"]
+            or expected_readback["pr_branch"] != readback["pr_branch"]
+            or expected_readback["pr_body_sha256"] != readback["pr_body_sha256"]
+            or expected_readback["pr_head_sha"] != readback["pr_head_sha"]
+            or expected_readback["merge_sha"] != readback["merge_sha"]
+        ):
+            raise ValueError("active_derivation_canonical_snapshot_changed")
+        try:
+            stored_row = derivation.validate_readback_against_journal(
+                stored_envelope, journal, journal_ref_sha=journal_ref_sha,
+                allow_monotonic_successor=True,
+            )
+        except derivation.DerivationError as exc:
+            raise ValueError("active_derivation_canonical_snapshot_changed") from exc
+        if stored_row != canonical_row:
+            raise ValueError("active_derivation_canonical_row_changed")
+        exact_ack_run(
+            main_root, repository, canonical_row,
+            load_json(main_root / "policy/upstream-catalogue-health.json"), dt.datetime.now(dt.timezone.utc), derivation,
+        )
+
+        baseline = stored_envelope["composition_baseline"]
+        if (
+            current_identity["registry_path"] != baseline["registry_path"]
+            or current_identity["registry_bytes"] != baseline["registry_bytes"]
+            or current_identity["registry_sha256"] != baseline["registry_sha256"]
+        ):
+            raise ValueError("active_derivation_current_canonical_payload_changed")
+        current_bytes = main_root / ".datapan/current-canonical" / pathlib.Path(*baseline["registry_path"].split("/"))
+        if current_bytes.is_symlink() or not current_bytes.is_file():
+            raise ValueError("active_derivation_composition_baseline_unavailable")
+        composition_bytes = current_bytes.read_bytes()
+        if (len(composition_bytes), sha256_bytes(composition_bytes)) != (
+            baseline["registry_bytes"], baseline["registry_sha256"],
+        ):
+            raise ValueError("active_derivation_composition_baseline_changed")
+
+        baseline_main = baseline["main_sha"]
+        current_main = run_git(main_root, "rev-parse", "HEAD")
+        import subprocess
+        for ancestor in (expected_readback["merge_sha"], baseline_main):
+            ancestry = subprocess.run(
+                ("git", "merge-base", "--is-ancestor", ancestor, current_main),
+                cwd=main_root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            if ancestry.returncode != 0:
+                raise ValueError("active_derivation_current_main_not_descendant")
+        merge_before_baseline = subprocess.run(
+            ("git", "merge-base", "--is-ancestor", expected_readback["merge_sha"], baseline_main),
+            cwd=main_root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        )
+        if merge_before_baseline.returncode != 0:
+            raise ValueError("active_derivation_baseline_predates_canonical_merge")
+
+        live_main = subprocess.run(
+            ("git", "ls-remote", "--heads", "origin", "refs/heads/main"),
+            cwd=main_root, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        )
+        live_shas = [
+            line.split("\t", 1)[0] for line in live_main.stdout.splitlines()
+            if line.endswith("\trefs/heads/main")
+        ]
+        if live_main.returncode != 0 or live_shas != [current_main]:
+            raise ValueError("active_derivation_current_main_moved")
+
+        parent_checkpoints: dict[str, dict[str, Any]] = {}
+        parent_bundles: dict[str, pathlib.Path] = {}
+        for role in ("resume_parent_processor", "canonical_parent_processor"):
+            reference = stored_envelope[role]
+            parent_id = str(reference["generation_id"])
+            if parent_id not in indexed_ids:
+                raise ValueError("active_derivation_parent_not_indexed")
+            parent_path = source_state / "generations" / f"{parent_id}.json"
+            if not parent_path.is_file() or parent_path.is_symlink():
+                raise ValueError("active_derivation_parent_checkpoint_unavailable")
+            parent = runner.verify_processor_checkpoint(load_json(parent_path, 262144), checkpoint_schema)
+            try:
+                derivation.validate_processor_parent_checkpoint(
+                    reference, parent, original_observation=original,
+                )
+            except derivation.DerivationError as exc:
+                raise ValueError("active_derivation_parent_checkpoint_invalid") from exc
+            parent_admission = admission_for_checkpoint(parent, index, handoff)
+            if derivation.original_observation_from_checkpoint(parent, parent_admission) != original:
+                raise ValueError("active_derivation_parent_original_mismatch")
+            expiry = runner.parse_utc_timestamp(parent["output_artifact"].get("expires_at"), "active derivation parent expiry")
+            if expiry <= dt.datetime.now(dt.timezone.utc):
+                raise ValueError("derivation_parent_artifact_expired")
+            parent_checkpoints[parent_id] = parent
+
+        def load_parent_checkpoint(generation_id: str) -> dict[str, Any]:
+            if generation_id not in parent_checkpoints:
                 path = source_state / "generations" / f"{generation_id}.json"
-                if not path.is_file() or path.is_symlink():
-                    continue
-                candidate_parent = runner.verify_processor_checkpoint(load_json(path, 262144), checkpoint_schema)
-                if candidate_parent.get("status") not in {"ready", "no-change"}:
-                    continue
-                candidate_admission = admission_for_checkpoint(candidate_parent, index, handoff)
-                if derivation.original_observation_from_checkpoint(candidate_parent, candidate_admission) == original:
-                    resume_generation_id = generation_id
-                    break
-            if not resume_generation_id:
-                # This B checkpoint can independently satisfy both the
-                # contribution-resume and C-canonical roles. The role proofs
-                # remain separate in the envelope; distinct object identity
-                # is not required when no older same-A B is retained.
-                resume_generation_id = str(selected_target["generation_id"])
+                if generation_id not in indexed_ids or not path.is_file() or path.is_symlink():
+                    raise ValueError("active_derivation_parent_graph_checkpoint_unavailable")
+                parent_checkpoints[generation_id] = runner.verify_processor_checkpoint(
+                    load_json(path, 262144), checkpoint_schema,
+                )
+            return parent_checkpoints[generation_id]
+
+        def load_parent_admission(parent: Mapping[str, Any]) -> dict[str, Any]:
+            return admission_for_checkpoint(parent, index, handoff)
+
+        try:
+            graph = derivation.validate_processor_parent_graph(
+                [
+                    stored_envelope["resume_parent_processor"]["generation_id"],
+                    stored_envelope["canonical_parent_processor"]["generation_id"],
+                ],
+                load_checkpoint=load_parent_checkpoint,
+                admission_for=load_parent_admission,
+                original_observation=original,
+                expected_ancestor_generation_ids=stored_envelope["ancestor_generation_ids"],
+                forbidden_generation_id=target_id,
+            )
+        except (derivation.DerivationError, OSError, ValueError, json.JSONDecodeError) as exc:
+            raise ValueError("active_derivation_parent_graph_invalid") from exc
+
+        processor = load_module(main_root / "scripts/process-upstream-catalogue-candidate.py", "active_derivation_processor")
+        generation_id, inputs = processor.generation_identity(
+            original["source_id"], original["source_scope"], original["original_baseline_sha256"],
+            original["candidate_sha256"], None, original["source_policy_sha256"],
+            original["provider_index_sha256"], same_observation_derivation=stored_envelope,
+        )
+        if generation_id != target_id or inputs != target_inputs:
+            raise ValueError("active_derivation_generation_identity_changed")
+        if processor.derivation_processor_revision() != stored_envelope["derivation_processor_revision_sha256"]:
+            raise ValueError("active_derivation_processor_revision_changed")
+
+        for role in ("resume_parent_processor", "canonical_parent_processor"):
+            reference = stored_envelope[role]
+            parent_id = str(reference["generation_id"])
+            if parent_id in parent_bundles:
+                continue
+            parent = parent_checkpoints[parent_id]
+            destination = output_root / f"{role}-bundle"
+            download_parent_bundle(main_root, repository, args.default_branch, state_root, parent, destination, runner)
+            authenticate_parent_bundle(
+                main_root, repository, args.default_branch, state_root, parent, destination, runner,
+            )
+            parent_bundles[parent_id] = destination
+
+        # The envelope and generation ID stay byte-for-byte stable across an
+        # interrupted derived run. Current main is independently checked
+        # above; the frozen composition bytes are reused only when the
+        # canonical payload still has the exact original digest.
+        output_root.mkdir(parents=True, exist_ok=True)
+        baseline_path = output_root / "composition-baseline.registry.json"
+        baseline_path.write_bytes(composition_bytes)
+        envelope_path = output_root / "same-observation-derivation.json"
+        envelope_path.write_bytes(derivation.canonical_json(stored_envelope) + b"\n")
+        journal_path = output_root / "canonical-update-promotion-journal.json"
+        journal_path.write_bytes(runner.canonical_json(journal) + b"\n")
+        resume_id = stored_envelope["resume_parent_processor"]["generation_id"]
+        canonical_id = stored_envelope["canonical_parent_processor"]["generation_id"]
+        return {
+            "eligible": True,
+            "reason": "active_same_observation_generation_rehydrated",
+            "generation_id": target_id,
+            "active_generation_resume": True,
+            "composition_baseline_path": str(baseline_path),
+            "derivation_path": str(envelope_path),
+            "journal_path": str(journal_path),
+            "journal_ref_sha": journal_ref_sha,
+            "resume_parent_bundle_dir": str(parent_bundles[resume_id]),
+            "resume_enrichment_evidence_path": str(parent_bundles[resume_id] / "upstream-catalogue-enrichment-evidence.json"),
+            "canonical_parent_bundle_dir": str(parent_bundles[canonical_id]),
+            "current_main_sha": current_main,
+            "current_manifest_sha256": current_identity["manifest_sha256"],
+            "resume_parent_generation_id": resume_id,
+            "canonical_parent_generation_id": canonical_id,
+            "canonical_parent_journal_record_index": canonical_index,
+        }
+    if canonical_checkpoint["generation_id"] == selected_target["generation_id"]:
+        # The selected C producer already contains its authenticated
+        # same-A contributions, so it can fill both parent roles. Do not
+        # introduce an unnecessary dependency on an older, expiring B archive.
+        # The role references remain explicit in the envelope even when both
+        # resolve to this same checkpoint.
+        resume_generation_id = str(selected_target["generation_id"])
         if resume_generation_id not in indexed_ids:
             raise ValueError("canonical_producer_resume_parent_not_indexed")
         resume_path = source_state / "generations" / f"{resume_generation_id}.json"
@@ -508,7 +697,7 @@ def main() -> int:
             with args.github_output.open("a", encoding="utf-8") as handle:
                 handle.write(f"derivation_enabled={str(result.get('eligible') is True).lower()}\n")
                 for field in (
-                    "composition_baseline_path", "derivation_path", "journal_path",
+                    "generation_id", "composition_baseline_path", "derivation_path", "journal_path",
                     "journal_ref_sha", "resume_parent_bundle_dir", "resume_enrichment_evidence_path",
                     "canonical_parent_bundle_dir",
                 ):

@@ -716,6 +716,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
     def _run_claim_and_worker(
         self, attempt: int, *, resume: pathlib.Path | None = None,
         derivation: dict[str, Any] | None = None,
+        expected_generation_id: str | None = None,
+        claim_only_return: bool = False,
         generator_revision: str | None = None,
         composition_baseline: pathlib.Path | None = None,
         resume_parent_bundle: pathlib.Path | None = None,
@@ -739,6 +741,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             max_attempts=max_attempts, max_queue=max_queue,
             retries_per_detail=retries_per_detail,
         )
+        args.expected_generation_id = expected_generation_id
         if resume is not None:
             args.resume_enrichment_evidence = resume
         if derivation is not None:
@@ -791,6 +794,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             self.assertEqual(claim["status"], expected_claim_status)
             if claim_code != 0:
                 return claim
+            if claim_only_return:
+                return claim
             args.claim_only = False
             args.require_durable_reservation = True
             if derivation is None:
@@ -839,7 +844,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         # keep the old manifest available so the test fails on the intended
         # head guard rather than in the Git adapter.
         main_manifest = self.current_manifests.get(main_sha, self.current_manifests[baseline["main_sha"]])
-        c_row = snapshot["records"][0]
+        c_row = snapshot["records"][derivation["canonical_parent_readback"]["journal_record_index"]]
         c_ack = next(row for row in c_row["acknowledgements"] if row.get("status") == "merged")
         c_run_id = int(c_ack["run_id"])
         c_run_attempt = int(c_ack["run_attempt"])
@@ -1051,6 +1056,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         run_by_id: dict[str, dict[str, Any]] = {}
         for checkpoint in checkpoints.values():
             locator = checkpoint["output_artifact"]
+            if str(locator.get("artifact_id")) not in archives:
+                continue
             run_id, attempt, _name = PROMOTION.processor_attempt_from_locator(checkpoint)
             head_sha = self.observation_head
             run_by_id[run_id] = {
@@ -1071,7 +1078,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             }
 
         policy = json.loads((ROOT / "policy/upstream-catalogue-health.json").read_text(encoding="utf-8"))
-        current_c = journal["records"][0]
+        current_c = journal["records"][c["readback"]["journal_record_index"]]
         ack = next(row for row in current_c["acknowledgements"] if row.get("status") == "merged")
         c_run_id = int(ack["run_id"])
         c_run_attempt = int(ack["run_attempt"])
@@ -1095,6 +1102,12 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
 
         def fake_health_subprocess(argv, *args, **kwargs):
             command = tuple(str(part) for part in argv)
+            if command[:3] == ("git", "merge-base", "--is-ancestor"):
+                return subprocess.CompletedProcess(argv, 0, stdout="", stderr="")
+            if command == ("git", "ls-remote", "--heads", "origin", "refs/heads/main"):
+                return subprocess.CompletedProcess(
+                    argv, 0, stdout=f"{prepared_main_sha}\trefs/heads/main\n", stderr="",
+                )
             if command[:2] == ("gh", "api"):
                 endpoint = command[2]
                 if endpoint.endswith("/actions/workflows/canonical-update-promotion.yml"):
@@ -1136,6 +1149,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 return (source_root / "data/provider-index.json").read_text(encoding="utf-8")
             raise AssertionError(f"unexpected preparation Git command: {root} {argv!r}")
 
+        def fake_preparation_git_bytes(root: pathlib.Path, *argv: str) -> bytes:
+            if tuple(argv) == ("show", f"{self.observation_head}:policy/source-refresh.json"):
+                return (source_root / "policy/source-refresh.json").read_bytes()
+            if tuple(argv) == ("show", f"{self.observation_head}:data/provider-index.json"):
+                return (source_root / "data/provider-index.json").read_bytes()
+            raise AssertionError(f"unexpected preparation Git byte command: {root} {argv!r}")
+
         module_by_filename = {
             "run-canonical-update-promotion.py": PROMOTION,
             "upstream_catalogue_handoff.py": HANDOFF,
@@ -1151,7 +1171,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             target_generation_id=target["generation_id"], repository="StatPan/datapan-registry",
             default_branch="main", collector_admission=self.helper.root / f"admitted-a-{label}.json",
             candidate=self.helper.candidate_path, refresh_evidence=self.helper.evidence_path,
-            diff=self.helper.diff_path, resume_bundle=self.output_by_generation[target["generation_id"]],
+            diff=self.helper.diff_path,
+            resume_bundle=self.output_by_generation.get(target["generation_id"], self.helper.root),
             output_dir=output_root,
         )
         args.github_output = output_root / "github-output"
@@ -1194,6 +1215,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         with (
             mock.patch.object(PREPARATION, "load_module", side_effect=lambda path, _name: module_by_filename[path.name]),
             mock.patch.object(PREPARATION, "run_git", side_effect=fake_preparation_git),
+            mock.patch.object(PREPARATION, "run_git_bytes", side_effect=fake_preparation_git_bytes),
             mock.patch.object(PREPARATION, "dt", mock.Mock(
                 datetime=mock.Mock(now=mock.Mock(return_value=self.now)),
                 timezone=dt.timezone,
@@ -1224,6 +1246,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             self.assertEqual(outputs["derivation_enabled"], str(plan.get("eligible") is True).lower())
             if plan.get("eligible") is True:
                 self.assertEqual(outputs["derivation_path"], plan["derivation_path"])
+                self.assertEqual(outputs["generation_id"], plan["generation_id"])
         self.assertEqual((self.helper.state_dir / "sources/data_go_kr/index.json").read_bytes(), original_index)
         return plan
 
@@ -1242,7 +1265,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         )
         envelope = checkpoint["generation_inputs"]["same_observation_derivation"]
         baseline = envelope["composition_baseline"]
-        row = journal["records"][0]
+        row = journal["records"][envelope["canonical_parent_readback"]["journal_record_index"]]
         ack = next(value for value in row["acknowledgements"] if value.get("status") == "merged")
         run_id, attempt = str(ack["run_id"]), int(ack["run_attempt"])
         policy = read_json(ROOT / "policy/upstream-catalogue-health.json")
@@ -1587,18 +1610,22 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         # Recurse from exact B1 contribution history and the newly merged B2 C
         # baseline. The fourth synthetic LINK must be processed once; the first
         # three operations survive the real composer without deletion.
-        plan2 = self._prepare_authenticated_plan(b2, journal2, c2, label="second-recursive-intake")
+        plan2 = self._prepare_authenticated_plan(b2, journal_after_b2, c2, label="second-recursive-intake")
         self.assertTrue(plan2["eligible"], plan2)
         env2 = read_json(pathlib.Path(plan2["derivation_path"]))
+        self.assertEqual(
+            env2["resume_parent_processor"]["generation_id"],
+            env2["canonical_parent_processor"]["generation_id"],
+        )
         b3 = self._run_claim_and_worker(
             4, derivation=env2, composition_baseline=pathlib.Path(plan2["composition_baseline_path"]),
-            resume_parent_bundle=self.output_by_generation[b1["generation_id"]],
+            resume_parent_bundle=self.output_by_generation[env2["resume_parent_processor"]["generation_id"]],
             canonical_parent_bundle=self.output_by_generation[b2["generation_id"]],
-            journal=journal2, journal_ref_sha=c2["readback"]["journal_ref_sha"],
+            journal=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"],
         )
         # The second real B composition is independently accepted by the
         # strict C lineage reader against its own exact merged/read-back row.
-        self._validate_c_derivation(b3, journal2, c2)
+        self._validate_c_derivation(b3, journal_after_b2, c2)
         output = json.loads((self.output_by_generation[b3["generation_id"]] / "composed-candidate.registry.json").read_text(encoding="utf-8"))
         self.assertEqual(
             {row["id"] for row in output}, {"1", "2", "3", "4"},
@@ -1675,6 +1702,10 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         orphan = copy.deepcopy(b0)
         orphan_id = "e" * 64
         orphan["generation_id"] = orphan_id
+        orphan["status"] = "no-change"
+        orphan["outcome"]["detail_retry_count"] = 0
+        orphan["lease"] = None
+        orphan["request_reservation"] = None
         PROCESSOR.seal_checkpoint(orphan)
         orphan_path = generation_dir / f"{orphan_id}.json"
         orphan_path.write_text(json.dumps(orphan, sort_keys=True), encoding="utf-8")
@@ -1693,13 +1724,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         replay_baseline_path = self.helper.root / "composition-baseline-replay.json"
         replay_baseline_path.write_bytes(pathlib.Path(plan2["composition_baseline_path"]).read_bytes())
         replay_journal_path = self.helper.root / "journal-replay.json"
-        replay_journal_path.write_text(json.dumps(journal2, sort_keys=True), encoding="utf-8")
+        replay_journal_path.write_text(json.dumps(journal_after_b2, sort_keys=True), encoding="utf-8")
         replay_args.same_observation_derivation = replay_envelope_path
         replay_args.composition_baseline = replay_baseline_path
         replay_args.current_main_root = self.helper.root
         replay_args.derivation_journal = replay_journal_path
         replay_args.derivation_journal_ref_sha = c2["readback"]["journal_ref_sha"]
-        replay_args.resume_parent_bundle_dir = self.output_by_generation[b1["generation_id"]]
+        replay_args.resume_parent_bundle_dir = self.output_by_generation[env2["resume_parent_processor"]["generation_id"]]
         replay_args.canonical_parent_bundle_dir = self.output_by_generation[b2["generation_id"]]
         replay_args.resume_enrichment_evidence = replay_args.resume_parent_bundle_dir / "upstream-catalogue-enrichment-evidence.json"
         replay_args.canonical_update_pr_helper = ROOT / "scripts/canonical_update_pr.py"
@@ -1708,7 +1739,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         before_checkpoint = PROCESSOR.load_json(replay_checkpoint_path)
         before_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
         before_calls = len(self.detail_calls)
-        with self._derivation_git(snapshot=journal2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2):
+        with self._derivation_git(snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2):
             replay_code, replayed = PROCESSOR.process(
                 replay_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
             )
@@ -1764,14 +1795,21 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         }
         protected_rows = [current_rows[item] for item in protected_ids if item in current_rows]
         self.assertEqual({row["generation_id"] for row in protected_rows}, protected_ids)
-        unrelated = [
-            {
-                "generation_id": hashlib.sha256(f"unrelated-{number}".encode()).hexdigest(),
-                "status": "no-change", "checkpoint": f"unrelated-{number}.json",
-                "updated_at": self.now_text, "candidate_sha256": "f" * 64,
-            }
-            for number in range(70)
-        ]
+        unrelated = []
+        for number in range(70):
+            unrelated_id = hashlib.sha256(f"unrelated-{number}".encode()).hexdigest()
+            unrelated_checkpoint = copy.deepcopy(orphan)
+            unrelated_checkpoint["generation_id"] = unrelated_id
+            PROCESSOR.seal_checkpoint(unrelated_checkpoint)
+            (generation_dir / f"{unrelated_id}.json").write_text(
+                json.dumps(unrelated_checkpoint, sort_keys=True), encoding="utf-8",
+            )
+            unrelated.append({
+                "generation_id": unrelated_id,
+                "status": "no-change", "checkpoint": f"{unrelated_id}.json",
+                "updated_at": self.now_text,
+                "candidate_sha256": unrelated_checkpoint["generation_inputs"]["candidate_sha256"],
+            })
         expanded = dict(after_pure_index)
         expanded["generations"] = protected_rows + unrelated
         index_path.write_text(json.dumps(expanded, sort_keys=True), encoding="utf-8")
@@ -2271,13 +2309,15 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         expected_reservations: dict[str, int] = {}
         inspected = []
         budget_left = 24
-        for identity in rotated[:48]:
+        eligible_inspected = 0
+        for identity in rotated:
             inspected.append(identity)
             allocation = min(3 - native_attempts[identity], budget_left)
             if allocation > 0:
+                eligible_inspected += 1
                 expected_reservations[identity] = allocation
                 budget_left -= allocation
-            if budget_left == 0:
+            if budget_left == 0 or eligible_inspected >= 48:
                 break
         self.assertEqual(sum(expected_reservations.values()), 24)
 
@@ -2321,6 +2361,164 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         )
         self.assertEqual(len(self.detail_calls) - before_detail_calls, 12)
         self._validate_c_derivation(b1, journal, c)
+
+    def test_production_slice_scans_past_exhausted_48_prefix_without_starving_eligible_row(self) -> None:
+        identities = [str(value) for value in range(1, 80)]
+        self._write_synthetic_observation(identities)
+        self.admission_path, self.archive_path = self._write_admission()
+        b0 = self._run_claim_and_worker(1, max_attempts=1, max_queue=1, retries_per_detail=2)
+        journal, c = self._synthetic_c_journal(b0, 9)
+        plan = self._prepare_authenticated_plan(b0, journal, c, label="exhausted-prefix-48")
+        self.assertTrue(plan["eligible"], plan)
+        envelope = read_json(pathlib.Path(plan["derivation_path"]))
+
+        candidate_by_id = {
+            PROCESSOR.record_id(row): row for row in PROCESSOR.load_registry(self.helper.candidate_path)
+        }
+        parent_ids = {
+            row["api_key"]["id"] for row in json.loads(
+                (self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json").read_text()
+            )["records"]
+        }
+        queue_ids = sorted(set(identities) - parent_ids)
+        self.assertGreaterEqual(len(queue_ids), 49)
+        exhausted_prefix = queue_ids[:48]
+        expected_identity = queue_ids[48]
+        index_path = self.helper.state_dir / "sources/data_go_kr/index.json"
+        index = PROCESSOR.load_json(index_path)
+        index["detail_queue_cursor"] = 0
+        index["detail_retry_state"] = {
+            identity: {
+                "source_sha256": PROCESSOR.source_fingerprint(candidate_by_id[identity]),
+                "guide_sha256": PROCESSOR.guide_fingerprint(candidate_by_id[identity]),
+                "attempts": 3,
+                "last_attempt_at": self.now_text,
+            }
+            for identity in exhausted_prefix
+        }
+        index_path.write_text(json.dumps(index, sort_keys=True), encoding="utf-8")
+
+        calls: list[str] = []
+        reservation_at_call: list[dict[str, Any]] = []
+
+        def count_selected(url: str, timeout: float) -> Any:
+            calls.append(url.split("/data/", 1)[1].split("/", 1)[0])
+            active = PROCESSOR.load_json(
+                self.helper.state_dir / "sources/data_go_kr/generations" / f"{plan['generation_id']}.json",
+            )
+            reservation_at_call.append(copy.deepcopy(active["request_reservation"]))
+            raise TimeoutError("bounded fixture timeout")
+
+        b1 = self._run_claim_and_worker(
+            2, derivation=envelope,
+            expected_generation_id=plan["generation_id"],
+            composition_baseline=pathlib.Path(plan["composition_baseline_path"]),
+            resume_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            canonical_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            journal=journal, journal_ref_sha=c["readback"]["journal_ref_sha"],
+            max_attempts=3, max_queue=48, retries_per_detail=2,
+            fetcher=count_selected,
+            expected_worker_code=2, expected_worker_status="retry",
+        )
+        self.assertEqual(b1["request_reservation"]["attempt_budget"], 3)
+        self.assertEqual(reservation_at_call[0]["reserved_attempts"], 3)
+        self.assertEqual(reservation_at_call[0]["attempts_made"], 1)
+        self.assertEqual(b1["request_reservation"]["reserved_attempts"], 3)
+        self.assertEqual(b1["request_reservation"]["attempts_made"], 3)
+        self.assertEqual(len(calls), 3)
+        self.assertEqual([row["id"] for row in b1["request_reservation"]["records"]], [expected_identity])
+        self.assertEqual(set(calls), {expected_identity})
+        self.assertEqual(b1["detail_queue_cursor"], 49 % len(queue_ids))
+        self.assertTrue(all(b1["attempts_by_id"][identity] == 3 for identity in exhausted_prefix))
+        self.assertEqual(b1["attempts_by_id"][expected_identity], 3)
+
+    def test_active_derived_generation_rehydrates_exact_plan_and_resumes_fenced_claim(self) -> None:
+        identities = [str(value) for value in range(1, 33)]
+        self._write_synthetic_observation(identities)
+        self.admission_path, self.archive_path = self._write_admission()
+        b0 = self._run_claim_and_worker(1)
+        journal, c = self._synthetic_c_journal(b0, 10)
+        initial_plan = self._prepare_authenticated_plan(b0, journal, c, label="active-derived-initial")
+        self.assertTrue(initial_plan["eligible"], initial_plan)
+        original_envelope = read_json(pathlib.Path(initial_plan["derivation_path"]))
+
+        interrupted_claim = self._run_claim_and_worker(
+            2, derivation=original_envelope,
+            expected_generation_id=initial_plan["generation_id"],
+            composition_baseline=pathlib.Path(initial_plan["composition_baseline_path"]),
+            resume_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            canonical_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            journal=journal, journal_ref_sha=c["readback"]["journal_ref_sha"],
+            max_attempts=3, max_queue=1, retries_per_detail=2,
+            claim_only_return=True,
+        )
+        self.assertEqual(interrupted_claim["status"], "enriching")
+        self.assertEqual(interrupted_claim["generation_id"], initial_plan["generation_id"])
+        self.assertEqual(interrupted_claim["request_reservation"]["reserved_attempts"], 3)
+        self.assertEqual(interrupted_claim["request_reservation"]["attempts_made"], 0)
+        self.assertEqual(interrupted_claim["observation_count"], 1)
+        self.assertEqual(interrupted_claim["observed_at"], b0["observed_at"])
+
+        checkpoint_path = self.helper.state_dir / "sources/data_go_kr/generations" / f"{interrupted_claim['generation_id']}.json"
+        active_on_disk = PROCESSOR.verify_checkpoint(
+            PROCESSOR.load_json(checkpoint_path),
+            read_json(ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"),
+        )
+        # Model elapsed lease time without touching durable retry accounting.
+        active_on_disk["lease"]["expires_at"] = PROCESSOR.timestamp(
+            self.now - dt.timedelta(seconds=1),
+        )
+        PROCESSOR.atomic_write_json(checkpoint_path, PROCESSOR.seal_checkpoint(active_on_disk))
+        before_retry_state = copy.deepcopy(
+            PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")["detail_retry_state"],
+        )
+
+        resumed_plan = self._prepare_authenticated_plan(
+            active_on_disk, journal, c, label="active-derived-resume",
+        )
+        self.assertTrue(resumed_plan["eligible"], resumed_plan)
+        self.assertTrue(resumed_plan["active_generation_resume"])
+        self.assertEqual(resumed_plan["generation_id"], interrupted_claim["generation_id"])
+        resumed_envelope = read_json(pathlib.Path(resumed_plan["derivation_path"]))
+        self.assertEqual(DERIVATION.canonical_json(resumed_envelope), DERIVATION.canonical_json(original_envelope))
+        self.assertEqual(pathlib.Path(resumed_plan["composition_baseline_path"]).read_bytes(), pathlib.Path(initial_plan["composition_baseline_path"]).read_bytes())
+
+        calls: list[str] = []
+
+        def record_resumed_call(url: str, timeout: float) -> Any:
+            calls.append(url.split("/data/", 1)[1].split("/", 1)[0])
+            return self._fetch(url, timeout)
+
+        resumed = self._run_claim_and_worker(
+            3, derivation=resumed_envelope,
+            expected_generation_id=interrupted_claim["generation_id"],
+            composition_baseline=pathlib.Path(resumed_plan["composition_baseline_path"]),
+            resume_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            canonical_parent_bundle=self.output_by_generation[b0["generation_id"]],
+            journal=journal, journal_ref_sha=c["readback"]["journal_ref_sha"],
+            max_attempts=3, max_queue=48, retries_per_detail=2,
+            fetcher=record_resumed_call,
+        )
+        self.assertEqual(resumed["generation_id"], interrupted_claim["generation_id"])
+        self.assertGreater(resumed["fencing_token"], interrupted_claim["fencing_token"])
+        self.assertEqual(resumed["observation_count"], 1)
+        self.assertEqual(resumed["observed_at"], b0["observed_at"])
+        self.assertEqual(resumed["attempts_consumed"], 4)
+        self.assertEqual(resumed["attempts_by_id"], PROCESSOR.load_json(checkpoint_path)["attempts_by_id"])
+        self.assertTrue(all(
+            resumed["attempts_by_id"].get(identity, 0) == count
+            for identity, count in interrupted_claim["attempts_by_id"].items()
+        ))
+        self.assertTrue(all(
+            PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")["detail_retry_state"].get(identity, {}).get("attempts") == row["attempts"]
+            for identity, row in before_retry_state.items()
+            if identity in PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")["detail_retry_state"]
+        ))
+        self.assertEqual(
+            resumed["generation_inputs"]["same_observation_derivation"],
+            original_envelope,
+        )
+        self.assertEqual(len(calls), 1)
 
     def test_expired_parent_artifact_blocks_authenticated_plan_without_claim_mutation(self) -> None:
         original_now = self.now

@@ -256,6 +256,10 @@ class WorkflowContractTests(unittest.TestCase):
         worker = steps[worker_position]["run"]
         self.assertIn("--claim-only", claim)
         self.assertIn("--expected-old-sha", push)
+        self.assertIn("steps.claim.outputs.checkpoint_persisted == 'true'", steps[push_position]["if"])
+        self.assertIn("steps.claim.outputs.exit_code != '1'", steps[push_position]["if"])
+        self.assertIn("checkpoint_persisted=${checkpoint_persisted}", claim)
+        self.assertIn("rm -f .datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json", claim)
         self.assertIn("steps.claim_push.outputs.claim_sha", steps[worker_position]["if"])
         self.assertIn("--require-durable-reservation", worker)
         self.assertIn("python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py", worker)
