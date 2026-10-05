@@ -5,6 +5,7 @@ import os
 import pathlib
 import shlex
 import subprocess
+import sys
 import tempfile
 import unittest
 import datetime as dt
@@ -199,6 +200,73 @@ class WorkflowContractTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.workflow = yaml.load(WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
         cls.text = WORKFLOW.read_text(encoding="utf-8")
+
+    def test_process_install_declares_yaml_and_real_derivation_cli_reaches_durable_index_guard(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        install_position = next(
+            index for index, step in enumerate(steps)
+            if step.get("name") == "Materialize canonical registry and install validators"
+        )
+        derivation_position = next(
+            index for index, step in enumerate(steps) if step.get("id") == "derivation"
+        )
+        install = steps[install_position]
+        self.assertEqual(install["if"], "steps.select.outputs.decision == 'process'")
+        self.assertIn("'jsonschema==4.25.1' 'PyYAML==6.0.2'", install["run"])
+        self.assertLess(install_position, derivation_position)
+
+        with tempfile.TemporaryDirectory(prefix="catalogue-derivation-bootstrap-") as temp:
+            root = pathlib.Path(temp)
+            state_dir = root / "state"
+            index_path = state_dir / "sources/data_go_kr/index.json"
+            index_path.parent.mkdir(parents=True)
+            index_bytes = json.dumps({
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "generations": [],
+                "detail_queue_cursor": 0,
+                "detail_retry_state": {},
+            }, sort_keys=True).encode("utf-8") + b"\n"
+            index_path.write_bytes(index_bytes)
+            output_dir = root / "derivation-output"
+            github_output = root / "github-output"
+            unavailable_path = root / "not-read-before-index-selection"
+            env = {
+                **os.environ,
+                "PATH": str(root / "empty-bin"),
+                "PYTHONDONTWRITEBYTECODE": "1",
+            }
+            env.pop("GH_TOKEN", None)
+            env.pop("GITHUB_TOKEN", None)
+            command = [
+                sys.executable,
+                str(ROOT / "scripts/prepare-upstream-catalogue-derivation.py"),
+                "--main-root", str(ROOT),
+                "--source-root", str(ROOT),
+                "--state-dir", str(state_dir),
+                "--target-generation-id", "a" * 64,
+                "--repository", REPOSITORY,
+                "--default-branch", "main",
+                "--collector-admission", str(unavailable_path / "admission.json"),
+                "--candidate", str(unavailable_path / "candidate.json"),
+                "--refresh-evidence", str(unavailable_path / "refresh.json"),
+                "--diff", str(unavailable_path / "diff.json"),
+                "--resume-bundle", str(unavailable_path / "resume-bundle"),
+                "--output-dir", str(output_dir),
+                "--github-output", str(github_output),
+            ]
+            result = subprocess.run(
+                command, cwd=ROOT, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+            self.assertEqual(result.stdout, "")
+            self.assertEqual(json.loads(result.stderr), {
+                "eligible": False,
+                "reason": "selected_generation_not_durable",
+            })
+            self.assertEqual(index_path.read_bytes(), index_bytes)
+            self.assertFalse(output_dir.exists())
+            self.assertFalse(github_output.exists())
+            self.assertFalse(unavailable_path.exists())
 
     def test_triggers_and_trusted_run_gates_are_explicit(self) -> None:
         triggers = self.workflow["on"]
