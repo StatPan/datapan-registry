@@ -5,9 +5,9 @@
       "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
       "first_seen_at": "2026-10-03T05:52:54Z",
       "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
-      "last_receipt_sha256": "a59fa07461d739c17f1f2929f2f69fcf08f5b044478ddff3c736938e9dad7de5",
-      "last_seen_at": "2026-10-05T01:35:47Z",
-      "observation_count": 88,
+      "last_receipt_sha256": "9491db4ad8fa64ae134224a79dd8eb204078d0695f67400e1e2e7d4daa5fd239",
+      "last_seen_at": "2026-10-05T02:05:41Z",
+      "observation_count": 89,
       "owner_ticket": 659,
       "producer_run_id": "36646768289",
       "reason": "candidate_ready_with_pending_scope",
@@ -755,8 +755,8 @@
     }
   },
   "latest_receipt": {
-    "path": "receipts/receipt-37252018266-1-a59fa07461d739c1.json",
-    "sha256": "a59fa07461d739c17f1f2929f2f69fcf08f5b044478ddff3c736938e9dad7de5"
+    "path": "receipts/receipt-37253987304-1-9491db4ad8fa64ae.json",
+    "sha256": "9491db4ad8fa64ae134224a79dd8eb204078d0695f67400e1e2e7d4daa5fd239"
   },
   "observations_by_source": {
     "data_go_kr": [
@@ -776,7 +776,7 @@
   "repository": "StatPan/datapan-registry",
   "root": "health/upstream-catalogue",
   "schema_version": "datapan.upstream-catalogue-health-state.v1",
-  "state_sha256": "94a2d822e3e33913c473b9e5df86f1201270e054b6933e039a26e19dac835716",
+  "state_sha256": "3d0e82d48f1090f62a01bd38a69c285cf161d9b44ded3554b57f582130d448df",
   "state_status": "degraded",
-  "updated_at": "2026-10-05T01:35:47Z"
+  "updated_at": "2026-10-05T02:05:41Z"
 }
