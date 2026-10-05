@@ -1,0 +1,39 @@
+{
+  "fixture_schema": "datapan.github-rest-response-fixture.v1",
+  "endpoint": "GET /repos/StatPan/datapan-registry/pulls/720",
+  "response_api_version_selected": "2022-11-28",
+  "source_capture": "peer-pr-720-supported.json",
+  "source_response_sha256": "2945cecf82c63c12050f59794d998414a73a5c7d8601468522587b293176ec6b",
+  "redacted_fields": [
+    "account avatar and URL metadata",
+    "repository URL/count/feature metadata",
+    "irrelevant PR links and counters"
+  ],
+  "response": {
+    "number": 720,
+    "html_url": "https://github.com/StatPan/datapan-registry/pull/720",
+    "state": "closed",
+    "merged": true,
+    "body": "Health probes were reconstructing every Registry endpoint as HTTPS and selecting the KORAD service root without its documented method. The catalog now preserves the source transport and binds one explicit KORAD request correction to its dataset, upstream operation, original path and official specification. Source query values remain excluded and the canonical upstream snapshot is unchanged.\n\nGenerator, schema, validator, CLI aliases and manifest-owned release evidence are synchronized. New negative cases cover source/policy drift, missing-method regression and invalid transport. The catalog requires CLI #178 (planned v0.1.40); source merge, immutable publication/readback and Health #83 runtime acceptance remain separate.\n\nValidation: 18 focused tests and the release-ledger fixed-point check passed. Dependent assertion-policy digests were regenerated and all three current-head CI checks passed. Astra paired-consumer source review found no blocking findings; all 191 manifest artifact sizes and digests match. No provider rows or credentials were included.\n\nCloses #719\n",
+    "merged_at": "2026-10-04T15:21:49Z",
+    "head": {
+      "ref": "issue-719-preserve-health-endpoint-transport-and-correct-korad-operation-identity",
+      "sha": "c5fca8d777da494350ec078537d18ca1943f32c5",
+      "repo": {
+        "id": 1278568329,
+        "name": "datapan-registry",
+        "full_name": "StatPan/datapan-registry"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+      "repo": {
+        "id": 1278568329,
+        "name": "datapan-registry",
+        "full_name": "StatPan/datapan-registry"
+      }
+    },
+    "merge_commit_sha": "849af2936a743573358820275df985b5809d0f7b"
+  }
+}

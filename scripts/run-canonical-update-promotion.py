@@ -923,11 +923,137 @@ def download_processor_artifact(
     return output_dir
 
 
+def validate_processor_link_metadata(
+    checkpoint: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+    *,
+    root: pathlib.Path,
+) -> None:
+    """Semantically bind unresolved resolver metadata to its checkpoint row."""
+    evidence_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+    if not evidence_path.is_file():
+        detail_records = checkpoint.get("detail_records")
+        if isinstance(detail_records, list) and any(
+            isinstance(item, Mapping)
+            and (
+                "link_metadata" in item
+                or isinstance(item.get("failure_diagnostic"), Mapping)
+                and item["failure_diagnostic"].get("code") == "resolved_link_operation_contract_unproven"
+            )
+            for item in detail_records
+        ):
+            raise PromotionError("processor resolver checkpoint metadata is missing its enrichment evidence")
+        return
+    evidence = load_object(evidence_path)
+    if not isinstance(evidence, Mapping):
+        raise PromotionError("processor enrichment evidence is not an object")
+    try:
+        import jsonschema
+    except ImportError as exc:
+        raise PromotionError("processor enrichment schema validator is unavailable") from exc
+    try:
+        enrichment_schema = load_object(root / "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json")
+        jsonschema.Draft202012Validator(
+            enrichment_schema, format_checker=jsonschema.FormatChecker(),
+        ).validate(evidence)
+    except (OSError, PromotionError, jsonschema.ValidationError) as exc:
+        raise PromotionError("processor enrichment evidence does not match the trusted schema") from exc
+    outcomes = evidence.get("worker_outcomes", [])
+    if not isinstance(outcomes, list):
+        raise PromotionError("processor worker outcomes are not an array")
+    metadata_outcomes = [
+        item for item in outcomes if isinstance(item, Mapping) and "link_metadata" in item
+    ]
+    detail_records = checkpoint.get("detail_records")
+    if not isinstance(detail_records, list):
+        raise PromotionError("processor checkpoint detail records are invalid")
+    metadata_records = [
+        item for item in detail_records if isinstance(item, Mapping) and "link_metadata" in item
+    ]
+    for item in outcomes:
+        diagnostic = item.get("failure_diagnostic") if isinstance(item, Mapping) else None
+        if (
+            isinstance(diagnostic, Mapping)
+            and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
+            and "link_metadata" not in item
+        ):
+            raise PromotionError("processor resolver diagnostic is missing its link metadata provenance")
+    for item in detail_records:
+        diagnostic = item.get("failure_diagnostic") if isinstance(item, Mapping) else None
+        if (
+            isinstance(diagnostic, Mapping)
+            and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
+            and "link_metadata" not in item
+        ):
+            raise PromotionError("processor checkpoint resolver diagnostic is missing its link metadata provenance")
+    if not metadata_outcomes and not metadata_records:
+        return
+    try:
+        composer = load_module(
+            root / "scripts/compose-upstream-catalogue-candidate.py",
+            "processor_catalogue_composer_for_bundle_validation",
+        )
+    except (OSError, PromotionError) as exc:
+        raise PromotionError("trusted processor composer is unavailable for link metadata") from exc
+    helper = getattr(composer, "LINK_DETAIL_HELPERS", None)
+    if helper is None or not callable(getattr(helper, "validate_link_metadata", None)):
+        raise PromotionError("processor link metadata validator is unavailable")
+    try:
+        provider_index = load_object(root / "data/provider-index.json")
+        registered = helper.registered_hosts(provider_index)
+    except (OSError, PromotionError, AttributeError, TypeError) as exc:
+        raise PromotionError("trusted provider host index is unavailable for link metadata") from exc
+    by_id: dict[str, Mapping[str, Any]] = {}
+    for item in detail_records:
+        if not isinstance(item, Mapping):
+            continue
+        identity = str(item.get("id") or "")
+        if identity:
+            if identity in by_id:
+                raise PromotionError("processor checkpoint has duplicate detail identities")
+            by_id[identity] = item
+    seen: set[str] = set()
+    successful = {
+        str(item.get("api_key", {}).get("id") or "")
+        for item in evidence.get("records", [])
+        if isinstance(item, Mapping) and isinstance(item.get("api_key"), Mapping)
+    } if isinstance(evidence.get("records", []), list) else set()
+    for item in metadata_outcomes:
+        api_key = item.get("api_key")
+        identity = str(api_key.get("id") or "") if isinstance(api_key, Mapping) else ""
+        diagnostic = item.get("failure_diagnostic")
+        row = by_id.get(identity)
+        if (
+            not identity or not isinstance(api_key, Mapping) or api_key.get("provider") != "data.go.kr"
+            or identity in seen or identity in successful
+            or item.get("status") != "quarantined"
+            or not isinstance(diagnostic, Mapping)
+            or diagnostic.get("code") != "resolved_link_operation_contract_unproven"
+            or diagnostic.get("phase") != "resolver"
+            or not isinstance(row, Mapping)
+            or row.get("status") != "quarantined"
+            or row.get("source_sha256") != item.get("source_sha256")
+            or row.get("guide_sha256") != item.get("guide_sha256")
+            or row.get("failure_diagnostic") != diagnostic
+            or row.get("link_metadata") != item.get("link_metadata")
+        ):
+            raise PromotionError("processor link metadata outcome is not bound to its quarantined checkpoint row")
+        try:
+            helper.validate_link_metadata(item["link_metadata"], identity, registered)
+        except (ValueError, TypeError) as exc:
+            raise PromotionError("processor link metadata provenance is invalid") from exc
+        seen.add(identity)
+    if {str(row.get("id") or "") for row in metadata_records if isinstance(row, Mapping)} != seen:
+        raise PromotionError("processor checkpoint and enrichment link metadata identities differ")
+
+
 def validate_processor_bundle(
     checkpoint: Mapping[str, Any],
     bundle_dir: pathlib.Path,
     composition_schema: Mapping[str, Any],
     composition_helper: Any,
+    *,
+    root: pathlib.Path | None = None,
 ) -> dict[str, Any]:
     digests = checkpoint.get("output_digests")
     locator = checkpoint.get("output_artifact")
@@ -1003,6 +1129,10 @@ def validate_processor_bundle(
             output_artifact["expires_at"] = None
     if uploaded_normalized != durable_normalized:
         raise PromotionError("uploaded processor checkpoint receipt differs from immutable durable generation state")
+    if root is not None:
+        validate_processor_link_metadata(
+            checkpoint, bundle_dir, root=root,
+        )
     result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
     if result.get("generation_id") != checkpoint.get("generation_id") or result.get("status") != processor_status:
         raise PromotionError("uploaded processor result does not confirm the exact terminal generation state")
@@ -1120,7 +1250,7 @@ def screen_processor_recovery_candidate(
     except ProcessorCandidateError:
         return None, "processor_artifact_bundle_invalid"
     try:
-        bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, composition_helper)
+        bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, composition_helper, root=root)
         verify_processor_input_compatibility(
             root, checkpoint, str(run["head_sha"]), current_head_sha,
             composition_receipt=bundle.get("composition_receipt"),
@@ -3018,7 +3148,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     if checkpoint.get("source_id") != "data_go_kr" or checkpoint.get("source_scope") != "aggregate_supported_catalog":
         raise PromotionError("processor state is outside the admitted source/scope")
     validate_generation_identity(checkpoint)
-    bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper)
+    bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper, root=root)
     if not re.fullmatch(r"[a-f0-9]{40}", args.workflow_run_head_sha):
         raise PromotionError("processor workflow head must be a full immutable Git commit SHA")
     head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
@@ -4212,7 +4342,7 @@ def prepare_source_refresh_candidate(
         root / ".datapan" / f"source-refresh-{pr_number}-{generation_id[:12]}" / "bundle",
     )
     composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
-    bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper)
+    bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper, root=root)
     verify_processor_input_compatibility(
         root, checkpoint, str(run["head_sha"]), target_main,
         composition_receipt=bundle.get("composition_receipt"),

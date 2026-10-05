@@ -58,6 +58,9 @@ MAX_PR_BODY_BYTES = 128 * 1024
 MAX_GITHUB_REQUESTS = 256
 MAX_RETRIES = 2
 REQUEST_TIMEOUT_SECONDS = 30
+# PR merge identity is part of publication and journal reconciliation. Pin the
+# supported contract that still returns merge_commit_sha on PR responses.
+GITHUB_REST_API_VERSION = "2022-11-28"
 CANONICAL_AUTOMATION_BRANCH_PREFIX = "automation/canonical-update/"
 CANONICAL_OWNER_MARKER_PREFIX = "datapan-canonical-update:v1:"
 SHA1 = re.compile(r"^[a-f0-9]{40}$")
@@ -190,7 +193,7 @@ class GitHubApi:
             headers={
                 "Accept": "application/vnd.github+json",
                 "Authorization": f"Bearer {self.token}",
-                "X-GitHub-Api-Version": "2026-03-10",
+                "X-GitHub-Api-Version": GITHUB_REST_API_VERSION,
             },
         )
         for retry in range(MAX_RETRIES + 1):

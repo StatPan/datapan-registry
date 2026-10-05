@@ -100,14 +100,22 @@ def validate_catalog(catalog: dict[str, Any], schema: dict[str, Any], registry: 
         by_id[operation_id] = entry
         fail(entry["policy"]["key"] == operation_id, f"{operation_id}: policy key must be stable operation_id")
         aliases = entry["aliases"]
+        selections = [item for item in policy_canaries if item["operation_id"] == operation_id]
+        fail(len(selections) == 1, f"{operation_id}: policy selector must resolve exactly once")
+        fail(
+            (aliases["dataset_id"], aliases["operation_name"])
+            == (selections[0]["dataset_id"], selections[0]["operation_name"]),
+            f"{operation_id}: selected operation selector drift",
+        )
         matches = [(d, o) for d in registry if d["id"] == aliases["dataset_id"] for o in d["operations"] if o["name"] == aliases["operation_name"]]
         fail(len(matches) == 1, f"{operation_id}: aliases do not resolve exactly once")
         dataset, operation = matches[0]
         raw = operation["source"]["raw"]
         fail(str(raw["operation_seq"]) == aliases["upstream_operation_seq"], f"{operation_id}: upstream operation seq drift")
         endpoint = entry["endpoint"]
-        selections = [item for item in policy_canaries if item["operation_id"] == operation_id]
-        fail(len(selections) == 1, f"{operation_id}: policy selector must resolve exactly once")
+        version = selections[0].get("policy_version", 1)
+        fail(type(version) is int and version >= 1, f"{operation_id}: invalid selected policy version")
+        fail(entry["policy"]["version"] == version, f"{operation_id}: selected policy version drift")
         resolved = resolve_endpoint(selections[0], dataset, operation)
         dependency = "data_go_kr_gateway" if resolved["host"] == "apis.data.go.kr" else "external_endpoint"
         fail(endpoint == {**resolved, "dependency_class": dependency}, f"{operation_id}: endpoint transport or correction drift")

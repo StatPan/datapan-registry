@@ -40,6 +40,9 @@ def build(policy: dict[str, Any], registry: list[dict[str, Any]]) -> tuple[dict[
     entries: list[dict[str, Any]] = []
     cases: list[dict[str, Any]] = []
     for selection in policy["canaries"]:
+        version = selection.get("policy_version", 1)
+        if type(version) is not int or version < 1:
+            raise ValueError(f"{selection['operation_id']}: policy version must be a positive integer")
         datasets = [dataset for dataset in registry if dataset["id"] == selection["dataset_id"]]
         if len(datasets) != 1:
             raise ValueError(f"{selection['operation_id']}: dataset selector must resolve exactly once")
@@ -60,7 +63,7 @@ def build(policy: dict[str, Any], registry: list[dict[str, Any]]) -> tuple[dict[
         }
         entry = {
             "operation_id": selection["operation_id"],
-            "policy": {"key": selection["operation_id"], "version": 1, "authority": "datapan-registry", "max_level": "L4"},
+            "policy": {"key": selection["operation_id"], "version": version, "authority": "datapan-registry", "max_level": "L4"},
             "aliases": aliases,
             "provider": dataset["provider"],
             "endpoint": {**endpoint, "dependency_class": dependency},

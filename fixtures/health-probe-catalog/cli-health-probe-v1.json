@@ -133,12 +133,12 @@
     {
       "operation_id": "dpr-op-00000009",
       "selector": {
-        "ref": "15109030",
+        "ref": "15158559",
         "operation": "버스 차고지 현황 정보"
       },
       "expected": {
-        "operation_key": "ea622246361f2f3efb93274772e327c1026ae0dc6c2cda6cd7af4426c771a5d7",
-        "dependency_class": "external_endpoint",
+        "operation_key": "dfd0b8588fcd34217e7d7e08fb8510df92c5b65bb450b813ae7dc60456d72668",
+        "dependency_class": "data_go_kr_gateway",
         "safe_parameter_names": [
           "numOfRows",
           "pageNo"

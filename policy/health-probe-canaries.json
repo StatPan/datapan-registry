@@ -1,7 +1,7 @@
 {
   "schema_version": "datapan.health-probe-canary-selection.v1",
-  "generated_at": "2026-07-14T10:05:00Z",
-  "selection_rationale": "One bounded credential-required probe per reviewed Registry selector; five data.go.kr gateway routes and five registered external-adapter routes provide a small public-health representative set without asserting entitlement or data freshness.",
+  "generated_at": "2026-10-04T19:24:11Z",
+  "selection_rationale": "One bounded credential-required probe per reviewed Registry selector; six data.go.kr gateway routes and four registered external-adapter routes provide a small public-health representative set without asserting entitlement or data freshness.",
   "not_asserted_reason": "upstream_timestamp_contract_not_reviewed",
   "canaries": [
     {"operation_id": "dpr-op-00000001", "dataset_id": "15000480", "operation_name": "명절 비상진료기관 FullData 내려받기목록정보 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
@@ -12,7 +12,45 @@
     {"operation_id": "dpr-op-00000006", "dataset_id": "15025329", "operation_name": "연도별 등급별 실기 합격률 조회", "safe_parameters": [{"name": "baseYY", "strategy": "relative_year", "offset_years": -3, "minimum_year": 2020, "maximum_year": 2100}]},
     {"operation_id": "dpr-op-00000007", "dataset_id": "15004206", "operation_name": "주변지역 기상정보 실시간 데이터 조회", "endpoint_correction": {"source_path": "/openapi/service/weatherMoniterSvc", "request_path": "/openapi/service/weatherMoniterSvc/getWeatherMoniterDataList", "source": "https://www.data.go.kr/data/15004206/openapi.do", "upstream_operation_seq": "6836"}, "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
     {"operation_id": "dpr-op-00000008", "dataset_id": "15052669", "operation_name": "교통카드충전소정보 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
-    {"operation_id": "dpr-op-00000009", "dataset_id": "15109030", "operation_name": "버스 차고지 현황 정보", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
+    {"operation_id": "dpr-op-00000009", "dataset_id": "15158559", "policy_version": 2, "operation_name": "버스 차고지 현황 정보", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]},
     {"operation_id": "dpr-op-00000010", "dataset_id": "15029006", "operation_name": "대학별 학과정보 조회", "safe_parameters": [{"name": "pageNo", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}, {"name": "numOfRows", "strategy": "bounded_integer", "minimum": 1, "maximum": 1}]}
+  ],
+  "selection_history": [
+    {
+      "operation_id": "dpr-op-00000009",
+      "previous_policy_version": 1,
+      "policy_version": 2,
+      "decision": "select_current_official_gateway_dataset",
+      "previous_dataset_id": "15109030",
+      "previous_upstream_operation_seq": "47278",
+      "dataset_id": "15158559",
+      "upstream_operation_seq": "69640",
+      "operation_name": "버스 차고지 현황 정보",
+      "canonical_record_disposition": "retain_both_records_unchanged",
+      "previous_api_lifecycle": "retirement_not_asserted",
+      "current_api_runtime_health": "not_asserted",
+      "official_metadata_observed_at": "2026-10-04T19:24:11Z",
+      "previous_metadata": {
+        "source": "https://www.data.go.kr/catalog/15109030/openapi.json",
+        "bytes": 114,
+        "sha256": "08fb864056e559783dcc9073318b8e8aac432c19f54a790e2c6e5fe1f112d578",
+        "disposition": "dataset_does_not_exist"
+      },
+      "current_metadata": {
+        "source": "https://www.data.go.kr/catalog/15158559/openapi.json",
+        "bytes": 2031,
+        "sha256": "656f0ce10b35190cd6ac9d1a8bc19bcd61b2cca3f49a448d9c9abba35945c74b",
+        "name": "서울시설공단_버스 공영 차고지 현황_GW",
+        "provider": "서울시설공단",
+        "date_modified": "2026-05-26"
+      },
+      "current_detail": "https://www.data.go.kr/data/15158559/openapi.do",
+      "request_contract_source": "existing_canonical_registry_operation",
+      "bounded_parameters": [
+        "pageNo",
+        "numOfRows"
+      ],
+      "provider_api_requests_during_reconciliation": 0
+    }
   ]
 }

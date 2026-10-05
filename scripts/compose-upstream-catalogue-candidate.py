@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+import importlib.util
 import json
 import os
 import pathlib
@@ -45,6 +46,19 @@ UNORDERED_API_ARRAYS = {"source_keywords", "search_terms"}
 
 class CompositionError(ValueError):
     """Input or policy could not be safely composed."""
+
+
+def load_link_detail_helpers() -> Any:
+    helper_path = pathlib.Path(__file__).with_name("generate-batch-link-detail-registry-patches.py")
+    spec = importlib.util.spec_from_file_location("catalogue_link_detail_helpers", helper_path)
+    if spec is None or spec.loader is None:
+        raise CompositionError("link detail contract helper is unavailable")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+LINK_DETAIL_HELPERS = load_link_detail_helpers()
 
 
 def stable_json_bytes(value: Any) -> bytes:
@@ -424,6 +438,7 @@ def validate_worker_outcomes(
     *,
     candidate_by_key: dict[tuple[str, str], dict[str, Any]],
     successful_keys: set[tuple[str, str]],
+    registered_adapter_hosts: set[str],
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Validate unresolved worker rows against the immutable candidate rows."""
     if evidence is None or "worker_outcomes" not in evidence:
@@ -437,16 +452,25 @@ def validate_worker_outcomes(
         "timeout", "transport_error", "provider_http_error", "response_bytes_cap",
         "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations",
         "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error",
+        "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven",
     }
     for index, outcome in enumerate(outcomes):
-        if not isinstance(outcome, dict) or set(outcome) not in (expected_fields, expected_fields | {"failure_diagnostic"}):
+        allowed_shapes = {
+            frozenset(expected_fields),
+            frozenset(expected_fields | {"failure_diagnostic"}),
+            frozenset(expected_fields | {"link_metadata"}),
+            frozenset(expected_fields | {"failure_diagnostic", "link_metadata"}),
+        }
+        if not isinstance(outcome, dict) or frozenset(outcome) not in allowed_shapes:
             raise CompositionError(f"enrichment evidence worker_outcomes[{index}] has an invalid shape")
         if "failure_diagnostic" in outcome:
             diagnostic = outcome["failure_diagnostic"]
             if (
                 not isinstance(diagnostic, dict)
-                or set(diagnostic) not in ({"code"}, {"code", "http_status"})
+                or "code" not in diagnostic
+                or set(diagnostic) - {"code", "http_status", "phase"}
                 or diagnostic.get("code") not in failure_codes
+                or "phase" in diagnostic and diagnostic.get("phase") not in {"page", "resolver"}
                 or "http_status" in diagnostic and (
                     diagnostic.get("code") != "provider_http_error"
                     or not isinstance(diagnostic.get("http_status"), int)
@@ -455,6 +479,8 @@ def validate_worker_outcomes(
                 )
             ):
                 raise CompositionError(f"enrichment evidence worker_outcomes[{index}] has an invalid failure_diagnostic")
+        else:
+            diagnostic = None
         if not isinstance(outcome.get("api_key"), dict):
             raise CompositionError(f"enrichment evidence worker_outcomes[{index}] must include api_key")
         key = api_key(outcome["api_key"])
@@ -473,6 +499,27 @@ def validate_worker_outcomes(
             raise CompositionError(f"worker outcome source binding mismatch for {key[0]}:{key[1]}")
         if outcome.get("guide_sha256") != guide_fingerprint(candidate_row):
             raise CompositionError(f"worker outcome guide binding mismatch for {key[0]}:{key[1]}")
+        if "link_metadata" in outcome:
+            try:
+                LINK_DETAIL_HELPERS.validate_link_metadata(
+                    outcome["link_metadata"], key[1], registered_adapter_hosts,
+                )
+            except (ValueError, TypeError) as exc:
+                raise CompositionError(f"worker outcome link metadata is invalid for {key[0]}:{key[1]}") from exc
+            if (
+                outcome.get("status") != "quarantined"
+                or not isinstance(diagnostic, dict)
+                or diagnostic.get("code") != "resolved_link_operation_contract_unproven"
+                or diagnostic.get("phase") != "resolver"
+            ):
+                raise CompositionError(f"worker outcome link metadata is not an unresolved resolver result for {key[0]}:{key[1]}")
+        elif (
+            isinstance(diagnostic, dict)
+            and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
+        ):
+            raise CompositionError(
+                f"worker outcome claims an unresolved resolver result without link metadata for {key[0]}:{key[1]}"
+            )
         by_key[key] = outcome
     return by_key
 
@@ -795,6 +842,7 @@ def compose_registries(
         enrichment_evidence,
         candidate_by_key=candidate_by_key,
         successful_keys=set(enrichment_by_key),
+        registered_adapter_hosts=hosts,
     )
     composed_by_key = dict(baseline_by_key)
     decisions: list[dict[str, Any]] = []
