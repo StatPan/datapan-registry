@@ -227,6 +227,7 @@ jobs:
           python -m unittest tests/test_import_runtime_freshness_run.py
           python -m unittest tests/test_project_runtime_freshness_recovery.py
           python -m unittest tests/test_apply_runtime_freshness_import.py
+          python -m unittest tests/test_apply_runtime_freshness_import_integration.py
           python -m unittest tests/test_generate_runtime_freshness_import_admission.py
           python -m unittest tests/test_attest_runtime_freshness_import.py
           python -m unittest tests/test_runtime_freshness_pr_handoff.py
