@@ -801,6 +801,179 @@ class CompletenessProofRollupTest(unittest.TestCase):
         subprocess.run(["git", "update-ref", "refs/remotes/origin/main", commit], cwd=root, check=True)
         return commit
 
+    def _clone_disposable_at_verified_main(
+        self,
+        source_root: pathlib.Path,
+        repository: pathlib.Path,
+        *,
+        expected_main: str | None = None,
+    ) -> tuple[str, str]:
+        """Clone test files, then locally fetch and verify the exact trusted-main tree."""
+        source_root = source_root.resolve()
+        environment = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"}
+        trusted_main = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
+            cwd=source_root,
+            text=True,
+        ).strip()
+        if len(trusted_main) != 40 or any(character not in "0123456789abcdef" for character in trusted_main):
+            raise ValueError("source origin/main is not an exact commit SHA")
+        if expected_main is not None and expected_main != trusted_main:
+            raise ValueError("expected trusted main does not match source origin/main")
+        source_tree = subprocess.check_output(
+            ["git", "rev-parse", "--verify", f"{trusted_main}^{{tree}}"],
+            cwd=source_root,
+            text=True,
+        ).strip()
+
+        subprocess.run(
+            ["git", "clone", "--quiet", "--shared", "--no-checkout", str(source_root), str(repository)],
+            check=True,
+            env=environment,
+        )
+        # A local shared clone from a shallow PR checkout need not retain its
+        # separately fetched origin/main ref or all of that ref's reachable
+        # tree objects. Transfer only the already authenticated exact SHA from
+        # this local checkout; never consult its remote URL or substitute HEAD.
+        subprocess.run(
+            [
+                "git", "fetch", "--no-tags", "--depth=64", str(source_root),
+                f"{trusted_main}:refs/remotes/origin/main",
+            ],
+            cwd=repository,
+            check=True,
+            env=environment,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        copied_main = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
+            cwd=repository,
+            text=True,
+        ).strip()
+        copied_tree = subprocess.check_output(
+            ["git", "rev-parse", "--verify", f"{copied_main}^{{tree}}"],
+            cwd=repository,
+            text=True,
+        ).strip()
+        self.assertEqual(copied_main, trusted_main)
+        self.assertEqual(copied_tree, source_tree)
+        subprocess.run(
+            ["git", "checkout", "--quiet", "--detach", trusted_main],
+            cwd=repository,
+            check=True,
+            env=environment,
+        )
+        checked_out_main = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "HEAD^{commit}"], cwd=repository, text=True,
+        ).strip()
+        checked_out_tree = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "HEAD^{tree}"], cwd=repository, text=True,
+        ).strip()
+        self.assertEqual(checked_out_main, trusted_main)
+        self.assertEqual(checked_out_tree, source_tree)
+        return trusted_main, source_tree
+
+    def _make_genuine_shallow_local_source(
+        self, directory: pathlib.Path, *, source_root: pathlib.Path = ROOT,
+    ) -> tuple[pathlib.Path, str, str, str]:
+        """Create a local depth-1 PR checkout and separately fetch its trusted main."""
+        source_root = source_root.resolve()
+        pr_head = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "HEAD^{commit}"], cwd=source_root, text=True,
+        ).strip()
+        trusted_main = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
+            cwd=source_root,
+            text=True,
+        ).strip()
+        trusted_tree = subprocess.check_output(
+            ["git", "rev-parse", "--verify", f"{trusted_main}^{{tree}}"], cwd=source_root, text=True,
+        ).strip()
+        source_object_dir = pathlib.Path(subprocess.check_output(
+            ["git", "rev-parse", "--git-path", "objects"], cwd=source_root, text=True,
+        ).strip())
+        if not source_object_dir.is_absolute():
+            source_object_dir = (source_root / source_object_dir).resolve()
+
+        remote = directory / "shallow-source-origin.git"
+        subprocess.run(
+            ["git", "init", "--quiet", "--bare", "--initial-branch=main", str(remote)], check=True,
+        )
+        alternate = remote / "objects/info/alternates"
+        alternate.parent.mkdir(parents=True, exist_ok=True)
+        alternate.write_text(str(source_object_dir) + "\n", encoding="utf-8")
+        subprocess.run(
+            ["git", "--git-dir", str(remote), "update-ref", "refs/heads/main", trusted_main], check=True,
+        )
+        subprocess.run(
+            ["git", "--git-dir", str(remote), "update-ref", "refs/heads/fixture-pr", pr_head], check=True,
+        )
+
+        checkout = directory / "shallow-pr-checkout"
+        environment = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"}
+        subprocess.run(
+            [
+                "git", "clone", "--quiet", "--no-tags", "--depth=1", "--branch", "fixture-pr",
+                remote.as_uri(), str(checkout),
+            ],
+            check=True,
+            env=environment,
+        )
+        self.assertEqual(
+            subprocess.check_output(["git", "rev-parse", "--is-shallow-repository"], cwd=checkout, text=True).strip(),
+            "true",
+        )
+        self.assertEqual(
+            subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip(), pr_head,
+        )
+        self.assertNotEqual(pr_head, trusted_main)
+        with self.assertRaises(subprocess.CalledProcessError):
+            subprocess.run(
+                ["git", "rev-parse", "refs/remotes/origin/main"],
+                cwd=checkout,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        subprocess.run(
+            [
+                "git", "fetch", "--no-tags", "--depth=64", "origin",
+                "+refs/heads/main:refs/remotes/origin/main",
+            ],
+            cwd=checkout,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        fetched_main = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
+            cwd=checkout,
+            text=True,
+        ).strip()
+        fetched_tree = subprocess.check_output(
+            ["git", "rev-parse", "--verify", f"{fetched_main}^{{tree}}"], cwd=checkout, text=True,
+        ).strip()
+        self.assertEqual(fetched_main, trusted_main)
+        self.assertEqual(fetched_tree, trusted_tree)
+        self.assertEqual(
+            subprocess.check_output(["git", "rev-parse", "--is-shallow-repository"], cwd=checkout, text=True).strip(),
+            "true",
+        )
+
+        # Verify Release materializes this manifest-bound LFS object before
+        # running the feature suite. Reuse those local bytes without a pull.
+        source_registry = source_root / "data/data-go-kr.registry.json"
+        materialized_registry = checkout / "data/data-go-kr.registry.json"
+        if source_registry.stat().st_size <= 1024:
+            raise AssertionError("shallow caller fixture requires the already materialized canonical registry")
+        materialized_registry.unlink()
+        try:
+            os.link(source_registry, materialized_registry)
+        except OSError:
+            shutil.copy2(source_registry, materialized_registry)
+        return checkout, pr_head, trusted_main, trusted_tree
+
     def _rebind_synthetic_processor_history(
         self, *, index: dict[str, object], input_root: pathlib.Path, repository: pathlib.Path,
         variant: str,
@@ -1014,14 +1187,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
 
         repository = input_root / "repository"
-        subprocess.run(
-            ["git", "clone", "--quiet", "--shared", "--no-checkout", str(ROOT), str(repository)],
-            check=True,
-        )
-        trusted_main = subprocess.check_output(
-            ["git", "rev-parse", "refs/remotes/origin/main"], cwd=ROOT, text=True,
-        ).strip()
-        subprocess.run(["git", "checkout", "--quiet", "--detach", trusted_main], cwd=repository, check=True)
+        trusted_main, trusted_tree = self._clone_disposable_at_verified_main(ROOT, repository)
         if processor_history_variant is not None:
             self._rebind_synthetic_processor_history(
                 index=index, input_root=input_root, repository=repository,
@@ -1058,6 +1224,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         tree_sha = subprocess.check_output(
             ["git", "rev-parse", f"{trusted_main}^{{tree}}"], cwd=repository, text=True,
         ).strip()
+        self.assertEqual(tree_sha, trusted_tree)
         environment = {
             **os.environ,
             "GIT_AUTHOR_NAME": "Synthetic completeness fixture",
@@ -1423,13 +1590,42 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 )
             subprocess.run(fetch_step.split(), cwd=checkout, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             fetched_main = subprocess.check_output(
-                ["git", "rev-parse", "refs/remotes/origin/main"], cwd=checkout, text=True,
+                ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"], cwd=checkout, text=True,
             ).strip()
             self.assertEqual(fetched_main, main_sha)
+            self.assertEqual(
+                subprocess.check_output(
+                    ["git", "rev-parse", "--is-shallow-repository"], cwd=checkout, text=True,
+                ).strip(),
+                "true",
+            )
+            pr_head = subprocess.check_output(
+                ["git", "rev-parse", "--verify", "HEAD^{commit}"], cwd=checkout, text=True,
+            ).strip()
+            self.assertNotEqual(pr_head, fetched_main)
             subprocess.run(
                 ["git", "merge-base", "--is-ancestor", source_sha, "refs/remotes/origin/main"],
                 cwd=checkout, check=True,
             )
+
+            disposable = root / "disposable-main-checkout"
+            cloned_main, cloned_tree = self._clone_disposable_at_verified_main(checkout, disposable)
+            self.assertEqual(cloned_main, main_sha)
+            self.assertEqual(
+                cloned_tree,
+                subprocess.check_output(
+                    ["git", "rev-parse", "--verify", f"{main_sha}^{{tree}}"], cwd=checkout, text=True,
+                ).strip(),
+            )
+            self.assertEqual(
+                subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=disposable, text=True).strip(),
+                main_sha,
+            )
+            with self.assertRaisesRegex(ValueError, "expected trusted main does not match source origin/main"):
+                self._clone_disposable_at_verified_main(
+                    checkout, root / "wrong-main-checkout", expected_main=source_sha,
+                )
+            self.assertFalse((root / "wrong-main-checkout").exists())
 
     def test_projection_rejects_an_unreviewed_published_605_contract(self) -> None:
         """A real newer generator revision is not executed until its source contract is reviewed."""
@@ -2321,19 +2517,31 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 self.assertTrue(local["persister"].verify_seal(local["post_state"], "state_sha256"))
 
     def test_build_report_admits_synthetic_changed_b_to_merged_c_with_exact_lineage(self) -> None:
-        """The indexed caller joins a changed B output to a matching producer-shaped C merge."""
+        """The indexed caller handles changed B→C evidence from a real shallow PR checkout."""
         registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
         operation_scope = next(
             scope for scope in registry["scopes"]
             if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
         )
-        with tempfile.TemporaryDirectory(prefix="completeness-synthetic-matching-b-c-") as name:
-            input_root = pathlib.Path(name) / "evidence"
-            input_root.mkdir()
-            repository, index_path, expected_generation = self._build_synthetic_matching_b_c_packet(input_root)
-            report = MODULE.build_report(
-                root=repository, input_root=input_root, input_index_path=index_path,
+        with tempfile.TemporaryDirectory(
+            prefix="completeness-synthetic-matching-b-c-shallow-", dir=ROOT.parent,
+        ) as name:
+            base = pathlib.Path(name)
+            shallow_root, pr_head, trusted_main, _trusted_tree = self._make_genuine_shallow_local_source(base)
+            self.assertEqual(
+                subprocess.check_output(
+                    ["git", "rev-parse", "--is-shallow-repository"], cwd=shallow_root, text=True,
+                ).strip(),
+                "true",
             )
+            self.assertNotEqual(pr_head, trusted_main)
+            input_root = base / "evidence"
+            input_root.mkdir()
+            with mock.patch(__name__ + ".ROOT", shallow_root), mock.patch.object(MODULE, "ROOT", shallow_root):
+                repository, index_path, expected_generation = self._build_synthetic_matching_b_c_packet(input_root)
+                report = MODULE.build_report(
+                    root=repository, input_root=input_root, input_index_path=index_path,
+                )
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
         delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")
@@ -2376,24 +2584,23 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 report = MODULE.build_report(
                     root=repository, input_root=input_root, input_index_path=index_path,
                 )
-
-            row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
-            facets = {facet["facet_id"]: facet for facet in row["facets"]}
-            pipeline = facets["specification_pipeline"]
-            delivery = facets["immutable_publication_read_back"]
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
-            self.assertEqual(pipeline["state"], "historical")
-            self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
-            self.assertTrue(pipeline["details"]["promotion_candidate_available"])
-            self.assertEqual(pipeline["details"]["promotion_candidate_lifecycle_status"], final_status)
-            self.assertEqual(
-                pipeline["details"]["promotion_candidate_acknowledgement_statuses"], expected_history,
-            )
-            self.assertEqual(delivery["state"], "missing")
-            self.assertEqual(delivery["details"]["missing_stages"], ["publisher", "acknowledgement"])
-            self.assertEqual(
-                delivery["missing_evidence"][0]["code"], "same_subject_publication_read_back_missing",
-            )
+                row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
+                facets = {facet["facet_id"]: facet for facet in row["facets"]}
+                pipeline = facets["specification_pipeline"]
+                delivery = facets["immutable_publication_read_back"]
+                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(pipeline["state"], "historical")
+                self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
+                self.assertTrue(pipeline["details"]["promotion_candidate_available"])
+                self.assertEqual(pipeline["details"]["promotion_candidate_lifecycle_status"], final_status)
+                self.assertEqual(
+                    pipeline["details"]["promotion_candidate_acknowledgement_statuses"], expected_history,
+                )
+                self.assertEqual(delivery["state"], "missing")
+                self.assertEqual(delivery["details"]["missing_stages"], ["publisher", "acknowledgement"])
+                self.assertEqual(
+                    delivery["missing_evidence"][0]["code"], "same_subject_publication_read_back_missing",
+                )
 
     def test_build_report_does_not_match_c_rows_with_foreign_generation_or_source(self) -> None:
         """A validly sealed candidate with the wrong B generation/source is not borrowed."""
@@ -2418,12 +2625,12 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 report = MODULE.build_report(
                     root=repository, input_root=input_root, input_index_path=index_path,
                 )
-            row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
-            pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
-            self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
-            self.assertFalse(pipeline["details"]["promotion_candidate_available"])
-            self.assertFalse(pipeline["details"]["promotion_processor_generation_matches"])
+                row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
+                pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
+                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
+                self.assertFalse(pipeline["details"]["promotion_candidate_available"])
+                self.assertFalse(pipeline["details"]["promotion_processor_generation_matches"])
 
     def test_build_report_rejects_synthetic_c_manifest_mismatch(self) -> None:
         """A merged C row cannot bind B's exact bytes to another release manifest."""
