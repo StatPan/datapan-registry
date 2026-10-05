@@ -687,7 +687,16 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(facets["immutable_publication_read_back"]["state"], "historical")
         self.assertTrue(facets["immutable_publication_read_back"]["details"]["payload_equivalent_to_current_registry"])
         self.assertFalse(facets["immutable_publication_read_back"]["details"]["current_release_subject_applicable"])
-        self.assertFalse(facets["source_observation"]["details"]["new_post_repair_observation"])
+        self.assertTrue(facets["source_observation"]["details"]["observation_authenticated"])
+        self.assertNotIn("new_post_repair_observation", facets["source_observation"]["details"])
+        self.assertEqual(
+            facets["source_observation"]["missing_evidence"][0]["code"],
+            "post_repair_observation_baseline_unbound",
+        )
+        self.assertEqual(
+            facets["health_observation"]["missing_evidence"][0]["code"],
+            "health_receipt_does_not_establish_additional_source_observations",
+        )
         markdown = MODULE.render_markdown(report).decode("utf-8")
         self.assertIn("## Evidence facets", markdown)
         self.assertIn("Input index semantic identity: `canonical-semantic-json:", markdown)
@@ -712,10 +721,25 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(result["health"]["run_id"], "37205341388")
         self.assertEqual(result["health"]["observation_count"], 1)
         self.assertEqual(result["health"]["last_good_source_sha"], "6a5138c792f4b7402da0c5ab439646bd752a307f")
+        self.assertTrue(result["promotion"]["processor_generation_matches"])
         self.assertEqual(result["publication"]["status"], "verified")
         self.assertFalse(result["publication"]["details"]["currentness_established"])
         self.assertIn("main_ancestry_checked_tip", result["promotion"])
         self.assertNotIn("main_sha", result["promotion"])
+
+        promotion_roles = MODULE.stage_input_map(scoped, "promotion")
+        promotion_run, promotion_job, _started, _completed = MODULE.validate_stage_run(
+            stage="promotion", roles=promotion_roles, resolved=resolved,
+            evaluation_epoch=index["evaluation_epoch"], root=ROOT,
+        )
+        wrong_b_size = copy.deepcopy(result["processor"])
+        wrong_b_size["candidate_bytes"] += 1
+        with self.assertRaisesRegex(ValueError, "exact B candidate, byte count, and outcome"):
+            MODULE.validate_promotion_stage(
+                root=ROOT, roles=promotion_roles, resolved=resolved,
+                run=promotion_run, job=promotion_job, processor=wrong_b_size,
+                current_registry=result["current_registry"], evaluation_epoch=index["evaluation_epoch"],
+            )
 
         # Publication/ACK is a separate facet. Removing both must not discard
         # the already complete and authenticated A/B/C/Health chain.
@@ -784,6 +808,11 @@ class CompletenessProofRollupTest(unittest.TestCase):
             return result
 
         future_native_attempt = {"run_id": "99999999999", "attempt": 1, "source_sha": "a" * 40}
+        future_inputs_without_ack = [
+            item for item in scoped
+            if item.get("subject", {}).get("stage") != "acknowledgement"
+            and not item["role"].startswith("acknowledgement_")
+        ]
         original_import_module = MODULE.import_module
 
         def reject_legacy_adapter(name: str, path: pathlib.Path):
@@ -801,13 +830,191 @@ class CompletenessProofRollupTest(unittest.TestCase):
             mock.patch.object(MODULE, "import_module", side_effect=reject_legacy_adapter),
         ):
             future = MODULE.validate_pipeline_evidence(
-                root=ROOT, operation_inputs=scoped, all_inputs=checked,
+                root=ROOT, operation_inputs=future_inputs_without_ack, all_inputs=checked,
                 resolved=resolved, evaluation_epoch=index["evaluation_epoch"],
                 scope_registry=scope_registry,
             )
         self.assertEqual(future["status"], "verified_historical_chain")
         self.assertIsNone(future["publication"])
         self.assertEqual(future["publisher_attempt"], future_native_attempt)
+
+    def test_source_refresh_result_is_derived_from_policy_for_no_change(self) -> None:
+        source_config = {
+            "source_id": "data_go_kr", "owner": "release-operator",
+            "diff": {"material_change_fields": ["added", "removed", "changed"]},
+            "publication": {"required_gates": ["release_manifest_verification", "release_readiness", "consumer_compatibility"]},
+        }
+        summary = {"added": 0, "removed": 0, "changed": 0, "stable": 120}
+        diff = {
+            "generated_at": "2026-10-04T01:02:03Z", "old": "data/data-go-kr.registry.json",
+            "new": ".datapan/ci/upstream-refresh/candidate.registry.json", "summary": summary,
+        }
+        snapshot = {
+            "path": diff["new"], "bytes": 123, "sha256": "a" * 64, "records": 120,
+        }
+        evidence = {
+            "source_id": "data_go_kr", "owner": "release-operator", "status": "no_change",
+            "collection": {"attempted": True, "succeeded": True, "exit_code": 0, "error_class": None},
+            "snapshot": snapshot, "diff": {"path": ".datapan/ci/upstream-refresh/catalog-diff.json"},
+            "review": {"action": "none"},
+            "publication": {
+                "automatic": False, "release_allowed": False,
+                "required_gates": source_config["publication"]["required_gates"],
+            },
+        }
+        packet = {
+            "source_id": "data_go_kr", "owner": "release-operator", "status": "no_change",
+            "action": "none", "observed_at": diff["generated_at"], "work_key": "",
+            "automatic_publication": False, "snapshot": snapshot["path"], "diff": evidence["diff"]["path"],
+        }
+        payload = {
+            "source_id": "data_go_kr", "status": "no_change", "summary": summary,
+            "error_class": None,
+        }
+        packet["work_key"] = "upstream-refresh:data_go_kr:" + __import__("hashlib").sha256(
+            json.dumps(payload, sort_keys=True).encode("utf-8")
+        ).hexdigest()[:16]
+        evidence["review"]["work_key"] = packet["work_key"]
+        status, _ = MODULE.source_refresh_result_contract(
+            source_config=source_config, evidence=evidence, diff=diff, work_packet=packet,
+        )
+        self.assertEqual(status, "no_change")
+        self.assertNotEqual(snapshot["sha256"], "b" * 64)
+
+        evidence["collection"]["exit_code"] = 1
+        with self.assertRaisesRegex(ValueError, "producer-owned refresh policy"):
+            MODULE.source_refresh_result_contract(
+                source_config=source_config, evidence=evidence, diff=diff, work_packet=packet,
+            )
+        evidence["collection"]["exit_code"] = 0
+
+        material = copy.deepcopy(summary)
+        material["added"] = 1
+        diff["summary"] = material
+        payload["status"] = "material_change"
+        payload["summary"] = material
+        work_key = "upstream-refresh:data_go_kr:" + __import__("hashlib").sha256(
+            json.dumps(payload, sort_keys=True).encode("utf-8")
+        ).hexdigest()[:16]
+        packet.update({"status": "material_change", "action": "review_catalog_drift", "work_key": work_key})
+        evidence.update({"status": "material_change"})
+        evidence["review"].update({"action": "review_catalog_drift", "work_key": work_key})
+        self.assertEqual(
+            MODULE.source_refresh_result_contract(
+                source_config=source_config, evidence=evidence, diff=diff, work_packet=packet,
+            )[0],
+            "material_change",
+        )
+
+    def test_health_stage_preserves_bounded_history_and_nullable_last_good(self) -> None:
+        """A validated Health snapshot may carry multiple observations and no publication."""
+        scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        index, checked, resolved = MODULE.validate_input_index(
+            root=ROOT, input_root=ROOT, index_path=ROOT / MODULE.INPUT_INDEX_PATH,
+            scope_by_id=scope_by_id,
+        )
+        operation_inputs = [item for item in checked if item["scope_id"] == "data-go-kr.api-operations"]
+        chain = MODULE.validate_pipeline_evidence(
+            root=ROOT, operation_inputs=operation_inputs, all_inputs=checked,
+            resolved=resolved, evaluation_epoch=index["evaluation_epoch"], scope_registry=scope_registry,
+        )
+        self.assertEqual(chain["status"], "verified_historical_chain")
+
+        health_roles = MODULE.stage_input_map(operation_inputs, "health")
+        health_run, health_job, _started, _completed = MODULE.validate_stage_run(
+            stage="health", roles=health_roles, resolved=resolved,
+            evaluation_epoch=index["evaluation_epoch"], root=ROOT,
+        )
+        validated_local = MODULE.validate_health_stage_local(
+            root=ROOT, roles=health_roles, resolved=resolved, run=health_run,
+            job=health_job, evaluation_epoch=index["evaluation_epoch"],
+        )
+        local = dict(validated_local)
+        local["receipt"] = copy.deepcopy(validated_local["receipt"])
+        local["post_state"] = copy.deepcopy(validated_local["post_state"])
+        history = local["post_state"]["observations_by_source"]["data_go_kr"]
+        self.assertEqual(len(history), 1)
+        prior = copy.deepcopy(history[0])
+        prior.update({
+            "producer_run_id": "36640000000",
+            "observed_at": "2026-09-28T23:44:39Z",
+            "refresh_evidence_sha256": "a" * 64,
+        })
+        history.insert(0, prior)
+        local["post_state"]["last_good_by_source"]["data_go_kr"] = None
+        local["receipt"]["sources"][0]["canonical"]["last_good"] = None
+        local["receipt"]["sources"][0]["canonical"]["already_canonical_candidate"] = None
+        no_publication_promotion = copy.deepcopy(chain["promotion"])
+        no_publication_promotion["already_canonical_generation_id"] = None
+        no_publication_promotion["candidate_available"] = False
+
+        # The local ZIP/state/ref/seal/persister transition above was validated
+        # from the real retained packet. This focused adapter probe supplies a
+        # producer-shaped, post-validation history extension to exercise the
+        # generic bounded-history/null-publication branch without claiming it
+        # is a new live observation or a new publication.
+        with mock.patch.object(MODULE, "validate_health_stage_local", return_value=local):
+            health = MODULE.validate_health_stage(
+                root=ROOT, roles=health_roles, resolved=resolved,
+                run=health_run, job=health_job,
+                processor=chain["processor"], promotion=no_publication_promotion,
+                source=chain["source"], current_registry=chain["current_registry"],
+                evaluation_epoch=index["evaluation_epoch"],
+            )
+        self.assertEqual(health["observation_count"], 2)
+        self.assertIsNone(health["last_good"])
+        self.assertIsNone(health["last_good_source_sha"])
+        self.assertTrue(health["source_observation_matches"])
+        self.assertTrue(health["processor_observation_matches"])
+        self.assertFalse(health["candidate_relation_valid"])
+
+        bad_local = dict(local)
+        bad_local["receipt"] = copy.deepcopy(local["receipt"])
+        bad_local["receipt"]["sources"][0]["processor"]["checkpoint_sha256"] = "f" * 64
+        with mock.patch.object(MODULE, "validate_health_stage_local", return_value=bad_local):
+            with self.assertRaisesRegex(ValueError, "checkpoint digest differs"):
+                MODULE.validate_health_stage(
+                    root=ROOT, roles=health_roles, resolved=resolved,
+                    run=health_run, job=health_job,
+                    processor=chain["processor"], promotion=no_publication_promotion,
+                    source=chain["source"], current_registry=chain["current_registry"],
+                    evaluation_epoch=index["evaluation_epoch"],
+                )
+
+    def test_processor_input_history_supports_multiple_observations_and_rejects_duplicate_locator(self) -> None:
+        candidate_sha = "a" * 64
+        first = {
+            "run_id": "100", "name": "upstream-catalog-refresh-100", "artifact_id": "200",
+            "expires_at": "2026-10-10T00:00:00Z", "candidate_sha256": "f" * 64,
+            "evidence_sha256": "b" * 64, "diff_sha256": "c" * 64,
+        }
+        latest = {
+            "run_id": "101", "name": "upstream-catalog-refresh-101", "artifact_id": "201",
+            "expires_at": "2026-10-11T00:00:00Z", "candidate_sha256": candidate_sha,
+            "evidence_sha256": "d" * 64, "diff_sha256": "e" * 64,
+        }
+        checkpoint = {
+            "generation_inputs": {"candidate_sha256": candidate_sha},
+            "input_artifacts": [first, latest], "observation_count": 2,
+            "last_observation": {
+                "producer_run_id": "101", "refresh_evidence_sha256": "d" * 64,
+                "observed_at": "2026-10-05T00:00:00Z",
+            },
+        }
+        source = {
+            "run_id": "101", "artifact_id": "201", "candidate_sha256": candidate_sha,
+            "refresh_evidence_sha256": "d" * 64, "diff_sha256": "e" * 64,
+            "observed_at": "2026-10-05T00:00:00Z",
+        }
+        selected, locator_count, observation_count = MODULE.validate_processor_input_history(checkpoint, source)
+        self.assertEqual(selected["run_id"], "101")
+        self.assertEqual(locator_count, 2)
+        self.assertEqual(observation_count, 2)
+
+        checkpoint["input_artifacts"].append(copy.deepcopy(latest))
+        checkpoint["observation_count"] = 3
+        with self.assertRaisesRegex(ValueError, "repeats an exact run/evidence locator"):
+            MODULE.validate_processor_input_history(checkpoint, source)
 
     def test_partial_pipeline_rejects_tampered_present_pointer_without_ack(self) -> None:
         """Missing ACK is conservative, but it cannot hide malformed publisher evidence."""
@@ -1256,6 +1463,90 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(facet["state"], "missing")
         self.assertEqual(set(facet["details"]["missing_stages"]), {"processor", "promotion"})
+
+    def test_present_ack_transition_is_validated_but_not_promoted_without_c_and_health(self) -> None:
+        """A locally valid ACK stays non-authoritative while independent peers are absent."""
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item.get("scope_id") != operation_id
+            or item.get("subject", {}).get("stage") not in {"promotion", "health"}
+        ]
+        with tempfile.TemporaryDirectory(prefix="completeness-ack-without-c-health-") as name:
+            input_root = pathlib.Path(name)
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            report = MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+        operation = next(row for row in report["scopes"] if row["scope_id"] == operation_id)
+        pipeline = next(facet for facet in operation["facets"] if facet["facet_id"] == "specification_pipeline")
+        self.assertEqual(operation["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(pipeline["state"], "missing")
+        self.assertEqual(set(pipeline["details"]["missing_stages"]), {"promotion", "health"})
+
+    def test_partial_ack_rejects_rebound_journal_and_log_before_missing_health_return(self) -> None:
+        """Missing Health cannot hide malformed supplied ACK journal or job logs."""
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+
+        def partial_index() -> dict[str, object]:
+            index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+            index["inputs"] = [
+                item for item in index["inputs"]
+                if item.get("scope_id") != operation_id
+                or item.get("subject", {}).get("stage") != "health"
+            ]
+            return index
+
+        with tempfile.TemporaryDirectory(prefix="completeness-ack-local-negative-") as name:
+            input_root = pathlib.Path(name)
+            index = partial_index()
+            after_item = next(
+                item for item in index["inputs"]
+                if item.get("scope_id") == operation_id and item["role"] == "acknowledgement_journal_after"
+            )
+            self._write_rebound_evidence(
+                input_root, after_item, "tampered-ack-journal.json", b'{"tampered_ack":true}\n',
+            )
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            json_output = input_root / "existing-rollup.json"
+            markdown_output = input_root / "existing-rollup.md"
+            json_output.write_bytes(b"prior-json-report\n")
+            markdown_output.write_bytes(b"prior-markdown-report\n")
+            output_paths = {"rollup.json": json_output, "rollup.md": markdown_output}
+            with mock.patch.object(
+                MODULE, "output_path",
+                side_effect=lambda _root, value, _label: output_paths[value],
+            ):
+                result = MODULE.main([
+                    "--repo-root", str(ROOT),
+                    "--input-root", str(input_root),
+                    "--input-index", str(index_path),
+                    "--output-json", "rollup.json",
+                    "--output-markdown", "rollup.md",
+                    "--write",
+                ])
+            self.assertEqual(result, 1)
+            self.assertEqual(json_output.read_bytes(), b"prior-json-report\n")
+            self.assertEqual(markdown_output.read_bytes(), b"prior-markdown-report\n")
+
+            index = partial_index()
+            log_item = next(
+                item for item in index["inputs"]
+                if item.get("scope_id") == operation_id and item["role"] == "acknowledgement_log_archive"
+            )
+            self._write_rebound_evidence(input_root, log_item, "not-ack-logs.zip", b"not-a-zip\n")
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            with self.assertRaisesRegex(ValueError, "acknowledgement logs.*ZIP|not a valid bounded ZIP"):
+                MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
 
     def test_health_archived_state_refs_join_each_supplied_peer_without_full_chain(self) -> None:
         registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)

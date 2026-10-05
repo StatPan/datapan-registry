@@ -1903,6 +1903,63 @@ def source_lfs_binding(root: pathlib.Path, source_sha: str) -> tuple[dict[str, A
     return artifact, sha256_bytes(manifest_raw)
 
 
+def source_refresh_result_contract(
+    *, source_config: dict[str, Any], evidence: dict[str, Any],
+    diff: dict[str, Any], work_packet: dict[str, Any],
+) -> tuple[str, str]:
+    """Derive A's result from its producer policy and validate its paired records."""
+    summary = diff.get("summary")
+    material_fields = source_config.get("diff", {}).get("material_change_fields")
+    if (
+        not isinstance(summary, dict)
+        or set(summary) != {"added", "removed", "changed", "stable"}
+        or not isinstance(material_fields, list)
+        or not material_fields
+        or any(field not in summary for field in material_fields)
+        or any(
+            isinstance(value, bool) or not isinstance(value, int) or value < 0
+            for value in summary.values()
+        )
+    ):
+        raise ValueError("source diff summary or policy material-change fields are invalid")
+    material_change = any(summary[field] > 0 for field in material_fields)
+    expected_status = "material_change" if material_change else "no_change"
+    expected_action = "review_catalog_drift" if material_change else "none"
+    key_payload = {
+        "source_id": "data_go_kr", "status": expected_status,
+        "summary": summary, "error_class": None,
+    }
+    work_key_digest = hashlib.sha256(
+        json.dumps(key_payload, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:16]
+    expected_work_key = f"upstream-refresh:data_go_kr:{work_key_digest}"
+    if (
+        evidence.get("source_id") != "data_go_kr"
+        or evidence.get("owner") != source_config.get("owner")
+        or evidence.get("status") != expected_status
+        or evidence.get("collection", {}).get("attempted") is not True
+        or evidence.get("collection", {}).get("succeeded") is not True
+        or isinstance(evidence.get("collection", {}).get("exit_code"), bool)
+        or evidence.get("collection", {}).get("exit_code") != 0
+        or evidence.get("collection", {}).get("error_class") is not None
+        or evidence.get("review", {}).get("action") != expected_action
+        or evidence.get("review", {}).get("work_key") != expected_work_key
+        or evidence.get("publication", {}).get("automatic") is not False
+        or evidence.get("publication", {}).get("release_allowed") is not False
+        or evidence.get("publication", {}).get("required_gates") != source_config.get("publication", {}).get("required_gates")
+        or work_packet.get("source_id") != "data_go_kr"
+        or work_packet.get("owner") != source_config.get("owner")
+        or work_packet.get("status") != expected_status
+        or work_packet.get("action") != expected_action
+        or work_packet.get("work_key") != expected_work_key
+        or work_packet.get("automatic_publication") is not False
+        or work_packet.get("snapshot") != evidence.get("snapshot", {}).get("path")
+        or work_packet.get("diff") != evidence.get("diff", {}).get("path")
+    ):
+        raise ValueError("source evidence and work packet disagree with the producer-owned refresh policy")
+    return expected_status, expected_work_key
+
+
 def validate_source_observation(
     *, root: pathlib.Path, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
     run: dict[str, Any], job: dict[str, Any], archive: bytes, evaluation_epoch: str,
@@ -1921,9 +1978,39 @@ def validate_source_observation(
     if set(members) != expected_members:
         raise ValueError("source collector artifact does not contain the exact four-file contract")
     evidence = json.loads(members["upstream-refresh-evidence.json"])
-    validate_schema(evidence, root / "schemas/datapan.upstream-refresh-evidence.v1.schema.json", "source refresh evidence")
     diff = json.loads(members["catalog-diff.json"])
     work_packet = json.loads(members["upstream-refresh-work-packet.json"])
+    try:
+        policy = json.loads(git_read_only(root, ["show", f"{run['head_sha']}:policy/source-refresh.json"]))
+    except (ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("source refresh policy is unavailable at its authenticated producer revision") from exc
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.source-refresh-policy.v1.schema.json",
+        value=policy, label="source refresh policy",
+    )
+    source_configs = [
+        row for row in policy.get("sources", [])
+        if isinstance(row, dict) and row.get("source_id") == "data_go_kr"
+    ]
+    if len(source_configs) != 1:
+        raise ValueError("source refresh policy does not uniquely register data_go_kr")
+    source_config = source_configs[0]
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+        value=evidence, label="source refresh evidence",
+    )
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.catalog-diff.v1.schema.json",
+        value=diff, label="source catalog diff",
+    )
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.upstream-refresh-work-packet.v1.schema.json",
+        value=work_packet, label="source refresh work packet",
+    )
     candidate_bytes = members["candidate.registry.json"]
     observe_steps = [
         step for step in job.get("steps", [])
@@ -1932,20 +2019,27 @@ def validate_source_observation(
     observe_start = observe_steps[0].get("started_at") if len(observe_steps) == 1 else None
     observed_at = evidence.get("observed_at")
     snapshot = evidence.get("snapshot", {})
+    summary = diff.get("summary")
+    expected_status, expected_work_key = source_refresh_result_contract(
+        source_config=source_config, evidence=evidence, diff=diff, work_packet=work_packet,
+    )
+    expected_action = "review_catalog_drift" if expected_status == "material_change" else "none"
     if (
-        evidence.get("source_id") != "data_go_kr"
-        or evidence.get("status") != "material_change"
+        evidence.get("status") != expected_status
         or evidence.get("collection", {}).get("succeeded") is not True
         or evidence.get("collection", {}).get("attempted") is not True
         or not isinstance(observe_start, str)
         or parse_time(observe_start, "collector observation step start") != parse_time(observed_at, "source observation time")
-        or evidence.get("baseline", {}).get("path") != "data/data-go-kr.registry.json"
+        or evidence.get("baseline", {}).get("path") != source_config.get("canonical_registry")
         or evidence.get("diff", {}).get("sha256") != sha256_bytes(members["catalog-diff.json"])
-        or diff.get("summary") != evidence.get("diff", {}).get("summary")
-        or work_packet.get("source_id") != "data_go_kr"
-        or work_packet.get("status") != evidence.get("status")
+        or evidence.get("diff", {}).get("summary") != summary
+        or diff.get("generated_at") != observed_at
+        or diff.get("old") != source_config.get("canonical_registry")
+        or diff.get("new") != snapshot.get("path")
         or work_packet.get("observed_at") != observed_at
-        or work_packet.get("automatic_publication") is not False
+        or work_packet.get("evidence") != ".datapan/ci/upstream-refresh/upstream-refresh-evidence.json"
+        or work_packet.get("snapshot") != snapshot.get("path")
+        or work_packet.get("diff") != ".datapan/ci/upstream-refresh/catalog-diff.json"
         or len(candidate_bytes) != snapshot.get("bytes")
         or sha256_bytes(candidate_bytes) != snapshot.get("sha256")
         or snapshot.get("path") != ".datapan/ci/upstream-refresh/candidate.registry.json"
@@ -1973,10 +2067,13 @@ def validate_source_observation(
         "candidate_sha256": snapshot["sha256"],
         "candidate_bytes": snapshot["bytes"],
         "refresh_evidence_sha256": sha256_bytes(members["upstream-refresh-evidence.json"]),
+        "diff_sha256": evidence["diff"]["sha256"],
         "baseline_sha256": baseline["sha256"],
         "baseline_bytes": baseline["bytes"],
         "release_manifest_sha256": source_manifest_sha256,
         "diff_summary": evidence["diff"]["summary"],
+        "status": expected_status,
+        "review_action": expected_action,
         "evidence": [
             artifact(input_path(roles["pipeline_run"]), read_bytes(resolved[roles["pipeline_run"]["input_id"]])),
             artifact(input_path(roles["pipeline_artifact_archive"]), archive),
@@ -2168,6 +2265,75 @@ def validate_processor_generation_inputs(
     return not changed, sorted(set(changed))
 
 
+def validate_processor_input_history(
+    checkpoint: dict[str, Any], source: dict[str, Any] | None,
+) -> tuple[dict[str, Any], int, int]:
+    """Bind the selected observation to a bounded locator history, not count one."""
+    rows = checkpoint.get("input_artifacts")
+    latest = checkpoint.get("last_observation")
+    count = checkpoint.get("observation_count")
+    generation_inputs = checkpoint.get("generation_inputs", {})
+    if (
+        not isinstance(rows, list) or not 1 <= len(rows) <= 8
+        or not isinstance(latest, dict)
+        or isinstance(count, bool) or not isinstance(count, int) or count < len(rows)
+        or not isinstance(generation_inputs, dict)
+        or not isinstance(generation_inputs.get("candidate_sha256"), str)
+        or not SHA256_RE.fullmatch(generation_inputs["candidate_sha256"])
+    ):
+        raise ValueError("processor checkpoint does not retain valid bounded collector observation history")
+    keys: set[tuple[str, str | None]] = set()
+    selected: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("processor checkpoint collector input locator is malformed")
+        run_id = row.get("run_id")
+        artifact_id = row.get("artifact_id")
+        key = (str(run_id), row.get("evidence_sha256"))
+        if key in keys:
+            raise ValueError("processor checkpoint collector history repeats an exact run/evidence locator")
+        keys.add(key)
+        if (
+            not isinstance(run_id, str) or not re.fullmatch(r"[0-9]+", run_id)
+            or not isinstance(artifact_id, (str, type(None)))
+            or (artifact_id is not None and not re.fullmatch(r"[0-9]+", artifact_id))
+            or row.get("name") != f"upstream-catalog-refresh-{run_id}"
+            or not isinstance(row.get("expires_at"), str)
+            or not isinstance(row.get("evidence_sha256"), (str, type(None)))
+            or not isinstance(row.get("diff_sha256"), (str, type(None)))
+            or any(
+                value is not None and not SHA256_RE.fullmatch(value)
+                for value in (row.get("candidate_sha256"), row.get("evidence_sha256"), row.get("diff_sha256"))
+            )
+        ):
+            raise ValueError("processor collector locator does not match its immutable generation input contract")
+        parse_time(row["expires_at"], "processor collector locator expiry")
+        if (
+            str(run_id) == str(latest.get("producer_run_id"))
+            and row.get("evidence_sha256") == latest.get("refresh_evidence_sha256")
+        ):
+            selected.append(row)
+    if len(selected) != 1:
+        raise ValueError("processor latest observation does not select one retained collector locator")
+    selected_row = selected[0]
+    if selected_row.get("candidate_sha256") != generation_inputs.get("candidate_sha256"):
+        raise ValueError("processor selected collector candidate differs from its immutable generation input")
+    if source is not None:
+        expected = {
+            "run_id": source["run_id"],
+            "artifact_id": source["artifact_id"],
+            "name": f"upstream-catalog-refresh-{source['run_id']}",
+            "candidate_sha256": source["candidate_sha256"],
+            "evidence_sha256": source["refresh_evidence_sha256"],
+            "diff_sha256": source["diff_sha256"],
+        }
+        if any(selected_row.get(field) != value for field, value in expected.items()):
+            raise ValueError("processor latest collector locator differs from the exact validated source artifact")
+        if latest.get("observed_at") != source["observed_at"]:
+            raise ValueError("processor latest observation clock differs from the exact validated source run")
+    return selected_row, len(rows), count
+
+
 def validate_processor_stage(
     *, root: pathlib.Path, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
     run: dict[str, Any], job: dict[str, Any], source: dict[str, Any] | None,
@@ -2179,11 +2345,6 @@ def validate_processor_stage(
     )
     committed_main = assert_main_ancestor(root, run["head_sha"], "processor workflow source commit")
     head_registry_artifact, head_manifest_sha256 = source_lfs_binding(root, run["head_sha"])
-    if (
-        head_registry_artifact.get("sha256") != current_registry.get("sha256")
-        or head_registry_artifact.get("bytes") != current_registry.get("bytes")
-    ):
-        raise ValueError("processor execution head release manifest does not bind the current canonical payload")
     generation_api = indexed_json(roles, resolved, "processor_generation_api")
     generation_path = generation_api.get("path")
     expected_generation = pathlib.PurePosixPath(generation_path).stem if isinstance(generation_path, str) else ""
@@ -2242,53 +2403,17 @@ def validate_processor_stage(
         promotion.validate_generation_identity(checkpoint)
     except Exception as exc:
         raise ValueError("processor checkpoint schema or immutable generation identity is invalid") from exc
-    # Stage-local validation can run when A is absent. In that case the B
-    # checkpoint proves only its own internally consistent source locator; it
-    # cannot promote that locator into an authenticated A observation. When A
-    # is present, bind the same fields to the independently validated A packet.
-    locator_rows = checkpoint.get("input_artifacts")
-    if not isinstance(locator_rows, list) or len(locator_rows) != 1:
-        raise ValueError("processor checkpoint does not retain exactly one admitted collector artifact")
-    input_locator = locator_rows[0]
-    if not isinstance(input_locator, dict):
-        raise ValueError("processor checkpoint collector input locator is malformed")
-    expected_locator = {
-        "run_id": input_locator.get("run_id"),
-        "artifact_id": input_locator.get("artifact_id"),
-        "name": f"upstream-catalog-refresh-{input_locator.get('run_id')}",
-        "candidate_sha256": checkpoint.get("generation_inputs", {}).get("candidate_sha256"),
-        "evidence_sha256": checkpoint.get("last_observation", {}).get("refresh_evidence_sha256"),
-    }
-    if (
-        not re.fullmatch(r"[0-9]+", str(expected_locator["run_id"]))
-        or not re.fullmatch(r"[0-9]+", str(expected_locator["artifact_id"]))
-        or not SHA256_RE.fullmatch(str(expected_locator["candidate_sha256"]))
-        or not SHA256_RE.fullmatch(str(expected_locator["evidence_sha256"]))
-        or any(input_locator.get(key) != value for key, value in expected_locator.items())
-    ):
-        raise ValueError("processor checkpoint collector input locator is internally inconsistent")
-    if source is not None and any(
-        input_locator.get(key) != value
-        for key, value in {
-            "run_id": source["run_id"],
-            "artifact_id": source["artifact_id"],
-            "name": f"upstream-catalog-refresh-{source['run_id']}",
-            "candidate_sha256": source["candidate_sha256"],
-            "evidence_sha256": source["refresh_evidence_sha256"],
-        }.items()
-    ):
-        raise ValueError("processor checkpoint collector input does not match the exact validated source artifact")
+    # Stage-local validation can run when A is absent. The selected locator is
+    # still internally bound, but it is not promoted into an authenticated A
+    # observation unless the exact source artifact is independently present.
+    input_locator, locator_count, observation_count = validate_processor_input_history(checkpoint, source)
     last_observation = checkpoint.get("last_observation")
     if (
         checkpoint.get("source_id") != "data_go_kr"
         or checkpoint.get("source_scope") != "aggregate_supported_catalog"
-        or checkpoint.get("observation_count") != 1
         or not isinstance(last_observation, dict)
-        or str(last_observation.get("producer_run_id")) != str(input_locator.get("run_id"))
-        or last_observation.get("refresh_evidence_sha256") != input_locator.get("evidence_sha256")
-        or (source is not None and last_observation.get("observed_at") != source["observed_at"])
     ):
-        raise ValueError("processor checkpoint does not preserve its exact single source observation locator")
+        raise ValueError("processor checkpoint does not preserve a valid bounded source observation history")
 
     artifacts_response = object_at(resolved[roles["pipeline_artifact_metadata"]["input_id"]], "processor artifact API")
     artifacts = artifacts_response.get("artifacts")
@@ -2309,7 +2434,16 @@ def validate_processor_stage(
 
     with tempfile.TemporaryDirectory(prefix="completeness-processor-bundle-") as temporary:
         output_dir = pathlib.Path(temporary) / "bundle"
-        required = set(promotion.REQUIRED_PROCESSOR_FILES) | {"upstream-catalogue-checkpoint-receipt.json"}
+        status = checkpoint.get("status")
+        output_names = {
+            row.get("path") for row in checkpoint.get("output_digests", [])
+            if isinstance(row, dict) and isinstance(row.get("path"), str)
+        }
+        required = output_names | {"upstream-catalogue-checkpoint-receipt.json"}
+        if status in {"ready", "no-change"}:
+            required = set(promotion.REQUIRED_PROCESSOR_FILES) | {"upstream-catalogue-checkpoint-receipt.json"}
+        elif status not in {"retry", "quarantined"}:
+            raise ValueError("processor checkpoint status is not a supported bounded outcome")
         extract_bounded_processor_bundle(
             archive, output_dir, expected_members=required,
             max_archive_bytes=promotion.MAX_PROCESSOR_ARCHIVE_BYTES,
@@ -2326,49 +2460,52 @@ def validate_processor_stage(
         except Exception as exc:
             raise ValueError("processor archive or producer-head input provenance does not pass validation") from exc
         result = bundle
-        composition_receipt = copy.deepcopy(bundle["composition_receipt"])
-        composition_sha = sha256_file(pathlib.Path(bundle["composition_receipt_path"]))
+        composition_receipt = copy.deepcopy(bundle.get("composition_receipt"))
+        composition_path = bundle.get("composition_receipt_path")
+        composition_sha = sha256_file(pathlib.Path(composition_path)) if composition_path else None
         checkpoint_output = checkpoint.get("output_digests", [])
-        candidate_row = [row for row in checkpoint_output if isinstance(row, dict) and row.get("path") == "composed-candidate.registry.json"]
-        if len(candidate_row) != 1:
-            raise ValueError("processor checkpoint does not inventory one composed candidate")
-        if (
-            current_registry.get("path") != "data/data-go-kr.registry.json"
-            or result["status"] != "ready"
-            or result["registry_sha256"] != current_registry.get("sha256")
-            or result["registry_bytes"] != current_registry.get("bytes")
-        ):
-            raise ValueError("processor composition is not the exact currently materialized canonical payload")
         outcome = checkpoint.get("outcome", {})
-        if (
-            outcome.get("composer_status") != "ready_scoped"
-            or outcome.get("reason") != "scoped_candidate_ready_pending_outcomes_retained"
-            or outcome.get("pending_count") != 4382
-            or outcome.get("detail_retry_count") != 908
-            or outcome.get("detail_unattempted_count") != 884
-            or outcome.get("detail_failure_counts") != {"missing_link_detail_operations": 88, "timeout": 56}
-            or outcome.get("attempts_this_invocation") != 24
-            or outcome.get("detail_reason_unavailable_count") != 764
-        ):
-            raise ValueError("processor outcome differs from the exact retained scoped/pending execution")
         if outcome.get("full_scope_fresh") is True or outcome.get("publication_allowed") is True:
             raise ValueError("processor outcome cannot assert full-scope freshness or publication eligibility")
+        candidate_sha = result.get("registry_sha256")
+        candidate_bytes = result.get("registry_bytes")
+        if status in {"ready", "no-change"}:
+            candidate_row = [row for row in checkpoint_output if isinstance(row, dict) and row.get("path") == "composed-candidate.registry.json"]
+            if len(candidate_row) != 1 or candidate_sha is None or candidate_bytes is None:
+                raise ValueError("reviewable processor checkpoint does not inventory its exact composed candidate")
+        current_is_composition = (
+            candidate_sha == current_registry.get("sha256")
+            and candidate_bytes == current_registry.get("bytes")
+        )
         return {
             "run_id": str(run["id"]), "attempt": run["run_attempt"], "workflow_id": run["workflow_id"],
-            "head_sha": run["head_sha"], "generation_id": checkpoint["generation_id"],
+            "head_sha": run["head_sha"], "source_id": checkpoint["source_id"],
+            "source_scope": checkpoint["source_scope"], "generation_id": checkpoint["generation_id"],
+            "checkpoint_sha256": checkpoint.get("checkpoint_sha256"),
             "release_manifest_sha256": head_manifest_sha256,
-            "status": result["status"], "candidate_sha256": result["registry_sha256"],
-            "candidate_bytes": result["registry_bytes"], "baseline_sha256": result["baseline_sha256"],
+            "execution_head_registry_sha256": head_registry_artifact.get("sha256"),
+            "execution_head_registry_bytes": head_registry_artifact.get("bytes"),
+            "status": result["status"], "candidate_sha256": candidate_sha,
+            "candidate_bytes": candidate_bytes, "baseline_sha256": result.get("baseline_sha256"),
+            "candidate_path": result.get("registry_path", "data/data-go-kr.registry.json"),
+            "current_subject_sha256": current_registry.get("sha256"),
+            "current_subject_bytes": current_registry.get("bytes"),
+            "current_subject_matches_composition": current_is_composition,
             "source_observation": copy.deepcopy(last_observation),
             "source_candidate_sha256": checkpoint["generation_inputs"]["candidate_sha256"],
-            "pending_count": outcome["pending_count"], "detail_retry_count": outcome["detail_retry_count"],
-            "detail_unattempted_count": outcome["detail_unattempted_count"],
+            "observation_count": observation_count,
+            "collector_locator_count": locator_count,
+            "outcome": copy.deepcopy(outcome),
+            "pending_count": outcome.get("pending_count"), "detail_retry_count": outcome.get("detail_retry_count"),
+            "detail_unattempted_count": outcome.get("detail_unattempted_count"),
             "full_scope_fresh": outcome.get("full_scope_fresh"), "publication_allowed": outcome.get("publication_allowed"),
             "current_input_contract_compatible": current_input_contract_compatible,
             "current_input_contract_changed_paths": changed_input_paths,
             "composition_sha256": composition_sha, "state_commit": state_ref["object"]["sha"],
             "state_tree_sha": indexed_json(roles, resolved, "processor_state_tree")["sha"],
-            "artifact_id": str(artifact_meta["id"]), "artifact_sha256": sha256_bytes(archive),
+            "artifact_id": str(artifact_meta["id"]),
+            "output_bundle_sha256": checkpoint.get("output_artifact", {}).get("bundle_manifest_sha256"),
+            "artifact_sha256": sha256_bytes(archive),
             "evidence": [
                 artifact(input_path(roles["pipeline_run"]), read_bytes(resolved[roles["pipeline_run"]["input_id"]])),
                 artifact(input_path(roles["pipeline_artifact_archive"]), archive),
@@ -2422,6 +2559,22 @@ def promotion_log_results(raw_log: bytes) -> list[dict[str, Any]]:
     return found
 
 
+def validate_promotion_journal_at_revision(
+    *, root: pathlib.Path, revision: str, journal: dict[str, Any],
+) -> None:
+    relative = "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
+    try:
+        schema = json.loads(git_read_only(root, ["show", f"{revision}:{relative}"]))
+    except (ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("promotion journal schema is unavailable at its authenticated execution revision") from exc
+    validate_schema_value(journal, schema, "promotion journal")
+    helper = import_module("completeness_journal_contract", root / "scripts/canonical_update_pr.py")
+    try:
+        helper.validate_journal(journal, schema)
+    except Exception as exc:
+        raise ValueError("promotion journal fails its producer-owned revision and transition contract") from exc
+
+
 def validate_promotion_stage(
     *, root: pathlib.Path, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
     run: dict[str, Any], job: dict[str, Any], processor: dict[str, Any],
@@ -2446,13 +2599,15 @@ def validate_promotion_stage(
         or not isinstance(journal.get("records"), list)
     ):
         raise ValueError("promotion state ref or immutable journal does not match its registered owner")
-    validate_schema_at_revision(
-        root=root, revision=run["head_sha"],
-        relative_path="schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
-        value=journal, label="promotion journal",
-    )
+    validate_promotion_journal_at_revision(root=root, revision=run["head_sha"], journal=journal)
+    journal_helper = import_module("completeness_journal_identity", root / "scripts/canonical_update_pr.py")
+    execution_head_registry, execution_manifest_sha256 = source_lfs_binding(root, run["head_sha"])
     no_op_results = [row for row in log_results if "already_canonical_generations" in row]
     no_op_generation = None
+    selected_candidate_record: dict[str, Any] | None = None
+    candidate_merge_commit: str | None = None
+    candidate_available = False
+    result_status = "execution-without-matched-candidate"
     if no_op_results:
         if len(no_op_results) != 1:
             raise ValueError("promotion log contains ambiguous no-op candidate summaries")
@@ -2467,24 +2622,46 @@ def validate_promotion_stage(
             or not isinstance(already_canonical, list)
         ):
             raise ValueError("promotion output does not record a valid no-candidate reconciliation outcome")
-        matching_no_ops = [
-            item for item in already_canonical
-            if isinstance(item, dict)
-            and item.get("candidate_available") is False
-            and item.get("reason") == "already_canonical_payload"
-            and item.get("generation_id") == processor["generation_id"]
-            and item.get("registry_sha256") == current_registry["sha256"]
-            and item.get("pending_count") == processor["pending_count"]
-            and item.get("detail_retry_count") == processor["detail_retry_count"]
-            and item.get("detail_unattempted_count") == processor["detail_unattempted_count"]
+        generations: set[str] = set()
+        for row in already_canonical:
+            if not isinstance(row, dict):
+                raise ValueError("promotion no-op log contains a malformed generation row")
+            generation_id = row.get("generation_id")
+            counts = (row.get("pending_count"), row.get("detail_retry_count"), row.get("detail_unattempted_count"))
+            if (
+                not isinstance(generation_id, str) or not SHA256_RE.fullmatch(generation_id)
+                or generation_id in generations
+                or row.get("reason") != "already_canonical_payload"
+                or row.get("candidate_available") is not False
+                or not isinstance(row.get("registry_sha256"), str)
+                or not SHA256_RE.fullmatch(row["registry_sha256"])
+                or any(isinstance(value, bool) or not isinstance(value, int) or value < 0 for value in counts)
+            ):
+                raise ValueError("promotion no-op log contains conflicting or malformed generation identities")
+            generations.add(generation_id)
+        generation_rows = [
+            row for row in already_canonical
+            if row["generation_id"] == processor.get("generation_id")
         ]
-        if (
-            len(matching_no_ops) != 1
-            or current_registry["sha256"] != processor["candidate_sha256"]
-            or current_registry["bytes"] != processor["candidate_bytes"]
-        ):
-            raise ValueError("promotion no-op row does not bind the exact B generation and current canonical payload")
-        no_op_generation = processor["generation_id"]
+        if len(generation_rows) > 1:
+            raise ValueError("promotion no-op result repeats the exact B generation")
+        if generation_rows:
+            row = generation_rows[0]
+            if processor.get("status") not in {"ready", "no-change"}:
+                raise ValueError("promotion no-op names a B generation without a reviewable composed output")
+            if (
+                row.get("registry_sha256") != processor.get("candidate_sha256")
+                or row.get("registry_sha256") != execution_head_registry.get("sha256")
+                or processor.get("candidate_bytes") != execution_head_registry.get("bytes")
+                or row.get("pending_count") != processor.get("pending_count")
+                or row.get("detail_retry_count") != processor.get("detail_retry_count")
+                or row.get("detail_unattempted_count") != processor.get("detail_unattempted_count")
+            ):
+                raise ValueError("promotion no-op does not bind the exact B candidate, byte count, and outcome")
+            no_op_generation = processor["generation_id"]
+            result_status = "already-canonical-noop"
+        else:
+            result_status = "no-op-without-matched-generation"
     else:
         reconciliations = [
             row for row in log_results
@@ -2493,38 +2670,76 @@ def validate_promotion_stage(
         ]
         if len(reconciliations) != 1:
             raise ValueError("promotion log lacks an exact successful reconciliation summary")
-        matching_merged = []
+        matching_merged: list[tuple[dict[str, Any], str]] = []
+        matching_prepared: list[dict[str, Any]] = []
         for row in journal["records"]:
             candidate = row.get("candidate") if isinstance(row, dict) else None
             pr = row.get("pr") if isinstance(row, dict) else None
             if not isinstance(candidate, dict) or not isinstance(pr, dict):
                 continue
+            if row.get("superseded_by") is not None:
+                continue
             if (
-                row.get("status") == "read-back-confirmed"
-                and candidate.get("repository", "").casefold() == "statpan/datapan-registry"
-                and candidate.get("source_id") == "data_go_kr"
+                candidate.get("repository", "").casefold() == "statpan/datapan-registry"
+                and candidate.get("source_id") == processor.get("source_id", "data_go_kr")
+                and candidate.get("scope") == processor.get("source_scope")
                 and candidate.get("generation_id") == processor["generation_id"]
-                and candidate.get("registry_path") == current_registry["path"]
-                and candidate.get("registry_sha256") == current_registry["sha256"]
-                and candidate.get("registry_bytes") == current_registry["bytes"]
-                and candidate.get("manifest_sha256") == current_registry["release_manifest_sha256"]
-                and isinstance(pr.get("merge_commit_sha"), str)
+                and candidate.get("registry_path") == processor.get("candidate_path", "data/data-go-kr.registry.json")
+                and candidate.get("registry_sha256") == processor.get("candidate_sha256")
+                and candidate.get("registry_bytes") == processor.get("candidate_bytes")
+                and candidate.get("composition_receipt_sha256") == processor.get("composition_sha256")
             ):
-                merge = pr["merge_commit_sha"]
-                assert_main_ancestor(root, merge, "promotion journal candidate merge commit")
-                merged_manifest = git_read_only(root, ["show", f"{merge}:manifest.json"])
-                if sha256_bytes(merged_manifest) == candidate.get("manifest_sha256"):
-                    matching_merged.append(row)
-        if len(matching_merged) != 1:
-            raise ValueError("promotion journal does not bind one exact merged B candidate to current main")
+                if row.get("status") == "read-back-confirmed" and isinstance(pr.get("merge_commit_sha"), str):
+                    merge = pr["merge_commit_sha"]
+                    assert_main_ancestor(root, merge, "promotion journal candidate merge commit")
+                    merged_artifact, merged_manifest_sha256 = source_lfs_binding(root, merge)
+                    if (
+                        candidate.get("manifest_sha256") == merged_manifest_sha256
+                        and merged_artifact.get("sha256") == candidate.get("registry_sha256")
+                        and merged_artifact.get("bytes") == candidate.get("registry_bytes")
+                    ):
+                        matching_merged.append((row, merge))
+                elif row.get("status") in {"prepared", "pending-review", "ci-pending", "ci-failed"}:
+                    matching_prepared.append(row)
+        active_candidate_rows = [*matching_merged, *((row, "") for row in matching_prepared)]
+        candidate_keys = [journal_helper.candidate_key(row) for row, _merge in active_candidate_rows]
+        if len(candidate_keys) != len(set(candidate_keys)):
+            raise ValueError("promotion journal repeats one complete candidate key")
+        if len(active_candidate_rows) > 1:
+            raise ValueError("promotion journal has multiple active candidates for the exact B composition")
+        if matching_merged:
+            selected_candidate_record, candidate_merge_commit = matching_merged[-1]
+            candidate_available = True
+            result_status = "merged-candidate-reconciled"
+        elif matching_prepared:
+            selected_candidate_record = matching_prepared[-1]
+            candidate_available = True
+            result_status = f"candidate-{selected_candidate_record['status']}"
+        else:
+            result_status = "reconciled-without-matched-generation"
     return {
         "run_id": str(run["id"]), "attempt": run["run_attempt"], "workflow_id": run["workflow_id"],
         "head_sha": run["head_sha"], "main_ancestry_checked_tip": committed_main,
         "state_commit": ref["object"]["sha"],
         "state_tree_sha": indexed_json(roles, resolved, "promotion_state_tree")["sha"],
-        "status": "already-canonical-noop" if no_op_generation else "merged-candidate-reconciled",
-        "candidate_available": no_op_generation is None,
+        "status": result_status,
+        "candidate_available": candidate_available,
         "already_canonical_generation_id": no_op_generation,
+        "candidate_record": copy.deepcopy(selected_candidate_record),
+        "candidate_key": list(journal_helper.candidate_key(selected_candidate_record)) if selected_candidate_record else None,
+        "processor_generation_matches": (
+            no_op_generation == processor.get("generation_id")
+            or isinstance(selected_candidate_record, dict)
+            and selected_candidate_record.get("candidate", {}).get("generation_id") == processor.get("generation_id")
+        ),
+        "candidate_merge_commit": candidate_merge_commit,
+        "candidate_current_subject_matches": (
+            no_op_generation is not None and current_registry.get("sha256") == processor.get("candidate_sha256")
+            or candidate_merge_commit is not None and current_registry.get("sha256") == processor.get("candidate_sha256")
+        ),
+        "execution_head_registry_sha256": execution_head_registry.get("sha256"),
+        "execution_head_registry_bytes": execution_head_registry.get("bytes"),
+        "execution_head_manifest_sha256": execution_manifest_sha256,
         "journal_raw": state_bytes["promotion_journal_blob_api"],
         "journal_sha256": sha256_bytes(state_bytes["promotion_journal_blob_api"]),
         "journal_git_blob_sha": indexed_json(roles, resolved, "promotion_journal_blob_api")["sha"],
@@ -2768,43 +2983,134 @@ def validate_health_stage(
     source_rows = [row for row in receipt.get("sources", []) if isinstance(row, dict) and row.get("source_id") == "data_go_kr"]
     observations = post_state.get("observations_by_source", {}).get("data_go_kr", [])
     last_good = post_state.get("last_good_by_source", {}).get("data_go_kr")
-    last_good_artifact = last_good.get("artifact_identity", {}) if isinstance(last_good, dict) else {}
     canonical = source_rows[0].get("canonical", {}) if len(source_rows) == 1 else {}
+    health_observation = source_rows[0].get("observation", {}) if len(source_rows) == 1 else {}
     health_processor = source_rows[0].get("processor", {}) if len(source_rows) == 1 else {}
-    health_outcome = health_processor.get("outcome", {})
-    health_candidate = canonical.get("already_canonical_candidate", {})
-    health_promotion = canonical.get("promotion_execution", {})
-    health_promotion_success = health_promotion.get("latest_successful_execution_run", {})
-    if (
-        len(source_rows) != 1 or len(observations) != 1
-        or observations[0].get("producer_run_id") != source["run_id"]
-        or observations[0].get("observed_at") != source["observed_at"]
-        or observations[0].get("refresh_evidence_sha256") != source["refresh_evidence_sha256"]
-        or health_processor.get("generation_id") != processor["generation_id"]
-        or health_outcome.get("pending_count") != processor["pending_count"]
-        or health_outcome.get("detail_retry_count") != processor["detail_retry_count"]
-        or health_outcome.get("detail_unattempted_count") != processor["detail_unattempted_count"]
-        or health_candidate.get("generation_id") != processor["generation_id"]
-        or health_candidate.get("composed_registry_sha256") != processor["candidate_sha256"]
-        or health_candidate.get("composed_registry_bytes") != processor["candidate_bytes"]
-        or health_candidate.get("artifact_id") != processor["artifact_id"]
-        or health_candidate.get("processor_run_id") != processor["run_id"]
-        or health_candidate.get("processor_run_attempt") != processor["attempt"]
-        or health_candidate.get("main_revision") != processor["head_sha"]
-        or health_candidate.get("main_manifest_sha256") != processor["release_manifest_sha256"]
-        or health_promotion_success.get("run_id") != promotion["run_id"]
-        or health_promotion_success.get("run_attempt") != promotion["attempt"]
-        or health_promotion_success.get("head_sha") != promotion["head_sha"]
-        or health_promotion_success.get("workflow_id") != promotion["workflow_id"]
-        or not isinstance(last_good, dict)
-        or last_good.get("source_sha") == processor["head_sha"]
-        or last_good.get("source_sha") != "6a5138c792f4b7402da0c5ab439646bd752a307f"
-        or last_good.get("manifest_sha256") != "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
-        or last_good_artifact.get("path") != "data/data-go-kr.registry.json"
-        or last_good_artifact.get("sha256") != processor["candidate_sha256"]
-        or last_good_artifact.get("bytes") != processor["candidate_bytes"]
+    if len(source_rows) != 1 or not isinstance(observations, list) or len(observations) > 64:
+        raise ValueError("Health receipt must contain one source summary and its bounded observation history")
+
+    def observation_identity(value: Any, label: str) -> tuple[str, str, str] | None:
+        if not isinstance(value, dict):
+            return None
+        producer_run_id = value.get("producer_run_id")
+        observed_at = value.get("observed_at")
+        evidence_sha256 = value.get("refresh_evidence_sha256")
+        if producer_run_id is None and observed_at is None and evidence_sha256 is None:
+            return None
+        if (
+            not isinstance(producer_run_id, str) or not producer_run_id.isdigit()
+            or not isinstance(observed_at, str)
+            or not isinstance(evidence_sha256, str) or not SHA256_RE.fullmatch(evidence_sha256)
+        ):
+            raise ValueError(f"Health {label} has an incomplete source-observation identity")
+        parse_time(observed_at, f"Health {label} observed_at")
+        return producer_run_id, observed_at, evidence_sha256
+
+    expected_observation = (
+        source["run_id"], source["observed_at"], source["refresh_evidence_sha256"],
+    )
+    health_observation_identity = observation_identity(health_observation, "source observation")
+    if health_observation_identity is not None and health_observation_identity != expected_observation:
+        raise ValueError("Health source observation differs from the exact supplied A observation")
+    if health_observation.get("state") == "fresh" and health_observation_identity != expected_observation:
+        raise ValueError("Health fresh observation does not bind the exact supplied A observation")
+
+    processor_observation = observation_identity(health_processor.get("last_observation"), "processor observation")
+    selected_processor_observation = observation_identity(processor.get("source_observation"), "selected processor observation")
+    if processor_observation is not None and processor_observation != selected_processor_observation:
+        raise ValueError("Health processor checkpoint selects a different source observation from the exact supplied B generation")
+    if health_processor.get("generation_id") != processor["generation_id"]:
+        raise ValueError("Health processor state differs from the exact supplied B generation")
+    if health_processor.get("state") != processor["status"]:
+        raise ValueError("Health processor outcome state differs from the exact supplied B checkpoint")
+    if health_processor.get("checkpoint_sha256") != processor.get("checkpoint_sha256"):
+        raise ValueError("Health processor checkpoint digest differs from the exact supplied B checkpoint")
+    if health_processor.get("candidate_sha256") != processor.get("source_candidate_sha256"):
+        raise ValueError("Health processor source candidate differs from the exact supplied B generation input")
+    if health_processor.get("outcome") != processor.get("outcome"):
+        raise ValueError("Health processor outcome differs from the exact supplied B checkpoint outcome")
+    health_artifact = health_processor.get("output_artifact")
+    if not isinstance(health_artifact, dict) or (
+        str(health_artifact.get("run_id")) != processor["run_id"]
+        or str(health_artifact.get("artifact_id")) != processor["artifact_id"]
+        or health_artifact.get("bundle_manifest_sha256") != processor.get("output_bundle_sha256")
     ):
-        raise ValueError("Health replay changed source-observation cardinality or promoted a historical publication to current")
+        raise ValueError("Health processor artifact locator differs from the exact supplied B artifact")
+    health_outputs = health_processor.get("output_digests")
+    composed_outputs = [
+        row for row in health_outputs if isinstance(row, dict)
+        and row.get("path") == "composed-candidate.registry.json"
+    ] if isinstance(health_outputs, list) else []
+    if processor.get("candidate_sha256") is not None and (
+        len(composed_outputs) != 1
+        or composed_outputs[0].get("sha256") != processor["candidate_sha256"]
+        or composed_outputs[0].get("bytes") != processor["candidate_bytes"]
+    ):
+        raise ValueError("Health processor output inventory differs from the exact supplied B composition")
+
+    # Health's inspected main and last-good are time-specific producer facts.
+    # Authenticate the main subject against its own immutable Git tree, but do
+    # not equate it with the rollup's later candidate or B's run-head.
+    main = canonical.get("main")
+    if not isinstance(main, dict):
+        raise ValueError("Health receipt lacks its inspected canonical main subject")
+    main_revision = main.get("revision")
+    if not isinstance(main_revision, str) or not re.fullmatch(r"[a-f0-9]{40}", main_revision):
+        raise ValueError("Health inspected main revision is malformed")
+    assert_main_ancestor(root, main_revision, "Health inspected canonical main revision")
+    main_artifact, main_manifest_sha256 = source_lfs_binding(root, main_revision)
+    if (
+        main.get("manifest_sha256") != main_manifest_sha256
+        or main.get("registry_path") != main_artifact.get("path")
+        or main.get("registry_sha256") != main_artifact.get("sha256")
+        or main.get("registry_bytes") != main_artifact.get("bytes")
+    ):
+        raise ValueError("Health inspected main identity does not match its exact committed manifest and LFS pointer")
+
+    # The checker's verified flag is an internal relationship claim. Validate
+    # it with the checker implementation at the Health execution revision;
+    # if present, never accept the flag alone as B or C evidence.
+    health_candidate = canonical.get("already_canonical_candidate")
+    candidate_relation_valid = False
+    if health_candidate is not None:
+        verified_relation = persister.verified_already_canonical_relation(source_rows[0], receipt)
+        if verified_relation is None:
+            raise ValueError("Health already-canonical candidate relation fails its producer-owned inventory contract")
+        candidate_relation_valid = True
+        if health_candidate.get("generation_id") == processor["generation_id"] and (
+            health_candidate.get("source_id") != processor.get("source_id")
+            or health_candidate.get("checkpoint_sha256") != processor.get("checkpoint_sha256")
+            or health_candidate.get("processor_run_id") != processor["run_id"]
+            or health_candidate.get("processor_run_attempt") != processor["attempt"]
+            or health_candidate.get("artifact_id") != processor["artifact_id"]
+            or health_candidate.get("output_bundle_sha256") != processor.get("output_bundle_sha256")
+            or health_candidate.get("composed_registry_sha256") != processor.get("candidate_sha256")
+            or health_candidate.get("composed_registry_bytes") != processor.get("candidate_bytes")
+        ):
+            raise ValueError("Health already-canonical relation does not bind the exact supplied B generation")
+    if promotion.get("already_canonical_generation_id") == processor["generation_id"]:
+        if not candidate_relation_valid or health_candidate.get("generation_id") != processor["generation_id"]:
+            raise ValueError("Health omitted the exact B relationship reported by the C no-op result")
+
+    promotion_execution = canonical.get("promotion_execution", {})
+    promotion_success = promotion_execution.get("latest_successful_execution_run") if isinstance(promotion_execution, dict) else None
+    promotion_execution_matches = False
+    if isinstance(promotion_success, dict) and str(promotion_success.get("run_id")) == promotion["run_id"]:
+        promotion_execution_matches = (
+            str(promotion_success.get("run_id")) == promotion["run_id"]
+            and promotion_success.get("run_attempt") == promotion["attempt"]
+            and promotion_success.get("head_sha") == promotion["head_sha"]
+            and promotion_success.get("workflow_id") == promotion["workflow_id"]
+        )
+        if not promotion_execution_matches:
+            raise ValueError("Health promotion execution summary conflicts with the exact supplied C attempt")
+
+    replayed_last_good = last_good
+    payload_matches_current = (
+        main_artifact.get("sha256") == current_registry.get("sha256")
+        and main_artifact.get("bytes") == current_registry.get("bytes")
+    )
+    manifest_matches_current = main_manifest_sha256 == current_registry.get("release_manifest_sha256")
     return {
         "run_id": str(run["id"]), "attempt": run["run_attempt"], "workflow_id": run["workflow_id"],
         "head_sha": run["head_sha"], "state_commit": commit_api["sha"],
@@ -2812,7 +3118,19 @@ def validate_health_stage(
         "pre_state_sha256": sha256_bytes(pre_state_raw), "pre_state_seal": pre_state["state_sha256"],
         "post_state_sha256": sha256_bytes(state_bytes["health_state_blob_api"]),
         "post_state_seal": post_state["state_sha256"], "observation_count": len(observations),
-        "last_good_source_sha": last_good["source_sha"],
+        "source_observation_matches": health_observation_identity == expected_observation,
+        "processor_observation_matches": processor_observation == selected_processor_observation,
+        "candidate_relation_valid": candidate_relation_valid,
+        "promotion_execution_matches": promotion_execution_matches,
+        "health_main_revision": main_revision,
+        "health_main_manifest_sha256": main_manifest_sha256,
+        "health_main_registry_sha256": main_artifact["sha256"],
+        "health_main_registry_bytes": main_artifact["bytes"],
+        "health_main_payload_matches_current": payload_matches_current,
+        "health_main_release_manifest_matches_current": manifest_matches_current,
+        "health_main_matches_current_subject": payload_matches_current and manifest_matches_current,
+        "last_good": copy.deepcopy(replayed_last_good),
+        "last_good_source_sha": replayed_last_good.get("source_sha") if isinstance(replayed_last_good, dict) else None,
         "summary": copy.deepcopy(receipt.get("summary", {})),
         "evidence": [
             artifact(input_path(roles["pipeline_run"]), read_bytes(resolved[roles["pipeline_run"]["input_id"]])),
@@ -3502,11 +3820,7 @@ def validate_present_stage_local_artifacts(
         promotion_state_ref = indexed_json(promotion_roles, resolved, "promotion_state_ref")
         promotion_state_commit = promotion_state_ref.get("object", {}).get("sha")
         journal = json.loads(state_bytes["promotion_journal_blob_api"])
-        validate_schema_at_revision(
-            root=root, revision=run["head_sha"],
-            relative_path="schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
-            value=journal, label="promotion journal",
-        )
+        validate_promotion_journal_at_revision(root=root, revision=run["head_sha"], journal=journal)
         if promotion_state_ref.get("ref") != "refs/heads/automation/canonical-update-state":
             raise ValueError("promotion state ref is outside its registered owned branch")
         if processor_result is not None:
@@ -3529,28 +3843,28 @@ def validate_present_stage_local_artifacts(
                     raise ValueError("promotion log contains ambiguous no-op candidate summaries")
                 output = no_op_results[0]
                 rows = output.get("already_canonical_generations")
+                head_registry, _head_manifest = source_lfs_binding(root, run["head_sha"])
                 if (
                     output.get("status") not in allowed_statuses
                     or output.get("candidate_available") is not False
                     or not isinstance(rows, list)
-                    or not rows
-                    or not any(
-                        isinstance(row, dict)
-                        and row.get("candidate_available") is False
-                        and row.get("reason") == "already_canonical_payload"
-                        and row.get("registry_sha256") == current_registry["sha256"]
-                        and isinstance(row.get("generation_id"), str)
-                        and SHA256_RE.fullmatch(row["generation_id"])
-                        and all(
-                            isinstance(row.get(field), int)
-                            and not isinstance(row.get(field), bool)
-                            and row[field] >= 0
+                    or any(
+                        not isinstance(row, dict)
+                        or row.get("candidate_available") is not False
+                        or row.get("reason") != "already_canonical_payload"
+                        or not isinstance(row.get("generation_id"), str)
+                        or not SHA256_RE.fullmatch(row["generation_id"])
+                        or row.get("registry_sha256") != head_registry.get("sha256")
+                        or any(
+                            isinstance(row.get(field), bool)
+                            or not isinstance(row.get(field), int)
+                            or row[field] < 0
                             for field in ("pending_count", "detail_retry_count", "detail_unattempted_count")
                         )
                         for row in rows
                     )
                 ):
-                    raise ValueError("promotion no-op log lacks a valid current-canonical stage-local result")
+                    raise ValueError("promotion no-op log lacks a valid producer-head-scoped result")
             else:
                 run_url = f"https://github.com/StatPan/datapan-registry/actions/runs/{run['id']}/attempts/{run['run_attempt']}"
                 reconciliations = [
@@ -3669,8 +3983,12 @@ def acknowledgement_log_result(raw: bytes) -> dict[str, Any]:
                 continue
             if isinstance(value, dict) and value.get("status") == "read-back-confirmed":
                 found.append(value)
-    if len(found) != 1:
-        raise ValueError("acknowledgement logs do not contain one exact read-back-confirmed result")
+    # GitHub's retained job archive can contain the same structured result in
+    # both the step log and the job summary. Duplicate identical lines are one
+    # fact; conflicting outcomes are ambiguous and must fail closed.
+    unique = {canonical_json_bytes(row) for row in found}
+    if len(unique) != 1:
+        raise ValueError("acknowledgement logs do not contain one unambiguous read-back-confirmed result")
     return found[0]
 
 
@@ -3686,8 +4004,9 @@ def validate_acknowledgement_transition(
         "acknowledgement_state_ref", "acknowledgement_state_commit",
         "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
     }
-    if not optional_state_roles.issubset(roles):
-        raise ValueError("updated claim requires exact ACK state ref, commit, tree, and journal blob inputs")
+    supplied_state_roles = optional_state_roles & set(roles)
+    if supplied_state_roles and supplied_state_roles != optional_state_roles:
+        raise ValueError("ACK state-tree evidence is only valid as a complete ref/commit/tree/blob bundle")
     before_item = single_role(scoped_inputs, "acknowledgement_journal_before")
     after_item = single_role(scoped_inputs, "acknowledgement_journal_after")
     if before_item is None or after_item is None:
@@ -3695,34 +4014,44 @@ def validate_acknowledgement_transition(
     for item in (before_item, after_item):
         producer = item["producer"]
         if (
-            item.get("namespace") != "live_operational"
+            item.get("namespace") not in {"live_operational", "historical_admitted"}
             or producer.get("repository", "").casefold() != "statpan/datapan-registry"
-            or producer.get("run_id") != str(ack_run["id"])
-            or isinstance(producer.get("attempt"), bool)
-            or producer.get("attempt") != ack_run["run_attempt"]
-            or producer.get("workflow_id") != PIPELINE_WORKFLOWS["acknowledgement"]["workflow_id"]
-            or producer.get("workflow_path") != PIPELINE_WORKFLOWS["acknowledgement"]["workflow_path"]
-            or producer.get("event") != ack_run["event"]
-            or producer.get("revision") != ack_run["head_sha"]
         ):
-            raise ValueError("ACK journal snapshots are not attributed to the exact trusted ACK attempt")
+            raise ValueError("ACK journal snapshot lacks its retained Registry admission identity")
+        tuple_keys = {"run_id", "attempt", "workflow_id", "workflow_path", "event", "revision"}
+        indexed_tuple = tuple_keys & set(producer)
+        if item.get("namespace") == "live_operational" or indexed_tuple:
+            if (
+                indexed_tuple != tuple_keys
+                or producer.get("run_id") != str(ack_run["id"])
+                or isinstance(producer.get("attempt"), bool)
+                or producer.get("attempt") != ack_run["run_attempt"]
+                or producer.get("workflow_id") != PIPELINE_WORKFLOWS["acknowledgement"]["workflow_id"]
+                or producer.get("workflow_path") != PIPELINE_WORKFLOWS["acknowledgement"]["workflow_path"]
+                or producer.get("event") != ack_run["event"]
+                or producer.get("revision") != ack_run["head_sha"]
+            ):
+                raise ValueError("ACK journal snapshots are not attributed to the exact trusted ACK attempt")
 
-    state_bytes = validate_state_tree(
-        stage="acknowledgement", roles=roles, resolved=resolved,
-        ref_role="acknowledgement_state_ref", commit_role="acknowledgement_state_commit",
-        tree_role="acknowledgement_state_tree", content_roles={},
-        blob_roles={"acknowledgement_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
-    )
-    ref = indexed_json(roles, resolved, "acknowledgement_state_ref")
-    commit = indexed_json(roles, resolved, "acknowledgement_state_commit")
-    if (
-        ref.get("ref") != "refs/heads/automation/canonical-update-state"
-        or commit.get("sha") != ref.get("object", {}).get("sha")
-    ):
-        raise ValueError("ACK state ref does not identify the immutable canonical promotion journal commit")
+    state_bytes: dict[str, bytes] = {}
+    ref: dict[str, Any] = {}
+    if supplied_state_roles:
+        state_bytes = validate_state_tree(
+            stage="acknowledgement", roles=roles, resolved=resolved,
+            ref_role="acknowledgement_state_ref", commit_role="acknowledgement_state_commit",
+            tree_role="acknowledgement_state_tree", content_roles={},
+            blob_roles={"acknowledgement_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
+        )
+        ref = indexed_json(roles, resolved, "acknowledgement_state_ref")
+        commit = indexed_json(roles, resolved, "acknowledgement_state_commit")
+        if (
+            ref.get("ref") != "refs/heads/automation/canonical-update-state"
+            or commit.get("sha") != ref.get("object", {}).get("sha")
+        ):
+            raise ValueError("ACK state ref does not identify the immutable canonical promotion journal commit")
     before_raw = receipt_path_bytes(resolved[before_item["input_id"]], before_item)
     after_raw = receipt_path_bytes(resolved[after_item["input_id"]], after_item)
-    if after_raw != state_bytes["acknowledgement_journal_blob_api"]:
+    if supplied_state_roles and after_raw != state_bytes["acknowledgement_journal_blob_api"]:
         raise ValueError("ACK after-journal snapshot differs from the exact blob in its ref/commit/tree")
     before = json.loads(before_raw)
     after = json.loads(after_raw)
@@ -3829,10 +4158,230 @@ def validate_acknowledgement_transition(
     return {
         "run_id": str(ack_run["id"]), "attempt": ack_run["run_attempt"],
         "workflow_id": ack_run["workflow_id"], "event": ack_run["event"],
-        "workflow_head_sha": ack_run["head_sha"], "state_commit": ref["object"]["sha"],
-        "state_tree_sha": indexed_json(roles, resolved, "acknowledgement_state_tree")["sha"],
+        "workflow_head_sha": ack_run["head_sha"],
+        "state_commit": ref.get("object", {}).get("sha") if ref else None,
+        "state_tree_sha": indexed_json(roles, resolved, "acknowledgement_state_tree")["sha"] if ref else None,
         "journal_sha256": sha256_bytes(after_raw), "journal_record_count": len(after_records),
         "acknowledgement_observed_at": final["observed_at"],
+    }
+
+
+def validate_acknowledgement_local_transition(
+    *, root: pathlib.Path, scope: dict[str, Any], scoped_inputs: list[dict[str, Any]],
+    roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
+    ack_run: dict[str, Any], ack_job: dict[str, Any], evaluation_epoch: str,
+) -> dict[str, Any]:
+    """Validate a supplied ACK transition without claiming its absent peer joins.
+
+    A missing source/B/C/Health or publisher stage keeps the overall pipeline
+    blocked. It does not make a supplied ACK journal or log opaque: the local
+    append-only transition still has to bind to this exact ACK run attempt.
+    """
+    before_item = single_role(scoped_inputs, "acknowledgement_journal_before", required=False)
+    after_item = single_role(scoped_inputs, "acknowledgement_journal_after", required=False)
+    if (before_item is None) != (after_item is None):
+        raise ValueError("ACK local transition requires both before and after journal snapshots")
+    if before_item is None or after_item is None:
+        raise ValueError("ACK workflow evidence lacks its append-only journal transition")
+
+    run_id = str(ack_run.get("id"))
+    attempt = ack_run.get("run_attempt")
+    workflow = PIPELINE_WORKFLOWS["acknowledgement"]
+    for item in (before_item, after_item):
+        producer = item.get("producer", {})
+        if (
+            item.get("namespace") not in {"live_operational", "historical_admitted"}
+            or str(producer.get("repository", "")).casefold() != "statpan/datapan-registry"
+        ):
+            raise ValueError("ACK journal snapshot lacks a retained Registry producer identity")
+        indexed_attempt = producer.get("attempt")
+        indexed_tuple = {"run_id", "attempt", "workflow_id", "workflow_path", "event", "revision"} & set(producer)
+        if item.get("namespace") == "live_operational" or indexed_tuple:
+            if (
+                indexed_tuple != {"run_id", "attempt", "workflow_id", "workflow_path", "event", "revision"}
+                or producer.get("run_id") != run_id
+                or isinstance(indexed_attempt, bool) or indexed_attempt != attempt
+                or producer.get("workflow_id") != workflow["workflow_id"]
+                or producer.get("workflow_path") != workflow["workflow_path"]
+                or producer.get("event") != ack_run.get("event")
+                or producer.get("revision") != ack_run.get("head_sha")
+            ):
+                raise ValueError("ACK journal snapshot is not attributed to the exact trusted ACK attempt")
+
+    before_raw = receipt_path_bytes(resolved[before_item["input_id"]], before_item)
+    after_raw = receipt_path_bytes(resolved[after_item["input_id"]], after_item)
+    try:
+        before = json.loads(before_raw)
+        after = json.loads(after_raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("ACK before/after journal snapshot is not valid JSON") from exc
+    validate_schema(before, root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json", "ACK journal before")
+    validate_schema(after, root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json", "ACK journal after")
+    if (
+        str(before.get("repository", "")).casefold() != "statpan/datapan-registry"
+        or str(after.get("repository", "")).casefold() != "statpan/datapan-registry"
+        or not isinstance(before.get("records"), list)
+        or not isinstance(after.get("records"), list)
+    ):
+        raise ValueError("ACK journal snapshots have invalid Registry identity or records")
+
+    log_item = roles.get("acknowledgement_log_archive")
+    if log_item is None:
+        raise ValueError("ACK workflow evidence lacks its exact job log archive")
+    log_result = acknowledgement_log_result(
+        receipt_path_bytes(resolved[log_item["input_id"]], log_item)
+    )
+    ack_url = f"https://github.com/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}"
+    job_started = parse_time(ack_job["started_at"], "ACK job start")
+    job_completed = parse_time(ack_job["completed_at"], "ACK job completion")
+    cutoff = parse_time(evaluation_epoch, "ACK evaluation epoch")
+    if (
+        job_completed > cutoff
+        or log_result.get("status") != "read-back-confirmed"
+        or log_result.get("run_url") != ack_url
+        or not isinstance(log_result.get("source_sha"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", log_result["source_sha"])
+        or not isinstance(log_result.get("manifest_sha256"), str)
+        or not SHA256_RE.fullmatch(log_result["manifest_sha256"])
+    ):
+        raise ValueError("ACK log does not bind one successful read-back result to the exact ACK attempt")
+
+    before_updated = parse_time(before.get("updated_at"), "ACK journal before update time")
+    after_updated = parse_time(after.get("updated_at"), "ACK journal after update time")
+    if not before_updated <= job_started <= after_updated <= job_completed <= cutoff:
+        raise ValueError("ACK journal transition timestamps do not enclose the exact ACK attempt")
+
+    after_matches: list[tuple[int, dict[str, Any], dict[str, Any]]] = []
+    for index, row in enumerate(after["records"]):
+        if not isinstance(row, dict):
+            continue
+        candidate, pr = row.get("candidate"), row.get("pr")
+        acknowledgements = row.get("acknowledgements")
+        if not isinstance(candidate, dict) or not isinstance(pr, dict) or not isinstance(acknowledgements, list):
+            continue
+        matching_acks = [
+            ack for ack in acknowledgements
+            if isinstance(ack, dict)
+            and str(ack.get("run_id")) == run_id
+            and ack.get("run_attempt") == attempt
+            and ack.get("status") == "read-back-confirmed"
+        ]
+        if (
+            candidate.get("source_id") == scope.get("source_id")
+            and candidate.get("repository", "").casefold() == "statpan/datapan-registry"
+            and len(matching_acks) == 1
+        ):
+            after_matches.append((index, row, matching_acks[0]))
+    if len(after_matches) != 1:
+        raise ValueError("ACK after journal does not identify one read-back transition for this source and attempt")
+
+    target_index, after_row, final_ack = after_matches[0]
+    before_records = before["records"]
+    if len(before_records) != len(after["records"]):
+        raise ValueError("ACK transition changes the promotion-journal record inventory")
+    before_row = before_records[target_index]
+    if not isinstance(before_row, dict):
+        raise ValueError("ACK before journal target record is malformed")
+    candidate = after_row["candidate"]
+    pr = after_row["pr"]
+    before_candidate = before_row.get("candidate")
+    before_pr = before_row.get("pr")
+    if (
+        not isinstance(before_candidate, dict) or not isinstance(before_pr, dict)
+        or candidate != before_candidate or pr != before_pr
+        or before_row.get("status") != "merged"
+        or after_row.get("status") != "read-back-confirmed"
+        or pr.get("state") != "merged"
+        or not isinstance(pr.get("merge_commit_sha"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", pr["merge_commit_sha"])
+    ):
+        raise ValueError("ACK transition does not preserve one already-merged candidate and PR identity")
+    before_acks, after_acks = before_row.get("acknowledgements"), after_row.get("acknowledgements")
+    if (
+        not isinstance(before_acks, list) or not isinstance(after_acks, list)
+        or after_acks[:len(before_acks)] != before_acks
+        or len(after_acks) - len(before_acks) != 3
+        or [row.get("status") if isinstance(row, dict) else None for row in after_acks[len(before_acks):]]
+        != ["publication-pending", "published", "read-back-confirmed"]
+    ):
+        raise ValueError("ACK transition is not one bounded append-only publication/read-back suffix")
+    previous_observation = parse_time(before_acks[-1].get("observed_at"), "ACK prior observation time") if before_acks else None
+    for appended in after_acks[len(before_acks):]:
+        observed_at = parse_time(appended.get("observed_at"), "ACK appended observation time")
+        if not job_started <= observed_at <= job_completed or (previous_observation and observed_at < previous_observation):
+            raise ValueError("ACK journal observation is outside the exact attempt or out of order")
+        previous_observation = observed_at
+    for index, (old_row, new_row) in enumerate(zip(before_records, after["records"], strict=True)):
+        if index == target_index:
+            continue
+        if old_row != new_row:
+            raise ValueError("ACK transition changed an unrelated promotion-journal record")
+
+    identity = final_ack.get("artifact_identity")
+    source_sha = pr["merge_commit_sha"]
+    if (
+        final_ack.get("source_sha") != source_sha
+        or source_sha != log_result.get("source_sha")
+        or final_ack.get("manifest_sha256") != candidate.get("manifest_sha256")
+        or final_ack.get("manifest_sha256") != log_result.get("manifest_sha256")
+        or not isinstance(identity, dict)
+        or identity.get("path") != candidate.get("registry_path")
+        or identity.get("bytes") != candidate.get("registry_bytes")
+        or identity.get("sha256") != candidate.get("registry_sha256")
+        or final_ack.get("read_back_verified") is not True
+        or final_ack.get("read_back_sha256") != identity.get("sha256")
+        or final_ack.get("read_back_bytes") != identity.get("bytes")
+        or isinstance(final_ack.get("run_attempt"), bool)
+        or not isinstance(final_ack.get("run_attempt"), int)
+        or final_ack.get("run_attempt") != attempt
+        or final_ack.get("run_id") != ack_run.get("id")
+        or final_ack.get("run_url") != ack_url
+        or not isinstance(final_ack.get("evidence_reference"), str)
+        or not re.search(r"sha256=[a-f0-9]{64}(?:\b|$)", final_ack["evidence_reference"])
+        or not isinstance(final_ack.get("publication_revision"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", final_ack["publication_revision"])
+        or not isinstance(final_ack.get("publication_pointer_revision"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", final_ack["publication_pointer_revision"])
+    ):
+        raise ValueError("ACK final journal identity differs from its merged candidate or exact log result")
+
+    receipt_item = single_role(scoped_inputs, "publication_receipt", required=False)
+    if receipt_item is not None:
+        receipt_raw = receipt_path_bytes(resolved[receipt_item["input_id"]], receipt_item)
+        receipt_sha = sha256_bytes(receipt_raw)
+        evidence_reference = final_ack.get("evidence_reference")
+        if not isinstance(evidence_reference, str) or f"sha256={receipt_sha}" not in evidence_reference:
+            raise ValueError("ACK final journal does not reference the exact supplied publication receipt bytes")
+
+    optional_state_roles = {
+        "acknowledgement_state_ref", "acknowledgement_state_commit",
+        "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+    }
+    supplied_state_roles = optional_state_roles & set(roles)
+    if supplied_state_roles and supplied_state_roles != optional_state_roles:
+        raise ValueError("ACK state-tree bundle is incomplete")
+    if supplied_state_roles:
+        state_bytes = validate_state_tree(
+            stage="acknowledgement", roles=roles, resolved=resolved,
+            ref_role="acknowledgement_state_ref", commit_role="acknowledgement_state_commit",
+            tree_role="acknowledgement_state_tree", content_roles={},
+            blob_roles={"acknowledgement_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
+        )
+        ref = indexed_json(roles, resolved, "acknowledgement_state_ref")
+        commit = indexed_json(roles, resolved, "acknowledgement_state_commit")
+        if (
+            ref.get("ref") != "refs/heads/automation/canonical-update-state"
+            or commit.get("sha") != ref.get("object", {}).get("sha")
+            or state_bytes["acknowledgement_journal_blob_api"] != after_raw
+        ):
+            raise ValueError("ACK state ref/tree does not bind the exact after-journal snapshot")
+
+    return {
+        "run_id": run_id, "attempt": attempt, "source_sha": source_sha,
+        "manifest_sha256": candidate["manifest_sha256"],
+        "journal_sha256": sha256_bytes(after_raw),
+        "acknowledgement_observed_at": final_ack.get("observed_at"),
+        "cross_stage_join": "unproven-until-publisher-and-pipeline-stages-are-present",
     }
 
 
@@ -4393,6 +4942,14 @@ def validate_pipeline_evidence(
     stage_roles = {stage: stage_input_map(operation_inputs, stage) for stage in relevant_stages}
     if not any(stage_roles.values()):
         return None
+    scope_ids = {item.get("scope_id") for item in operation_inputs}
+    registered_scopes = [
+        scope for scope in scope_registry.get("scopes", [])
+        if scope.get("scope_id") in scope_ids
+    ]
+    if len(scope_ids) != 1 or len(registered_scopes) != 1:
+        raise ValueError("pipeline evidence must be bound to exactly one registered scope")
+    operation_scope = registered_scopes[0]
     stage_runs: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {}
     for stage, roles in stage_roles.items():
         if roles:
@@ -4443,6 +5000,34 @@ def validate_pipeline_evidence(
         publisher_run=publisher_run, publisher=publisher_attempt,
         evaluation_epoch=evaluation_epoch,
     )
+    if stage_roles["acknowledgement"]:
+        acknowledgement_run, acknowledgement_job = stage_runs["acknowledgement"]
+        validate_acknowledgement_local_transition(
+            root=root, scope=operation_scope, scoped_inputs=operation_inputs,
+            roles=stage_roles["acknowledgement"], resolved=resolved,
+            ack_run=acknowledgement_run, ack_job=acknowledgement_job,
+            evaluation_epoch=evaluation_epoch,
+        )
+        if publisher_attempt is not None and receipt_item is not None:
+            publisher_manifest_raw = git_read_only(
+                root, ["show", f"{publisher_attempt['source_sha']}:manifest.json"]
+            )
+            publisher_manifest = json.loads(publisher_manifest_raw)
+            catalog_scopes = [
+                candidate for candidate in scope_registry.get("scopes", [])
+                if candidate.get("source_id") == operation_scope.get("source_id")
+                and candidate.get("resource_kind") == "api_catalog_metadata"
+            ]
+            if len(catalog_scopes) != 1:
+                raise ValueError("ACK cross-stage join requires one registered catalog publication subject")
+            validate_acknowledgement_transition(
+                root=root, scope=operation_scope, acknowledgement_scope=catalog_scopes[0],
+                scoped_inputs=operation_inputs, roles=stage_roles["acknowledgement"],
+                resolved=resolved, ack_run=acknowledgement_run, ack_job=acknowledgement_job,
+                publisher=publisher_attempt,
+                publisher_receipt_raw=raw_role("publication_receipt"),
+                release_manifest=publisher_manifest, evaluation_epoch=evaluation_epoch,
+            )
     orphan_ack_rows = [
         item for item in operation_inputs
         if item["role"].startswith("acknowledgement_")
@@ -4718,9 +5303,12 @@ def scope_facets(
                     "observed_at": source["observed_at"], "step_completed_at": source["step_completed_at"],
                     "candidate_sha256": source["candidate_sha256"],
                     "refresh_evidence_sha256": source["refresh_evidence_sha256"],
-                    "new_post_repair_observation": False,
+                    "observation_authenticated": True,
                 },
-                "missing_evidence": [missing_entry("new_authenticated_source_observation_missing", "StatPan/datapan-data", "StatPan/datapan-data#1190")],
+                "missing_evidence": [missing_entry(
+                    "post_repair_observation_baseline_unbound",
+                    "StatPan/datapan-registry", "StatPan/datapan-registry#722",
+                )],
             })
             facets.append({
                 "facet_id": "specification_pipeline",
@@ -4741,11 +5329,22 @@ def scope_facets(
                     "current_input_contract_changed_paths": processor["current_input_contract_changed_paths"],
                     "promotion_run_id": promotion["run_id"],
                     "promotion_candidate_available": promotion["candidate_available"],
+                    "promotion_processor_generation_matches": promotion["processor_generation_matches"],
+                    "promotion_candidate_key": promotion["candidate_key"],
                     "promotion_journal_sha256": promotion["journal_sha256"],
                     "health_run_id": health["run_id"],
                     "health_receipt_sha256": health["receipt_sha256"],
                     "health_observation_count": health["observation_count"],
                     "health_last_good_source_sha": health["last_good_source_sha"],
+                    "health_source_observation_matches": health["source_observation_matches"],
+                    "health_processor_observation_matches": health["processor_observation_matches"],
+                    "health_promotion_execution_matches": health["promotion_execution_matches"],
+                    "health_candidate_relation_valid": health["candidate_relation_valid"],
+                    "health_main_revision": health["health_main_revision"],
+                    "health_main_manifest_sha256": health["health_main_manifest_sha256"],
+                    "health_main_payload_matches_current": health["health_main_payload_matches_current"],
+                    "health_main_release_manifest_matches_current": health["health_main_release_manifest_matches_current"],
+                    "health_main_matches_current_subject": health["health_main_matches_current_subject"],
                     "full_scope_fresh": processor["full_scope_fresh"],
                     "publication_allowed": processor["publication_allowed"],
                 },
@@ -4764,7 +5363,10 @@ def scope_facets(
                     "observation_count": health["observation_count"],
                     "health_is_not_new_source_observation": True,
                 },
-                "missing_evidence": [missing_entry("health_producer_receipt_missing", "StatPan/datapan-health", "StatPan/datapan-health#33")],
+                "missing_evidence": [missing_entry(
+                    "health_receipt_does_not_establish_additional_source_observations",
+                    "StatPan/datapan-registry", "#659",
+                )],
             })
             publication = pipeline_evidence["publication"]
             if updated_delivery is None:
