@@ -825,14 +825,28 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
     def test_helper_bytes_change_generation_revision_and_identity(self):
         original_processor = ROOT / "scripts/process-upstream-catalogue-candidate.py"
         original_handoff = ROOT / "scripts/upstream_catalogue_handoff.py"
+        original_snapshot_generator = ROOT / "scripts/generate-seoul-oa109-subject-snapshot.py"
         original_detail = ROOT / "scripts/generate-batch-link-detail-registry-patches.py"
+        original_declaration_helper = ROOT / "scripts/seoul_oa109_operation_declaration.py"
+        original_declaration = ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+        original_snapshot = ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
         with tempfile.TemporaryDirectory() as temporary:
-            scripts = pathlib.Path(temporary) / "scripts"
+            temporary_root = pathlib.Path(temporary)
+            scripts = temporary_root / "scripts"
             scripts.mkdir()
             copied_processor = scripts / original_processor.name
             copied_handoff = scripts / original_handoff.name
+            copied_snapshot_generator = scripts / original_snapshot_generator.name
+            copied_declaration_helper = scripts / original_declaration_helper.name
+            copied_declaration = temporary_root / "contracts/provider-operation-declarations" / original_declaration.name
+            copied_snapshot = temporary_root / "contracts/provider-operation-declarations" / original_snapshot.name
+            copied_declaration.parent.mkdir(parents=True)
             shutil.copyfile(original_processor, copied_processor)
             shutil.copyfile(original_handoff, copied_handoff)
+            shutil.copyfile(original_snapshot_generator, copied_snapshot_generator)
+            shutil.copyfile(original_declaration_helper, copied_declaration_helper)
+            shutil.copyfile(original_declaration, copied_declaration)
+            shutil.copyfile(original_snapshot, copied_snapshot)
             shutil.copyfile(original_detail, scripts / original_detail.name)
             module_name = "upstream_catalogue_handoff"
             missing = object()
@@ -854,6 +868,10 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
                 payload = module.canonical_json({
                     "processor_script_sha256": hashlib.sha256(copied_processor.read_bytes()).hexdigest(),
                     "collector_handoff_helper_sha256": hashlib.sha256(copied_handoff.read_bytes()).hexdigest(),
+                    "seoul_operation_declaration_helper_sha256": hashlib.sha256(copied_declaration_helper.read_bytes()).hexdigest(),
+                    "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256(copied_snapshot_generator.read_bytes()).hexdigest(),
+                    "seoul_operation_declaration_sha256": hashlib.sha256(copied_declaration.read_bytes()).hexdigest(),
+                    "seoul_historical_subject_snapshot_sha256": hashlib.sha256(copied_snapshot.read_bytes()).hexdigest(),
                 })
                 return hashlib.sha256(payload).hexdigest()
 

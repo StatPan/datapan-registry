@@ -41,7 +41,13 @@
     "parameter": {
       "type": "object", "additionalProperties": false,
       "required": ["name", "label"],
-      "properties": {"name": {"type": "string", "minLength": 1}, "label": {"type": "string"}}
+      "properties": {
+        "name": {"type": "string", "minLength": 1}, "label": {"type": "string"},
+        "type": {"enum": ["string", "integer"]}, "required": {"type": "boolean"},
+        "location": {"enum": ["path"]}, "auth": {"type": "boolean"},
+        "enum_values": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "enum_labels": {"type": "object", "additionalProperties": {"type": "string"}}
+      }
     },
     "operation": {
       "type": "object", "additionalProperties": false,
@@ -64,7 +70,7 @@
     "transport": {
       "type": "object", "additionalProperties": false,
       "required": ["endpoint", "method", "action", "method_evidence"],
-      "properties": {"endpoint": {"type": ["string", "null"], "format": "uri"}, "method": {"type": ["string", "null"], "enum": ["GET", null]}, "action": {"type": ["string", "null"], "minLength": 1}, "method_evidence": {"enum": ["registry_default_get", "soap_action"]}}
+      "properties": {"endpoint": {"type": ["string", "null"]}, "method": {"type": ["string", "null"], "enum": ["GET", null]}, "action": {"type": ["string", "null"], "minLength": 1}, "method_evidence": {"enum": ["registry_default_get", "soap_action", "target-service-hyperlink-navigation-v1"]}}
     },
     "call_readiness": {
       "type": "object", "additionalProperties": false,

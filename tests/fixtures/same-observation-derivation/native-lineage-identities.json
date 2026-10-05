@@ -1,0 +1,84 @@
+{
+  "canonical_parent": {
+    "artifact": {
+      "artifact_id": "11272837837",
+      "bundle_manifest_sha256": "18f19f6c29b236d430f64a4c20981d8d07b94a3839b540f9009eba03e5defc9d",
+      "expires_at": "2026-11-02T11:38:27Z",
+      "name": "upstream-catalogue-processing-37120180628-1",
+      "repository": "StatPan/datapan-registry",
+      "run_id": "37120180628"
+    },
+    "attempts_by_id_count": 72,
+    "attempts_by_id_sum": 72,
+    "attempts_consumed": 48,
+    "checkpoint_sha256": "fd1c339e85a04b894a66ac1686f0308b71a75a923814c015dbd7f5d8c3ade2bf",
+    "detail_queue_cursor": 72,
+    "detail_retry_count": 884,
+    "detail_unattempted_count": null,
+    "extractor_revision": "9cb122dd6f20bee3faf36359bb22d66b165cb2ccc43a13ec0408796108910983",
+    "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+    "generator_revision": "42d292257ee4d51ed41d82fa37265c475e9f18a28b44f6e2facd82afd3beaf80",
+    "observation_count": 1,
+    "observed_at": "2026-09-29T23:44:39Z",
+    "pending_count": 4382,
+    "status": "ready"
+  },
+  "canonical_payload": {
+    "bytes": 139155499,
+    "path": "data/data-go-kr.registry.json",
+    "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+  },
+  "fixture_kind": "native-lineage-identities-only; archived output bytes are not bundled in this fixture",
+  "merged_c": {
+    "ack_event": "workflow_run",
+    "ack_run_attempt": 12,
+    "ack_run_id": 37101245239,
+    "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+    "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+    "merge_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+    "pr_head_sha": "8b086826fb1e30ea949cfb8222a252e7aa09fa40",
+    "pr_number": 686
+  },
+  "original_a": {
+    "baseline_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+    "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+    "diff_sha256": "b8ec7cb8c8eed140d118fd3f6e147718cf24ff9d7b67cbdfc1a6bf86574d90c9",
+    "evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+    "observation_count": 1,
+    "observed_at": "2026-09-29T23:44:39Z",
+    "producer_artifact_id": "11068634862",
+    "producer_artifact_name": "upstream-catalog-refresh-36646768289",
+    "producer_head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+    "producer_run_attempt": 1,
+    "producer_run_id": "36646768289",
+    "provider_index_sha256": "b235d6f053bd8ec1f87d6a889a07912dfde1a944353eb640da8713fdf640e4d6",
+    "source_policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc"
+  },
+  "resume_parent": {
+    "artifact": {
+      "artifact_id": "11315424055",
+      "bundle_manifest_sha256": "de4087ea990b5681c692ac6ec6ca1a7f69b7a7094c2f045efee49b83e938e8d9",
+      "expires_at": "2026-11-03T21:31:27Z",
+      "name": "upstream-catalogue-processing-37235734113-1",
+      "repository": "StatPan/datapan-registry",
+      "run_id": "37235734113"
+    },
+    "attempts_by_id_count": 248,
+    "attempts_by_id_sum": 264,
+    "attempts_consumed": 24,
+    "checkpoint_sha256": "1dd9dcfc6ab0e1c7a9661bb9e3d20fc64dd1a69275403a00c3d689300ed68fd2",
+    "detail_queue_cursor": 248,
+    "detail_retry_count": 908,
+    "detail_unattempted_count": 900,
+    "extractor_revision": "884815d693ed8de1b98d2fb3ec16f3be62a5f426a31da6797633517039cb52ef",
+    "generation_id": "9938e29ef963f799af3a15adf472e7a1fca119d5b075c578dfadbef2e11c7ead",
+    "generator_revision": "5ce8cfb30f918582e437dcf83ab2e4bea86de5126439f1fe67a87c97aefad6d2",
+    "observation_count": 1,
+    "observed_at": "2026-09-29T23:44:39Z",
+    "pending_count": 4382,
+    "status": "ready"
+  },
+  "source_id": "data_go_kr",
+  "source_scope": "aggregate_supported_catalog",
+  "test_disclaimer": "The identities above are copied from retained native receipts. Any additional operation used by tests is synthetic and does not represent a live provider observation."
+}

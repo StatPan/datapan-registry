@@ -80,6 +80,10 @@ jobs:
         working-directory: datapan-registry
         run: git fetch --no-tags --depth=1 origin b49d66b97d8155c34649f4dd2040b884c4212d64
 
+      - name: Fetch pinned Seoul historical subject source commit
+        working-directory: datapan-registry
+        run: git fetch --no-tags --depth=1 origin 0085b357289755d6b3fb60a7259bd85da42d2962
+
       - name: Fetch pinned publication receipt fixture history
         working-directory: datapan-registry
         run: |
@@ -200,6 +204,8 @@ jobs:
           python scripts/persist-upstream-catalogue-health.py --help
           python -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py tests/test_persist_upstream_catalogue_health.py
           python -m unittest tests/test_process_upstream_catalogue_candidate.py
+          python3 -m py_compile scripts/upstream_catalogue_derivation.py scripts/prepare-upstream-catalogue-derivation.py
+          python -m unittest tests/test_same_observation_derivation.py
           python -m unittest tests/test_link_detail_resolver.py tests/test_process_upstream_catalogue_request_reservations.py
           python -m unittest tests/test_upstream_catalogue_process_workflow.py
           python -m unittest tests/test_upstream_catalogue_handoff.py

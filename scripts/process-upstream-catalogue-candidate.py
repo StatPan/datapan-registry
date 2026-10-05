@@ -8,6 +8,7 @@ as separate digest-bound evidence for the reviewed composer interface.
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import html
 import hashlib
@@ -22,6 +23,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections.abc import Mapping
 from typing import Any, Callable
 
 SCRIPT_DIR = pathlib.Path(__file__).resolve().parent
@@ -38,6 +40,7 @@ from upstream_catalogue_handoff import (  # noqa: E402
     validate_admission_row,
     validate_ledger,
 )
+import upstream_catalogue_derivation as DERIVATION  # noqa: E402
 
 CHECKPOINT_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
 ENRICHMENT_SCHEMA = "datapan.catalogue-enrichment-evidence.v1"
@@ -142,9 +145,28 @@ def file_sha256(path: pathlib.Path) -> str:
 def generator_revision() -> str:
     source = pathlib.Path(__file__)
     handoff = source.with_name("upstream_catalogue_handoff.py")
+    declaration_helper = source.with_name("seoul_oa109_operation_declaration.py")
+    snapshot_generator = source.with_name("generate-seoul-oa109-subject-snapshot.py")
+    declaration = source.parent.parent / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+    historical_snapshot = source.parent.parent / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
     return sha256_bytes(canonical_json({
         "processor_script_sha256": file_sha256(source),
         "collector_handoff_helper_sha256": file_sha256(handoff),
+        "seoul_operation_declaration_helper_sha256": file_sha256(declaration_helper),
+        "seoul_historical_subject_snapshot_generator_sha256": file_sha256(snapshot_generator),
+        "seoul_operation_declaration_sha256": file_sha256(declaration),
+        "seoul_historical_subject_snapshot_sha256": file_sha256(historical_snapshot),
+    }))
+
+
+def derivation_processor_revision() -> str:
+    source = pathlib.Path(__file__)
+    handoff = source.with_name("upstream_catalogue_handoff.py")
+    derivation = source.with_name("upstream_catalogue_derivation.py")
+    return sha256_bytes(canonical_json({
+        "processor_script_sha256": file_sha256(source),
+        "collector_handoff_helper_sha256": file_sha256(handoff),
+        "same_observation_derivation_helper_sha256": file_sha256(derivation),
     }))
 
 
@@ -189,7 +211,18 @@ def load_detail_helpers() -> Any:
     return module
 
 
+def load_seoul_declaration_helper() -> Any:
+    helper_path = pathlib.Path(__file__).with_name("seoul_oa109_operation_declaration.py")
+    spec = importlib.util.spec_from_file_location("seoul_oa109_operation_declaration", helper_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("cannot load pinned Seoul operation declaration")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 DETAIL_HELPERS = load_detail_helpers()
+SEOUL_DECLARATION = load_seoul_declaration_helper()
 
 
 def load_registry(path: pathlib.Path) -> list[dict[str, Any]]:
@@ -541,7 +574,7 @@ def source_retry_state(index_path: pathlib.Path) -> dict[str, dict[str, Any]]:
 def reserve_requests(
     checkpoint: dict[str, Any], queue: list[dict[str, Any]], *, cursor: int,
     processor_run_id: str, max_attempts: int, max_queue: int,
-    retries_per_detail: int, now: dt.datetime,
+    retries_per_detail: int, now: dt.datetime, no_advance_when_empty: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     """Durably account a fair bounded request slice before any network call."""
     if not queue:
@@ -556,25 +589,24 @@ def reserve_requests(
     inspected: list[dict[str, Any]] = []
     budget_left = max_attempts
     reserved: dict[str, int] = {}
-    # Reserve the complete remaining physical allowance for each inspected
-    # identity before moving on. With the production 24/48/2 profile this
-    # yields eight fresh identities with three request slots each, so a
-    # page+resolver chain and one retry can finish without a second claim.
-    # The same min(remaining, budget) rule applies to tiny budgets, allowing a
-    # single selected identity to complete a page+resolver chain when two
-    # physical slots remain. Exhausted rows still count as inspected for
-    # cursor fairness.
-    for row in rotated[:max_queue]:
+    # `max_queue` caps identities selected for this request slice, not local
+    # inspection of already exhausted rows. Scan past exhausted identities
+    # so an exhausted prefix cannot starve a later eligible identity forever.
+    # This loop performs no network I/O; physical calls remain bounded by the
+    # pre-reserved `max_attempts` and each row's lifetime allowance.
+    eligible_inspected = 0
+    for row in rotated:
         inspected.append(row)
         identity = row["id"]
         remaining = max_for_row - int(attempts.get(identity, 0))
         if remaining <= 0:
             continue
+        eligible_inspected += 1
         allocation = min(remaining, budget_left)
         if allocation:
             reserved[identity] = allocation
             budget_left -= allocation
-        if budget_left == 0:
+        if budget_left == 0 or eligible_inspected >= max_queue:
             break
     reservation_records = []
     for row in inspected:
@@ -591,11 +623,18 @@ def reserve_requests(
     # weekly candidate digest does not restart from the first catalogue page.
     # Advance past every inspected row, including those already at their
     # per-identity retry cap, or an exhausted prefix can pin the cursor forever.
-    cursor_advance = len(inspected)
-    if queue:
+    cursor_advance = 0 if no_advance_when_empty and reserved_attempts == 0 else len(inspected)
+    if no_advance_when_empty and reserved_attempts == 0:
+        # Pure same-observation recomposition does not own the durable retry
+        # cursor. Preserve its exact value, even when the queue is empty or an
+        # exhausted queue has a cursor outside the current queue length.
+        checkpoint["detail_queue_cursor"] = cursor
+    elif queue:
         checkpoint["detail_queue_cursor"] = (cursor + cursor_advance) % len(queue)
     else:
-        checkpoint["detail_queue_cursor"] = 0
+        # An empty queue has no position to advance over. Preserve the source
+        # cursor so a cached/local-only pass cannot reset fairness state.
+        checkpoint["detail_queue_cursor"] = cursor
     reservation = {
         "owner_run_id": processor_run_id,
         "generation_id": checkpoint["generation_id"],
@@ -645,6 +684,7 @@ def generation_identity(
     observation_failure_sha256: str | None,
     policy_sha256: str,
     adapter_sha256: str,
+    same_observation_derivation: dict[str, Any] | None = None,
 ) -> tuple[str, dict[str, Any]]:
     inputs = {
         "source_id": source_id,
@@ -661,6 +701,8 @@ def generation_identity(
         "generator_revision": generator_revision(),
         "extractor_revision": extractor_revision(),
     }
+    if same_observation_derivation is not None:
+        inputs["same_observation_derivation"] = DERIVATION.validate_derivation_envelope(same_observation_derivation)
     return sha256_bytes(canonical_json(inputs)), inputs
 
 
@@ -960,6 +1002,68 @@ def verify_worker_scope(
     return True, "", len(pending | quarantined)
 
 
+def materialize_cached_seoul_declaration(
+    row: dict[str, Any], outcome: dict[str, Any], *, now: dt.datetime, registered_hosts: set[str],
+) -> dict[str, Any] | None:
+    """Resolve a pinned declaration locally from a verified cached resolver chain.
+
+    This path spends no detail-request budget. It only upgrades the exact
+    previously quarantined OA-109 metadata outcome, and only while the
+    digest-bound page/resolver observations remain within the ordinary detail
+    freshness window. It does not turn an absent guide into a positive claim.
+    """
+    identity = str(outcome.get("api_key", {}).get("id") or "")
+    if identity != SEOUL_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]:
+        return None
+    if guide_fingerprint(row) is not None:
+        return None
+    metadata = outcome.get("link_metadata")
+    if not isinstance(metadata, dict):
+        return None
+    try:
+        SEOUL_DECLARATION.validate_subject_row(row)
+        DETAIL_HELPERS.validate_link_metadata(metadata, identity, registered_hosts)
+        page = metadata["page"]
+        observed_at = parse_timestamp(str(page["observed_at"]))
+        if observed_at > now + dt.timedelta(minutes=5) or now - observed_at >= dt.timedelta(days=DETAIL_OBSERVATION_TTL_DAYS):
+            return None
+        operation = SEOUL_DECLARATION.build_operation(row, None)
+        provenance = SEOUL_DECLARATION.build_provenance(
+            row,
+            source_sha256=str(outcome["source_sha256"]),
+            guide_sha256=outcome.get("guide_sha256"),
+            observed_guide_url=None,
+            observed_guide_url_sha256=None,
+            link_metadata=metadata,
+            operation=operation,
+        )
+        operations = [copy.deepcopy(item) for item in row.get("operations", [])]
+        operations.append(operation)
+        source_provenance = {
+            "system": "data.go.kr",
+            "page_url": page["url"],
+            "effective_url": page["effective_url"],
+            "page_sha256": page["sha256"],
+            "observed_at": page["observed_at"],
+        }
+        record = {
+            "api_key": {"provider": "data.go.kr", "id": identity},
+            "status": "enriched",
+            "source_sha256": outcome["source_sha256"],
+            "guide_sha256": outcome.get("guide_sha256"),
+            "observed_guide_url": None,
+            "observed_guide_url_sha256": None,
+            "operations": operations,
+            "operations_sha256": sha256_bytes(canonical_json(operations)),
+            "source_provenance": source_provenance,
+            "declaration_provenance": provenance,
+        }
+        SEOUL_DECLARATION.validate_enriched_record(row, record)
+        return record
+    except (AttributeError, KeyError, TypeError, ValueError) as exc:
+        raise ValueError("resume_seoul_cached_declaration_binding_invalid") from exc
+
+
 def validated_resume_records(
     path: pathlib.Path | None,
     *,
@@ -971,6 +1075,9 @@ def validated_resume_records(
     candidate_by_id: dict[str, dict[str, Any]],
     registered_hosts: set[str],
     now: dt.datetime,
+    allow_parent_extractor_revision: bool = False,
+    expected_owner_generation_id: str | None = None,
+    reject_stale_source_or_guide_contract: bool = False,
 ) -> dict[str, dict[str, Any]]:
     if path is None or not path.is_file():
         return {}
@@ -995,6 +1102,8 @@ def validated_resume_records(
     owner: dict[str, Any] | None = None
     evidence_digest: str | None = None
     for old in owner_checkpoints:
+        if expected_owner_generation_id is not None and old.get("generation_id") != expected_owner_generation_id:
+            continue
         locator = old.get("output_artifact")
         outputs = old.get("output_digests")
         if not isinstance(locator, dict) or not isinstance(outputs, list):
@@ -1027,6 +1136,7 @@ def validated_resume_records(
         or not isinstance(evidence.get("records"), list)
     ):
         raise ValueError("resume_enrichment_binding_mismatch")
+    locally_materialized_declarations: dict[str, dict[str, Any]] = {}
     if "worker_outcomes" in evidence:
         outcomes = evidence["worker_outcomes"]
         if not isinstance(outcomes, list):
@@ -1089,11 +1199,26 @@ def validated_resume_records(
             ):
                 raise ValueError("resume_worker_outcome_binding_mismatch")
             outcome_ids.add(identity)
+            if (
+                isinstance(diagnostic, dict)
+                and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
+                and isinstance(outcome.get("link_metadata"), dict)
+            ):
+                materialized = materialize_cached_seoul_declaration(
+                    row, outcome, now=now, registered_hosts=registered_hosts,
+                )
+                if materialized is not None:
+                    locally_materialized_declarations[identity] = materialized
+    owner_inputs = owner.get("generation_inputs", {}) if isinstance(owner, dict) else {}
+    expected_extractor_revision = (
+        owner_inputs.get("extractor_revision") if allow_parent_extractor_revision
+        else extractor_revision()
+    )
     if (
         evidence.get("provider_index_sha256") != provider_index_sha256
         or evidence.get("adapter_revision") != provider_index_sha256
-        or evidence.get("extractor_revision") != extractor_revision()
-        or owner.get("generation_inputs", {}).get("candidate_sha256") is None
+        or evidence.get("extractor_revision") != expected_extractor_revision
+        or owner_inputs.get("candidate_sha256") is None
     ):
         return {}
     expected_record_fields = {
@@ -1102,7 +1227,11 @@ def validated_resume_records(
     }
     resumed: dict[str, dict[str, Any]] = {}
     for record in evidence["records"]:
-        if not isinstance(record, dict) or set(record) != expected_record_fields or record.get("status") != "enriched":
+        if (
+            not isinstance(record, dict)
+            or set(record) not in (expected_record_fields, expected_record_fields | {"declaration_provenance"})
+            or record.get("status") != "enriched"
+        ):
             raise ValueError("resume_enrichment_record_invalid")
         api_key = record.get("api_key")
         if not isinstance(api_key, dict) or api_key.get("provider") != "data.go.kr":
@@ -1117,6 +1246,8 @@ def validated_resume_records(
         observed_guide = record.get("observed_guide_url")
         observed_guide_digest = record.get("observed_guide_url_sha256")
         if record.get("source_sha256") != source_fingerprint(row) or record.get("guide_sha256") != guide_fingerprint(row):
+            if reject_stale_source_or_guide_contract:
+                raise ValueError("resume_enrichment_source_or_guide_identity_mismatch")
             continue
         if (
             not isinstance(provenance, dict)
@@ -1142,7 +1273,32 @@ def validated_resume_records(
             or observed_guide_digest != sha256_bytes(observed_guide.encode("utf-8"))
         ):
             raise ValueError("resume_enrichment_guide_binding_mismatch")
-        for operation in operations:
+        declaration_provenance = record.get("declaration_provenance")
+        has_declared_operation = any(
+            isinstance(operation, dict)
+            and isinstance(operation.get("source"), dict)
+            and isinstance(operation["source"].get("raw"), dict)
+            and operation["source"]["raw"].get("operation_declaration_id") == SEOUL_DECLARATION.DECLARATION_ID
+            for operation in operations
+        )
+        if declaration_provenance is not None or has_declared_operation:
+            if declaration_provenance is None:
+                raise ValueError("resume_seoul_declaration_provenance_missing")
+            try:
+                SEOUL_DECLARATION.validate_enriched_record(row, record)
+                link_metadata = declaration_provenance.get("page_resolver")
+                DETAIL_HELPERS.validate_link_metadata(link_metadata, identity, registered_hosts)
+            except (AttributeError, KeyError, TypeError, ValueError) as exc:
+                raise ValueError("resume_seoul_declaration_binding_invalid") from exc
+        historical_operations = row.get("operations", [])
+        operations_to_validate = operations
+        if declaration_provenance is not None:
+            # A pinned declaration is additive: its three historical metadata
+            # links retain their original catalogue provenance.  The exact
+            # prefix was already verified by validate_enriched_record, so only
+            # the new operation is bound to this observed page/resolver pair.
+            operations_to_validate = operations[len(historical_operations):]
+        for operation in operations_to_validate:
             source = operation.get("source") if isinstance(operation, dict) else None
             raw = source.get("raw") if isinstance(source, dict) else None
             endpoint = str(operation.get("endpoint") or "") if isinstance(operation, dict) else ""
@@ -1156,8 +1312,41 @@ def validated_resume_records(
                 or (observed_guide is not None and raw.get("guide_url") != observed_guide)
             ):
                 raise ValueError("resume_enrichment_operation_binding_mismatch")
+            if raw.get("operation_declaration_id") is not None:
+                try:
+                    SEOUL_DECLARATION.validate_declared_operation(row, operation)
+                except (TypeError, ValueError) as exc:
+                    raise ValueError("resume_seoul_declared_operation_invalid") from exc
         resumed[identity] = record
+    for identity, record in locally_materialized_declarations.items():
+        if identity not in resumed:
+            resumed[identity] = record
     return resumed
+
+
+def merge_derivation_enrichment_records(
+    resume_records: dict[str, dict[str, Any]],
+    canonical_records: dict[str, dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Union verified A-bound contributions without choosing between conflicts."""
+    merged = dict(resume_records)
+    for identity, candidate in canonical_records.items():
+        prior = merged.get(identity)
+        if prior is None:
+            merged[identity] = candidate
+            continue
+        if (
+            prior.get("source_sha256") != candidate.get("source_sha256")
+            or prior.get("guide_sha256") != candidate.get("guide_sha256")
+            or prior.get("operations_sha256") != candidate.get("operations_sha256")
+            or prior.get("operations") != candidate.get("operations")
+        ):
+            raise ValueError("derivation_parent_enrichment_contribution_conflict")
+        prior_time = parse_timestamp(str((prior.get("source_provenance") or {}).get("observed_at") or ""))
+        candidate_time = parse_timestamp(str((candidate.get("source_provenance") or {}).get("observed_at") or ""))
+        if candidate_time > prior_time:
+            merged[identity] = candidate
+    return merged
 
 
 def set_output_artifact_locator(checkpoint: dict[str, Any], args: argparse.Namespace, expires_at: str, bundle: list[dict[str, Any]]) -> None:
@@ -1182,6 +1371,14 @@ def persist_result_only_checkpoint(
     output_expires_at: str,
 ) -> dict[str, Any]:
     """Publish a sealed checkpoint and its small, digest-bound result artifact."""
+    retention_index = (
+        load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+        if index_path.is_file() else {
+            "schema_version": CHECKPOINT_SCHEMA, "generations": [],
+            "detail_queue_cursor": 0, "detail_retry_state": {},
+        }
+    )
+    plan_generation_retention(retention_index, checkpoint_path.parent, checkpoint)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     result_path = atomic_output(
         args.output_dir,
@@ -1309,6 +1506,8 @@ def call_composer(
     *, baseline: pathlib.Path, candidate: pathlib.Path, diff: pathlib.Path,
     refresh_evidence: pathlib.Path, provider_index: pathlib.Path, source_policy: pathlib.Path,
     producer_run_id: str, producer_run_url: str, output_dir: pathlib.Path, enrichment: pathlib.Path,
+    composition_baseline: pathlib.Path | None = None,
+    same_observation_derivation: pathlib.Path | None = None,
 ) -> tuple[int, str]:
     if not command.is_file():
         return 127, "composer_cli_missing"
@@ -1320,10 +1519,327 @@ def call_composer(
         "--producer-run-id", producer_run_id, "--producer-run-url", producer_run_url,
         "--output-dir", str(output_dir), "--enrichment-evidence", str(enrichment),
     ]
+    if composition_baseline is not None:
+        args.extend(["--composition-baseline", str(composition_baseline)])
+    if same_observation_derivation is not None:
+        args.extend(["--same-observation-derivation", str(same_observation_derivation)])
     result = subprocess.run(args, text=True, capture_output=True, check=False, timeout=300)  # noqa: S603
     if result.returncode != 0:
         return result.returncode, "composer_failed"
     return 0, "composer_succeeded"
+
+
+def _git_bytes(root: pathlib.Path, revision_path: str) -> bytes:
+    import subprocess
+
+    result = subprocess.run(
+        ("git", "show", revision_path), cwd=root, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, check=False,
+    )
+    if result.returncode != 0:
+        raise ValueError("derivation_main_revision_unavailable")
+    return result.stdout
+
+
+def _assert_git_ancestor(root: pathlib.Path, ancestor: str, descendant: str) -> None:
+    import subprocess
+
+    result = subprocess.run(
+        ("git", "merge-base", "--is-ancestor", ancestor, descendant), cwd=root,
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False,
+    )
+    if result.returncode != 0:
+        raise ValueError("derivation_canonical_merge_not_ancestor")
+
+
+def validate_derivation_before_claim(
+    args: argparse.Namespace,
+    *,
+    generation_id: str,
+    derivation: Mapping[str, Any],
+    composition_baseline_path: pathlib.Path,
+    collector_admission: Mapping[str, Any] | None,
+    state_index_path: pathlib.Path,
+    schema: Mapping[str, Any],
+    original_baseline_sha256: str,
+    candidate_sha256: str,
+    evidence_sha256: str,
+    diff_sha256: str,
+    policy_sha256: str,
+    adapter_sha256: str,
+    current_main_root: pathlib.Path,
+    resume_parent_bundle_dir: pathlib.Path,
+    canonical_parent_bundle_dir: pathlib.Path,
+    allow_source_only_main_advance: bool = False,
+    allow_monotonic_journal_successor: bool = False,
+) -> dict[str, Any]:
+    """Authenticate both B parents and the exact merged-C snapshot before claim."""
+    import subprocess
+
+    envelope = DERIVATION.validate_derivation_envelope(derivation)
+    if args.execution_mode != "live" or collector_admission is None:
+        raise ValueError("same_observation_derivation_requires_live_admission")
+    if (
+        args.resume_parent_bundle_dir is None or args.canonical_parent_bundle_dir is None
+        or args.derivation_journal is None or args.derivation_journal_ref_sha is None
+    ):
+        raise ValueError("same_observation_derivation_parent_archive_or_journal_missing")
+    if not state_index_path.is_file():
+        raise ValueError("derivation_state_index_missing")
+    state_index = load_json(state_index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+    if not isinstance(state_index, dict) or state_index.get("schema_version") != CHECKPOINT_SCHEMA:
+        raise ValueError("derivation_state_index_invalid")
+    ledger = state_index.get("collector_handoff")
+    if not isinstance(ledger, Mapping):
+        raise ValueError("derivation_admission_ledger_missing")
+    try:
+        validated_ledger = validate_ledger(ledger)
+    except HandoffError as exc:
+        raise ValueError("derivation_admission_ledger_invalid") from exc
+    admitted_rows = validated_ledger["admitted_observations"]
+    original = envelope["original_observation"]
+    def admission_for(checkpoint: Mapping[str, Any]) -> dict[str, Any]:
+        observed = checkpoint.get("last_observation") if isinstance(checkpoint.get("last_observation"), Mapping) else {}
+        refs = checkpoint.get("input_artifacts") if isinstance(checkpoint.get("input_artifacts"), list) else []
+        matches = [
+            row for row in admitted_rows
+            if row.get("producer_run_id") == str(observed.get("producer_run_id") or "")
+            and row.get("refresh_evidence_sha256") == observed.get("refresh_evidence_sha256")
+            and any(
+                isinstance(ref, Mapping)
+                and str(ref.get("run_id")) == row["producer_run_id"]
+                and str(ref.get("artifact_id")) == row["artifact_id"]
+                and ref.get("evidence_sha256") == row["refresh_evidence_sha256"]
+                for ref in refs
+            )
+        ]
+        if len(matches) != 1:
+            raise ValueError("derivation_parent_admission_ambiguous_or_missing")
+        return matches[0]
+
+    if (
+        str(collector_admission.get("producer_run_id")) != original["producer_run_id"]
+        or collector_admission.get("run_attempt") != original["producer_run_attempt"]
+        or collector_admission.get("head_sha") != original["producer_head_sha"]
+        or str(collector_admission.get("artifact_id")) != original["producer_artifact_id"]
+        or collector_admission.get("artifact_digest_sha256") != original["producer_artifact_sha256"]
+        or collector_admission.get("observed_at") != original["observed_at"]
+        or collector_admission.get("candidate_sha256") != candidate_sha256
+        or collector_admission.get("refresh_evidence_sha256") != evidence_sha256
+        or candidate_sha256 != original["candidate_sha256"]
+        or evidence_sha256 != original["evidence_sha256"]
+        or diff_sha256 != original["diff_sha256"]
+        or original_baseline_sha256 != original["original_baseline_sha256"]
+        or args.source != original["source_id"]
+        or args.source_scope != original["source_scope"]
+        or derivation_processor_revision() != envelope["derivation_processor_revision_sha256"]
+    ):
+        raise ValueError("derivation_incoming_observation_or_contract_mismatch")
+
+    parents: dict[str, dict[str, Any]] = {}
+    for field in ("resume_parent_processor", "canonical_parent_processor"):
+        ref = envelope[field]
+        cp_path = args.state_dir / "sources" / args.source / "generations" / f"{ref['generation_id']}.json"
+        if not cp_path.is_file():
+            raise ValueError("derivation_parent_checkpoint_unavailable")
+        try:
+            cp = verify_checkpoint(load_json(cp_path, maximum_bytes=STATE_FILE_LIMIT), dict(schema))
+            DERIVATION.validate_processor_parent_checkpoint(ref, cp, original_observation=original)
+            parent_admission = admission_for(cp)
+            parent_subject = DERIVATION.original_observation_from_checkpoint(cp, parent_admission)
+        except Exception as exc:
+            raise ValueError("derivation_parent_checkpoint_invalid") from exc
+        if parent_subject != original:
+            raise ValueError("derivation_parent_original_observation_mismatch")
+        if parse_timestamp(str(ref["artifact_expires_at"])) <= utc_now():
+            raise ValueError("derivation_parent_artifact_expired")
+        parents[field] = cp
+    try:
+        DERIVATION.validate_processor_parent_bundle(
+            envelope["resume_parent_processor"], parents["resume_parent_processor"],
+            resume_parent_bundle_dir,
+        )
+        DERIVATION.validate_processor_parent_bundle(
+            envelope["canonical_parent_processor"], parents["canonical_parent_processor"],
+            canonical_parent_bundle_dir,
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("derivation_parent_archived_bundle_invalid") from exc
+    if envelope["resume_parent_processor"]["generation_id"] == envelope["canonical_parent_processor"]["generation_id"]:
+        if parents["resume_parent_processor"] != parents["canonical_parent_processor"]:
+            raise ValueError("derivation_parent_checkpoint_conflict")
+
+    indexed = {
+        row.get("generation_id") for row in state_index.get("generations", [])
+        if isinstance(row, Mapping)
+    }
+    def load_lineage_checkpoint(generation: str) -> dict[str, Any]:
+        if generation not in indexed:
+            raise ValueError("derivation_parent_graph_checkpoint_unavailable")
+        path = args.state_dir / "sources" / args.source / "generations" / f"{generation}.json"
+        if not path.is_file() or path.is_symlink():
+            raise ValueError("derivation_parent_graph_checkpoint_unavailable")
+        return verify_checkpoint(load_json(path, maximum_bytes=STATE_FILE_LIMIT), dict(schema))
+
+    try:
+        expected_ancestors = DERIVATION.validate_processor_parent_graph(
+            [
+                envelope["resume_parent_processor"]["generation_id"],
+                envelope["canonical_parent_processor"]["generation_id"],
+            ],
+            load_checkpoint=load_lineage_checkpoint,
+            admission_for=admission_for,
+            original_observation=original,
+            expected_ancestor_generation_ids=envelope["ancestor_generation_ids"],
+            forbidden_generation_id=generation_id,
+        )
+    except (DERIVATION.DerivationError, OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("derivation_parent_graph_checkpoint_invalid") from exc
+
+    journal_path = args.derivation_journal
+    journal_ref_sha = args.derivation_journal_ref_sha
+    if journal_path is None or not journal_path.is_file() or not journal_ref_sha:
+        raise ValueError("derivation_promotion_journal_snapshot_missing")
+    journal = load_json(journal_path, maximum_bytes=16 * 1024 * 1024)
+    if not isinstance(journal, Mapping):
+        raise ValueError("derivation_promotion_journal_invalid")
+    if not re.fullmatch(r"[a-f0-9]{40}", str(journal_ref_sha)):
+        raise ValueError("derivation_promotion_journal_ref_invalid")
+    live_journal_ref = subprocess.run(
+        ("git", "ls-remote", "--heads", "origin", "refs/heads/automation/canonical-update-state"),
+        cwd=current_main_root, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    live_journal_shas = [
+        line.split("\t", 1)[0] for line in live_journal_ref.stdout.splitlines()
+        if line.endswith("\trefs/heads/automation/canonical-update-state")
+    ]
+    if live_journal_ref.returncode != 0 or live_journal_shas != [journal_ref_sha]:
+        raise ValueError("derivation_promotion_journal_ref_changed")
+    spec = importlib.util.spec_from_file_location(
+        "upstream_catalogue_derivation_canonical_update_pr", args.canonical_update_pr_helper,
+    )
+    if spec is None or spec.loader is None:
+        raise ValueError("derivation_promotion_validator_unavailable")
+    helper = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(helper)
+    helper.validate_journal(journal, load_json(args.canonical_update_journal_schema, maximum_bytes=1024 * 1024))
+    try:
+        row = DERIVATION.validate_readback_against_journal(
+            envelope, journal, journal_ref_sha=journal_ref_sha,
+            allow_monotonic_successor=allow_monotonic_journal_successor,
+        )
+    except DERIVATION.DerivationError as exc:
+        raise ValueError("derivation_canonical_readback_invalid") from exc
+    try:
+        health_policy = load_json(current_main_root / "policy/upstream-catalogue-health.json", maximum_bytes=4 * 1024 * 1024)
+        DERIVATION.authenticate_canonical_merge_ack(
+            current_main_root, args.repository, row, health_policy, now=utc_now(),
+        )
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ValueError("derivation_canonical_merge_ack_untrusted") from exc
+    active_same_a = []
+    for index, record in enumerate(journal.get("records", [])):
+        if not isinstance(record, Mapping):
+            continue
+        candidate = record.get("candidate") if isinstance(record.get("candidate"), Mapping) else {}
+        if (
+            record.get("superseded_by") is not None
+            or record.get("status") not in {"merged", "publication-pending", "published", "read-back-confirmed"}
+            or candidate.get("source_id") != original["source_id"]
+            or candidate.get("scope") != original["source_scope"]
+            or candidate.get("registry_sha256") != envelope["composition_baseline"]["registry_sha256"]
+        ):
+            continue
+        generation = str(candidate.get("generation_id") or "")
+        cp_path = args.state_dir / "sources" / args.source / "generations" / f"{generation}.json"
+        if not cp_path.is_file():
+            continue
+        try:
+            cp = verify_checkpoint(load_json(cp_path, maximum_bytes=STATE_FILE_LIMIT), dict(schema))
+            admission = admission_for(cp)
+            if DERIVATION.original_observation_from_checkpoint(cp, admission) == original:
+                active_same_a.append(index)
+        except Exception:
+            continue
+    if active_same_a != [int(envelope["canonical_parent_readback"]["journal_record_index"])]:
+        raise ValueError("derivation_canonical_lineage_is_ambiguous_or_not_current")
+    if row.get("candidate", {}).get("generation_id") != envelope["canonical_parent_processor"]["generation_id"]:
+        raise ValueError("derivation_canonical_producer_generation_mismatch")
+
+    baseline_identity = envelope["composition_baseline"]
+    current_head = subprocess.run(
+        ("git", "rev-parse", "HEAD"), cwd=current_main_root, text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    if current_head.returncode != 0 or not re.fullmatch(r"[a-f0-9]{40}", current_head.stdout.strip()):
+        raise ValueError("derivation_current_main_head_mismatch")
+    current_main_sha = current_head.stdout.strip()
+    if not allow_source_only_main_advance and current_main_sha != baseline_identity["main_sha"]:
+        raise ValueError("derivation_current_main_head_mismatch")
+    live_main = subprocess.run(
+        ("git", "ls-remote", "--heads", "origin", "refs/heads/main"), cwd=current_main_root,
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    live_main_shas = [line.split("\t", 1)[0] for line in live_main.stdout.splitlines() if line.endswith("\trefs/heads/main")]
+    if live_main.returncode != 0 or live_main_shas != [current_main_sha]:
+        raise ValueError("derivation_current_main_moved")
+
+    def manifest_registry_identity(revision: str, *, expected_manifest_sha: str | None = None) -> tuple[str, int, str]:
+        manifest_bytes = _git_bytes(current_main_root, f"{revision}:manifest.json")
+        if expected_manifest_sha is not None and sha256_bytes(manifest_bytes) != expected_manifest_sha:
+            raise ValueError("derivation_composition_baseline_manifest_mismatch")
+        try:
+            manifest = json.loads(manifest_bytes)
+        except json.JSONDecodeError as exc:
+            raise ValueError("derivation_current_manifest_invalid") from exc
+        if not isinstance(manifest, Mapping) or manifest.get("source_registry") != baseline_identity["registry_path"]:
+            raise ValueError("derivation_current_manifest_path_mismatch")
+        entries = [
+            item for item in manifest.get("artifacts", []) if isinstance(item, Mapping)
+            and item.get("path") == baseline_identity["registry_path"] and item.get("kind") == "registry"
+        ]
+        if len(entries) != 1:
+            raise ValueError("derivation_current_manifest_registry_mismatch")
+        entry = entries[0]
+        if not isinstance(entry.get("bytes"), int) or isinstance(entry.get("bytes"), bool) or not isinstance(entry.get("sha256"), str):
+            raise ValueError("derivation_current_manifest_registry_mismatch")
+        pointer = _git_bytes(current_main_root, f"{revision}:{baseline_identity['registry_path']}")
+        try:
+            pointer_text = pointer.decode("ascii", errors="strict").splitlines()
+        except UnicodeDecodeError as exc:
+            raise ValueError("derivation_current_lfs_pointer_mismatch") from exc
+        if (
+            f"oid sha256:{entry['sha256']}" not in pointer_text
+            or f"size {entry['bytes']}" not in pointer_text
+        ):
+            raise ValueError("derivation_current_lfs_pointer_mismatch")
+        return str(entry["sha256"]), int(entry["bytes"]), sha256_bytes(manifest_bytes)
+
+    baseline_sha, baseline_bytes, _baseline_manifest_sha = manifest_registry_identity(
+        baseline_identity["main_sha"], expected_manifest_sha=baseline_identity["manifest_sha256"],
+    )
+    if (baseline_sha, baseline_bytes) != (
+        baseline_identity["registry_sha256"], baseline_identity["registry_bytes"],
+    ):
+        raise ValueError("derivation_composition_baseline_manifest_registry_mismatch")
+    current_sha, current_bytes, _current_manifest_sha = manifest_registry_identity(current_main_sha)
+    if (current_sha, current_bytes) != (
+        baseline_identity["registry_sha256"], baseline_identity["registry_bytes"],
+    ):
+        raise ValueError("derivation_current_manifest_registry_mismatch")
+    _assert_git_ancestor(
+        current_main_root, envelope["canonical_parent_readback"]["merge_sha"], baseline_identity["main_sha"],
+    )
+    _assert_git_ancestor(current_main_root, baseline_identity["main_sha"], current_main_sha)
+    _assert_git_ancestor(current_main_root, envelope["canonical_parent_readback"]["merge_sha"], current_main_sha)
+    if composition_baseline_path.is_symlink() or not composition_baseline_path.is_file():
+        raise ValueError("derivation_composition_baseline_missing")
+    composition_bytes = composition_baseline_path.read_bytes()
+    if (len(composition_bytes), sha256_bytes(composition_bytes)) != (
+        baseline_identity["registry_bytes"], baseline_identity["registry_sha256"],
+    ):
+        raise ValueError("derivation_composition_baseline_digest_mismatch")
+    return envelope
 
 
 def append_generation_index(
@@ -1331,7 +1847,7 @@ def append_generation_index(
     collector_admission: dict[str, Any] | None = None,
     legacy_floor: dict[str, Any] | None = None,
     admitted_at: str | None = None,
-) -> None:
+) -> set[str]:
     index = {"schema_version": CHECKPOINT_SCHEMA, "generations": [], "detail_queue_cursor": 0, "detail_retry_state": {}}
     if index_path.exists():
         loaded = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
@@ -1344,7 +1860,9 @@ def append_generation_index(
         "checkpoint": checkpoint_path.name, "updated_at": checkpoint["last_heartbeat_at"],
         "candidate_sha256": checkpoint["generation_inputs"].get("candidate_sha256"),
     })
-    index["generations"] = rows[-DEFAULT_MAX_GENERATIONS:]
+    index["generations"] = rows
+    retained_ids = plan_generation_retention(index, checkpoint_path.parent, checkpoint)
+    index["generations"] = [row for row in rows if row.get("generation_id") in retained_ids]
     index["detail_queue_cursor"] = int(checkpoint.get("detail_queue_cursor", index.get("detail_queue_cursor", 0)))
     retry_state = index.setdefault("detail_retry_state", {})
     if not isinstance(retry_state, dict):
@@ -1397,6 +1915,232 @@ def append_generation_index(
         except HandoffError as exc:
             raise ValueError(str(exc)) from exc
     atomic_write_json(index_path, index)
+    return retained_ids
+
+
+def plan_generation_retention(
+    index: Mapping[str, Any], generation_dir: pathlib.Path,
+    prospective_checkpoint: Mapping[str, Any], *, max_generations: int = DEFAULT_MAX_GENERATIONS,
+) -> set[str]:
+    """Plan one validated index/file keep-set without mutating either store."""
+    rows_value = index.get("generations")
+    if not isinstance(rows_value, list):
+        raise ValueError("corrupt_generation_index")
+    current_id = prospective_checkpoint.get("generation_id")
+    if not isinstance(current_id, str) or not re.fullmatch(r"[a-f0-9]{64}", current_id):
+        raise ValueError("generation_retention_current_identity_invalid")
+    rows: list[dict[str, Any]] = []
+    seen_rows: set[str] = set()
+    for raw in rows_value:
+        if not isinstance(raw, Mapping):
+            raise ValueError("corrupt_generation_index")
+        generation_id = raw.get("generation_id")
+        if not isinstance(generation_id, str) or not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+            raise ValueError("corrupt_generation_index")
+        if generation_id in seen_rows:
+            raise ValueError("duplicate_generation_index_identity")
+        seen_rows.add(generation_id)
+        rows.append(dict(raw))
+    rows = [row for row in rows if row["generation_id"] != current_id]
+    rows.append({
+        "generation_id": current_id,
+        "status": prospective_checkpoint.get("status"),
+        "checkpoint": f"{current_id}.json",
+        "updated_at": prospective_checkpoint.get("last_heartbeat_at"),
+        "candidate_sha256": (
+            prospective_checkpoint.get("generation_inputs", {}).get("candidate_sha256")
+            if isinstance(prospective_checkpoint.get("generation_inputs"), Mapping) else None
+        ),
+    })
+    index_ids = {row["generation_id"] for row in rows}
+
+    schema_path = pathlib.Path(__file__).resolve().parent.parent / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    schema = load_json(schema_path, maximum_bytes=1024 * 1024)
+    checkpoints: dict[str, dict[str, Any]] = {}
+    for path in generation_dir.glob("*.json"):
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("derivation_lineage_checkpoint_file_invalid")
+        generation_id = path.stem
+        if not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+            raise ValueError("derivation_lineage_checkpoint_filename_invalid")
+        try:
+            checkpoint = verify_checkpoint(load_json(path, maximum_bytes=STATE_FILE_LIMIT), schema)
+        except Exception as exc:
+            raise ValueError("derivation_lineage_checkpoint_corrupt") from exc
+        if checkpoint.get("generation_id") != generation_id:
+            raise ValueError("derivation_lineage_checkpoint_identity_mismatch")
+        checkpoints[generation_id] = checkpoint
+
+    prospective = dict(prospective_checkpoint)
+    prospective.pop("checkpoint_sha256", None)
+    prospective = seal_checkpoint(prospective)
+    try:
+        verify_checkpoint(prospective, schema)
+    except Exception as exc:
+        raise ValueError("generation_retention_prospective_checkpoint_invalid") from exc
+    checkpoints[current_id] = prospective
+
+    protected: set[str] = set()
+    derived_ids: list[str] = []
+    ancestors_by_generation: dict[str, set[str]] = {}
+    parents_by_generation: dict[str, tuple[str, str]] = {}
+    for generation_id, checkpoint in checkpoints.items():
+        inputs = checkpoint.get("generation_inputs")
+        envelope_value = inputs.get("same_observation_derivation") if isinstance(inputs, Mapping) else None
+        if envelope_value is None:
+            continue
+        try:
+            envelope = DERIVATION.validate_derivation_envelope(envelope_value)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("derivation_lineage_envelope_corrupt") from exc
+        if generation_id in envelope["ancestor_generation_ids"]:
+            raise ValueError("derivation_lineage_checkpoint_cycle")
+        ancestors = set(envelope["ancestor_generation_ids"])
+        protected.update(ancestors)
+        ancestors_by_generation[generation_id] = ancestors
+        parents_by_generation[generation_id] = (
+            envelope["resume_parent_processor"]["generation_id"],
+            envelope["canonical_parent_processor"]["generation_id"],
+        )
+        derived_ids.append(generation_id)
+
+    handoff_ledger = index.get("collector_handoff")
+    admitted_rows: list[dict[str, Any]] = []
+    if handoff_ledger is not None:
+        try:
+            admitted_rows = validate_ledger(handoff_ledger)["admitted_observations"]
+        except HandoffError as exc:
+            raise ValueError("derivation_lineage_admission_ledger_invalid") from exc
+
+    def admission_for(checkpoint: Mapping[str, Any]) -> Mapping[str, Any]:
+        observation = checkpoint.get("last_observation")
+        refs = checkpoint.get("input_artifacts")
+        if not isinstance(observation, Mapping) or not isinstance(refs, list):
+            raise ValueError("derivation_lineage_admission_identity_missing")
+        matches = [
+            row for row in admitted_rows
+            if str(row.get("producer_run_id")) == str(observation.get("producer_run_id") or "")
+            and row.get("refresh_evidence_sha256") == observation.get("refresh_evidence_sha256")
+            and any(
+                isinstance(ref, Mapping)
+                and str(ref.get("run_id")) == str(row.get("producer_run_id"))
+                and str(ref.get("artifact_id")) == str(row.get("artifact_id"))
+                and ref.get("evidence_sha256") == row.get("refresh_evidence_sha256")
+                for ref in refs
+            )
+        ]
+        if len(matches) != 1:
+            raise ValueError("derivation_lineage_admission_ambiguous_or_missing")
+        return matches[0]
+
+    if derived_ids:
+        if not admitted_rows:
+            raise ValueError("derivation_lineage_admission_ledger_missing")
+        for generation_id in derived_ids:
+            checkpoint = checkpoints[generation_id]
+            envelope = DERIVATION.validate_derivation_envelope(
+                checkpoint["generation_inputs"]["same_observation_derivation"],
+            )
+            try:
+                DERIVATION.validate_processor_parent_graph(
+                    [
+                        envelope["resume_parent_processor"]["generation_id"],
+                        envelope["canonical_parent_processor"]["generation_id"],
+                    ],
+                    load_checkpoint=lambda parent_id: checkpoints[parent_id],
+                    admission_for=admission_for,
+                    original_observation=envelope["original_observation"],
+                    expected_ancestor_generation_ids=envelope["ancestor_generation_ids"],
+                    forbidden_generation_id=generation_id,
+                )
+            except (KeyError, DERIVATION.DerivationError, OSError, ValueError) as exc:
+                raise ValueError("derivation_lineage_parent_graph_invalid") from exc
+
+    missing_files = protected - checkpoints.keys()
+    if missing_files:
+        raise ValueError("derivation_lineage_parent_checkpoint_unavailable")
+    if not protected.issubset(index_ids):
+        raise ValueError("derivation_parent_index_entry_missing")
+
+    active_statuses = {"queued", "validating", "enriching", "composing", "retry"}
+    active_ids: set[str] = set()
+    shadowed_ready_ancestors: set[str] = set()
+    for derived_id, ancestors in ancestors_by_generation.items():
+        parents = parents_by_generation[derived_id]
+        # Each authenticated C-lineage edge shadows the ready/retry ancestors
+        # that the selector cannot independently promote. Preserve this
+        # envelope's distinct resume parent when it differs from the already
+        # merged canonical producer. Compute the exception per envelope before
+        # unioning: a later descendant may shadow an older envelope's resume
+        # parent, and must not have that shadow undone by a global subtraction.
+        shadowed_by_derived_checkpoint = set(ancestors)
+        if parents[0] != parents[1]:
+            shadowed_by_derived_checkpoint.discard(parents[0])
+        shadowed_ready_ancestors.update(shadowed_by_derived_checkpoint)
+    for generation_id, checkpoint in checkpoints.items():
+        outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), Mapping) else {}
+        lease = checkpoint.get("lease")
+        ready_retry = (
+            checkpoint.get("status") == "ready"
+            and int(outcome.get("detail_retry_count", 0) or 0) > 0
+        )
+        # A ready retry ancestor named by the current authenticated derivation
+        # is retained as lineage evidence, but the C selector screens the
+        # derived continuation against the exact current canonical row. Such
+        # ancestors are not independent work slots once the continuation
+        # shadows them. A distinct resume parent is left selectable above.
+        # Keep any leased checkpoint active: a live lease must never be
+        # discounted as shadowed work.
+        shadowed_ready_ancestor = (
+            ready_retry and generation_id in shadowed_ready_ancestors and lease is None
+        )
+        if not shadowed_ready_ancestor and (
+            checkpoint.get("status") in active_statuses
+            or ready_retry
+            or lease is not None
+        ):
+            active_ids.add(generation_id)
+    if len(active_ids) > DEFAULT_MAX_ACTIVE_GENERATIONS:
+        raise ValueError("active_generation_queue_full")
+    if not active_ids.issubset(index_ids):
+        raise ValueError("active_generation_index_entry_missing")
+
+    required_ids = protected | active_ids | {current_id}
+    if len(required_ids) > max_generations:
+        raise ValueError("derivation_lineage_generation_capacity_exceeded")
+    if not required_ids.issubset(index_ids):
+        raise ValueError("generation_retention_required_index_entry_missing")
+
+    retained_ids = set(required_ids)
+    # The index row order is the durable recency order used by both the index
+    # writer and the checkpoint-file pruner.
+    for row in reversed(rows):
+        generation_id = row["generation_id"]
+        if generation_id in retained_ids or generation_id not in checkpoints:
+            continue
+        if len(retained_ids) >= max_generations:
+            break
+        retained_ids.add(generation_id)
+    return retained_ids
+
+
+def preflight_generation_retention(
+    index_path: pathlib.Path, generation_dir: pathlib.Path,
+    prospective_checkpoint: Mapping[str, Any],
+) -> set[str]:
+    """Read the durable snapshot and reject unsafe capacity before mutation."""
+    if index_path.is_symlink():
+        raise ValueError("generation_retention_index_path_invalid")
+    if index_path.is_file():
+        index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+    else:
+        index = {
+            "schema_version": CHECKPOINT_SCHEMA, "generations": [],
+            "detail_queue_cursor": 0, "detail_retry_state": {},
+        }
+    if not isinstance(index, Mapping) or index.get("schema_version") != CHECKPOINT_SCHEMA:
+        raise ValueError("corrupt_generation_index")
+    return plan_generation_retention(index, generation_dir, prospective_checkpoint)
 
 
 def validate_collector_admission(
@@ -1549,6 +2293,11 @@ def bind_output_artifact_id(
     expiry = parse_timestamp(artifact_expires_at)
     if expiry <= utc_now():
         raise ValueError("output_artifact_expired")
+    preflight_generation_retention(
+        state_dir / "sources" / source_id / "index.json",
+        checkpoint_path.parent,
+        checkpoint,
+    )
     locator["artifact_id"] = artifact_id
     locator["expires_at"] = timestamp(expiry)
     atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
@@ -1557,27 +2306,50 @@ def bind_output_artifact_id(
     )
 
 
-def prune_generation_files(generation_dir: pathlib.Path, current_path: pathlib.Path, max_generations: int = DEFAULT_MAX_GENERATIONS) -> None:
-    checkpoints = sorted(generation_dir.glob("*.json"), key=lambda path: path.stat().st_mtime, reverse=True)
-    if len(checkpoints) <= max_generations:
-        return
-    active = []
-    for path in checkpoints:
+def protected_lineage_generations(generation_dir: pathlib.Path) -> set[str]:
+    """Return all parent IDs referenced by any durable derived checkpoint."""
+    protected: set[str] = set()
+    for path in generation_dir.glob("*.json"):
         try:
             value = load_json(path, maximum_bytes=STATE_FILE_LIMIT)
-            if isinstance(value, dict) and value.get("status") in {"queued", "validating", "enriching", "composing", "retry"}:
-                active.append(path)
         except (OSError, ValueError, json.JSONDecodeError):
             continue
-    if len(active) > DEFAULT_MAX_ACTIVE_GENERATIONS:
-        raise ValueError("active_generation_queue_full")
-    retained = {path for path in checkpoints if path in active or path == current_path}
-    for path in checkpoints:
-        if len(retained) >= max_generations:
-            break
-        retained.add(path)
-    for path in checkpoints:
-        if path not in retained:
+        if not isinstance(value, dict) or value.get("schema_version") != CHECKPOINT_SCHEMA:
+            continue
+        claimed = value.get("checkpoint_sha256")
+        unsigned = dict(value)
+        unsigned.pop("checkpoint_sha256", None)
+        if claimed != checkpoint_digest(unsigned):
+            raise ValueError("derivation_lineage_checkpoint_corrupt")
+        inputs = value.get("generation_inputs")
+        envelope = inputs.get("same_observation_derivation") if isinstance(inputs, dict) else None
+        if envelope is None:
+            continue
+        try:
+            validated = DERIVATION.validate_derivation_envelope(envelope)
+        except ValueError as exc:
+            raise ValueError("derivation_lineage_envelope_corrupt") from exc
+        protected.update(validated["ancestor_generation_ids"])
+    return protected
+
+
+def prune_generation_files(
+    generation_dir: pathlib.Path,
+    current_path: pathlib.Path,
+    max_generations: int = DEFAULT_MAX_GENERATIONS,
+    *, retained_ids: set[str] | None = None,
+) -> None:
+    if retained_ids is None:
+        index_path = generation_dir.parent / "index.json"
+        index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+        current_checkpoint = verify_checkpoint(load_json(current_path, maximum_bytes=STATE_FILE_LIMIT))
+        retained_ids = plan_generation_retention(
+            index, generation_dir, current_checkpoint, max_generations=max_generations,
+        )
+    if current_path.stem not in retained_ids:
+        raise ValueError("generation_retention_current_checkpoint_not_retained")
+    for path in generation_dir.glob("*.json"):
+        if path.stem not in retained_ids:
             path.unlink(missing_ok=True)
 
 
@@ -1633,6 +2405,12 @@ def mark_existing_generation_input_unavailable(
         raise ValueError("target_generation_not_active")
     if active_lease(checkpoint, now):
         return 2, checkpoint
+
+    preflight_generation_retention(
+        args.state_dir / "sources" / args.source / "index.json",
+        args.state_dir / "sources" / args.source / "generations",
+        checkpoint,
+    )
 
     if status != "quarantined":
         checkpoint["status"] = "quarantined"
@@ -1715,6 +2493,16 @@ def process(
     source = sources[0]
     baseline_path = args.baseline or pathlib.Path(source["canonical_registry"])
     baseline_rows = load_registry(baseline_path)
+    composition_baseline_path = args.composition_baseline or baseline_path
+    derivation: dict[str, Any] | None = None
+    if args.same_observation_derivation:
+        if not args.composition_baseline:
+            raise ValueError("same_observation_derivation_requires_composition_baseline")
+        derivation = DERIVATION.validate_derivation_envelope(
+            load_json(args.same_observation_derivation, maximum_bytes=256 * 1024),
+        )
+    elif args.composition_baseline or args.derivation_journal or args.derivation_journal_ref_sha:
+        raise ValueError("composition_baseline_requires_same_observation_derivation")
     candidate_rows: list[dict[str, Any]] | None = None
     candidate_path = args.candidate
     evidence = load_json(args.refresh_evidence, maximum_bytes=8 * 1024 * 1024) if args.refresh_evidence and args.refresh_evidence.exists() else None
@@ -1760,10 +2548,37 @@ def process(
     generation_id, generation_inputs = generation_identity(
         args.source, source_scope, baseline_sha, candidate_sha,
         evidence_sha if candidate_sha is None else None, policy_sha, adapter_sha,
+        same_observation_derivation=derivation,
     )
+    if args.expected_generation_id and generation_id != args.expected_generation_id:
+        raise ValueError("prepared_generation_identity_mismatch")
     generation_dir = args.state_dir / "sources" / args.source / "generations"
-    checkpoint_path = generation_dir / f"{generation_id}.json"
     index_path = args.state_dir / "sources" / args.source / "index.json"
+    schema = load_json(args.checkpoint_schema, maximum_bytes=1024 * 1024)
+    derivation_parent_checkpoint: dict[str, Any] | None = None
+    if derivation is not None:
+        resume_id = derivation["resume_parent_processor"]["generation_id"]
+        parent_path = generation_dir / f"{resume_id}.json"
+        if not parent_path.is_file():
+            raise ValueError("derivation_resume_parent_checkpoint_unavailable")
+        derivation_parent_checkpoint = verify_checkpoint(load_json(parent_path, maximum_bytes=STATE_FILE_LIMIT), schema)
+        parent_inputs = derivation_parent_checkpoint.get("generation_inputs")
+        if not isinstance(parent_inputs, dict):
+            raise ValueError("derivation_resume_parent_inputs_missing")
+        if (
+            parent_inputs.get("source_id") != args.source
+            or parent_inputs.get("source_scope") != source_scope
+            or parent_inputs.get("baseline_sha256") != baseline_sha
+            or parent_inputs.get("candidate_sha256") != candidate_sha
+            or parent_inputs.get("observation_failure_sha256") is not None
+        ):
+            raise ValueError("derivation_resume_parent_source_contract_changed")
+        if (
+            derivation["resume_parent_processor"]["checkpoint_sha256"] != derivation_parent_checkpoint.get("checkpoint_sha256")
+            or derivation["resume_parent_processor"]["generation_id"] != derivation_parent_checkpoint.get("generation_id")
+        ):
+            raise ValueError("derivation_resume_parent_checkpoint_reference_mismatch")
+    checkpoint_path = generation_dir / f"{generation_id}.json"
     collector_admission: dict[str, Any] | None = None
     legacy_floor: dict[str, Any] | None = None
     if not args.input_error and candidate_path is not None and candidate_path.is_file() and evidence_sha:
@@ -1772,7 +2587,44 @@ def process(
             evidence_sha256=evidence_sha, generation_id=generation_id,
             artifact_name=artifact_name, artifact_expires_at=artifact_expires_at, now=now,
         )
-    schema = load_json(args.checkpoint_schema, maximum_bytes=1024 * 1024)
+    if derivation is not None:
+        if not args.current_main_root or not args.current_main_root.is_dir():
+            raise ValueError("derivation_current_main_checkout_missing")
+        assert derivation_parent_checkpoint is not None
+        existing_target: dict[str, Any] | None = None
+        if checkpoint_path.is_file() and not checkpoint_path.is_symlink():
+            existing_target = verify_checkpoint(
+                load_json(checkpoint_path, maximum_bytes=STATE_FILE_LIMIT), schema,
+            )
+        existing_outcome = existing_target.get("outcome") if isinstance(existing_target, Mapping) and isinstance(existing_target.get("outcome"), Mapping) else {}
+        can_resume_advanced_main = bool(
+            isinstance(existing_target, Mapping)
+            and existing_target.get("generation_inputs", {}).get("same_observation_derivation") == derivation
+            and (
+                existing_target.get("status") in {"queued", "validating", "enriching", "composing", "retry"}
+                or existing_target.get("status") == "ready" and int(existing_outcome.get("detail_retry_count", 0) or 0) > 0
+            )
+        )
+        validate_derivation_before_claim(
+            args,
+            generation_id=generation_id,
+            derivation=derivation,
+            composition_baseline_path=composition_baseline_path,
+            collector_admission=collector_admission,
+            state_index_path=index_path,
+            schema=schema,
+            original_baseline_sha256=baseline_sha,
+            candidate_sha256=str(candidate_sha or ""),
+            evidence_sha256=str(evidence_sha or ""),
+            diff_sha256=file_sha256(diff_path) if diff_path and diff_path.is_file() else "",
+            policy_sha256=policy_sha,
+            adapter_sha256=adapter_sha,
+            current_main_root=args.current_main_root.resolve(),
+            resume_parent_bundle_dir=args.resume_parent_bundle_dir,
+            canonical_parent_bundle_dir=args.canonical_parent_bundle_dir,
+            allow_source_only_main_advance=can_resume_advanced_main,
+            allow_monotonic_journal_successor=can_resume_advanced_main,
+        )
     if checkpoint_path.exists():
         try:
             checkpoint = verify_checkpoint(load_json(checkpoint_path, maximum_bytes=STATE_FILE_LIMIT), schema)
@@ -1799,6 +2651,14 @@ def process(
             diff_sha256=file_sha256(diff_path) if diff_path and diff_path.is_file() else None,
             status="queued",
         )
+        if derivation is not None:
+            assert derivation_parent_checkpoint is not None
+            # A derivative is still the same immutable A observation. Carry
+            # its observation clock/count verbatim; retry counters and cursor
+            # continue to come from the current state index below.
+            checkpoint["observed_at"] = derivation_parent_checkpoint["observed_at"]
+            checkpoint["last_observation"] = dict(derivation_parent_checkpoint["last_observation"])
+            checkpoint["observation_count"] = int(derivation_parent_checkpoint["observation_count"])
         checkpoint["detail_queue_cursor"] = source_queue_cursor(index_path, 0)
 
     if checkpoint.get("generation_inputs") != generation_inputs:
@@ -1868,6 +2728,12 @@ def process(
         checkpoint.get("status") == "ready"
         and int(prior_outcome.get("detail_retry_count", 0) or 0) > 0
     )
+    retention_candidate = dict(checkpoint)
+    if checkpoint.get("status") in {"ready", "no-change"} and (new_observation_received or ready_has_detail_work):
+        retention_candidate["status"] = "retry"
+    # Plan the exact required/retained generation set before terminal replay,
+    # quarantine, lease acquisition, or request reservation can write state.
+    preflight_generation_retention(index_path, generation_dir, retention_candidate)
     if checkpoint.get("status") in {"ready", "no-change", "quarantined"} and not new_observation_received and not ready_has_detail_work:
         checkpoint["last_heartbeat_at"] = timestamp(now)
         atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
@@ -1958,7 +2824,29 @@ def process(
             candidate_by_id=candidate_asset,
             registered_hosts=registered_hosts,
             now=now,
+            allow_parent_extractor_revision=derivation is not None,
+            expected_owner_generation_id=(
+                derivation["resume_parent_processor"]["generation_id"] if derivation is not None else None
+            ),
+            reject_stale_source_or_guide_contract=derivation is not None,
         )
+        if derivation is not None:
+            canonical_evidence_path = args.canonical_parent_bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            canonical_records = validated_resume_records(
+                canonical_evidence_path,
+                checkpoint=checkpoint,
+                state_dir=args.state_dir,
+                source_id=args.source,
+                checkpoint_schema=schema,
+                provider_index_sha256=adapter_sha,
+                candidate_by_id=candidate_asset,
+                registered_hosts=registered_hosts,
+                now=now,
+                allow_parent_extractor_revision=True,
+                expected_owner_generation_id=derivation["canonical_parent_processor"]["generation_id"],
+                reject_stale_source_or_guide_contract=True,
+            )
+            all_cached_records = merge_derivation_enrichment_records(all_cached_records, canonical_records)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         checkpoint.update({"status": "quarantined", "outcome": {"reason": safe_error_class(exc)}, "lease": None})
         checkpoint["last_heartbeat_at"] = timestamp(now)
@@ -2009,6 +2897,7 @@ def process(
             checkpoint, queued, cursor=queue_cursor, processor_run_id=processor_run_id,
             max_attempts=args.max_attempts, max_queue=args.max_queue,
             retries_per_detail=args.retries_per_detail, now=now_fn(),
+            no_advance_when_empty=derivation is not None,
         )
         checkpoint.update({
             "status": "enriching",
@@ -2044,6 +2933,7 @@ def process(
             checkpoint, queued, cursor=queue_cursor, processor_run_id=processor_run_id,
             max_attempts=args.max_attempts, max_queue=args.max_queue,
             retries_per_detail=args.retries_per_detail, now=now_fn(),
+            no_advance_when_empty=derivation is not None,
         )
     reserved_by_id = {
         str(row["id"]): int(row["attempts_reserved"])
@@ -2089,6 +2979,7 @@ def process(
         row_operations: list[dict[str, Any]] = []
         failure_diagnostic = retained_failure_diagnostics.get(identity)
         source_provenance: dict[str, Any] | None = None
+        declaration_provenance: dict[str, Any] | None = None
         link_metadata: dict[str, Any] | None = None
         observed_guide: str | None = None
         observation: DetailPageObservation | None = None
@@ -2163,6 +3054,7 @@ def process(
                     failure_context = "page_parser"
                     current_template = extract_current_template_dataset_id(body, identity)
                     if current_template is not None:
+                        observed_guide = observed_guide_url(body, expected_page_url)
                         continue
 
                     # The old anchor extractor remains the only path for the
@@ -2291,11 +3183,55 @@ def process(
                 link_metadata = DETAIL_HELPERS.validate_link_metadata(
                     candidate_link_metadata, identity, registered_hosts,
                 )
-                row_status = "quarantined"
-                failure_diagnostic = {
-                    "code": "resolved_link_operation_contract_unproven",
-                    "phase": "resolver",
-                }
+                try:
+                    if identity != SEOUL_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]:
+                        raise SEOUL_DECLARATION.DeclarationError("no_pinned_operation_declaration_for_subject")
+                    declared_operation = SEOUL_DECLARATION.build_operation(row, observed_guide)
+                    declaration_provenance = SEOUL_DECLARATION.build_provenance(
+                        row,
+                        source_sha256=queue_row["source_sha256"],
+                        guide_sha256=queue_row["guide_sha256"],
+                        observed_guide_url=observed_guide,
+                        observed_guide_url_sha256=(
+                            sha256_bytes(observed_guide.encode("utf-8")) if observed_guide else None
+                        ),
+                        link_metadata=link_metadata,
+                        operation=declared_operation,
+                    )
+                    row_operations = [copy.deepcopy(item) for item in row.get("operations", [])]
+                    row_operations.append(declared_operation)
+                    source_provenance = {
+                        "system": "data.go.kr",
+                        "page_url": observation.page_url,
+                        "effective_url": observation.effective_url,
+                        "page_sha256": observation.page_sha256,
+                        "observed_at": observation.observed_at,
+                    }
+                    declaration_record = {
+                        "api_key": {"provider": "data.go.kr", "id": identity},
+                        "source_sha256": queue_row["source_sha256"],
+                        "guide_sha256": queue_row["guide_sha256"],
+                        "observed_guide_url": observed_guide,
+                        "observed_guide_url_sha256": (
+                            sha256_bytes(observed_guide.encode("utf-8")) if observed_guide else None
+                        ),
+                        "operations": row_operations,
+                        "operations_sha256": sha256_bytes(canonical_json(row_operations)),
+                        "status": "enriched",
+                        "source_provenance": source_provenance,
+                        "declaration_provenance": declaration_provenance,
+                    }
+                    SEOUL_DECLARATION.validate_enriched_record(row, declaration_record)
+                    failure_diagnostic = None
+                    row_status = "enriched"
+                except (SEOUL_DECLARATION.DeclarationError, KeyError, TypeError, ValueError):
+                    row_operations = []
+                    declaration_provenance = None
+                    row_status = "quarantined"
+                    failure_diagnostic = {
+                        "code": "resolved_link_operation_contract_unproven",
+                        "phase": "resolver",
+                    }
                 break
             except Exception as exc:
                 diagnostic = classify_detail_exception(exc)
@@ -2344,7 +3280,7 @@ def process(
             worker_record["link_metadata"] = link_metadata
         worker_records.append(worker_record)
         if row_status == "enriched":
-            enriched_records.append({
+            enriched_record = {
                 "api_key": {"provider": "data.go.kr", "id": identity},
                 "status": "enriched",
                 "source_sha256": fingerprint,
@@ -2354,7 +3290,10 @@ def process(
                 "operations": row_operations,
                 "operations_sha256": sha256_bytes(canonical_json(row_operations)),
                 "source_provenance": source_provenance,
-            })
+            }
+            if declaration_provenance is not None:
+                enriched_record["declaration_provenance"] = declaration_provenance
+            enriched_records.append(enriched_record)
         checkpoint["detail_records"] = worker_records[-128:]
         checkpoint["last_heartbeat_at"] = timestamp(now_fn())
         checkpoint["last_progress_at"] = timestamp(now_fn())
@@ -2454,6 +3393,8 @@ def process(
         refresh_evidence=args.refresh_evidence, provider_index=args.provider_index,
         source_policy=args.source_policy, producer_run_id=args.producer_run_id,
         producer_run_url=args.producer_run_url, output_dir=composer_output_dir, enrichment=enrichment_path,
+        composition_baseline=composition_baseline_path if derivation is not None else None,
+        same_observation_derivation=args.same_observation_derivation if derivation is not None else None,
     )
     ensure_fence(checkpoint, processor_run_id, token, now_fn())
     if code == 0:
@@ -2570,8 +3511,10 @@ def process(
     set_output_artifact_locator(checkpoint, args, output_artifact_expires_at, bundle)
     atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
     atomic_write_json(output_dir / "upstream-catalogue-checkpoint-receipt.json", checkpoint)
-    append_generation_index(index_path, checkpoint_path, checkpoint)
-    prune_generation_files(generation_dir, checkpoint_path)
+    retained_generation_ids = append_generation_index(index_path, checkpoint_path, checkpoint)
+    prune_generation_files(
+        generation_dir, checkpoint_path, retained_ids=retained_generation_ids,
+    )
     return (0 if terminal_status in {"ready", "no-change"} else 2 if terminal_status == "retry" else 3), checkpoint
 
 
@@ -2580,6 +3523,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--source", default="data_go_kr")
     parser.add_argument("--source-scope", default="aggregate_supported_catalog")
     parser.add_argument("--baseline", type=pathlib.Path)
+    parser.add_argument("--composition-baseline", type=pathlib.Path)
+    parser.add_argument("--same-observation-derivation", type=pathlib.Path)
+    parser.add_argument("--expected-generation-id")
+    parser.add_argument("--current-main-root", type=pathlib.Path)
+    parser.add_argument("--derivation-journal", type=pathlib.Path)
+    parser.add_argument("--derivation-journal-ref-sha")
+    parser.add_argument("--resume-parent-bundle-dir", type=pathlib.Path)
+    parser.add_argument("--canonical-parent-bundle-dir", type=pathlib.Path)
+    parser.add_argument("--canonical-update-pr-helper", type=pathlib.Path, default=pathlib.Path("scripts/canonical_update_pr.py"))
+    parser.add_argument("--canonical-update-journal-schema", type=pathlib.Path, default=pathlib.Path("schemas/datapan.canonical-update-promotion-journal.v1.schema.json"))
     parser.add_argument("--candidate", type=pathlib.Path)
     parser.add_argument("--diff", type=pathlib.Path)
     parser.add_argument("--refresh-evidence", type=pathlib.Path)

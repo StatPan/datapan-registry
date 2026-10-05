@@ -185,7 +185,7 @@ def upstream_operation_key(operation: dict[str, Any]) -> str | None:
     if system == "safetydata.go.kr":
         value = raw.get("source_interface_id") or raw.get("data_sn")
     else:
-        value = raw.get("operation_seq")
+        value = raw.get("operation_seq") or raw.get("operation_declaration_key")
     return str(value) if isinstance(value, (str, int)) and str(value) else None
 
 

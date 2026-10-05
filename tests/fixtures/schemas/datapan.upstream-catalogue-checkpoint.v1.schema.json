@@ -86,6 +86,371 @@
   "$defs": {
     "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "nullable_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+    "original_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_scope",
+        "producer_run_id",
+        "producer_run_attempt",
+        "producer_head_sha",
+        "producer_artifact_id",
+        "producer_artifact_name",
+        "producer_artifact_sha256",
+        "observed_at",
+        "original_baseline_sha256",
+        "candidate_sha256",
+        "evidence_sha256",
+        "diff_sha256",
+        "source_policy_sha256",
+        "provider_index_sha256",
+        "observation_count"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "producer_run_id": {
+          "type": "string",
+          "pattern": "^[0-9]{1,20}$"
+        },
+        "producer_run_attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "producer_head_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "producer_artifact_id": {
+          "type": "string",
+          "pattern": "^[0-9]{1,20}$"
+        },
+        "producer_artifact_name": {
+          "type": "string",
+          "pattern": "^upstream-catalog-refresh-[0-9]{1,20}$"
+        },
+        "producer_artifact_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "original_baseline_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "candidate_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "evidence_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "diff_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "source_policy_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "provider_index_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "observation_count": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "processor_parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generation_id",
+        "checkpoint_sha256",
+        "generation_inputs_sha256",
+        "bundle_manifest_sha256",
+        "repository",
+        "artifact_run_id",
+        "artifact_id",
+        "artifact_name",
+        "artifact_expires_at",
+        "original_baseline_sha256",
+        "candidate_sha256",
+        "enrichment_evidence_sha256",
+        "composition_receipt_sha256",
+        "composed_registry_sha256",
+        "original_observation_sha256",
+        "contribution_set_sha256",
+        "contribution_count",
+        "processor_generator_revision",
+        "processor_extractor_revision"
+      ],
+      "properties": {
+        "generation_id": {
+          "$ref": "#/$defs/digest"
+        },
+        "checkpoint_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "generation_inputs_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "bundle_manifest_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "artifact_run_id": {
+          "type": "string",
+          "pattern": "^[0-9]{1,20}$"
+        },
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^[0-9]{1,20}$"
+        },
+        "artifact_name": {
+          "type": "string",
+          "pattern": "^upstream-catalogue-processing-[0-9]+-[1-9][0-9]*$"
+        },
+        "artifact_expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "original_baseline_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "candidate_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "enrichment_evidence_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "composition_receipt_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "composed_registry_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "original_observation_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "contribution_set_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "contribution_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "processor_generator_revision": {
+          "$ref": "#/$defs/digest"
+        },
+        "processor_extractor_revision": {
+          "$ref": "#/$defs/digest"
+        }
+      }
+    },
+    "canonical_parent_readback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "journal_ref_sha",
+        "journal_sha256",
+        "journal_record_index",
+        "journal_record_sha256",
+        "canonical_producer_generation_id",
+        "source_id",
+        "source_scope",
+        "registry_path",
+        "registry_bytes",
+        "registry_sha256",
+        "manifest_sha256",
+        "pr_number",
+        "pr_branch",
+        "pr_body_sha256",
+        "pr_head_sha",
+        "merge_sha",
+        "merge_ack_run_id",
+        "merge_ack_run_attempt",
+        "merge_ack_run_url",
+        "merge_ack_observed_at",
+        "merge_ack_manifest_sha256",
+        "merge_ack_source_sha"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "journal_ref_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "journal_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "journal_record_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "journal_record_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "canonical_producer_generation_id": {
+          "$ref": "#/$defs/digest"
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registry_path": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "registry_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "registry_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "pr_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pr_branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pr_body_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "pr_head_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "merge_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "merge_ack_run_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "merge_ack_run_attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "merge_ack_run_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "merge_ack_observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "merge_ack_manifest_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "merge_ack_source_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        }
+      }
+    },
+    "composition_baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "main_sha",
+        "manifest_sha256",
+        "registry_path",
+        "registry_sha256",
+        "registry_bytes"
+      ],
+      "properties": {
+        "main_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "registry_path": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "registry_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "registry_bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "same_observation_derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "derivation_revision",
+        "original_observation",
+        "resume_parent_processor",
+        "canonical_parent_processor",
+        "canonical_parent_readback",
+        "composition_baseline",
+        "derivation_processor_revision_sha256",
+        "ancestor_generation_ids"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "datapan.same-observation-derivation.v1"
+        },
+        "derivation_revision": {
+          "const": "same-observation-composition/v1"
+        },
+        "original_observation": {
+          "$ref": "#/$defs/original_observation"
+        },
+        "resume_parent_processor": {
+          "$ref": "#/$defs/processor_parent"
+        },
+        "canonical_parent_processor": {
+          "$ref": "#/$defs/processor_parent"
+        },
+        "canonical_parent_readback": {
+          "$ref": "#/$defs/canonical_parent_readback"
+        },
+        "composition_baseline": {
+          "$ref": "#/$defs/composition_baseline"
+        },
+        "derivation_processor_revision_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "ancestor_generation_ids": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/digest"
+          }
+        }
+      }
+    },
     "generation_inputs": {
       "type": "object", "additionalProperties": false,
       "required": ["source_id", "source_scope", "baseline_sha256", "candidate_sha256", "observation_failure_sha256", "policy_sha256", "adapter_revision", "generator_revision", "extractor_revision"],
@@ -98,7 +463,8 @@
         "policy_sha256": {"$ref": "#/$defs/digest"},
         "adapter_revision": {"$ref": "#/$defs/digest"},
         "generator_revision": {"$ref": "#/$defs/digest"},
-        "extractor_revision": {"$ref": "#/$defs/digest"}
+        "extractor_revision": {"$ref": "#/$defs/digest"},
+        "same_observation_derivation": {"$ref": "#/$defs/same_observation_derivation"}
       }
     },
     "observation": {
