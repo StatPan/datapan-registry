@@ -93,6 +93,17 @@ PIPELINE_WORKFLOWS = {
         "required_job": "reconcile",
     },
 }
+ACKNOWLEDGEMENT_STATE_AFTER_ROLES = frozenset({
+    "acknowledgement_state_ref", "acknowledgement_state_commit",
+    "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+})
+ACKNOWLEDGEMENT_STATE_BEFORE_ROLE_MAP = {
+    "acknowledgement_state_ref_before": "acknowledgement_state_ref",
+    "acknowledgement_state_commit_before": "acknowledgement_state_commit",
+    "acknowledgement_state_tree_before": "acknowledgement_state_tree",
+    "acknowledgement_journal_blob_api_before": "acknowledgement_journal_blob_api",
+}
+ACKNOWLEDGEMENT_STATE_BEFORE_ROLES = frozenset(ACKNOWLEDGEMENT_STATE_BEFORE_ROLE_MAP)
 NATIVE_DISTRIBUTION_CONTRACTS = {
     # This exact source/workflow pair is the reviewed native verifier that
     # covers the complete immutable distribution pointer, including the five
@@ -151,6 +162,10 @@ PIPELINE_INPUT_ROLES = {
     "acknowledgement_state_commit": "pipeline_git_commit",
     "acknowledgement_state_tree": "pipeline_git_tree",
     "acknowledgement_journal_blob_api": "pipeline_git_blob",
+    "acknowledgement_state_ref_before": "pipeline_state_reference",
+    "acknowledgement_state_commit_before": "pipeline_git_commit",
+    "acknowledgement_state_tree_before": "pipeline_git_tree",
+    "acknowledgement_journal_blob_api_before": "pipeline_git_blob",
 }
 PIPELINE_STAGE_ROLES = {
     "source": {
@@ -183,6 +198,7 @@ PIPELINE_STAGE_OPTIONAL_ROLES = {
     "acknowledgement": {
         "acknowledgement_state_ref", "acknowledgement_state_commit",
         "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+        *ACKNOWLEDGEMENT_STATE_BEFORE_ROLES,
     },
 }
 
@@ -762,6 +778,10 @@ def validate_input_index(
         "acknowledgement_state_commit": "pipeline_git_commit",
         "acknowledgement_state_tree": "pipeline_git_tree",
         "acknowledgement_journal_blob_api": "pipeline_git_blob",
+        "acknowledgement_state_ref_before": "pipeline_state_reference",
+        "acknowledgement_state_commit_before": "pipeline_git_commit",
+        "acknowledgement_state_tree_before": "pipeline_git_tree",
+        "acknowledgement_journal_blob_api_before": "pipeline_git_blob",
         "acknowledgement_journal_before": "promotion_journal",
         "acknowledgement_journal_after": "promotion_journal",
         "acknowledgement_health_receipt": "health_receipt",
@@ -2672,6 +2692,10 @@ def validate_promotion_stage(
             raise ValueError("promotion log lacks an exact successful reconciliation summary")
         matching_merged: list[tuple[dict[str, Any], str]] = []
         matching_prepared: list[dict[str, Any]] = []
+        matching_terminal: list[dict[str, Any]] = []
+        merged_lifecycle_states = {
+            "merged", "publication-pending", "published", "read-back-confirmed",
+        }
         for row in journal["records"]:
             candidate = row.get("candidate") if isinstance(row, dict) else None
             pr = row.get("pr") if isinstance(row, dict) else None
@@ -2689,7 +2713,12 @@ def validate_promotion_stage(
                 and candidate.get("registry_bytes") == processor.get("candidate_bytes")
                 and candidate.get("composition_receipt_sha256") == processor.get("composition_sha256")
             ):
-                if row.get("status") == "read-back-confirmed" and isinstance(pr.get("merge_commit_sha"), str):
+                row_status = row.get("status")
+                if row_status in merged_lifecycle_states or (
+                    row_status in {"failed", "closed"}
+                    and pr.get("state") == "merged"
+                    and isinstance(pr.get("merge_commit_sha"), str)
+                ):
                     merge = pr["merge_commit_sha"]
                     assert_main_ancestor(root, merge, "promotion journal candidate merge commit")
                     merged_artifact, merged_manifest_sha256 = source_lfs_binding(root, merge)
@@ -2699,8 +2728,15 @@ def validate_promotion_stage(
                         and merged_artifact.get("bytes") == candidate.get("registry_bytes")
                     ):
                         matching_merged.append((row, merge))
-                elif row.get("status") in {"prepared", "pending-review", "ci-pending", "ci-failed"}:
+                    else:
+                        raise ValueError("merged promotion lifecycle record does not bind its exact release manifest and Registry payload")
+                elif row_status in {"prepared", "pending-review"}:
                     matching_prepared.append(row)
+                elif row_status in {"failed", "closed"}:
+                    # A pre-merge terminal record still identifies a real B
+                    # generation transition. Preserve it as a terminal C fact,
+                    # but never treat it as a merged/current candidate.
+                    matching_terminal.append(row)
         active_candidate_rows = [*matching_merged, *((row, "") for row in matching_prepared)]
         candidate_keys = [journal_helper.candidate_key(row) for row, _merge in active_candidate_rows]
         if len(candidate_keys) != len(set(candidate_keys)):
@@ -2710,10 +2746,19 @@ def validate_promotion_stage(
         if matching_merged:
             selected_candidate_record, candidate_merge_commit = matching_merged[-1]
             candidate_available = True
-            result_status = "merged-candidate-reconciled"
+            lifecycle_status = selected_candidate_record.get("status")
+            result_status = (
+                "merged-candidate-reconciled" if lifecycle_status == "merged"
+                else f"merged-candidate-{lifecycle_status}"
+            )
         elif matching_prepared:
             selected_candidate_record = matching_prepared[-1]
             candidate_available = True
+            result_status = f"candidate-{selected_candidate_record['status']}"
+        elif matching_terminal:
+            if len(matching_terminal) > 1:
+                raise ValueError("promotion journal repeats terminal records for the exact B composition")
+            selected_candidate_record = matching_terminal[0]
             result_status = f"candidate-{selected_candidate_record['status']}"
         else:
             result_status = "reconciled-without-matched-generation"
@@ -2724,6 +2769,18 @@ def validate_promotion_stage(
         "state_tree_sha": indexed_json(roles, resolved, "promotion_state_tree")["sha"],
         "status": result_status,
         "candidate_available": candidate_available,
+        "candidate_lifecycle_status": (
+            selected_candidate_record.get("status")
+            if isinstance(selected_candidate_record, dict) else None
+        ),
+        "candidate_acknowledgement_statuses": (
+            [
+                acknowledgement.get("status")
+                for acknowledgement in selected_candidate_record.get("acknowledgements", [])
+                if isinstance(acknowledgement, dict)
+            ]
+            if isinstance(selected_candidate_record, dict) else []
+        ),
         "already_canonical_generation_id": no_op_generation,
         "candidate_record": copy.deepcopy(selected_candidate_record),
         "candidate_key": list(journal_helper.candidate_key(selected_candidate_record)) if selected_candidate_record else None,
@@ -3549,6 +3606,79 @@ NATIVE_PUBLICATION_READBACK_ROLES = frozenset({
 })
 
 
+def native_publication_delivery_facet(
+    *, publisher: dict[str, Any], readback: dict[str, Any],
+    acknowledgement: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Normalize already-validated current native publisher/ACK facts.
+
+    Callers must first run the native publisher, immutable-pointer/readback,
+    and (when supplied) ACK transition validators. This function only joins
+    those returned facts; it does not grant scope authority or completeness.
+    """
+    registry = readback.get("registry_artifact")
+    if not isinstance(registry, dict):
+        raise ValueError("native publication read-back lacks its validated Registry artifact")
+    subject = {
+        "repository": "StatPan/datapan-registry",
+        "source_sha": publisher.get("source_sha"),
+        "manifest_sha256": publisher.get("manifest_sha256"),
+        "registry_path": registry.get("path"),
+        "registry_sha256": registry.get("sha256"),
+        "registry_bytes": registry.get("bytes"),
+        "publisher_run_id": publisher.get("run_id"),
+        "publisher_attempt": publisher.get("attempt"),
+        "payload_revision": readback.get("payload_revision"),
+        "pointer_revision": readback.get("pointer_revision"),
+    }
+    if acknowledgement is not None and (
+        acknowledgement.get("source_sha") != subject["source_sha"]
+        or acknowledgement.get("manifest_sha256") != subject["manifest_sha256"]
+    ):
+        raise ValueError("native publication ACK does not identify the exact read-back subject")
+    details: dict[str, Any] = {
+        "classification": "native_delivery_only",
+        "currentness_established": False,
+        "updated_claim_established": False,
+        "release_authority": False,
+        "cutover_established": False,
+        "verified_artifact_count": readback.get("verified_artifact_count"),
+        "publisher_job_started_at": publisher.get("job_started_at"),
+        "publisher_job_completed_at": publisher.get("job_completed_at"),
+        "publisher_anonymous_verify_completed_at": publisher.get("native_verification_completed_at"),
+        "anonymous_readback_observed_at": readback.get("consumer_readback_observed_at"),
+        "publisher_artifact_sha256": publisher.get("artifact_sha256"),
+        "publisher_artifact_expired_at_evaluation": publisher.get("artifact_expired_at_evaluation"),
+    }
+    if acknowledgement is None:
+        details["acknowledgement_missing"] = True
+        details["delivery_status"] = "publisher_readback_verified_ack_pending"
+    else:
+        details.update({
+            "delivery_status": "publisher_readback_acknowledged",
+            "acknowledgement_run_id": acknowledgement.get("run_id"),
+            "acknowledgement_attempt": acknowledgement.get("attempt"),
+            "acknowledgement_observed_at": acknowledgement.get("acknowledgement_observed_at"),
+            "acknowledgement_journal_sha256": acknowledgement.get("journal_sha256"),
+            "acknowledgement_state_commit": acknowledgement.get("state_commit"),
+        })
+        if acknowledgement.get("replay_status") == "already_acknowledged":
+            details.update({
+                "acknowledgement_replay_run_id": acknowledgement.get("replay_run_id"),
+                "acknowledgement_replay_attempt": acknowledgement.get("replay_attempt"),
+                "acknowledgement_replay_status": acknowledgement.get("replay_status"),
+                "acknowledgement_replay_journal_writes": acknowledgement.get("journal_writes"),
+                "acknowledgement_replay_state_unchanged": acknowledgement.get("state_replay_unchanged"),
+            })
+    return {
+        "status": "verified" if acknowledgement is not None else "read-back-verified",
+        "subject": subject,
+        "missing": [] if acknowledgement is not None else ["acknowledgement"],
+        "evidence": [],
+        "details": details,
+    }
+
+
 def validate_native_publication_readback(
     *, root: pathlib.Path, inputs: list[dict[str, Any]], resolved: dict[str, pathlib.Path],
     publisher_run: dict[str, Any], publisher: dict[str, Any] | None,
@@ -3774,6 +3904,80 @@ def validate_native_publication_readback(
     }
 
 
+def validate_acknowledgement_state_bundles(
+    *, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
+    journal_before_raw: bytes, journal_after_raw: bytes,
+    require_before: bool = False,
+) -> dict[str, Any]:
+    """Authenticate optional before/after ACK state trees and their journal blobs."""
+    after_roles = ACKNOWLEDGEMENT_STATE_AFTER_ROLES & set(roles)
+    before_roles = ACKNOWLEDGEMENT_STATE_BEFORE_ROLES & set(roles)
+    if after_roles and after_roles != ACKNOWLEDGEMENT_STATE_AFTER_ROLES:
+        raise ValueError("ACK after-state evidence is only valid as a complete ref/commit/tree/blob bundle")
+    if before_roles and before_roles != ACKNOWLEDGEMENT_STATE_BEFORE_ROLES:
+        raise ValueError("ACK before-state evidence is only valid as a complete ref/commit/tree/blob bundle")
+    if before_roles and not after_roles:
+        raise ValueError("ACK before-state evidence requires its exact after-state bundle")
+    if require_before and (not before_roles or not after_roles):
+        raise ValueError("already-acknowledged replay requires complete before/after ACK state bundles")
+
+    result: dict[str, Any] = {"before": None, "after": None}
+    if after_roles:
+        after_bytes = validate_state_tree(
+            stage="acknowledgement", roles=roles, resolved=resolved,
+            ref_role="acknowledgement_state_ref", commit_role="acknowledgement_state_commit",
+            tree_role="acknowledgement_state_tree", content_roles={},
+            blob_roles={"acknowledgement_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
+        )
+        after_ref = indexed_json(roles, resolved, "acknowledgement_state_ref")
+        after_commit = indexed_json(roles, resolved, "acknowledgement_state_commit")
+        after_tree = indexed_json(roles, resolved, "acknowledgement_state_tree")
+        if (
+            after_ref.get("ref") != "refs/heads/automation/canonical-update-state"
+            or after_commit.get("sha") != after_ref.get("object", {}).get("sha")
+            or after_bytes["acknowledgement_journal_blob_api"] != journal_after_raw
+        ):
+            raise ValueError("ACK after-state ref/tree does not bind the exact after-journal snapshot")
+        result["after"] = {
+            "ref": after_ref, "commit": after_commit, "tree": after_tree,
+            "journal_blob": after_bytes["acknowledgement_journal_blob_api"],
+        }
+
+    if before_roles:
+        before_role_map = {
+            after_role: roles[before_role]
+            for before_role, after_role in ACKNOWLEDGEMENT_STATE_BEFORE_ROLE_MAP.items()
+        }
+        before_bytes = validate_state_tree(
+            stage="acknowledgement", roles=before_role_map, resolved=resolved,
+            ref_role="acknowledgement_state_ref", commit_role="acknowledgement_state_commit",
+            tree_role="acknowledgement_state_tree", content_roles={},
+            blob_roles={"acknowledgement_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
+        )
+        before_ref = indexed_json(before_role_map, resolved, "acknowledgement_state_ref")
+        before_commit = indexed_json(before_role_map, resolved, "acknowledgement_state_commit")
+        before_tree = indexed_json(before_role_map, resolved, "acknowledgement_state_tree")
+        if (
+            before_ref.get("ref") != "refs/heads/automation/canonical-update-state"
+            or before_commit.get("sha") != before_ref.get("object", {}).get("sha")
+            or before_bytes["acknowledgement_journal_blob_api"] != journal_before_raw
+        ):
+            raise ValueError("ACK before-state ref/tree does not bind the exact before-journal snapshot")
+        result["before"] = {
+            "ref": before_ref, "commit": before_commit, "tree": before_tree,
+            "journal_blob": before_bytes["acknowledgement_journal_blob_api"],
+        }
+        if require_before:
+            for before_role, after_role in ACKNOWLEDGEMENT_STATE_BEFORE_ROLE_MAP.items():
+                before_raw = receipt_path_bytes(resolved[roles[before_role]["input_id"]], roles[before_role])
+                after_raw = receipt_path_bytes(resolved[roles[after_role]["input_id"]], roles[after_role])
+                if before_raw != after_raw:
+                    raise ValueError("already-acknowledged replay changed its state ref/commit/tree/blob")
+            if journal_before_raw != journal_after_raw:
+                raise ValueError("already-acknowledged replay changed its promotion journal bytes")
+    return result
+
+
 def validate_present_stage_local_artifacts(
     *, root: pathlib.Path, stage_roles: dict[str, dict[str, dict[str, Any]]],
     stage_runs: dict[str, tuple[dict[str, Any], dict[str, Any]]],
@@ -3981,15 +4185,90 @@ def acknowledgement_log_result(raw: bytes) -> dict[str, Any]:
                 value = json.loads(line[start:])
             except json.JSONDecodeError:
                 continue
-            if isinstance(value, dict) and value.get("status") == "read-back-confirmed":
+            if isinstance(value, dict) and value.get("status") in {
+                "read-back-confirmed", "already_acknowledged",
+            }:
                 found.append(value)
     # GitHub's retained job archive can contain the same structured result in
     # both the step log and the job summary. Duplicate identical lines are one
     # fact; conflicting outcomes are ambiguous and must fail closed.
     unique = {canonical_json_bytes(row) for row in found}
     if len(unique) != 1:
-        raise ValueError("acknowledgement logs do not contain one unambiguous read-back-confirmed result")
+        raise ValueError("acknowledgement logs do not contain one unambiguous successful result")
     return found[0]
+
+
+def acknowledged_journal_witness(
+    journal: dict[str, Any], *, source_id: str, source_sha: str, manifest_sha256: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Return the unique active read-back witness for an exact merged subject."""
+    matches: list[tuple[dict[str, Any], dict[str, Any]]] = []
+    records = journal.get("records")
+    if not isinstance(records, list):
+        raise ValueError("acknowledgement journal has no record list")
+    for row in records:
+        if not isinstance(row, dict):
+            continue
+        candidate, pr, acknowledgements = row.get("candidate"), row.get("pr"), row.get("acknowledgements")
+        if not isinstance(candidate, dict) or not isinstance(pr, dict) or not isinstance(acknowledgements, list) or not acknowledgements:
+            continue
+        final_ack = acknowledgements[-1]
+        if not isinstance(final_ack, dict):
+            continue
+        if (
+            row.get("status") == "read-back-confirmed"
+            and row.get("superseded_by") is None
+            and candidate.get("repository", "").casefold() == "statpan/datapan-registry"
+            and candidate.get("source_id") == source_id
+            and candidate.get("manifest_sha256") == manifest_sha256
+            and pr.get("state") == "merged"
+            and pr.get("merge_commit_sha") == source_sha
+            and final_ack.get("status") == "read-back-confirmed"
+            and final_ack.get("source_sha") == source_sha
+            and final_ack.get("manifest_sha256") == manifest_sha256
+        ):
+            matches.append((row, final_ack))
+    if len(matches) != 1:
+        raise ValueError("ACK replay does not identify one active exact-subject read-back witness")
+    row, witness = matches[0]
+    candidate = row["candidate"]
+    identity = witness.get("artifact_identity")
+    witness_run_id = witness.get("run_id")
+    witness_attempt = witness.get("run_attempt")
+    witness_url = (
+        f"https://github.com/StatPan/datapan-registry/actions/runs/{witness_run_id}/attempts/{witness_attempt}"
+        if isinstance(witness_run_id, int) and not isinstance(witness_run_id, bool)
+        and isinstance(witness_attempt, int) and not isinstance(witness_attempt, bool)
+        else None
+    )
+    if (
+        candidate.get("registry_path") != "data/data-go-kr.registry.json"
+        or isinstance(candidate.get("registry_bytes"), bool)
+        or not isinstance(candidate.get("registry_bytes"), int)
+        or candidate.get("registry_bytes") < 1
+        or not SHA256_RE.fullmatch(candidate.get("registry_sha256", ""))
+        or not isinstance(identity, dict)
+        or identity != {
+            "path": candidate.get("registry_path"),
+            "bytes": candidate.get("registry_bytes"),
+            "sha256": candidate.get("registry_sha256"),
+        }
+        or witness.get("read_back_verified") is not True
+        or witness.get("read_back_sha256") != candidate.get("registry_sha256")
+        or witness.get("read_back_bytes") != candidate.get("registry_bytes")
+        or isinstance(witness_run_id, bool) or not isinstance(witness_run_id, int) or witness_run_id < 1
+        or isinstance(witness_attempt, bool) or not isinstance(witness_attempt, int) or witness_attempt < 1
+        or witness.get("run_url") != witness_url
+        or not isinstance(witness.get("publication_revision"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", witness["publication_revision"])
+        or not isinstance(witness.get("publication_pointer_revision"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", witness["publication_pointer_revision"])
+        or not isinstance(witness.get("evidence_reference"), str)
+        or not re.search(r"sha256=[a-f0-9]{64}(?:\b|$)", witness["evidence_reference"])
+    ):
+        raise ValueError("ACK replay's existing read-back witness is malformed or unbound")
+    parse_time(witness.get("observed_at"), "prior ACK witness observation time")
+    return row, witness
 
 
 def validate_acknowledgement_transition(
@@ -4000,13 +4279,8 @@ def validate_acknowledgement_transition(
     publisher: dict[str, Any], publisher_receipt_raw: bytes,
     release_manifest: dict[str, Any], evaluation_epoch: str,
 ) -> dict[str, Any]:
-    optional_state_roles = {
-        "acknowledgement_state_ref", "acknowledgement_state_commit",
-        "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
-    }
-    supplied_state_roles = optional_state_roles & set(roles)
-    if supplied_state_roles and supplied_state_roles != optional_state_roles:
-        raise ValueError("ACK state-tree evidence is only valid as a complete ref/commit/tree/blob bundle")
+    supplied_state_roles = ACKNOWLEDGEMENT_STATE_AFTER_ROLES & set(roles)
+    supplied_before_state_roles = ACKNOWLEDGEMENT_STATE_BEFORE_ROLES & set(roles)
     before_item = single_role(scoped_inputs, "acknowledgement_journal_before")
     after_item = single_role(scoped_inputs, "acknowledgement_journal_after")
     if before_item is None or after_item is None:
@@ -4033,26 +4307,8 @@ def validate_acknowledgement_transition(
             ):
                 raise ValueError("ACK journal snapshots are not attributed to the exact trusted ACK attempt")
 
-    state_bytes: dict[str, bytes] = {}
-    ref: dict[str, Any] = {}
-    if supplied_state_roles:
-        state_bytes = validate_state_tree(
-            stage="acknowledgement", roles=roles, resolved=resolved,
-            ref_role="acknowledgement_state_ref", commit_role="acknowledgement_state_commit",
-            tree_role="acknowledgement_state_tree", content_roles={},
-            blob_roles={"acknowledgement_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
-        )
-        ref = indexed_json(roles, resolved, "acknowledgement_state_ref")
-        commit = indexed_json(roles, resolved, "acknowledgement_state_commit")
-        if (
-            ref.get("ref") != "refs/heads/automation/canonical-update-state"
-            or commit.get("sha") != ref.get("object", {}).get("sha")
-        ):
-            raise ValueError("ACK state ref does not identify the immutable canonical promotion journal commit")
     before_raw = receipt_path_bytes(resolved[before_item["input_id"]], before_item)
     after_raw = receipt_path_bytes(resolved[after_item["input_id"]], after_item)
-    if supplied_state_roles and after_raw != state_bytes["acknowledgement_journal_blob_api"]:
-        raise ValueError("ACK after-journal snapshot differs from the exact blob in its ref/commit/tree")
     before = json.loads(before_raw)
     after = json.loads(after_raw)
     validate_schema(before, root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json", "ACK journal before")
@@ -4062,6 +4318,17 @@ def validate_acknowledgement_transition(
         or after.get("repository", "").casefold() != "statpan/datapan-registry"
     ):
         raise ValueError("ACK journal repository identity differs")
+    log_item = roles.get("acknowledgement_log_archive")
+    if log_item is None:
+        raise ValueError("ACK workflow evidence lacks its exact job log archive")
+    log_result = acknowledgement_log_result(
+        receipt_path_bytes(resolved[log_item["input_id"]], log_item)
+    )
+    state = validate_acknowledgement_state_bundles(
+        roles=roles, resolved=resolved, journal_before_raw=before_raw,
+        journal_after_raw=after_raw,
+        require_before=log_result.get("status") == "already_acknowledged",
+    )
 
     source_binding = publisher["source_binding"]
     source_sha = source_binding["source_sha"]
@@ -4094,6 +4361,57 @@ def validate_acknowledgement_transition(
     if len(before_matches) != 1 or len(after_matches) != 1:
         raise ValueError("ACK journal does not uniquely identify the exact published source subject")
     before_row, after_row = before_matches[0], after_matches[0]
+    if log_result.get("status") == "already_acknowledged":
+        local = validate_acknowledgement_local_transition(
+            root=root, scope=scope, scoped_inputs=scoped_inputs, roles=roles,
+            resolved=resolved, ack_run=ack_run, ack_job=ack_job,
+            evaluation_epoch=evaluation_epoch,
+        )
+        if (
+            before_raw != after_raw or before_row != after_row
+            or before_row.get("status") != "read-back-confirmed"
+            or after_row.get("status") != "read-back-confirmed"
+        ):
+            raise ValueError("ACK no-write replay does not preserve the exact read-back-confirmed journal row")
+        _witness_row, witness = acknowledged_journal_witness(
+            after, source_id=acknowledgement_scope["source_id"],
+            source_sha=source_sha, manifest_sha256=manifest_sha,
+        )
+        candidate = after_row["candidate"]
+        if (
+            candidate.get("registry_path") != registry_artifact.get("path")
+            or candidate.get("registry_sha256") != registry_artifact.get("sha256")
+            or candidate.get("registry_bytes") != registry_artifact.get("bytes")
+            or witness.get("publication_revision") != publisher["payload_revision"]
+            or witness.get("publication_pointer_revision") != publisher["pointer_revision"]
+            or f"sha256={sha256_bytes(publisher_receipt_raw)}" not in witness.get("evidence_reference", "")
+            or local.get("status") != "already_acknowledged"
+        ):
+            raise ValueError("ACK replay's existing witness differs from the exact native publisher subject")
+        ack_started = parse_time(ack_job["started_at"], "ACK job start")
+        ack_completed = parse_time(ack_job["completed_at"], "ACK job completion")
+        replay_started = parse_time(
+            ack_run.get("run_started_at") or ack_run.get("created_at"), "ACK replay run start",
+        )
+        cutoff = parse_time(evaluation_epoch, "ACK evaluation epoch")
+        if (
+            replay_started < parse_time(publisher["job_completed_at"], "publisher job completion")
+            or ack_started < parse_time(publisher["job_completed_at"], "publisher job completion")
+            or ack_completed > cutoff
+        ):
+            raise ValueError("ACK no-write replay is outside the exact published subject's time bounds")
+        return {
+            "run_id": str(witness["run_id"]), "attempt": witness["run_attempt"],
+            "source_sha": source_sha, "manifest_sha256": manifest_sha,
+            "workflow_id": ack_run["workflow_id"], "event": ack_run["event"],
+            "workflow_head_sha": ack_run["head_sha"],
+            "state_commit": local["state_commit"], "state_tree_sha": local["state_tree_sha"],
+            "journal_sha256": sha256_bytes(after_raw), "journal_record_count": len(after["records"]),
+            "acknowledgement_observed_at": witness["observed_at"],
+            "replay_run_id": str(ack_run["id"]), "replay_attempt": ack_run["run_attempt"],
+            "replay_status": "already_acknowledged", "journal_writes": 0,
+            "state_replay_unchanged": True,
+        }
     if (
         before_row.get("status") != "merged" or after_row.get("status") != "read-back-confirmed"
         or after_row.get("superseded_by") is not None
@@ -4157,10 +4475,11 @@ def validate_acknowledgement_transition(
         raise ValueError("ACK journal final read-back does not bind the publisher receipt and exact Registry payload")
     return {
         "run_id": str(ack_run["id"]), "attempt": ack_run["run_attempt"],
+        "source_sha": source_sha, "manifest_sha256": manifest_sha,
         "workflow_id": ack_run["workflow_id"], "event": ack_run["event"],
         "workflow_head_sha": ack_run["head_sha"],
-        "state_commit": ref.get("object", {}).get("sha") if ref else None,
-        "state_tree_sha": indexed_json(roles, resolved, "acknowledgement_state_tree")["sha"] if ref else None,
+        "state_commit": state["after"]["commit"]["sha"] if state["after"] else None,
+        "state_tree_sha": state["after"]["tree"]["sha"] if state["after"] else None,
         "journal_sha256": sha256_bytes(after_raw), "journal_record_count": len(after_records),
         "acknowledgement_observed_at": final["observed_at"],
     }
@@ -4232,22 +4551,65 @@ def validate_acknowledgement_local_transition(
         receipt_path_bytes(resolved[log_item["input_id"]], log_item)
     )
     ack_url = f"https://github.com/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}"
+    run_started = parse_time(
+        ack_run.get("run_started_at") or ack_run.get("created_at"), "ACK workflow run start",
+    )
     job_started = parse_time(ack_job["started_at"], "ACK job start")
     job_completed = parse_time(ack_job["completed_at"], "ACK job completion")
     cutoff = parse_time(evaluation_epoch, "ACK evaluation epoch")
     if (
         job_completed > cutoff
-        or log_result.get("status") != "read-back-confirmed"
+        or log_result.get("status") not in {"read-back-confirmed", "already_acknowledged"}
         or log_result.get("run_url") != ack_url
         or not isinstance(log_result.get("source_sha"), str)
         or not re.fullmatch(r"[a-f0-9]{40}", log_result["source_sha"])
         or not isinstance(log_result.get("manifest_sha256"), str)
         or not SHA256_RE.fullmatch(log_result["manifest_sha256"])
     ):
-        raise ValueError("ACK log does not bind one successful read-back result to the exact ACK attempt")
+        raise ValueError("ACK log does not bind one successful result to the exact ACK attempt")
 
     before_updated = parse_time(before.get("updated_at"), "ACK journal before update time")
     after_updated = parse_time(after.get("updated_at"), "ACK journal after update time")
+    if log_result.get("status") == "already_acknowledged":
+        state = validate_acknowledgement_state_bundles(
+            roles=roles, resolved=resolved, journal_before_raw=before_raw,
+            journal_after_raw=after_raw, require_before=True,
+        )
+        writes = log_result.get("journal_writes")
+        if (
+            isinstance(writes, bool) or not isinstance(writes, int) or writes != 0
+            or before_raw != after_raw or before_updated != after_updated
+            or not before_updated <= run_started <= job_started <= job_completed <= cutoff
+        ):
+            raise ValueError("already-acknowledged ACK run is not an exact zero-write journal replay")
+        row, witness = acknowledged_journal_witness(
+            after, source_id=str(scope.get("source_id")),
+            source_sha=log_result["source_sha"], manifest_sha256=log_result["manifest_sha256"],
+        )
+        witness_run = (witness["run_id"], witness["run_attempt"])
+        if (
+            witness_run == (ack_run.get("id"), attempt)
+            or parse_time(witness["observed_at"], "prior ACK witness observation") > before_updated
+            or parse_time(witness["observed_at"], "prior ACK witness observation") > run_started
+        ):
+            raise ValueError("ACK replay does not preserve an earlier independent journal witness")
+        return {
+            "status": "already_acknowledged", "run_id": run_id, "attempt": attempt,
+            "source_sha": log_result["source_sha"],
+            "manifest_sha256": log_result["manifest_sha256"],
+            "journal_sha256": sha256_bytes(after_raw),
+            "journal_record_count": len(after["records"]),
+            "journal_writes": 0,
+            "acknowledgement_observed_at": witness["observed_at"],
+            "witness_run_id": witness_run[0], "witness_attempt": witness_run[1],
+            "witness_status": row["status"],
+            "state_commit": state["after"]["commit"]["sha"],
+            "state_tree_sha": state["after"]["tree"]["sha"],
+            "state_replay_unchanged": True,
+            "cross_stage_join": "unproven-until-publisher-and-pipeline-stages-are-present",
+        }
+    if log_result.get("status") != "read-back-confirmed":
+        raise ValueError("ACK log has an unsupported successful result")
     if not before_updated <= job_started <= after_updated <= job_completed <= cutoff:
         raise ValueError("ACK journal transition timestamps do not enclose the exact ACK attempt")
 
@@ -4353,34 +4715,18 @@ def validate_acknowledgement_local_transition(
         if not isinstance(evidence_reference, str) or f"sha256={receipt_sha}" not in evidence_reference:
             raise ValueError("ACK final journal does not reference the exact supplied publication receipt bytes")
 
-    optional_state_roles = {
-        "acknowledgement_state_ref", "acknowledgement_state_commit",
-        "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
-    }
-    supplied_state_roles = optional_state_roles & set(roles)
-    if supplied_state_roles and supplied_state_roles != optional_state_roles:
-        raise ValueError("ACK state-tree bundle is incomplete")
-    if supplied_state_roles:
-        state_bytes = validate_state_tree(
-            stage="acknowledgement", roles=roles, resolved=resolved,
-            ref_role="acknowledgement_state_ref", commit_role="acknowledgement_state_commit",
-            tree_role="acknowledgement_state_tree", content_roles={},
-            blob_roles={"acknowledgement_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
-        )
-        ref = indexed_json(roles, resolved, "acknowledgement_state_ref")
-        commit = indexed_json(roles, resolved, "acknowledgement_state_commit")
-        if (
-            ref.get("ref") != "refs/heads/automation/canonical-update-state"
-            or commit.get("sha") != ref.get("object", {}).get("sha")
-            or state_bytes["acknowledgement_journal_blob_api"] != after_raw
-        ):
-            raise ValueError("ACK state ref/tree does not bind the exact after-journal snapshot")
+    state = validate_acknowledgement_state_bundles(
+        roles=roles, resolved=resolved, journal_before_raw=before_raw,
+        journal_after_raw=after_raw,
+    )
 
     return {
         "run_id": run_id, "attempt": attempt, "source_sha": source_sha,
         "manifest_sha256": candidate["manifest_sha256"],
         "journal_sha256": sha256_bytes(after_raw),
         "acknowledgement_observed_at": final_ack.get("observed_at"),
+        "state_commit": state["after"]["commit"]["sha"] if state["after"] else None,
+        "state_tree_sha": state["after"]["tree"]["sha"] if state["after"] else None,
         "cross_stage_join": "unproven-until-publisher-and-pipeline-stages-are-present",
     }
 
@@ -4406,9 +4752,14 @@ def validate_updated_claim_inputs(
     ack_roles = stage_input_map(scoped_inputs, "acknowledgement")
     if "consumer_readback" not in publisher_roles:
         raise ValueError("updated claim requires a producer-attributed immutable consumer stream report")
-    present_ack_state_roles = set(ack_roles) & PIPELINE_STAGE_OPTIONAL_ROLES["acknowledgement"]
-    if present_ack_state_roles and present_ack_state_roles != PIPELINE_STAGE_OPTIONAL_ROLES["acknowledgement"]:
-        raise ValueError("updated claim has an incomplete optional ACK state-tree evidence bundle")
+    present_ack_state_after = set(ack_roles) & ACKNOWLEDGEMENT_STATE_AFTER_ROLES
+    present_ack_state_before = set(ack_roles) & ACKNOWLEDGEMENT_STATE_BEFORE_ROLES
+    if present_ack_state_after and present_ack_state_after != ACKNOWLEDGEMENT_STATE_AFTER_ROLES:
+        raise ValueError("updated claim has an incomplete optional ACK after-state tree bundle")
+    if present_ack_state_before and present_ack_state_before != ACKNOWLEDGEMENT_STATE_BEFORE_ROLES:
+        raise ValueError("updated claim has an incomplete optional ACK before-state tree bundle")
+    if present_ack_state_before and not present_ack_state_after:
+        raise ValueError("updated claim ACK before-state bundle lacks its matching after-state bundle")
     publisher_run, publisher_job, _publisher_started, _publisher_completed = validate_stage_run(
         stage="publisher", roles=publisher_roles, resolved=resolved,
         evaluation_epoch=evaluation_epoch, root=root,
@@ -4686,7 +5037,7 @@ def validate_updated_claim_inputs(
 
     ack_fact = None
     ack_evidence_roles: set[str] = set()
-    if ack_roles and present_ack_state_roles:
+    if ack_roles and present_ack_state_after:
         ack_run, ack_job, ack_started, _ack_completed = validate_stage_run(
             stage="acknowledgement", roles=ack_roles, resolved=resolved,
             evaluation_epoch=evaluation_epoch, root=root,
@@ -4712,6 +5063,7 @@ def validate_updated_claim_inputs(
             "acknowledgement_journal_before", "acknowledgement_journal_after",
             "acknowledgement_state_ref", "acknowledgement_state_commit",
             "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+            *ACKNOWLEDGEMENT_STATE_BEFORE_ROLES,
         }
     evidence_roles = {
         "authoritative_source_snapshot", "authoritative_denominator",
@@ -4984,6 +5336,8 @@ def validate_pipeline_evidence(
         raise ValueError("native publisher receipt and source binding must be supplied together")
     publisher_attempt: dict[str, Any] | None = None
     publisher_readback: dict[str, Any] | None = None
+    acknowledgement_local: dict[str, Any] | None = None
+    acknowledgement_transition: dict[str, Any] | None = None
     if publisher_roles and receipt_item is not None and binding_item is not None:
         publisher_attempt = validate_native_publisher_attempt(
             root=root,
@@ -5002,7 +5356,7 @@ def validate_pipeline_evidence(
     )
     if stage_roles["acknowledgement"]:
         acknowledgement_run, acknowledgement_job = stage_runs["acknowledgement"]
-        validate_acknowledgement_local_transition(
+        acknowledgement_local = validate_acknowledgement_local_transition(
             root=root, scope=operation_scope, scoped_inputs=operation_inputs,
             roles=stage_roles["acknowledgement"], resolved=resolved,
             ack_run=acknowledgement_run, ack_job=acknowledgement_job,
@@ -5020,7 +5374,7 @@ def validate_pipeline_evidence(
             ]
             if len(catalog_scopes) != 1:
                 raise ValueError("ACK cross-stage join requires one registered catalog publication subject")
-            validate_acknowledgement_transition(
+            acknowledgement_transition = validate_acknowledgement_transition(
                 root=root, scope=operation_scope, acknowledgement_scope=catalog_scopes[0],
                 scoped_inputs=operation_inputs, roles=stage_roles["acknowledgement"],
                 resolved=resolved, ack_run=acknowledgement_run, ack_job=acknowledgement_job,
@@ -5043,11 +5397,53 @@ def validate_pipeline_evidence(
             resolved=resolved, current_registry=current_registry,
             evaluation_epoch=evaluation_epoch,
         )
+        publication = None
+        if publisher_attempt is not None and publisher_readback is not None:
+            publication = native_publication_delivery_facet(
+                publisher=publisher_attempt, readback=publisher_readback,
+                acknowledgement=acknowledgement_transition,
+            )
+        publication_roles = {
+            "publication_producer_run", "publication_producer_jobs", "publication_output_artifact",
+            "publication_artifact_archive", "publication_receipt", "publication_source_binding",
+            "publication_source_commit", "publication_source_manifest", "publication_workflow",
+            *NATIVE_PUBLICATION_READBACK_ROLES,
+            "acknowledgement_run", "acknowledgement_jobs", "acknowledgement_log_archive",
+            "acknowledgement_journal_before", "acknowledgement_journal_after",
+            "acknowledgement_state_ref", "acknowledgement_state_commit",
+            "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+            *ACKNOWLEDGEMENT_STATE_BEFORE_ROLES,
+        }
+        partial_evidence = [
+            artifact(input_path(item), receipt_path_bytes(resolved[item["input_id"]], item))
+            for item in operation_inputs
+            if item.get("subject", {}).get("stage") in {*core_stages, "publisher", "acknowledgement"}
+            or item.get("role") in publication_roles
+        ]
+        publication_evidence = [
+            item for item in partial_evidence
+            if item["path"] in {
+                input_path(row) for row in operation_inputs if row.get("role") in publication_roles
+            }
+        ]
         return {
             "status": "missing_core_chain",
             "missing_stages": missing_core_stages,
-            "evidence": [],
-            "publication": None,
+            "evidence": partial_evidence,
+            "publication": publication,
+            "publisher_attempt": publisher_attempt,
+            "publisher_readback": publisher_readback,
+            "acknowledgement_local": acknowledgement_local,
+            "acknowledgement_transition": acknowledgement_transition,
+            "current_registry": current_registry,
+            "publication_evidence": publication_evidence,
+            "publication_missing_stages": [
+                stage for stage, roles in (
+                    ("publisher", publisher_roles),
+                    ("acknowledgement", stage_roles["acknowledgement"]),
+                )
+                if not roles or stage == "acknowledgement" and acknowledgement_transition is None
+            ],
         }
 
     source_run, source_job = stage_runs["source"]
@@ -5104,6 +5500,7 @@ def validate_pipeline_evidence(
         "publication_anonymous_manifest", "publication_anonymous_payload", "acknowledgement_run",
         "acknowledgement_jobs", "acknowledgement_log_archive", "acknowledgement_journal_before",
         "acknowledgement_journal_after",
+        *ACKNOWLEDGEMENT_STATE_AFTER_ROLES, *ACKNOWLEDGEMENT_STATE_BEFORE_ROLES,
     )
     acknowledgement_roles = stage_roles["acknowledgement"]
     acknowledgement_run = stage_runs.get("acknowledgement", ({}, {}))[0]
@@ -5116,9 +5513,10 @@ def validate_pipeline_evidence(
         publisher_run.get("id") == publication_helper.PUBLISHER_RUN_ID
         and acknowledgement_run.get("id") == publication_helper.ACK_RUN_ID
     )
+    legacy_required_roles = set(publication_roles) - ACKNOWLEDGEMENT_STATE_AFTER_ROLES - ACKNOWLEDGEMENT_STATE_BEFORE_ROLES
     legacy_roles_present = all(
         single_role(operation_inputs, role, required=False) is not None
-        for role in publication_roles
+        for role in legacy_required_roles
     )
     if legacy_packet_ids:
         if not publisher_roles or not acknowledgement_roles or not legacy_roles_present:
@@ -5163,22 +5561,28 @@ def validate_pipeline_evidence(
         if publication.get("status") != "verified":
             raise ValueError("retained publication and acknowledgement packet is not authenticated")
         assert_main_ancestor(root, publisher_run["head_sha"], "publisher workflow source commit")
+    elif publisher_attempt is not None and publisher_readback is not None and acknowledgement_transition is not None:
+        # Generic producer evidence uses the same native readback and ACK
+        # validators as updated claims. Keep the resulting delivery fact even
+        # when no positive #631 proof exists; this does not elevate any
+        # completeness/current/updated claim.
+        publication = native_publication_delivery_facet(
+            publisher=publisher_attempt, readback=publisher_readback,
+            acknowledgement=acknowledgement_transition,
+        )
 
     if publication is not None:
         for role in publication_roles:
-            item = single_role(operation_inputs, role)
-            assert item is not None
-            publication_evidence.append(
-                artifact(input_path(item), receipt_path_bytes(resolved[item["input_id"]], item))
-            )
-    elif publisher_attempt is not None:
-        # Preserve what the generic native producer actually proved without
-        # presenting it as a complete anonymous-readback/ACK facet.
-        for role in (
-            "publication_producer_run", "publication_producer_jobs",
-            "publication_output_artifact", "publication_artifact_archive",
-            "publication_receipt", "publication_source_binding",
-        ):
+            item = single_role(operation_inputs, role, required=False)
+            if item is not None:
+                publication_evidence.append(
+                    artifact(input_path(item), receipt_path_bytes(resolved[item["input_id"]], item))
+                )
+    elif publisher_attempt is not None or publisher_readback is not None or acknowledgement_local is not None:
+        # Preserve each independently validated native delivery input when a
+        # peer is absent. Missing ACK/core joins do not make valid publisher
+        # and anonymous-readback evidence disappear.
+        for role in publication_roles:
             item = single_role(operation_inputs, role, required=False)
             if item is not None:
                 publication_evidence.append(
@@ -5200,6 +5604,9 @@ def validate_pipeline_evidence(
         "current_registry": current_registry,
         "publication": publication,
         "publisher_attempt": publisher_attempt,
+        "publisher_readback": publisher_readback,
+        "acknowledgement_local": acknowledgement_local,
+        "acknowledgement_transition": acknowledgement_transition,
         "publication_missing_stages": [
             stage for stage, roles in (("publisher", publisher_roles), ("acknowledgement", acknowledgement_roles))
             if not roles
@@ -5275,16 +5682,79 @@ def scope_facets(
         if pipeline_evidence is None or pipeline_evidence.get("status") != "verified_historical_chain":
             stage_missing = pipeline_evidence.get("missing_stages", []) if pipeline_evidence else []
             facets.append({
-                "facet_id": "specification_pipeline", "state": "missing", "evidence": [],
-                "details": {"missing_stages": stage_missing},
+                "facet_id": "specification_pipeline", "state": "missing",
+                "evidence": pipeline_evidence.get("evidence", []) if pipeline_evidence else [],
+                "details": {
+                    "missing_stages": stage_missing,
+                    "validated_present_stage_evidence": pipeline_evidence.get("evidence", []) if pipeline_evidence else [],
+                },
                 "missing_evidence": [missing_entry("authenticated_b_c_health_chain_missing", "StatPan/datapan-registry", "#659")],
             })
             if updated_delivery is None:
-                facets.append({
-                    "facet_id": "immutable_publication_read_back", "state": "missing", "evidence": [],
-                    "details": {"receipt_cutover_required": False, "consumer_read_back_required_for_updated": True},
-                    "missing_evidence": [missing_entry("same_subject_publication_read_back_missing", "StatPan/datapan-registry", "#659")],
-                })
+                publication = pipeline_evidence.get("publication") if pipeline_evidence else None
+                readback = pipeline_evidence.get("publisher_readback") if pipeline_evidence else None
+                publisher_attempt = pipeline_evidence.get("publisher_attempt") if pipeline_evidence else None
+                current_registry = pipeline_evidence.get("current_registry") if pipeline_evidence else None
+                if publication is not None or readback is not None and publisher_attempt is not None:
+                    subject = publication["subject"] if publication is not None else {
+                        "repository": "StatPan/datapan-registry",
+                        "source_sha": readback["source_sha"],
+                        "manifest_sha256": readback["manifest_sha256"],
+                        "registry_path": readback["registry_artifact"]["path"],
+                        "registry_sha256": readback["registry_artifact"]["sha256"],
+                        "registry_bytes": readback["registry_artifact"]["bytes"],
+                        "publisher_run_id": readback["publisher_run_id"],
+                        "publisher_attempt": readback["publisher_attempt"],
+                        "payload_revision": readback["payload_revision"],
+                        "pointer_revision": readback["pointer_revision"],
+                    }
+                    release_manifest_sha = current_registry.get("release_manifest_sha256") if current_registry else None
+                    same_release = candidate_context is None and subject["manifest_sha256"] == release_manifest_sha
+                    publication_missing = pipeline_evidence.get("publication_missing_stages", [])
+                    missing_evidence = []
+                    if not same_release:
+                        missing_evidence.append(missing_entry("current_release_publication_read_back_missing", "StatPan/datapan-registry", "#659"))
+                    if "acknowledgement" in publication_missing:
+                        missing_evidence.append(missing_entry("publication_acknowledgement_missing", "StatPan/datapan-registry", "#716"))
+                    facets.append({
+                        "facet_id": "immutable_publication_read_back",
+                        "state": "proven" if same_release else "historical",
+                        "evidence": pipeline_evidence.get("publication_evidence", []),
+                        "details": {
+                            **(publication.get("details", {}) if publication is not None else {}),
+                            "subject": subject,
+                            "native_readback": {
+                                "observed_at": readback["consumer_readback_observed_at"],
+                                "verified_artifact_count": readback["verified_artifact_count"],
+                            } if readback is not None else None,
+                            "acknowledgement_present": "acknowledgement" not in publication_missing,
+                            "missing_stages": publication_missing,
+                            "current_release_manifest_sha256": release_manifest_sha,
+                            "current_release_subject_applicable": same_release,
+                            "payload_equivalent_to_current_registry": (
+                                bool(current_registry)
+                                and subject["registry_sha256"] == current_registry["sha256"]
+                                and subject["registry_bytes"] == current_registry["bytes"]
+                            ),
+                            "receipt_cutover_required": False,
+                            "consumer_read_back_required_for_updated": True,
+                        },
+                        "missing_evidence": missing_evidence,
+                    })
+                else:
+                    facets.append({
+                        "facet_id": "immutable_publication_read_back", "state": "missing",
+                        "evidence": pipeline_evidence.get("publication_evidence", []) if pipeline_evidence else [],
+                        "details": {
+                            "publisher_attempt": publisher_attempt,
+                            "publisher_readback": readback,
+                            "acknowledgement_local": pipeline_evidence.get("acknowledgement_local") if pipeline_evidence else None,
+                            "missing_stages": pipeline_evidence.get("publication_missing_stages", []) if pipeline_evidence else [],
+                            "receipt_cutover_required": False,
+                            "consumer_read_back_required_for_updated": True,
+                        },
+                        "missing_evidence": [missing_entry("same_subject_publication_read_back_missing", "StatPan/datapan-registry", "#659")],
+                    })
             facets.extend([
                 {"facet_id": "source_observation", "state": "missing", "evidence": [], "details": {}, "missing_evidence": [missing_entry("new_authenticated_source_observation_missing", "StatPan/datapan-data", "StatPan/datapan-data#1190")]},
                 {"facet_id": "health_observation", "state": "missing", "evidence": [], "details": {"health_is_not_source_observation": True}, "missing_evidence": [missing_entry("health_producer_receipt_missing", "StatPan/datapan-health", "StatPan/datapan-health#33")]},
@@ -5329,6 +5799,8 @@ def scope_facets(
                     "current_input_contract_changed_paths": processor["current_input_contract_changed_paths"],
                     "promotion_run_id": promotion["run_id"],
                     "promotion_candidate_available": promotion["candidate_available"],
+                    "promotion_candidate_lifecycle_status": promotion["candidate_lifecycle_status"],
+                    "promotion_candidate_acknowledgement_statuses": promotion["candidate_acknowledgement_statuses"],
                     "promotion_processor_generation_matches": promotion["processor_generation_matches"],
                     "promotion_candidate_key": promotion["candidate_key"],
                     "promotion_journal_sha256": promotion["journal_sha256"],
@@ -5371,18 +5843,68 @@ def scope_facets(
             publication = pipeline_evidence["publication"]
             if updated_delivery is None:
                 if publication is None:
-                    facets.append({
-                        "facet_id": "immutable_publication_read_back",
-                        "state": "missing",
-                        "evidence": pipeline_evidence["publication_evidence"],
-                        "details": {
-                            "publisher_attempt": pipeline_evidence.get("publisher_attempt"),
-                            "missing_stages": pipeline_evidence.get("publication_missing_stages", []),
-                            "receipt_cutover_required": False,
-                            "consumer_read_back_required_for_updated": True,
-                        },
-                        "missing_evidence": [missing_entry("same_subject_publication_read_back_missing", "StatPan/datapan-registry", "#659")],
-                    })
+                    readback = pipeline_evidence.get("publisher_readback")
+                    publisher_attempt = pipeline_evidence.get("publisher_attempt")
+                    if readback is None or publisher_attempt is None:
+                        facets.append({
+                            "facet_id": "immutable_publication_read_back",
+                            "state": "missing",
+                            "evidence": pipeline_evidence["publication_evidence"],
+                            "details": {
+                                "publisher_attempt": publisher_attempt,
+                                "publisher_readback": readback,
+                                "missing_stages": pipeline_evidence.get("publication_missing_stages", []),
+                                "receipt_cutover_required": False,
+                                "consumer_read_back_required_for_updated": True,
+                            },
+                            "missing_evidence": [missing_entry("same_subject_publication_read_back_missing", "StatPan/datapan-registry", "#659")],
+                        })
+                    else:
+                        readback_subject = {
+                            "repository": "StatPan/datapan-registry",
+                            "source_sha": readback["source_sha"],
+                            "manifest_sha256": readback["manifest_sha256"],
+                            "registry_path": readback["registry_artifact"]["path"],
+                            "registry_sha256": readback["registry_artifact"]["sha256"],
+                            "registry_bytes": readback["registry_artifact"]["bytes"],
+                            "publisher_run_id": readback["publisher_run_id"],
+                            "publisher_attempt": readback["publisher_attempt"],
+                            "payload_revision": readback["payload_revision"],
+                            "pointer_revision": readback["pointer_revision"],
+                        }
+                        current_release_manifest_sha = pipeline_evidence["current_registry"]["release_manifest_sha256"]
+                        compared_registry = candidate_context["candidate_registry"] if candidate_context is not None else pipeline_evidence["current_registry"]
+                        same_release = candidate_context is None and readback_subject["manifest_sha256"] == current_release_manifest_sha
+                        missing_evidence = []
+                        if not same_release:
+                            missing_evidence.append(missing_entry("current_release_publication_read_back_missing", "StatPan/datapan-registry", "#659"))
+                        if "acknowledgement" in pipeline_evidence.get("publication_missing_stages", []):
+                            missing_evidence.append(missing_entry("publication_acknowledgement_missing", "StatPan/datapan-registry", "#716"))
+                        facets.append({
+                            "facet_id": "immutable_publication_read_back",
+                            "state": "proven" if same_release else "historical",
+                            "evidence": pipeline_evidence["publication_evidence"],
+                            "details": {
+                                    "subject": readback_subject,
+                                    "publisher_attempt": publisher_attempt,
+                                    "native_readback": {
+                                    "observed_at": readback["consumer_readback_observed_at"],
+                                    "verified_artifact_count": readback["verified_artifact_count"],
+                                },
+                                    "acknowledgement_present": "acknowledgement" not in pipeline_evidence.get("publication_missing_stages", []),
+                                    "missing_stages": pipeline_evidence.get("publication_missing_stages", []),
+                                    "current_release_manifest_sha256": None if candidate_context is not None else current_release_manifest_sha,
+                                "current_release_subject_applicable": same_release,
+                                "payload_equivalent_to_current_registry": (
+                                    readback_subject["registry_sha256"] == compared_registry["sha256"]
+                                    and readback_subject["registry_bytes"] == compared_registry["bytes"]
+                                ),
+                                "candidate_release_publication_unproven": candidate_context is not None,
+                                "receipt_cutover_required": False,
+                                "consumer_read_back_required_for_updated": True,
+                            },
+                                "missing_evidence": missing_evidence,
+                        })
                 else:
                     current_release_manifest_sha = pipeline_evidence["current_registry"]["release_manifest_sha256"]
                     publication_subject = publication["subject"]
