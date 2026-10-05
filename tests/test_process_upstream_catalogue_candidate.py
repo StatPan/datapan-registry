@@ -208,6 +208,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
     def assert_c_processor_bundle_accepts(
         self, checkpoint: dict[str, Any], baseline: list[dict[str, Any]], candidate: list[dict[str, Any]],
         provider_index: dict[str, Any], enrichment: dict[str, Any], composer: Any,
+        *, bundle_mutator: Any = None, expected_rejection: str | None = None,
     ) -> None:
         """Exercise the real C bundle gate over a real composition result."""
         import importlib.util
@@ -256,13 +257,25 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             run_id="20100000000",
             run_url="https://github.com/StatPan/datapan-registry/actions/runs/20100000000",
         )
-        bundle_dir = self.root / f"c-processor-bundle-{checkpoint['generation_id'][:8]}"
+        bundle_index = len(list(self.root.glob("c-processor-bundle-*")))
+        bundle_dir = self.root / f"c-processor-bundle-{checkpoint['generation_id'][:8]}-{bundle_index}"
         bundle_dir.mkdir()
         for name, payload in payloads.items():
             (bundle_dir / name).write_bytes(payload)
         (bundle_dir / "upstream-catalogue-enrichment-evidence.json").write_bytes(
             MODULE.canonical_json(enrichment) + b"\n",
         )
+        if bundle_mutator is not None:
+            bundle_mutator(bundle_dir)
+            composition_path = bundle_dir / "composition-receipt.json"
+            composition_receipt = json.loads(composition_path.read_text(encoding="utf-8"))
+            for name in composition_receipt.get("outputs", {}):
+                path = bundle_dir / name
+                composition_receipt["outputs"][name] = {
+                    "bytes": path.stat().st_size,
+                    "sha256": MODULE.file_sha256(path),
+                }
+            composition_path.write_bytes(MODULE.canonical_json(composition_receipt) + b"\n")
 
         final = copy.deepcopy(checkpoint)
         processor_run_id = str(final["output_artifact"]["name"]).removeprefix("upstream-catalogue-processing-")
@@ -303,7 +316,11 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         )
         schema = json.loads((ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json").read_text())
         composition_helper = runner.load_canonical_update_pr(ROOT)
-        runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper)
+        if expected_rejection is None:
+            runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=ROOT)
+        else:
+            with self.assertRaisesRegex(runner.PromotionError, expected_rejection):
+                runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=ROOT)
 
     def successful_fetch(self, url: str, timeout: float) -> str:
         self.assertRegex(url, r"^https://www\.data\.go\.kr/data/[0-9]+/openapi\.do$")
@@ -360,15 +377,20 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
 
         subject = json.loads((ROOT / "data/data-go-kr.registry.json").read_text(encoding="utf-8"))
         subject = next(row for row in subject if row["id"] == "15056854")
-        baseline = copy.deepcopy(subject)
+        # This is a newly seen source row, so use an empty baseline: the
+        # processor deliberately spends no HTTP detail budget for an unchanged
+        # existing source row without a stale cached observation.
+        baseline: list[dict[str, Any]] = []
         candidate = copy.deepcopy(subject)
-        candidate["source"]["raw"]["updated_at"] = "2026-10-01"
-        self.baseline_path.write_text(json.dumps([baseline], ensure_ascii=False), encoding="utf-8")
-        self.candidate_path.write_text(json.dumps([candidate], ensure_ascii=False), encoding="utf-8")
+        self.write_real_composer_inputs(baseline, [candidate], self.now)
         self.provider_index_path.write_bytes((ROOT / "data/provider-index.json").read_bytes())
-        self.write_observation(self.now)
 
         helper = MODULE.SEOUL_DECLARATION
+        source_pin = helper.validate_committed_prefix_snapshot(ROOT)
+        self.assertEqual(source_pin["commit"], "0085b357289755d6b3fb60a7259bd85da42d2962")
+        self.assertEqual(source_pin["source_manifest_sha256"], "89afa12758dd3eded5ce5a96275572a8826574d4e7ead020412f7a76d6bb60ba")
+        self.assertEqual(source_pin["source_file_git_blob_sha1"], "fcd4a814348b7beff832737402b5ec22642d4228")
+        self.assertTrue(source_pin["materialized_registry_verified"])
         detail_id = subject["source"]["raw"]["id"]
         page_url = helper.PAGE_URL
         page_body = (
@@ -396,7 +418,11 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             )
 
         actual_composer = ROOT / "scripts/compose-upstream-catalogue-candidate.py"
-        process_args = self.args()
+        process_args = self.args(run_id="101001", **{
+            "--composer": ACTUAL_COMPOSER,
+        })
+        process_args.fixture_composer = None
+        process_args.allow_fixture_composer = False
         code, checkpoint = MODULE.process(
             process_args,
             fetcher=fetch_page,
@@ -408,8 +434,16 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
         self.assertEqual(len(evidence["records"]), 1)
         record = evidence["records"][0]
+        self.assertEqual(
+            record["declaration_provenance"]["historical_operation_prefix"]["canonical_operations_sha256"],
+            "a22776819f63f30f9294f21dcacfd2447577e700425c02fb25e0e5e2c5f05def",
+        )
+        self.assertEqual(
+            record["declaration_provenance"]["source_review_record"]["review_decision_recorded_at"],
+            "2026-10-05T03:14:39Z",
+        )
         self.assertEqual(len(record["operations"]), 4)
-        self.assertEqual(record["operations"][:3], baseline["operations"])
+        self.assertEqual(record["operations"][:3], subject["operations"])
         declared = record["operations"][-1]
         self.assertEqual(declared["http_method"], "GET")
         self.assertEqual(declared["method_evidence"], "target-service-hyperlink-navigation-v1")
@@ -449,7 +483,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         validated_enrichment = composer.validate_enrichment_evidence(
             evidence,
             candidate_by_key={("data.go.kr", candidate["id"]): candidate},
-            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            baseline_by_key={},
             candidate_sha256=MODULE.file_sha256(self.candidate_path),
             provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
             hosts=composer.registered_hosts(provider_index),
@@ -465,7 +499,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         rejected_observation = composer.validate_enrichment_evidence(
             changed_observation,
             candidate_by_key={("data.go.kr", candidate["id"]): candidate},
-            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            baseline_by_key={},
             candidate_sha256=MODULE.file_sha256(self.candidate_path),
             provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
             hosts=composer.registered_hosts(provider_index),
@@ -478,7 +512,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         rejected_source = composer.validate_enrichment_evidence(
             evidence,
             candidate_by_key={("data.go.kr", changed_source["id"]): changed_source},
-            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            baseline_by_key={},
             candidate_sha256=MODULE.file_sha256(self.candidate_path),
             provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
             hosts=composer.registered_hosts(provider_index),
@@ -486,20 +520,177 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         )
         self.assertIn("_binding_error", rejected_source[("data.go.kr", candidate["id"])])
         composed = composer.compose_registries(
-            [baseline], [candidate], provider_index,
+            baseline, [candidate], provider_index,
             baseline_sha256=MODULE.file_sha256(self.baseline_path),
             candidate_sha256=MODULE.file_sha256(self.candidate_path),
             provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
             enrichment_evidence=evidence,
         )
         composed_row = composed["composed_registry"][0]
-        self.assertEqual(composed_row["operations"][:3], baseline["operations"])
+        self.assertEqual(composed_row["operations"][:3], subject["operations"])
         self.assertEqual(len(composed_row["operations"]), 4, composed["semantic_diff"]["api_decisions"])
         self.assertEqual(composed_row["operations"][3], declared)
         self.assertEqual(composer.operation_counts([composed_row])["gateway"], 1)
         self.assert_c_processor_bundle_accepts(
-            checkpoint, [baseline], [candidate], provider_index, evidence, composer,
+            checkpoint, baseline, [candidate], provider_index, evidence, composer,
         )
+
+        def write_json(path: pathlib.Path, value: Any) -> None:
+            path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+
+        def mutate_provenance_digest(bundle_dir: pathlib.Path) -> None:
+            path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            value = json.loads(path.read_text(encoding="utf-8"))
+            value["records"][0]["declaration_provenance"]["declaration_sha256"] = "0" * 64
+            write_json(path, value)
+
+        def mutate_review_clock(bundle_dir: pathlib.Path) -> None:
+            path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            value = json.loads(path.read_text(encoding="utf-8"))
+            value["records"][0]["declaration_provenance"]["source_review_record"]["review_decision_recorded_at"] = "2026-10-05T03:14:40Z"
+            write_json(path, value)
+
+        def mutate_prefix_digest(bundle_dir: pathlib.Path) -> None:
+            path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            value = json.loads(path.read_text(encoding="utf-8"))
+            value["records"][0]["declaration_provenance"]["historical_operation_prefix"]["canonical_operations_sha256"] = "0" * 64
+            write_json(path, value)
+
+        def mutate_prefix_name(bundle_dir: pathlib.Path) -> None:
+            evidence_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            evidence_value = json.loads(evidence_path.read_text(encoding="utf-8"))
+            evidence_record = evidence_value["records"][0]
+            evidence_record["operations"][0]["name"] += " forged-prefix"
+            evidence_record["operations_sha256"] = composer.operations_digest(evidence_record["operations"])
+            write_json(evidence_path, evidence_value)
+            for name in ("composed-candidate.registry.json", "ready-scope.registry.json"):
+                path = bundle_dir / name
+                rows = json.loads(path.read_text(encoding="utf-8"))
+                target = next(row for row in rows if row.get("id") == "15056854")
+                target["operations"][0]["name"] += " forged-prefix"
+                write_json(path, rows)
+
+        def mutate_source_origin(bundle_dir: pathlib.Path) -> None:
+            for name in ("composed-candidate.registry.json", "ready-scope.registry.json"):
+                path = bundle_dir / name
+                rows = json.loads(path.read_text(encoding="utf-8"))
+                target = next(row for row in rows if row.get("id") == "15056854")
+                target["source"]["url"] = "https://attacker.invalid/catalog/15056854"
+                write_json(path, rows)
+
+        def mutate_strip_declaration_marker(bundle_dir: pathlib.Path) -> None:
+            path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            value = json.loads(path.read_text(encoding="utf-8"))
+            value["records"][0].pop("declaration_provenance")
+            write_json(path, value)
+
+        def mutate_composed_counterpart_only(bundle_dir: pathlib.Path) -> None:
+            path = bundle_dir / "composed-candidate.registry.json"
+            rows = json.loads(path.read_text(encoding="utf-8"))
+            target = next(row for row in rows if row.get("id") == "15056854")
+            target["operations"][-1]["name"] += " counterpart-only tampering"
+            write_json(path, rows)
+
+        def mutate_ready_counterpart_only(bundle_dir: pathlib.Path) -> None:
+            path = bundle_dir / "ready-scope.registry.json"
+            rows = json.loads(path.read_text(encoding="utf-8"))
+            target = next(row for row in rows if row.get("id") == "15056854")
+            target["operations"][-1]["name"] += " counterpart-only tampering"
+            write_json(path, rows)
+
+        for mutation in (
+            mutate_provenance_digest,
+            mutate_review_clock,
+            mutate_prefix_digest,
+            mutate_prefix_name,
+            mutate_source_origin,
+            mutate_strip_declaration_marker,
+            mutate_composed_counterpart_only,
+            mutate_ready_counterpart_only,
+        ):
+            self.assert_c_processor_bundle_accepts(
+                checkpoint, baseline, [candidate], provider_index, evidence, composer,
+                bundle_mutator=mutation,
+                expected_rejection="processor .* declaration|historical prefix authority",
+            )
+
+        def mutate_declared_operation(field_path: tuple[str, ...], value: Any) -> Any:
+            def set_field(operation: dict[str, Any]) -> None:
+                target = operation
+                for component in field_path[:-1]:
+                    target = target[component]
+                target[field_path[-1]] = value
+
+            def mutate(bundle_dir: pathlib.Path) -> None:
+                for name in (
+                    "upstream-catalogue-enrichment-evidence.json",
+                    "composed-candidate.registry.json",
+                    "ready-scope.registry.json",
+                ):
+                    path = bundle_dir / name
+                    payload = json.loads(path.read_text(encoding="utf-8"))
+                    if name == "upstream-catalogue-enrichment-evidence.json":
+                        operation = payload["records"][0]["operations"][-1]
+                        set_field(operation)
+                        payload["records"][0]["operations_sha256"] = composer.operations_digest(
+                            payload["records"][0]["operations"],
+                        )
+                        payload["records"][0]["declaration_provenance"]["operation_sha256"] = (
+                            composer.SEOUL_OPERATION_DECLARATION.digest_json(operation)
+                        )
+                    else:
+                        target = next(row for row in payload if row.get("id") == "15056854")
+                        set_field(target["operations"][-1])
+                    write_json(path, payload)
+            return mutate
+
+        def mutate_declared_source_url(bundle_dir: pathlib.Path) -> None:
+            for name in (
+                "upstream-catalogue-enrichment-evidence.json",
+                "composed-candidate.registry.json",
+                "ready-scope.registry.json",
+            ):
+                path = bundle_dir / name
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                if name == "upstream-catalogue-enrichment-evidence.json":
+                    operation = payload["records"][0]["operations"][-1]
+                    operation["source"]["url"] = "https://attacker.invalid/openapi"
+                    payload["records"][0]["operations_sha256"] = composer.operations_digest(
+                        payload["records"][0]["operations"],
+                    )
+                    payload["records"][0]["declaration_provenance"]["operation_sha256"] = (
+                        composer.SEOUL_OPERATION_DECLARATION.digest_json(operation)
+                    )
+                else:
+                    target = next(row for row in payload if row.get("id") == "15056854")
+                    target["operations"][-1]["source"]["url"] = "https://attacker.invalid/openapi"
+                write_json(path, payload)
+
+        for mutation in (
+            mutate_declared_operation(("http_method",), "POST"),
+            mutate_declared_operation(("source", "raw", "provider_dataset_id"), "OA-101"),
+            mutate_declared_source_url,
+        ):
+            self.assert_c_processor_bundle_accepts(
+                checkpoint, baseline, [candidate], provider_index, evidence, composer,
+                bundle_mutator=mutation,
+                expected_rejection="processor .* declaration|historical prefix authority",
+            )
+
+        other_api = copy.deepcopy(candidate)
+        other_api["id"] = "2"
+        other_api["source"]["url"] = "https://www.data.go.kr/catalog/2/openapi.json"
+        other_api["source"]["raw"]["id"] = "uddi:fixture-2"
+        other_api["source"]["raw"]["list_id"] = "2"
+        other_operation = copy.deepcopy(subject["operations"][0])
+        other_operation["source"]["url"] = other_api["source"]["url"]
+        other_errors = composer.operation_provenance_errors(
+            other_api,
+            other_operation,
+            composer.registered_hosts(provider_index),
+            source_page_url="https://www.data.go.kr/data/2/openapi.do",
+        )
+        self.assertIn("operation_source_url_differs_from_api", other_errors)
 
         manifest_spec = importlib.util.spec_from_file_location(
             "seoul_test_operation_manifest", ROOT / "scripts/generate-data-go-kr-operation-manifest.py",
@@ -536,6 +727,109 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertTrue(runtime_contract["contract_complete"], runtime_contract["incomplete_reasons"])
         self.assertEqual(runtime_contract["upstream_operation_key"], helper.OPERATION_KEY)
 
+    def test_seoul_operationless_baseline_preserves_pinned_prefix_in_real_composer_and_c(self) -> None:
+        import importlib.util
+
+        subject = json.loads((ROOT / "data/data-go-kr.registry.json").read_text(encoding="utf-8"))
+        candidate = next(row for row in subject if row["id"] == "15056854")
+        self.write_real_composer_inputs([], [candidate], self.now)
+        self.provider_index_path.write_bytes((ROOT / "data/provider-index.json").read_bytes())
+        helper = MODULE.SEOUL_DECLARATION
+        detail_id = candidate["source"]["raw"]["id"]
+        page_body = (
+            "<button type=\"button\" onclick=\"fn_goUrlLink('15056854')\">Open</button>"
+            "<input type=\"hidden\" id=\"publicDataPk\" value=\"15056854\">"
+            f"<input type=\"hidden\" id=\"publicDataDetailPk\" value=\"{detail_id}\">"
+        ).encode("utf-8")
+        resolver_body = json.dumps({
+            "publicDataDetailPk": detail_id,
+            "linkUrl": helper.DECLARATION["subject"]["source_metadata_target"],
+            "status": True,
+        }, separators=(",", ":")).encode("utf-8")
+        page_calls: list[str] = []
+        resolver_calls: list[str] = []
+
+        def page_fetch(url: str, _timeout: float):
+            self.assertEqual(url, helper.PAGE_URL)
+            page_calls.append(url)
+            return MODULE.DetailPageObservation(
+                body=page_body.decode("utf-8"), page_url=url, effective_url=url,
+                page_sha256=MODULE.sha256_bytes(page_body), observed_at=self.now, page_bytes=page_body,
+            )
+
+        def resolver_fetch(url: str, _timeout: float):
+            self.assertEqual(url, helper.RESOLVER_URL)
+            resolver_calls.append(url)
+            return MODULE.LinkResolverObservation(
+                body=resolver_body, request_url=url, effective_url=url, observed_at=self.now,
+            )
+
+        first_args = self.args(run_id="101001", **{
+            "--composer": ACTUAL_COMPOSER,
+        })
+        first_args.fixture_composer = None
+        first_args.allow_fixture_composer = False
+        first_code, first_checkpoint = MODULE.process(
+            first_args, fetcher=page_fetch, resolver_fetcher=resolver_fetch, sleeper=lambda _delay: None,
+        )
+        self.assertEqual(first_code, 0, first_checkpoint)
+        self.assertEqual(first_checkpoint["status"], "ready")
+        self.assertEqual(len(page_calls), 1)
+        self.assertEqual(len(resolver_calls), 1)
+        cached_dir = self.root / "cached-seoul"
+        cached_dir.mkdir()
+        cached_evidence_path = cached_dir / "upstream-catalogue-enrichment-evidence.json"
+        cached_evidence_path.write_bytes(
+            (self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_bytes(),
+        )
+
+        baseline = copy.deepcopy(candidate)
+        baseline["operations"] = []
+        self.write_real_composer_inputs([baseline], [candidate], self.now)
+        second_args = self.args(run_id="101002", **{
+            "--composer": ACTUAL_COMPOSER,
+            "--resume-enrichment-evidence": cached_evidence_path,
+        })
+        second_args.fixture_composer = None
+        second_args.allow_fixture_composer = False
+
+        def no_page_fetch(_url: str, _timeout: float):
+            raise AssertionError("fresh cached declaration must not fetch the page again")
+
+        def no_resolver_fetch(_url: str, _timeout: float):
+            raise AssertionError("fresh cached declaration must not fetch the resolver again")
+
+        code, checkpoint = MODULE.process(
+            second_args, fetcher=no_page_fetch, resolver_fetcher=no_resolver_fetch,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(code, 0, checkpoint)
+        self.assertEqual(checkpoint["status"], "ready")
+        self.assertEqual(checkpoint["attempts_consumed"], 0)
+        self.assertEqual(len(page_calls), 1)
+        self.assertEqual(len(resolver_calls), 1)
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        self.assertEqual(len(evidence["records"]), 1)
+        self.assertEqual(len(evidence["records"][0]["operations"]), 4)
+        self.assertEqual(evidence["records"][0]["operations"][:3], candidate["operations"])
+        receipt = json.loads((self.output_dir / "composition-receipt.json").read_text())
+        self.assertEqual(receipt["status"], "ready_scoped")
+        composed = json.loads((self.output_dir / "composed-candidate.registry.json").read_text())
+        self.assertEqual(len(composed), 1)
+        self.assertEqual(len(composed[0]["operations"]), 4)
+
+        composer_spec = importlib.util.spec_from_file_location(
+            "seoul_operationless_actual_composer", ACTUAL_COMPOSER,
+        )
+        assert composer_spec is not None and composer_spec.loader is not None
+        composer = importlib.util.module_from_spec(composer_spec)
+        composer_spec.loader.exec_module(composer)
+        provider_index = json.loads(self.provider_index_path.read_text(encoding="utf-8"))
+        self.assert_c_processor_bundle_accepts(
+            checkpoint, [baseline], [candidate], provider_index, evidence, composer,
+        )
+
+
     def test_seoul_cached_declaration_uses_no_http_or_retry_budget_and_keeps_source_cursor(self) -> None:
         import importlib.util
 
@@ -543,8 +837,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         subject = next(row for row in subject if row["id"] == "15056854")
         baseline = copy.deepcopy(subject)
         candidate = copy.deepcopy(subject)
-        candidate["source"]["raw"]["updated_at"] = "2026-10-01"
-        self.baseline_path.write_text(json.dumps([baseline]), encoding="utf-8")
+        # Treat the pinned target as a newly observed catalogue row so the
+        # first pass legitimately acquires its page/resolver cache.
+        self.baseline_path.write_text("[]", encoding="utf-8")
         self.candidate_path.write_text(json.dumps([candidate]), encoding="utf-8")
         self.provider_index_path.write_bytes((ROOT / "data/provider-index.json").read_bytes())
         self.write_observation(self.now)
@@ -696,7 +991,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         validated = composer.validate_enrichment_evidence(
             cached_result,
             candidate_by_key={("data.go.kr", candidate["id"]): candidate},
-            baseline_by_key={("data.go.kr", baseline["id"]): baseline},
+            baseline_by_key={},
             candidate_sha256=MODULE.file_sha256(self.candidate_path),
             provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
             hosts=composer.registered_hosts(provider_index),
@@ -704,7 +999,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         )
         self.assertNotIn("_binding_error", validated[("data.go.kr", "15056854")])
         self.assert_c_processor_bundle_accepts(
-            worker, [baseline], [candidate], provider_index, cached_result, composer,
+            worker, [], [candidate], provider_index, cached_result, composer,
         )
 
     def test_resume_rejects_resolver_diagnostic_when_metadata_chain_is_missing(self) -> None:
@@ -1573,6 +1868,90 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(completed["attempts_consumed"], 1)
         self.assertEqual(completed["output_artifact"]["run_id"], "101")
 
+    def test_seoul_cancellation_after_page_keeps_reserved_budget_and_cas_replay_cannot_refund(self) -> None:
+        subject = json.loads((ROOT / "data/data-go-kr.registry.json").read_text(encoding="utf-8"))
+        candidate = next(row for row in subject if row["id"] == "15056854")
+        self.write_real_composer_inputs([], [candidate], self.now)
+        self.provider_index_path.write_bytes((ROOT / "data/provider-index.json").read_bytes())
+        helper = MODULE.SEOUL_DECLARATION
+        detail_id = candidate["source"]["raw"]["id"]
+        page_body = (
+            "<button type=\"button\" onclick=\"fn_goUrlLink('15056854')\">Open</button>"
+            "<input type=\"hidden\" id=\"publicDataPk\" value=\"15056854\">"
+            f"<input type=\"hidden\" id=\"publicDataDetailPk\" value=\"{detail_id}\">"
+        ).encode("utf-8")
+
+        claim_args = self.args(run_id="101201", **{
+            "--claim-only": None,
+            "--max-attempts": 2,
+            "--max-queue": 1,
+            "--retries-per-detail": 2,
+        })
+        claim_code, claim = MODULE.process(
+            claim_args,
+            fetcher=lambda *_args: self.fail("claim must not call the provider"),
+            resolver_fetcher=lambda *_args: self.fail("claim must not call the resolver"),
+        )
+        self.assertEqual(claim_code, 0, claim)
+        self.assertEqual(claim["attempts_consumed"], 2)
+        checkpoint_path = self.checkpoint_path(claim)
+
+        class SimulatedCancellation(BaseException):
+            pass
+
+        page_calls: list[str] = []
+        resolver_calls: list[str] = []
+
+        def page_fetch(url: str, _timeout: float):
+            page_calls.append(url)
+            return MODULE.DetailPageObservation(
+                body=page_body.decode("utf-8"), page_url=url, effective_url=url,
+                page_sha256=MODULE.sha256_bytes(page_body), observed_at=self.now, page_bytes=page_body,
+            )
+
+        def cancel_after_resolver_dispatch(url: str, _timeout: float):
+            self.assertEqual(url, helper.RESOLVER_URL)
+            resolver_calls.append(url)
+            raise SimulatedCancellation("cancel after both reserved calls were charged")
+
+        worker_args = copy.deepcopy(claim_args)
+        worker_args.claim_only = False
+        worker_args.require_durable_reservation = True
+        with self.assertRaises(SimulatedCancellation):
+            MODULE.process(
+                worker_args, fetcher=page_fetch, resolver_fetcher=cancel_after_resolver_dispatch,
+                sleeper=lambda _delay: None,
+            )
+        self.assertEqual(len(page_calls), 1)
+        self.assertEqual(resolver_calls, [helper.RESOLVER_URL])
+        interrupted = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        self.assertEqual(interrupted["status"], "enriching")
+        self.assertEqual(interrupted["request_reservation"]["attempts_made"], 2)
+        self.assertEqual(interrupted["attempts_consumed"], 2)
+        self.assertEqual(interrupted["attempts_by_id"], {"15056854": 2})
+
+        # Once the lease expires, the same identity gets only its one remaining
+        # lifetime slot. The cancelled worker cannot turn the two precharged
+        # page/resolver attempts into a free replay.
+        self.now = "2026-10-01T11:00:01Z"
+        self.write_observation(self.now)
+        replay_args = self.args(run_id="101202", **{
+            "--claim-only": None,
+            "--max-attempts": 2,
+            "--max-queue": 1,
+            "--retries-per-detail": 2,
+        })
+        replay_code, replay = MODULE.process(
+            replay_args,
+            fetcher=lambda *_args: self.fail("claim replay must not perform provider I/O"),
+            resolver_fetcher=lambda *_args: self.fail("claim replay must not perform resolver I/O"),
+        )
+        self.assertEqual(replay_code, 0, replay)
+        self.assertEqual(replay["attempts_by_id"], {"15056854": 3})
+        self.assertEqual(replay["attempts_consumed"], 3)
+        self.assertEqual(replay["request_reservation"]["reserved_attempts"], 1)
+        self.assertEqual(replay["request_reservation"]["records"][0]["attempts_reserved"], 1)
+
     def test_distinct_processor_run_cannot_consume_another_runs_reservation(self) -> None:
         claim_args = self.args(**{"--claim-only": None, "--max-attempts": 1})
         _, claim = MODULE.process(claim_args)
@@ -1590,9 +1969,34 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         candidate_bytes = json.dumps(candidate_rows, ensure_ascii=False, separators=(",", ":")).encode()
         self.baseline_path.write_bytes(baseline_bytes)
         self.candidate_path.write_bytes(candidate_bytes)
-        added = [row for row in candidate_rows if row["id"] not in {item["id"] for item in baseline_rows}]
-        removed = [row for row in baseline_rows if row["id"] not in {item["id"] for item in candidate_rows}]
-        summary = {"added": len(added), "removed": len(removed), "changed": 0, "stable": len(candidate_rows) - len(added)}
+        baseline_by_id = {row["id"]: row for row in baseline_rows}
+        candidate_by_id = {row["id"]: row for row in candidate_rows}
+        added = [row for row in candidate_rows if row["id"] not in baseline_by_id]
+        removed = [row for row in baseline_rows if row["id"] not in candidate_by_id]
+        changed = []
+        changed_fields = (
+            "title", "provider", "organization", "source_category", "priority", "source_keywords",
+            "search_terms", "operations", "smoke", "source", "description",
+        )
+        for identity in baseline_by_id.keys() & candidate_by_id.keys():
+            old = baseline_by_id[identity]
+            new = candidate_by_id[identity]
+            fields = [field for field in changed_fields if old.get(field) != new.get(field)]
+            if fields:
+                item = {
+                    "id": identity,
+                    "fields": fields,
+                    "old_digest": MODULE.sha256_bytes(MODULE.canonical_json(old)),
+                    "new_digest": MODULE.sha256_bytes(MODULE.canonical_json(new)),
+                }
+                if "title" in fields:
+                    item["old_title"] = old.get("title", "")
+                    item["new_title"] = new.get("title", "")
+                changed.append(item)
+        summary = {
+            "added": len(added), "removed": len(removed), "changed": len(changed),
+            "stable": len(candidate_rows) - len(added) - len(changed),
+        }
         diff = {
             "generated_at": observed_at, "provider": "data.go.kr",
             "old": self.baseline_path.name, "new": self.candidate_path.name,
@@ -1601,18 +2005,18 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             "summary": summary,
             "added": [{"id": row["id"], "title": row["title"], "provider": row["provider"], "operations_count": len(row["operations"])} for row in added],
             "removed": [{"id": row["id"], "title": row["title"], "provider": row["provider"], "operations_count": len(row["operations"])} for row in removed],
-            "changed": [],
+            "changed": changed,
         }
         diff_bytes = json.dumps(diff, ensure_ascii=False, separators=(",", ":")).encode()
         self.diff_path.write_bytes(diff_bytes)
         self.evidence_path.write_text(json.dumps({
             "schema_version": "datapan.upstream-refresh-evidence.v1", "observed_at": observed_at,
-            "source_id": "data_go_kr", "owner": "test", "status": "material_change" if added or removed else "no_change",
+            "source_id": "data_go_kr", "owner": "test", "status": "material_change" if added or removed or changed else "no_change",
             "collection": {"attempted": True, "succeeded": True, "exit_code": 0, "error_class": None},
             "baseline": {"path": self.baseline_path.name, "bytes": len(baseline_bytes), "sha256": MODULE.sha256_bytes(baseline_bytes), "records": len(baseline_rows)},
             "snapshot": {"path": self.candidate_path.name, "bytes": len(candidate_bytes), "sha256": MODULE.sha256_bytes(candidate_bytes), "records": len(candidate_rows)},
             "diff": {"path": self.diff_path.name, "sha256": MODULE.sha256_bytes(diff_bytes), "summary": summary},
-            "review": {"action": "review_catalog_drift" if added or removed else "none", "work_key": "upstream-refresh:data_go_kr:0123456789abcdef"},
+            "review": {"action": "review_catalog_drift" if added or removed or changed else "none", "work_key": "upstream-refresh:data_go_kr:0123456789abcdef"},
             "publication": {"automatic": False, "release_allowed": False, "required_gates": ["release_manifest_verification", "release_readiness", "consumer_compatibility"]},
         }), encoding="utf-8")
         self.policy_path.write_text(json.dumps({"sources": [{

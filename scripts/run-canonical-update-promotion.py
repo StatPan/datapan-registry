@@ -176,6 +176,14 @@ def load_object(path: pathlib.Path) -> dict[str, Any]:
     return value
 
 
+def load_json_value(path: pathlib.Path) -> Any:
+    """Load one required JSON document without imposing an object root."""
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PromotionError(f"invalid required JSON input: {path}") from exc
+
+
 def load_module(path: pathlib.Path, name: str) -> Any:
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
@@ -966,6 +974,7 @@ def validate_processor_link_metadata(
         ).validate(evidence)
     except (OSError, PromotionError, jsonschema.ValidationError) as exc:
         raise PromotionError("processor enrichment evidence does not match the trusted schema") from exc
+    validate_processor_seoul_declaration(checkpoint, bundle_dir, evidence, root=root)
     outcomes = evidence.get("worker_outcomes", [])
     if not isinstance(outcomes, list):
         raise PromotionError("processor worker outcomes are not an array")
@@ -1053,6 +1062,188 @@ def validate_processor_link_metadata(
         seen.add(identity)
     if {str(row.get("id") or "") for row in metadata_records if isinstance(row, Mapping)} != seen:
         raise PromotionError("processor checkpoint and enrichment link metadata identities differ")
+
+
+def validate_processor_seoul_declaration(
+    checkpoint: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+    evidence: Mapping[str, Any],
+    *,
+    root: pathlib.Path,
+) -> None:
+    """Revalidate a successful pinned declaration against the trusted source and C outputs."""
+    try:
+        composer = load_module(
+            root / "scripts/compose-upstream-catalogue-candidate.py",
+            "processor_catalogue_composer_for_declaration_validation",
+        )
+    except (OSError, PromotionError) as exc:
+        raise PromotionError("trusted processor composer is unavailable for declaration validation") from exc
+    declaration = getattr(composer, "SEOUL_OPERATION_DECLARATION", None)
+    declaration_id = getattr(declaration, "DECLARATION_ID", None)
+    if not isinstance(declaration_id, str) or not declaration_id:
+        raise PromotionError("trusted Seoul operation declaration validator is unavailable")
+    target_id = str(declaration.DECLARATION["subject"]["portal_dataset_id"])
+    records = evidence.get("records")
+    if not isinstance(records, list):
+        raise PromotionError("processor enrichment records are invalid for declaration validation")
+
+    def declared_operations(row: Any) -> list[Mapping[str, Any]]:
+        if not isinstance(row, Mapping) or not isinstance(row.get("operations"), list):
+            return []
+        result = []
+        for operation in row["operations"]:
+            source = operation.get("source") if isinstance(operation, Mapping) else None
+            raw = source.get("raw") if isinstance(source, Mapping) else None
+            if isinstance(raw, Mapping) and raw.get("operation_declaration_id") is not None:
+                result.append(operation)
+        return result
+
+    declared_records: list[Mapping[str, Any]] = []
+    target_records: list[Mapping[str, Any]] = []
+    for record in records:
+        if not isinstance(record, Mapping):
+            raise PromotionError("processor enrichment record is invalid for declaration validation")
+        api_key = record.get("api_key")
+        identity = str(api_key.get("id") or "") if isinstance(api_key, Mapping) else ""
+        if identity == target_id:
+            target_records.append(record)
+        if record.get("declaration_provenance") is not None or declared_operations(record):
+            if identity != target_id:
+                raise PromotionError("processor declaration provenance is bound to the wrong API identity")
+            declared_records.append(record)
+
+    checkpoint_details = checkpoint.get("detail_records")
+    if not isinstance(checkpoint_details, list):
+        raise PromotionError("processor checkpoint detail records are invalid for declaration validation")
+    target_success = [
+        item for item in checkpoint_details
+        if isinstance(item, Mapping) and str(item.get("id") or "") == target_id and item.get("status") == "enriched"
+    ]
+    if len(target_success) > 1:
+        raise PromotionError("processor checkpoint has duplicate successful Seoul declaration rows")
+    if target_success and (len(target_records) != 1 or len(declared_records) != 1):
+        raise PromotionError("successful Seoul declaration row was downgraded or lost its declaration evidence")
+    if target_records and not declared_records:
+        raise PromotionError("successful Seoul enrichment record is missing its pinned declaration provenance")
+    if declared_records and (len(declared_records) != 1 or target_records != declared_records):
+        raise PromotionError("processor Seoul declaration evidence is duplicated or inconsistent")
+    if not declared_records:
+        return
+
+    record = declared_records[0]
+    if len(declared_operations(record)) != 1 or record.get("declaration_provenance") is None:
+        raise PromotionError("processor Seoul declaration operation or provenance is missing")
+    record_op = declared_operations(record)[0]
+    try:
+        declaration.validate_committed_prefix_snapshot(root, verify_materialized_row=False)
+    except (AttributeError, OSError, ValueError) as exc:
+        raise PromotionError("processor Seoul historical prefix authority is unavailable or invalid") from exc
+    composed_path = bundle_dir / "composed-candidate.registry.json"
+    ready_path = bundle_dir / "ready-scope.registry.json"
+    try:
+        composed_rows = load_json_value(composed_path)
+        ready_rows = load_json_value(ready_path)
+    except PromotionError as exc:
+        raise PromotionError("processor composed outputs are unavailable for declaration validation") from exc
+    if not isinstance(composed_rows, list) or not isinstance(ready_rows, list):
+        raise PromotionError("processor composed outputs are invalid for declaration validation")
+
+    def find_unique_target(rows: list[Any], label: str) -> Mapping[str, Any]:
+        matches = [
+            row for row in rows
+            if isinstance(row, Mapping) and str(row.get("id") or "") == target_id
+            and row.get("provider") == "data.go.kr"
+        ]
+        if len(matches) != 1:
+            raise PromotionError(f"processor {label} does not contain one exact Seoul declaration row")
+        return matches[0]
+
+    composed_row = find_unique_target(composed_rows, "composed candidate")
+    ready_row = find_unique_target(ready_rows, "ready scope")
+    for label, row in (("composed candidate", composed_row), ("ready scope", ready_row)):
+        row_ops = declared_operations(row)
+        if len(row_ops) != 1 or dict(row_ops[0]) != dict(record_op):
+            raise PromotionError(f"processor {label} declaration operation differs from trusted enrichment evidence")
+        source = row.get("source")
+        raw = source.get("raw") if isinstance(source, Mapping) else None
+        if not isinstance(raw, Mapping):
+            raise PromotionError(f"processor {label} declaration source row is invalid")
+        observed_guide = record.get("observed_guide_url")
+        if observed_guide is None:
+            if "guide_url" in raw:
+                raise PromotionError(f"processor {label} guide transform differs from declaration evidence")
+        elif raw.get("guide_url") != observed_guide:
+            raise PromotionError(f"processor {label} guide transform differs from declaration evidence")
+
+    # The original A candidate is not part of the processor artifact. Rebuild
+    # only its documented local-enrichment transform, then verify its complete
+    # pinned historical prefix and exact source identity before validating the
+    # declaration record. The prefix pin is rooted in the reviewed committed
+    # canonical LFS snapshot, not inferred from these output rows.
+    original_row = copy.deepcopy(dict(composed_row))
+    original_row["operations"] = [
+        copy.deepcopy(item) for item in record.get("operations", [])
+        if not declared_operations({"operations": [item]})
+    ]
+    source = original_row.get("source")
+    source = copy.deepcopy(dict(source)) if isinstance(source, Mapping) else {}
+    raw = source.get("raw")
+    raw = copy.deepcopy(dict(raw)) if isinstance(raw, Mapping) else {}
+    raw["guide_url"] = declaration.DECLARATION["subject"]["source_guide_url"]
+    source["raw"] = raw
+    original_row["source"] = source
+    try:
+        declaration.validate_subject_row(original_row)
+        generation_inputs = checkpoint.get("generation_inputs")
+        candidate_sha256 = generation_inputs.get("candidate_sha256") if isinstance(generation_inputs, Mapping) else None
+        provider_index = load_object(root / "data/provider-index.json")
+        provider_index_sha256 = file_sha256(root / "data/provider-index.json")
+        composition = load_object(bundle_dir / "composition-receipt.json")
+        input_digests = composition.get("input_digests") if isinstance(composition, Mapping) else None
+        if (
+            not isinstance(candidate_sha256, str)
+            or not isinstance(input_digests, Mapping)
+            or not isinstance(input_digests.get("candidate"), Mapping)
+            or input_digests["candidate"].get("sha256") != candidate_sha256
+            or not isinstance(input_digests.get("provider_index"), Mapping)
+            or input_digests["provider_index"].get("sha256") != provider_index_sha256
+        ):
+            raise PromotionError("processor declaration evidence is not bound to trusted candidate and provider inputs")
+        schema = load_object(root / "schemas/datapan.specs.v1.schema.json")
+        filtered_evidence = copy.deepcopy(dict(evidence))
+        filtered_evidence["records"] = [copy.deepcopy(dict(record))]
+        filtered_evidence.pop("worker_outcomes", None)
+        validated = composer.validate_enrichment_evidence(
+            filtered_evidence,
+            candidate_by_key={("data.go.kr", target_id): original_row},
+            baseline_by_key={},
+            candidate_sha256=candidate_sha256,
+            provider_index_sha256=provider_index_sha256,
+            hosts=composer.registered_hosts(provider_index),
+            registry_schema=schema,
+        )
+        validated_record = validated.get(("data.go.kr", target_id))
+        if not isinstance(validated_record, Mapping) or validated_record.get("_binding_error"):
+            raise PromotionError("processor Seoul declaration semantic binding was rejected")
+        declaration.validate_enriched_record(original_row, record)
+        declaration.validate_declared_operation(original_row, record_op)
+        composer.LINK_DETAIL_HELPERS.validate_link_metadata(
+            record["declaration_provenance"]["page_resolver"],
+            target_id,
+            composer.registered_hosts(provider_index),
+        )
+        if target_success:
+            row = target_success[0]
+            if (
+                row.get("source_sha256") != record.get("source_sha256")
+                or row.get("guide_sha256") != record.get("guide_sha256")
+            ):
+                raise PromotionError("processor Seoul declaration differs from its successful checkpoint record")
+    except PromotionError:
+        raise
+    except Exception as exc:
+        raise PromotionError("processor Seoul declaration semantic binding is invalid") from exc
 
 
 def validate_processor_bundle(

@@ -636,11 +636,19 @@ def operation_provenance_errors(
                 recognized_stored_detail = source.get("url") == canonical_detail_page_url(row)
             except CompositionError:
                 pass
-        recognized_historical_catalogue_source = (
-            source_page_url is not None
+        recognized_historical_catalogue_source = False
+        if (
+            source_page_url == SEOUL_OPERATION_DECLARATION.PAGE_URL
             and not declared_operation
             and source.get("url") == api_source.get("url")
-        )
+        ):
+            try:
+                SEOUL_OPERATION_DECLARATION.validate_historical_operation(
+                    row, operation, observed_guide_url=observed_guide_url,
+                )
+                recognized_historical_catalogue_source = True
+            except (AttributeError, KeyError, TypeError, ValueError):
+                pass
         if (
             source.get("url") != expected_source_url
             and not recognized_stored_detail

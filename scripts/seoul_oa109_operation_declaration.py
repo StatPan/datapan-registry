@@ -13,6 +13,7 @@ import hashlib
 import json
 import pathlib
 import re
+import subprocess
 from datetime import datetime, timezone
 from typing import Any, Mapping
 from urllib.parse import urlsplit
@@ -20,7 +21,7 @@ from urllib.parse import urlsplit
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DECLARATION_PATH = ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
-DECLARATION_SHA256 = "224c1f2cb7fd39b1f72040957042b4d114b4540dc17765abfcadce4cfd7b8f5c"
+DECLARATION_SHA256 = "c0b6f62921e6fca856162db58ce8d8871259d649d367b20b672ca37a555f179a"
 DECLARATION_ID = "data-go-kr:OA-109:SearchLastTrainTimeByIDService:v1"
 PROVENANCE_METHOD = "data_go_kr_seoul_target_navigation_declaration_v1"
 OPERATION_KEY = "OA-109:SearchLastTrainTimeByIDService"
@@ -105,6 +106,44 @@ def native_document_sha256s() -> dict[str, str]:
     }
 
 
+def native_document_acquisition_provenance() -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    for name, document in DECLARATION["native_documents"].items():
+        acquisition = document.get("acquisition_provenance")
+        if not isinstance(acquisition, Mapping):
+            raise DeclarationError("declaration_document_acquisition_provenance_missing")
+        result[name] = copy.deepcopy(dict(acquisition))
+    if set(result) != {"guide", "service_download", "service_fragment"}:
+        raise DeclarationError("declaration_document_acquisition_set_invalid")
+    return result
+
+
+def source_review_provenance() -> dict[str, Any]:
+    review = DECLARATION.get("source_review")
+    if not isinstance(review, Mapping):
+        raise DeclarationError("declaration_source_review_provenance_missing")
+    keys = (
+        "review_decision_comment_id", "review_decision_comment_url", "review_decision_recorded_at",
+        "review_decision_author", "review_decision_author_association", "review_decision_body_sha256",
+        "review_decision_native_readback_sha256", "facts_sha256", "navigation_review_sha256",
+    )
+    value = {key: copy.deepcopy(review.get(key)) for key in keys}
+    if (
+        value["review_decision_comment_id"] != 5987467565
+        or value["review_decision_comment_url"] != "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5987467565"
+        or value["review_decision_recorded_at"] != "2026-10-05T03:14:39Z"
+        or value["review_decision_author"] != "StatPan"
+        or value["review_decision_author_association"] != "OWNER"
+        or value["review_decision_body_sha256"] != "4c1d12657f355d3c2134cf8b9771f6b57979ee59328497cb46ff61673d652692"
+        or value["review_decision_native_readback_sha256"] != "6c12eefda06025011a316261afd12a0de49c4befee9bdce79c6f2e48d0f4099b"
+        or value["facts_sha256"] != "86c3d5f57fe4bd03c23e72f98db1cc695ea188f4fa3950a6f6878d63568ff31b"
+        or value["navigation_review_sha256"] != "05b98551a908018053796845a393564c6b961351391bbc57e49abbdd09ad126c"
+    ):
+        raise DeclarationError("declaration_source_review_record_invalid")
+    _timestamp(value["review_decision_recorded_at"])
+    return value
+
+
 def _source(row: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
     source = row.get("source")
     raw = source.get("raw") if isinstance(source, Mapping) else None
@@ -128,7 +167,26 @@ def validate_subject_row(row: Mapping[str, Any]) -> None:
     ):
         raise DeclarationError("portal_source_subject_mismatch")
     operations = row.get("operations")
-    if not isinstance(operations, list) or len(operations) != len(HISTORY_ENDPOINTS):
+    prefix = DECLARATION.get("historical_operation_prefix")
+    if (
+        not isinstance(prefix, Mapping)
+        or prefix.get("schema") != "datapan.seoul-historical-operation-prefix.v1"
+        or prefix.get("source_path") != "data/data-go-kr.registry.json"
+        or prefix.get("source_main_commit") != "0085b357289755d6b3fb60a7259bd85da42d2962"
+        or prefix.get("source_file_git_blob_sha1") != "fcd4a814348b7beff832737402b5ec22642d4228"
+        or prefix.get("source_file_sha256") != "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+        or prefix.get("source_manifest_sha256") != "89afa12758dd3eded5ce5a96275572a8826574d4e7ead020412f7a76d6bb60ba"
+        or prefix.get("source_lfs_bytes") != 139155499
+        or prefix.get("source_lfs_sha256") != "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+        or prefix.get("provider") != subject["provider"]
+        or prefix.get("api_id") != subject["portal_dataset_id"]
+        or prefix.get("source_url") != subject["source_url"]
+        or prefix.get("operation_count") != len(HISTORY_ENDPOINTS)
+        or prefix.get("ordered_endpoints") != list(HISTORY_ENDPOINTS)
+        or not isinstance(operations, list)
+        or len(operations) != prefix.get("operation_count")
+        or digest_json(operations) != prefix.get("canonical_operations_sha256")
+    ):
         raise DeclarationError("portal_historical_operation_set_mismatch")
     endpoints: list[str] = []
     for operation in operations:
@@ -143,6 +201,147 @@ def validate_subject_row(row: Mapping[str, Any]) -> None:
         endpoints.append(endpoint)
     if tuple(endpoints) != HISTORY_ENDPOINTS:
         raise DeclarationError("portal_historical_operation_order_or_target_mismatch")
+    for operation in operations:
+        operation_source, operation_raw = _source(operation)
+        current_raw = copy.deepcopy(dict(raw))
+        historical_raw = copy.deepcopy(dict(operation_raw))
+        for volatile_operation_field in ("operation_nm", "operation_url"):
+            current_raw.pop(volatile_operation_field, None)
+            historical_raw.pop(volatile_operation_field, None)
+        if operation_source.get("system") != subject["source_system"] or operation_source.get("url") != subject["source_url"] or historical_raw != current_raw:
+            raise DeclarationError("portal_historical_operation_source_mismatch")
+
+
+def validate_committed_prefix_snapshot(
+    root: pathlib.Path = ROOT, *, verify_materialized_row: bool = True,
+) -> dict[str, Any]:
+    """Verify the reviewed commit, manifest, Git LFS pointer, and hydrated bytes when available.
+
+    The prefix operations themselves are separately checked by validate_subject_row
+    against the declaration's pinned canonical digest. A pointer-only checkout can
+    authenticate the committed LFS object identity without claiming that its payload
+    was materialized in that checkout.
+    """
+    prefix = DECLARATION.get("historical_operation_prefix")
+    if not isinstance(prefix, Mapping):
+        raise DeclarationError("portal_historical_operation_pin_missing")
+    commit = str(prefix.get("source_main_commit") or "")
+    source_path = str(prefix.get("source_path") or "")
+
+    def git_bytes(*args: str) -> bytes:
+        try:
+            result = subprocess.run(
+                ["git", "-C", str(root), *args],
+                check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            )
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise DeclarationError("portal_historical_source_commit_unavailable") from exc
+        return result.stdout
+
+    resolved = git_bytes("rev-parse", "--verify", f"{commit}^{{commit}}").decode("ascii", errors="strict").strip()
+    if resolved != commit:
+        raise DeclarationError("portal_historical_source_commit_mismatch")
+    manifest = git_bytes("show", f"{commit}:manifest.json")
+    if sha256_bytes(manifest) != prefix.get("source_manifest_sha256"):
+        raise DeclarationError("portal_historical_source_manifest_mismatch")
+    pointer = git_bytes("show", f"{commit}:{source_path}")
+    git_blob_sha1 = hashlib.sha1(b"blob " + str(len(pointer)).encode("ascii") + b"\0" + pointer).hexdigest()
+    if git_blob_sha1 != prefix.get("source_file_git_blob_sha1"):
+        raise DeclarationError("portal_historical_source_pointer_blob_mismatch")
+    try:
+        lines = pointer.decode("ascii", errors="strict").splitlines()
+    except UnicodeError as exc:
+        raise DeclarationError("portal_historical_source_pointer_invalid") from exc
+    expected_pointer = [
+        "version https://git-lfs.github.com/spec/v1",
+        f"oid sha256:{prefix.get('source_lfs_sha256')}",
+        f"size {prefix.get('source_lfs_bytes')}",
+    ]
+    if lines != expected_pointer:
+        raise DeclarationError("portal_historical_source_pointer_invalid")
+
+    result: dict[str, Any] = {
+        "commit": commit,
+        "source_path": source_path,
+        "source_manifest_sha256": sha256_bytes(manifest),
+        "source_file_git_blob_sha1": git_blob_sha1,
+        "source_lfs_sha256": prefix.get("source_lfs_sha256"),
+        "source_lfs_bytes": prefix.get("source_lfs_bytes"),
+        "materialized_registry_verified": False,
+    }
+    materialized_path = root / source_path
+    try:
+        materialized = materialized_path.read_bytes()
+    except OSError as exc:
+        raise DeclarationError("portal_historical_materialized_source_unavailable") from exc
+    if materialized == pointer:
+        return result
+    if (
+        len(materialized) != prefix.get("source_lfs_bytes")
+        or sha256_bytes(materialized) != prefix.get("source_lfs_sha256")
+    ):
+        raise DeclarationError("portal_historical_materialized_source_mismatch")
+    result["materialized_registry_bytes_verified"] = True
+    result["materialized_registry_sha256"] = sha256_bytes(materialized)
+    if not verify_materialized_row:
+        return result
+    try:
+        registry = json.loads(materialized.decode("utf-8", errors="strict"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise DeclarationError("portal_historical_materialized_source_invalid") from exc
+    if not isinstance(registry, list):
+        raise DeclarationError("portal_historical_materialized_source_invalid")
+    subject = DECLARATION["subject"]
+    matches = [
+        item for item in registry
+        if isinstance(item, Mapping)
+        and item.get("provider") == subject["provider"]
+        and str(item.get("id") or "") == subject["portal_dataset_id"]
+    ]
+    if len(matches) != 1:
+        raise DeclarationError("portal_historical_materialized_source_identity_mismatch")
+    validate_subject_row(matches[0])
+    result["materialized_registry_verified"] = True
+    return result
+
+
+def validate_historical_operation(
+    row: Mapping[str, Any], operation: Mapping[str, Any], *, observed_guide_url: str | None,
+) -> None:
+    """Accept only one exact historical operation from the pinned prefix."""
+    subject = DECLARATION["subject"]
+    _current_source, current_raw = _source(row)
+    current_guide = current_raw.get("guide_url")
+    if observed_guide_url is None:
+        if current_guide not in (None, ""):
+            raise DeclarationError("portal_source_guide_observation_mismatch")
+    elif current_guide != observed_guide_url:
+        raise DeclarationError("portal_source_guide_observation_mismatch")
+    original = copy.deepcopy(dict(row))
+    original_source = original.get("source")
+    original_source = copy.deepcopy(dict(original_source)) if isinstance(original_source, Mapping) else {}
+    original_raw = original_source.get("raw")
+    original_raw = copy.deepcopy(dict(original_raw)) if isinstance(original_raw, Mapping) else {}
+    original_raw["guide_url"] = subject["source_guide_url"]
+    original_source["raw"] = original_raw
+    original["source"] = original_source
+    all_operations = original.get("operations")
+    if not isinstance(all_operations, list):
+        raise DeclarationError("portal_historical_operation_set_mismatch")
+    declared = [
+        item for item in all_operations
+        if isinstance(item, Mapping)
+        and _source(item)[1].get("operation_declaration_id") == DECLARATION_ID
+    ]
+    if declared:
+        if len(declared) != 1:
+            raise DeclarationError("portal_historical_operation_set_mismatch")
+        all_operations = list(all_operations)
+        all_operations.remove(declared[0])
+    original["operations"] = all_operations
+    validate_subject_row(original)
+    if not any(isinstance(item, Mapping) and dict(item) == dict(operation) for item in all_operations):
+        raise DeclarationError("portal_historical_operation_not_in_pinned_prefix")
 
 
 def _timestamp(value: Any) -> datetime:
@@ -278,6 +477,9 @@ def build_provenance(
         "declaration_sha256": DECLARATION_SHA256,
         "subject": copy.deepcopy(DECLARATION["subject"]),
         "native_document_sha256s": native_document_sha256s(),
+        "native_document_acquisition": native_document_acquisition_provenance(),
+        "source_review_record": source_review_provenance(),
+        "historical_operation_prefix": copy.deepcopy(DECLARATION["historical_operation_prefix"]),
         "method_derivation": {
             "id": DECLARATION["transport"]["method_evidence"],
             "classification": DECLARATION["transport"]["method_evidence_classification"],

@@ -56,7 +56,7 @@
     },
     "declaration_provenance": {
       "type": "object", "additionalProperties": false,
-      "required": ["method", "declaration_id", "declaration_sha256", "subject", "native_document_sha256s", "method_derivation", "source_binding", "page_resolver", "operation_sha256"],
+      "required": ["method", "declaration_id", "declaration_sha256", "subject", "native_document_sha256s", "native_document_acquisition", "source_review_record", "historical_operation_prefix", "method_derivation", "source_binding", "page_resolver", "operation_sha256"],
       "properties": {
         "method": {"const": "data_go_kr_seoul_target_navigation_declaration_v1"},
         "declaration_id": {"const": "data-go-kr:OA-109:SearchLastTrainTimeByIDService:v1"},
@@ -82,6 +82,17 @@
             "service_fragment": {"$ref": "#/$defs/sha256"}
           }
         },
+        "native_document_acquisition": {
+          "type": "object", "additionalProperties": false,
+          "required": ["guide", "service_download", "service_fragment"],
+          "properties": {
+            "guide": {"$ref": "#/$defs/document_acquisition_provenance"},
+            "service_download": {"$ref": "#/$defs/document_acquisition_provenance"},
+            "service_fragment": {"$ref": "#/$defs/document_acquisition_provenance"}
+          }
+        },
+        "source_review_record": {"$ref": "#/$defs/source_review_record"},
+        "historical_operation_prefix": {"$ref": "#/$defs/historical_operation_prefix"},
         "method_derivation": {
           "type": "object", "additionalProperties": false,
           "required": ["id", "classification", "execution_verified", "exclusive_method_claim"],
@@ -102,6 +113,59 @@
         },
         "page_resolver": {"$ref": "#/$defs/link_metadata"},
         "operation_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "document_acquisition_provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["ledger_sha256", "capture_completed_at", "authorization_comment_id", "authorization_comment_url", "authorization_decision_sha256", "authorization_applied_at"],
+      "properties": {
+        "ledger_sha256": {"$ref": "#/$defs/sha256"},
+        "capture_completed_at": {"type": "string", "format": "date-time"},
+        "authorization_comment_id": {"type": "integer", "minimum": 1},
+        "authorization_comment_url": {"type": "string", "format": "uri"},
+        "authorization_decision_sha256": {"$ref": "#/$defs/sha256"},
+        "authorization_applied_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "source_review_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["review_decision_comment_id", "review_decision_comment_url", "review_decision_recorded_at", "review_decision_author", "review_decision_author_association", "review_decision_body_sha256", "review_decision_native_readback_sha256", "facts_sha256", "navigation_review_sha256"],
+      "properties": {
+        "review_decision_comment_id": {"type": "integer", "minimum": 1},
+        "review_decision_comment_url": {"type": "string", "format": "uri"},
+        "review_decision_recorded_at": {"type": "string", "format": "date-time"},
+        "review_decision_author": {"type": "string", "minLength": 1},
+        "review_decision_author_association": {"type": "string", "minLength": 1},
+        "review_decision_body_sha256": {"$ref": "#/$defs/sha256"},
+        "review_decision_native_readback_sha256": {"$ref": "#/$defs/sha256"},
+        "facts_sha256": {"$ref": "#/$defs/sha256"},
+        "navigation_review_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "historical_operation_prefix": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema", "source_main_commit", "source_path", "source_file_git_blob_sha1", "source_file_sha256", "source_manifest_sha256", "source_lfs_bytes", "source_lfs_sha256", "provider", "api_id", "source_url", "operation_count", "ordered_endpoints", "canonical_operations_sha256"],
+      "properties": {
+        "schema": {"const": "datapan.seoul-historical-operation-prefix.v1"},
+        "source_main_commit": {"const": "0085b357289755d6b3fb60a7259bd85da42d2962"},
+        "source_path": {"const": "data/data-go-kr.registry.json"},
+        "source_file_git_blob_sha1": {"const": "fcd4a814348b7beff832737402b5ec22642d4228"},
+        "source_file_sha256": {"$ref": "#/$defs/sha256"},
+        "source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_lfs_bytes": {"const": 139155499},
+        "source_lfs_sha256": {"$ref": "#/$defs/sha256"},
+        "provider": {"const": "data.go.kr"},
+        "api_id": {"const": "15056854"},
+        "source_url": {"const": "https://www.data.go.kr/catalog/15056854/openapi.json"},
+        "operation_count": {"const": 3},
+        "ordered_endpoints": {
+          "const": [
+            "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109&srvType=A&serviceKind=1",
+            "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-101&srvType=A&serviceKind=1",
+            "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-108&srvType=A&serviceKind=1"
+          ]
+        },
+        "canonical_operations_sha256": {"$ref": "#/$defs/sha256"}
       }
     },
     "link_metadata": {

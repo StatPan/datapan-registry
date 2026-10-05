@@ -22,17 +22,41 @@
     "guide": {
       "bytes": 52468,
       "path": "provider-operation-declarations-726-seoul-useguide-document/spent-capture-001/seoul_public_useguide_document.response.raw",
-      "sha256": "d8cbf3291c5f8b21f759fe2b281e1acf96a05165140c03540ed916173c52928d"
+      "sha256": "d8cbf3291c5f8b21f759fe2b281e1acf96a05165140c03540ed916173c52928d",
+      "acquisition_provenance": {
+        "ledger_sha256": "002a40b9cd868263626c8caf3ce879bec9a493bafc4f1208aef28374f9c9eda4",
+        "capture_completed_at": "2026-10-05T02:32:18Z",
+        "authorization_comment_id": 5987061598,
+        "authorization_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5987061598",
+        "authorization_decision_sha256": "2986ba9533a87d14099fad67ab78244051a769e5bcc7421ac6411ac3af94f6c4",
+        "authorization_applied_at": "2026-10-05T02:27:16Z"
+      }
     },
     "service_download": {
       "bytes": 7662,
       "path": "provider-operation-declarations-726-seoul-openapi-form-post/spent-capture-001/seoul_oa109_openapi_document_post.response.raw",
-      "sha256": "2bcdfb9ef5a07a942f363b46938c57a61c25e28faf0048e93b6fd53fce5ab62d"
+      "sha256": "2bcdfb9ef5a07a942f363b46938c57a61c25e28faf0048e93b6fd53fce5ab62d",
+      "acquisition_provenance": {
+        "ledger_sha256": "1280013fd7eaf6f12116dfddf65a32ca62b76b272b268d3b9a60fd0a6fcd8c0b",
+        "capture_completed_at": "2026-10-05T01:04:11Z",
+        "authorization_comment_id": 5986309497,
+        "authorization_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5986309497",
+        "authorization_decision_sha256": "a70523dcaf7fd4e038f1a910a3b9022f7232f2c7604a5a950dd617bf653e674f",
+        "authorization_applied_at": "2026-10-05T00:58:26Z"
+      }
     },
     "service_fragment": {
       "bytes": 22557,
       "path": "provider-operation-declarations-726-seoul-openapi-document/spent-capture-001/seoul_oa109_openapi_document.response.raw",
-      "sha256": "dde0f9448e16c6122524316f9d162d85e437f70089b2ff156f1b96f05e53c6fe"
+      "sha256": "dde0f9448e16c6122524316f9d162d85e437f70089b2ff156f1b96f05e53c6fe",
+      "acquisition_provenance": {
+        "ledger_sha256": "3d13bb343086a06f6cfd62cc12f37f350c95dad82cc95837c95680f7378f23dc",
+        "capture_completed_at": "2026-10-05T00:12:42Z",
+        "authorization_comment_id": 5985901774,
+        "authorization_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5985901774",
+        "authorization_decision_sha256": "cacd2c2e90024e0ba2ade632bfad164b70478437ba2e3b52ec01495d53f1458d",
+        "authorization_applied_at": "2026-10-05T00:10:34Z"
+      }
     }
   },
   "request_parameters": [
@@ -220,7 +244,14 @@
     "facts_sha256": "86c3d5f57fe4bd03c23e72f98db1cc695ea188f4fa3950a6f6878d63568ff31b",
     "navigation_review_sha256": "05b98551a908018053796845a393564c6b961351391bbc57e49abbdd09ad126c",
     "review_facts_schema": "astra.seoul-combined-document-review.v2",
-    "verdict": "usable_source_declared_GET_contract_with_optional_response_details_unknown_not_execution_verified"
+    "verdict": "usable_source_declared_GET_contract_with_optional_response_details_unknown_not_execution_verified",
+    "review_decision_comment_id": 5987467565,
+    "review_decision_comment_url": "https://github.com/StatPan/datapan-registry/issues/726#issuecomment-5987467565",
+    "review_decision_recorded_at": "2026-10-05T03:14:39Z",
+    "review_decision_author": "StatPan",
+    "review_decision_author_association": "OWNER",
+    "review_decision_body_sha256": "4c1d12657f355d3c2134cf8b9771f6b57979ee59328497cb46ff61673d652692",
+    "review_decision_native_readback_sha256": "6c12eefda06025011a316261afd12a0de49c4befee9bdce79c6f2e48d0f4099b"
   },
   "subject": {
     "portal_dataset_id": "15056854",
@@ -329,5 +360,25 @@
     "response field datatypes/requiredness/nullability",
     "response envelope/items path",
     "response media types/default format"
-  ]
+  ],
+  "historical_operation_prefix": {
+    "schema": "datapan.seoul-historical-operation-prefix.v1",
+    "source_main_commit": "0085b357289755d6b3fb60a7259bd85da42d2962",
+    "source_path": "data/data-go-kr.registry.json",
+    "source_file_git_blob_sha1": "fcd4a814348b7beff832737402b5ec22642d4228",
+    "source_file_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+    "source_manifest_sha256": "89afa12758dd3eded5ce5a96275572a8826574d4e7ead020412f7a76d6bb60ba",
+    "source_lfs_bytes": 139155499,
+    "source_lfs_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+    "provider": "data.go.kr",
+    "api_id": "15056854",
+    "source_url": "https://www.data.go.kr/catalog/15056854/openapi.json",
+    "operation_count": 3,
+    "ordered_endpoints": [
+      "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109&srvType=A&serviceKind=1",
+      "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-101&srvType=A&serviceKind=1",
+      "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-108&srvType=A&serviceKind=1"
+    ],
+    "canonical_operations_sha256": "a22776819f63f30f9294f21dcacfd2447577e700425c02fb25e0e5e2c5f05def"
+  }
 }
