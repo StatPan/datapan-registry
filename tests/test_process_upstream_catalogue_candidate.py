@@ -1076,6 +1076,25 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             current_canonical=(mixed_identity, mixed_baseline_bytes),
         )
 
+        def forge_authenticated_composition_baseline_digest(bundle_dir: pathlib.Path) -> None:
+            semantic_path = bundle_dir / "semantic-diff.json"
+            semantic = json.loads(semantic_path.read_text(encoding="utf-8"))
+            decision = next(
+                item for item in semantic["api_decisions"]
+                if item.get("api_key") == {"provider": "data.go.kr", "id": "15056854"}
+            )
+            decision["baseline_record_sha256"] = "0" * 64
+            semantic_path.write_bytes(MODULE.canonical_json(semantic) + b"\n")
+
+        self.assert_c_processor_bundle_accepts(
+            mixed_checkpoint, mixed_baseline, mixed_candidate, no_change_provider_index,
+            mixed_evidence, no_change_composer,
+            bundle_mutator=forge_authenticated_composition_baseline_digest,
+            expected_rejection="does not bind the authenticated baseline row",
+            root=pointer_root,
+            current_canonical=(mixed_identity, mixed_baseline_bytes),
+        )
+
         # Once the complete mixed result itself is current canonical, the
         # caller may terminate as already-canonical. Its larger total size is
         # not compared to the old composition-baseline size.

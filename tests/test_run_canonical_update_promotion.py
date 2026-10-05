@@ -713,6 +713,66 @@ class ProcessorBundleContractTests(unittest.TestCase):
             self.assertEqual(outcome["status"], "quarantined")
             self.assertEqual(outcome["reason"], "input_expired")
 
+    def test_quarantine_bundle_still_validates_enrichment_schema(self) -> None:
+        generation = "f" * 64
+        processor_run_id = "70000000001-1"
+        processor_artifact_run_id = "70000000001"
+        with tempfile.TemporaryDirectory() as raw:
+            bundle = pathlib.Path(raw)
+            result = {
+                "status": "quarantined", "reason": "input_expired", "generation_id": generation,
+                "source_id": "data_go_kr", "producer_run_id": "36646768289",
+                "processor_run_id": processor_run_id, "processor_artifact_run_id": processor_artifact_run_id,
+                "processing_replay": False, "candidate_available": False,
+            }
+            result_path = bundle / "upstream-catalogue-processing-result.json"
+            result_path.write_bytes(RUNNER.canonical_json(result))
+            # The bundle is terminal and noncandidate, but the evidence file is
+            # still part of its authenticated output contract. A retry/quarantine
+            # fast path must not bypass ordinary enrichment schema validation.
+            evidence_path = bundle / "upstream-catalogue-enrichment-evidence.json"
+            evidence_path.write_bytes(RUNNER.canonical_json({
+                "schema_version": "datapan.catalogue-enrichment-evidence.v1",
+                "original_candidate_sha256": "e" * 64,
+                "provider_index_sha256": "f" * 64,
+                "adapter_revision": "f" * 64,
+                "extractor_revision": "a" * 64,
+                "records": "tampered-not-an-array",
+                "worker_outcomes": [],
+            }))
+            digests = [
+                {"path": evidence_path.name, "sha256": RUNNER.file_sha256(evidence_path), "bytes": evidence_path.stat().st_size},
+                {"path": result_path.name, "sha256": RUNNER.file_sha256(result_path), "bytes": result_path.stat().st_size},
+            ]
+            locator = {
+                "repository": "StatPan/datapan-registry", "run_id": processor_artifact_run_id,
+                "name": f"upstream-catalogue-processing-{processor_run_id}", "artifact_id": "123456",
+                "expires_at": "2026-10-31T00:00:00Z",
+                "bundle_manifest_sha256": hashlib.sha256(RUNNER.canonical_json(digests)).hexdigest(),
+            }
+            checkpoint = {
+                "generation_id": generation, "status": "quarantined", "source_id": "data_go_kr",
+                "source_scope": "aggregate_supported_catalog", "output_digests": digests,
+                "last_heartbeat_at": "2026-10-01T12:00:00Z", "detail_records": [],
+                "output_artifact": locator,
+                "last_observation": {"producer_run_id": "36646768289", "observed_at": "2026-10-01T12:00:00Z"},
+                "outcome": {"reason": "input_expired"},
+            }
+            uploaded_copy = copy.deepcopy(checkpoint)
+            uploaded_copy["output_artifact"] = {
+                **locator, "artifact_id": None, "expires_at": "2026-10-30T00:00:00Z",
+            }
+            uploaded_copy.pop("checkpoint_sha256", None)
+            uploaded_copy["checkpoint_sha256"] = hashlib.sha256(RUNNER.canonical_json(uploaded_copy)).hexdigest()
+            (bundle / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+                RUNNER.canonical_json(uploaded_copy),
+            )
+            checkpoint["checkpoint_sha256"] = hashlib.sha256(RUNNER.canonical_json(checkpoint)).hexdigest()
+            with self.assertRaisesRegex(RUNNER.PromotionError, "does not match the trusted schema"):
+                RUNNER.validate_processor_bundle(
+                    checkpoint, bundle, {}, None, root=SCRIPT.parents[1],
+                )
+
     def test_c_bundle_validator_binds_resolver_metadata_to_quarantine_and_registered_host(self) -> None:
         page_time = "2026-10-01T10:00:00Z"
         resolved_url = "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109"
