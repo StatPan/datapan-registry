@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import io
 import json
 import os
 import pathlib
@@ -10,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from unittest import mock
 
 
@@ -55,6 +57,17 @@ class CompletenessProofRollupTest(unittest.TestCase):
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
 
     @staticmethod
+    def _write_rebound_evidence(
+        input_root: pathlib.Path, item: dict[str, object], filename: str, raw: bytes,
+    ) -> None:
+        path = input_root / filename
+        path.write_bytes(raw)
+        item.update({
+            "root": "evidence", "path": filename,
+            "bytes": len(raw), "sha256": MODULE.sha256_bytes(raw),
+        })
+
+    @staticmethod
     def _commit_test_tree(root: pathlib.Path, changed_paths: list[str], parent: str, message: str) -> str:
         subprocess.run(["git", "add", "--", *changed_paths], cwd=root, check=True)
         tree = subprocess.check_output(["git", "write-tree"], cwd=root, text=True).strip()
@@ -74,6 +87,66 @@ class CompletenessProofRollupTest(unittest.TestCase):
         subprocess.run(["git", "update-ref", "refs/heads/main", commit], cwd=root, check=True)
         subprocess.run(["git", "update-ref", "refs/remotes/origin/main", commit], cwd=root, check=True)
         return commit
+
+    def test_verify_release_fetches_bounded_main_ref_for_retained_provenance(self) -> None:
+        workflow = (ROOT / ".github/workflows/verify-release.yml").read_text(encoding="utf-8")
+        fetch_step = "git fetch --no-tags --depth=64 origin +refs/heads/main:refs/remotes/origin/main"
+        self.assertIn(fetch_step, workflow)
+        self.assertLess(
+            workflow.index("Fetch bounded trusted main history for retained evidence checks"),
+            workflow.index("Validate registry policy artifacts"),
+        )
+
+        with tempfile.TemporaryDirectory(prefix="completeness-main-history-fetch-") as name:
+            root = pathlib.Path(name)
+            remote = root / "origin.git"
+            seed = root / "seed"
+            checkout = root / "ci-checkout"
+            subprocess.run(
+                ["git", "init", "--quiet", "--bare", "--initial-branch=main", str(remote)],
+                check=True,
+            )
+            subprocess.run(["git", "init", "--quiet", "--initial-branch=main", str(seed)], check=True)
+            for repository in (seed,):
+                subprocess.run(["git", "config", "user.name", "Completeness rollup test"], cwd=repository, check=True)
+                subprocess.run(["git", "config", "user.email", "completeness-test@example.invalid"], cwd=repository, check=True)
+            subprocess.run(["git", "remote", "add", "origin", str(remote)], cwd=seed, check=True)
+            source_sha = ""
+            for index in range(16):
+                (seed / "history.txt").write_text(f"commit {index}\n", encoding="utf-8")
+                subprocess.run(["git", "add", "history.txt"], cwd=seed, check=True)
+                subprocess.run(["git", "commit", "--quiet", "-m", f"history {index}"], cwd=seed, check=True)
+                if index == 0:
+                    source_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=seed, text=True).strip()
+            main_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=seed, text=True).strip()
+            subprocess.run(["git", "push", "--quiet", "origin", "main"], cwd=seed, check=True)
+            subprocess.run(["git", "checkout", "--quiet", "-b", "fixture-pr"], cwd=seed, check=True)
+            (seed / "pull-request.txt").write_text("PR source\n", encoding="utf-8")
+            subprocess.run(["git", "add", "pull-request.txt"], cwd=seed, check=True)
+            subprocess.run(["git", "commit", "--quiet", "-m", "PR source"], cwd=seed, check=True)
+            subprocess.run(["git", "push", "--quiet", "origin", "HEAD:refs/heads/fixture-pr"], cwd=seed, check=True)
+
+            subprocess.run(["git", "init", "--quiet", "--initial-branch=main", str(checkout)], check=True)
+            subprocess.run(["git", "remote", "add", "origin", str(remote)], cwd=checkout, check=True)
+            subprocess.run([
+                "git", "fetch", "--no-tags", "--depth=1", "origin",
+                "+refs/heads/fixture-pr:refs/remotes/origin/fixture-pr",
+            ], cwd=checkout, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.run(["git", "checkout", "--quiet", "--detach", "refs/remotes/origin/fixture-pr"], cwd=checkout, check=True)
+            with self.assertRaises(subprocess.CalledProcessError):
+                subprocess.run(
+                    ["git", "rev-parse", "refs/remotes/origin/main"], cwd=checkout,
+                    check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                )
+            subprocess.run(fetch_step.split(), cwd=checkout, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            fetched_main = subprocess.check_output(
+                ["git", "rev-parse", "refs/remotes/origin/main"], cwd=checkout, text=True,
+            ).strip()
+            self.assertEqual(fetched_main, main_sha)
+            subprocess.run(
+                ["git", "merge-base", "--is-ancestor", source_sha, "refs/remotes/origin/main"],
+                cwd=checkout, check=True,
+            )
 
     def test_build_report_admits_exact_subject_and_rejects_borrowed_release_member(self) -> None:
         """Exercise proof -> index -> native publisher/C admission without changing live authority."""
@@ -683,6 +756,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         with (
             mock.patch.object(MODULE, "validate_stage_run", side_effect=future_attempt_stage_validator),
             mock.patch.object(MODULE, "validate_native_publisher_attempt", return_value=future_native_attempt),
+            mock.patch.object(MODULE, "validate_native_publication_readback", return_value={"future": True}),
             mock.patch.object(MODULE, "import_module", side_effect=reject_legacy_adapter),
         ):
             future = MODULE.validate_pipeline_evidence(
@@ -693,6 +767,431 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(future["status"], "verified_historical_chain")
         self.assertIsNone(future["publication"])
         self.assertEqual(future["publisher_attempt"], future_native_attempt)
+
+    def test_partial_pipeline_rejects_tampered_present_pointer_without_ack(self) -> None:
+        """Missing ACK is conservative, but it cannot hide malformed publisher evidence."""
+        scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        operation_scope = next(
+            scope for scope in scope_registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        operation_id = operation_scope["scope_id"]
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item["scope_id"] != operation_id
+            or (
+                item.get("subject", {}).get("stage") != "acknowledgement"
+                and not item["role"].startswith("acknowledgement_")
+            )
+        ]
+        pointer = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "publication_pointer_immutable"
+        )
+
+        with tempfile.TemporaryDirectory(prefix="completeness-partial-publisher-") as name:
+            input_root = pathlib.Path(name)
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            valid_report = MODULE.build_report(
+                root=ROOT, input_root=input_root, input_index_path=index_path,
+            )
+            operation_row = next(row for row in valid_report["scopes"] if row["scope_id"] == operation_id)
+            pipeline_facet = next(facet for facet in operation_row["facets"] if facet["facet_id"] == "specification_pipeline")
+            publication_facet = next(
+                facet for facet in operation_row["facets"]
+                if facet["facet_id"] == "immutable_publication_read_back"
+            )
+            self.assertEqual(pipeline_facet["state"], "historical")
+            self.assertEqual(publication_facet["state"], "missing")
+            self.assertEqual(publication_facet["details"]["missing_stages"], ["acknowledgement"])
+            self.assertEqual(publication_facet["details"]["publisher_attempt"]["run_id"], "37199628001")
+
+            tampered = b'{"tampered_pointer": true}\n'
+            (input_root / "tampered-pointer.json").write_bytes(tampered)
+            pointer.update({
+                "root": "evidence", "path": "tampered-pointer.json",
+                "bytes": len(tampered), "sha256": MODULE.sha256_bytes(tampered),
+            })
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            with self.assertRaisesRegex(ValueError, "pointer|distribution|publication"):
+                MODULE.build_report(
+                    root=ROOT, input_root=input_root, input_index_path=index_path,
+                )
+
+            json_output = input_root / "existing-rollup.json"
+            markdown_output = input_root / "existing-rollup.md"
+            json_output.write_bytes(b"prior-json-report\n")
+            markdown_output.write_bytes(b"prior-markdown-report\n")
+            output_paths = {
+                "rollup.json": json_output,
+                "rollup.md": markdown_output,
+            }
+            with mock.patch.object(
+                MODULE, "output_path",
+                side_effect=lambda _root, value, _label: output_paths[value],
+            ):
+                result = MODULE.main([
+                    "--repo-root", str(ROOT),
+                    "--input-root", str(input_root),
+                    "--input-index", str(index_path),
+                    "--output-json", "rollup.json",
+                    "--output-markdown", "rollup.md",
+                    "--write",
+                ])
+            self.assertEqual(result, 1)
+            self.assertEqual(json_output.read_bytes(), b"prior-json-report\n")
+            self.assertEqual(markdown_output.read_bytes(), b"prior-markdown-report\n")
+
+    def test_partial_pipeline_rejects_tampered_present_readback_without_ack(self) -> None:
+        scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        operation_scope = next(
+            scope for scope in scope_registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        operation_id = operation_scope["scope_id"]
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item["scope_id"] != operation_id
+            or (
+                item.get("subject", {}).get("stage") != "acknowledgement"
+                and not item["role"].startswith("acknowledgement_")
+            )
+        ]
+        readback_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "publication_anonymous_payload"
+        )
+
+        with tempfile.TemporaryDirectory(prefix="completeness-partial-readback-") as name:
+            input_root = pathlib.Path(name)
+            readback = json.loads((ROOT / readback_item["path"]).read_bytes())
+            detail = next(
+                row["detail"] for row in readback["checks"]
+                if row.get("check") == "immutable_registry_stream_matches_expected_sha_and_size"
+            )
+            detail["sha256"] = "a" * 64
+            raw = (json.dumps(readback, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
+            (input_root / "tampered-readback.json").write_bytes(raw)
+            readback_item.update({
+                "root": "evidence", "path": "tampered-readback.json",
+                "bytes": len(raw), "sha256": MODULE.sha256_bytes(raw),
+            })
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            with self.assertRaisesRegex(ValueError, "anonymous read-back"):
+                MODULE.build_report(
+                    root=ROOT, input_root=input_root, input_index_path=index_path,
+                )
+
+    def test_missing_health_does_not_hide_malformed_present_source_archive(self) -> None:
+        """Validate each present stage's local artifact before returning a missing-chain result."""
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_scope = next(
+            scope for scope in scope_registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        operation_id = operation_scope["scope_id"]
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item["scope_id"] != operation_id
+            or item.get("subject", {}).get("stage") != "health"
+        ]
+        source_archive = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id
+            and item.get("subject", {}).get("stage") == "source"
+            and item["role"] == "pipeline_artifact_archive"
+        )
+        source_metadata = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id
+            and item.get("subject", {}).get("stage") == "source"
+            and item["role"] == "pipeline_artifact_metadata"
+        )
+
+        with tempfile.TemporaryDirectory(prefix="completeness-partial-source-") as name:
+            input_root = pathlib.Path(name)
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            report = MODULE.build_report(
+                root=ROOT, input_root=input_root, input_index_path=index_path,
+            )
+            operation = next(row for row in report["scopes"] if row["scope_id"] == operation_id)
+            self.assertEqual(operation["claims"], {"complete": False, "current": False, "updated": False})
+
+            malformed = b"not-a-zip"
+            (input_root / "malformed-source.zip").write_bytes(malformed)
+            source_archive.update({
+                "root": "evidence", "path": "malformed-source.zip",
+                "bytes": len(malformed), "sha256": MODULE.sha256_bytes(malformed),
+            })
+            metadata_path = ROOT / source_metadata["path"]
+            metadata = json.loads(metadata_path.read_bytes())
+            metadata["artifacts"][0]["size_in_bytes"] = len(malformed)
+            metadata["artifacts"][0]["digest"] = f"sha256:{MODULE.sha256_bytes(malformed)}"
+            metadata_raw = (json.dumps(metadata, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
+            (input_root / "malformed-source-metadata.json").write_bytes(metadata_raw)
+            source_metadata.update({
+                "root": "evidence", "path": "malformed-source-metadata.json",
+                "bytes": len(metadata_raw), "sha256": MODULE.sha256_bytes(metadata_raw),
+            })
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+
+            with self.assertRaisesRegex(ValueError, "source collector artifact|valid bounded ZIP"):
+                MODULE.build_report(
+                    root=ROOT, input_root=input_root, input_index_path=index_path,
+                )
+
+    def test_missing_health_does_not_hide_malformed_present_processor_receipt(self) -> None:
+        """A valid ZIP and matching artifact hashes cannot bless a malformed checkpoint member."""
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_scope = next(
+            scope for scope in scope_registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        operation_id = operation_scope["scope_id"]
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item["scope_id"] != operation_id or item.get("subject", {}).get("stage") != "health"
+        ]
+        processor_archive = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id
+            and item.get("subject", {}).get("stage") == "processor"
+            and item["role"] == "pipeline_artifact_archive"
+        )
+        processor_metadata = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id
+            and item.get("subject", {}).get("stage") == "processor"
+            and item["role"] == "pipeline_artifact_metadata"
+        )
+
+        archive_path = ROOT / processor_archive["path"]
+        original_archive = archive_path.read_bytes()
+        with zipfile.ZipFile(io.BytesIO(original_archive)) as archive:
+            members = {item.filename: archive.read(item.filename) for item in archive.infolist()}
+        checkpoint_name = "upstream-catalogue-checkpoint-receipt.json"
+        self.assertIn(checkpoint_name, members)
+        members[checkpoint_name] = b"not-json\n"
+        output = io.BytesIO()
+        with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for name, content in members.items():
+                archive.writestr(name, content)
+        malformed_archive = output.getvalue()
+
+        metadata = json.loads((ROOT / processor_metadata["path"]).read_bytes())
+        self.assertEqual(metadata["total_count"], 1)
+        self.assertEqual(len(metadata["artifacts"]), 1)
+        metadata["artifacts"][0]["size_in_bytes"] = len(malformed_archive)
+        metadata["artifacts"][0]["digest"] = f"sha256:{MODULE.sha256_bytes(malformed_archive)}"
+        metadata_raw = (json.dumps(metadata, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
+
+        with tempfile.TemporaryDirectory(prefix="completeness-missing-health-bad-checkpoint-") as name:
+            input_root = pathlib.Path(name)
+            (input_root / "malformed-processor.zip").write_bytes(malformed_archive)
+            (input_root / "malformed-processor-metadata.json").write_bytes(metadata_raw)
+            processor_archive.update({
+                "root": "evidence", "path": "malformed-processor.zip",
+                "bytes": len(malformed_archive), "sha256": MODULE.sha256_bytes(malformed_archive),
+            })
+            processor_metadata.update({
+                "root": "evidence", "path": "malformed-processor-metadata.json",
+                "bytes": len(metadata_raw), "sha256": MODULE.sha256_bytes(metadata_raw),
+            })
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+
+            with self.assertRaisesRegex(ValueError, "processor archive or producer-head input provenance"):
+                MODULE.build_report(
+                    root=ROOT, input_root=input_root, input_index_path=index_path,
+                )
+
+            no_source_index = copy.deepcopy(index)
+            no_source_index["inputs"] = [
+                item for item in no_source_index["inputs"]
+                if item["scope_id"] != operation_id or item.get("subject", {}).get("stage") != "source"
+            ]
+            no_source_index_path = input_root / "no-source-input-index.json"
+            no_source_index_path.write_text(json.dumps(no_source_index, ensure_ascii=False, indent=2) + "\n")
+            with self.assertRaisesRegex(ValueError, "processor archive or producer-head input provenance"):
+                MODULE.build_report(
+                    root=ROOT, input_root=input_root, input_index_path=no_source_index_path,
+                )
+
+            json_output = input_root / "existing-rollup.json"
+            markdown_output = input_root / "existing-rollup.md"
+            json_output.write_bytes(b"prior-json-report\n")
+            markdown_output.write_bytes(b"prior-markdown-report\n")
+            output_paths = {"rollup.json": json_output, "rollup.md": markdown_output}
+            with mock.patch.object(
+                MODULE, "output_path",
+                side_effect=lambda _root, value, _label: output_paths[value],
+            ):
+                result = MODULE.main([
+                    "--repo-root", str(ROOT),
+                    "--input-root", str(input_root),
+                    "--input-index", str(index_path),
+                    "--output-json", "rollup.json",
+                    "--output-markdown", "rollup.md",
+                    "--write",
+                ])
+            self.assertEqual(result, 1)
+            self.assertEqual(json_output.read_bytes(), b"prior-json-report\n")
+            self.assertEqual(markdown_output.read_bytes(), b"prior-markdown-report\n")
+
+    def test_missing_processor_does_not_hide_malformed_present_promotion_journal(self) -> None:
+        """C's own journal schema and immutable tree binding are checked without B."""
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        scope_registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_scope = next(
+            scope for scope in scope_registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        operation_id = operation_scope["scope_id"]
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item["scope_id"] != operation_id or item.get("subject", {}).get("stage") != "processor"
+        ]
+        journal_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "promotion_journal_blob_api"
+        )
+        tree_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "promotion_state_tree"
+        )
+        commit_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "promotion_state_commit"
+        )
+        ref_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "promotion_state_ref"
+        )
+
+        with tempfile.TemporaryDirectory(prefix="completeness-missing-b-bad-journal-") as name:
+            input_root = pathlib.Path(name)
+            invalid_journal = b"{}\n"
+            blob_api = json.loads((ROOT / journal_item["path"]).read_bytes())
+            blob_api.update({
+                "size": len(invalid_journal),
+                "sha": MODULE.git_blob_sha1(invalid_journal),
+                "content": MODULE.base64.b64encode(invalid_journal).decode("ascii"),
+            })
+            tree = json.loads((ROOT / tree_item["path"]).read_bytes())
+            tree_rows = [
+                row for row in tree["tree"]
+                if row.get("path") == "reports/canonical-update-promotion-receipt.json"
+            ]
+            self.assertEqual(len(tree_rows), 1)
+            tree_rows[0]["sha"] = blob_api["sha"]
+            tree["sha"] = "d" * 40
+            commit = json.loads((ROOT / commit_item["path"]).read_bytes())
+            commit["tree"]["sha"] = tree["sha"]
+            commit["sha"] = "c" * 40
+            ref = json.loads((ROOT / ref_item["path"]).read_bytes())
+            ref["object"]["sha"] = commit["sha"]
+
+            self._write_rebound_evidence(
+                input_root, journal_item, "bad-promotion-journal-blob.json",
+                (json.dumps(blob_api, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+            )
+            self._write_rebound_evidence(
+                input_root, tree_item, "bad-promotion-tree.json",
+                (json.dumps(tree, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+            )
+            self._write_rebound_evidence(
+                input_root, commit_item, "bad-promotion-commit.json",
+                (json.dumps(commit, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+            )
+            self._write_rebound_evidence(
+                input_root, ref_item, "bad-promotion-ref.json",
+                (json.dumps(ref, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+            )
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            with self.assertRaisesRegex(ValueError, "promotion journal schema"):
+                MODULE.build_report(
+                    root=ROOT, input_root=input_root, input_index_path=index_path,
+                )
+
+    def test_missing_processor_does_not_hide_invalid_durable_health_seal(self) -> None:
+        """Health's durable state is independently schema-, tree-, and seal-checked."""
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        scope_registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_scope = next(
+            scope for scope in scope_registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        operation_id = operation_scope["scope_id"]
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item["scope_id"] != operation_id or item.get("subject", {}).get("stage") != "processor"
+        ]
+        state_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "health_state_blob_api"
+        )
+        tree_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "health_state_tree"
+        )
+        commit_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "health_state_commit"
+        )
+        ref_item = next(
+            item for item in index["inputs"]
+            if item["scope_id"] == operation_id and item["role"] == "health_state_ref"
+        )
+
+        with tempfile.TemporaryDirectory(prefix="completeness-missing-b-bad-health-state-") as name:
+            input_root = pathlib.Path(name)
+            blob_api = json.loads((ROOT / state_item["path"]).read_bytes())
+            state_raw = MODULE.base64.b64decode(blob_api["content"])
+            state = json.loads(state_raw)
+            state["state_sha256"] = "0" * 64
+            invalid_state = (json.dumps(state, ensure_ascii=False, indent=2) + "\n").encode()
+            blob_api.update({
+                "size": len(invalid_state),
+                "sha": MODULE.git_blob_sha1(invalid_state),
+                "content": MODULE.base64.b64encode(invalid_state).decode("ascii"),
+            })
+            tree = json.loads((ROOT / tree_item["path"]).read_bytes())
+            tree_rows = [
+                row for row in tree["tree"]
+                if row.get("path") == "health/upstream-catalogue/state.json"
+            ]
+            self.assertEqual(len(tree_rows), 1)
+            tree_rows[0]["sha"] = blob_api["sha"]
+            tree["sha"] = "d" * 40
+            commit = json.loads((ROOT / commit_item["path"]).read_bytes())
+            commit["tree"]["sha"] = tree["sha"]
+            commit["sha"] = "c" * 40
+            ref = json.loads((ROOT / ref_item["path"]).read_bytes())
+            ref["object"]["sha"] = commit["sha"]
+            for row, filename, value in (
+                (state_item, "bad-health-state-blob.json", blob_api),
+                (tree_item, "bad-health-tree.json", tree),
+                (commit_item, "bad-health-commit.json", commit),
+                (ref_item, "bad-health-ref.json", ref),
+            ):
+                self._write_rebound_evidence(
+                    input_root, row, filename,
+                    (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+                )
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            with self.assertRaisesRegex(ValueError, "durable Health post-state seal"):
+                MODULE.build_report(
+                    root=ROOT, input_root=input_root, input_index_path=index_path,
+                )
 
     def test_retained_full_chain_uses_registry_defined_catalog_scope_id(self) -> None:
         scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)

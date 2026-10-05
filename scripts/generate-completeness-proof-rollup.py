@@ -219,6 +219,10 @@ def object_at(path: pathlib.Path, label: str) -> dict[str, Any]:
 
 def validate_schema(value: Any, schema_path: pathlib.Path, label: str) -> None:
     schema = object_at(schema_path, f"{label} schema")
+    validate_schema_value(value, schema, label)
+
+
+def validate_schema_value(value: Any, schema: Any, label: str) -> None:
     errors = sorted(
         jsonschema.Draft202012Validator(
             schema, format_checker=jsonschema.FormatChecker()
@@ -231,6 +235,16 @@ def validate_schema(value: Any, schema_path: pathlib.Path, label: str) -> None:
             for error in errors
         )
         raise ValueError(f"{label} schema: {detail}")
+
+
+def validate_schema_at_revision(
+    *, root: pathlib.Path, revision: str, relative_path: str, value: Any, label: str,
+) -> None:
+    try:
+        schema = json.loads(git_read_only(root, ["show", f"{revision}:{relative_path}"]))
+    except (ValueError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{label} schema is unavailable at its authenticated producer revision") from exc
+    validate_schema_value(value, schema, label)
 
 
 def parse_time(value: str, label: str) -> datetime:
@@ -278,7 +292,7 @@ def input_index_for_candidate(
     candidate_registry: pathlib.Path,
     candidate_operation_manifest: pathlib.Path,
     baseline_registry_file: pathlib.Path | None = None,
-) -> dict[str, Any]:
+    ) -> dict[str, Any]:
     """Rebuild a candidate index from its immutable main baseline.
 
     Only the registered data.go.kr catalog and operation-manifest inventory rows
@@ -2156,7 +2170,7 @@ def validate_processor_generation_inputs(
 
 def validate_processor_stage(
     *, root: pathlib.Path, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
-    run: dict[str, Any], job: dict[str, Any], source: dict[str, Any],
+    run: dict[str, Any], job: dict[str, Any], source: dict[str, Any] | None,
     current_registry: dict[str, Any],
     evaluation_epoch: str,
 ) -> dict[str, Any]:
@@ -2228,23 +2242,41 @@ def validate_processor_stage(
         promotion.validate_generation_identity(checkpoint)
     except Exception as exc:
         raise ValueError("processor checkpoint schema or immutable generation identity is invalid") from exc
-    source_input = source
-    source_archive_roles = None
-    source_items = [item for item in roles.values() if item.get("subject", {}).get("stage") == "source"]
-    # Stage-local inputs are passed independently, so bind the checkpoint to the
-    # already validated A summary and exact artifact API identity supplied above.
+    # Stage-local validation can run when A is absent. In that case the B
+    # checkpoint proves only its own internally consistent source locator; it
+    # cannot promote that locator into an authenticated A observation. When A
+    # is present, bind the same fields to the independently validated A packet.
     locator_rows = checkpoint.get("input_artifacts")
-    expected_locator = {
-        "run_id": source_input["run_id"],
-        "artifact_id": source_input["artifact_id"],
-        "name": f"upstream-catalog-refresh-{source_input['run_id']}",
-        "candidate_sha256": source_input["candidate_sha256"],
-        "evidence_sha256": source_input["refresh_evidence_sha256"],
-    }
     if not isinstance(locator_rows, list) or len(locator_rows) != 1:
         raise ValueError("processor checkpoint does not retain exactly one admitted collector artifact")
     input_locator = locator_rows[0]
-    if any(input_locator.get(key) != value for key, value in expected_locator.items()):
+    if not isinstance(input_locator, dict):
+        raise ValueError("processor checkpoint collector input locator is malformed")
+    expected_locator = {
+        "run_id": input_locator.get("run_id"),
+        "artifact_id": input_locator.get("artifact_id"),
+        "name": f"upstream-catalog-refresh-{input_locator.get('run_id')}",
+        "candidate_sha256": checkpoint.get("generation_inputs", {}).get("candidate_sha256"),
+        "evidence_sha256": checkpoint.get("last_observation", {}).get("refresh_evidence_sha256"),
+    }
+    if (
+        not re.fullmatch(r"[0-9]+", str(expected_locator["run_id"]))
+        or not re.fullmatch(r"[0-9]+", str(expected_locator["artifact_id"]))
+        or not SHA256_RE.fullmatch(str(expected_locator["candidate_sha256"]))
+        or not SHA256_RE.fullmatch(str(expected_locator["evidence_sha256"]))
+        or any(input_locator.get(key) != value for key, value in expected_locator.items())
+    ):
+        raise ValueError("processor checkpoint collector input locator is internally inconsistent")
+    if source is not None and any(
+        input_locator.get(key) != value
+        for key, value in {
+            "run_id": source["run_id"],
+            "artifact_id": source["artifact_id"],
+            "name": f"upstream-catalog-refresh-{source['run_id']}",
+            "candidate_sha256": source["candidate_sha256"],
+            "evidence_sha256": source["refresh_evidence_sha256"],
+        }.items()
+    ):
         raise ValueError("processor checkpoint collector input does not match the exact validated source artifact")
     last_observation = checkpoint.get("last_observation")
     if (
@@ -2252,11 +2284,11 @@ def validate_processor_stage(
         or checkpoint.get("source_scope") != "aggregate_supported_catalog"
         or checkpoint.get("observation_count") != 1
         or not isinstance(last_observation, dict)
-        or last_observation.get("producer_run_id") != source_input["run_id"]
-        or last_observation.get("observed_at") != source_input["observed_at"]
-        or last_observation.get("refresh_evidence_sha256") != expected_locator["evidence_sha256"]
+        or str(last_observation.get("producer_run_id")) != str(input_locator.get("run_id"))
+        or last_observation.get("refresh_evidence_sha256") != input_locator.get("evidence_sha256")
+        or (source is not None and last_observation.get("observed_at") != source["observed_at"])
     ):
-        raise ValueError("processor checkpoint does not preserve the exact single historical source observation")
+        raise ValueError("processor checkpoint does not preserve its exact single source observation locator")
 
     artifacts_response = object_at(resolved[roles["pipeline_artifact_metadata"]["input_id"]], "processor artifact API")
     artifacts = artifacts_response.get("artifacts")
@@ -2414,9 +2446,10 @@ def validate_promotion_stage(
         or not isinstance(journal.get("records"), list)
     ):
         raise ValueError("promotion state ref or immutable journal does not match its registered owner")
-    validate_schema(
-        journal, root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
-        "promotion journal",
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+        value=journal, label="promotion journal",
     )
     no_op_results = [row for row in log_results if "already_canonical_generations" in row]
     no_op_generation = None
@@ -2555,14 +2588,14 @@ def expected_health_post_state(
     return persister.seal(state, "state_sha256")
 
 
-def validate_health_stage(
+def validate_health_stage_local(
     *, root: pathlib.Path, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
-    run: dict[str, Any], job: dict[str, Any], processor: dict[str, Any],
-    promotion: dict[str, Any], source: dict[str, Any], current_registry: dict[str, Any],
-    evaluation_epoch: str,
+    run: dict[str, Any], job: dict[str, Any], evaluation_epoch: str,
 ) -> dict[str, Any]:
+    """Validate the complete Health receipt/archive/state transition without A/B/C joins."""
     metadata, archive_raw = validate_stage_artifact(
-        stage="health", roles=roles, resolved=resolved, run=run, job=job, evaluation_epoch=evaluation_epoch,
+        stage="health", roles=roles, resolved=resolved, run=run, job=job,
+        evaluation_epoch=evaluation_epoch,
     )
     archive = safe_zip_members(
         archive_raw, label="health execution bundle", max_archive=64 * 1024 * 1024,
@@ -2570,36 +2603,55 @@ def validate_health_stage(
     )
     expected_members = {
         "as-of.txt", "health-receipt.json", "checker-result.json", "health-ref",
-        "health-state/state.json", "processor-ref", "promotion/reports/canonical-update-promotion-receipt.json",
-        "promotion-ref",
+        "health-state/state.json", "processor-ref",
+        "promotion/reports/canonical-update-promotion-receipt.json", "promotion-ref",
     }
     if set(archive) != expected_members:
-        raise ValueError("health execution archive has a missing or unexpected member")
-    receipt_raw = archive["health-receipt.json"]
-    receipt = json.loads(receipt_raw)
-    pre_state_raw = archive["health-state/state.json"]
-    pre_state = json.loads(pre_state_raw)
-    checker_result = json.loads(archive["checker-result.json"])
+        raise ValueError("health execution bundle has a missing or unexpected member")
+    try:
+        receipt_raw = archive["health-receipt.json"]
+        receipt = json.loads(receipt_raw)
+        pre_state_raw = archive["health-state/state.json"]
+        pre_state = json.loads(pre_state_raw)
+        checker_result = json.loads(archive["checker-result.json"])
+        archive_as_of = archive["as-of.txt"].decode("ascii").strip()
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("health execution archive contains malformed JSON or timestamp data") from exc
     persister = import_health_persister_at_revision(root, run["head_sha"])
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.upstream-catalogue-health.v1.schema.json",
+        value=receipt, label="health receipt",
+    )
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+        value=pre_state, label="health pre-state",
+    )
+    policy_raw = git_read_only(root, ["show", f"{run['head_sha']}:policy/upstream-catalogue-health.json"])
+    policy = json.loads(policy_raw)
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+        value=policy, label="health policy",
+    )
+    workflow_receipt = receipt.get("health_workflow", {})
     if (
         not persister.verify_seal(receipt, "receipt_sha256")
         or receipt.get("execution_mode") != "live"
         or receipt.get("repository") != "StatPan/datapan-registry"
-        or receipt.get("evaluated_at") != archive["as-of.txt"].decode("ascii").strip()
+        or receipt.get("evaluated_at") != archive_as_of
         or checker_result.get("receipt_sha256") != receipt.get("receipt_sha256")
         or checker_result.get("status") != "ok"
         or not persister.verify_seal(pre_state, "state_sha256")
-    ):
-        raise ValueError("health receipt, pre-persist state, or checker result fails its sealed identity")
-    workflow_receipt = receipt.get("health_workflow", {})
-    if (
-        str(workflow_receipt.get("run_id")) != str(run["id"])
+        or str(workflow_receipt.get("run_id")) != str(run["id"])
         or workflow_receipt.get("run_attempt") != run["run_attempt"]
         or workflow_receipt.get("revision") != run["head_sha"]
-        or archive["processor-ref"].decode("ascii").strip().split("\t") != [processor["state_commit"], "refs/heads/automation/upstream-catalogue-state"]
-        or archive["promotion-ref"].decode("ascii").strip().split("\t") != [promotion["state_commit"], "refs/heads/automation/canonical-update-state"]
+        or not parse_time(receipt.get("evaluated_at"), "health receipt evaluation")
+        <= parse_time(evaluation_epoch, "health execution evaluation epoch")
     ):
-        raise ValueError("health receipt or archived producer refs do not bind the exact B/C/Health workflow chain")
+        raise ValueError("health receipt, pre-state, checker result, or workflow identity fails its sealed contract")
+
     health_ref = archive["health-ref"].decode("ascii").strip().split("\t")
     commit_api = indexed_json(roles, resolved, "health_state_commit")
     parent_shas = {
@@ -2626,11 +2678,53 @@ def validate_health_stage(
     if state_bytes["health_receipt_blob_api"] != receipt_raw:
         raise ValueError("durable Health receipt tree member differs from the receipt in its workflow archive")
     post_state = json.loads(state_bytes["health_state_blob_api"])
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+        value=post_state, label="durable Health post-state",
+    )
+    if not persister.verify_seal(post_state, "state_sha256"):
+        raise ValueError("durable Health post-state seal is invalid")
     expected_post_state = expected_health_post_state(
         root=root, workflow_head=run["head_sha"], pre_state=pre_state, receipt=receipt,
     )
     if post_state != expected_post_state:
         raise ValueError("durable Health post-state differs from the pure replay of the trusted persister transition")
+    return {
+        "metadata": metadata, "archive_raw": archive_raw, "archive": archive,
+        "receipt_raw": receipt_raw, "receipt": receipt,
+        "pre_state_raw": pre_state_raw, "pre_state": pre_state,
+        "checker_result": checker_result, "persister": persister,
+        "state_bytes": state_bytes, "post_state": post_state,
+        "commit_api": commit_api,
+    }
+
+
+def validate_health_stage(
+    *, root: pathlib.Path, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
+    run: dict[str, Any], job: dict[str, Any], processor: dict[str, Any],
+    promotion: dict[str, Any], source: dict[str, Any], current_registry: dict[str, Any],
+    evaluation_epoch: str,
+) -> dict[str, Any]:
+    local = validate_health_stage_local(
+        root=root, roles=roles, resolved=resolved, run=run, job=job,
+        evaluation_epoch=evaluation_epoch,
+    )
+    archive_raw = local["archive_raw"]
+    archive = local["archive"]
+    receipt_raw = local["receipt_raw"]
+    receipt = local["receipt"]
+    pre_state_raw = local["pre_state_raw"]
+    pre_state = local["pre_state"]
+    persister = local["persister"]
+    state_bytes = local["state_bytes"]
+    post_state = local["post_state"]
+    commit_api = local["commit_api"]
+    if (
+        archive["processor-ref"].decode("ascii").strip().split("\t") != [processor["state_commit"], "refs/heads/automation/upstream-catalogue-state"]
+        or archive["promotion-ref"].decode("ascii").strip().split("\t") != [promotion["state_commit"], "refs/heads/automation/canonical-update-state"]
+    ):
+        raise ValueError("health archived producer refs do not bind the exact B/C workflow chain")
     source_rows = [row for row in receipt.get("sources", []) if isinstance(row, dict) and row.get("source_id") == "data_go_kr"]
     observations = post_state.get("observations_by_source", {}).get("data_go_kr", [])
     last_good = post_state.get("last_good_by_source", {}).get("data_go_kr")
@@ -3086,6 +3180,367 @@ def validate_native_publisher_attempt(
         "publication": json.loads(receipt_raw).get("publication", {}),
         "anonymous_verification": json.loads(receipt_raw).get("anonymous_verification", {}),
     }
+
+
+NATIVE_PUBLICATION_READBACK_ROLES = frozenset({
+    "publication_source_commit", "publication_source_manifest", "publication_workflow",
+    "publication_repo_metadata_before", "publication_pointer_before",
+    "publication_repo_metadata_after", "publication_pointer_after",
+    "publication_pointer_immutable", "publication_anonymous_manifest",
+    "publication_anonymous_payload",
+})
+
+
+def validate_native_publication_readback(
+    *, root: pathlib.Path, inputs: list[dict[str, Any]], resolved: dict[str, pathlib.Path],
+    publisher_run: dict[str, Any], publisher: dict[str, Any] | None,
+    evaluation_epoch: str,
+) -> dict[str, Any] | None:
+    """Validate every supplied native pointer/read-back row independently of ACK presence.
+
+    An absent ACK makes delivery incomplete; it does not make a supplied pointer,
+    manifest, or anonymous stream report trustworthy by omission. This adapter
+    authenticates the publisher's complete verified inventory and its retained
+    read-back subset without granting a completeness or currentness claim.
+    """
+    supplied = {item["role"] for item in inputs} & NATIVE_PUBLICATION_READBACK_ROLES
+    if not supplied:
+        return None
+    if publisher is None or not publisher_run:
+        raise ValueError("publication pointer/read-back inputs lack a validated native publisher attempt")
+    if supplied != NATIVE_PUBLICATION_READBACK_ROLES:
+        raise ValueError(
+            "native publication pointer/read-back bundle is incomplete: "
+            f"missing={sorted(NATIVE_PUBLICATION_READBACK_ROLES - supplied)}"
+        )
+
+    def item_for(role: str) -> dict[str, Any]:
+        item = single_role(inputs, role)
+        assert item is not None
+        return item
+
+    def raw_for(role: str) -> bytes:
+        item = item_for(role)
+        return receipt_path_bytes(resolved[item["input_id"]], item)
+
+    def json_for(role: str) -> dict[str, Any]:
+        item = item_for(role)
+        return object_at(resolved[item["input_id"]], role)
+
+    source_sha = publisher["source_sha"]
+    manifest_sha = publisher["manifest_sha256"]
+    workflow_head_sha = publisher["workflow_head_sha"]
+    source_binding = publisher["source_binding"]
+    source_manifest_raw = git_read_only(root, ["show", f"{source_sha}:manifest.json"])
+    source_manifest = json.loads(source_manifest_raw)
+    source_manifest_input = item_for("publication_source_manifest")
+    indexed_manifest_raw = raw_for("publication_source_manifest")
+    indexed_manifest = json.loads(indexed_manifest_raw)
+    if (
+        source_manifest_input.get("subject", {}).get("source_revision") != source_sha
+        or indexed_manifest_raw != source_manifest_raw
+        or indexed_manifest != source_manifest
+        or sha256_bytes(source_manifest_raw) != manifest_sha
+    ):
+        raise ValueError("native publication source-manifest input differs from the exact receipt-bound source commit")
+
+    source_commit = json_for("publication_source_commit")
+    if (
+        source_commit.get("sha") != source_sha
+        or source_commit.get("commit", {}).get("tree", {}).get("sha") != source_binding.get("source_tree_sha")
+    ):
+        raise ValueError("native publication source-commit API differs from the receipt-bound source tree")
+    workflow_api = json_for("publication_workflow")
+    workflow_contract = PIPELINE_WORKFLOWS["publisher"]
+    workflow_input = item_for("publication_workflow")
+    if (
+        workflow_api.get("id") != workflow_contract["workflow_id"]
+        or workflow_api.get("path") != workflow_contract["workflow_path"]
+        or workflow_api.get("state") != "active"
+        or (
+            workflow_input.get("subject", {}).get("source_revision") is not None
+            and workflow_input["subject"]["source_revision"] != workflow_head_sha
+        )
+    ):
+        raise ValueError("native publication workflow snapshot differs from its authenticated run source")
+
+    receipt_raw = raw_for("publication_receipt")
+    receipt = json.loads(receipt_raw)
+    if (
+        receipt.get("source_binding") != source_binding
+        or receipt.get("publication") != publisher.get("publication")
+        or receipt.get("anonymous_verification") != publisher.get("anonymous_verification")
+    ):
+        raise ValueError("native publication receipt row differs from the exact verified artifact receipt")
+    source_script = git_read_only(root, ["show", f"{source_sha}:scripts/huggingface_registry_distribution.py"])
+    workflow_raw = git_read_only(root, ["show", f"{workflow_head_sha}:{workflow_contract['workflow_path']}"])
+
+    pointer_before = json_for("publication_pointer_before")
+    pointer_after = json_for("publication_pointer_after")
+    pointer_immutable = json_for("publication_pointer_immutable")
+    metadata_before = json_for("publication_repo_metadata_before")
+    metadata_after = json_for("publication_repo_metadata_after")
+    publication_record = publisher.get("publication")
+    verification_record = publisher.get("anonymous_verification")
+    if not isinstance(publication_record, dict) or not isinstance(verification_record, dict):
+        raise ValueError("native publication receipt lacks its exact publication and verification records")
+
+    pointer_validator = import_module(
+        "generic_distribution_pointer_contract", root / "scripts/completeness_publication_evidence.py"
+    )
+    registry_rows = [
+        row for row in source_manifest.get("artifacts", [])
+        if isinstance(row, dict) and row.get("path") == "data/data-go-kr.registry.json"
+    ]
+    if len(registry_rows) != 1:
+        raise ValueError("native publication source manifest does not uniquely identify the Registry payload")
+    registry_member = registry_rows[0]
+    for label, pointer in (("after", pointer_after), ("immutable", pointer_immutable)):
+        pointer_validator._check_distribution_index(
+            pointer,
+            payload_revision=publisher["payload_revision"],
+            pointer_revision=publisher["pointer_revision"],
+            manifest_sha256=manifest_sha,
+            manifest_bytes=len(source_manifest_raw),
+            registry_sha256=registry_member.get("sha256"),
+            registry_bytes=registry_member.get("bytes"),
+            artifact_count=publication_record.get("artifacts"),
+            label=f"native publication {label} pointer",
+        )
+    if pointer_after != pointer_immutable:
+        raise ValueError("native publication immutable pointer differs from the post-publication pointer")
+
+    def validate_pointer_snapshot(pointer: dict[str, Any], label: str) -> None:
+        dataset = pointer.get("dataset")
+        manifest = pointer.get("release_manifest")
+        rows = pointer.get("artifacts")
+        count = pointer.get("artifact_count")
+        if (
+            pointer.get("schema_version") != "datapan.huggingface-distribution.v1"
+            or not isinstance(dataset, dict)
+            or dataset.get("id") != "StatPan/datapan-registry"
+            or not isinstance(dataset.get("revision"), str)
+            or not re.fullmatch(r"[a-f0-9]{40}", dataset["revision"])
+            or not isinstance(manifest, dict)
+            or manifest.get("path") != "manifest.json"
+            or manifest.get("kind") != "release_manifest"
+            or isinstance(manifest.get("bytes"), bool)
+            or not isinstance(manifest.get("bytes"), int)
+            or not SHA256_RE.fullmatch(manifest.get("sha256", ""))
+            or isinstance(count, bool)
+            or not isinstance(count, int)
+            or not isinstance(rows, list)
+            or count != len(rows)
+        ):
+            raise ValueError(f"native publication {label} pointer snapshot is malformed")
+        seen: set[str] = set()
+        for row in rows:
+            if not isinstance(row, dict):
+                raise ValueError(f"native publication {label} pointer contains a non-object artifact")
+            path = normalize_relative_path(row.get("path"), f"native publication {label} artifact path").as_posix()
+            size, digest, kind = row.get("bytes"), row.get("sha256"), row.get("kind")
+            if (
+                path in seen or isinstance(size, bool) or not isinstance(size, int) or size < 1
+                or not isinstance(kind, str) or not kind or not isinstance(digest, str)
+                or not SHA256_RE.fullmatch(digest)
+            ):
+                raise ValueError(f"native publication {label} pointer artifact identity is malformed")
+            seen.add(path)
+
+    validate_pointer_snapshot(pointer_before, "before")
+    for label, metadata in (("before", metadata_before), ("after", metadata_after)):
+        siblings = metadata.get("siblings")
+        if (
+            metadata.get("id") != "StatPan/datapan-registry"
+            or not isinstance(metadata.get("sha"), str)
+            or not re.fullmatch(r"[a-f0-9]{40}", metadata["sha"])
+            or not isinstance(siblings, list)
+            or not {"manifest.json", "data/data-go-kr.registry.json"}.issubset({
+                item.get("rfilename") for item in siblings if isinstance(item, dict)
+            })
+        ):
+            raise ValueError(f"native publication repository metadata {label} snapshot is malformed")
+    if metadata_after.get("sha") != publisher["pointer_revision"]:
+        raise ValueError("native publication repository metadata does not bind the receipt pointer revision")
+    inventory = validate_native_distribution_inventory(
+        manifest=source_manifest, manifest_raw=source_manifest_raw,
+        pointer=pointer_immutable, receipt=receipt,
+        source_script_raw=source_script, workflow_raw=workflow_raw,
+    )
+
+    anonymous_manifest_raw = raw_for("publication_anonymous_manifest")
+    if anonymous_manifest_raw != source_manifest_raw:
+        raise ValueError("native anonymous release-manifest read-back differs from the exact published source bytes")
+    readback = json_for("publication_anonymous_payload")
+    check_rows = [
+        row for row in readback.get("checks", [])
+        if isinstance(row, dict) and row.get("check") == "immutable_registry_stream_matches_expected_sha_and_size"
+    ] if isinstance(readback.get("checks"), list) else []
+    detail = check_rows[0].get("detail") if len(check_rows) == 1 else None
+    try:
+        readback_at = parse_time(readback.get("generated_at"), "anonymous publisher read-back time")
+        verified_at = parse_time(publisher["native_verification_completed_at"], "native publisher verification time")
+        cutoff = parse_time(evaluation_epoch, "publication evaluation epoch")
+    except ValueError as exc:
+        raise ValueError("native anonymous read-back lacks valid bounded timestamps") from exc
+    if (
+        str(readback.get("publisher_run_id")) != str(publisher_run.get("id"))
+        or isinstance(readback.get("publisher_attempt"), bool)
+        or not isinstance(readback.get("publisher_attempt"), int)
+        or readback.get("publisher_attempt") != publisher_run.get("run_attempt")
+        or len(check_rows) != 1 or not isinstance(detail, dict)
+        or detail.get("path") != registry_member.get("path")
+        or isinstance(detail.get("bytes_streamed"), bool)
+        or not isinstance(detail.get("bytes_streamed"), int)
+        or detail.get("bytes_streamed") != registry_member.get("bytes")
+        or detail.get("sha256") != registry_member.get("sha256")
+        or detail.get("revision") != publisher["payload_revision"]
+        or not verified_at <= readback_at <= cutoff
+    ):
+        raise ValueError("native anonymous read-back does not corroborate the exact verified publisher payload")
+    return {
+        "source_sha": source_sha,
+        "manifest_sha256": manifest_sha,
+        "registry_artifact": copy.deepcopy(registry_member),
+        "publisher_run_id": str(publisher_run["id"]),
+        "publisher_attempt": publisher_run["run_attempt"],
+        "payload_revision": publisher["payload_revision"],
+        "pointer_revision": publisher["pointer_revision"],
+        "native_verification_completed_at": publisher["native_verification_completed_at"],
+        "consumer_readback_observed_at": readback.get("generated_at"),
+        "verified_artifact_count": inventory["distribution_artifacts"],
+        "evidence": [
+            artifact(input_path(item_for(role)), receipt_path_bytes(resolved[item_for(role)["input_id"]], item_for(role)))
+            for role in sorted(NATIVE_PUBLICATION_READBACK_ROLES)
+        ],
+    }
+
+
+def validate_present_stage_local_artifacts(
+    *, root: pathlib.Path, stage_roles: dict[str, dict[str, dict[str, Any]]],
+    stage_runs: dict[str, tuple[dict[str, Any], dict[str, Any]]],
+    resolved: dict[str, pathlib.Path], current_registry: dict[str, Any], evaluation_epoch: str,
+) -> None:
+    """Validate present stage-local payloads before reporting a missing chain link."""
+    source_roles = stage_roles["source"]
+    source_result: dict[str, Any] | None = None
+    if source_roles:
+        run, job = stage_runs["source"]
+        archive_item = source_roles["pipeline_artifact_archive"]
+        source_result = validate_source_observation(
+            root=root, roles=source_roles, resolved=resolved, run=run, job=job,
+            archive=receipt_path_bytes(resolved[archive_item["input_id"]], archive_item),
+            evaluation_epoch=evaluation_epoch,
+        )
+
+    processor_roles = stage_roles["processor"]
+    processor_result: dict[str, Any] | None = None
+    if processor_roles:
+        run, job = stage_runs["processor"]
+        processor_result = validate_processor_stage(
+            root=root, roles=processor_roles, resolved=resolved, run=run, job=job,
+            source=source_result, current_registry=current_registry,
+            evaluation_epoch=evaluation_epoch,
+        )
+
+    promotion_roles = stage_roles["promotion"]
+    promotion_result: dict[str, Any] | None = None
+    if promotion_roles:
+        run, job = stage_runs["promotion"]
+        assert_main_ancestor(root, run["head_sha"], "promotion workflow source commit")
+        log_item = promotion_roles["pipeline_log_archive"]
+        log_results = promotion_log_results(receipt_path_bytes(resolved[log_item["input_id"]], log_item))
+        state_bytes = validate_state_tree(
+            stage="promotion", roles=promotion_roles, resolved=resolved,
+            ref_role="promotion_state_ref", commit_role="promotion_state_commit",
+            tree_role="promotion_state_tree", content_roles={},
+            blob_roles={"promotion_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
+        )
+        journal = json.loads(state_bytes["promotion_journal_blob_api"])
+        validate_schema_at_revision(
+            root=root, revision=run["head_sha"],
+            relative_path="schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+            value=journal, label="promotion journal",
+        )
+        if indexed_json(promotion_roles, resolved, "promotion_state_ref").get("ref") != "refs/heads/automation/canonical-update-state":
+            raise ValueError("promotion state ref is outside its registered owned branch")
+        if processor_result is not None:
+            promotion_result = validate_promotion_stage(
+                root=root, roles=promotion_roles, resolved=resolved, run=run, job=job,
+                processor=processor_result, current_registry=current_registry,
+                evaluation_epoch=evaluation_epoch,
+            )
+        else:
+            # When B is absent, validate C's exact run-local outcome shape and
+            # authenticated state payload, while keeping its B relationship
+            # explicitly unproven.
+            no_op_results = [row for row in log_results if "already_canonical_generations" in row]
+            if no_op_results:
+                allowed_statuses = {
+                    "no-eligible-ready-processor-bundle", "already-canonical-payload",
+                    "skipped-already-canonical-processor-bundles",
+                }
+                if len(no_op_results) != 1:
+                    raise ValueError("promotion log contains ambiguous no-op candidate summaries")
+                output = no_op_results[0]
+                rows = output.get("already_canonical_generations")
+                if (
+                    output.get("status") not in allowed_statuses
+                    or output.get("candidate_available") is not False
+                    or not isinstance(rows, list)
+                    or not rows
+                    or not any(
+                        isinstance(row, dict)
+                        and row.get("candidate_available") is False
+                        and row.get("reason") == "already_canonical_payload"
+                        and row.get("registry_sha256") == current_registry["sha256"]
+                        and isinstance(row.get("generation_id"), str)
+                        and SHA256_RE.fullmatch(row["generation_id"])
+                        and all(
+                            isinstance(row.get(field), int)
+                            and not isinstance(row.get(field), bool)
+                            and row[field] >= 0
+                            for field in ("pending_count", "detail_retry_count", "detail_unattempted_count")
+                        )
+                        for row in rows
+                    )
+                ):
+                    raise ValueError("promotion no-op log lacks a valid current-canonical stage-local result")
+            else:
+                run_url = f"https://github.com/StatPan/datapan-registry/actions/runs/{run['id']}/attempts/{run['run_attempt']}"
+                reconciliations = [
+                    row for row in log_results
+                    if row.get("status") == "promotion-prs-reconciled" and row.get("run_url") == run_url
+                ]
+                if len(reconciliations) != 1:
+                    raise ValueError("promotion log does not bind one successful result to the exact current run attempt")
+
+    health_roles = stage_roles["health"]
+    if health_roles:
+        run, job = stage_runs["health"]
+        health_local = validate_health_stage_local(
+            root=root, roles=health_roles, resolved=resolved, run=run, job=job,
+            evaluation_epoch=evaluation_epoch,
+        )
+        archive = health_local["archive"]
+        if (
+            processor_result is not None
+            and archive["processor-ref"].decode("ascii").strip().split("\t")
+            != [processor_result["state_commit"], "refs/heads/automation/upstream-catalogue-state"]
+        ):
+            raise ValueError("health archived processor ref differs from the exact supplied B state")
+        if (
+            promotion_result is not None
+            and archive["promotion-ref"].decode("ascii").strip().split("\t")
+            != [promotion_result["state_commit"], "refs/heads/automation/canonical-update-state"]
+        ):
+            raise ValueError("health archived promotion ref differs from the exact supplied C state")
+        if source_result is not None and processor_result is not None and promotion_result is not None:
+            validate_health_stage(
+                root=root, roles=health_roles, resolved=resolved, run=run, job=job,
+                processor=processor_result, promotion=promotion_result, source=source_result,
+                current_registry=current_registry, evaluation_epoch=evaluation_epoch,
+            )
 
 
 def validate_consumer_readback(
@@ -3898,8 +4353,63 @@ def validate_pipeline_evidence(
                 evaluation_epoch=evaluation_epoch, root=root,
             )
             stage_runs[stage] = (run, job)
+
+    current_registry = validate_current_catalog_subject(
+        root=root, inputs=all_inputs, resolved=resolved, scope_registry=scope_registry,
+        candidate_context=candidate_context,
+    )
+
+    def raw_role(role: str) -> bytes:
+        item = single_role(operation_inputs, role, required=False)
+        if item is None:
+            raise ValueError(f"publication evidence is missing role {role}")
+        return receipt_path_bytes(resolved[item["input_id"]], item)
+
+    def json_role(role: str) -> dict[str, Any]:
+        item = single_role(operation_inputs, role, required=False)
+        if item is None:
+            raise ValueError(f"publication evidence is missing role {role}")
+        return object_at(resolved[item["input_id"]], role)
+
+    publisher_roles = stage_roles["publisher"]
+    publisher_run = stage_runs.get("publisher", ({}, {}))[0]
+    receipt_item = single_role(operation_inputs, "publication_receipt", required=False)
+    binding_item = single_role(operation_inputs, "publication_source_binding", required=False)
+    if (receipt_item is None) != (binding_item is None):
+        raise ValueError("native publisher receipt and source binding must be supplied together")
+    publisher_attempt: dict[str, Any] | None = None
+    publisher_readback: dict[str, Any] | None = None
+    if publisher_roles and receipt_item is not None and binding_item is not None:
+        publisher_attempt = validate_native_publisher_attempt(
+            root=root,
+            run=publisher_run,
+            jobs=json_role("publication_producer_jobs"),
+            artifact_response=json_role("publication_output_artifact"),
+            archive=raw_role("publication_artifact_archive"),
+            receipt_raw=raw_role("publication_receipt"),
+            binding_raw=raw_role("publication_source_binding"),
+            evaluation_epoch=evaluation_epoch,
+        )
+    publisher_readback = validate_native_publication_readback(
+        root=root, inputs=operation_inputs, resolved=resolved,
+        publisher_run=publisher_run, publisher=publisher_attempt,
+        evaluation_epoch=evaluation_epoch,
+    )
+    orphan_ack_rows = [
+        item for item in operation_inputs
+        if item["role"].startswith("acknowledgement_")
+        and item.get("subject", {}).get("stage") != "acknowledgement"
+    ]
+    if orphan_ack_rows and not stage_roles["acknowledgement"]:
+        raise ValueError("ACK journal or state evidence is present without its exact acknowledgement run stage")
+
     missing_core_stages = [stage for stage in core_stages if not stage_roles[stage]]
     if missing_core_stages:
+        validate_present_stage_local_artifacts(
+            root=root, stage_roles=stage_roles, stage_runs=stage_runs,
+            resolved=resolved, current_registry=current_registry,
+            evaluation_epoch=evaluation_epoch,
+        )
         return {
             "status": "missing_core_chain",
             "missing_stages": missing_core_stages,
@@ -3907,10 +4417,6 @@ def validate_pipeline_evidence(
             "publication": None,
         }
 
-    current_registry = validate_current_catalog_subject(
-        root=root, inputs=all_inputs, resolved=resolved, scope_registry=scope_registry,
-        candidate_context=candidate_context,
-    )
     source_run, source_job = stage_runs["source"]
     source_roles = stage_roles["source"]
     source_archive_item = source_roles["pipeline_artifact_archive"]
@@ -3955,7 +4461,6 @@ def validate_pipeline_evidence(
         "completeness_publication_evidence", root / "scripts/completeness_publication_evidence.py"
     )
     publication: dict[str, Any] | None = None
-    publisher_attempt: dict[str, Any] | None = None
     publication_evidence: list[dict[str, Any]] = []
     publication_roles = (
         "publication_producer_run", "publication_producer_jobs", "publication_output_artifact",
@@ -3967,31 +4472,13 @@ def validate_pipeline_evidence(
         "acknowledgement_jobs", "acknowledgement_log_archive", "acknowledgement_journal_before",
         "acknowledgement_journal_after",
     )
-    publisher_roles = stage_roles["publisher"]
     acknowledgement_roles = stage_roles["acknowledgement"]
-    publisher_run = stage_runs.get("publisher", ({}, {}))[0]
     acknowledgement_run = stage_runs.get("acknowledgement", ({}, {}))[0]
 
     # Keep the exact retained legacy packet as a historical adapter. New native
     # attempts are validated through the generic #716 publisher checks in the
     # updated-claim path; their presence can no longer make this legacy-only
     # adapter reject the independently valid source→B→C→Health chain.
-    receipt_item = single_role(operation_inputs, "publication_receipt", required=False)
-    binding_item = single_role(operation_inputs, "publication_source_binding", required=False)
-    if (receipt_item is None) != (binding_item is None):
-        raise ValueError("native publisher receipt and source binding must be supplied together")
-    if publisher_roles and receipt_item is not None and binding_item is not None:
-        publisher_attempt = validate_native_publisher_attempt(
-            root=root,
-            run=publisher_run,
-            jobs=json_role("publication_producer_jobs"),
-            artifact_response=json_role("publication_output_artifact"),
-            archive=raw_role("publication_artifact_archive"),
-            receipt_raw=raw_role("publication_receipt"),
-            binding_raw=raw_role("publication_source_binding"),
-            evaluation_epoch=evaluation_epoch,
-        )
-
     legacy_packet_ids = (
         publisher_run.get("id") == publication_helper.PUBLISHER_RUN_ID
         and acknowledgement_run.get("id") == publication_helper.ACK_RUN_ID
