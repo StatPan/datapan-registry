@@ -3239,6 +3239,74 @@ class CompletenessProofRollupTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "starts from a status not selected"):
                 MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
 
+    def test_build_report_binds_pr_number_across_ack_without_ci_or_state_bundles(self) -> None:
+        """Optional CI/state snapshots cannot replace the PR identity in both ACK journals."""
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        mutations = ("changed_after", "missing_before", "boolean_before", "zero_before", "negative_before")
+        for mutation in mutations:
+            with self.subTest(mutation=mutation), tempfile.TemporaryDirectory(
+                prefix=f"completeness-ack-pr-number-{mutation}-"
+            ) as name:
+                input_root = pathlib.Path(name) / "evidence"
+                input_root.mkdir()
+                index_path, _source = self._build_synthetic_native_ack_packet(
+                    input_root, outcome="read-back-confirmed", predecessor_status="prepared",
+                )
+                index = json.loads(index_path.read_bytes())
+                index["inputs"] = [
+                    item for item in index["inputs"]
+                    if not (
+                        item.get("scope_id") == operation_id
+                        and item.get("role") in {
+                            "acknowledgement_state_ref", "acknowledgement_state_commit",
+                            "acknowledgement_state_tree", "acknowledgement_journal_blob_api",
+                            "acknowledgement_state_ref_before", "acknowledgement_state_commit_before",
+                            "acknowledgement_state_tree_before", "acknowledgement_journal_blob_api_before",
+                        }
+                    )
+                ]
+                snapshots: dict[str, tuple[dict[str, object], dict[str, object]]] = {}
+                for role in ("acknowledgement_journal_before", "acknowledgement_journal_after"):
+                    item = next(
+                        row for row in index["inputs"]
+                        if row.get("scope_id") == operation_id and row["role"] == role
+                    )
+                    journal = json.loads((input_root / item["path"]).read_bytes())
+                    target = journal["records"][0]
+                    target.pop("ci", None)
+                    snapshots[role] = (item, journal)
+
+                before_item, before = snapshots["acknowledgement_journal_before"]
+                after_item, after = snapshots["acknowledgement_journal_after"]
+                before_pr = before["records"][0]["pr"]
+                after_pr = after["records"][0]["pr"]
+                if mutation == "changed_after":
+                    after_pr["number"] += 1
+                    after_pr["url"] = f"https://github.com/StatPan/datapan-registry/pull/{after_pr['number']}"
+                elif mutation == "missing_before":
+                    before_pr.pop("number")
+                elif mutation == "boolean_before":
+                    before_pr["number"] = True
+                elif mutation == "zero_before":
+                    before_pr["number"] = 0
+                else:
+                    before_pr["number"] = -1
+                self._write_rebound_evidence(
+                    input_root, before_item, f"pr-number-before-{mutation}.json",
+                    (json.dumps(before, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+                )
+                self._write_rebound_evidence(
+                    input_root, after_item, f"pr-number-after-{mutation}.json",
+                    (json.dumps(after, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode(),
+                )
+                index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+                with self.assertRaisesRegex(ValueError, "exact positive PR number"):
+                    MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+
     def test_build_report_rejects_ack_source_payload_manifest_pr_history_and_ci_mutations(self) -> None:
         """Rebound indexed journals still fail each independent native subject or history join."""
         registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)

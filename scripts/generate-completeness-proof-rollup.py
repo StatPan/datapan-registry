@@ -4662,6 +4662,14 @@ def validate_acknowledgement_local_transition(
     pr = after_row["pr"]
     before_candidate = before_row.get("candidate")
     before_pr = before_row.get("pr")
+    before_pr_number = before_pr.get("number") if isinstance(before_pr, dict) else None
+    after_pr_number = pr.get("number") if isinstance(pr, dict) else None
+    if (
+        isinstance(before_pr_number, bool) or not isinstance(before_pr_number, int) or before_pr_number < 1
+        or isinstance(after_pr_number, bool) or not isinstance(after_pr_number, int)
+        or after_pr_number != before_pr_number
+    ):
+        raise ValueError("ACK transition does not preserve one exact positive PR number from its before snapshot")
     if (
         not isinstance(before_candidate, dict) or not isinstance(before_pr, dict)
         or after_row.get("status") != "read-back-confirmed"
