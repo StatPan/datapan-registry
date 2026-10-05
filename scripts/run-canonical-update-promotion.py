@@ -638,7 +638,11 @@ def verify_processor_input_compatibility(
     if not isinstance(generation_inputs, Mapping):
         raise PromotionError("processor checkpoint lacks generation input provenance")
     historical_bytes: dict[str, bytes] = {}
-    for raw_path in dict.fromkeys(PROCESSOR_COMPATIBILITY_FILES):
+    compatibility_files = list(PROCESSOR_COMPATIBILITY_FILES)
+    derivation_value = generation_inputs.get("same_observation_derivation")
+    if derivation_value is not None:
+        compatibility_files.append("scripts/upstream_catalogue_derivation.py")
+    for raw_path in dict.fromkeys(compatibility_files):
         path = pathlib.PurePosixPath(raw_path)
         if path.is_absolute() or ".." in path.parts or "\\" in raw_path:
             raise PromotionError("processor compatibility contract contains an unsafe source path")
@@ -665,6 +669,20 @@ def verify_processor_input_compatibility(
         "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
         "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
     }
+    if derivation_value is not None:
+        derivation_bytes = historical_bytes.get("scripts/upstream_catalogue_derivation.py")
+        if derivation_bytes is None:
+            raise PromotionError("derived processor source is missing its same-observation lineage validator")
+        derivation_material = {
+            "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
+            "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
+            "same_observation_derivation_helper_sha256": hashlib.sha256(derivation_bytes).hexdigest(),
+        }
+        derivation_revision = hashlib.sha256(
+            json.dumps(derivation_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if derivation_value.get("derivation_processor_revision_sha256") != derivation_revision:
+            raise PromotionError("processor same-observation revision does not bind its trusted source commit")
     expected_generator_revision = hashlib.sha256(
         json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
@@ -1162,13 +1180,35 @@ def validate_processor_bundle(
     receipt_path = bundle_dir / "composition-receipt.json"
     composition = load_object(receipt_path)
     generation_inputs = checkpoint.get("generation_inputs", {})
-    baseline_sha = generation_inputs.get("baseline_sha256")
+    original_baseline_sha = generation_inputs.get("baseline_sha256")
+    derivation_value = generation_inputs.get("same_observation_derivation")
+    composition_baseline_sha = original_baseline_sha
+    if derivation_value is not None:
+        derivation_helper = load_module(
+            (root / "scripts/upstream_catalogue_derivation.py") if root is not None
+            else pathlib.Path(__file__).with_name("upstream_catalogue_derivation.py"),
+            "promotion_same_observation_derivation",
+        )
+        try:
+            derivation_value = derivation_helper.validate_derivation_envelope(derivation_value)
+        except (ValueError, TypeError) as exc:
+            raise PromotionError("processor same-observation derivation envelope is invalid") from exc
+        composition_baseline_sha = derivation_value["composition_baseline"]["registry_sha256"]
+        composition_baseline_bytes = derivation_value["composition_baseline"]["registry_bytes"]
+        if (
+            derivation_value["original_observation"]["original_baseline_sha256"] != original_baseline_sha
+            or derivation_value["original_observation"]["candidate_sha256"] != generation_inputs.get("candidate_sha256")
+        ):
+            raise PromotionError("processor derivation does not preserve its original source observation")
+    else:
+        composition_baseline_bytes = None
+    baseline_sha = composition_baseline_sha
     producer_candidate_sha = generation_inputs.get("candidate_sha256")
     input_digests = composition.get("input_digests")
     if not isinstance(input_digests, Mapping):
         raise PromotionError("composition receipt lacks exact baseline and candidate input digests")
     for receipt_key, label, digest in (
-        ("baseline", "baseline", baseline_sha),
+        ("baseline", "original baseline", original_baseline_sha),
         ("candidate", "upstream candidate", producer_candidate_sha),
     ):
         observed = input_digests.get(receipt_key)
@@ -1178,6 +1218,15 @@ def validate_processor_bundle(
             or observed.get("sha256") != digest
         ):
             raise PromotionError(f"composition receipt is not bound to the exact {label} digest in processor state")
+    if derivation_value is not None:
+        composition_baseline_input = input_digests.get("composition_baseline")
+        if (
+            not isinstance(composition_baseline_input, Mapping)
+            or composition_baseline_input.get("sha256") != composition_baseline_sha
+            or composition_baseline_input.get("bytes") != composition_baseline_bytes
+            or composition.get("same_observation_derivation") != derivation_value
+        ):
+            raise PromotionError("composition receipt does not bind the exact derivative baseline and lineage")
     expected_composition_status = "ready_scoped" if processor_status == "ready" else "no_change"
     try:
         composition_helper.validate_composition(
@@ -1188,14 +1237,15 @@ def validate_processor_bundle(
         raise PromotionError(f"composer did not admit a valid {expected_composition_status} candidate receipt") from exc
     outcome = checkpoint.get("outcome", {})
     if processor_status == "no-change":
-        if candidate_sha != baseline_sha or outcome.get("composer_status") != "no_change" or int(outcome.get("pending_count", -1)) != 0 or int(outcome.get("detail_retry_count", -1)) != 0:
+        if candidate_sha != composition_baseline_sha or outcome.get("composer_status") != "no_change" or int(outcome.get("pending_count", -1)) != 0 or int(outcome.get("detail_retry_count", -1)) != 0:
             raise PromotionError("no-change processor proof does not bind an unchanged candidate with zero pending work")
     return {
         "status": processor_status,
         "registry_path": "data/data-go-kr.registry.json",
         "registry_bytes": candidate_path.stat().st_size,
         "registry_sha256": candidate_sha,
-        "baseline_sha256": baseline_sha,
+        "baseline_sha256": composition_baseline_sha,
+        "original_baseline_sha256": original_baseline_sha,
         "producer_candidate_sha256": producer_candidate_sha,
         "composition_receipt": composition,
         "composition_receipt_path": str(receipt_path.resolve()),
@@ -1274,6 +1324,8 @@ def select_first_eligible_processor_bundle(
     candidates: Sequence[Mapping[str, Any]],
     blocked: list[dict[str, str]],
     journal: Mapping[str, Any] | None = None,
+    journal_ref_sha: str | None = None,
+    state_root: pathlib.Path | None = None,
     *,
     default_branch: str,
     current_head_sha: str,
@@ -1300,6 +1352,11 @@ def select_first_eligible_processor_bundle(
         if canonical_identity is None:
             canonical_identity = authenticated_current_canonical_registry(root, current_head_sha)
         if bundle_matches_current_canonical(bundle, canonical_identity):
+            # A fully screened immutable B artifact whose exact composed bytes
+            # are already the manifest-bound current canonical payload is a
+            # no-op. Its historical derivation baseline is expected to differ
+            # after the ordinary C merge, so do not reinterpret that old
+            # parent proof as authority to prepare another candidate.
             outcome = checkpoint.get("outcome", {})
             already_canonical_rows.append({
                 "generation_id": generation_id,
@@ -1311,6 +1368,19 @@ def select_first_eligible_processor_bundle(
                 "candidate_available": False,
             })
             continue
+        if checkpoint.get("generation_inputs", {}).get("same_observation_derivation") is not None:
+            if state_root is None:
+                blocked.append({"generation_id": generation_id, "reason": "derivation_processor_state_unavailable"})
+                continue
+            try:
+                validate_same_observation_derivation_for_c(
+                    root, state_root, checkpoint, bundle, journal, journal_ref_sha,
+                    current_head_sha=current_head_sha,
+                    canonical_identity=canonical_identity,
+                )
+            except PromotionError:
+                blocked.append({"generation_id": generation_id, "reason": "same_observation_derivation_invalid"})
+                continue
         if bundle.get("baseline_sha256") != canonical_identity.get("registry_sha256"):
             # A different payload composed from an older immutable baseline
             # cannot be rebased safely. Keep it visible as blocked, then let a
@@ -1462,10 +1532,231 @@ def authenticated_current_canonical_registry(
     verify_remote_main()
     return {
         "main_sha": expected_main_sha,
+        "manifest_sha256": hashlib.sha256(committed_manifest_bytes).hexdigest(),
         "registry_path": registry_path,
         "registry_bytes": actual_bytes,
         "registry_sha256": actual_sha,
     }
+
+
+def validate_same_observation_derivation_for_c(
+    root: pathlib.Path,
+    state_root: pathlib.Path,
+    checkpoint: Mapping[str, Any],
+    bundle: Mapping[str, Any],
+    journal: Mapping[str, Any] | None,
+    journal_ref_sha: str | None,
+    *,
+    current_head_sha: str,
+    canonical_identity: Mapping[str, Any],
+) -> None:
+    """Recheck B's two-parent proof against the current durable C lineage.
+
+    The composition baseline's historical manifest and current main's
+    manifest are checked independently. This admits source-only main advances
+    while requiring the canonical registry bytes to remain identical.
+    """
+    generation_inputs = checkpoint.get("generation_inputs")
+    derivation_value = generation_inputs.get("same_observation_derivation") if isinstance(generation_inputs, Mapping) else None
+    if derivation_value is None:
+        return
+    derivation_helper = load_module(root / "scripts/upstream_catalogue_derivation.py", "c_same_observation_derivation")
+    try:
+        envelope = derivation_helper.validate_derivation_envelope(derivation_value)
+        if not isinstance(journal, Mapping) or not isinstance(journal_ref_sha, str):
+            raise ValueError("current promotion journal snapshot is unavailable")
+        pr_helper = load_canonical_update_pr(root)
+        journal_schema = load_object(root / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json")
+        pr_helper.validate_journal(journal, journal_schema)
+        selected_row = derivation_helper.validate_readback_against_journal(
+            envelope, journal, journal_ref_sha=journal_ref_sha,
+            allow_monotonic_successor=True,
+        )
+        health_policy = load_object(root / "policy/upstream-catalogue-health.json")
+        derivation_helper.authenticate_canonical_merge_ack(
+            root, str(envelope["canonical_parent_readback"]["repository"]),
+            selected_row, health_policy, now=dt.datetime.now(dt.timezone.utc),
+        )
+        composition = bundle.get("composition_receipt")
+        if not isinstance(composition, Mapping) or composition.get("same_observation_derivation") != envelope:
+            raise ValueError("composition receipt derivation differs from checkpoint")
+        original = envelope["original_observation"]
+        baseline = envelope["composition_baseline"]
+        if (
+            checkpoint.get("source_id") != original["source_id"]
+            or checkpoint.get("source_scope") != original["source_scope"]
+            or generation_inputs.get("baseline_sha256") != original["original_baseline_sha256"]
+            or generation_inputs.get("candidate_sha256") != original["candidate_sha256"]
+            or generation_inputs.get("policy_sha256") != original["source_policy_sha256"]
+            or generation_inputs.get("adapter_revision") != original["provider_index_sha256"]
+            or bundle.get("original_baseline_sha256") != original["original_baseline_sha256"]
+            or bundle.get("baseline_sha256") != baseline["registry_sha256"]
+            or (baseline["registry_path"], baseline["registry_bytes"], baseline["registry_sha256"])
+                != (canonical_identity.get("registry_path"), canonical_identity.get("registry_bytes"), canonical_identity.get("registry_sha256"))
+        ):
+            raise ValueError("derivation original observation or current canonical bytes differ")
+        if canonical_identity.get("main_sha") != current_head_sha:
+            raise ValueError("current canonical identity is not pinned to checked-out main")
+
+        # Bind the envelope's original baseline main and manifest to committed
+        # Git objects. Current manifest may have advanced, but both must name
+        # exactly the same materialized canonical registry.
+        historical_manifest = command(
+            ("git", "show", f"{baseline['main_sha']}:manifest.json"), root,
+        ).stdout.encode("utf-8")
+        if hashlib.sha256(historical_manifest).hexdigest() != baseline["manifest_sha256"]:
+            raise ValueError("derivation baseline manifest is not the pinned historical commit")
+        historical_value = json.loads(historical_manifest)
+        if not isinstance(historical_value, Mapping) or historical_value.get("source_registry") != baseline["registry_path"]:
+            raise ValueError("derivation baseline manifest names another canonical path")
+        historical_entries = [
+            row for row in historical_value.get("artifacts", [])
+            if isinstance(row, Mapping) and row.get("kind") == "registry" and row.get("path") == baseline["registry_path"]
+        ]
+        if len(historical_entries) != 1 or (historical_entries[0].get("bytes"), historical_entries[0].get("sha256")) != (
+            baseline["registry_bytes"], baseline["registry_sha256"],
+        ):
+            raise ValueError("derivation baseline manifest registry identity differs")
+        pointer = command(("git", "show", f"{baseline['main_sha']}:{baseline['registry_path']}"), root).stdout.encode("utf-8")
+        if parse_git_lfs_pointer_identity(pointer) != (baseline["registry_sha256"], baseline["registry_bytes"]):
+            raise ValueError("derivation baseline LFS pointer differs")
+        for ancestor, descendant in (
+            (baseline["main_sha"], current_head_sha),
+            (envelope["canonical_parent_readback"]["merge_sha"], baseline["main_sha"]),
+            (envelope["canonical_parent_readback"]["merge_sha"], current_head_sha),
+        ):
+            result = command(("git", "merge-base", "--is-ancestor", ancestor, descendant), root,
+                             allowed_returncodes=frozenset({0, 1}))
+            if result.returncode != 0:
+                raise ValueError("canonical merge or composition baseline is not in current main history")
+
+        # Resolve both direct B parents from the durable state branch and
+        # authenticate their original A subject using its admitted handoff.
+        source_root = state_root / "sources" / "data_go_kr"
+        index = load_object(source_root / "index.json")
+        if index.get("schema_version") != PROCESSOR_SCHEMA or not isinstance(index.get("generations"), list):
+            raise ValueError("processor state index is malformed")
+        rows = {row.get("generation_id") for row in index["generations"] if isinstance(row, Mapping)}
+        ledger = index.get("collector_handoff")
+        handoff = load_module(root / "scripts/upstream_catalogue_handoff.py", "c_derivation_handoff")
+        admitted = handoff.validate_ledger(ledger)["admitted_observations"] if isinstance(ledger, Mapping) else None
+        if not isinstance(admitted, list):
+            raise ValueError("original collector admission ledger is unavailable")
+
+        def load_parent(reference: Mapping[str, Any]) -> dict[str, Any]:
+            generation = str(reference["generation_id"])
+            if generation not in rows:
+                raise ValueError("derivation parent is missing from current state index")
+            path = source_root / "generations" / f"{generation}.json"
+            parent = verify_processor_checkpoint(load_object(path), root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json")
+            derivation_helper.validate_processor_parent_checkpoint(
+                reference, parent, original_observation=original,
+            )
+            observations = parent.get("last_observation") if isinstance(parent.get("last_observation"), Mapping) else {}
+            input_refs = parent.get("input_artifacts") if isinstance(parent.get("input_artifacts"), list) else []
+            matches = [
+                item for item in admitted
+                if item.get("producer_run_id") == str(observations.get("producer_run_id") or "")
+                and item.get("refresh_evidence_sha256") == observations.get("refresh_evidence_sha256")
+                and any(
+                    isinstance(ref, Mapping)
+                    and str(ref.get("run_id")) == item["producer_run_id"]
+                    and str(ref.get("artifact_id")) == item["artifact_id"]
+                    and ref.get("evidence_sha256") == item["refresh_evidence_sha256"]
+                    for ref in input_refs
+                )
+            ]
+            if len(matches) != 1 or derivation_helper.original_observation_from_checkpoint(parent, matches[0]) != original:
+                raise ValueError("derivation B parent is not admitted to the exact original A")
+            return parent
+
+        parents = [
+            load_parent(envelope["resume_parent_processor"]),
+            load_parent(envelope["canonical_parent_processor"]),
+        ]
+        parent_id_set = {
+            envelope["resume_parent_processor"]["generation_id"],
+            envelope["canonical_parent_processor"]["generation_id"],
+        }
+
+        indexed_generations = {
+            row.get("generation_id") for row in index.get("generations", [])
+            if isinstance(row, Mapping)
+        }
+
+        def load_lineage_checkpoint(generation_id: str) -> dict[str, Any]:
+            if generation_id not in indexed_generations:
+                raise ValueError("derivation parent is missing from current state index")
+            path = source_root / "generations" / f"{generation_id}.json"
+            return verify_processor_checkpoint(
+                load_object(path), root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+            )
+
+        def admitted_observation_for(checkpoint: Mapping[str, Any]) -> Mapping[str, Any]:
+            observations = checkpoint.get("last_observation") if isinstance(checkpoint.get("last_observation"), Mapping) else {}
+            input_refs = checkpoint.get("input_artifacts") if isinstance(checkpoint.get("input_artifacts"), list) else []
+            matches = [
+                item for item in admitted
+                if item.get("producer_run_id") == str(observations.get("producer_run_id") or "")
+                and item.get("refresh_evidence_sha256") == observations.get("refresh_evidence_sha256")
+                and any(
+                    isinstance(ref, Mapping)
+                    and str(ref.get("run_id")) == item["producer_run_id"]
+                    and str(ref.get("artifact_id")) == item["artifact_id"]
+                    and ref.get("evidence_sha256") == item["refresh_evidence_sha256"]
+                    for ref in input_refs
+                )
+            ]
+            if len(matches) != 1:
+                raise ValueError("derivation B parent admission is ambiguous or missing")
+            return matches[0]
+
+        expected_ancestors = derivation_helper.validate_processor_parent_graph(
+            list(parent_id_set),
+            load_checkpoint=load_lineage_checkpoint,
+            admission_for=admitted_observation_for,
+            original_observation=original,
+            expected_ancestor_generation_ids=envelope["ancestor_generation_ids"],
+            forbidden_generation_id=checkpoint.get("generation_id"),
+        )
+        if selected_row.get("candidate", {}).get("generation_id") != envelope["canonical_parent_processor"]["generation_id"]:
+            raise ValueError("canonical readback does not select its exact B producer")
+        active_records = [
+            row for row in journal.get("records", []) if isinstance(row, Mapping)
+            and row.get("superseded_by") is None
+            and row.get("status") in {"merged", "publication-pending", "published", "read-back-confirmed"}
+            and isinstance(row.get("candidate"), Mapping)
+            and row["candidate"].get("source_id") == original["source_id"]
+            and row["candidate"].get("scope") == original["source_scope"]
+            and row["candidate"].get("registry_sha256") == baseline["registry_sha256"]
+        ]
+        if len(active_records) != 1 or active_records[0] != selected_row:
+            raise ValueError("canonical readback is ambiguous for this original observation")
+
+        # The PR body/head/base/merge are independently read back once; the
+        # frozen journal locator is not used as a substitute for GitHub state.
+        readback = gh_pr_readback(root, envelope["canonical_parent_readback"]["repository"], int(envelope["canonical_parent_readback"]["pr_number"]))
+        reference = envelope["canonical_parent_readback"]
+        merge_commit = readback.get("mergeCommit")
+        observed_merge_sha = merge_commit.get("oid") if isinstance(merge_commit, Mapping) else None
+        body = readback.get("body")
+        if (
+            readback.get("number") != reference["pr_number"]
+            or readback.get("state") != "CLOSED"
+            or readback.get("repository") != reference["repository"]
+            or readback.get("headRepository") != reference["repository"]
+            or readback.get("headRefName") != reference["pr_branch"]
+            or readback.get("headRefOid") != reference["pr_head_sha"]
+            or readback.get("baseRefName") != "main"
+            or observed_merge_sha != reference["merge_sha"]
+            or not isinstance(body, str)
+            or hashlib.sha256(body.encode("utf-8")).hexdigest() != reference["pr_body_sha256"]
+            or body != selected_row.get("ownership", {}).get("body")
+            or readback.get("merged") is not True
+        ):
+            raise ValueError("canonical PR API readback differs from the exact merged journal ownership")
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError, PromotionError) as exc:
+        raise PromotionError("processor same-observation lineage failed strict C validation") from exc
 
 
 def bundle_matches_current_canonical(
@@ -1820,6 +2111,8 @@ def gh_pr_readback(root: pathlib.Path, repository: str, number: int) -> dict[str
         "mergeCommit": value.get("mergeCommit"),
         "repository": authoritative_base,
         "headRepository": authoritative_head,
+        "merged": pull.get("merged") if isinstance(pull, Mapping) else None,
+        "mergedAt": pull.get("merged_at") if isinstance(pull, Mapping) else None,
     }
 
 
@@ -3188,6 +3481,14 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
                 "detail_unattempted_count": outcome.get("detail_unattempted_count"),
             }, sort_keys=True))
             return
+        if checkpoint.get("generation_inputs", {}).get("same_observation_derivation") is not None:
+            early_journal, early_journal_sha = load_promotion_journal_snapshot(root)
+            validate_same_observation_derivation_for_c(
+                root, args.state_root.resolve(), checkpoint, bundle,
+                early_journal, early_journal_sha,
+                current_head_sha=head_sha,
+                canonical_identity=canonical_identity,
+            )
 
     # The old immutable Hugging Face revision is materialized only to verify
     # the processor's precise observation baseline. Candidate preparation
@@ -3210,6 +3511,15 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         raise PromotionError("candidate checkout was not clean before staging; refusing to mix unrelated changes")
 
     prior_journal, journal_state_sha = load_promotion_journal_snapshot(root)
+    if checkpoint.get("generation_inputs", {}).get("same_observation_derivation") is not None:
+        if explicit_source_refresh:
+            raise PromotionError("same-observation derivation cannot be combined with a trusted source-refresh predecessor")
+        validate_same_observation_derivation_for_c(
+            root, args.state_root.resolve(), checkpoint, bundle,
+            prior_journal, journal_state_sha,
+            current_head_sha=head_sha,
+            canonical_identity=canonical_identity,
+        )
     if explicit_source_refresh and journal_state_sha != getattr(args, "source_refresh_expected_state_sha", None):
         raise PromotionError("promotion state changed while the trusted source refresh was preparing its exact B input")
     prior = None
@@ -3656,7 +3966,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
             expected_head_sha=args.event_head_sha,
         )
 
-    journal = load_promotion_journal(root)
+    journal, journal_ref_sha = load_promotion_journal_snapshot(root)
     candidates, blocked = list_recoverable_processor_checkpoints(
         args.state_root.resolve(), schema_path, journal,
     )
@@ -3675,6 +3985,8 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     screened, blocked = select_first_eligible_processor_bundle(
         root, repository, candidates, blocked,
         journal=journal,
+        journal_ref_sha=journal_ref_sha,
+        state_root=args.state_root.resolve(),
         default_branch=default_branch,
         current_head_sha=current_head_sha,
         composition_schema=composition_schema,

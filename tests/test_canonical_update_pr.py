@@ -33,6 +33,54 @@ class CanonicalUpdatePromotionTests(unittest.TestCase):
             "generation_id": generation,
         }
 
+    def test_source_refresh_diff_uses_authenticated_composition_baseline_for_derivations(self) -> None:
+        original_a = "a" * 64
+        canonical_c = "b" * 64
+        ordinary_receipt = {
+            "input_digests": {"baseline": {"bytes": 553, "sha256": original_a}},
+        }
+        self.assertEqual(
+            PROMOTION.source_refresh_previous_registry_sha(
+                ordinary_receipt, expected_registry_path="data/data-go-kr.registry.json",
+            ),
+            original_a,
+        )
+
+        derived_receipt = {
+            "input_digests": {
+                "baseline": {"bytes": 553, "sha256": original_a},
+                "composition_baseline": {"bytes": 2067, "sha256": canonical_c},
+            },
+            "same_observation_derivation": {
+                "original_observation": {"original_baseline_sha256": original_a},
+                "composition_baseline": {
+                    "registry_path": "data/data-go-kr.registry.json",
+                    "registry_bytes": 2067,
+                    "registry_sha256": canonical_c,
+                },
+            },
+        }
+        self.assertEqual(
+            PROMOTION.source_refresh_previous_registry_sha(
+                derived_receipt, expected_registry_path="data/data-go-kr.registry.json",
+            ),
+            canonical_c,
+        )
+
+        changed_original = copy.deepcopy(derived_receipt)
+        changed_original["same_observation_derivation"]["original_observation"]["original_baseline_sha256"] = "c" * 64
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "immutable original A baseline"):
+            PROMOTION.source_refresh_previous_registry_sha(
+                changed_original, expected_registry_path="data/data-go-kr.registry.json",
+            )
+
+        changed_composition_input = copy.deepcopy(derived_receipt)
+        changed_composition_input["input_digests"]["composition_baseline"]["sha256"] = "c" * 64
+        with self.assertRaisesRegex(PROMOTION.AdmissionError, "exact input"):
+            PROMOTION.source_refresh_previous_registry_sha(
+                changed_composition_input, expected_registry_path="data/data-go-kr.registry.json",
+            )
+
     def ack(self, candidate: dict, status: str, source_sha: str, **overrides) -> dict:
         ack = {
             "status": status,

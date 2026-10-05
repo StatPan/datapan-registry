@@ -283,10 +283,16 @@ class RecoverFailedGenerationTest(unittest.TestCase):
         state = values[0]
         original_index = copy.deepcopy(state["index"])
         with tempfile.TemporaryDirectory() as temporary:
-            index_path = pathlib.Path(temporary) / "index.json"
+            source_dir = pathlib.Path(temporary) / "sources" / "data_go_kr"
+            generation_dir = source_dir / "generations"
+            generation_dir.mkdir(parents=True)
+            index_path = source_dir / "index.json"
             index_path.write_text(json.dumps(original_index), encoding="utf-8")
+            # Match the production state layout: the index is adjacent to,
+            # not inside, the directory scanned for checkpoint JSON files.
+            checkpoint_path = generation_dir / f"{values[1]['generation_id']}.json"
+            checkpoint_path.write_text(json.dumps(values[1]), encoding="utf-8")
             sealed = PROCESSOR.seal_checkpoint(copy.deepcopy(first.checkpoint))
-            checkpoint_path = pathlib.Path(temporary) / f"{sealed['generation_id']}.json"
             PROCESSOR.append_generation_index(index_path, checkpoint_path, sealed)
             updated_index = json.loads(index_path.read_text(encoding="utf-8"))
         self.assertEqual(updated_index["detail_queue_cursor"], original_index["detail_queue_cursor"])

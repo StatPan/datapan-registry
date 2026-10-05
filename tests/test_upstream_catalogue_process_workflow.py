@@ -256,9 +256,30 @@ class WorkflowContractTests(unittest.TestCase):
         worker = steps[worker_position]["run"]
         self.assertIn("--claim-only", claim)
         self.assertIn("--expected-old-sha", push)
+        self.assertIn("steps.claim.outputs.checkpoint_persisted == 'true'", steps[push_position]["if"])
+        self.assertIn("steps.claim.outputs.exit_code != '1'", steps[push_position]["if"])
+        self.assertIn("checkpoint_persisted=${checkpoint_persisted}", claim)
+        self.assertIn("rm -f .datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json", claim)
         self.assertIn("steps.claim_push.outputs.claim_sha", steps[worker_position]["if"])
         self.assertIn("--require-durable-reservation", worker)
         self.assertIn("python3 ../bootstrap/scripts/process-upstream-catalogue-candidate.py", worker)
+
+    def test_failed_same_observation_parent_authentication_cannot_fall_back_to_legacy_claim(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        derivation_position = next(
+            index for index, step in enumerate(steps) if step.get("id") == "derivation"
+        )
+        claim_position = next(index for index, step in enumerate(steps) if step.get("id") == "claim")
+        derivation = steps[derivation_position]
+        claim = steps[claim_position]
+        self.assertLess(derivation_position, claim_position)
+        self.assertIn("steps.derivation.outcome != 'failure'", claim["if"])
+        # A failed strict intake (for example, an unavailable journal or a
+        # same-A canonical row that no longer matches) must prevent the
+        # legacy claim step from manufacturing a different generation ID.
+        self.assertIn("--claim-only", claim["run"])
+        self.assertEqual(claim["env"]["TARGET_GENERATION_ID"], "${{ steps.select.outputs.generation_id }}")
+        self.assertEqual(derivation["id"], "derivation")
 
     def test_trusted_bootstrap_code_uses_exact_producer_worktree_inputs(self) -> None:
         job = self.workflow["jobs"]["process"]
@@ -411,6 +432,10 @@ class WorkflowContractTests(unittest.TestCase):
         select_step = next(step for step in self.workflow["jobs"]["process"]["steps"] if step.get("id") == "select")
         with tempfile.TemporaryDirectory(prefix="catalogue-redelivery-select-") as temp:
             root = pathlib.Path(temp)
+            (root / "scripts").mkdir()
+            (root / "scripts/upstream_catalogue_derivation.py").write_bytes(
+                (ROOT / "scripts/upstream_catalogue_derivation.py").read_bytes(),
+            )
             state = root / "state"
             generation_id = "a" * 64
             expires_at = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=5)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
