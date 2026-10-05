@@ -29,7 +29,7 @@
     },
     "schema_version": "datapan.upstream-catalogue-handoff-ledger.v1"
   },
-  "detail_queue_cursor": 256,
+  "detail_queue_cursor": 264,
   "detail_retry_state": {
     "15003164": {
       "attempts": 1,
@@ -2126,6 +2126,54 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "09b6a86af1d8af42733ca7e7dc2a96014b575d5a98f5007f2ad61db9d9c5199c"
+    },
+    "15057491": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "ec2df2c0547ec7f7c1993bf5dfbc69b4b91176c799692c9709574b716224db72"
+    },
+    "15057499": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "82f558e7f6252b6c7e372eec848338b538a804d58b96bd2ab8ffd258faf816fa"
+    },
+    "15057505": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "2557066e4c2b0cfa5b994350bb084bd0e3a748f9b48ba56facf0f281925d265f"
+    },
+    "15057514": {
+      "attempts": 3,
+      "guide_sha256": "72af1d6295bcf66928a25acc448d04920fa7f0174278253c5a619a4d7a1ce621",
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "59173a725b99022687e202acd09c41ee9ce6d81584b4463f68dce32e91df7837"
+    },
+    "15057515": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "37d282d35ac3f4a74689ce17c6e574e864fb7f4e38bfaab75a3c90872e04465c"
+    },
+    "15057523": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "f60f33fd7ae9c5ce9f463656ed11d6bf233e42e43428d76fefd9e323cfb3e483"
+    },
+    "15057542": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "cff0dc29f6acf409aa890b41d901bd5842a7afef665e3b6048f3f2621d1902aa"
+    },
+    "15057559": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-10-05T07:01:15Z",
+      "source_sha256": "d252dfa88cebe5b950db670a03917cd54ea8011cf6dd568dfe86a7d5104e5aff"
     }
   },
   "generations": [
@@ -2168,8 +2216,8 @@
       "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
       "checkpoint": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5.json",
       "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
-      "status": "ready",
-      "updated_at": "2026-10-05T01:04:30Z"
+      "status": "enriching",
+      "updated_at": "2026-10-05T07:01:15Z"
     }
   ],
   "schema_version": "datapan.upstream-catalogue-checkpoint.v1"
