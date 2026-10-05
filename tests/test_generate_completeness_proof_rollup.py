@@ -67,6 +67,47 @@ class CompletenessProofRollupTest(unittest.TestCase):
             "bytes": len(raw), "sha256": MODULE.sha256_bytes(raw),
         })
 
+    def _write_rebound_health_archive(
+        self, index: dict[str, object], input_root: pathlib.Path,
+        member_name: str, member_bytes: bytes,
+    ) -> pathlib.Path:
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        health_items = [
+            item for item in index["inputs"]
+            if item.get("scope_id") == operation_id
+            and item.get("subject", {}).get("stage") == "health"
+        ]
+        archive_item = next(item for item in health_items if item["role"] == "pipeline_artifact_archive")
+        metadata_item = next(item for item in health_items if item["role"] == "pipeline_artifact_metadata")
+        archive_raw = (ROOT / archive_item["path"]).read_bytes()
+        with zipfile.ZipFile(io.BytesIO(archive_raw)) as source_archive:
+            members = {entry.filename: source_archive.read(entry.filename) for entry in source_archive.infolist()}
+        if member_name not in members:
+            raise AssertionError(f"fixture Health archive lacks {member_name}")
+        members[member_name] = member_bytes
+        output = io.BytesIO()
+        with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as target_archive:
+            for name, value in members.items():
+                target_archive.writestr(name, value)
+        rebound_archive = output.getvalue()
+        self._write_rebound_evidence(input_root, archive_item, "rebound-health.zip", rebound_archive)
+
+        metadata = json.loads((ROOT / metadata_item["path"]).read_bytes())
+        self.assertEqual(metadata.get("total_count"), 1)
+        self.assertEqual(len(metadata.get("artifacts", [])), 1)
+        metadata["artifacts"][0]["size_in_bytes"] = len(rebound_archive)
+        metadata["artifacts"][0]["digest"] = f"sha256:{MODULE.sha256_bytes(rebound_archive)}"
+        metadata_raw = (json.dumps(metadata, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
+        self._write_rebound_evidence(input_root, metadata_item, "rebound-health-metadata.json", metadata_raw)
+
+        index_path = input_root / "input-index.json"
+        index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+        return index_path
+
     @staticmethod
     def _commit_test_tree(root: pathlib.Path, changed_paths: list[str], parent: str, message: str) -> str:
         subprocess.run(["git", "add", "--", *changed_paths], cwd=root, check=True)
@@ -1192,6 +1233,156 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 MODULE.build_report(
                     root=ROOT, input_root=input_root, input_index_path=index_path,
                 )
+
+    def test_partial_health_packet_remains_blocked_when_b_and_c_are_absent(self) -> None:
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item.get("scope_id") != operation_id
+            or item.get("subject", {}).get("stage") not in {"processor", "promotion"}
+        ]
+        with tempfile.TemporaryDirectory(prefix="completeness-health-without-bc-") as name:
+            input_root = pathlib.Path(name)
+            index_path = input_root / "input-index.json"
+            index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+            report = MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+        row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
+        facet = next(item for item in row["facets"] if item["facet_id"] == "specification_pipeline")
+        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(facet["state"], "missing")
+        self.assertEqual(set(facet["details"]["missing_stages"]), {"processor", "promotion"})
+
+    def test_health_archived_state_refs_join_each_supplied_peer_without_full_chain(self) -> None:
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        cases = (
+            (
+                "processor", "promotion-ref",
+                b"0" * 40 + b"\trefs/heads/automation/canonical-update-state\n",
+                "health archived promotion ref differs from the exact supplied C state",
+            ),
+            (
+                "promotion", "processor-ref",
+                b"0" * 40 + b"\trefs/heads/automation/upstream-catalogue-state\n",
+                "health archived processor ref differs from the exact supplied B state",
+            ),
+        )
+        for missing_stage, member_name, changed_ref, message in cases:
+            with self.subTest(missing_stage=missing_stage):
+                index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+                index["inputs"] = [
+                    item for item in index["inputs"]
+                    if item.get("scope_id") != operation_id
+                    or item.get("subject", {}).get("stage") != missing_stage
+                ]
+                with tempfile.TemporaryDirectory(prefix="completeness-health-peer-join-") as name:
+                    input_root = pathlib.Path(name)
+                    index_path = self._write_rebound_health_archive(
+                        index, input_root, member_name, changed_ref,
+                    )
+                    with self.assertRaisesRegex(ValueError, message):
+                        MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+
+    def test_health_archived_promotion_journal_exactly_joins_c_and_preserves_write(self) -> None:
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        index["inputs"] = [
+            item for item in index["inputs"]
+            if item.get("scope_id") != operation_id
+            or item.get("subject", {}).get("stage") != "processor"
+        ]
+        health_archive_item = next(
+            item for item in index["inputs"]
+            if item.get("scope_id") == operation_id
+            and item.get("subject", {}).get("stage") == "health"
+            and item["role"] == "pipeline_artifact_archive"
+        )
+        archive_raw = (ROOT / health_archive_item["path"]).read_bytes()
+        with zipfile.ZipFile(io.BytesIO(archive_raw)) as archive:
+            journal = json.loads(archive.read("promotion/reports/canonical-update-promotion-receipt.json"))
+        original_updated_at = journal["updated_at"]
+        journal["updated_at"] = "2026-10-04T13:23:01Z"
+        self.assertNotEqual(journal["updated_at"], original_updated_at)
+        valid_schema_different_journal = (
+            json.dumps(journal, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+        ).encode()
+
+        with tempfile.TemporaryDirectory(prefix="completeness-health-c-journal-join-") as name:
+            input_root = pathlib.Path(name)
+            index_path = self._write_rebound_health_archive(
+                index, input_root,
+                "promotion/reports/canonical-update-promotion-receipt.json",
+                valid_schema_different_journal,
+            )
+            with self.assertRaisesRegex(ValueError, "health archived promotion journal differs from the exact supplied C state"):
+                MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
+
+            json_output = input_root / "existing-rollup.json"
+            markdown_output = input_root / "existing-rollup.md"
+            json_output.write_bytes(b"prior-json-report\n")
+            markdown_output.write_bytes(b"prior-markdown-report\n")
+            output_paths = {"rollup.json": json_output, "rollup.md": markdown_output}
+            with mock.patch.object(
+                MODULE, "output_path",
+                side_effect=lambda _root, value, _label: output_paths[value],
+            ):
+                result = MODULE.main([
+                    "--repo-root", str(ROOT),
+                    "--input-root", str(input_root),
+                    "--input-index", str(index_path),
+                    "--output-json", "rollup.json",
+                    "--output-markdown", "rollup.md",
+                    "--write",
+                ])
+            self.assertEqual(result, 1)
+            self.assertEqual(json_output.read_bytes(), b"prior-json-report\n")
+            self.assertEqual(markdown_output.read_bytes(), b"prior-markdown-report\n")
+
+    def test_health_local_snapshot_schema_and_ref_fail_before_missing_b_c_return(self) -> None:
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        cases = (
+            (
+                "promotion/reports/canonical-update-promotion-receipt.json", b"{}\n",
+                "health archived promotion journal",
+            ),
+            (
+                "processor-ref", b"bad\trefs/heads/automation/upstream-catalogue-state\n",
+                "health archived processor-ref",
+            ),
+            (
+                "promotion-ref", b"0" * 40 + b"\trefs/heads/foreign-state\n",
+                "health archived promotion-ref",
+            ),
+        )
+        for member_name, bad_bytes, expected in cases:
+            with self.subTest(member=member_name):
+                index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+                index["inputs"] = [
+                    item for item in index["inputs"]
+                    if item.get("scope_id") != operation_id
+                    or item.get("subject", {}).get("stage") not in {"processor", "promotion"}
+                ]
+                with tempfile.TemporaryDirectory(prefix="completeness-health-local-snapshot-") as name:
+                    input_root = pathlib.Path(name)
+                    index_path = self._write_rebound_health_archive(index, input_root, member_name, bad_bytes)
+                    with self.assertRaisesRegex(ValueError, expected):
+                        MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
 
     def test_retained_full_chain_uses_registry_defined_catalog_scope_id(self) -> None:
         scope_registry, _policy, scope_by_id = MODULE.load_and_validate_registry(ROOT)

@@ -82,7 +82,9 @@ class ApplyRuntimeFreshnessImportIntegrationTest(unittest.TestCase):
         return result
 
     @classmethod
-    def _create_ci_like_shallow_source(cls) -> tuple[pathlib.Path, str, list[tuple[str, int]]]:
+    def _create_ci_like_shallow_source(
+        cls,
+    ) -> tuple[pathlib.Path, str, list[tuple[str, int]], str, str]:
         source_git = cls.temp_root / "ci-like-source.git"
         initialized = run(["git", "init", "--bare", str(source_git)], cwd=cls.temp_root)
         if initialized.returncode:
@@ -95,12 +97,17 @@ class ApplyRuntimeFreshnessImportIntegrationTest(unittest.TestCase):
         # This is a synthetic local checkout baseline for the disposable
         # transaction fixture, not an origin/main trust or provenance claim.
         fetched_baseline = run(
-            ["git", "--git-dir", str(source_git), "fetch", "--no-tags", "--depth=64",
+            ["git", "--git-dir", str(source_git), "fetch", "--no-tags", "--depth=1",
              str(ROOT), f"{source_revision}:refs/heads/ci-fixture-main-baseline"],
             cwd=cls.temp_root,
         )
         if fetched_baseline.returncode:
             raise AssertionError(f"local shallow synthetic baseline fetch failed: {fetched_baseline.stderr[-1000:]}")
+
+        fetched_main = run(["git", "rev-parse", "--verify", "refs/remotes/origin/main"], cwd=ROOT)
+        if fetched_main.returncode:
+            raise AssertionError(f"cannot resolve the actual fetched origin/main: {fetched_main.stderr[-1000:]}")
+        main_revision = fetched_main.stdout.strip()
 
         historical = json.loads(
             (ROOT / "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.provenance.v1.json")
@@ -111,28 +118,27 @@ class ApplyRuntimeFreshnessImportIntegrationTest(unittest.TestCase):
             ("e34062309a48b0e0b6c0f38add32f0cdec088616", 8),
             ("1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07", 1),
         ]
-        for commit, depth in history_pins:
-            fetched_pin = run(
-                ["git", "--git-dir", str(source_git), "fetch", "--no-tags", f"--depth={depth}",
-                 str(ROOT), commit],
-                cwd=cls.temp_root,
-            )
-            if fetched_pin.returncode:
-                raise AssertionError(f"local shallow source pin fetch failed for {commit}: {fetched_pin.stderr[-1000:]}")
+        retained_attestation = json.loads(
+            (ROOT / "reports/runtime-freshness-import-attestations/35798122454.json")
+            .read_text(encoding="utf-8")
+        )
+        retained_merge = retained_attestation.get("import", {}).get("merge_commit")
+        if not isinstance(retained_merge, str) or len(retained_merge) != 40:
+            raise AssertionError("retained historical import attestation lacks its exact merge commit")
         head_ref = run(
             ["git", "--git-dir", str(source_git), "symbolic-ref", "HEAD", "refs/heads/ci-fixture-main-baseline"],
             cwd=cls.temp_root,
         )
         if head_ref.returncode:
             raise AssertionError(f"local shallow source HEAD setup failed: {head_ref.stderr[-1000:]}")
-        return source_git, source_revision, history_pins
+        return source_git, source_revision, history_pins, main_revision, retained_merge
 
     @classmethod
     def _create_offline_repo(cls) -> None:
         # Reproduce checkout depth and exact-history fetches from Verify Release
         # without network access. A shallow local clone can omit commits that
         # exist only in the parent's FETCH_HEAD.
-        source_git, source_revision, history_pins = cls._create_ci_like_shallow_source()
+        source_git, source_revision, history_pins, main_revision, retained_merge = cls._create_ci_like_shallow_source()
         result = run(
             ["git", "clone", "--shared", "--no-checkout", "--quiet", str(source_git), str(cls.repo)],
             cwd=cls.temp_root,
@@ -155,6 +161,60 @@ class ApplyRuntimeFreshnessImportIntegrationTest(unittest.TestCase):
         if unavailable.returncode == 0:
             raise AssertionError("CI-like shallow clone unexpectedly inherited the FETCH_HEAD-only historical health pin")
 
+        # Keep the initial shallow-clone assertions above independent from the
+        # actual fetched main history. Add that authenticated commit only after
+        # the exact historical pins are checked; otherwise those pins become
+        # reachable from main and the FETCH_HEAD-only control stops testing its
+        # intended boundary.
+        for commit, depth in history_pins:
+            fetched_pin = run(
+                ["git", "--git-dir", str(source_git), "fetch", "--no-tags", f"--depth={depth}",
+                 str(ROOT), commit],
+                cwd=cls.temp_root,
+            )
+            if fetched_pin.returncode:
+                raise AssertionError(f"local shallow source pin fetch failed for {commit}: {fetched_pin.stderr[-1000:]}")
+
+        copied_main = run(
+            ["git", "--git-dir", str(source_git), "fetch", "--no-tags", "--depth=64",
+             str(ROOT), "refs/remotes/origin/main:refs/ci-fixture/fetched-origin-main"],
+            cwd=cls.temp_root,
+        )
+        if copied_main.returncode:
+            raise AssertionError(f"cannot copy the fetched origin/main into the hidden fixture ref: {copied_main.stderr[-1000:]}")
+        copied_main_sha = run(
+            ["git", "--git-dir", str(source_git), "rev-parse", "--verify", "refs/ci-fixture/fetched-origin-main"],
+            cwd=cls.temp_root,
+        )
+        if copied_main_sha.returncode or copied_main_sha.stdout.strip() != main_revision:
+            raise AssertionError("hidden fixture main ref differs from the actual fetched origin/main SHA")
+        advertised_main = run(
+            ["git", "--git-dir", str(source_git), "show-ref", "--verify", "--quiet", "refs/heads/main"],
+            cwd=cls.temp_root,
+        )
+        if advertised_main.returncode == 0:
+            raise AssertionError("synthetic source must not advertise a fixture-created refs/heads/main")
+        if advertised_main.returncode != 1:
+            raise AssertionError(f"cannot verify synthetic source main-branch absence: {advertised_main.stderr[-1000:]}")
+
+        # Exact historical pin fetches may mark a commit on the trusted main
+        # ancestry shallow. Deepen only the already-authenticated main ref so
+        # those pins cannot hide its real parent chain from the checker.
+        deepened_source_main = run(
+            ["git", "--git-dir", str(source_git), "fetch", "--no-tags", "--deepen=64",
+             str(ROOT), "refs/remotes/origin/main:refs/ci-fixture/fetched-origin-main"],
+            cwd=cls.temp_root,
+        )
+        if deepened_source_main.returncode:
+            raise AssertionError(f"cannot deepen the exact fetched origin/main ancestry: {deepened_source_main.stderr[-1000:]}")
+        source_has_retained_merge = run(
+            ["git", "--git-dir", str(source_git), "merge-base", "--is-ancestor", retained_merge,
+             "refs/ci-fixture/fetched-origin-main"],
+            cwd=cls.temp_root,
+        )
+        if source_has_retained_merge.returncode:
+            raise AssertionError("deepened fetched origin/main does not contain the retained import merge commit")
+
         # Transfer the explicitly fetched CI pins into this clone's own object
         # database so linked transaction worktrees can verify historical Git evidence.
         for commit, depth in history_pins:
@@ -167,6 +227,32 @@ class ApplyRuntimeFreshnessImportIntegrationTest(unittest.TestCase):
         resolved_history_blob = cls._git("rev-parse", f"{historical_commit}:{historical_path}").stdout.strip()
         if resolved_history_blob != historical["git_blob"]:
             raise AssertionError("fixture history-pin fetch did not preserve the pinned historical health blob")
+
+        fetched_main = run(
+            ["git", "fetch", "--no-tags", "--depth=64", str(source_git),
+             "refs/ci-fixture/fetched-origin-main:refs/remotes/origin/main"],
+            cwd=cls.repo,
+        )
+        if fetched_main.returncode:
+            raise AssertionError(f"fixture could not fetch the exact authenticated origin/main ref: {fetched_main.stderr[-1000:]}")
+        resolved_main = cls._git("rev-parse", "--verify", "refs/remotes/origin/main").stdout.strip()
+        if resolved_main != main_revision:
+            raise AssertionError("CI-like fixture origin/main does not match the exact fetched source origin/main SHA")
+        deepened_clone_main = run(
+            ["git", "fetch", "--no-tags", "--deepen=64", str(source_git),
+             "refs/ci-fixture/fetched-origin-main:refs/remotes/origin/main"],
+            cwd=cls.repo,
+        )
+        if deepened_clone_main.returncode:
+            raise AssertionError(f"fixture could not deepen exact origin/main ancestry: {deepened_clone_main.stderr[-1000:]}")
+        resolved_main = cls._git("rev-parse", "--verify", "refs/remotes/origin/main").stdout.strip()
+        if resolved_main != main_revision:
+            raise AssertionError("deepening origin/main changed the exact fetched main SHA")
+        clone_has_retained_merge = cls._git(
+            "merge-base", "--is-ancestor", retained_merge, "refs/remotes/origin/main", check=False,
+        )
+        if clone_has_retained_merge.returncode:
+            raise AssertionError("deepened fixture origin/main does not contain the retained import merge commit")
 
         checkout = run(
             ["git", "checkout", "--detach", "HEAD"], cwd=cls.repo,

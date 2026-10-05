@@ -2525,6 +2525,7 @@ def validate_promotion_stage(
         "status": "already-canonical-noop" if no_op_generation else "merged-candidate-reconciled",
         "candidate_available": no_op_generation is None,
         "already_canonical_generation_id": no_op_generation,
+        "journal_raw": state_bytes["promotion_journal_blob_api"],
         "journal_sha256": sha256_bytes(state_bytes["promotion_journal_blob_api"]),
         "journal_git_blob_sha": indexed_json(roles, resolved, "promotion_journal_blob_api")["sha"],
         "journal_record_count": len(journal["records"]),
@@ -2588,6 +2589,24 @@ def expected_health_post_state(
     return persister.seal(state, "state_sha256")
 
 
+def parse_health_owned_state_ref(raw: bytes, *, label: str, expected_ref: str) -> dict[str, str]:
+    """Parse the exact one-line state ref locator embedded in a Health bundle."""
+    try:
+        text = raw.decode("ascii")
+    except UnicodeDecodeError as exc:
+        raise ValueError(f"health archived {label} is not ASCII") from exc
+    if not text.endswith("\n") or text.count("\n") != 1 or "\r" in text:
+        raise ValueError(f"health archived {label} must contain one newline-terminated locator")
+    fields = text[:-1].split("\t")
+    if (
+        len(fields) != 2
+        or not re.fullmatch(r"[a-f0-9]{40}", fields[0])
+        or fields[1] != expected_ref
+    ):
+        raise ValueError(f"health archived {label} has an invalid commit or owned ref locator")
+    return {"commit_sha": fields[0], "ref": fields[1]}
+
+
 def validate_health_stage_local(
     *, root: pathlib.Path, roles: dict[str, dict[str, Any]], resolved: dict[str, pathlib.Path],
     run: dict[str, Any], job: dict[str, Any], evaluation_epoch: str,
@@ -2613,10 +2632,20 @@ def validate_health_stage_local(
         receipt = json.loads(receipt_raw)
         pre_state_raw = archive["health-state/state.json"]
         pre_state = json.loads(pre_state_raw)
+        promotion_journal_raw = archive["promotion/reports/canonical-update-promotion-receipt.json"]
+        promotion_journal = json.loads(promotion_journal_raw)
         checker_result = json.loads(archive["checker-result.json"])
         archive_as_of = archive["as-of.txt"].decode("ascii").strip()
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError("health execution archive contains malformed JSON or timestamp data") from exc
+    processor_ref = parse_health_owned_state_ref(
+        archive["processor-ref"], label="processor-ref",
+        expected_ref="refs/heads/automation/upstream-catalogue-state",
+    )
+    promotion_ref = parse_health_owned_state_ref(
+        archive["promotion-ref"], label="promotion-ref",
+        expected_ref="refs/heads/automation/canonical-update-state",
+    )
     persister = import_health_persister_at_revision(root, run["head_sha"])
     validate_schema_at_revision(
         root=root, revision=run["head_sha"],
@@ -2628,6 +2657,13 @@ def validate_health_stage_local(
         relative_path="schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
         value=pre_state, label="health pre-state",
     )
+    validate_schema_at_revision(
+        root=root, revision=run["head_sha"],
+        relative_path="schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+        value=promotion_journal, label="health archived promotion journal",
+    )
+    if promotion_journal.get("repository") != "StatPan/datapan-registry":
+        raise ValueError("health archived promotion journal repository is outside its registered owner")
     policy_raw = git_read_only(root, ["show", f"{run['head_sha']}:policy/upstream-catalogue-health.json"])
     policy = json.loads(policy_raw)
     validate_schema_at_revision(
@@ -2694,6 +2730,9 @@ def validate_health_stage_local(
         "metadata": metadata, "archive_raw": archive_raw, "archive": archive,
         "receipt_raw": receipt_raw, "receipt": receipt,
         "pre_state_raw": pre_state_raw, "pre_state": pre_state,
+        "promotion_journal_raw": promotion_journal_raw,
+        "promotion_journal": promotion_journal,
+        "processor_ref": processor_ref, "promotion_ref": promotion_ref,
         "checker_result": checker_result, "persister": persister,
         "state_bytes": state_bytes, "post_state": post_state,
         "commit_api": commit_api,
@@ -2721,8 +2760,9 @@ def validate_health_stage(
     post_state = local["post_state"]
     commit_api = local["commit_api"]
     if (
-        archive["processor-ref"].decode("ascii").strip().split("\t") != [processor["state_commit"], "refs/heads/automation/upstream-catalogue-state"]
-        or archive["promotion-ref"].decode("ascii").strip().split("\t") != [promotion["state_commit"], "refs/heads/automation/canonical-update-state"]
+        local["processor_ref"]["commit_sha"] != processor["state_commit"]
+        or local["promotion_ref"]["commit_sha"] != promotion["state_commit"]
+        or local["promotion_journal_raw"] != promotion.get("journal_raw")
     ):
         raise ValueError("health archived producer refs do not bind the exact B/C workflow chain")
     source_rows = [row for row in receipt.get("sources", []) if isinstance(row, dict) and row.get("source_id") == "data_go_kr"]
@@ -3445,6 +3485,8 @@ def validate_present_stage_local_artifacts(
 
     promotion_roles = stage_roles["promotion"]
     promotion_result: dict[str, Any] | None = None
+    promotion_state_commit: str | None = None
+    promotion_journal_raw: bytes | None = None
     if promotion_roles:
         run, job = stage_runs["promotion"]
         assert_main_ancestor(root, run["head_sha"], "promotion workflow source commit")
@@ -3456,13 +3498,16 @@ def validate_present_stage_local_artifacts(
             tree_role="promotion_state_tree", content_roles={},
             blob_roles={"promotion_journal_blob_api": "reports/canonical-update-promotion-receipt.json"},
         )
+        promotion_journal_raw = state_bytes["promotion_journal_blob_api"]
+        promotion_state_ref = indexed_json(promotion_roles, resolved, "promotion_state_ref")
+        promotion_state_commit = promotion_state_ref.get("object", {}).get("sha")
         journal = json.loads(state_bytes["promotion_journal_blob_api"])
         validate_schema_at_revision(
             root=root, revision=run["head_sha"],
             relative_path="schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
             value=journal, label="promotion journal",
         )
-        if indexed_json(promotion_roles, resolved, "promotion_state_ref").get("ref") != "refs/heads/automation/canonical-update-state":
+        if promotion_state_ref.get("ref") != "refs/heads/automation/canonical-update-state":
             raise ValueError("promotion state ref is outside its registered owned branch")
         if processor_result is not None:
             promotion_result = validate_promotion_stage(
@@ -3525,16 +3570,19 @@ def validate_present_stage_local_artifacts(
         archive = health_local["archive"]
         if (
             processor_result is not None
-            and archive["processor-ref"].decode("ascii").strip().split("\t")
-            != [processor_result["state_commit"], "refs/heads/automation/upstream-catalogue-state"]
+            and health_local["processor_ref"]["commit_sha"] != processor_result["state_commit"]
         ):
             raise ValueError("health archived processor ref differs from the exact supplied B state")
         if (
-            promotion_result is not None
-            and archive["promotion-ref"].decode("ascii").strip().split("\t")
-            != [promotion_result["state_commit"], "refs/heads/automation/canonical-update-state"]
+            promotion_state_commit is not None
+            and health_local["promotion_ref"]["commit_sha"] != promotion_state_commit
         ):
             raise ValueError("health archived promotion ref differs from the exact supplied C state")
+        if (
+            promotion_journal_raw is not None
+            and health_local["promotion_journal_raw"] != promotion_journal_raw
+        ):
+            raise ValueError("health archived promotion journal differs from the exact supplied C state")
         if source_result is not None and processor_result is not None and promotion_result is not None:
             validate_health_stage(
                 root=root, roles=health_roles, resolved=resolved, run=run, job=job,
