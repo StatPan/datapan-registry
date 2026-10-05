@@ -628,6 +628,16 @@ def operation_provenance_errors(
         errors.append(code[:80] or "operation_identity_invalid")
     api_source = row.get("source") if isinstance(row.get("source"), dict) else {}
     api_raw = raw_source(row)
+    exact_historical_stored_operation = False
+    if not declared_operation and row.get("provider") == PROVIDER and str(row.get("id") or "") == "15056854":
+        try:
+            SEOUL_OPERATION_DECLARATION.validate_historical_operation(
+                row, operation,
+                observed_guide_url=api_raw.get("guide_url") if isinstance(api_raw.get("guide_url"), str) else None,
+            )
+            exact_historical_stored_operation = True
+        except (AttributeError, KeyError, TypeError, ValueError):
+            pass
     if system == "data.go.kr":
         expected_source_url = source_page_url or api_source.get("url")
         recognized_stored_detail = False
@@ -636,19 +646,11 @@ def operation_provenance_errors(
                 recognized_stored_detail = source.get("url") == canonical_detail_page_url(row)
             except CompositionError:
                 pass
-        recognized_historical_catalogue_source = False
-        if (
+        recognized_historical_catalogue_source = (
             source_page_url == SEOUL_OPERATION_DECLARATION.PAGE_URL
-            and not declared_operation
+            and exact_historical_stored_operation
             and source.get("url") == api_source.get("url")
-        ):
-            try:
-                SEOUL_OPERATION_DECLARATION.validate_historical_operation(
-                    row, operation, observed_guide_url=observed_guide_url,
-                )
-                recognized_historical_catalogue_source = True
-            except (AttributeError, KeyError, TypeError, ValueError):
-                pass
+        )
         if (
             source.get("url") != expected_source_url
             and not recognized_stored_detail
@@ -656,9 +658,12 @@ def operation_provenance_errors(
         ):
             errors.append("operation_source_url_differs_from_api")
         if source_page_url is None:
-            for field in ("meta_url", "guide_url"):
-                if field in api_raw and raw.get(field) != api_raw.get(field):
-                    errors.append(f"operation_{field}_provenance_mismatch")
+            if not declared_operation:
+                for field in ("meta_url", "guide_url"):
+                    if field in api_raw and raw.get(field) != api_raw.get(field):
+                        if field == "guide_url" and exact_historical_stored_operation:
+                            continue
+                        errors.append(f"operation_{field}_provenance_mismatch")
         else:
             operation_guide_url = raw.get("guide_url")
             if observed_guide_url is not None and operation_guide_url != observed_guide_url:
@@ -704,7 +709,18 @@ def api_provenance_errors(row: dict[str, Any], *, allow_missing_link_guide: bool
         if not valid_http_url(raw.get("meta_url")):
             errors.append("link_meta_url_missing")
         if not allow_missing_link_guide and not valid_http_url(raw.get("guide_url")):
-            errors.append("link_guide_url_missing")
+            exact_stored_declaration = False
+            if (
+                provider == PROVIDER
+                and str(row.get("id") or "") == SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]
+            ):
+                try:
+                    SEOUL_OPERATION_DECLARATION.validate_stored_subject_row(row)
+                    exact_stored_declaration = True
+                except (AttributeError, KeyError, TypeError, ValueError):
+                    pass
+            if not exact_stored_declaration:
+                errors.append("link_guide_url_missing")
     return sorted(set(errors))
 
 

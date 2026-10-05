@@ -1951,7 +1951,9 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 "processor_script_sha256": hashlib.sha256((root / "scripts/process-upstream-catalogue-candidate.py").read_bytes()).hexdigest(),
                 "collector_handoff_helper_sha256": hashlib.sha256((root / "scripts/upstream_catalogue_handoff.py").read_bytes()).hexdigest(),
                 "seoul_operation_declaration_helper_sha256": hashlib.sha256((root / "scripts/seoul_oa109_operation_declaration.py").read_bytes()).hexdigest(),
+                "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256((root / "scripts/generate-seoul-oa109-subject-snapshot.py").read_bytes()).hexdigest(),
                 "seoul_operation_declaration_sha256": hashlib.sha256((root / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json").read_bytes()).hexdigest(),
+                "seoul_historical_subject_snapshot_sha256": hashlib.sha256((root / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json").read_bytes()).hexdigest(),
             }
             generation_inputs["generator_revision"] = hashlib.sha256(
                 json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -1997,6 +1999,18 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             declaration_path.write_bytes(prior_declaration)
             subprocess.run(("git", "add", str(declaration_path)), cwd=root, check=True)
             subprocess.run(("git", "commit", "-qm", "restore Seoul operation declaration"), cwd=root, check=True)
+
+            snapshot_path = root / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
+            prior_snapshot = snapshot_path.read_bytes()
+            snapshot_path.write_bytes(prior_snapshot + b"\nchanged historical source snapshot\n")
+            subprocess.run(("git", "add", str(snapshot_path)), cwd=root, check=True)
+            subprocess.run(("git", "commit", "-qm", "change Seoul historical subject snapshot"), cwd=root, check=True)
+            snapshot_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
+            with self.assertRaisesRegex(RUNNER.PromotionError, "input contract changed since observation: contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"):
+                RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, snapshot_head, composition)
+            snapshot_path.write_bytes(prior_snapshot)
+            subprocess.run(("git", "add", str(snapshot_path)), cwd=root, check=True)
+            subprocess.run(("git", "commit", "-qm", "restore Seoul historical subject snapshot"), cwd=root, check=True)
 
             tampered_composition = {"input_digests": {**receipt_digests, "registry_schema": {"bytes": 1, "sha256": "0" * 64}}}
             with self.assertRaisesRegex(RUNNER.PromotionError, "registry_schema digest"):

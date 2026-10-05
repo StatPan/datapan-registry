@@ -161,6 +161,11 @@
       "kind": "operation_denominator_expectation",
       "schema": "https://schemas.datapan.dev/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
       "authority_ticket": "StatPan/datapan-registry#658"
+    },
+    {
+      "path": "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+      "kind": "historical_subject_snapshot",
+      "authority_ticket": "StatPan/datapan-registry#739"
     }
   ]
 }

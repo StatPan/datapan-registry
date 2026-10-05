@@ -144,12 +144,16 @@ def generator_revision() -> str:
     source = pathlib.Path(__file__)
     handoff = source.with_name("upstream_catalogue_handoff.py")
     declaration_helper = source.with_name("seoul_oa109_operation_declaration.py")
+    snapshot_generator = source.with_name("generate-seoul-oa109-subject-snapshot.py")
     declaration = source.parent.parent / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+    historical_snapshot = source.parent.parent / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
     return sha256_bytes(canonical_json({
         "processor_script_sha256": file_sha256(source),
         "collector_handoff_helper_sha256": file_sha256(handoff),
         "seoul_operation_declaration_helper_sha256": file_sha256(declaration_helper),
+        "seoul_historical_subject_snapshot_generator_sha256": file_sha256(snapshot_generator),
         "seoul_operation_declaration_sha256": file_sha256(declaration),
+        "seoul_historical_subject_snapshot_sha256": file_sha256(historical_snapshot),
     }))
 
 

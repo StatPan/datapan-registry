@@ -74,11 +74,13 @@ PROCESSOR_COMPOSITION_INPUTS = {
 PROCESSOR_COMPATIBILITY_FILES = (
     *PROCESSOR_INPUT_PROVENANCE.values(),
     "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
+    "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
     ".github/workflows/upstream-catalogue-process.yml",
     ".github/workflows/upstream-catalog-refresh.yml",
     "scripts/upstream-catalogue-state-branch.py",
     "scripts/upstream_catalogue_handoff.py",
     "scripts/seoul_oa109_operation_declaration.py",
+    "scripts/generate-seoul-oa109-subject-snapshot.py",
     "scripts/compose-upstream-catalogue-candidate.py",
     "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
@@ -668,18 +670,27 @@ def verify_processor_input_compatibility(
     processor_path = PROCESSOR_INPUT_PROVENANCE["generator_revision"]
     handoff_path = "scripts/upstream_catalogue_handoff.py"
     declaration_helper_path = "scripts/seoul_oa109_operation_declaration.py"
+    snapshot_generator_path = "scripts/generate-seoul-oa109-subject-snapshot.py"
     declaration_path = "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+    historical_snapshot_path = "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
     processor_bytes = historical_bytes.get(processor_path)
     handoff_bytes = historical_bytes.get(handoff_path)
     declaration_helper_bytes = historical_bytes.get(declaration_helper_path)
+    snapshot_generator_bytes = historical_bytes.get(snapshot_generator_path)
     declaration_bytes = historical_bytes.get(declaration_path)
-    if any(value is None for value in (processor_bytes, handoff_bytes, declaration_helper_bytes, declaration_bytes)):
+    historical_snapshot_bytes = historical_bytes.get(historical_snapshot_path)
+    if any(value is None for value in (
+        processor_bytes, handoff_bytes, declaration_helper_bytes, snapshot_generator_bytes,
+        declaration_bytes, historical_snapshot_bytes,
+    )):
         raise PromotionError("processor source is missing a collector handoff or operation declaration compatibility input")
     generator_material = {
         "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
         "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
         "seoul_operation_declaration_helper_sha256": hashlib.sha256(declaration_helper_bytes).hexdigest(),
+        "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256(snapshot_generator_bytes).hexdigest(),
         "seoul_operation_declaration_sha256": hashlib.sha256(declaration_bytes).hexdigest(),
+        "seoul_historical_subject_snapshot_sha256": hashlib.sha256(historical_snapshot_bytes).hexdigest(),
     }
     expected_generator_revision = hashlib.sha256(
         json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -1136,39 +1147,15 @@ def validate_processor_seoul_declaration(
         raise PromotionError("processor Seoul declaration operation or provenance is missing")
     record_op = declared_operations(record)[0]
     try:
-        snapshot_pin = declaration.validate_committed_prefix_snapshot(root, verify_materialized_row=False)
-        prefix_pin = declaration.DECLARATION["historical_operation_prefix"]
-        source_path_value = snapshot_pin.get("source_path")
-        if (
-            not isinstance(source_path_value, str)
-            or snapshot_pin.get("materialized_registry_bytes_verified") is not True
-            or snapshot_pin.get("materialized_registry_sha256") != prefix_pin.get("source_lfs_sha256")
-            or snapshot_pin.get("source_lfs_bytes") != prefix_pin.get("source_lfs_bytes")
-        ):
-            raise PromotionError("processor Seoul historical source payload is not materialized and verified")
-        source_payload = (root / source_path_value).read_bytes()
-        if (
-            len(source_payload) != prefix_pin.get("source_lfs_bytes")
-            or hashlib.sha256(source_payload).hexdigest() != prefix_pin.get("source_lfs_sha256")
-        ):
-            raise PromotionError("processor Seoul historical source changed during declaration validation")
-        source_registry = json.loads(source_payload.decode("utf-8", errors="strict"))
-        if not isinstance(source_registry, list):
-            raise PromotionError("processor Seoul historical source registry is invalid")
-        pinned_matches = [
-            row for row in source_registry
-            if isinstance(row, Mapping)
-            and row.get("provider") == "data.go.kr"
-            and str(row.get("id") or "") == target_id
-        ]
-        if len(pinned_matches) != 1:
-            raise PromotionError("processor Seoul historical source subject is missing or ambiguous")
-        pinned_source_row = copy.deepcopy(dict(pinned_matches[0]))
+        # The compact source-controlled snapshot is extracted from the exact
+        # authenticated 0085 payload and pinned by both declaration and helper.
+        # It remains independent of current canonical bytes and works in the
+        # processor's intentional pointer-only checkout.
+        historical_snapshot = declaration.load_historical_subject_snapshot(root)
+        pinned_source_row = copy.deepcopy(dict(historical_snapshot["subject_row"]))
         declaration.validate_subject_row(pinned_source_row)
-    except PromotionError:
-        raise
-    except (AttributeError, OSError, UnicodeError, ValueError, json.JSONDecodeError) as exc:
-        raise PromotionError("processor Seoul historical prefix authority is unavailable or invalid") from exc
+    except (AttributeError, OSError, TypeError, ValueError) as exc:
+        raise PromotionError("processor Seoul historical subject snapshot is unavailable or invalid") from exc
     composed_path = bundle_dir / "composed-candidate.registry.json"
     ready_path = bundle_dir / "ready-scope.registry.json"
     try:
@@ -1190,11 +1177,13 @@ def validate_processor_seoul_declaration(
         return matches[0]
 
     composed_row = find_unique_target(composed_rows, "composed candidate")
-    ready_row = find_unique_target(ready_rows, "ready scope")
-    for label, row in (("composed candidate", composed_row), ("ready scope", ready_row)):
-        row_ops = declared_operations(row)
-        if len(row_ops) != 1 or dict(row_ops[0]) != dict(record_op):
-            raise PromotionError(f"processor {label} declaration operation differs from trusted enrichment evidence")
+    ready_matches = [
+        row for row in ready_rows
+        if isinstance(row, Mapping) and str(row.get("id") or "") == target_id
+        and row.get("provider") == "data.go.kr"
+    ]
+    if len(ready_matches) > 1:
+        raise PromotionError("processor ready scope contains duplicate Seoul declaration rows")
     # Rebuild the only permitted output transform from the independently
     # authenticated committed source row. This binds each final output's full
     # subject/source/UDDI and ordered operation list; neither output is used as
@@ -1202,11 +1191,66 @@ def validate_processor_seoul_declaration(
     if record.get("api_key") != {"provider": "data.go.kr", "id": target_id}:
         raise PromotionError("processor Seoul declaration record identity differs from pinned subject")
     expected_row = composer.apply_enrichment_record(copy.deepcopy(pinned_source_row), dict(record))
-    for label, row in (("composed candidate", composed_row), ("ready scope", ready_row)):
-        if dict(row) != expected_row:
+    if dict(composed_row) != expected_row:
+        raise PromotionError(
+            "processor composed candidate full Seoul subject, source, guide, or ordered operation list differs from pinned declaration"
+        )
+    try:
+        composition_receipt = load_object(bundle_dir / "composition-receipt.json")
+        semantic_diff = load_object(bundle_dir / "semantic-diff.json")
+    except PromotionError as exc:
+        raise PromotionError("processor Seoul declaration disposition evidence is unavailable") from exc
+    scope = composition_receipt.get("scope") if isinstance(composition_receipt, Mapping) else None
+    decisions = semantic_diff.get("api_decisions") if isinstance(semantic_diff, Mapping) else None
+    decision_matches = [
+        item for item in decisions
+        if isinstance(item, Mapping)
+        and isinstance(item.get("api_key"), Mapping)
+        and item["api_key"].get("provider") == "data.go.kr"
+        and str(item["api_key"].get("id") or "") == target_id
+    ] if isinstance(decisions, list) else []
+    if not isinstance(scope, Mapping) or len(decision_matches) != 1:
+        raise PromotionError("processor Seoul declaration disposition is missing or ambiguous")
+    decision = decision_matches[0]
+    disposition = decision.get("disposition")
+    status = composition_receipt.get("status")
+    if ready_matches:
+        ready_row = ready_matches[0]
+        if dict(ready_row) != expected_row:
             raise PromotionError(
-                f"processor {label} full Seoul subject, source, guide, or ordered operation list differs from pinned declaration"
+                "processor ready scope full Seoul subject, source, guide, or ordered operation list differs from pinned declaration"
             )
+        if disposition not in {"accept_new", "accept_changed", "retain_enrichment"}:
+            raise PromotionError("processor ready Seoul declaration lacks an applied composition decision")
+    else:
+        # A source-pinned declaration can be present in composed output while
+        # producing no ready-scope delta only when composition independently
+        # records this API as unchanged. Pending, quarantined, and changed rows
+        # must remain visible in the ready scope or fail closed.
+        if disposition != "unchanged":
+            raise PromotionError("processor omitted a changed or pending Seoul declaration from ready scope")
+        for field in ("retained_pending_api_keys", "quarantined_api_keys"):
+            identities = scope.get(field)
+            if not isinstance(identities, list) or any(
+                isinstance(item, Mapping)
+                and item.get("provider") == "data.go.kr"
+                and str(item.get("id") or "") == target_id
+                for item in identities
+            ):
+                raise PromotionError("processor omitted a pending Seoul declaration from ready scope")
+        if status == "no_change":
+            outcome = checkpoint.get("outcome")
+            if (
+                checkpoint.get("status") != "no-change"
+                or ready_rows
+                or not isinstance(outcome, Mapping)
+                or outcome.get("composer_status") != "no_change"
+                or outcome.get("pending_count") != 0
+                or outcome.get("detail_retry_count") != 0
+            ):
+                raise PromotionError("processor Seoul no-change result does not prove an empty, complete ready scope")
+        elif status != "ready_scoped" or checkpoint.get("status") != "ready":
+            raise PromotionError("processor omitted Seoul declaration outside a scoped unchanged decision")
 
     # The original A artifact itself is not part of the processor bundle. Bind
     # the successful enrichment to the exact pinned local subject without
@@ -1214,7 +1258,7 @@ def validate_processor_seoul_declaration(
     # transform plus the one declaration operation.
     original_row = copy.deepcopy(pinned_source_row)
     try:
-        declaration.validate_enriched_record(original_row, record)
+        declaration.validate_enriched_record(original_row, record, root=root)
         generation_inputs = checkpoint.get("generation_inputs")
         candidate_sha256 = generation_inputs.get("candidate_sha256") if isinstance(generation_inputs, Mapping) else None
         provider_index = load_object(root / "data/provider-index.json")
@@ -1246,7 +1290,7 @@ def validate_processor_seoul_declaration(
         validated_record = validated.get(("data.go.kr", target_id))
         if not isinstance(validated_record, Mapping) or validated_record.get("_binding_error"):
             raise PromotionError("processor Seoul declaration semantic binding was rejected")
-        declaration.validate_declared_operation(original_row, record_op)
+        declaration.validate_declared_operation(original_row, record_op, root=root)
         composer.LINK_DETAIL_HELPERS.validate_link_metadata(
             record["declaration_provenance"]["page_resolver"],
             target_id,

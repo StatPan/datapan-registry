@@ -90,6 +90,37 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
         self.provider_index_path.write_text(json.dumps({"adapters": [{"name": "example", "hosts": ["api.example.gov"]}]}), encoding="utf-8")
         self.composer_path.write_text(self.fake_composer_source(), encoding="utf-8")
 
+    def pointer_only_c_root(self) -> pathlib.Path:
+        """Build the production C validator inputs with the registry still an LFS pointer."""
+        root = self.root / "pointer-only-c-checkout"
+        root.mkdir()
+        files = (
+            "scripts/compose-upstream-catalogue-candidate.py",
+            "scripts/generate-batch-link-detail-registry-patches.py",
+            "scripts/seoul_oa109_operation_declaration.py",
+            "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+            "schemas/datapan.specs.v1.schema.json",
+            "data/provider-index.json",
+            "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
+            "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+        )
+        for relative in files:
+            source = ROOT / relative
+            target = root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+        pointer = (
+            b"version https://git-lfs.github.com/spec/v1\n"
+            b"oid sha256:0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0\n"
+            b"size 139155499\n"
+        )
+        registry_pointer = root / "data/data-go-kr.registry.json"
+        registry_pointer.parent.mkdir(parents=True, exist_ok=True)
+        registry_pointer.write_bytes(pointer)
+        self.assertLess(registry_pointer.stat().st_size, 200)
+        self.assertIn(b"size 139155499\n", registry_pointer.read_bytes())
+        return root
+
     def test_generator_revision_binds_collector_and_seoul_declaration_inputs(self) -> None:
         with tempfile.TemporaryDirectory(prefix="collector-handoff-revision-") as temp:
             root = pathlib.Path(temp)
@@ -98,12 +129,16 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             processor_path = scripts / "process-upstream-catalogue-candidate.py"
             helper_path = scripts / "upstream_catalogue_handoff.py"
             declaration_helper_path = scripts / "seoul_oa109_operation_declaration.py"
+            snapshot_generator_path = scripts / "generate-seoul-oa109-subject-snapshot.py"
             declaration_path = root / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+            historical_snapshot_path = root / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
             declaration_path.parent.mkdir(parents=True)
             shutil.copy2(SCRIPT, processor_path)
             shutil.copy2(ROOT / "scripts/upstream_catalogue_handoff.py", helper_path)
             shutil.copy2(ROOT / "scripts/seoul_oa109_operation_declaration.py", declaration_helper_path)
+            shutil.copy2(ROOT / "scripts/generate-seoul-oa109-subject-snapshot.py", snapshot_generator_path)
             shutil.copy2(ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json", declaration_path)
+            shutil.copy2(ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json", historical_snapshot_path)
             shutil.copy2(ROOT / "scripts/generate-batch-link-detail-registry-patches.py", scripts / "generate-batch-link-detail-registry-patches.py")
             spec = importlib.util.spec_from_file_location("processor_revision_fixture", processor_path)
             self.assertIsNotNone(spec)
@@ -116,7 +151,9 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
                     "processor_script_sha256": hashlib.sha256(processor_path.read_bytes()).hexdigest(),
                     "collector_handoff_helper_sha256": hashlib.sha256(helper_path.read_bytes()).hexdigest(),
                     "seoul_operation_declaration_helper_sha256": hashlib.sha256(declaration_helper_path.read_bytes()).hexdigest(),
+                    "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256(snapshot_generator_path.read_bytes()).hexdigest(),
                     "seoul_operation_declaration_sha256": hashlib.sha256(declaration_path.read_bytes()).hexdigest(),
+                    "seoul_historical_subject_snapshot_sha256": hashlib.sha256(historical_snapshot_path.read_bytes()).hexdigest(),
                 }
                 encoded = json.dumps(contract, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
                 return hashlib.sha256(encoded).hexdigest()
@@ -127,7 +164,7 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             changed = processor.generator_revision()
             self.assertNotEqual(changed, original)
             self.assertEqual(changed, independently_derive())
-            for path in (declaration_helper_path, declaration_path):
+            for path in (declaration_helper_path, snapshot_generator_path, declaration_path, historical_snapshot_path):
                 previous = path.read_bytes()
                 path.write_bytes(previous + b"\n# pinned declaration revision change\n")
                 changed = processor.generator_revision()
@@ -209,9 +246,12 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self, checkpoint: dict[str, Any], baseline: list[dict[str, Any]], candidate: list[dict[str, Any]],
         provider_index: dict[str, Any], enrichment: dict[str, Any], composer: Any,
         *, bundle_mutator: Any = None, expected_rejection: str | None = None,
-    ) -> None:
+        root: pathlib.Path | None = None,
+    ) -> pathlib.Path:
         """Exercise the real C bundle gate over a real composition result."""
         import importlib.util
+
+        validation_root = root or ROOT
 
         runner_spec = importlib.util.spec_from_file_location(
             "seoul_test_canonical_promotion", ROOT / "scripts/run-canonical-update-promotion.py",
@@ -231,7 +271,8 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             enrichment_evidence=enrichment,
             registry_schema=registry_schema,
         )
-        self.assertEqual(result["status"], "ready_scoped")
+        expected_status = checkpoint.get("outcome", {}).get("composer_status")
+        self.assertEqual(result["status"], expected_status)
         input_paths = {
             "baseline": self.baseline_path,
             "candidate": self.candidate_path,
@@ -280,7 +321,6 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         final = copy.deepcopy(checkpoint)
         processor_run_id = str(final["output_artifact"]["name"]).removeprefix("upstream-catalogue-processing-")
         processor_artifact_run_id = str(final["output_artifact"]["run_id"])
-        final["status"] = "ready"
         final["output_artifact"].update({
             "artifact_id": "20100000001",
             "expires_at": "2026-11-01T00:00:00Z",
@@ -317,10 +357,11 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         schema = json.loads((ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json").read_text())
         composition_helper = runner.load_canonical_update_pr(ROOT)
         if expected_rejection is None:
-            runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=ROOT)
+            runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=validation_root)
         else:
             with self.assertRaisesRegex(runner.PromotionError, expected_rejection):
-                runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=ROOT)
+                runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=validation_root)
+        return bundle_dir
 
     def successful_fetch(self, url: str, timeout: float) -> str:
         self.assertRegex(url, r"^https://www\.data\.go\.kr/data/[0-9]+/openapi\.do$")
@@ -866,8 +907,54 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         composer = importlib.util.module_from_spec(composer_spec)
         composer_spec.loader.exec_module(composer)
         provider_index = json.loads(self.provider_index_path.read_text(encoding="utf-8"))
-        self.assert_c_processor_bundle_accepts(
+        pointer_root = self.pointer_only_c_root()
+        first_bundle_dir = self.assert_c_processor_bundle_accepts(
             checkpoint, [baseline], [candidate], provider_index, evidence, composer,
+            root=pointer_root,
+        )
+
+        # A later observation can compare the same cached declaration against
+        # the now-persisted four-operation baseline. The local cached proof is
+        # reused without a page/resolver call or retry-budget charge; the
+        # complete current composition is no-change and therefore has no ready
+        # target row to publish.
+        later_at = "2026-10-02T10:00:00Z"
+        self.now = later_at
+        self.write_real_composer_inputs(
+            [composed[0]], [candidate], later_at,
+            baseline_bytes=(first_bundle_dir / "composed-candidate.registry.json").read_bytes(),
+        )
+        no_change_args = self.args(run_id="101003", **{
+            "--composer": ACTUAL_COMPOSER,
+            "--resume-enrichment-evidence": cached_evidence_path,
+        })
+        no_change_args.fixture_composer = None
+        no_change_args.allow_fixture_composer = False
+        code, no_change_checkpoint = MODULE.process(
+            no_change_args,
+            fetcher=no_page_fetch,
+            resolver_fetcher=no_resolver_fetch,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(code, 0, no_change_checkpoint)
+        self.assertEqual(no_change_checkpoint["status"], "no-change")
+        self.assertEqual(no_change_checkpoint["attempts_consumed"], 0)
+        self.assertEqual(no_change_checkpoint["outcome"]["pending_count"], 0)
+        no_change_receipt = json.loads((self.output_dir / "composition-receipt.json").read_text())
+        self.assertEqual(no_change_receipt["status"], "no_change")
+        no_change_ready = json.loads((self.output_dir / "ready-scope.registry.json").read_text())
+        self.assertEqual(no_change_ready, [])
+        no_change_evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text())
+        no_change_composer_spec = importlib.util.spec_from_file_location(
+            "seoul_no_change_actual_composer", ACTUAL_COMPOSER,
+        )
+        assert no_change_composer_spec is not None and no_change_composer_spec.loader is not None
+        no_change_composer = importlib.util.module_from_spec(no_change_composer_spec)
+        no_change_composer_spec.loader.exec_module(no_change_composer)
+        no_change_provider_index = json.loads(self.provider_index_path.read_text(encoding="utf-8"))
+        self.assert_c_processor_bundle_accepts(
+            no_change_checkpoint, [composed[0]], [candidate], no_change_provider_index,
+            no_change_evidence, no_change_composer, root=pointer_root,
         )
 
 
@@ -1041,6 +1128,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertNotIn("_binding_error", validated[("data.go.kr", "15056854")])
         self.assert_c_processor_bundle_accepts(
             worker, [], [candidate], provider_index, cached_result, composer,
+            root=self.pointer_only_c_root(),
         )
 
     def test_resume_rejects_resolver_diagnostic_when_metadata_chain_is_missing(self) -> None:
@@ -2005,8 +2093,11 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(conflict["outcome"]["reason"], "lease_conflict")
         self.assertEqual(claim["request_reservation"]["owner_run_id"], "101")
 
-    def write_real_composer_inputs(self, baseline_rows, candidate_rows, observed_at: str) -> None:
-        baseline_bytes = json.dumps(baseline_rows, ensure_ascii=False, separators=(",", ":")).encode()
+    def write_real_composer_inputs(
+        self, baseline_rows, candidate_rows, observed_at: str, *, baseline_bytes: bytes | None = None,
+    ) -> None:
+        if baseline_bytes is None:
+            baseline_bytes = json.dumps(baseline_rows, ensure_ascii=False, separators=(",", ":")).encode()
         candidate_bytes = json.dumps(candidate_rows, ensure_ascii=False, separators=(",", ":")).encode()
         self.baseline_path.write_bytes(baseline_bytes)
         self.candidate_path.write_bytes(candidate_bytes)

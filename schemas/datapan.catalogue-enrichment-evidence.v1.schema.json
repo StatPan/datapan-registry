@@ -144,7 +144,7 @@
     },
     "historical_operation_prefix": {
       "type": "object", "additionalProperties": false,
-      "required": ["schema", "source_main_commit", "source_path", "source_file_git_blob_sha1", "source_file_sha256", "source_manifest_sha256", "source_lfs_bytes", "source_lfs_sha256", "provider", "api_id", "source_url", "operation_count", "ordered_endpoints", "canonical_operations_sha256"],
+      "required": ["schema", "source_main_commit", "source_path", "source_file_git_blob_sha1", "source_file_sha256", "source_manifest_sha256", "source_lfs_bytes", "source_lfs_sha256", "provider", "api_id", "source_url", "operation_count", "ordered_endpoints", "canonical_operations_sha256", "subject_snapshot_path", "subject_snapshot_sha256", "subject_snapshot_bytes", "subject_snapshot_row_sha256", "subject_snapshot_row_index", "source_registry_rows"],
       "properties": {
         "schema": {"const": "datapan.seoul-historical-operation-prefix.v1"},
         "source_main_commit": {"const": "0085b357289755d6b3fb60a7259bd85da42d2962"},
@@ -165,7 +165,13 @@
             "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-108&srvType=A&serviceKind=1"
           ]
         },
-        "canonical_operations_sha256": {"$ref": "#/$defs/sha256"}
+        "canonical_operations_sha256": {"$ref": "#/$defs/sha256"},
+        "subject_snapshot_path": {"const": "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"},
+        "subject_snapshot_sha256": {"const": "9336a1fe033af542b270364969264a26ae021906ed0f9e988f79775833119739"},
+        "subject_snapshot_bytes": {"const": 13937},
+        "subject_snapshot_row_sha256": {"const": "2146cee4cdeeeef451611c4e7edfba8962d02e4896145d021dc7ddde04ee8ca4"},
+        "subject_snapshot_row_index": {"const": 1131},
+        "source_registry_rows": {"const": 12282}
       }
     },
     "link_metadata": {

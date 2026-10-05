@@ -373,6 +373,23 @@
       "schema_relationship": "No JSON schema applies.",
       "package_relationship": "Included in release packages through manifest.json.",
       "exemption_boundary": "Manual edits are allowed, but manifest bytes and sha256 must be refreshed deterministically."
+    },
+    {
+      "id": "provider_operation_historical_subject_snapshot",
+      "artifact_kinds": ["historical_subject_snapshot"],
+      "owner": "provider operation declaration maintainers",
+      "generated_by": [
+        "python3 scripts/generate-seoul-oa109-subject-snapshot.py --write --source <authenticated 0085 registry bytes>"
+      ],
+      "checked_by": [
+        "python3 scripts/generate-seoul-oa109-subject-snapshot.py --check",
+        "python3 scripts/sync-release-manifest-artifacts.py --check",
+        "datapan catalog release verify --manifest manifest.json"
+      ],
+      "manifest_relationship": "The compact historical subject snapshot is a separate manifest-bound release artifact derived from the exact authenticated 0085 registry payload; its source commit, LFS pointer, materialized payload digest, row index, full row digest, and operation-prefix digest are pinned in the declaration.",
+      "schema_relationship": "The trusted declaration helper validates the snapshot's exact schema shape and source, identity, row, and ordered-operation digests.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "The snapshot contains one historical subject row only; it does not replace the canonical registry, claim full A artifact membership, or authorize provider execution."
     }
   ],
   "distribution_artifacts": [
