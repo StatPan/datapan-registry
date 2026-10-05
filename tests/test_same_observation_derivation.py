@@ -1648,6 +1648,20 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         # The second real B composition is independently accepted by the
         # strict C lineage reader against its own exact merged/read-back row.
         self._validate_c_derivation(b3, journal_after_b2, c2)
+        self.assertEqual(b3["status"], "ready")
+        # B1 was the distinct resume parent in B2's first derivative, then a
+        # later exact same-A descendant B3 shadowed it. The historical resume
+        # exception is per-envelope; it must not be subtracted from the union
+        # and revived as an independent active slot.
+        with mock.patch.object(PROCESSOR, "DEFAULT_MAX_ACTIVE_GENERATIONS", 1):
+            retained = PROCESSOR.plan_generation_retention(
+                PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json"),
+                self.helper.state_dir / "sources/data_go_kr/generations",
+                b3,
+            )
+        self.assertIn(b1["generation_id"], retained)
+        self.assertIn(b2["generation_id"], retained)
+        self.assertIn(b3["generation_id"], retained)
         output = json.loads((self.output_by_generation[b3["generation_id"]] / "composed-candidate.registry.json").read_text(encoding="utf-8"))
         self.assertEqual(
             {row["id"] for row in output}, {"1", "2", "3", "4"},
@@ -1844,6 +1858,31 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertTrue(protected_ids.issubset(retained_ids))
         self.assertIn(unrelated[-1]["generation_id"], retained_ids)
         self.assertNotIn(unrelated[0]["generation_id"], retained_ids)
+
+        # A new independent A still gets its own active slot after the later
+        # B3 descendant has shadowed B1, the distinct resume parent of B2.
+        # This catches implementations that subtract historical resume
+        # exceptions only after unioning every derivation's ancestors.
+        self.now += dt.timedelta(minutes=1)
+        self.now_text = self.now.isoformat().replace("+00:00", "Z")
+        self.observation_run = "99000000005"
+        self.observation_artifact = "99000000006"
+        self.observation_head = "c" * 40
+        self._write_synthetic_observation(["9001", "9002", "9003", "9004"])
+        self.admission_path, self.archive_path = self._write_admission()
+        independent = self._run_claim_and_worker(
+            6, max_attempts=1, max_queue=1, retries_per_detail=2,
+        )
+        self.assertIsNone(independent["generation_inputs"].get("same_observation_derivation"))
+        self.assertGreater(independent["outcome"]["detail_retry_count"], 0)
+        with mock.patch.object(PROCESSOR, "DEFAULT_MAX_ACTIVE_GENERATIONS", 1):
+            retained = PROCESSOR.plan_generation_retention(
+                PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json"),
+                self.helper.state_dir / "sources/data_go_kr/generations",
+                independent,
+            )
+        self.assertIn(b1["generation_id"], retained)
+        self.assertIn(independent["generation_id"], retained)
 
     def test_single_current_b_can_fill_both_roles_and_continue_without_revision_change(self) -> None:
         b0 = self._run_claim_and_worker(1)
@@ -2655,6 +2694,34 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             self.helper.state_dir / "sources/data_go_kr/generations",
         )
         self.assertTrue({checkpoint["generation_id"] for checkpoint in generated[:-1]}.issubset(protected))
+
+        # An independent new A has no derivation envelope, but the authenticated
+        # old lineage still makes its eight shadowed ancestors non-selectable.
+        # Keep the current old-A retry candidate active alongside the new-A
+        # claim, and retain every historical parent file for audit/replay.
+        prior_generation_ids = {checkpoint["generation_id"] for checkpoint in generated}
+        self.now += dt.timedelta(minutes=1)
+        self.now_text = self.now.isoformat().replace("+00:00", "Z")
+        self.observation_run = "99000000003"
+        self.observation_artifact = "99000000004"
+        self.observation_head = "b" * 40
+        self._write_synthetic_observation(["9001", "9002", "9003", "9004"])
+        self.admission_path, self.archive_path = self._write_admission()
+        independent = self._run_claim_and_worker(
+            10, max_attempts=1, max_queue=1, retries_per_detail=2,
+        )
+        self.assertIsNone(independent["generation_inputs"].get("same_observation_derivation"))
+        self.assertEqual(independent["status"], "ready")
+        self.assertGreater(independent["outcome"]["detail_retry_count"], 0)
+        self.assertEqual(independent["last_observation"]["producer_run_id"], self.observation_run)
+        index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        generation_dir = self.helper.state_dir / "sources/data_go_kr/generations"
+        self.assertTrue(prior_generation_ids.issubset({row["generation_id"] for row in index["generations"]}))
+        self.assertTrue(all((generation_dir / f"{generation_id}.json").is_file() for generation_id in prior_generation_ids))
+        with mock.patch.object(PROCESSOR, "DEFAULT_MAX_ACTIVE_GENERATIONS", 2):
+            retained = PROCESSOR.plan_generation_retention(index, generation_dir, independent)
+        self.assertTrue(prior_generation_ids.issubset(retained))
+        self.assertIn(independent["generation_id"], retained)
 
     def test_distinct_selectable_resume_parent_keeps_its_active_work_slot(self) -> None:
         b0 = self._run_claim_and_worker(1)

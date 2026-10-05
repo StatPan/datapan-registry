@@ -1932,15 +1932,19 @@ def plan_generation_retention(
 
     active_statuses = {"queued", "validating", "enriching", "composing", "retry"}
     active_ids: set[str] = set()
-    current_ancestors = ancestors_by_generation.get(current_id, set())
-    current_parents = parents_by_generation.get(current_id)
-    shadowed_ready_ancestors = set(current_ancestors)
-    if current_parents is not None and current_parents[0] != current_parents[1]:
-        # The selected B resume parent remains independently selectable when
-        # it differs from the already-merged C producer. The canonical
-        # producer and older same-A ancestors are shadowed by the exact C row;
-        # preserve a work slot for this distinct ready resume parent.
-        shadowed_ready_ancestors.discard(current_parents[0])
+    shadowed_ready_ancestors: set[str] = set()
+    for derived_id, ancestors in ancestors_by_generation.items():
+        parents = parents_by_generation[derived_id]
+        # Each authenticated C-lineage edge shadows the ready/retry ancestors
+        # that the selector cannot independently promote. Preserve this
+        # envelope's distinct resume parent when it differs from the already
+        # merged canonical producer. Compute the exception per envelope before
+        # unioning: a later descendant may shadow an older envelope's resume
+        # parent, and must not have that shadow undone by a global subtraction.
+        shadowed_by_derived_checkpoint = set(ancestors)
+        if parents[0] != parents[1]:
+            shadowed_by_derived_checkpoint.discard(parents[0])
+        shadowed_ready_ancestors.update(shadowed_by_derived_checkpoint)
     for generation_id, checkpoint in checkpoints.items():
         outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), Mapping) else {}
         lease = checkpoint.get("lease")
