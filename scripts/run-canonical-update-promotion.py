@@ -955,6 +955,11 @@ def validate_processor_link_metadata(
     bundle_dir: pathlib.Path,
     *,
     root: pathlib.Path,
+    composition_baseline_sha256: str | None = None,
+    composition_baseline_bytes: int | None = None,
+    canonical_context: Mapping[str, Any] | None = None,
+    allow_terminal_noop: bool = False,
+    validate_seoul: bool = True,
 ) -> None:
     """Semantically bind unresolved resolver metadata to its checkpoint row."""
     evidence_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
@@ -985,7 +990,14 @@ def validate_processor_link_metadata(
         ).validate(evidence)
     except (OSError, PromotionError, jsonschema.ValidationError) as exc:
         raise PromotionError("processor enrichment evidence does not match the trusted schema") from exc
-    validate_processor_seoul_declaration(checkpoint, bundle_dir, evidence, root=root)
+    if validate_seoul:
+        validate_processor_seoul_declaration(
+            checkpoint, bundle_dir, evidence, root=root,
+            composition_baseline_sha256=composition_baseline_sha256,
+            composition_baseline_bytes=composition_baseline_bytes,
+            canonical_context=canonical_context,
+            allow_terminal_noop=allow_terminal_noop,
+        )
     outcomes = evidence.get("worker_outcomes", [])
     if not isinstance(outcomes, list):
         raise PromotionError("processor worker outcomes are not an array")
@@ -1075,12 +1087,65 @@ def validate_processor_link_metadata(
         raise PromotionError("processor checkpoint and enrichment link metadata identities differ")
 
 
+def processor_seoul_unchanged_baseline_rows(
+    bundle_dir: pathlib.Path,
+    composed_rows: list[Any],
+    *,
+    composition_baseline_sha256: str,
+    composition_baseline_bytes: int | None,
+    canonical_context: Mapping[str, Any] | None,
+    allow_terminal_noop: bool,
+) -> tuple[list[Any], str]:
+    """Return rows backed by the exact C composition baseline or safe no-op output."""
+    if not isinstance(composition_baseline_sha256, str) or not re.fullmatch(
+        r"[a-f0-9]{64}", composition_baseline_sha256,
+    ):
+        raise PromotionError("processor Seoul unchanged decision lacks a resolved composition-baseline digest")
+    if composition_baseline_bytes is not None and (
+        type(composition_baseline_bytes) is not int or composition_baseline_bytes < 1
+    ):
+        raise PromotionError("processor Seoul unchanged decision has an invalid composition-baseline size")
+    composed_path = bundle_dir / "composed-candidate.registry.json"
+    composed_sha256 = file_sha256(composed_path)
+    composed_size = composed_path.stat().st_size
+    if (
+        composed_sha256 == composition_baseline_sha256
+        and (composition_baseline_bytes is None or composed_size == composition_baseline_bytes)
+    ):
+        return composed_rows, "generation-baseline"
+    if not isinstance(canonical_context, Mapping):
+        raise PromotionError("processor Seoul unchanged decision has no caller-authenticated composition baseline")
+    identity = canonical_context.get("identity")
+    rows = canonical_context.get("rows")
+    if not isinstance(identity, Mapping) or not isinstance(rows, list) or not rows:
+        raise PromotionError("processor Seoul unchanged decision canonical context is malformed")
+    current_sha = identity.get("registry_sha256")
+    current_size = identity.get("registry_bytes")
+    if type(current_size) is not int or current_size < 1:
+        raise PromotionError("processor Seoul unchanged decision canonical size is invalid")
+    if current_sha == composition_baseline_sha256:
+        if composition_baseline_bytes is not None and current_size != composition_baseline_bytes:
+            raise PromotionError("processor Seoul unchanged decision canonical baseline size differs")
+        return rows, "authenticated-composition-baseline"
+    if (
+        allow_terminal_noop
+        and current_sha == composed_sha256
+        and current_size == composed_size
+    ):
+        return rows, "terminal-already-canonical-noop"
+    raise PromotionError("processor Seoul unchanged decision differs from authenticated composition-baseline bytes")
+
+
 def validate_processor_seoul_declaration(
     checkpoint: Mapping[str, Any],
     bundle_dir: pathlib.Path,
     evidence: Mapping[str, Any],
     *,
     root: pathlib.Path,
+    composition_baseline_sha256: str | None,
+    composition_baseline_bytes: int | None,
+    canonical_context: Mapping[str, Any] | None,
+    allow_terminal_noop: bool = False,
 ) -> None:
     """Revalidate a successful pinned declaration against the trusted source and C outputs."""
     try:
@@ -1229,6 +1294,29 @@ def validate_processor_seoul_declaration(
         # must remain visible in the ready scope or fail closed.
         if disposition != "unchanged":
             raise PromotionError("processor omitted a changed or pending Seoul declaration from ready scope")
+        baseline_rows, baseline_proof = processor_seoul_unchanged_baseline_rows(
+            bundle_dir, composed_rows,
+            composition_baseline_sha256=composition_baseline_sha256,
+            composition_baseline_bytes=composition_baseline_bytes,
+            canonical_context=canonical_context,
+            allow_terminal_noop=allow_terminal_noop,
+        )
+        baseline_row = find_unique_target(baseline_rows, "authenticated generation baseline")
+        try:
+            baseline_semantics = composer.semantic_record_view(dict(baseline_row))
+            expected_semantics = composer.semantic_record_view(dict(expected_row))
+            baseline_record_sha256 = composer._record_hash(dict(baseline_row))
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise PromotionError("processor Seoul unchanged baseline row cannot be semantically validated") from exc
+        if baseline_semantics != expected_semantics:
+            raise PromotionError("processor Seoul unchanged decision differs from its authenticated baseline row")
+        if decision.get("composed_record_sha256") != baseline_record_sha256:
+            raise PromotionError("processor Seoul unchanged decision does not bind the authenticated composed row")
+        if (
+            baseline_proof in {"generation-baseline", "authenticated-composition-baseline"}
+            and decision.get("baseline_record_sha256") != baseline_record_sha256
+        ):
+            raise PromotionError("processor Seoul unchanged decision does not bind the authenticated baseline row")
         for field in ("retained_pending_api_keys", "quarantined_api_keys"):
             identities = scope.get(field)
             if not isinstance(identities, list) or any(
@@ -1316,6 +1404,8 @@ def validate_processor_bundle(
     composition_helper: Any,
     *,
     root: pathlib.Path | None = None,
+    canonical_context: Mapping[str, Any] | None = None,
+    allow_terminal_noop: bool = False,
 ) -> dict[str, Any]:
     digests = checkpoint.get("output_digests")
     locator = checkpoint.get("output_artifact")
@@ -1392,8 +1482,11 @@ def validate_processor_bundle(
     if uploaded_normalized != durable_normalized:
         raise PromotionError("uploaded processor checkpoint receipt differs from immutable durable generation state")
     if root is not None:
+        # Keep schema and unresolved-link checks on every terminal processor
+        # status. Only the Seoul unchanged-decision check needs the resolved
+        # composition-baseline identity below.
         validate_processor_link_metadata(
-            checkpoint, bundle_dir, root=root,
+            checkpoint, bundle_dir, root=root, validate_seoul=False,
         )
     result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
     if result.get("generation_id") != checkpoint.get("generation_id") or result.get("status") != processor_status:
@@ -1440,6 +1533,18 @@ def validate_processor_bundle(
             or observed.get("sha256") != digest
         ):
             raise PromotionError(f"composition receipt is not bound to the exact {label} digest in processor state")
+    composition_baseline_bytes: int | None = None
+    composition_baseline_input = input_digests.get("composition_baseline")
+    if isinstance(composition_baseline_input, Mapping):
+        raw_size = composition_baseline_input.get("bytes")
+        if isinstance(raw_size, bool) or not isinstance(raw_size, int) or raw_size < 1:
+            raise PromotionError("composition receipt has an invalid exact composition-baseline size")
+        composition_baseline_bytes = raw_size
+    else:
+        baseline_input = input_digests.get("baseline")
+        raw_size = baseline_input.get("bytes") if isinstance(baseline_input, Mapping) else None
+        if isinstance(raw_size, int) and not isinstance(raw_size, bool) and raw_size > 0:
+            composition_baseline_bytes = raw_size
     expected_composition_status = "ready_scoped" if processor_status == "ready" else "no_change"
     try:
         composition_helper.validate_composition(
@@ -1448,6 +1553,27 @@ def validate_processor_bundle(
         )
     except Exception as exc:
         raise PromotionError(f"composer did not admit a valid {expected_composition_status} candidate receipt") from exc
+    if root is not None:
+        enrichment_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+        if enrichment_path.is_file() and not enrichment_path.is_symlink():
+            enrichment_for_declaration = load_object(enrichment_path)
+            validate_processor_seoul_declaration(
+                checkpoint, bundle_dir, enrichment_for_declaration, root=root,
+                composition_baseline_sha256=baseline_sha,
+                composition_baseline_bytes=composition_baseline_bytes,
+                canonical_context=canonical_context,
+                allow_terminal_noop=allow_terminal_noop,
+            )
+        else:
+            target_id = "15056854"
+            detail_records = checkpoint.get("detail_records")
+            if isinstance(detail_records, list) and any(
+                isinstance(row, Mapping)
+                and str(row.get("id") or "") == target_id
+                and row.get("status") == "enriched"
+                for row in detail_records
+            ):
+                raise PromotionError("successful Seoul declaration row is missing its enrichment evidence")
     outcome = checkpoint.get("outcome", {})
     if processor_status == "no-change":
         if candidate_sha != baseline_sha or outcome.get("composer_status") != "no_change" or int(outcome.get("pending_count", -1)) != 0 or int(outcome.get("detail_retry_count", -1)) != 0:
@@ -1475,6 +1601,7 @@ def screen_processor_recovery_candidate(
     current_head_sha: str,
     composition_schema: Mapping[str, Any],
     composition_helper: Any,
+    canonical_context: Mapping[str, Any] | None = None,
 ) -> tuple[dict[str, Any] | None, str | None]:
     """Validate one durable generation completely before it can occupy this C run."""
     generation_id = str(checkpoint.get("generation_id", ""))
@@ -1512,7 +1639,11 @@ def screen_processor_recovery_candidate(
     except ProcessorCandidateError:
         return None, "processor_artifact_bundle_invalid"
     try:
-        bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, composition_helper, root=root)
+        bundle = validate_processor_bundle(
+            checkpoint, bundle_dir, composition_schema, composition_helper, root=root,
+            canonical_context=canonical_context,
+            allow_terminal_noop=True,
+        )
         verify_processor_input_compatibility(
             root, checkpoint, str(run["head_sha"]), current_head_sha,
             composition_receipt=bundle.get("composition_receipt"),
@@ -1527,6 +1658,7 @@ def screen_processor_recovery_candidate(
         "bundle_dir": bundle_dir,
         "bundle": bundle,
         "generation_id": generation_id,
+        "canonical_context": canonical_context,
     }, None
 
 
@@ -1545,7 +1677,17 @@ def select_first_eligible_processor_bundle(
 ) -> tuple[dict[str, Any] | None, list[dict[str, str]]]:
     """Screen generations in observation order and stop at the first valid bundle."""
     already_canonical_rows = already_canonical if already_canonical is not None else []
-    canonical_identity: dict[str, Any] | None = None
+    needs_canonical_context = any(
+        isinstance(checkpoint, Mapping) and checkpoint.get("status") in {"ready", "no-change"}
+        for checkpoint in candidates
+    )
+    canonical_context = (
+        authenticated_current_canonical_context(root, current_head_sha)
+        if needs_canonical_context else None
+    )
+    canonical_identity = (
+        canonical_context.get("identity") if isinstance(canonical_context, Mapping) else None
+    )
     for checkpoint in candidates:
         generation_id = str(checkpoint.get("generation_id", ""))
         screened, reason = screen_processor_recovery_candidate(
@@ -1554,13 +1696,14 @@ def select_first_eligible_processor_bundle(
             current_head_sha=current_head_sha,
             composition_schema=composition_schema,
             composition_helper=composition_helper,
+            canonical_context=canonical_context,
         )
         if screened is None:
             blocked.append({"generation_id": generation_id, "reason": str(reason)})
             continue
         bundle = screened.get("bundle", {})
-        if canonical_identity is None:
-            canonical_identity = authenticated_current_canonical_registry(root, current_head_sha)
+        if not isinstance(canonical_identity, Mapping):
+            raise PromotionError("authenticated current-canonical context is missing during processor selection")
         if bundle_matches_current_canonical(bundle, canonical_identity):
             outcome = checkpoint.get("outcome", {})
             already_canonical_rows.append({
@@ -1728,6 +1871,42 @@ def authenticated_current_canonical_registry(
         "registry_bytes": actual_bytes,
         "registry_sha256": actual_sha,
     }
+
+
+def authenticated_current_canonical_context(
+    root: pathlib.Path,
+    expected_main_sha: str,
+) -> dict[str, Any]:
+    """Authenticate once, then pass the exact materialized bytes to C validators."""
+    identity = authenticated_current_canonical_registry(root, expected_main_sha)
+    registry_path = identity.get("registry_path")
+    if not isinstance(registry_path, str) or not registry_path:
+        raise PromotionError("authenticated current-canonical identity has no registry path")
+    relative = pathlib.PurePosixPath(registry_path)
+    if relative.is_absolute() or ".." in relative.parts or "\\" in registry_path:
+        raise PromotionError("authenticated current-canonical identity has an unsafe registry path")
+    canonical_path = root / ".datapan/current-canonical" / pathlib.Path(*relative.parts)
+    try:
+        canonical_path.resolve(strict=False).relative_to(root.resolve(strict=True))
+    except (OSError, ValueError) as exc:
+        raise PromotionError("authenticated current-canonical materialization escaped the trusted checkout") from exc
+    if canonical_path.is_symlink() or not canonical_path.is_file():
+        raise PromotionError("authenticated current-canonical materialization is not a regular file")
+    raw = canonical_path.read_bytes()
+    if (
+        type(identity.get("registry_bytes")) is not int
+        or identity.get("registry_bytes") < 1
+        or len(raw) != identity.get("registry_bytes")
+        or hashlib.sha256(raw).hexdigest() != identity.get("registry_sha256")
+    ):
+        raise PromotionError("authenticated current-canonical bytes changed after manifest verification")
+    try:
+        rows = json.loads(raw)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PromotionError("authenticated current-canonical bytes are not valid JSON") from exc
+    if not isinstance(rows, list) or not rows:
+        raise PromotionError("authenticated current-canonical bytes are not a nonempty registry array")
+    return {"identity": identity, "rows": rows}
 
 
 def bundle_matches_current_canonical(
@@ -3410,17 +3589,26 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     if checkpoint.get("source_id") != "data_go_kr" or checkpoint.get("source_scope") != "aggregate_supported_catalog":
         raise PromotionError("processor state is outside the admitted source/scope")
     validate_generation_identity(checkpoint)
-    bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper, root=root)
     if not re.fullmatch(r"[a-f0-9]{40}", args.workflow_run_head_sha):
         raise PromotionError("processor workflow head must be a full immutable Git commit SHA")
     head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    explicit_predecessor = getattr(args, "source_refresh_predecessor", None)
+    explicit_target_main = getattr(args, "source_refresh_target_main_sha", None)
+    explicit_source_refresh = isinstance(explicit_predecessor, Mapping)
+    canonical_context = getattr(args, "_authenticated_canonical_context", None)
+    if not isinstance(canonical_context, Mapping) or not isinstance(canonical_context.get("identity"), Mapping):
+        canonical_context = authenticated_current_canonical_context(root, head_sha)
+    elif canonical_context["identity"].get("main_sha") != head_sha:
+        raise PromotionError("caller-authenticated canonical context is not pinned to the preparation base")
+    bundle = validate_processor_bundle(
+        checkpoint, bundle_dir, composition_schema, helper, root=root,
+        canonical_context=canonical_context,
+        allow_terminal_noop=not explicit_source_refresh,
+    )
     verify_processor_input_compatibility(
         root, checkpoint, args.workflow_run_head_sha, head_sha,
         composition_receipt=bundle.get("composition_receipt"),
     )
-    explicit_predecessor = getattr(args, "source_refresh_predecessor", None)
-    explicit_target_main = getattr(args, "source_refresh_target_main_sha", None)
-    explicit_source_refresh = isinstance(explicit_predecessor, Mapping)
     if bundle.get("status") in {"retry", "quarantined"}:
         print(json.dumps({
             "status": "no-candidate", "reason": bundle["reason"],
@@ -3435,7 +3623,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         if main_rows != [head_sha]:
             raise PromotionError("stale_base: main changed after the upstream observation; request a fresh catalogue observation")
     else:
-        canonical_identity = authenticated_current_canonical_registry(root, head_sha)
+        canonical_identity = canonical_context["identity"]
         if bundle_matches_current_canonical(bundle, canonical_identity):
             outcome = checkpoint.get("outcome", {})
             print(json.dumps({
@@ -3968,6 +4156,7 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     args.workflow_run_attempt = screened["attempt"]
     args.workflow_run_head_sha = str(screened["run"]["head_sha"])
     args.processor_artifact_id = screened["artifact_id"]
+    args._authenticated_canonical_context = screened.get("canonical_context")
     execute_candidate_preparation(args, root)
 
 
@@ -4604,7 +4793,11 @@ def prepare_source_refresh_candidate(
         root / ".datapan" / f"source-refresh-{pr_number}-{generation_id[:12]}" / "bundle",
     )
     composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
-    bundle = validate_processor_bundle(checkpoint, bundle_dir, composition_schema, helper, root=root)
+    canonical_context = authenticated_current_canonical_context(root, target_main)
+    bundle = validate_processor_bundle(
+        checkpoint, bundle_dir, composition_schema, helper, root=root,
+        canonical_context=canonical_context,
+    )
     verify_processor_input_compatibility(
         root, checkpoint, str(run["head_sha"]), target_main,
         composition_receipt=bundle.get("composition_receipt"),
@@ -4642,6 +4835,7 @@ def prepare_source_refresh_candidate(
     args.workflow_run_head_sha = str(run["head_sha"])
     args.processor_artifact_id = artifact_id
     args.bundle_dir = bundle_dir
+    args._authenticated_canonical_context = canonical_context
     execute_candidate_preparation(args, root)
 
 

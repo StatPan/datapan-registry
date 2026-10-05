@@ -247,6 +247,8 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         provider_index: dict[str, Any], enrichment: dict[str, Any], composer: Any,
         *, bundle_mutator: Any = None, expected_rejection: str | None = None,
         root: pathlib.Path | None = None,
+        current_canonical: tuple[dict[str, Any], bytes] | None = None,
+        allow_terminal_noop: bool = False,
     ) -> pathlib.Path:
         """Exercise the real C bundle gate over a real composition result."""
         import importlib.util
@@ -356,11 +358,31 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         )
         schema = json.loads((ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json").read_text())
         composition_helper = runner.load_canonical_update_pr(ROOT)
+        canonical_context = None
+        if current_canonical is not None:
+            identity, canonical_bytes = current_canonical
+            canonical_path = (
+                validation_root / ".datapan/current-canonical"
+                / pathlib.Path(*pathlib.PurePosixPath(identity["registry_path"]).parts)
+            )
+            canonical_path.parent.mkdir(parents=True, exist_ok=True)
+            canonical_path.write_bytes(canonical_bytes)
+            canonical_context = {"identity": identity, "rows": json.loads(canonical_bytes)}
         if expected_rejection is None:
-            runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=validation_root)
+            validate = lambda: runner.validate_processor_bundle(
+                final, bundle_dir, schema, composition_helper, root=validation_root,
+                canonical_context=canonical_context,
+                allow_terminal_noop=allow_terminal_noop,
+            )
+            validate()
         else:
             with self.assertRaisesRegex(runner.PromotionError, expected_rejection):
-                runner.validate_processor_bundle(final, bundle_dir, schema, composition_helper, root=validation_root)
+                validate = lambda: runner.validate_processor_bundle(
+                    final, bundle_dir, schema, composition_helper, root=validation_root,
+                    canonical_context=canonical_context,
+                    allow_terminal_noop=allow_terminal_noop,
+                )
+                validate()
         return bundle_dir
 
     def successful_fetch(self, url: str, timeout: float) -> str:
@@ -913,6 +935,45 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             root=pointer_root,
         )
 
+        # The self-reported semantic decision is not baseline authority. A
+        # producer can rehash every output and claim this newly added row was
+        # unchanged, but the actual composition baseline is the empty array.
+        def forge_unchanged_without_a_baseline(bundle_dir: pathlib.Path) -> None:
+            (bundle_dir / "ready-scope.registry.json").write_bytes(b"[]")
+            composed_rows = json.loads(
+                (bundle_dir / "composed-candidate.registry.json").read_text(encoding="utf-8"),
+            )
+            record_sha = composer._record_hash(composed_rows[0])
+            semantic_path = bundle_dir / "semantic-diff.json"
+            semantic = json.loads(semantic_path.read_text(encoding="utf-8"))
+            decision = next(
+                item for item in semantic["api_decisions"]
+                if item.get("api_key") == {"provider": "data.go.kr", "id": "15056854"}
+            )
+            decision.update({
+                "disposition": "unchanged",
+                "baseline_record_sha256": record_sha,
+                "composed_record_sha256": record_sha,
+            })
+            semantic_path.write_bytes(MODULE.canonical_json(semantic) + b"\n")
+
+        unrelated_canonical = json.dumps(
+            [self.old_link], ensure_ascii=False, separators=(",", ":"),
+        ).encode("utf-8")
+        unrelated_identity = {
+            "main_sha": "a" * 40,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": len(unrelated_canonical),
+            "registry_sha256": MODULE.sha256_bytes(unrelated_canonical),
+        }
+        self.assert_c_processor_bundle_accepts(
+            checkpoint, [], [candidate], provider_index, evidence, composer,
+            bundle_mutator=forge_unchanged_without_a_baseline,
+            expected_rejection="processor Seoul unchanged decision differs from authenticated composition-baseline bytes",
+            root=pointer_root,
+            current_canonical=(unrelated_identity, unrelated_canonical),
+        )
+
         # A later observation can compare the same cached declaration against
         # the now-persisted four-operation baseline. The local cached proof is
         # reused without a page/resolver call or retry-budget charge; the
@@ -955,6 +1016,84 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assert_c_processor_bundle_accepts(
             no_change_checkpoint, [composed[0]], [candidate], no_change_provider_index,
             no_change_evidence, no_change_composer, root=pointer_root,
+        )
+
+        # A mixed output has a real, separately authenticated composition
+        # baseline. The declared Seoul row remains unchanged while an unrelated
+        # API changes; the local cache is reused without fresh HTTP attempts.
+        full_registry = json.loads((ROOT / "data/data-go-kr.registry.json").read_text(encoding="utf-8"))
+        other_baseline = copy.deepcopy(next(row for row in full_registry if row["id"] == "15000021"))
+        other_candidate = copy.deepcopy(other_baseline)
+        other_candidate["priority"] = "P1" if other_candidate["priority"] != "P1" else "P2"
+        mixed_baseline = [copy.deepcopy(composed[0]), other_baseline]
+        mixed_candidate = [copy.deepcopy(candidate), other_candidate]
+        mixed_baseline_bytes = json.dumps(
+            mixed_baseline, ensure_ascii=False, separators=(",", ":"),
+        ).encode("utf-8")
+        self.write_real_composer_inputs(
+            mixed_baseline, mixed_candidate, later_at,
+            baseline_bytes=mixed_baseline_bytes,
+        )
+        mixed_args = self.args(run_id="101004", **{
+            "--composer": ACTUAL_COMPOSER,
+            "--resume-enrichment-evidence": cached_evidence_path,
+        })
+        mixed_args.fixture_composer = None
+        mixed_args.allow_fixture_composer = False
+        mixed_code, mixed_checkpoint = MODULE.process(
+            mixed_args,
+            fetcher=no_page_fetch,
+            resolver_fetcher=no_resolver_fetch,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(mixed_code, 0, mixed_checkpoint)
+        self.assertEqual(mixed_checkpoint["status"], "ready")
+        self.assertEqual(mixed_checkpoint["attempts_consumed"], 0)
+        mixed_evidence = json.loads(
+            (self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text(encoding="utf-8"),
+        )
+        mixed_composed = json.loads(
+            (self.output_dir / "composed-candidate.registry.json").read_text(encoding="utf-8"),
+        )
+        mixed_ready = json.loads(
+            (self.output_dir / "ready-scope.registry.json").read_text(encoding="utf-8"),
+        )
+        self.assertEqual(len(mixed_ready), 1)
+        self.assertEqual(mixed_ready[0]["id"], "15000021")
+        self.assertEqual(
+            next(row for row in mixed_composed if row["id"] == "15056854"),
+            composed[0],
+        )
+        mixed_identity = {
+            "main_sha": "b" * 40,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": len(mixed_baseline_bytes),
+            "registry_sha256": MODULE.sha256_bytes(mixed_baseline_bytes),
+        }
+        self.assert_c_processor_bundle_accepts(
+            mixed_checkpoint, mixed_baseline, mixed_candidate, no_change_provider_index,
+            mixed_evidence, no_change_composer, root=pointer_root,
+            current_canonical=(mixed_identity, mixed_baseline_bytes),
+        )
+
+        # Once the complete mixed result itself is current canonical, the
+        # caller may terminate as already-canonical. Its larger total size is
+        # not compared to the old composition-baseline size.
+        mixed_composed_bytes = (
+            self.output_dir / "composed-candidate.registry.json"
+        ).read_bytes()
+        mixed_current_identity = {
+            "main_sha": "c" * 40,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": len(mixed_composed_bytes),
+            "registry_sha256": MODULE.sha256_bytes(mixed_composed_bytes),
+        }
+        self.assertNotEqual(len(mixed_composed_bytes), len(mixed_baseline_bytes))
+        self.assert_c_processor_bundle_accepts(
+            mixed_checkpoint, mixed_baseline, mixed_candidate, no_change_provider_index,
+            mixed_evidence, no_change_composer, root=pointer_root,
+            current_canonical=(mixed_current_identity, mixed_composed_bytes),
+            allow_terminal_noop=True,
         )
 
 

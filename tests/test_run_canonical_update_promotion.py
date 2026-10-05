@@ -1143,6 +1143,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             "registry_bytes": 999,
             "registry_sha256": "c" * 64,
         }
+        current_context = {"identity": current_identity, "rows": []}
 
         with (
             mock.patch.object(RUNNER, "processor_run_api", side_effect=run_api),
@@ -1150,7 +1151,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             mock.patch.object(RUNNER, "download_processor_artifact", return_value=root / "downloaded-bundle"),
             mock.patch.object(RUNNER, "validate_processor_bundle", side_effect=validate_bundle),
             mock.patch.object(RUNNER, "verify_processor_input_compatibility", side_effect=compatibility_side_effect),
-            mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value=current_identity),
+            mock.patch.object(RUNNER, "authenticated_current_canonical_context", return_value=current_context),
         ):
             selection_options = {}
             if already_canonical_out is not None:
@@ -1427,11 +1428,14 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
                 stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
                 stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
-                stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
-                    "main_sha": self.source_sha,
-                    "registry_path": bundle["registry_path"],
-                    "registry_bytes": 37,
-                    "registry_sha256": "d" * 64,
+                stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_context", return_value={
+                    "identity": {
+                        "main_sha": self.source_sha,
+                        "registry_path": bundle["registry_path"],
+                        "registry_bytes": 37,
+                        "registry_sha256": "d" * 64,
+                    },
+                    "rows": [],
                 }))
                 stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(37, "d" * 64)))
                 materialize = stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
@@ -1483,11 +1487,14 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
                 stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
                 stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
-                stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
-                    "main_sha": self.source_sha,
-                    "registry_path": bundle["registry_path"],
-                    "registry_bytes": 37,
-                    "registry_sha256": "d" * 64,
+                stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_context", return_value={
+                    "identity": {
+                        "main_sha": self.source_sha,
+                        "registry_path": bundle["registry_path"],
+                        "registry_bytes": 37,
+                        "registry_sha256": "d" * 64,
+                    },
+                    "rows": [],
                 }))
                 command = stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
                 materialize = stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot"))
@@ -1801,11 +1808,14 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                     "baseline_sha256": checkpoint["generation_inputs"]["baseline_sha256"],
                 }),
                 mock.patch.object(RUNNER, "verify_processor_input_compatibility", return_value=None),
-                mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
-                    "main_sha": self.source_sha,
-                    "registry_path": "data/data-go-kr.registry.json",
-                    "registry_bytes": 37,
-                    "registry_sha256": "c" * 64,
+                mock.patch.object(RUNNER, "authenticated_current_canonical_context", return_value={
+                    "identity": {
+                        "main_sha": self.source_sha,
+                        "registry_path": "data/data-go-kr.registry.json",
+                        "registry_bytes": 37,
+                        "registry_sha256": "c" * 64,
+                    },
+                    "rows": [],
                 }),
             ):
                 screened, blocked = RUNNER.select_first_eligible_processor_bundle(
@@ -2379,8 +2389,16 @@ class OwnedPRRefreshRecoveryTests(unittest.TestCase):
                 stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
                 stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
                 stack.enter_context(mock.patch.object(
-                    RUNNER, "authenticated_current_canonical_registry",
-                    side_effect=AssertionError("explicit source refresh must retain its authorized path"),
+                    RUNNER, "authenticated_current_canonical_context",
+                    return_value={
+                        "identity": {
+                            "main_sha": controller_head,
+                            "registry_path": registry_path,
+                            "registry_bytes": registry_bytes,
+                            "registry_sha256": "a" * 64,
+                        },
+                        "rows": [],
+                    },
                 ))
                 stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(registry_bytes, "a" * 64)))
                 stack.enter_context(mock.patch.object(RUNNER, "load_promotion_journal_snapshot", return_value=(journal, state_sha)))
@@ -3336,11 +3354,14 @@ class PreparedCreateRecoveryTests(unittest.TestCase):
                     stack.enter_context(mock.patch.object(RUNNER, "validate_generation_identity"))
                     stack.enter_context(mock.patch.object(RUNNER, "validate_processor_bundle", return_value=bundle))
                     stack.enter_context(mock.patch.object(RUNNER, "verify_processor_input_compatibility"))
-                    stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_registry", return_value={
-                        "main_sha": controller_head,
-                        "registry_path": candidate["registry_path"],
-                        "registry_bytes": 10,
-                        "registry_sha256": baseline_sha,
+                    stack.enter_context(mock.patch.object(RUNNER, "authenticated_current_canonical_context", return_value={
+                        "identity": {
+                            "main_sha": controller_head,
+                            "registry_path": candidate["registry_path"],
+                            "registry_bytes": 10,
+                            "registry_sha256": baseline_sha,
+                        },
+                        "rows": [],
                     }))
                     stack.enter_context(mock.patch.object(RUNNER, "command", side_effect=fake_command))
                     stack.enter_context(mock.patch.object(RUNNER, "registry_sha_from_path", return_value=(10, baseline_sha)))
@@ -3597,6 +3618,21 @@ class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
         main_patch = mock.patch.object(RUNNER, "assert_remote_main_sha")
         main_patch.start()
         self.addCleanup(main_patch.stop)
+        canonical_context_patch = mock.patch.object(
+            RUNNER,
+            "authenticated_current_canonical_context",
+            return_value={
+                "identity": {
+                    "main_sha": self.target_main,
+                    "registry_path": "data/data-go-kr.registry.json",
+                    "registry_bytes": 37,
+                    "registry_sha256": self.old["candidate"]["registry_sha256"],
+                },
+                "rows": [],
+            },
+        )
+        canonical_context_patch.start()
+        self.addCleanup(canonical_context_patch.stop)
         return environment, command_patch, main_patch
 
     def test_refresh_resolves_exact_adopted_receipt_and_replays_same_b_payload(self) -> None:
@@ -3712,6 +3748,17 @@ class TrustedSourceRefreshEntryPointTests(unittest.TestCase):
                 return original_locate(pathlib.Path(selected_root), *args, **kwargs)
 
             output = io.StringIO()
+            canonical_context_patch = mock.patch.object(RUNNER, "authenticated_current_canonical_context", return_value={
+                "identity": {
+                    "main_sha": self.target_main,
+                    "registry_path": "data/data-go-kr.registry.json",
+                    "registry_bytes": 10,
+                    "registry_sha256": old_checkpoint["generation_inputs"]["baseline_sha256"],
+                },
+                "rows": [],
+            })
+            canonical_context_patch.start()
+            self.addCleanup(canonical_context_patch.stop)
             with (
                 mock.patch.dict(os.environ, {
                     "GITHUB_REPOSITORY": self.repository,
