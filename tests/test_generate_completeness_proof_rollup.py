@@ -860,24 +860,72 @@ class CompletenessProofRollupTest(unittest.TestCase):
             try:
                 destination_shallow_bytes = destination_shallow_path.read_bytes()
             except FileNotFoundError:
-                destination_shallow_path.write_bytes(source_shallow_bytes)
+                destination_shallow_bytes = None
+            if destination_shallow_bytes is not None:
+                if not destination_shallow_bytes:
+                    raise ValueError("disposable clone shallow boundary metadata is empty")
+                destination_shallow_state = subprocess.check_output(
+                    ["git", "rev-parse", "--is-shallow-repository"],
+                    cwd=repository,
+                    text=True,
+                ).strip()
+                if destination_shallow_state != "true":
+                    raise ValueError("disposable clone boundary metadata is not natively shallow")
             else:
-                if destination_shallow_bytes != source_shallow_bytes:
-                    raise ValueError("disposable clone has conflicting shallow boundary metadata")
-            destination_shallow_state = subprocess.check_output(
-                ["git", "rev-parse", "--is-shallow-repository"],
-                cwd=repository,
-                text=True,
-            ).strip()
-            if destination_shallow_state != "true":
-                raise ValueError("disposable clone did not retain the source shallow boundary")
-            if destination_shallow_path.read_bytes() != source_shallow_bytes:
-                raise ValueError("disposable clone shallow boundary differs from the source")
+                destination_object_dir = pathlib.Path(subprocess.check_output(
+                    ["git", "rev-parse", "--path-format=absolute", "--git-path", "objects"],
+                    cwd=repository,
+                    text=True,
+                ).strip()).resolve()
+                source_object_dir = pathlib.Path(subprocess.check_output(
+                    ["git", "rev-parse", "--path-format=absolute", "--git-path", "objects"],
+                    cwd=source_root,
+                    text=True,
+                ).strip()).resolve()
+                alternates_path = pathlib.Path(subprocess.check_output(
+                    ["git", "rev-parse", "--path-format=absolute", "--git-path", "objects/info/alternates"],
+                    cwd=repository,
+                    text=True,
+                ).strip())
+                try:
+                    alternate_entries = alternates_path.read_text(encoding="utf-8").splitlines()
+                except FileNotFoundError:
+                    alternate_entries = []
+                borrows_source_objects = False
+                for entry in alternate_entries:
+                    if not entry:
+                        continue
+                    alternate_path = pathlib.Path(entry)
+                    if not alternate_path.is_absolute():
+                        alternate_path = destination_object_dir / alternate_path
+                    if alternate_path.resolve() == source_object_dir:
+                        borrows_source_objects = True
+                        break
+                if borrows_source_objects:
+                    destination_shallow_path.write_bytes(source_shallow_bytes)
+                    destination_shallow_state = subprocess.check_output(
+                        ["git", "rev-parse", "--is-shallow-repository"],
+                        cwd=repository,
+                        text=True,
+                    ).strip()
+                    if destination_shallow_state != "true":
+                        raise ValueError("shared disposable clone did not accept source shallow boundaries")
+                    if destination_shallow_path.read_bytes() != source_shallow_bytes:
+                        raise ValueError("shared disposable clone shallow boundary differs from source")
+                else:
+                    destination_shallow_state = subprocess.check_output(
+                        ["git", "rev-parse", "--is-shallow-repository"],
+                        cwd=repository,
+                        text=True,
+                    ).strip()
+                    if destination_shallow_state != "false":
+                        raise ValueError("disposable clone is shallow without native boundary metadata")
         # A local shared clone from a shallow PR checkout need not retain its
-        # shallow boundary file. Preserve those exact native boundaries before
-        # the fetch so borrowed objects are not mistaken for complete history.
-        # Transfer only the already authenticated exact SHA from this local
-        # checkout; never consult its remote URL or substitute HEAD.
+        # common shallow boundary file. Preserve native boundaries selected by
+        # Git, or transfer exact source bytes only when the clone borrows this
+        # source's common object store. Transfer only the already authenticated
+        # exact SHA from this local checkout; never consult its remote URL or
+        # substitute HEAD.
         fetch_args = [
             "git", "fetch", "--no-tags", "--depth=64", str(source_root),
             f"{trusted_main}:refs/remotes/origin/main",
@@ -1865,6 +1913,75 @@ class CompletenessProofRollupTest(unittest.TestCase):
         def output(args: list[str], *, cwd: pathlib.Path) -> str:
             return git(args, cwd=cwd).stdout.strip()
 
+        def invoke_and_capture_fetch(
+            source_root: pathlib.Path,
+            destination: pathlib.Path,
+            *,
+            expected_main: str | None = None,
+            after_clone: object | None = None,
+        ) -> tuple[tuple[str, str] | None, list[dict[str, object]], Exception | None]:
+            original_run = subprocess.run
+            fetch_snapshots: list[dict[str, object]] = []
+
+            def native_output(args: list[str], *, cwd: pathlib.Path) -> str:
+                result = original_run(
+                    ["git", *args], cwd=cwd, check=True, text=True,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                )
+                return result.stdout.strip()
+
+            def intercept(*args: object, **kwargs: object) -> subprocess.CompletedProcess[str]:
+                command = args[0] if args else kwargs.get("args")
+                is_command = isinstance(command, list)
+                if (
+                    is_command
+                    and command[:4] == ["git", "fetch", "--no-tags", "--depth=64"]
+                    and pathlib.Path(kwargs.get("cwd", "")).resolve() == destination.resolve()
+                ):
+                    destination_shallow = pathlib.Path(native_output(
+                        ["rev-parse", "--path-format=absolute", "--git-path", "shallow"],
+                        cwd=destination,
+                    ))
+                    destination_objects = pathlib.Path(native_output(
+                        ["rev-parse", "--path-format=absolute", "--git-path", "objects"],
+                        cwd=destination,
+                    )).resolve()
+                    source_shallow = pathlib.Path(native_output(
+                        ["rev-parse", "--path-format=absolute", "--git-path", "shallow"],
+                        cwd=source_root,
+                    ))
+                    destination_alternates = pathlib.Path(native_output(
+                        ["rev-parse", "--path-format=absolute", "--git-path", "objects/info/alternates"],
+                        cwd=destination,
+                    ))
+                    fetch_snapshots.append({
+                        "destination_shallow_bytes": destination_shallow.read_bytes() if destination_shallow.exists() else None,
+                        "destination_state": native_output(["rev-parse", "--is-shallow-repository"], cwd=destination),
+                        "destination_alternates": destination_alternates.read_text(encoding="utf-8") if destination_alternates.exists() else None,
+                        "destination_objects": destination_objects,
+                        "source_shallow_bytes": source_shallow.read_bytes(),
+                    })
+                    return original_run(*args, **kwargs)
+
+                result = original_run(*args, **kwargs)
+                if (
+                    is_command
+                    and command[:2] == ["git", "clone"]
+                    and pathlib.Path(command[-1]).resolve() == destination.resolve()
+                    and callable(after_clone)
+                ):
+                    after_clone(destination)
+                return result
+
+            try:
+                with mock.patch.object(subprocess, "run", side_effect=intercept):
+                    clone_result = self._clone_disposable_at_verified_main(
+                        source_root, destination, expected_main=expected_main,
+                    )
+            except Exception as error:
+                return None, fetch_snapshots, error
+            return clone_result, fetch_snapshots, None
+
         with tempfile.TemporaryDirectory(prefix="completeness-shallow-linked-boundary-") as name:
             root = pathlib.Path(name)
             remote = root / "origin.git"
@@ -1888,6 +2005,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
             (seed / "trusted-main.txt").write_text("trusted main\n", encoding="utf-8")
             git(["add", "trusted-main.txt"], cwd=seed)
             git(["commit", "--quiet", "-m", "trusted main"], cwd=seed)
+            for index in range(1, 71):
+                with (seed / "trusted-main.txt").open("a", encoding="utf-8") as handle:
+                    handle.write(f"trusted main {index}\n")
+                git(["commit", "--quiet", "-am", f"trusted main {index}"], cwd=seed)
             trusted_main = output(["rev-parse", "HEAD^{commit}"], cwd=seed)
             trusted_tree = output(["rev-parse", f"{trusted_main}^{{tree}}"], cwd=seed)
 
@@ -1911,6 +2032,38 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 "fetch", "--quiet", "--no-tags", "--depth=64", "origin",
                 "+refs/heads/main:refs/remotes/origin/main",
             ], cwd=source)
+            source_shallow_path = pathlib.Path(output(
+                ["rev-parse", "--path-format=absolute", "--git-path", "shallow"], cwd=source,
+            ))
+            source_shallow_bytes = source_shallow_path.read_bytes()
+            source_shallow_lines = source_shallow_bytes.decode("ascii").splitlines()
+            self.assertEqual(len(source_shallow_lines), 2)
+            self.assertIn(boundary_commit, source_shallow_lines)
+
+            standalone_destination = root / "native-standalone-clone"
+            standalone_result, standalone_fetches, standalone_error = invoke_and_capture_fetch(
+                source, standalone_destination, expected_main=trusted_main,
+            )
+            self.assertIsNone(standalone_error)
+            self.assertIsNotNone(standalone_result)
+            self.assertEqual(len(standalone_fetches), 1)
+            standalone_before_fetch = standalone_fetches[0]
+            standalone_boundaries = standalone_before_fetch["destination_shallow_bytes"]
+            self.assertIsInstance(standalone_boundaries, bytes)
+            self.assertNotEqual(standalone_boundaries, source_shallow_bytes)
+            standalone_boundary_lines = standalone_boundaries.decode("ascii").splitlines()
+            self.assertEqual(len(standalone_boundary_lines), 1)
+            self.assertTrue(set(standalone_boundary_lines) < set(source_shallow_lines))
+            self.assertEqual(standalone_before_fetch["destination_state"], "true")
+            self.assertIsNone(standalone_before_fetch["destination_alternates"])
+            self.assertEqual(standalone_before_fetch["source_shallow_bytes"], source_shallow_bytes)
+            self.assertEqual(standalone_result, (trusted_main, trusted_tree))
+            self.assertEqual(output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=standalone_destination), trusted_main)
+            self.assertEqual(output(["rev-parse", "HEAD^{commit}"], cwd=standalone_destination), trusted_main)
+            self.assertEqual(output(["rev-parse", "HEAD^{tree}"], cwd=standalone_destination), trusted_tree)
+            self.assertEqual(git(["rev-list", "--all", "--parents"], cwd=standalone_destination, check=False).returncode, 0)
+            self.assertEqual(source_shallow_path.read_bytes(), source_shallow_bytes)
+
             git(["config", "user.name", "Completeness shallow-boundary test"], cwd=source)
             git(["config", "user.email", "completeness-shallow@example.invalid"], cwd=source)
             git(["config", "commit.gpgsign", "false"], cwd=source)
@@ -1974,14 +2127,47 @@ class CompletenessProofRollupTest(unittest.TestCase):
             finally:
                 source_shallow_path.write_bytes(source_shallow_bytes)
 
-            cloned_main, cloned_tree = self._clone_disposable_at_verified_main(linked, destination)
-            destination_shallow_path = pathlib.Path(output(
-                ["rev-parse", "--path-format=absolute", "--git-path", "shallow"], cwd=destination,
-            ))
+            empty_native_destination = root / "empty-native-boundary-clone"
+            empty_native_result, empty_native_fetches, empty_native_error = invoke_and_capture_fetch(
+                linked,
+                empty_native_destination,
+                after_clone=lambda clone_path: (clone_path / ".git/shallow").write_bytes(b""),
+            )
+            self.assertIsNone(empty_native_result)
+            self.assertEqual(empty_native_fetches, [])
+            self.assertIsInstance(empty_native_error, ValueError)
+            self.assertRegex(str(empty_native_error), "disposable clone shallow boundary metadata is empty")
+
+            malformed_native_destination = root / "malformed-native-boundary-clone"
+            malformed_native_result, malformed_native_fetches, malformed_native_error = invoke_and_capture_fetch(
+                linked,
+                malformed_native_destination,
+                after_clone=lambda clone_path: (clone_path / ".git/shallow").write_bytes(b"not-a-git-object-id\n"),
+            )
+            self.assertIsNone(malformed_native_result)
+            self.assertEqual(malformed_native_fetches, [])
+            self.assertIsInstance(malformed_native_error, subprocess.CalledProcessError)
+
+            linked_result, linked_fetches, linked_error = invoke_and_capture_fetch(linked, destination)
+            self.assertIsNone(linked_error)
+            self.assertIsNotNone(linked_result)
+            self.assertEqual(len(linked_fetches), 1)
+            linked_before_fetch = linked_fetches[0]
+            self.assertEqual(linked_before_fetch["destination_shallow_bytes"], source_shallow_bytes)
+            self.assertEqual(linked_before_fetch["destination_state"], "true")
+            self.assertEqual(linked_before_fetch["source_shallow_bytes"], source_shallow_bytes)
+            linked_alternates = linked_before_fetch["destination_alternates"]
+            self.assertIsInstance(linked_alternates, str)
+            linked_alternate_paths = [
+                pathlib.Path(entry.strip()).resolve()
+                for entry in linked_alternates.splitlines()
+                if entry.strip()
+            ]
+            self.assertIn((source_common_dir / "objects").resolve(), linked_alternate_paths)
+            cloned_main, cloned_tree = linked_result
             self.assertEqual(cloned_main, trusted_main)
             self.assertEqual(cloned_tree, trusted_tree)
             self.assertEqual(output(["rev-parse", "--is-shallow-repository"], cwd=destination), "true")
-            self.assertEqual(destination_shallow_path.read_bytes(), source_shallow_bytes)
             self.assertEqual(
                 git(["rev-list", "--all", "--parents"], cwd=destination, check=False).returncode,
                 0,
@@ -1997,6 +2183,89 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertEqual(output(["rev-parse", "HEAD^{commit}"], cwd=linked), source_head)
             self.assertEqual(output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=linked), trusted_main)
             self.assertEqual(output(["rev-parse", f"{trusted_main}^{{tree}}"], cwd=linked), trusted_tree)
+
+            # A shallow repository can advertise a complete selected main
+            # while retaining unrelated shallow boundaries for old refs.
+            complete_tree = output(["rev-parse", "HEAD^{tree}"], cwd=source)
+            complete_main = git(["commit-tree", complete_tree, "-m", "complete selected main"], cwd=source).stdout.strip()
+            git(["update-ref", "refs/heads/complete", complete_main], cwd=source)
+            git(["update-ref", "refs/remotes/origin/main", complete_main], cwd=source)
+            git(["switch", "--quiet", "complete"], cwd=source)
+            git(["branch", "-D", "prmerge"], cwd=source)
+            git(["update-ref", "-d", "refs/remotes/origin/prmerge"], cwd=source)
+            git(["symbolic-ref", "--delete", "refs/remotes/origin/HEAD"], cwd=source, check=False)
+            complete_source_shallow_bytes = source_shallow_path.read_bytes()
+            complete_source_refs = output(["show-ref"], cwd=source)
+            self.assertEqual(output(["rev-parse", "--is-shallow-repository"], cwd=source), "true")
+            self.assertEqual(output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=source), complete_main)
+            self.assertEqual(output(["rev-parse", f"{complete_main}^{{tree}}"], cwd=source), complete_tree)
+
+            complete_destination = root / "complete-selected-main-clone"
+            complete_result, complete_fetches, complete_error = invoke_and_capture_fetch(
+                source, complete_destination,
+            )
+            self.assertIsNone(complete_error)
+            self.assertIsNotNone(complete_result)
+            self.assertEqual(complete_result, (complete_main, complete_tree))
+            self.assertEqual(len(complete_fetches), 1)
+            complete_before_fetch = complete_fetches[0]
+            self.assertIsNone(complete_before_fetch["destination_shallow_bytes"])
+            self.assertEqual(complete_before_fetch["destination_state"], "false")
+            self.assertIsNone(complete_before_fetch["destination_alternates"])
+            self.assertEqual(complete_before_fetch["source_shallow_bytes"], complete_source_shallow_bytes)
+            complete_destination_shallow = pathlib.Path(output(
+                ["rev-parse", "--path-format=absolute", "--git-path", "shallow"], cwd=complete_destination,
+            ))
+            self.assertFalse(complete_destination_shallow.exists())
+            self.assertEqual(output(["rev-parse", "--is-shallow-repository"], cwd=complete_destination), "false")
+            self.assertFalse((complete_destination / ".git/objects/info/alternates").exists())
+            self.assertEqual(output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=complete_destination), complete_main)
+            self.assertEqual(output(["rev-parse", "HEAD^{tree}"], cwd=complete_destination), complete_tree)
+            self.assertEqual(git(["rev-list", "--all", "--parents"], cwd=complete_destination, check=False).returncode, 0)
+            self.assertEqual(source_shallow_path.read_bytes(), complete_source_shallow_bytes)
+            self.assertEqual(output(["show-ref"], cwd=source), complete_source_refs)
+
+            unrelated_objects = pathlib.Path(f"{source_common_dir / 'objects'} ")
+            unrelated_objects.mkdir()
+            mismatched_alternate_destination = root / "mismatched-alternate-clone"
+
+            def add_unrelated_alternate(clone_path: pathlib.Path) -> None:
+                alternates_path = clone_path / ".git/objects/info/alternates"
+                alternates_path.parent.mkdir(parents=True, exist_ok=True)
+                alternates_path.write_text(f"{unrelated_objects}\n", encoding="utf-8")
+
+            mismatched_result, mismatched_fetches, mismatched_error = invoke_and_capture_fetch(
+                source,
+                mismatched_alternate_destination,
+                after_clone=add_unrelated_alternate,
+            )
+            self.assertIsNone(mismatched_error)
+            self.assertIsNotNone(mismatched_result)
+            self.assertEqual(mismatched_result, (complete_main, complete_tree))
+            self.assertEqual(len(mismatched_fetches), 1)
+            mismatched_before_fetch = mismatched_fetches[0]
+            self.assertIsNone(mismatched_before_fetch["destination_shallow_bytes"])
+            self.assertEqual(mismatched_before_fetch["destination_state"], "false")
+            mismatched_alternate_entries = mismatched_before_fetch["destination_alternates"].splitlines()
+            self.assertEqual(mismatched_alternate_entries, [str(unrelated_objects)])
+            self.assertEqual(
+                pathlib.Path(mismatched_alternate_entries[0]).resolve(),
+                unrelated_objects.resolve(),
+            )
+            self.assertNotEqual(
+                pathlib.Path(mismatched_alternate_entries[0]).resolve(),
+                (source_common_dir / "objects").resolve(),
+            )
+            mismatched_destination_shallow = pathlib.Path(output(
+                ["rev-parse", "--path-format=absolute", "--git-path", "shallow"],
+                cwd=mismatched_alternate_destination,
+            ))
+            self.assertFalse(mismatched_destination_shallow.exists())
+            self.assertEqual(output(["rev-parse", "--is-shallow-repository"], cwd=mismatched_alternate_destination), "false")
+            self.assertEqual(
+                source_shallow_path.read_bytes(), complete_source_shallow_bytes,
+            )
+            self.assertEqual(output(["show-ref"], cwd=source), complete_source_refs)
 
     def test_nested_linked_worktree_fetch_preserves_authenticated_main(self) -> None:
         """The disposable reader can fetch exact main from a shallow linked worktree."""
