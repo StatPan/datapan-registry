@@ -2268,97 +2268,133 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertEqual(output(["show-ref"], cwd=source), complete_source_refs)
 
     def test_nested_linked_worktree_fetch_preserves_authenticated_main(self) -> None:
-        """The disposable reader can fetch exact main from a shallow linked worktree."""
+        """The reader preserves exact main from pointer and materialized shallow sources."""
         integration = importlib.import_module("tests.test_apply_runtime_freshness_import_integration")
         fixture = integration.ApplyRuntimeFreshnessImportIntegrationTest
-        # setUpClass allocates its TemporaryDirectory before building the
-        # repository. Keep even a partial setup inside this cleanup boundary,
-        # and never let teardown mask the original setup/test failure.
-        fixture.temporary = None
-        setup_or_test_failed = False
-        try:
-            fixture.setUpClass()
-            source_root = fixture.repo
-            base = fixture.temp_root
-            linked = base / "nested-linked-source"
-            disposable = base / "nested-disposable-main"
-            subprocess.run(
-                ["git", "-c", "core.hooksPath=/dev/null", "worktree", "add", "--detach", str(linked), "HEAD"],
-                cwd=source_root,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            self.assertTrue((linked / ".git").is_file())
-            self.assertEqual(
-                subprocess.check_output(
-                    ["git", "rev-parse", "--is-shallow-repository"], cwd=linked, text=True,
-                ).strip(),
-                "true",
-            )
-            source_shallow_path = pathlib.Path(subprocess.check_output(
-                ["git", "rev-parse", "--path-format=absolute", "--git-path", "shallow"],
-                cwd=linked,
-                text=True,
-            ).strip())
-            source_shallow_bytes = source_shallow_path.read_bytes()
-            self.assertTrue(source_shallow_bytes)
-            trusted_main = subprocess.check_output(
-                ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
-                cwd=linked,
-                text=True,
-            ).strip()
-            trusted_tree = subprocess.check_output(
-                ["git", "rev-parse", "--verify", f"{trusted_main}^{{tree}}"], cwd=linked, text=True,
-            ).strip()
-            common_dir = pathlib.Path(subprocess.check_output(
-                ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], cwd=linked, text=True,
-            ).strip())
-
-            cloned_main, cloned_tree = self._clone_disposable_at_verified_main(linked, disposable)
-
-            self.assertEqual(cloned_main, trusted_main)
-            self.assertEqual(cloned_tree, trusted_tree)
-            self.assertEqual(
-                subprocess.check_output(["git", "rev-parse", "HEAD^{commit}"], cwd=disposable, text=True).strip(),
-                trusted_main,
-            )
-            self.assertEqual(
-                subprocess.check_output(
-                    ["git", "rev-parse", "--is-shallow-repository"], cwd=disposable, text=True,
-                ).strip(),
-                "true",
-            )
-            alternates = disposable / ".git/objects/info/alternates"
-            self.assertTrue(alternates.is_file())
-            self.assertEqual(pathlib.Path(alternates.read_text(encoding="utf-8").strip()), common_dir / "objects")
-            self.assertEqual(
-                subprocess.run(
-                    ["git", "rev-list", "--all", "--parents"],
-                    cwd=disposable,
-                    check=False,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True,
-                ).returncode,
-                0,
-            )
-            self.assertEqual(source_shallow_path.read_bytes(), source_shallow_bytes)
-
-            wrong_main = base / "nested-wrong-main"
-            with self.assertRaisesRegex(ValueError, "expected trusted main does not match source origin/main"):
-                self._clone_disposable_at_verified_main(linked, wrong_main, expected_main="0" * 40)
-            self.assertFalse(wrong_main.exists())
-        except BaseException:
-            setup_or_test_failed = True
-            raise
-        finally:
-            if getattr(fixture, "temporary", None) is not None:
+        pointer_source_revision = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
+            cwd=integration.ROOT,
+            text=True,
+        ).strip()
+        for label in ("genuine_pointer", "already_materialized"):
+            with self.subTest(source_context=label):
+                # setUpClass allocates its TemporaryDirectory before building
+                # the repository. Keep partial setup inside the cleanup
+                # boundary and never let teardown mask the test failure.
+                fixture.temporary = None
+                prepared_temporary = None
+                setup_or_test_failed = False
                 try:
-                    fixture.tearDownClass()
+                    if label == "genuine_pointer":
+                        fixture.setUpClass(
+                            materialize_registry=False,
+                            source_revision=pointer_source_revision,
+                            source_root=integration.ROOT,
+                        )
+                        expected_representation = "lfs_pointer"
+                    else:
+                        # First produce the same committed materialized fixture
+                        # that the outer import test feeds to its nested suite,
+                        # then use that commit as the next fixture's source.
+                        fixture.setUpClass(source_root=integration.ROOT)
+                        prepared_temporary = fixture.temporary
+                        prepared_source_root = fixture.repo
+                        prepared_source_revision = fixture.fixture_revision
+                        fixture.setUpClass(
+                            materialize_registry=True,
+                            source_revision=prepared_source_revision,
+                            source_root=prepared_source_root,
+                        )
+                        expected_representation = "materialized"
+                    self.assertEqual(fixture.registry_representation, expected_representation)
+                    source_root = fixture.repo
+                    base = fixture.temp_root
+                    linked = base / f"nested-linked-source-{label}"
+                    disposable = base / f"nested-disposable-main-{label}"
+                    worktree_add = subprocess.run(
+                        ["git", "-c", "core.hooksPath=/dev/null", "worktree", "add", "--detach", str(linked), "HEAD"],
+                        cwd=source_root,
+                        env={**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"},
+                        check=False,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+                    self.assertEqual(worktree_add.returncode, 0, worktree_add.stderr.decode("utf-8", errors="replace"))
+                    self.assertTrue((linked / ".git").is_file())
+                    self.assertEqual(
+                        subprocess.check_output(
+                            ["git", "rev-parse", "--is-shallow-repository"], cwd=linked, text=True,
+                        ).strip(),
+                        "true",
+                    )
+                    source_shallow_path = pathlib.Path(subprocess.check_output(
+                        ["git", "rev-parse", "--path-format=absolute", "--git-path", "shallow"],
+                        cwd=linked,
+                        text=True,
+                    ).strip())
+                    source_shallow_bytes = source_shallow_path.read_bytes()
+                    self.assertTrue(source_shallow_bytes)
+                    trusted_main = subprocess.check_output(
+                        ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
+                        cwd=linked,
+                        text=True,
+                    ).strip()
+                    trusted_tree = subprocess.check_output(
+                        ["git", "rev-parse", "--verify", f"{trusted_main}^{{tree}}"], cwd=linked, text=True,
+                    ).strip()
+                    common_dir = pathlib.Path(subprocess.check_output(
+                        ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], cwd=linked, text=True,
+                    ).strip())
+
+                    cloned_main, cloned_tree = self._clone_disposable_at_verified_main(linked, disposable)
+
+                    self.assertEqual(cloned_main, trusted_main)
+                    self.assertEqual(cloned_tree, trusted_tree)
+                    self.assertEqual(
+                        subprocess.check_output(["git", "rev-parse", "HEAD^{commit}"], cwd=disposable, text=True).strip(),
+                        trusted_main,
+                    )
+                    self.assertEqual(
+                        subprocess.check_output(
+                            ["git", "rev-parse", "--is-shallow-repository"], cwd=disposable, text=True,
+                        ).strip(),
+                        "true",
+                    )
+                    alternates = disposable / ".git/objects/info/alternates"
+                    self.assertTrue(alternates.is_file())
+                    self.assertEqual(pathlib.Path(alternates.read_text(encoding="utf-8").strip()), common_dir / "objects")
+                    graph = subprocess.run(
+                        ["git", "rev-list", "--all", "--parents"],
+                        cwd=disposable,
+                        check=False,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        text=True,
+                    )
+                    self.assertEqual(graph.returncode, 0, graph.stderr)
+                    self.assertEqual(source_shallow_path.read_bytes(), source_shallow_bytes)
+
+                    source_blob = subprocess.check_output(
+                        ["git", "show", f"{fixture.source_revision}:{fixture.registry_identity.path}"],
+                        cwd=fixture.source_root,
+                    )
+                    self.assertEqual(integration.sha256_bytes(source_blob), fixture.original_registry_blob_sha256)
+                    wrong_main = base / f"nested-wrong-main-{label}"
+                    with self.assertRaisesRegex(ValueError, "expected trusted main does not match source origin/main"):
+                        self._clone_disposable_at_verified_main(linked, wrong_main, expected_main="0" * 40)
+                    self.assertFalse(wrong_main.exists())
                 except BaseException:
-                    if not setup_or_test_failed:
-                        raise
+                    setup_or_test_failed = True
+                    raise
+                finally:
+                    if getattr(fixture, "temporary", None) is not None:
+                        try:
+                            fixture.tearDownClass()
+                        except BaseException:
+                            if not setup_or_test_failed:
+                                raise
+                    if prepared_temporary is not None:
+                        prepared_temporary.cleanup()
 
     def test_failed_local_main_fetch_keeps_original_error_and_bounded_diagnostics(self) -> None:
         """A real local fetch failure surfaces its stderr without replacing the Git error."""
