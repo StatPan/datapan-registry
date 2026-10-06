@@ -1205,6 +1205,92 @@ class ProcessorBundleContractTests(unittest.TestCase):
             ).stdout.strip()
             self.assertIsNone(RUNNER.processor_composer_source_identity(root, head))
 
+    def test_composer_identity_never_lazy_fetches_a_missing_promisor_blob(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            source = root / "source"
+            partial = root / "partial"
+            source.mkdir()
+            subprocess.run(("git", "init", "-q"), cwd=source, check=True)
+            subprocess.run(("git", "config", "user.email", "test@example.invalid"), cwd=source, check=True)
+            subprocess.run(("git", "config", "user.name", "Test"), cwd=source, check=True)
+            subprocess.run(("git", "config", "uploadpack.allowFilter", "true"), cwd=source, check=True)
+            composer = source / RUNNER.PROCESSOR_COMPOSITION_INPUTS["composer"]
+            composer.parent.mkdir(parents=True)
+            composer.write_text("promisor composer fixture\n", encoding="utf-8")
+            subprocess.run(("git", "add", "."), cwd=source, check=True)
+            subprocess.run(("git", "commit", "-qm", "promisor source"), cwd=source, check=True)
+            subprocess.run(
+                (
+                    "git", "-c", "protocol.file.allow=always", "clone", "--filter=blob:none",
+                    "--no-checkout", source.resolve().as_uri(), str(partial),
+                ),
+                check=True,
+                capture_output=True,
+            )
+            self.assertEqual(
+                subprocess.run(
+                    ("git", "config", "--get", "remote.origin.promisor"),
+                    cwd=partial, check=True, text=True, capture_output=True,
+                ).stdout.strip(),
+                "true",
+            )
+            self.assertEqual(
+                subprocess.run(
+                    ("git", "config", "--get", "remote.origin.partialclonefilter"),
+                    cwd=partial, check=True, text=True, capture_output=True,
+                ).stdout.strip(),
+                "blob:none",
+            )
+            head = subprocess.run(
+                ("git", "rev-parse", "HEAD"), cwd=partial, check=True, text=True, capture_output=True,
+            ).stdout.strip()
+            blob = subprocess.run(
+                ("git", "rev-parse", f"{head}:{RUNNER.PROCESSOR_COMPOSITION_INPUTS['composer']}"),
+                cwd=partial, check=True, text=True, capture_output=True,
+            ).stdout.strip()
+
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            fetch_marker = root / "promisor-fetch-invoked"
+            remote_helper = fake_bin / "git-remote-trapfetch"
+            remote_helper.write_text(
+                f"#!{sys.executable}\n"
+                "import os, pathlib, sys\n"
+                "pathlib.Path(os.environ['PROMISOR_FETCH_MARKER']).write_text('invoked\\n')\n"
+                "sys.exit(1)\n",
+                encoding="utf-8",
+            )
+            remote_helper.chmod(0o755)
+            subprocess.run(
+                ("git", "remote", "set-url", "origin", "trapfetch::missing"),
+                cwd=partial, check=True,
+            )
+            environment = {
+                "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}",
+                "PROMISOR_FETCH_MARKER": str(fetch_marker),
+            }
+            with mock.patch.dict(RUNNER.os.environ, environment, clear=False):
+                self.assertIsNone(RUNNER.processor_composer_source_identity(partial, head))
+            self.assertFalse(fetch_marker.exists())
+
+            missing = subprocess.run(
+                ("git", "cat-file", "-e", blob),
+                cwd=partial,
+                env={
+                    **os.environ,
+                    "GIT_NO_LAZY_FETCH": "1",
+                    "GIT_TERMINAL_PROMPT": "0",
+                    "PATH": environment["PATH"],
+                    "PROMISOR_FETCH_MARKER": str(fetch_marker),
+                },
+                capture_output=True,
+                check=False,
+            )
+            self.assertNotEqual(missing.returncode, 0)
+            self.assertIn(b"lazy fetching disabled", missing.stderr)
+            self.assertFalse(fetch_marker.exists())
+
     def test_composer_identity_bounds_stderr_and_timeout_then_reaps_and_closes(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = pathlib.Path(raw)
