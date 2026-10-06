@@ -11,7 +11,7 @@
       "checkouts": [
         {
           "job": "reconcile",
-          "step": 3,
+          "step": 4,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "e3b2fa44cb0f68d7e58e003fbd71ecde505878de",
