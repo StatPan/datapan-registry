@@ -300,6 +300,11 @@ class PromotionRepo:
         self.synthetic_merge_sha = "f" * 40
         self.state_conflict = False
         self.push_count = 0
+        self.pr_cli_state_overrides: dict[int, str] = {}
+        self.pr_rest_merged_overrides: dict[int, bool] = {}
+        self.pr_rest_merged_missing: set[int] = set()
+        self.pr_cli_calls: list[int] = []
+        self.pr_rest_calls: list[str] = []
         self._copy_fixture_tree()
         self._commit_baseline()
         self.materializer = FakeGitHubLfsMaterializer(self.root, self)
@@ -469,9 +474,9 @@ class PromotionRepo:
             return {
                 "number": number,
                 "url": f"https://github.com/StatPan/datapan-registry/pull/{number}",
-                "state": "CLOSED", "merged": True, "repository": "StatPan/datapan-registry",
+                "state": "MERGED", "merged": True, "repository": "StatPan/datapan-registry",
                 "headRepository": "StatPan/datapan-registry", "headRefName": ownership["branch"],
-                "headRefOid": candidate["head_sha"], "baseRefName": "main",
+                "headRefOid": candidate["head_sha"], "baseRefName": "main", "baseRefOid": self.current_main,
                 "mergeCommit": {"oid": pr["merge_commit_sha"]}, "body": ownership["body"],
             }
         if self.canonical_parent_receipt is not None and number == self.canonical_parent_pr_number:
@@ -482,9 +487,9 @@ class PromotionRepo:
             return {
                 "number": number,
                 "url": f"https://github.com/StatPan/datapan-registry/pull/{number}",
-                "state": "CLOSED", "merged": True, "repository": "StatPan/datapan-registry",
+                "state": "MERGED", "merged": True, "repository": "StatPan/datapan-registry",
                 "headRepository": "StatPan/datapan-registry", "headRefName": ownership["branch"],
-                "headRefOid": candidate["head_sha"], "baseRefName": "main",
+                "headRefOid": candidate["head_sha"], "baseRefName": "main", "baseRefOid": self.current_main,
                 "mergeCommit": {"oid": pr["merge_commit_sha"]}, "body": ownership["body"],
             }
         receipt = self.current_candidate_receipt
@@ -494,11 +499,35 @@ class PromotionRepo:
         ownership = receipt["ownership"]
         return {
             "number": number, "url": f"https://github.com/StatPan/datapan-registry/pull/{number}",
-            "state": "OPEN", "repository": "StatPan/datapan-registry",
+            "state": "OPEN", "merged": False, "repository": "StatPan/datapan-registry",
             "headRepository": "StatPan/datapan-registry", "headRefName": ownership["branch"],
-            "headRefOid": candidate["head_sha"], "baseRefName": "main",
+            "headRefOid": candidate["head_sha"], "baseRefName": "main", "baseRefOid": self.current_main,
             "mergeCommit": None, "body": ownership["body"],
         }
+
+    def pr_cli_readback(self, root: pathlib.Path, repository: str, number: int) -> dict[str, Any]:
+        readback = self.pr_readback(root, repository, number)
+        state = self.pr_cli_state_overrides.get(number, str(readback["state"]))
+        cli, _rest = FLOW_TESTS.primary_pr_transport(readback, cli_state=state)
+        self.pr_cli_calls.append(number)
+        return cli
+
+    def pr_rest_readback(self, root: pathlib.Path, endpoint: str, *arguments: str) -> dict[str, Any]:
+        prefix = "repos/StatPan/datapan-registry/pulls/"
+        if not endpoint.startswith(prefix) or arguments != ("--method", "GET"):
+            raise AssertionError(f"unexpected PR REST transport request: {(endpoint, *arguments)!r}")
+        number = int(endpoint.removeprefix(prefix))
+        readback = self.pr_readback(root, "StatPan/datapan-registry", number)
+        state = self.pr_cli_state_overrides.get(number, str(readback["state"]))
+        merged = self.pr_rest_merged_overrides.get(number, readback.get("merged"))
+        _cli, rest = FLOW_TESTS.primary_pr_transport(
+            readback,
+            cli_state=state,
+            rest_merged=merged,
+            include_rest_merged=number not in self.pr_rest_merged_missing,
+        )
+        self.pr_rest_calls.append(endpoint)
+        return rest
 
     def remember_merged_pr(self, receipt: dict[str, Any]) -> None:
         number = int(receipt["pr"]["number"])
@@ -719,6 +748,61 @@ class SameObservationCDeliveryTests(unittest.TestCase):
                 journal=journal1, journal_ref_sha=state["sha"],
             )
             self._assert_payload_changed(flow, b2, b3)
+
+            # Both real C callers consume the native CLI state and the REST
+            # merged flag independently. Reject every non-merged combination
+            # before reserving, persisting, pushing, or starting provider work.
+            native_merge_failures = (
+                ("cli-closed", "CLOSED", True, False),
+                ("cli-open", "OPEN", True, False),
+                ("rest-not-merged", "MERGED", False, False),
+                ("rest-merged-missing", "MERGED", True, True),
+            )
+            canonical_parent_number = int(repo.canonical_parent_pr_number)
+            provider_index = repo.root / "data/provider-index.json"
+            for label, cli_state, rest_merged, rest_merged_missing in native_merge_failures:
+                with self.subTest(delivery_native_merge_failure=label):
+                    repo.pr_cli_state_overrides[canonical_parent_number] = cli_state
+                    repo.pr_rest_merged_overrides[canonical_parent_number] = rest_merged
+                    if rest_merged_missing:
+                        repo.pr_rest_merged_missing.add(canonical_parent_number)
+                    before_negative = {
+                        "pr_creates": repo.pr_create_count,
+                        "issues": copy.deepcopy(repo.issue_rows),
+                        "pushes": repo.push_count,
+                        "journal": copy.deepcopy(state["journal"]),
+                        "journal_sha": state["sha"],
+                        "persistence_calls": list(runner["persistence_calls"]),
+                        "detail_calls": list(flow.detail_calls),
+                        "provider_index": provider_index.read_bytes(),
+                        "cli_calls": len(repo.pr_cli_calls),
+                        "rest_calls": len(repo.pr_rest_calls),
+                    }
+                    try:
+                        with self.assertRaisesRegex(PROMOTION.PromotionError, "strict C validation"):
+                            self._execute_candidate(
+                                flow, repo, state, runner, b3, c1,
+                                output_root_label=f"b3-{label}-parent",
+                            )
+                    finally:
+                        repo.pr_cli_state_overrides.clear()
+                        repo.pr_rest_merged_overrides.clear()
+                        repo.pr_rest_merged_missing.clear()
+                    self.assertEqual(repo.pr_create_count, before_negative["pr_creates"])
+                    self.assertEqual(repo.issue_rows, before_negative["issues"])
+                    self.assertEqual(repo.push_count, before_negative["pushes"])
+                    self.assertEqual(state["journal"], before_negative["journal"])
+                    self.assertEqual(state["sha"], before_negative["journal_sha"])
+                    self.assertEqual(runner["persistence_calls"], before_negative["persistence_calls"])
+                    self.assertEqual(flow.detail_calls, before_negative["detail_calls"])
+                    self.assertEqual(provider_index.read_bytes(), before_negative["provider_index"])
+                    self.assertEqual(len(repo.pr_cli_calls), before_negative["cli_calls"] + 1)
+                    self.assertEqual(len(repo.pr_rest_calls), before_negative["rest_calls"] + 1)
+                    self.assertEqual(repo.pr_cli_calls[-1], canonical_parent_number)
+                    self.assertEqual(
+                        repo.pr_rest_calls[-1],
+                        f"repos/StatPan/datapan-registry/pulls/{canonical_parent_number}",
+                    )
 
             # A live C caller must reject a derivative whose exact canonical
             # parent PR identity no longer matches the durable journal, before
@@ -988,8 +1072,11 @@ class SameObservationCDeliveryTests(unittest.TestCase):
                 number = int(argv[2])
                 return next(row for row in repo.issue_rows if row["number"] == number)
             if argv[:2] == ("pr", "view"):
-                return repo.pr_readback(repo.root, "StatPan/datapan-registry", int(argv[2]))
+                return repo.pr_cli_readback(repo.root, "StatPan/datapan-registry", int(argv[2]))
             raise AssertionError(f"unexpected external GitHub read in C adapter: {argv!r}")
+
+        def gh_rest_json(_root: pathlib.Path, endpoint: str, *arguments: str) -> Any:
+            return repo.pr_rest_readback(repo.root, endpoint, *arguments)
 
         derivation = checkpoint["generation_inputs"].get("same_observation_derivation")
         canonical_readback = derivation.get("canonical_parent_readback") if isinstance(derivation, dict) else None
@@ -1063,8 +1150,8 @@ class SameObservationCDeliveryTests(unittest.TestCase):
             mock.patch.object(PROMOTION, "load_promotion_journal_snapshot", return_value=(state["journal"], state["sha"])),
             mock.patch.object(PROMOTION, "persist_journal_record", side_effect=runner["persist"]),
             mock.patch.object(PROMOTION, "gh_open_prs", side_effect=repo.open_pr_rows),
-            mock.patch.object(PROMOTION, "gh_pr_readback", side_effect=repo.pr_readback),
             mock.patch.object(PROMOTION, "gh_json", side_effect=gh_json),
+            mock.patch.object(PROMOTION, "gh_rest_json", side_effect=gh_rest_json),
             mock.patch.object(PROMOTION, "verify_release_ci_observation", return_value=(None, "test adapter: CI not exercised")),
             mock.patch.object(runner["helper"], "load_materializer", return_value=repo.materializer),
             mock.patch.object(subprocess, "run", side_effect=github_health_transport),
