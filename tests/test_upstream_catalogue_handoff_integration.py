@@ -278,6 +278,19 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             )
 
         self.assertEqual(validate(), envelope)
+        authenticated_fields = {
+            "repository", "producer_run_id", "run_attempt", "head_sha", "run_started_at",
+            "run_completed_at", "observe_job_started_at", "observe_job_completed_at", "artifact_id",
+            "artifact_name", "artifact_expires_at", "artifact_created_at", "artifact_digest_sha256",
+            "artifact_size_bytes", "event",
+        }
+        for field in sorted(authenticated_fields):
+            incomplete_selection = dict(expected)
+            incomplete_selection.pop(field)
+            with self.subTest(missing_selected_field=field), self.assertRaisesRegex(
+                ValueError, "collector_handoff_admission_authenticated_metadata_missing",
+            ):
+                validate(selected=incomplete_selection)
         malformed = []
         missing = dict(envelope)
         missing.pop("head_sha")
@@ -401,6 +414,57 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             )
         index_path = fixture.state_dir / "sources/data_go_kr/index.json"
         self.assertFalse(index_path.exists())
+
+    def test_claim_rejects_each_missing_selected_attempt_field_before_state_or_provider_work(self):
+        _support, fixture, processor = processor_fixture(self)
+        observed_at = "2026-10-03T10:02:00Z"
+        fixture.write_real_composer_inputs([], [rest_row()], observed_at)
+        fixture.now = "2026-10-04T00:00:00Z"
+        admission_path, archive, artifact_id = write_admission_bundle(
+            fixture, processor, run_id="503", observed_at=observed_at,
+        )
+        missing_fields = (
+            ("run_attempt", "producer_run_attempt"),
+            ("run_started_at", "producer_run_started_at"),
+            ("run_completed_at", "producer_run_completed_at"),
+            ("observe_job_started_at", "producer_observe_job_started_at"),
+            ("observe_job_completed_at", "producer_observe_job_completed_at"),
+            ("artifact_created_at", "producer_artifact_created_at"),
+            ("artifact_digest_sha256", "producer_artifact_digest_sha256"),
+            ("artifact_size_bytes", "producer_artifact_size_bytes"),
+            ("event", "producer_event"),
+        )
+        index_path = fixture.state_dir / "sources/data_go_kr/index.json"
+        provider_calls = []
+
+        def state_snapshot():
+            if not fixture.state_dir.exists():
+                return None
+            return {
+                path.relative_to(fixture.state_dir): (
+                    ("directory", None) if path.is_dir() else ("file", path.read_bytes())
+                )
+                for path in fixture.state_dir.rglob("*")
+            }
+
+        for field, arg_name in missing_fields:
+            with self.subTest(missing_selected_field=field):
+                args = admission_args(
+                    fixture, run_id="503", admission_path=admission_path,
+                    archive=archive, artifact_id=artifact_id, claim_only=True,
+                )
+                setattr(args, arg_name, None)
+                before = state_snapshot()
+                with self.assertRaisesRegex(
+                    ValueError, "collector_handoff_admission_authenticated_metadata_missing",
+                ):
+                    processor.process(
+                        args,
+                        fetcher=lambda *call: provider_calls.append(call),
+                    )
+                self.assertEqual(state_snapshot(), before)
+                self.assertFalse(index_path.exists())
+                self.assertEqual(provider_calls, [])
 
     @unittest.skipUnless(
         (ROOT / "scripts/compose-upstream-catalogue-candidate.py").is_file(),

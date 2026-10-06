@@ -397,14 +397,25 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("--collector-archive", derivation["run"])
         self.assertIn("--producer-observe-job-started-at", derivation["run"])
         self.assertIn("--producer-artifact-size-bytes", derivation["run"])
+        selected_attempt_metadata = {
+            "PRODUCER_RUN_ATTEMPT": ("run_attempt", "--producer-run-attempt"),
+            "PRODUCER_RUN_STARTED_AT": ("run_started_at", "--producer-run-started-at"),
+            "PRODUCER_RUN_COMPLETED_AT": ("run_completed_at", "--producer-run-completed-at"),
+            "OBSERVE_JOB_STARTED_AT": ("observe_job_started_at", "--producer-observe-job-started-at"),
+            "OBSERVE_JOB_COMPLETED_AT": ("observe_job_completed_at", "--producer-observe-job-completed-at"),
+            "ARTIFACT_CREATED_AT": ("artifact_created_at", "--producer-artifact-created-at"),
+            "ARTIFACT_DIGEST": ("artifact_digest_sha256", "--producer-artifact-digest-sha256"),
+            "ARTIFACT_SIZE": ("artifact_size_bytes", "--producer-artifact-size-bytes"),
+            "PRODUCER_EVENT": ("event", "--producer-event"),
+        }
         for step_id in ("claim", "run_processor"):
             consumer = next(step for step in steps if step.get("id") == step_id)
-            self.assertEqual(
-                consumer["env"]["PRODUCER_RUN_ATTEMPT"],
-                "${{ steps.producer_attempt.outputs.run_attempt }}",
-            )
-            self.assertIn("--producer-run-attempt", consumer["run"])
-            self.assertIn("--producer-artifact-digest-sha256", consumer["run"])
+            for env_name, (output_name, cli_flag) in selected_attempt_metadata.items():
+                self.assertEqual(
+                    consumer["env"][env_name],
+                    "${{ steps.producer_attempt.outputs." + output_name + " }}",
+                )
+                self.assertIn(cli_flag, consumer["run"])
 
     def test_trusted_bootstrap_code_uses_exact_producer_worktree_inputs(self) -> None:
         job = self.workflow["jobs"]["process"]

@@ -593,30 +593,31 @@ def validate_collector_admission_envelope(
 ) -> dict[str, Any]:
     """Authenticate one collector envelope against selected API and input bytes.
 
-    ``expected`` is populated from the exact producer/artifact API selection,
-    never from the envelope itself. Callers that have fewer independent fields
-    may provide the required identity subset; the preparation coordinator
-    requires the complete ``COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS`` set.
+    ``expected`` is the complete producer/artifact API selection, populated
+    independently from the envelope. A partial selection cannot authorize the
+    envelope's self-asserted attempt, interval, or artifact metadata.
     """
-    required_expected = {
+    identity_expected = {
         "repository", "producer_run_id", "artifact_id", "artifact_name",
         "artifact_expires_at", "head_sha",
     }
-    if not isinstance(expected, Mapping) or not required_expected.issubset(expected):
+    if not isinstance(expected, Mapping):
         raise HandoffError("collector_handoff_admission_authenticated_metadata_missing")
     if set(expected) - COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS:
         raise HandoffError("collector_handoff_admission_authenticated_metadata_invalid")
+    if set(expected) != COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS:
+        raise HandoffError("collector_handoff_admission_authenticated_metadata_missing")
     if not isinstance(value, dict) or set(value) != COLLECTOR_ADMISSION_ENVELOPE_KEYS:
         raise HandoffError("collector_handoff_admission_metadata_shape_invalid")
 
     if (
         value.get("schema_version") != "datapan.upstream-catalogue-admission-envelope.v1"
-        or any(value.get(key) != expected[key] for key in required_expected)
+        or any(value.get(key) != expected[key] for key in identity_expected)
         or value.get("event") not in {"schedule", "workflow_dispatch"}
         or not re.fullmatch(r"[a-f0-9]{40}", str(value.get("head_sha") or ""))
     ):
         raise HandoffError("collector_handoff_admission_identity_mismatch")
-    if any(value.get(key) != expected[key] for key in set(expected) - required_expected):
+    if any(value.get(key) != expected[key] for key in COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS - identity_expected):
         raise HandoffError("collector_handoff_admission_authenticated_metadata_mismatch")
 
     run_attempt = value.get("run_attempt")
