@@ -42,6 +42,24 @@ ENRICHMENT_EVIDENCE_SCHEMA = ROOT / "schemas/datapan.catalogue-enrichment-eviden
 SCHEMA_VERSION = "datapan.catalogue-composition-receipt.v1"
 PROVIDER = "data.go.kr"
 UNORDERED_API_ARRAYS = {"source_keywords", "search_terms"}
+CONTRACT_FAILURES = {
+    "no_reviewed_declaration": {
+        "unresolved_requirements": ["reviewed_operation_declaration"],
+        "next_action": "review_authoritative_declaration",
+    },
+    "subject_binding_unproven": {
+        "unresolved_requirements": ["subject_binding"],
+        "next_action": "verify_subject_binding",
+    },
+    "declaration_evidence_rejected": {
+        "unresolved_requirements": ["declaration_source_binding", "operation_contract_validation"],
+        "next_action": "review_declaration_evidence",
+    },
+    "validation_detail_unknown": {
+        "unresolved_requirements": [],
+        "next_action": "inspect_bound_validation_evidence",
+    },
+}
 
 
 class CompositionError(ValueError):
@@ -504,7 +522,7 @@ def validate_worker_outcomes(
             if (
                 not isinstance(diagnostic, dict)
                 or "code" not in diagnostic
-                or set(diagnostic) - {"code", "http_status", "phase"}
+                or set(diagnostic) - {"code", "http_status", "phase", "contract_failure"}
                 or diagnostic.get("code") not in failure_codes
                 or "phase" in diagnostic and diagnostic.get("phase") not in {"page", "resolver"}
                 or "http_status" in diagnostic and (
@@ -513,6 +531,10 @@ def validate_worker_outcomes(
                     or isinstance(diagnostic.get("http_status"), bool)
                     or not 400 <= diagnostic["http_status"] <= 599
                 )
+                or "contract_failure" in diagnostic and (
+                    diagnostic.get("code") != "resolved_link_operation_contract_unproven"
+                    or diagnostic.get("phase") != "resolver"
+                )
             ):
                 raise CompositionError(f"enrichment evidence worker_outcomes[{index}] has an invalid failure_diagnostic")
         else:
@@ -520,6 +542,11 @@ def validate_worker_outcomes(
         if not isinstance(outcome.get("api_key"), dict):
             raise CompositionError(f"enrichment evidence worker_outcomes[{index}] must include api_key")
         key = api_key(outcome["api_key"])
+        if isinstance(diagnostic, dict) and "contract_failure" in diagnostic:
+            diagnostic = dict(diagnostic)
+            diagnostic["contract_failure"] = validate_contract_failure(
+                diagnostic["contract_failure"], identity=key[1],
+            )
         if key in by_key:
             raise CompositionError(f"duplicate API identity {key[0]}:{key[1]} in worker outcomes")
         if key in successful_keys:
@@ -558,6 +585,62 @@ def validate_worker_outcomes(
             )
         by_key[key] = outcome
     return by_key
+
+
+def validate_contract_failure(value: Any, *, identity: str | None = None) -> dict[str, Any]:
+    if (
+        not isinstance(value, dict)
+        or set(value) != {"version", "reason", "unresolved_requirements", "next_action"}
+        or not isinstance(value.get("version"), int)
+        or isinstance(value.get("version"), bool)
+        or not isinstance(value.get("reason"), str)
+    ):
+        raise CompositionError("worker outcome contract_failure is invalid")
+    mapped = CONTRACT_FAILURES.get(value["reason"])
+    if mapped is None:
+        raise CompositionError("worker outcome contract_failure is invalid")
+    expected = {
+        "version": 1,
+        "reason": value["reason"],
+        "unresolved_requirements": list(mapped["unresolved_requirements"]),
+        "next_action": mapped["next_action"],
+    }
+    if value != expected:
+        raise CompositionError("worker outcome contract_failure is invalid")
+    subject_id = str(SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"])
+    if identity is not None and (
+        value["reason"] == "no_reviewed_declaration" and identity == subject_id
+        or value["reason"] in {"subject_binding_unproven", "declaration_evidence_rejected"}
+        and identity != subject_id
+    ):
+        raise CompositionError("worker outcome contract_failure subject binding is invalid")
+    return expected
+
+
+def worker_contract_projection(outcome: dict[str, Any]) -> dict[str, Any]:
+    diagnostic = outcome.get("failure_diagnostic")
+    if (
+        not isinstance(diagnostic, dict)
+        or diagnostic.get("code") != "resolved_link_operation_contract_unproven"
+        or diagnostic.get("phase") != "resolver"
+    ):
+        return {}
+    result = {"worker_outcome_sha256": digest_json(outcome)}
+    contract_failure = diagnostic.get("contract_failure")
+    if contract_failure is None:
+        result.update({
+            "contract_failure_status": "legacy_detail_unknown",
+            "next_action": "inspect_bound_validation_evidence",
+        })
+        return result
+    validated = validate_contract_failure(
+        contract_failure, identity=str(outcome.get("api_key", {}).get("id") or ""),
+    )
+    result.update({
+        "contract_failure": validated,
+        "next_action": validated["next_action"],
+    })
+    return result
 
 
 def operation_list_view(row: dict[str, Any]) -> list[dict[str, Any]]:
@@ -959,25 +1042,39 @@ def compose_registries(
                     tags.add("worker_outcome_contract_unresolved")
             status = worker_outcome["status"]
             reason_code = "worker_detail_retry" if status == "retry" else "worker_detail_quarantined"
+            worker_projection = worker_contract_projection(worker_outcome)
+            required_worker_evidence = (
+                list(worker_projection["contract_failure"]["unresolved_requirements"])
+                if "contract_failure" in worker_projection
+                else [] if worker_projection else [
+                    "current_link_detail_page", "operation_source_provenance", "registered_adapter_host",
+                ]
+            )
             if status == "retry":
                 disposition = "retain_worker_pending"
                 tags.add("worker_detail_retry")
-                queue.append(_queue_item(
+                queue_item = _queue_item(
                     key, [reason_code], before, after, baseline_sha256, candidate_sha256,
-                    ["current_link_detail_page", "operation_source_provenance", "registered_adapter_host"],
-                ))
+                    required_worker_evidence,
+                )
+                queue_item.update(worker_projection)
+                queue.append(queue_item)
             else:
                 disposition = "quarantine"
                 tags.add("worker_detail_quarantined")
-                queue.append(_queue_item(
+                queue_item = _queue_item(
                     key, [reason_code], before, after, baseline_sha256, candidate_sha256,
-                    ["current_link_detail_page", "operation_source_provenance", "registered_adapter_host"],
-                ))
-                quarantine.append({
+                    required_worker_evidence,
+                )
+                queue_item.update(worker_projection)
+                queue.append(queue_item)
+                quarantine_item = {
                     "api_key": display_key(key),
                     "reason_codes": [reason_code],
                     "record_state": "baseline_retained" if before is not None else "candidate_excluded",
-                })
+                }
+                quarantine_item.update(worker_projection)
+                quarantine.append(quarantine_item)
             decisions.append({
                 "api_key": display_key(key), "disposition": disposition, "tags": sorted(tags),
                 "baseline_record_sha256": _record_hash(before) if before is not None else None,
@@ -985,6 +1082,7 @@ def compose_registries(
                 "worker_outcome_status": status,
                 "worker_source_sha256": worker_outcome["source_sha256"],
                 "worker_guide_sha256": worker_outcome["guide_sha256"],
+                **worker_projection,
                 "composed_record_sha256": _record_hash(before) if before is not None else None,
                 "retained_operation_identities": retained_ops,
                 "findings": [reason_code],

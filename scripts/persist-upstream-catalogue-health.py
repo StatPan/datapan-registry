@@ -32,6 +32,24 @@ PROCESSOR_OUTPUT_PATHS = (
     "upstream-catalogue-enrichment-evidence.json",
     "upstream-catalogue-processing-result.json",
 )
+LINK_CONTRACT_FAILURES = {
+    "no_reviewed_declaration": {
+        "unresolved_requirements": ["reviewed_operation_declaration"],
+        "next_action": "review_authoritative_declaration",
+    },
+    "subject_binding_unproven": {
+        "unresolved_requirements": ["subject_binding"],
+        "next_action": "verify_subject_binding",
+    },
+    "declaration_evidence_rejected": {
+        "unresolved_requirements": ["declaration_source_binding", "operation_contract_validation"],
+        "next_action": "review_declaration_evidence",
+    },
+    "validation_detail_unknown": {
+        "unresolved_requirements": [],
+        "next_action": "inspect_bound_validation_evidence",
+    },
+}
 
 
 def canonical_json(value: Any) -> bytes:
@@ -829,6 +847,197 @@ def prune_receipts(directory: pathlib.Path, current_name: str, evaluated_at: dt.
         raise ValueError("health_receipt_retention_limit_exceeded")
 
 
+def validate_link_contract_diagnostics(receipt: dict[str, Any]) -> None:
+    """Validate the additive diagnostic view before any state-owner mutation."""
+    sources = receipt.get("sources")
+    if not isinstance(sources, list):
+        raise ValueError("health_link_contract_sources_invalid")
+    for source in sources:
+        processor = source.get("processor") if isinstance(source, dict) else None
+        if not isinstance(processor, dict):
+            raise ValueError("health_link_contract_processor_invalid")
+        projection = processor.get("link_contract_diagnostics")
+        if projection is None:
+            # Old sealed receipts predate this additive projection.
+            details = processor.get("detail_records")
+            if isinstance(details, list) and any(
+                isinstance(detail, dict)
+                and isinstance(detail.get("failure_diagnostic"), dict)
+                and detail["failure_diagnostic"].get("code")
+                == "resolved_link_operation_contract_unproven"
+                and "contract_failure" in detail["failure_diagnostic"]
+                for detail in details
+            ):
+                raise ValueError("health_link_contract_projection_missing_for_modern_detail")
+            continue
+        if not isinstance(projection, dict):
+            raise ValueError("health_link_contract_projection_invalid")
+        status = projection.get("status")
+        applicability = projection.get("applicability")
+        records = projection.get("records")
+        if not isinstance(records, list) or len(records) > 128:
+            raise ValueError("health_link_contract_projection_invalid")
+        if status != "verified":
+            expected_applicability = {
+                "rejected": "unavailable",
+                "unavailable": "unavailable",
+                "not_applicable": "not_applicable",
+            }.get(status)
+            if (
+                expected_applicability is None
+                or records
+                or projection.get("generation_id") is not None
+                or projection.get("checkpoint_sha256") is not None
+                or projection.get("producer") is not None
+                or applicability != expected_applicability
+            ):
+                raise ValueError("health_link_contract_unverified_claim_invalid")
+            continue
+
+        reason_code = projection.get("reason_code")
+        canonical = source.get("canonical") if isinstance(source, dict) else None
+        current_evaluation = (
+            canonical.get("current_candidate_evaluation") if isinstance(canonical, dict) else None
+        )
+        producer = projection.get("producer")
+        locator = processor.get("output_artifact")
+        generation_id = projection.get("generation_id")
+        checkpoint_sha256 = projection.get("checkpoint_sha256")
+        if not isinstance(current_evaluation, dict):
+            raise ValueError("health_link_contract_evaluation_missing")
+        if applicability == "current":
+            allowed_contexts = {
+                ("verified", None),
+                ("rejected", "candidate_payload_requires_promotion"),
+            }
+            if (current_evaluation.get("status"), current_evaluation.get("reason_code")) not in allowed_contexts:
+                raise ValueError("health_link_contract_current_context_invalid")
+            if reason_code != current_evaluation.get("reason_code"):
+                raise ValueError("health_link_contract_current_context_invalid")
+        elif applicability == "historical":
+            if (
+                current_evaluation.get("status") != "rejected"
+                or current_evaluation.get("reason_code") != "candidate_baseline_stale_for_current_main"
+                or reason_code != "candidate_baseline_stale_for_current_main"
+            ):
+                raise ValueError("health_link_contract_historical_context_invalid")
+        else:
+            raise ValueError("health_link_contract_verified_applicability_invalid")
+        if (
+            not isinstance(producer, dict)
+            or not isinstance(locator, dict)
+            or projection.get("schema_version") != "datapan.upstream-catalogue-link-contract-diagnostics.v1"
+            or generation_id != processor.get("generation_id")
+            or checkpoint_sha256 != processor.get("checkpoint_sha256")
+            or current_evaluation.get("producer") != producer
+            or producer.get("generation_id") != generation_id
+            or producer.get("checkpoint_sha256") != checkpoint_sha256
+            or producer.get("bundle_manifest_sha256") != locator.get("bundle_manifest_sha256")
+            or producer.get("artifact_id") != str(locator.get("artifact_id"))
+            or producer.get("run_id") != str(locator.get("run_id"))
+            or not isinstance(producer.get("head_sha"), str)
+            or not re.fullmatch(r"[a-f0-9]{40,64}", producer["head_sha"])
+        ):
+            raise ValueError("health_link_contract_producer_binding_invalid")
+        name_match = re.fullmatch(
+            r"upstream-catalogue-processing-([0-9]{1,20})-([1-9][0-9]*)",
+            str(locator.get("name", "")),
+        )
+        if (
+            not name_match
+            or name_match.group(1) != producer.get("run_id")
+            or int(name_match.group(2)) != producer.get("run_attempt")
+        ):
+            raise ValueError("health_link_contract_producer_attempt_invalid")
+
+        details = processor.get("detail_records")
+        if not isinstance(details, list):
+            raise ValueError("health_link_contract_detail_records_invalid")
+        detail_by_id: dict[str, dict[str, Any]] = {}
+        for detail in details:
+            diagnostic = detail.get("failure_diagnostic") if isinstance(detail, dict) else None
+            if (
+                not isinstance(diagnostic, dict)
+                or diagnostic.get("code") != "resolved_link_operation_contract_unproven"
+                or diagnostic.get("phase") != "resolver"
+            ):
+                continue
+            identity = detail.get("id")
+            if not isinstance(identity, str) or not identity or identity in detail_by_id:
+                raise ValueError("health_link_contract_detail_identity_invalid")
+            detail_by_id[identity] = detail
+
+        record_by_id: dict[str, dict[str, Any]] = {}
+        for record in records:
+            api_key = record.get("api_key") if isinstance(record, dict) else None
+            identity = api_key.get("id") if isinstance(api_key, dict) else None
+            if (
+                not isinstance(identity, str) or not identity
+                or api_key.get("provider") != "data.go.kr"
+                or identity in record_by_id
+            ):
+                raise ValueError("health_link_contract_record_identity_invalid")
+            detail = detail_by_id.get(identity)
+            diagnostic = detail.get("failure_diagnostic") if isinstance(detail, dict) else None
+            admitted_outcome = {
+                "api_key": {"provider": "data.go.kr", "id": identity},
+                "status": detail.get("status") if isinstance(detail, dict) else None,
+                "source_sha256": detail.get("source_sha256") if isinstance(detail, dict) else None,
+                "guide_sha256": detail.get("guide_sha256") if isinstance(detail, dict) else None,
+            }
+            if isinstance(detail, dict) and "failure_diagnostic" in detail:
+                admitted_outcome["failure_diagnostic"] = detail["failure_diagnostic"]
+            if isinstance(detail, dict) and "link_metadata" in detail:
+                admitted_outcome["link_metadata"] = detail["link_metadata"]
+            if (
+                not isinstance(detail, dict)
+                or record.get("worker_status") != detail.get("status")
+                or record.get("source_sha256") != detail.get("source_sha256")
+                or record.get("guide_sha256") != detail.get("guide_sha256")
+                or not isinstance(detail.get("link_metadata"), dict)
+                or not isinstance(record.get("worker_outcome_sha256"), str)
+                or not DIGEST.fullmatch(record["worker_outcome_sha256"])
+                or record.get("worker_outcome_sha256") != digest(admitted_outcome)
+            ):
+                raise ValueError("health_link_contract_record_binding_invalid")
+            contract_failure = diagnostic.get("contract_failure") if isinstance(diagnostic, dict) else None
+            if record.get("detail_status") == "verified":
+                reason = contract_failure.get("reason") if isinstance(contract_failure, dict) else None
+                mapping = LINK_CONTRACT_FAILURES.get(reason)
+                expected = {
+                    "version": 1,
+                    "reason": reason,
+                    "unresolved_requirements": list(mapping["unresolved_requirements"]) if mapping else None,
+                    "next_action": mapping["next_action"] if mapping else None,
+                }
+                seoul_subject = identity == "15056854"
+                if (
+                    not mapping
+                    or contract_failure != expected
+                    or record.get("contract_failure") != expected
+                    or record.get("next_action") != mapping["next_action"]
+                    or reason == "no_reviewed_declaration" and seoul_subject
+                    or reason in {"subject_binding_unproven", "declaration_evidence_rejected"} and not seoul_subject
+                ):
+                    raise ValueError("health_link_contract_failure_mapping_invalid")
+            elif record.get("detail_status") == "legacy_detail_unknown":
+                if (
+                    contract_failure is not None
+                    or "contract_failure" in record
+                    or record.get("next_action") != "inspect_bound_validation_evidence"
+                ):
+                    raise ValueError("health_link_contract_legacy_projection_invalid")
+            else:
+                raise ValueError("health_link_contract_detail_status_invalid")
+            record_by_id[identity] = record
+
+        if set(record_by_id) != set(detail_by_id):
+            raise ValueError("health_link_contract_projection_coverage_invalid")
+        ordered = sorted(records, key=lambda row: (row["api_key"]["provider"], row["api_key"]["id"]))
+        if records != ordered:
+            raise ValueError("health_link_contract_projection_order_invalid")
+
+
 def persist(receipt_path: pathlib.Path, state_root: pathlib.Path, policy_path: pathlib.Path, repository: str) -> dict[str, Any]:
     policy = load_json(policy_path)
     validate_schema(policy, POLICY_SCHEMA, "health_policy")
@@ -838,6 +1047,7 @@ def persist(receipt_path: pathlib.Path, state_root: pathlib.Path, policy_path: p
         raise ValueError("fixture_receipt_not_persistable")
     if not verify_seal(receipt, "receipt_sha256"):
         raise ValueError("health_receipt_digest_mismatch")
+    validate_link_contract_diagnostics(receipt)
     state_policy = policy["health_state"]
     configured_root = pathlib.PurePosixPath(state_policy["root"])
     configured_marker = pathlib.PurePosixPath(state_policy["ownership_marker"])

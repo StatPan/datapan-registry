@@ -720,9 +720,26 @@ class ProcessorBundleContractTests(unittest.TestCase):
             uploaded_copy.pop("checkpoint_sha256", None)
             uploaded_copy["checkpoint_sha256"] = hashlib.sha256(RUNNER.canonical_json(uploaded_copy)).hexdigest()
             (bundle / "upstream-catalogue-checkpoint-receipt.json").write_text(json.dumps(uploaded_copy), encoding="utf-8")
-            outcome = RUNNER.validate_processor_bundle(checkpoint, bundle, {}, None)
+            diagnostics = [{"api_key": {"provider": "data.go.kr", "id": "legacy"}}]
+            with mock.patch.object(
+                RUNNER, "validate_processor_link_metadata", return_value=diagnostics,
+            ) as validate_diagnostics:
+                outcome = RUNNER.validate_processor_bundle(
+                    checkpoint, bundle, {}, None, root=SCRIPT.parents[1],
+                )
             self.assertEqual(outcome["status"], "quarantined")
             self.assertEqual(outcome["reason"], "input_expired")
+            self.assertEqual(outcome["contract_diagnostics"], diagnostics)
+            validate_diagnostics.assert_called_once()
+
+            with mock.patch.object(
+                RUNNER, "validate_processor_link_metadata",
+                side_effect=RUNNER.PromotionError("unsafe resolver diagnostic"),
+            ):
+                with self.assertRaisesRegex(RUNNER.PromotionError, "unsafe resolver diagnostic"):
+                    RUNNER.validate_processor_bundle(
+                        checkpoint, bundle, {}, None, root=SCRIPT.parents[1],
+                    )
 
     def test_quarantine_bundle_still_validates_enrichment_schema(self) -> None:
         generation = "f" * 64
@@ -830,7 +847,83 @@ class ProcessorBundleContractTests(unittest.TestCase):
             bundle = pathlib.Path(raw)
             evidence_path = bundle / "upstream-catalogue-enrichment-evidence.json"
             evidence_path.write_text(json.dumps(evidence), encoding="utf-8")
-            RUNNER.validate_processor_link_metadata(checkpoint, bundle, root=SCRIPT.parents[1])
+            legacy_projection = RUNNER.validate_processor_link_metadata(
+                checkpoint, bundle, root=SCRIPT.parents[1], validate_seoul=False,
+            )
+            self.assertEqual(len(legacy_projection), 1)
+            self.assertEqual(legacy_projection[0]["detail_status"], "legacy_detail_unknown")
+            self.assertEqual(
+                legacy_projection[0]["next_action"], "inspect_bound_validation_evidence",
+            )
+
+            mappings = {
+                "no_reviewed_declaration": (
+                    "2", ["reviewed_operation_declaration"], "review_authoritative_declaration",
+                ),
+                "validation_detail_unknown": (
+                    "2", [], "inspect_bound_validation_evidence",
+                ),
+                "subject_binding_unproven": (
+                    "15056854", ["subject_binding"], "verify_subject_binding",
+                ),
+                "declaration_evidence_rejected": (
+                    "15056854", ["declaration_source_binding", "operation_contract_validation"],
+                    "review_declaration_evidence",
+                ),
+            }
+            for reason, (identity, requirements, action) in mappings.items():
+                with self.subTest(reason=reason):
+                    modern = copy.deepcopy(evidence)
+                    modern_checkpoint = copy.deepcopy(checkpoint)
+                    modern_outcome = modern["worker_outcomes"][0]
+                    modern_detail = modern_checkpoint["detail_records"][0]
+                    if identity != "2":
+                        modern_outcome["api_key"]["id"] = identity
+                        modern_detail["id"] = identity
+                        for row in (modern_outcome, modern_detail):
+                            row["link_metadata"]["dataset_id"] = identity
+                            row["link_metadata"]["public_data_pk"] = identity
+                            row["link_metadata"]["public_data_detail_pk"] = "uddi:fixture-" + identity
+                            row["link_metadata"]["page"]["url"] = f"https://www.data.go.kr/data/{identity}/openapi.do"
+                            row["link_metadata"]["page"]["effective_url"] = f"https://www.data.go.kr/data/{identity}/openapi.do"
+                            row["link_metadata"]["resolver"]["request_url"] = (
+                                "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=" + identity
+                            )
+                            row["link_metadata"]["resolver"]["effective_url"] = (
+                                "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=" + identity
+                            )
+                            row["link_metadata"]["resolver"]["public_data_detail_pk"] = "uddi:fixture-" + identity
+                    contract_failure = {
+                        "version": 1,
+                        "reason": reason,
+                        "unresolved_requirements": requirements,
+                        "next_action": action,
+                    }
+                    modern_outcome["failure_diagnostic"]["contract_failure"] = copy.deepcopy(contract_failure)
+                    modern_detail["failure_diagnostic"]["contract_failure"] = copy.deepcopy(contract_failure)
+                    evidence_path.write_text(json.dumps(modern), encoding="utf-8")
+                    projected = RUNNER.validate_processor_link_metadata(
+                        modern_checkpoint, bundle, root=SCRIPT.parents[1], validate_seoul=False,
+                    )
+                    self.assertEqual(projected[0]["contract_failure"], contract_failure)
+                    self.assertEqual(projected[0]["next_action"], action)
+                    self.assertRegex(projected[0]["worker_outcome_sha256"], r"^[a-f0-9]{64}$")
+
+            forged_subject = copy.deepcopy(evidence)
+            forged_checkpoint = copy.deepcopy(checkpoint)
+            forged_failure = {
+                "version": 1,
+                "reason": "subject_binding_unproven",
+                "unresolved_requirements": ["subject_binding"],
+                "next_action": "verify_subject_binding",
+            }
+            forged_subject["worker_outcomes"][0]["failure_diagnostic"]["contract_failure"] = forged_failure
+            forged_checkpoint["detail_records"][0]["failure_diagnostic"]["contract_failure"] = forged_failure
+            evidence_path.write_text(json.dumps(forged_subject), encoding="utf-8")
+            with self.assertRaisesRegex(RUNNER.PromotionError, "contract diagnostic is invalid"):
+                RUNNER.validate_processor_link_metadata(
+                    forged_checkpoint, bundle, root=SCRIPT.parents[1], validate_seoul=False,
+                )
 
             invalid = copy.deepcopy(evidence)
             bad_metadata = invalid["worker_outcomes"][0]["link_metadata"]
@@ -866,6 +959,121 @@ class ProcessorBundleContractTests(unittest.TestCase):
             evidence_path.unlink()
             with self.assertRaisesRegex(RUNNER.PromotionError, "missing its enrichment evidence"):
                 RUNNER.validate_processor_link_metadata(checkpoint, bundle, root=SCRIPT.parents[1])
+
+    def test_c_authenticates_complete_composer_diagnostic_projection(self) -> None:
+        modern_failure = {
+            "version": 1,
+            "reason": "no_reviewed_declaration",
+            "unresolved_requirements": ["reviewed_operation_declaration"],
+            "next_action": "review_authoritative_declaration",
+        }
+        admitted = [{
+            "api_key": {"provider": "data.go.kr", "id": "2"},
+            "worker_status": "quarantined",
+            "source_sha256": "a" * 64,
+            "guide_sha256": "b" * 64,
+            "worker_outcome_sha256": "c" * 64,
+            "detail_status": "verified",
+            "next_action": "review_authoritative_declaration",
+            "contract_failure": modern_failure,
+        }, {
+            "api_key": {"provider": "data.go.kr", "id": "3"},
+            "worker_status": "retry",
+            "source_sha256": "d" * 64,
+            "guide_sha256": "e" * 64,
+            "worker_outcome_sha256": "f" * 64,
+            "detail_status": "legacy_detail_unknown",
+            "next_action": "inspect_bound_validation_evidence",
+        }]
+        modern_projection = {
+            "worker_outcome_sha256": "c" * 64,
+            "contract_failure": modern_failure,
+            "next_action": "review_authoritative_declaration",
+        }
+        legacy_projection = {
+            "worker_outcome_sha256": "f" * 64,
+            "contract_failure_status": "legacy_detail_unknown",
+            "next_action": "inspect_bound_validation_evidence",
+        }
+        outputs = {
+            "semantic-diff.json": {"api_decisions": [{
+                "api_key": {"provider": "data.go.kr", "id": "2"},
+                "disposition": "quarantine", "worker_outcome_status": "quarantined",
+                "worker_source_sha256": "a" * 64, "worker_guide_sha256": "b" * 64,
+                **modern_projection,
+            }, {
+                "api_key": {"provider": "data.go.kr", "id": "3"},
+                "disposition": "retain_worker_pending", "worker_outcome_status": "retry",
+                "worker_source_sha256": "d" * 64, "worker_guide_sha256": "e" * 64,
+                **legacy_projection,
+            }]},
+            "regeneration-queue.json": {"items": [{
+                "api_key": {"provider": "data.go.kr", "id": "2"},
+                "reason_codes": ["worker_detail_quarantined"],
+                "required_evidence": ["reviewed_operation_declaration"],
+                **modern_projection,
+            }, {
+                "api_key": {"provider": "data.go.kr", "id": "3"},
+                "reason_codes": ["worker_detail_retry"], "required_evidence": [],
+                **legacy_projection,
+            }]},
+            "quarantine.json": {"items": [{
+                "api_key": {"provider": "data.go.kr", "id": "2"},
+                "reason_codes": ["worker_detail_quarantined"],
+                "record_state": "baseline_retained", **modern_projection,
+            }]},
+        }
+
+        def write_outputs(directory: pathlib.Path, values: dict[str, dict]) -> None:
+            for name, value in values.items():
+                (directory / name).write_bytes(RUNNER.canonical_json(value))
+
+        with tempfile.TemporaryDirectory() as raw:
+            bundle = pathlib.Path(raw)
+            write_outputs(bundle, outputs)
+            RUNNER.validate_processor_contract_diagnostic_outputs(bundle, admitted)
+
+            def drop_projection(values: dict[str, dict]) -> None:
+                values["semantic-diff.json"]["api_decisions"][0].pop("contract_failure")
+
+            def copy_other_digest(values: dict[str, dict]) -> None:
+                values["regeneration-queue.json"]["items"][0]["worker_outcome_sha256"] = "f" * 64
+
+            def swap_subject(values: dict[str, dict]) -> None:
+                rows = values["regeneration-queue.json"]["items"]
+                rows[0]["api_key"], rows[1]["api_key"] = rows[1]["api_key"], rows[0]["api_key"]
+
+            def duplicate_subject(values: dict[str, dict]) -> None:
+                values["semantic-diff.json"]["api_decisions"].append(
+                    copy.deepcopy(values["semantic-diff.json"]["api_decisions"][0]),
+                )
+
+            def inject_unrelated(values: dict[str, dict]) -> None:
+                row = copy.deepcopy(values["regeneration-queue.json"]["items"][0])
+                row["api_key"]["id"] = "unrelated"
+                values["regeneration-queue.json"]["items"].append(row)
+
+            def change_required_evidence(values: dict[str, dict]) -> None:
+                values["regeneration-queue.json"]["items"][0]["required_evidence"] = []
+
+            def remove_quarantine(values: dict[str, dict]) -> None:
+                values["quarantine.json"]["items"] = []
+
+            for label, mutate in {
+                "dropped_detail": drop_projection,
+                "copied_digest": copy_other_digest,
+                "swapped_subject": swap_subject,
+                "duplicate_subject": duplicate_subject,
+                "unrelated_projection": inject_unrelated,
+                "wrong_required_evidence": change_required_evidence,
+                "missing_quarantine": remove_quarantine,
+            }.items():
+                with self.subTest(case=label):
+                    tampered = copy.deepcopy(outputs)
+                    mutate(tampered)
+                    write_outputs(bundle, tampered)
+                    with self.assertRaises(RUNNER.PromotionError):
+                        RUNNER.validate_processor_contract_diagnostic_outputs(bundle, admitted)
 
 
 class DurableProcessorRecoveryTests(unittest.TestCase):
@@ -1618,6 +1826,33 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             self.assertEqual(validated["status"], "ready")
             self.assertEqual(validated["registry_sha256"], checkpoint["generation_inputs"]["candidate_sha256"])
             helper.validate_composition.assert_called_once()
+
+    def test_real_ready_bundle_calls_diagnostic_output_authenticator_after_composition(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            bundle, checkpoint, _uploaded = self.ready_bundle(root)
+            diagnostics = [{
+                "api_key": {"provider": "data.go.kr", "id": "19000003"},
+                "worker_status": "quarantined",
+                "source_sha256": "1" * 64,
+                "guide_sha256": None,
+                "worker_outcome_sha256": "2" * 64,
+                "detail_status": "legacy_detail_unknown",
+                "next_action": "inspect_bound_validation_evidence",
+            }]
+            helper = mock.Mock()
+            with (
+                mock.patch.object(RUNNER, "validate_processor_link_metadata", return_value=diagnostics),
+                mock.patch.object(RUNNER, "validate_processor_contract_diagnostic_outputs") as authenticate,
+            ):
+                validated = RUNNER.validate_processor_bundle(
+                    checkpoint, bundle, {}, helper, root=SCRIPT.parents[1],
+                    defer_seoul_declaration=True,
+                )
+
+            helper.validate_composition.assert_called_once()
+            authenticate.assert_called_once_with(bundle, diagnostics)
+            self.assertEqual(validated["contract_diagnostics"], diagnostics)
 
     def test_recovery_entrypoint_uses_real_validator_for_worker_pending_receipt(self) -> None:
         repository_root = pathlib.Path(__file__).parents[1]

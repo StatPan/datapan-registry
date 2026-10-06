@@ -568,6 +568,7 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
 
     def _inputs(
         self, identities: tuple[str, ...], *, empty_baseline_ids: tuple[str, ...] = (),
+        candidate_transform=None,
     ) -> tuple[list[dict], list[dict], object]:
         baseline = [copy.deepcopy(self.historical_rows[identity]) for identity in identities]
         for row in baseline:
@@ -577,6 +578,8 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         for row in candidate:
             row["operations"] = []
             row["source"]["raw"]["guide_url"] = f"https://www.data.go.kr/guide/manual/{row['id']}.html"
+        if candidate_transform is not None:
+            candidate_transform(candidate)
         baseline_bytes = self._write_json(self.baseline_path, baseline)
         candidate_bytes = self._write_json(self.candidate_path, candidate)
         stable_ids = set(identities)
@@ -731,14 +734,10 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         enrichment = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text(encoding="utf-8"))
         self.assertEqual(enrichment["records"], [])
         self.assertEqual([row["api_key"]["id"] for row in enrichment["worker_outcomes"]], ["15056854", "15056858"])
-        self.assertEqual({row["failure_diagnostic"]["code"] for row in enrichment["worker_outcomes"]}, {
-            "resolved_link_operation_contract_unproven",
-        })
+        outcomes_by_id = {row["api_key"]["id"]: row for row in enrichment["worker_outcomes"]}
+        self.assertEqual(set(outcomes_by_id), {"15056854", "15056858"})
         for outcome in enrichment["worker_outcomes"]:
             self.assertEqual(outcome["status"], "quarantined")
-            self.assertEqual(outcome["failure_diagnostic"], {
-                "code": "resolved_link_operation_contract_unproven", "phase": "resolver",
-            })
             self.assertIn("link_metadata", outcome)
             metadata = outcome["link_metadata"]
             sample = self.samples[outcome["api_key"]["id"]]
@@ -750,6 +749,24 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
             self.assertEqual(set(metadata), {"method", "dataset_id", "public_data_pk", "public_data_detail_pk", "page", "resolver"})
             self.assertNotIn("response_body", metadata["resolver"])
 
+        self.assertEqual(outcomes_by_id["15056858"]["failure_diagnostic"], {
+            "code": "resolved_link_operation_contract_unproven",
+            "phase": "resolver",
+            "contract_failure": MODULE.contract_failure_value("no_reviewed_declaration"),
+        })
+        self.assertEqual(outcomes_by_id["15056854"]["failure_diagnostic"], {
+            "code": "resolved_link_operation_contract_unproven",
+            "phase": "resolver",
+            "contract_failure": MODULE.contract_failure_value("validation_detail_unknown"),
+        })
+        jeju_metadata = outcomes_by_id["15056858"]["link_metadata"]
+        self.assertEqual(jeju_metadata["dataset_id"], "15056858")
+        self.assertEqual(jeju_metadata["public_data_detail_pk"], "uddi:1d006397-0007-41d6-b2c5-bed7ebf1173a")
+        self.assertEqual(
+            jeju_metadata["resolver"]["sha256"],
+            self.samples["15056858"]["resolver"]["response_sha256"],
+        )
+
         composed = json.loads((self.output_dir / "composed-candidate.registry.json").read_text(encoding="utf-8"))
         composed_by_id = {row["id"]: row for row in composed}
         baseline_by_id = {row["id"]: row for row in baseline}
@@ -757,6 +774,221 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         self.assertEqual(len(composed_by_id["15056854"]["operations"]), 3)
         self.assertEqual(composed_by_id["15056858"]["operations"], [])
         self.assertEqual(len(resolver_calls), sum(1 for _ in self.samples.values()))
+
+        index_path = self.state_dir / "sources" / "data_go_kr" / "index.json"
+        retry_state = MODULE.source_retry_state(index_path)
+        self.assertEqual(
+            retry_state["15056858"]["failure_diagnostic"],
+            outcomes_by_id["15056858"]["failure_diagnostic"],
+        )
+        checkpoint_schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        )
+        provider_index = json.loads((ROOT / "data/provider-index.json").read_text(encoding="utf-8"))
+        evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        evidence_digest_before_resume = MODULE.file_sha256(evidence_path)
+        MODULE.validated_resume_records(
+            evidence_path,
+            checkpoint=checkpoint,
+            state_dir=self.state_dir,
+            source_id="data_go_kr",
+            checkpoint_schema=checkpoint_schema,
+            provider_index_sha256=MODULE.file_sha256(ROOT / "data/provider-index.json"),
+            candidate_by_id={row["id"]: row for row in _candidate},
+            registered_hosts=MODULE.DETAIL_HELPERS.registered_hosts(provider_index),
+            now=MODULE.parse_timestamp(self.NOW),
+        )
+        self.assertEqual(MODULE.file_sha256(evidence_path), evidence_digest_before_resume)
+
+    def test_resume_requires_modern_contract_failure_outcomes_and_keeps_legacy_scope(self) -> None:
+        _baseline, candidate, args = self._inputs(
+            ("15056854", "15056858"), empty_baseline_ids=("15056858",),
+        )
+        page_get, resolver_get, _page_calls, _resolver_calls = self._observations()
+        code, _processed = MODULE.process(
+            args,
+            fetcher=page_get,
+            resolver_fetcher=resolver_get,
+            sleeper=lambda _delay: None,
+            clock=lambda: datetime(2026, 10, 5, 0, 0, 2, tzinfo=timezone.utc),
+        )
+        self.assertEqual(code, 2)
+
+        evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        owner_path = self.state_dir / "sources" / "data_go_kr" / "generations" / f"{_processed['generation_id']}.json"
+        original_evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        original_owner = json.loads(owner_path.read_text(encoding="utf-8"))
+        modern_ids = {
+            row["id"] for row in original_owner["detail_records"]
+            if isinstance(row.get("failure_diagnostic"), dict)
+            and "contract_failure" in row["failure_diagnostic"]
+        }
+        self.assertEqual(modern_ids, {"15056854", "15056858"})
+        self.assertEqual(
+            {row["api_key"]["id"] for row in original_evidence["worker_outcomes"]},
+            modern_ids,
+        )
+
+        schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        )
+        provider_index = json.loads((ROOT / "data/provider-index.json").read_text(encoding="utf-8"))
+        candidate_by_id = {row["id"]: row for row in candidate}
+        registered_hosts = MODULE.DETAIL_HELPERS.registered_hosts(provider_index)
+
+        def validate_bound(checkpoint_value: dict) -> dict:
+            evidence_bytes = evidence_path.read_bytes()
+            owner_bytes = owner_path.read_bytes()
+            try:
+                return MODULE.validated_resume_records(
+                    evidence_path,
+                    checkpoint=checkpoint_value,
+                    state_dir=self.state_dir,
+                    source_id="data_go_kr",
+                    checkpoint_schema=schema,
+                    provider_index_sha256=MODULE.file_sha256(ROOT / "data/provider-index.json"),
+                    candidate_by_id=candidate_by_id,
+                    registered_hosts=registered_hosts,
+                    now=MODULE.parse_timestamp(self.NOW),
+                )
+            finally:
+                self.assertEqual(evidence_path.read_bytes(), evidence_bytes)
+                self.assertEqual(owner_path.read_bytes(), owner_bytes)
+
+        def bind_variant(evidence_value: dict, owner_value: dict) -> dict:
+            self._write_json(evidence_path, evidence_value)
+            bound_owner = copy.deepcopy(owner_value)
+            evidence_entry = next(
+                item for item in bound_owner["output_digests"]
+                if item["path"] == evidence_path.name
+            )
+            evidence_entry.update({
+                "sha256": MODULE.file_sha256(evidence_path),
+                "bytes": evidence_path.stat().st_size,
+            })
+            bound_owner["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+                MODULE.canonical_json(bound_owner["output_digests"]),
+            )
+            bound_owner = MODULE.seal_checkpoint(bound_owner)
+            owner_path.write_text(
+                json.dumps(bound_owner, ensure_ascii=False, sort_keys=True), encoding="utf-8",
+            )
+            return bound_owner
+
+        # A genuine current worker output with both modern diagnostic rows resumes.
+        self.assertIsInstance(validate_bound(original_owner), dict)
+
+        # Deleting Jeju's whole actual-worker outcome cannot be hidden by the
+        # still-present Seoul outcome; neither an empty nor absent array can
+        # make the authenticated modern owner detail disappear.
+        without_jeju = copy.deepcopy(original_evidence)
+        without_jeju["worker_outcomes"] = [
+            row for row in without_jeju["worker_outcomes"] if row["api_key"]["id"] != "15056858"
+        ]
+        with self.assertRaisesRegex(ValueError, "resume_worker_contract_failure_outcome_missing"):
+            validate_bound(bind_variant(without_jeju, original_owner))
+
+        with_empty_outcomes = copy.deepcopy(original_evidence)
+        with_empty_outcomes["worker_outcomes"] = []
+        with self.assertRaisesRegex(ValueError, "resume_worker_contract_failure_outcome_missing"):
+            validate_bound(bind_variant(with_empty_outcomes, original_owner))
+
+        without_outcomes_key = copy.deepcopy(original_evidence)
+        without_outcomes_key.pop("worker_outcomes")
+        with self.assertRaisesRegex(ValueError, "resume_worker_contract_failure_outcome_missing"):
+            validate_bound(bind_variant(without_outcomes_key, original_owner))
+
+        # The coverage rule applies only to modern owner details. A mixed
+        # old-shaped Seoul diagnostic and current Jeju diagnostic still bind.
+        mixed_owner = copy.deepcopy(original_owner)
+        for detail in mixed_owner["detail_records"]:
+            if detail.get("id") == "15056854":
+                detail["failure_diagnostic"].pop("contract_failure")
+        mixed_evidence = copy.deepcopy(original_evidence)
+        for outcome in mixed_evidence["worker_outcomes"]:
+            if outcome["api_key"]["id"] == "15056854":
+                outcome["failure_diagnostic"].pop("contract_failure")
+        self.assertIsInstance(validate_bound(bind_variant(mixed_evidence, mixed_owner)), dict)
+
+        # An old-only owner may legitimately have no outcomes key. Preserve
+        # that source shape and accept it without synthesizing modern detail.
+        legacy_owner = copy.deepcopy(original_owner)
+        for detail in legacy_owner["detail_records"]:
+            diagnostic = detail.get("failure_diagnostic")
+            if isinstance(diagnostic, dict):
+                diagnostic.pop("contract_failure", None)
+        legacy_evidence = copy.deepcopy(original_evidence)
+        legacy_evidence.pop("worker_outcomes")
+        self.assertIsInstance(validate_bound(bind_variant(legacy_evidence, legacy_owner)), dict)
+
+    def test_jeju_diagnostic_retains_three_link_baseline_unchanged(self) -> None:
+        baseline, candidate, args = self._inputs(("15056858",))
+        self.assertEqual(len(baseline[0]["operations"]), 3)
+        page_get, resolver_get, page_calls, resolver_calls = self._observations()
+        code, checkpoint = MODULE.process(
+            args,
+            fetcher=page_get,
+            resolver_fetcher=resolver_get,
+            sleeper=lambda _delay: None,
+            clock=lambda: datetime(2026, 10, 5, 0, 0, 2, tzinfo=timezone.utc),
+        )
+        self.assertEqual(code, 2, checkpoint.get("outcome"))
+        self.assertEqual(len(page_calls), 1)
+        self.assertEqual(len(resolver_calls), 1)
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text(encoding="utf-8"))
+        outcome = evidence["worker_outcomes"][0]
+        self.assertEqual(outcome["api_key"]["id"], "15056858")
+        self.assertEqual(outcome["failure_diagnostic"]["contract_failure"], MODULE.contract_failure_value("no_reviewed_declaration"))
+        composed = json.loads((self.output_dir / "composed-candidate.registry.json").read_text(encoding="utf-8"))
+        self.assertEqual(composed[0]["operations"], baseline[0]["operations"])
+        self.assertEqual(len(composed[0]["operations"]), 3)
+
+    def test_explicit_seoul_subject_binding_failure_is_classified(self) -> None:
+        def change_subject(candidate: list[dict]) -> None:
+            candidate[0]["source"]["raw"]["id"] = "uddi:substituted-subject"
+
+        baseline, _candidate, args = self._inputs(("15056854",), candidate_transform=change_subject)
+        page_get, resolver_get, _page_calls, _resolver_calls = self._observations()
+        code, _checkpoint = MODULE.process(
+            args,
+            fetcher=page_get,
+            resolver_fetcher=resolver_get,
+            sleeper=lambda _delay: None,
+            clock=lambda: datetime(2026, 10, 5, 0, 0, 2, tzinfo=timezone.utc),
+        )
+        self.assertEqual(code, 2)
+        evidence = json.loads((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text(encoding="utf-8"))
+        self.assertEqual(evidence["worker_outcomes"][0]["failure_diagnostic"]["contract_failure"],
+                         MODULE.contract_failure_value("subject_binding_unproven"))
+        composed = json.loads((self.output_dir / "composed-candidate.registry.json").read_text(encoding="utf-8"))
+        self.assertEqual(composed[0]["operations"], baseline[0]["operations"])
+
+    def test_typed_declaration_validation_rejection_is_classified_without_exception_text(self) -> None:
+        baseline, _candidate, args = self._inputs(("15056854",))
+        page_get, resolver_get, _page_calls, _resolver_calls = self._observations()
+        with mock.patch.object(MODULE.SEOUL_DECLARATION, "build_operation", return_value={"name": "test-only"}), \
+             mock.patch.object(MODULE.SEOUL_DECLARATION, "build_provenance", return_value={}), \
+             mock.patch.object(
+                 MODULE.SEOUL_DECLARATION,
+                 "validate_enriched_record",
+                 side_effect=MODULE.SEOUL_DECLARATION.DeclarationError("synthetic private detail"),
+             ):
+            code, _checkpoint = MODULE.process(
+                args,
+                fetcher=page_get,
+                resolver_fetcher=resolver_get,
+                sleeper=lambda _delay: None,
+                clock=lambda: datetime(2026, 10, 5, 0, 0, 2, tzinfo=timezone.utc),
+            )
+        self.assertEqual(code, 2)
+        evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        evidence_bytes = evidence_path.read_bytes()
+        evidence = json.loads(evidence_bytes)
+        detail = evidence["worker_outcomes"][0]["failure_diagnostic"]["contract_failure"]
+        self.assertEqual(detail, MODULE.contract_failure_value("declaration_evidence_rejected"))
+        self.assertNotIn(b"synthetic private detail", evidence_bytes)
+        composed = json.loads((self.output_dir / "composed-candidate.registry.json").read_text(encoding="utf-8"))
+        self.assertEqual(composed[0]["operations"], baseline[0]["operations"])
 
     def test_wrong_current_button_cannot_fall_back_to_legacy_anchor_or_call_resolver(self) -> None:
         baseline, _candidate, args = self._inputs(("15056854",))

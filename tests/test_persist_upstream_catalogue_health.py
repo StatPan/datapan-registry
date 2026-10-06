@@ -188,6 +188,85 @@ def already_canonical_receipt() -> dict:
     return PERSIST.seal(receipt, "receipt_sha256")
 
 
+def link_contract_receipt() -> dict:
+    failure = {
+        "version": 1,
+        "reason": "no_reviewed_declaration",
+        "unresolved_requirements": ["reviewed_operation_declaration"],
+        "next_action": "review_authoritative_declaration",
+    }
+    producer = {
+        "generation_id": "1" * 64,
+        "checkpoint_sha256": "5" * 64,
+        "run_id": "123456789",
+        "run_attempt": 2,
+        "head_sha": "c" * 40,
+        "artifact_id": "99887766",
+        "bundle_manifest_sha256": "6" * 64,
+    }
+    return {"sources": [{
+        "processor": {
+            "generation_id": producer["generation_id"],
+            "checkpoint_sha256": producer["checkpoint_sha256"],
+            "output_artifact": {
+                "run_id": producer["run_id"],
+                "name": "upstream-catalogue-processing-123456789-2",
+                "artifact_id": producer["artifact_id"],
+                "bundle_manifest_sha256": producer["bundle_manifest_sha256"],
+            },
+            "detail_records": [{
+                "id": "19000003",
+                "status": "quarantined",
+                "source_sha256": "2" * 64,
+                "guide_sha256": None,
+                "failure_diagnostic": {
+                    "code": "resolved_link_operation_contract_unproven",
+                    "phase": "resolver",
+                    "contract_failure": copy.deepcopy(failure),
+                },
+                "link_metadata": {},
+            }],
+            "link_contract_diagnostics": {
+                "schema_version": "datapan.upstream-catalogue-link-contract-diagnostics.v1",
+                "status": "verified",
+                "applicability": "current",
+                "reason_code": None,
+                "generation_id": producer["generation_id"],
+                "checkpoint_sha256": producer["checkpoint_sha256"],
+                "producer": copy.deepcopy(producer),
+                "records": [{
+                    "api_key": {"provider": "data.go.kr", "id": "19000003"},
+                    "worker_status": "quarantined",
+                    "source_sha256": "2" * 64,
+                    "guide_sha256": None,
+                    "worker_outcome_sha256": PERSIST.digest({
+                        "api_key": {"provider": "data.go.kr", "id": "19000003"},
+                        "status": "quarantined",
+                        "source_sha256": "2" * 64,
+                        "guide_sha256": None,
+                        "failure_diagnostic": {
+                            "code": "resolved_link_operation_contract_unproven",
+                            "phase": "resolver",
+                            "contract_failure": copy.deepcopy(failure),
+                        },
+                        "link_metadata": {},
+                    }),
+                    "detail_status": "verified",
+                    "next_action": "review_authoritative_declaration",
+                    "contract_failure": copy.deepcopy(failure),
+                }],
+            },
+        },
+        "canonical": {
+            "current_candidate_evaluation": {
+                "status": "verified",
+                "reason_code": None,
+                "producer": copy.deepcopy(producer),
+            },
+        },
+    }]}
+
+
 def no_op_warning(reason: str, *, generation_id: str = "1" * 64, fault_key: str | None = None) -> dict:
     material = {
         "source_id": "data_go_kr",
@@ -311,6 +390,100 @@ def collector_success_summary(*, run_id: str = "37110000002", started_at: str = 
             "jobs_sha256": "f" * 64,
         },
     }
+
+
+class LinkContractDiagnosticPersistenceTests(unittest.TestCase):
+    @staticmethod
+    def rebind_worker_outcome_digest(receipt: dict) -> None:
+        processor = receipt["sources"][0]["processor"]
+        detail = processor["detail_records"][0]
+        outcome = {
+            "api_key": {"provider": "data.go.kr", "id": detail["id"]},
+            "status": detail["status"],
+            "source_sha256": detail["source_sha256"],
+            "guide_sha256": detail["guide_sha256"],
+        }
+        for field in ("failure_diagnostic", "link_metadata"):
+            if field in detail:
+                outcome[field] = detail[field]
+        processor["link_contract_diagnostics"]["records"][0]["worker_outcome_sha256"] = (
+            PERSIST.digest(outcome)
+        )
+
+    def test_valid_projection_legacy_unknown_and_absent_legacy_receipt_are_accepted(self) -> None:
+        receipt = link_contract_receipt()
+        PERSIST.validate_link_contract_diagnostics(receipt)
+
+        legacy_unknown = copy.deepcopy(receipt)
+        detail = legacy_unknown["sources"][0]["processor"]["detail_records"][0]
+        detail["failure_diagnostic"].pop("contract_failure")
+        record = legacy_unknown["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0]
+        record.pop("contract_failure")
+        record["detail_status"] = "legacy_detail_unknown"
+        record["next_action"] = "inspect_bound_validation_evidence"
+        self.rebind_worker_outcome_digest(legacy_unknown)
+        PERSIST.validate_link_contract_diagnostics(legacy_unknown)
+
+        old_receipt = copy.deepcopy(receipt)
+        old_receipt["sources"][0]["processor"].pop("link_contract_diagnostics")
+        old_receipt["sources"][0]["processor"]["detail_records"][0]["failure_diagnostic"].pop(
+            "contract_failure",
+        )
+        PERSIST.validate_link_contract_diagnostics(old_receipt)
+
+        stripped_modern = copy.deepcopy(receipt)
+        stripped_modern["sources"][0]["processor"].pop("link_contract_diagnostics")
+        with self.assertRaisesRegex(ValueError, "projection_missing_for_modern_detail"):
+            PERSIST.validate_link_contract_diagnostics(stripped_modern)
+
+    def test_semantic_projection_bindings_fail_closed(self) -> None:
+        def copied_source(receipt: dict) -> None:
+            receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0]["source_sha256"] = "9" * 64
+
+        def forged_reason(receipt: dict) -> None:
+            failure = receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0]["contract_failure"]
+            failure.update({
+                "reason": "validation_detail_unknown",
+                "unresolved_requirements": [],
+                "next_action": "inspect_bound_validation_evidence",
+            })
+
+        def invalid_subject_reason(receipt: dict) -> None:
+            failure = {
+                "version": 1,
+                "reason": "subject_binding_unproven",
+                "unresolved_requirements": ["subject_binding"],
+                "next_action": "verify_subject_binding",
+            }
+            detail = receipt["sources"][0]["processor"]["detail_records"][0]
+            record = receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0]
+            detail["failure_diagnostic"]["contract_failure"] = copy.deepcopy(failure)
+            record["contract_failure"] = failure
+            record["next_action"] = failure["next_action"]
+            self.rebind_worker_outcome_digest(receipt)
+
+        def copied_digest(receipt: dict) -> None:
+            receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0][
+                "worker_outcome_sha256"
+            ] = "8" * 64
+
+        def mismatched_reason_context(receipt: dict) -> None:
+            receipt["sources"][0]["processor"]["link_contract_diagnostics"]["reason_code"] = (
+                "candidate_payload_requires_promotion"
+            )
+
+        for label, mutate, error in (
+            ("source", copied_source, "record_binding"),
+            ("digest", copied_digest, "record_binding"),
+            ("reason", forged_reason, "failure_mapping"),
+            ("subject", invalid_subject_reason, "failure_mapping"),
+            ("context", mismatched_reason_context, "current_context"),
+        ):
+            with self.subTest(case=label):
+                receipt = link_contract_receipt()
+                mutate(receipt)
+                with self.assertRaisesRegex(ValueError, error):
+                    PERSIST.validate_link_contract_diagnostics(receipt)
 
 
 class PromotionExecutionRecoveryTests(unittest.TestCase):

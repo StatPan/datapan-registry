@@ -978,7 +978,7 @@ def validate_processor_link_metadata(
     canonical_context: Mapping[str, Any] | None = None,
     allow_terminal_noop: bool = False,
     validate_seoul: bool = True,
-) -> None:
+) -> list[dict[str, Any]]:
     """Semantically bind unresolved resolver metadata to its checkpoint row."""
     evidence_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
     if not evidence_path.is_file():
@@ -993,7 +993,7 @@ def validate_processor_link_metadata(
             for item in detail_records
         ):
             raise PromotionError("processor resolver checkpoint metadata is missing its enrichment evidence")
-        return
+        return []
     evidence = load_object(evidence_path)
     if not isinstance(evidence, Mapping):
         raise PromotionError("processor enrichment evidence is not an object")
@@ -1045,7 +1045,7 @@ def validate_processor_link_metadata(
         ):
             raise PromotionError("processor checkpoint resolver diagnostic is missing its link metadata provenance")
     if not metadata_outcomes and not metadata_records:
-        return
+        return []
     try:
         composer = load_module(
             root / "scripts/compose-upstream-catalogue-candidate.py",
@@ -1071,6 +1071,7 @@ def validate_processor_link_metadata(
                 raise PromotionError("processor checkpoint has duplicate detail identities")
             by_id[identity] = item
     seen: set[str] = set()
+    contract_diagnostics: list[dict[str, Any]] = []
     successful = {
         str(item.get("api_key", {}).get("id") or "")
         for item in evidence.get("records", [])
@@ -1100,9 +1101,166 @@ def validate_processor_link_metadata(
             helper.validate_link_metadata(item["link_metadata"], identity, registered)
         except (ValueError, TypeError) as exc:
             raise PromotionError("processor link metadata provenance is invalid") from exc
+        try:
+            projection = composer.worker_contract_projection(dict(item))
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise PromotionError("processor resolver contract diagnostic is invalid") from exc
+        if not isinstance(projection, Mapping) or not projection:
+            raise PromotionError("processor resolver outcome has no trusted contract diagnostic projection")
+        projected = {
+            "api_key": {"provider": "data.go.kr", "id": identity},
+            "worker_status": item.get("status"),
+            "source_sha256": item.get("source_sha256"),
+            "guide_sha256": item.get("guide_sha256"),
+            "worker_outcome_sha256": projection.get("worker_outcome_sha256"),
+            "detail_status": (
+                "verified" if "contract_failure" in projection else "legacy_detail_unknown"
+            ),
+            "next_action": projection.get("next_action"),
+        }
+        if "contract_failure" in projection:
+            projected["contract_failure"] = copy.deepcopy(projection["contract_failure"])
+        elif projection.get("contract_failure_status") != "legacy_detail_unknown":
+            raise PromotionError("processor legacy resolver diagnostic projection is invalid")
+        contract_diagnostics.append(projected)
         seen.add(identity)
     if {str(row.get("id") or "") for row in metadata_records if isinstance(row, Mapping)} != seen:
         raise PromotionError("processor checkpoint and enrichment link metadata identities differ")
+    return sorted(
+        contract_diagnostics,
+        key=lambda row: (str(row["api_key"]["provider"]), str(row["api_key"]["id"])),
+    )
+
+
+CONTRACT_DIAGNOSTIC_PROJECTION_FIELDS = frozenset({
+    "worker_outcome_sha256", "contract_failure", "contract_failure_status", "next_action",
+})
+
+
+def validate_processor_contract_diagnostic_outputs(
+    bundle_dir: pathlib.Path,
+    contract_diagnostics: Sequence[Mapping[str, Any]],
+) -> None:
+    """Authenticate the composer's complete per-subject diagnostic projection."""
+    if len(contract_diagnostics) > 128:
+        raise PromotionError("processor contract diagnostic projection exceeds its bounded subject limit")
+
+    def identity(row: Mapping[str, Any], label: str) -> tuple[str, str]:
+        api_key = row.get("api_key")
+        provider = api_key.get("provider") if isinstance(api_key, Mapping) else None
+        api_id = api_key.get("id") if isinstance(api_key, Mapping) else None
+        if provider != "data.go.kr" or not isinstance(api_id, str) or not api_id:
+            raise PromotionError(f"processor {label} has an invalid contract diagnostic identity")
+        return provider, api_id
+
+    expected: dict[tuple[str, str], Mapping[str, Any]] = {}
+    for row in contract_diagnostics:
+        if not isinstance(row, Mapping):
+            raise PromotionError("processor contract diagnostic projection contains a non-object row")
+        key = identity(row, "admitted outcome")
+        if key in expected:
+            raise PromotionError("processor contract diagnostic projection contains duplicate identities")
+        expected[key] = row
+
+    try:
+        semantic_diff = load_object(bundle_dir / "semantic-diff.json")
+        regeneration_queue = load_object(bundle_dir / "regeneration-queue.json")
+        quarantine = load_object(bundle_dir / "quarantine.json")
+    except PromotionError as exc:
+        raise PromotionError("processor contract diagnostic composition outputs are unavailable") from exc
+    decisions = semantic_diff.get("api_decisions") if isinstance(semantic_diff, Mapping) else None
+    queue_rows = regeneration_queue.get("items") if isinstance(regeneration_queue, Mapping) else None
+    quarantine_rows = quarantine.get("items") if isinstance(quarantine, Mapping) else None
+    if not isinstance(decisions, list) or not isinstance(queue_rows, list) or not isinstance(quarantine_rows, list):
+        raise PromotionError("processor contract diagnostic composition outputs are malformed")
+
+    def indexed(rows: Sequence[Any], label: str) -> dict[tuple[str, str], Mapping[str, Any]]:
+        result: dict[tuple[str, str], Mapping[str, Any]] = {}
+        for row in rows:
+            if not isinstance(row, Mapping):
+                raise PromotionError(f"processor {label} contains a non-object row")
+            key = identity(row, label)
+            if key in result:
+                raise PromotionError(f"processor {label} contains duplicate identities")
+            result[key] = row
+        return result
+
+    decision_by_key = indexed(decisions, "semantic decision")
+    queue_by_key = indexed(queue_rows, "regeneration queue")
+    quarantine_by_key = indexed(quarantine_rows, "quarantine")
+
+    def supplied_projection(row: Mapping[str, Any]) -> dict[str, Any]:
+        return {name: row[name] for name in CONTRACT_DIAGNOSTIC_PROJECTION_FIELDS if name in row}
+
+    for label, rows in (
+        ("semantic decision", decision_by_key),
+        ("regeneration queue", queue_by_key),
+        ("quarantine", quarantine_by_key),
+    ):
+        unrelated = [key for key, row in rows.items() if supplied_projection(row) and key not in expected]
+        if unrelated:
+            raise PromotionError(f"processor {label} contains an unrelated contract diagnostic projection")
+
+    for key, expected_row in expected.items():
+        modern = expected_row.get("detail_status") == "verified"
+        shared: dict[str, Any] = {
+            "worker_outcome_sha256": expected_row.get("worker_outcome_sha256"),
+            "next_action": expected_row.get("next_action"),
+        }
+        if modern:
+            contract_failure = expected_row.get("contract_failure")
+            if not isinstance(contract_failure, Mapping):
+                raise PromotionError("processor admitted contract diagnostic has no validated detail")
+            shared["contract_failure"] = contract_failure
+            required_evidence = contract_failure.get("unresolved_requirements")
+        elif expected_row.get("detail_status") == "legacy_detail_unknown":
+            shared["contract_failure_status"] = "legacy_detail_unknown"
+            required_evidence = []
+        else:
+            raise PromotionError("processor admitted contract diagnostic has an invalid detail status")
+        if not isinstance(required_evidence, list):
+            raise PromotionError("processor admitted contract diagnostic has invalid required evidence")
+
+        decision = decision_by_key.get(key)
+        queue_row = queue_by_key.get(key)
+        worker_status = expected_row.get("worker_status")
+        expected_disposition = "retain_worker_pending" if worker_status == "retry" else "quarantine"
+        expected_reason = "worker_detail_retry" if worker_status == "retry" else "worker_detail_quarantined"
+        if (
+            worker_status not in {"retry", "quarantined"}
+            or not isinstance(decision, Mapping)
+            or decision.get("disposition") != expected_disposition
+            or decision.get("worker_outcome_status") != worker_status
+            or decision.get("worker_source_sha256") != expected_row.get("source_sha256")
+            or decision.get("worker_guide_sha256") != expected_row.get("guide_sha256")
+            or supplied_projection(decision) != shared
+            or not isinstance(queue_row, Mapping)
+            or queue_row.get("reason_codes") != [expected_reason]
+            or queue_row.get("required_evidence") != required_evidence
+            or supplied_projection(queue_row) != shared
+        ):
+            raise PromotionError("processor contract diagnostic differs from its semantic decision or queue projection")
+        quarantine_row = quarantine_by_key.get(key)
+        if worker_status == "quarantined":
+            if (
+                not isinstance(quarantine_row, Mapping)
+                or quarantine_row.get("reason_codes") != [expected_reason]
+                or quarantine_row.get("record_state") not in {"baseline_retained", "candidate_excluded"}
+                or supplied_projection(quarantine_row) != shared
+            ):
+                raise PromotionError("processor contract diagnostic differs from its quarantine projection")
+        elif quarantine_row is not None:
+            raise PromotionError("processor retry contract diagnostic was incorrectly projected as quarantined")
+
+    expected_keys = set(expected)
+    projected_decisions = {key for key, row in decision_by_key.items() if supplied_projection(row)}
+    projected_queue = {key for key, row in queue_by_key.items() if supplied_projection(row)}
+    projected_quarantine = {key for key, row in quarantine_by_key.items() if supplied_projection(row)}
+    expected_quarantine = {
+        key for key, row in expected.items() if row.get("worker_status") == "quarantined"
+    }
+    if projected_decisions != expected_keys or projected_queue != expected_keys or projected_quarantine != expected_quarantine:
+        raise PromotionError("processor contract diagnostic composition coverage is incomplete")
 
 
 def processor_seoul_unchanged_baseline_rows(
@@ -1532,11 +1690,12 @@ def validate_processor_bundle(
             output_artifact["expires_at"] = None
     if uploaded_normalized != durable_normalized:
         raise PromotionError("uploaded processor checkpoint receipt differs from immutable durable generation state")
+    contract_diagnostics: list[dict[str, Any]] = []
     if root is not None:
         # Keep schema and unresolved-link checks on every terminal processor
         # status. Only the Seoul unchanged-decision check needs the resolved
         # composition-baseline identity below.
-        validate_processor_link_metadata(
+        contract_diagnostics = validate_processor_link_metadata(
             checkpoint, bundle_dir, root=root, validate_seoul=False,
         )
     result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
@@ -1562,6 +1721,7 @@ def validate_processor_bundle(
             "status": processor_status,
             "generation_id": checkpoint["generation_id"],
             "reason": result.get("reason"),
+            "contract_diagnostics": contract_diagnostics,
         }
     candidate_path = bundle_dir / "composed-candidate.registry.json"
     candidate_sha = file_sha256(candidate_path)
@@ -1641,6 +1801,8 @@ def validate_processor_bundle(
         )
     except Exception as exc:
         raise PromotionError(f"composer did not admit a valid {expected_composition_status} candidate receipt") from exc
+    if root is not None or contract_diagnostics:
+        validate_processor_contract_diagnostic_outputs(bundle_dir, contract_diagnostics)
     outcome = checkpoint.get("outcome", {})
     if processor_status == "no-change":
         if candidate_sha != composition_baseline_sha or outcome.get("composer_status") != "no_change" or int(outcome.get("pending_count", -1)) != 0 or int(outcome.get("detail_retry_count", -1)) != 0:
@@ -1661,6 +1823,7 @@ def validate_processor_bundle(
         "composition_receipt_path": str(receipt_path.resolve()),
         "composition_receipt_sha256": file_sha256(receipt_path),
         "composition_outputs_dir": str(bundle_dir.resolve()),
+        "contract_diagnostics": contract_diagnostics,
     }
     if root is not None and not defer_seoul_declaration:
         validate_processor_seoul_bundle(
