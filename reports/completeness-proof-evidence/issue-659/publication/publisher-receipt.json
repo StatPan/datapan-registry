@@ -1,0 +1,29 @@
+{
+  "schema_version": "datapan.registry-publication-receipt.v1",
+  "status": "verified",
+  "source_binding": {
+    "schema_version": "datapan.registry-publication-source-binding.v1",
+    "repository": "StatPan/datapan-registry",
+    "event_name": "workflow_dispatch",
+    "git_ref": "refs/heads/main",
+    "workflow_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+    "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+    "source_tree_sha": "ff6a93bed060e8bd9ef2738efdc2672d228f35f8",
+    "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+    "status": "bound"
+  },
+  "publication": {
+    "artifacts": 196,
+    "dataset": "StatPan/datapan-registry",
+    "payload_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+    "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+    "status": "published"
+  },
+  "anonymous_verification": {
+    "artifacts": 196,
+    "dataset": "StatPan/datapan-registry",
+    "release_manifest": "verified",
+    "revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+    "status": "verified"
+  }
+}

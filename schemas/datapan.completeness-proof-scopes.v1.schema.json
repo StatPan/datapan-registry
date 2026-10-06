@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.completeness-proof-scopes.v1.schema.json",
+  "title": "Datapan completeness proof scope registry v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scope_registry_id", "completeness_policy", "source_registry", "scopes"],
+  "properties": {
+    "schema_version": {"const": "datapan.completeness-proof-scopes.v1"},
+    "scope_registry_id": {"type": "string", "minLength": 1},
+    "completeness_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {"path": {"const": "policy/completeness-proof.json"}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "source_registry": {"const": "policy/sustainable-coverage.json"},
+    "scopes": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/scope"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "owner": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "ticket": {"type": "string", "pattern": "^(#[1-9][0-9]*|[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[1-9][0-9]*)$"},
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope_id", "source_id", "provider", "source_profile", "resource_kind", "selector", "identity_algorithm", "identity_fields", "identity_owner", "evidence_owner", "authority_state", "inventory", "blockers"],
+      "properties": {
+        "scope_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+        "source_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "provider": {"type": "string", "minLength": 1},
+        "source_profile": {"type": ["string", "null"], "pattern": "^sources/.+\\.json$"},
+        "resource_kind": {"enum": ["api_catalog_metadata", "api_operation_manifest", "file_dataset", "curated_payload_snapshot", "payload_rows"]},
+        "selector": {
+          "type": "object", "additionalProperties": false, "required": ["kind", "value"],
+          "properties": {"kind": {"enum": ["catalog", "query", "manifest", "snapshot"]}, "value": {"type": "string", "minLength": 1}}
+        },
+        "identity_algorithm": {"type": "string", "minLength": 1},
+        "identity_fields": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "identity_owner": {"$ref": "#/$defs/owner"},
+        "evidence_owner": {"$ref": "#/$defs/owner"},
+        "authority_state": {"enum": ["available", "unavailable", "unknown"]},
+        "inventory": {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "path", "input_role"],
+          "properties": {
+            "kind": {"enum": ["registry_snapshot", "operation_manifest", "operation_denominator", "none"]},
+            "path": {"type": ["string", "null"]},
+            "input_role": {"type": ["string", "null"], "pattern": "^[a-z0-9_]+$"}
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["code", "owner", "ticket"],
+            "properties": {"code": {"type": "string", "pattern": "^[a-z0-9_]+$"}, "owner": {"$ref": "#/$defs/owner"}, "ticket": {"$ref": "#/$defs/ticket"}}
+          }
+        }
+      },
+      "allOf": [
+        {"if": {"properties": {"inventory": {"properties": {"kind": {"const": "none"}}}}, "required": ["inventory"]}, "then": {"properties": {"inventory": {"properties": {"path": {"const": null}, "input_role": {"const": null}}}}}},
+        {
+          "if": {
+            "properties": {"inventory": {"properties": {"kind": {"enum": ["registry_snapshot", "operation_manifest", "operation_denominator"]}}}},
+            "required": ["inventory"]
+          },
+          "then": {"properties": {"inventory": {"properties": {"path": {"type": "string"}, "input_role": {"type": "string"}}}}}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,616 @@
+{
+  "_id": "6a518e3de5fefb2b15e5c5d6",
+  "author": "StatPan",
+  "createdAt": "2026-07-11T00:28:45.000Z",
+  "disabled": false,
+  "downloads": 561,
+  "gated": false,
+  "id": "StatPan/datapan-registry",
+  "lastModified": "2026-10-04T11:43:15.000Z",
+  "likes": 0,
+  "private": false,
+  "sha": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+  "siblings": [
+    {
+      "rfilename": ".gitattributes"
+    },
+    {
+      "rfilename": "RELEASE_NOTES.md"
+    },
+    {
+      "rfilename": "data/data-go-kr.registry.json"
+    },
+    {
+      "rfilename": "data/provider-index.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/approval-propagating.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/approval-required.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/contract-drift.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/credential-invalid.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/invalid-input.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/provider-outage.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/rate-limited.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/ready.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/semantic-quality.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/stale-data.json"
+    },
+    {
+      "rfilename": "examples/diagnostic-envelope/unknown.json"
+    },
+    {
+      "rfilename": "manifest.json"
+    },
+    {
+      "rfilename": "policy/completeness-proof.json"
+    },
+    {
+      "rfilename": "policy/data-go-kr-diagnostic-evidence-mapping.v1.json"
+    },
+    {
+      "rfilename": "policy/data-go-kr-operation-denominator-expectation.json"
+    },
+    {
+      "rfilename": "policy/diagnostic-cause-action-vocabulary.v1.json"
+    },
+    {
+      "rfilename": "policy/diagnostic-envelope-consumer-contract.v1.json"
+    },
+    {
+      "rfilename": "policy/failure-recovery.json"
+    },
+    {
+      "rfilename": "policy/source-refresh.json"
+    },
+    {
+      "rfilename": "policy/sustainable-coverage.json"
+    },
+    {
+      "rfilename": "policy/upstream-catalogue-health.json"
+    },
+    {
+      "rfilename": "provenance/data-go-kr.md"
+    },
+    {
+      "rfilename": "release/data-go-kr-shards.tar.gz"
+    },
+    {
+      "rfilename": "release/distribution-manifest.json"
+    },
+    {
+      "rfilename": "release/registry-shards.json"
+    },
+    {
+      "rfilename": "reports/adapter-targets.json"
+    },
+    {
+      "rfilename": "reports/catalog-audit.json"
+    },
+    {
+      "rfilename": "reports/catalog-diff.json"
+    },
+    {
+      "rfilename": "reports/coverage.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-collection-execution-plan.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-collection-preflight.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-evidence-policy.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-manual-review-acceptance-packet.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-manual-review-acceptance.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-manual-review-decision.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-operator-packets.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-receipt-collection-queue.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-review-handoff.json"
+    },
+    {
+      "rfilename": "reports/credential-runtime-runner-readiness.json"
+    },
+    {
+      "rfilename": "reports/current-runtime-evidence-projection.json"
+    },
+    {
+      "rfilename": "reports/data-go-kr/error-action-catalog.json"
+    },
+    {
+      "rfilename": "reports/data-go-kr/operation-manifest.json"
+    },
+    {
+      "rfilename": "reports/data-go-kr/runtime-evidence-growth.json"
+    },
+    {
+      "rfilename": "reports/dependencies.json"
+    },
+    {
+      "rfilename": "reports/diagnostic-consumer-compatibility/datapan-cli.v1.json"
+    },
+    {
+      "rfilename": "reports/diagnostic-consumer-compatibility/datapan-health.v1.json"
+    },
+    {
+      "rfilename": "reports/diagnostic-consumer-compatibility/datapan-web.v1.json"
+    },
+    {
+      "rfilename": "reports/diagnostic-current-source-applicability.json"
+    },
+    {
+      "rfilename": "reports/diagnostic-publication-readiness.json"
+    },
+    {
+      "rfilename": "reports/error-action-routing-rollup.json"
+    },
+    {
+      "rfilename": "reports/error-catalog.json"
+    },
+    {
+      "rfilename": "reports/failure-observations.json"
+    },
+    {
+      "rfilename": "reports/failure-recovery-rollup.json"
+    },
+    {
+      "rfilename": "reports/health-probe-catalog.json"
+    },
+    {
+      "rfilename": "reports/health-runtime-observation-plan.v1.json"
+    },
+    {
+      "rfilename": "reports/latest-release-readiness.json"
+    },
+    {
+      "rfilename": "reports/latest-release-verification.json"
+    },
+    {
+      "rfilename": "reports/latest-verification-summary.json"
+    },
+    {
+      "rfilename": "reports/latest-verification.json"
+    },
+    {
+      "rfilename": "reports/operation-denominator-rollup.json"
+    },
+    {
+      "rfilename": "reports/provider-backlog.json"
+    },
+    {
+      "rfilename": "reports/regional-baseline-source-provenance.json"
+    },
+    {
+      "rfilename": "reports/registry-impact-plan.json"
+    },
+    {
+      "rfilename": "reports/release-assembly-receipt.json"
+    },
+    {
+      "rfilename": "reports/release-consumer-compatibility.json"
+    },
+    {
+      "rfilename": "reports/release-consumer-decision.json"
+    },
+    {
+      "rfilename": "reports/release-distribution-footprint.json"
+    },
+    {
+      "rfilename": "reports/release-goal-continuation-queue.json"
+    },
+    {
+      "rfilename": "reports/release-goal-finish-preflight.json"
+    },
+    {
+      "rfilename": "reports/release-goal-operating-contract.json"
+    },
+    {
+      "rfilename": "reports/release-operational-pressure.json"
+    },
+    {
+      "rfilename": "reports/release-shard-consumer-proof.json"
+    },
+    {
+      "rfilename": "reports/release-version-decision.json"
+    },
+    {
+      "rfilename": "reports/route-disposition.json"
+    },
+    {
+      "rfilename": "reports/runtime-freshness-queue.json"
+    },
+    {
+      "rfilename": "reports/source-contract-rollup.json"
+    },
+    {
+      "rfilename": "reports/source-reference-drift.json"
+    },
+    {
+      "rfilename": "reports/source-report-inventory.json"
+    },
+    {
+      "rfilename": "reports/source-runtime-evidence-rollup.json"
+    },
+    {
+      "rfilename": "reports/source-runtime-remediation-map.json"
+    },
+    {
+      "rfilename": "reports/sustainable-coverage.json"
+    },
+    {
+      "rfilename": "reports/unadapted-external-probe-summary.json"
+    },
+    {
+      "rfilename": "reports/unadapted-external-probe.json"
+    },
+    {
+      "rfilename": "reports/verification-plan.json"
+    },
+    {
+      "rfilename": "schemas/datapan.adapter-targets.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.catalog-audit.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.catalog-diff.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.catalogue-composition-receipt.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.completeness-proof-policy.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.completeness-proof.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.coverage-backlog.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.coverage.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-collection-execution-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-collection-preflight.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-collection-session.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-evidence-policy.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-manual-review-acceptance-packet.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-manual-review-acceptance.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-manual-review-decision.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-operator-packets.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-receipt-collection-queue.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-receipt.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-review-handoff.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-runner-readiness.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-session-review-decisions.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.credential-runtime-session-review-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.current-runtime-evidence-projection.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.dependencies.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.diagnostic-envelope.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.diagnostic-publication-readiness.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.doctor-smoke-summary.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.error-action-catalog.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.error-action-routing-rollup.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.error-catalog.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.external-adapter-backlog.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.external-coverage.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.failure-observations.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.failure-recovery-policy.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.failure-recovery-rollup.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.health-probe-catalog.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.health-runtime-observation-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.huggingface-distribution.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.install-smoke-summary.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.institution-api-overview.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.institution-runtime-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.link-detail-registry-patches.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.manual-review-scope.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.operation-denominator-rollup.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.operation-denominator.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.operation-materialization-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.post-publication-admission.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.provider-index.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.providers.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.registry-distribution.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.registry-impact-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.registry-shards.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-assembly-receipt.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-consumer-compatibility.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-consumer-decision.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-distribution-footprint.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-goal-continuation-queue.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-goal-finish-preflight.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-goal-operating-contract.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-health-rollup.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-manifest.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-operational-pressure.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-readiness.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-receipt-admission.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-shard-consumer-proof.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-verification.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.release-version-decision.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.route-disposition.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.runtime-evidence-growth.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.runtime-freshness-batch.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.runtime-freshness-import-admission.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.runtime-freshness-import-receipt.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.runtime-freshness-queue.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.runtime-freshness-run-receipt.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.safetydata-operation-candidates.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.safetydata-registry-patches.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.schema-index.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-candidate-verification.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-contract-rollup.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-profile.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-provenance.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-reference-drift.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-refresh-policy.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-report-inventory.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-runtime-candidates.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-runtime-evidence-rollup.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.source-runtime-remediation-map.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.specs.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.studio-bundle.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.studio-datasets.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.sustainable-coverage-policy.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.sustainable-coverage.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.upstream-catalogue-health-state-owner.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.upstream-catalogue-health-state.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.upstream-catalogue-health.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.upstream-refresh-evidence.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.upstream-refresh-work-packet.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.verification-plan.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.verification-summary.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/datapan.verification.v1.schema.json"
+    },
+    {
+      "rfilename": "schemas/index.json"
+    }
+  ],
+  "tags": [
+    "region:us"
+  ],
+  "usedStorage": 411426230
+}

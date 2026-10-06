@@ -115,6 +115,15 @@ def build_commands(
     def py(script: str, *args: str) -> SourceCommand:
         return SourceCommand(("python3", f"scripts/{script}", *args), root)
 
+    completeness_args = [
+        "--write",
+        "--candidate-registry", str(registry_abs),
+        "--candidate-operation-manifest", str(root / "reports/data-go-kr/operation-manifest.json"),
+    ]
+    if previous_registry is not None:
+        completeness_args.extend(("--candidate-baseline-registry", str(previous_registry.resolve())))
+    completeness_rollup = py("generate-completeness-proof-rollup.py", *completeness_args)
+
     return tuple(commands) + (
         # Project native CLI coverage into the existing source-denominator
         # contract before any consumer reads it.
@@ -182,6 +191,7 @@ def build_commands(
         py("validate-institution-runtime-plan.py"),
         py("generate-sustainable-coverage.py"),
         py("generate-readme-runtime-snapshot.py"),
+        completeness_rollup,
         py("sync-release-schema-artifacts.py", "--write"),
         py("sync-release-manifest-artifacts.py", "--write"),
     )
