@@ -14,6 +14,7 @@ import shlex
 import subprocess
 import sys
 import tempfile
+import time
 import types
 import unittest
 import zipfile
@@ -1167,16 +1168,122 @@ class ProcessorBundleContractTests(unittest.TestCase):
             ("git", "rev-parse", "HEAD"), cwd=root, check=True, text=True, capture_output=True,
         ).stdout.strip()
         expected_bytes = (root / RUNNER.PROCESSOR_COMPOSITION_INPUTS["composer"]).read_bytes()
+        real_popen = subprocess.Popen
+        with mock.patch.object(RUNNER.subprocess, "Popen", wraps=real_popen) as spawn:
+            self.assertEqual(
+                RUNNER.processor_composer_source_identity(root, head),
+                {"bytes": len(expected_bytes), "sha256": hashlib.sha256(expected_bytes).hexdigest()},
+            )
+        environment = spawn.call_args.kwargs["env"]
+        self.assertEqual(environment["GIT_NO_LAZY_FETCH"], "1")
+        self.assertEqual(environment["GIT_TERMINAL_PROMPT"], "0")
+        self.assertEqual(environment["GIT_PAGER"], "cat")
         self.assertEqual(
-            RUNNER.processor_composer_source_identity(root, head),
-            {"bytes": len(expected_bytes), "sha256": hashlib.sha256(expected_bytes).hexdigest()},
+            RUNNER.processor_composer_source_identity(
+                root, "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+            ),
+            RUNNER.HISTORICAL_LINK_CONTRACT_COMPOSER,
         )
-        with mock.patch.object(
-            RUNNER.subprocess, "run",
-            return_value=subprocess.CompletedProcess(("git", "show"), 128, stdout=b"", stderr=b"missing"),
-        ):
-            self.assertIsNone(RUNNER.processor_composer_source_identity(root, "f" * 40))
-        self.assertIsNone(RUNNER.processor_composer_source_identity(root, "not-a-sha"))
+        self.assertIsNone(RUNNER.processor_composer_source_identity(root, "f" * 40))
+        with mock.patch.object(RUNNER.subprocess, "Popen") as spawn:
+            self.assertIsNone(RUNNER.processor_composer_source_identity(root, "not-a-sha"))
+            spawn.assert_not_called()
+
+    def test_composer_identity_rejects_a_real_local_blob_over_the_stdout_cap(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            subprocess.run(("git", "init", "-q"), cwd=root, check=True)
+            subprocess.run(("git", "config", "user.email", "test@example.invalid"), cwd=root, check=True)
+            subprocess.run(("git", "config", "user.name", "Test"), cwd=root, check=True)
+            composer = root / RUNNER.PROCESSOR_COMPOSITION_INPUTS["composer"]
+            composer.parent.mkdir(parents=True)
+            composer.write_bytes(b"x" * (RUNNER.MAX_PROCESSOR_COMPOSER_BYTES + 1))
+            subprocess.run(("git", "add", composer.relative_to(root).as_posix()), cwd=root, check=True)
+            subprocess.run(("git", "commit", "-qm", "oversized composer"), cwd=root, check=True)
+            head = subprocess.run(
+                ("git", "rev-parse", "HEAD"), cwd=root, check=True, text=True, capture_output=True,
+            ).stdout.strip()
+            self.assertIsNone(RUNNER.processor_composer_source_identity(root, head))
+
+    def test_composer_identity_bounds_stderr_and_timeout_then_reaps_and_closes(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            fake_git = fake_bin / "git"
+            fake_git.write_text(
+                f"#!{sys.executable}\n"
+                "import json, os, pathlib, signal, sys, time\n"
+                "pathlib.Path(os.environ['FAKE_GIT_PID']).write_text(str(os.getpid()))\n"
+                "pathlib.Path(os.environ['FAKE_GIT_ENV']).write_text(json.dumps({\n"
+                "    'GIT_NO_LAZY_FETCH': os.environ.get('GIT_NO_LAZY_FETCH'),\n"
+                "    'GIT_TERMINAL_PROMPT': os.environ.get('GIT_TERMINAL_PROMPT'),\n"
+                "    'GIT_PAGER': os.environ.get('GIT_PAGER'),\n"
+                "}, sort_keys=True))\n"
+                "def term(_signum, _frame):\n"
+                "    pathlib.Path(os.environ['FAKE_GIT_TERM']).write_text('terminate\\n')\n"
+                "signal.signal(signal.SIGTERM, term)\n"
+                "if os.environ['FAKE_GIT_MODE'] == 'stderr':\n"
+                f"    sys.stderr.buffer.write(b'x' * {RUNNER.MAX_PROCESSOR_COMPOSER_STDERR_BYTES + 4096})\n"
+                "    sys.stderr.buffer.flush()\n"
+                "while True:\n"
+                "    time.sleep(1)\n",
+                encoding="utf-8",
+            )
+            fake_git.chmod(0o755)
+            real_popen = subprocess.Popen
+
+            for mode, timeout in (("stderr", 2.0), ("timeout", 0.2)):
+                with self.subTest(mode=mode):
+                    pid_path = root / f"{mode}.pid"
+                    env_path = root / f"{mode}.env"
+                    term_path = root / f"{mode}.term"
+                    processes = []
+
+                    def spawn(*args, **kwargs):
+                        process = real_popen(*args, **kwargs)
+                        processes.append(process)
+                        return process
+
+                    environment = {
+                        "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}",
+                        "FAKE_GIT_MODE": mode,
+                        "FAKE_GIT_PID": str(pid_path),
+                        "FAKE_GIT_ENV": str(env_path),
+                        "FAKE_GIT_TERM": str(term_path),
+                    }
+                    started = time.monotonic()
+                    with (
+                        mock.patch.dict(RUNNER.os.environ, environment, clear=False),
+                        mock.patch.object(
+                            RUNNER, "PROCESSOR_COMPOSER_READ_TIMEOUT_SECONDS", timeout,
+                        ),
+                        mock.patch.object(
+                            RUNNER, "PROCESSOR_COMPOSER_TERMINATE_GRACE_SECONDS", 0.05,
+                        ),
+                        mock.patch.object(RUNNER.subprocess, "Popen", side_effect=spawn),
+                    ):
+                        self.assertIsNone(
+                            RUNNER.processor_composer_source_identity(root, "a" * 40),
+                        )
+                    self.assertLess(time.monotonic() - started, 1.5)
+                    self.assertEqual(len(processes), 1)
+                    process = processes[0]
+                    self.assertIsNotNone(process.returncode)
+                    self.assertTrue(process.stdout.closed)
+                    self.assertTrue(process.stderr.closed)
+                    self.assertEqual(term_path.read_text(encoding="utf-8"), "terminate\n")
+                    identity_environment = json.loads(env_path.read_text(encoding="utf-8"))
+                    self.assertEqual(identity_environment, {
+                        "GIT_NO_LAZY_FETCH": "1",
+                        "GIT_PAGER": "cat",
+                        "GIT_TERMINAL_PROMPT": "0",
+                    })
+                    pid = int(pid_path.read_text(encoding="utf-8"))
+                    with self.assertRaises(ProcessLookupError):
+                        os.kill(pid, 0)
+                    with self.assertRaises(ChildProcessError):
+                        os.waitpid(pid, os.WNOHANG)
 
 
 class DurableProcessorRecoveryTests(unittest.TestCase):
@@ -2056,19 +2163,15 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             )
             composition_helper = RUNNER.load_canonical_update_pr(repository_root)
             producer_commit = fixture["provenance"]["producer_commit"]
-            with mock.patch.object(
-                RUNNER, "processor_composer_source_identity",
-                wraps=lambda root, head: (
-                    dict(RUNNER.HISTORICAL_LINK_CONTRACT_COMPOSER)
-                    if root == repository_root and head == producer_commit else None
-                ),
-            ) as source_identity:
-                validated = RUNNER.validate_processor_bundle(
-                    checkpoint, bundle, composition_schema, composition_helper,
-                    root=repository_root, producer_head_sha=producer_commit,
-                    defer_seoul_declaration=True,
-                )
-            source_identity.assert_called_once_with(repository_root, producer_commit)
+            self.assertEqual(
+                RUNNER.processor_composer_source_identity(repository_root, producer_commit),
+                RUNNER.HISTORICAL_LINK_CONTRACT_COMPOSER,
+            )
+            validated = RUNNER.validate_processor_bundle(
+                checkpoint, bundle, composition_schema, composition_helper,
+                root=repository_root, producer_head_sha=producer_commit,
+                defer_seoul_declaration=True,
+            )
             self.assertEqual(validated["status"], "ready")
             self.assertEqual(validated["registry_sha256"], hashlib.sha256(
                 payloads["composed-candidate.registry.json"],

@@ -19,6 +19,7 @@ import json
 import os
 import pathlib
 import re
+import selectors
 import shutil
 import shlex
 import stat
@@ -26,6 +27,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -78,6 +80,10 @@ HISTORICAL_LINK_CONTRACT_COMPOSER = {
     "bytes": 78840,
     "sha256": "bf55d918b9763512b59c00ae4ff252342ec48b0ee687f46926a34448d5bbdc53",
 }
+PROCESSOR_COMPOSER_READ_TIMEOUT_SECONDS = 10.0
+MAX_PROCESSOR_COMPOSER_BYTES = 1024 * 1024
+MAX_PROCESSOR_COMPOSER_STDERR_BYTES = 64 * 1024
+PROCESSOR_COMPOSER_TERMINATE_GRACE_SECONDS = 0.25
 HISTORICAL_LINK_CONTRACT_REQUIRED_EVIDENCE = [
     "current_link_detail_page",
     "operation_source_provenance",
@@ -1149,26 +1155,114 @@ CONTRACT_DIAGNOSTIC_PROJECTION_FIELDS = frozenset({
 })
 
 
+def _terminate_and_reap_processor_composer_read(process: subprocess.Popen[bytes]) -> None:
+    """Stop a bounded local identity read and deterministically reap it."""
+    if process.poll() is not None:
+        process.wait()
+        return
+    try:
+        process.terminate()
+    except OSError:
+        pass
+    try:
+        process.wait(timeout=PROCESSOR_COMPOSER_TERMINATE_GRACE_SECONDS)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        process.kill()
+    except OSError:
+        pass
+    process.wait()
+
+
 def processor_composer_source_identity(
     root: pathlib.Path,
     producer_head_sha: str,
 ) -> dict[str, Any] | None:
-    """Read the exact composer bytes from an already authenticated B source commit."""
+    """Hash one bounded local composer blob from an authenticated B source commit."""
     if not re.fullmatch(r"[a-f0-9]{40}", producer_head_sha):
         return None
     composer_path = PROCESSOR_COMPOSITION_INPUTS["composer"]
-    argv = ("git", "show", f"{producer_head_sha}:{composer_path}")
+    argv = ("git", "--no-pager", "show", f"{producer_head_sha}:{composer_path}")
     print(f"+ [{root}] {shlex.join(argv)}", flush=True)
+    environment = dict(os.environ)
+    environment.update({
+        "GIT_NO_LAZY_FETCH": "1",
+        "GIT_TERMINAL_PROMPT": "0",
+        "GIT_PAGER": "cat",
+    })
+    deadline = time.monotonic() + PROCESSOR_COMPOSER_READ_TIMEOUT_SECONDS
     try:
-        result = subprocess.run(argv, cwd=root, capture_output=True, check=False)
+        process = subprocess.Popen(
+            argv,
+            cwd=root,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            close_fds=True,
+            env=environment,
+        )
     except OSError:
         # Missing local producer history can never grant the historical
         # encoding. The complete current projection remains mandatory.
         return None
-    if result.returncode != 0:
+
+    assert process.stdout is not None
+    assert process.stderr is not None
+    selector = selectors.DefaultSelector()
+    digest = hashlib.sha256()
+    counts = {"stdout": 0, "stderr": 0}
+    streams = {
+        process.stdout: ("stdout", MAX_PROCESSOR_COMPOSER_BYTES),
+        process.stderr: ("stderr", MAX_PROCESSOR_COMPOSER_STDERR_BYTES),
+    }
+    try:
+        for stream in streams:
+            os.set_blocking(stream.fileno(), False)
+            selector.register(stream, selectors.EVENT_READ)
+        while selector.get_map():
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return None
+            for key, _events in selector.select(min(remaining, 0.25)):
+                stream = key.fileobj
+                label, maximum_bytes = streams[stream]
+                read_size = min(65536, maximum_bytes + 1 - counts[label])
+                if read_size < 1:
+                    return None
+                try:
+                    chunk = os.read(stream.fileno(), read_size)
+                except BlockingIOError:
+                    continue
+                if not chunk:
+                    selector.unregister(stream)
+                    continue
+                counts[label] += len(chunk)
+                if counts[label] > maximum_bytes:
+                    return None
+                if label == "stdout":
+                    digest.update(chunk)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return None
+        try:
+            returncode = process.wait(timeout=remaining)
+        except subprocess.TimeoutExpired:
+            return None
+        if returncode != 0:
+            return None
+        return {"bytes": counts["stdout"], "sha256": digest.hexdigest()}
+    except (OSError, ValueError):
         return None
-    source = result.stdout
-    return {"bytes": len(source), "sha256": hashlib.sha256(source).hexdigest()}
+    finally:
+        if process.poll() is None:
+            _terminate_and_reap_processor_composer_read(process)
+        else:
+            process.wait()
+        selector.close()
+        process.stdout.close()
+        process.stderr.close()
 
 
 def authenticate_contract_diagnostic_encoding(
