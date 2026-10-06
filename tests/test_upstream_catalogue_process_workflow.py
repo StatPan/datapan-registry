@@ -5,6 +5,7 @@ import os
 import pathlib
 import shlex
 import subprocess
+import sys
 import tempfile
 import unittest
 import datetime as dt
@@ -200,6 +201,111 @@ class WorkflowContractTests(unittest.TestCase):
         cls.workflow = yaml.load(WORKFLOW.read_text(encoding="utf-8"), Loader=yaml.BaseLoader)
         cls.text = WORKFLOW.read_text(encoding="utf-8")
 
+    def test_process_install_declares_yaml_and_real_derivation_cli_reaches_durable_index_guard(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        install_position = next(
+            index for index, step in enumerate(steps)
+            if step.get("name") == "Materialize canonical registry and install validators"
+        )
+        derivation_position = next(
+            index for index, step in enumerate(steps) if step.get("id") == "derivation"
+        )
+        install = steps[install_position]
+        self.assertEqual(install["if"], "steps.select.outputs.decision == 'process'")
+        self.assertIn("'jsonschema==4.25.1' 'PyYAML==6.0.2'", install["run"])
+        self.assertLess(install_position, derivation_position)
+
+        with tempfile.TemporaryDirectory(prefix="catalogue-derivation-bootstrap-") as temp:
+            root = pathlib.Path(temp)
+            state_dir = root / "state"
+            index_path = state_dir / "sources/data_go_kr/index.json"
+            index_path.parent.mkdir(parents=True)
+            index_bytes = json.dumps({
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "generations": [],
+                "detail_queue_cursor": 0,
+                "detail_retry_state": {},
+            }, sort_keys=True).encode("utf-8") + b"\n"
+            index_path.write_bytes(index_bytes)
+            output_dir = root / "derivation-output"
+            github_output = root / "github-output"
+            unavailable_path = root / "not-read-before-index-selection"
+            env = {
+                **os.environ,
+                "PATH": str(root / "empty-bin"),
+                "PYTHONDONTWRITEBYTECODE": "1",
+            }
+            env.pop("GH_TOKEN", None)
+            env.pop("GITHUB_TOKEN", None)
+            command = [
+                sys.executable,
+                str(ROOT / "scripts/prepare-upstream-catalogue-derivation.py"),
+                "--main-root", str(ROOT),
+                "--source-root", str(ROOT),
+                "--state-dir", str(state_dir),
+                "--target-generation-id", "a" * 64,
+                "--repository", REPOSITORY,
+                "--default-branch", "main",
+                "--collector-admission", str(unavailable_path / "admission.json"),
+                "--candidate", str(unavailable_path / "candidate.json"),
+                "--refresh-evidence", str(unavailable_path / "refresh.json"),
+                "--diff", str(unavailable_path / "diff.json"),
+                "--resume-bundle", str(unavailable_path / "resume-bundle"),
+                "--output-dir", str(output_dir),
+                "--github-output", str(github_output),
+            ]
+            result = subprocess.run(
+                command, cwd=ROOT, env=env, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+            self.assertEqual(result.stdout, "")
+            self.assertEqual(json.loads(result.stderr), {
+                "eligible": False,
+                "reason": "selected_generation_not_durable",
+            })
+            self.assertEqual(index_path.read_bytes(), index_bytes)
+            self.assertFalse(output_dir.exists())
+            self.assertFalse(github_output.exists())
+            self.assertFalse(unavailable_path.exists())
+
+    def test_new_observation_without_selected_parent_returns_without_reading_admission_inputs(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="catalogue-new-observation-preparation-") as temp:
+            root = pathlib.Path(temp)
+            state_dir = root / "state"
+            index_path = state_dir / "sources/data_go_kr/index.json"
+            index_path.parent.mkdir(parents=True)
+            index_bytes = json.dumps({
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "generations": [], "detail_queue_cursor": 0, "detail_retry_state": {},
+            }, sort_keys=True).encode("utf-8") + b"\n"
+            index_path.write_bytes(index_bytes)
+            output_dir = root / "output"
+            github_output = root / "github-output"
+            unavailable = root / "must-not-be-read"
+            command = [
+                sys.executable,
+                str(ROOT / "scripts/prepare-upstream-catalogue-derivation.py"),
+                "--main-root", str(unavailable / "main"),
+                "--source-root", str(unavailable / "source"),
+                "--state-dir", str(state_dir),
+                "--repository", REPOSITORY, "--default-branch", "main",
+                "--collector-admission", str(unavailable / "admission.json"),
+                "--candidate", str(unavailable / "candidate.json"),
+                "--refresh-evidence", str(unavailable / "evidence.json"),
+                "--diff", str(unavailable / "diff.json"),
+                "--resume-bundle", str(unavailable / "bundle"),
+                "--output-dir", str(output_dir), "--github-output", str(github_output),
+            ]
+            result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(json.loads(result.stdout), {
+                "eligible": False,
+                "reason": "new_observation_no_existing_processor_parent",
+            })
+            self.assertIn("derivation_enabled=false", github_output.read_text(encoding="utf-8"))
+            self.assertEqual(index_path.read_bytes(), index_bytes)
+            self.assertFalse(unavailable.exists())
+
     def test_triggers_and_trusted_run_gates_are_explicit(self) -> None:
         triggers = self.workflow["on"]
         self.assertEqual(triggers["workflow_run"]["workflows"], ["Upstream catalog refresh"])
@@ -280,6 +386,36 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("--claim-only", claim["run"])
         self.assertEqual(claim["env"]["TARGET_GENERATION_ID"], "${{ steps.select.outputs.generation_id }}")
         self.assertEqual(derivation["id"], "derivation")
+        self.assertEqual(
+            derivation["env"]["PRODUCER_RUN_ATTEMPT"],
+            "${{ steps.producer_attempt.outputs.run_attempt }}",
+        )
+        self.assertEqual(
+            derivation["env"]["ARTIFACT_DIGEST"],
+            "${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}",
+        )
+        self.assertIn("--collector-archive", derivation["run"])
+        self.assertIn("--producer-observe-job-started-at", derivation["run"])
+        self.assertIn("--producer-artifact-size-bytes", derivation["run"])
+        selected_attempt_metadata = {
+            "PRODUCER_RUN_ATTEMPT": ("run_attempt", "--producer-run-attempt"),
+            "PRODUCER_RUN_STARTED_AT": ("run_started_at", "--producer-run-started-at"),
+            "PRODUCER_RUN_COMPLETED_AT": ("run_completed_at", "--producer-run-completed-at"),
+            "OBSERVE_JOB_STARTED_AT": ("observe_job_started_at", "--producer-observe-job-started-at"),
+            "OBSERVE_JOB_COMPLETED_AT": ("observe_job_completed_at", "--producer-observe-job-completed-at"),
+            "ARTIFACT_CREATED_AT": ("artifact_created_at", "--producer-artifact-created-at"),
+            "ARTIFACT_DIGEST": ("artifact_digest_sha256", "--producer-artifact-digest-sha256"),
+            "ARTIFACT_SIZE": ("artifact_size_bytes", "--producer-artifact-size-bytes"),
+            "PRODUCER_EVENT": ("event", "--producer-event"),
+        }
+        for step_id in ("claim", "run_processor"):
+            consumer = next(step for step in steps if step.get("id") == step_id)
+            for env_name, (output_name, cli_flag) in selected_attempt_metadata.items():
+                self.assertEqual(
+                    consumer["env"][env_name],
+                    "${{ steps.producer_attempt.outputs." + output_name + " }}",
+                )
+                self.assertIn(cli_flag, consumer["run"])
 
     def test_trusted_bootstrap_code_uses_exact_producer_worktree_inputs(self) -> None:
         job = self.workflow["jobs"]["process"]

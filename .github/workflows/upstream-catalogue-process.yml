@@ -568,7 +568,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 ../bootstrap/scripts/materialize-canonical-registry.py
-          python3 -m pip install --disable-pip-version-check 'jsonschema==4.25.1'
+          python3 -m pip install --disable-pip-version-check 'jsonschema==4.25.1' 'PyYAML==6.0.2'
           python3 ../bootstrap/scripts/validate-source-refresh-policy.py \
             --schema ../bootstrap/schemas/datapan.source-refresh-policy.v1.schema.json
 
@@ -1024,6 +1024,22 @@ jobs:
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
           TARGET_GENERATION_ID: ${{ steps.select.outputs.generation_id }}
           COLLECTOR_ADMISSION: ${{ steps.input_artifact.outputs.admission_file }}
+          COLLECTOR_ARCHIVE: ${{ steps.input_artifact.outputs.archive_path }}
+          PRODUCER_RUN_ID: ${{ steps.producer_attempt.outputs.producer_run_id }}
+          PRODUCER_RUN_ATTEMPT: ${{ steps.producer_attempt.outputs.run_attempt }}
+          PRODUCER_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
+          PRODUCER_RUN_STARTED_AT: ${{ steps.producer_attempt.outputs.run_started_at }}
+          PRODUCER_RUN_COMPLETED_AT: ${{ steps.producer_attempt.outputs.run_completed_at }}
+          OBSERVE_JOB_STARTED_AT: ${{ steps.producer_attempt.outputs.observe_job_started_at }}
+          OBSERVE_JOB_COMPLETED_AT: ${{ steps.producer_attempt.outputs.observe_job_completed_at }}
+          ARTIFACT_ID: ${{ steps.producer_attempt.outputs.artifact_id }}
+          ARTIFACT_NAME: ${{ steps.producer_attempt.outputs.artifact_name }}
+          ARTIFACT_EXPIRES_AT: ${{ steps.producer_attempt.outputs.artifact_expires_at }}
+          ARTIFACT_CREATED_AT: ${{ steps.producer_attempt.outputs.artifact_created_at }}
+          ARTIFACT_DIGEST: ${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}
+          ARTIFACT_SIZE: ${{ steps.producer_attempt.outputs.artifact_size_bytes }}
+          PRODUCER_EVENT: ${{ steps.producer_attempt.outputs.event }}
+          PRODUCER_RUN_URL: ${{ steps.producer_attempt.outputs.producer_url }}
           DERIVATION_OUTPUT: .datapan/ci/same-observation-derivation
         run: |
           set -euo pipefail
@@ -1032,6 +1048,22 @@ jobs:
             --target-generation-id "${TARGET_GENERATION_ID}" \
             --repository "${REPOSITORY}" --default-branch "${DEFAULT_BRANCH}" \
             --collector-admission "../datapan-registry/${COLLECTOR_ADMISSION}" \
+            --collector-archive "../datapan-registry/${COLLECTOR_ARCHIVE}" \
+            --producer-run-url "${PRODUCER_RUN_URL}" \
+            --producer-run-id "${PRODUCER_RUN_ID}" \
+            --producer-run-attempt "${PRODUCER_RUN_ATTEMPT}" \
+            --producer-head-sha "${PRODUCER_HEAD_SHA}" \
+            --producer-run-started-at "${PRODUCER_RUN_STARTED_AT}" \
+            --producer-run-completed-at "${PRODUCER_RUN_COMPLETED_AT}" \
+            --producer-observe-job-started-at "${OBSERVE_JOB_STARTED_AT}" \
+            --producer-observe-job-completed-at "${OBSERVE_JOB_COMPLETED_AT}" \
+            --producer-artifact-id "${ARTIFACT_ID}" \
+            --producer-artifact-name "${ARTIFACT_NAME}" \
+            --producer-artifact-expires-at "${ARTIFACT_EXPIRES_AT}" \
+            --producer-artifact-created-at "${ARTIFACT_CREATED_AT}" \
+            --producer-artifact-digest-sha256 "${ARTIFACT_DIGEST}" \
+            --producer-artifact-size-bytes "${ARTIFACT_SIZE}" \
+            --producer-event "${PRODUCER_EVENT}" \
             --candidate ../datapan-registry/.datapan/ci/upstream-refresh/candidate.registry.json \
             --refresh-evidence ../datapan-registry/.datapan/ci/upstream-refresh/upstream-refresh-evidence.json \
             --diff ../datapan-registry/.datapan/ci/upstream-refresh/catalog-diff.json \
@@ -1050,6 +1082,18 @@ jobs:
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
           PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
           PRODUCER_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
+          PRODUCER_RUN_ATTEMPT: ${{ steps.producer_attempt.outputs.run_attempt }}
+          PRODUCER_RUN_STARTED_AT: ${{ steps.producer_attempt.outputs.run_started_at }}
+          PRODUCER_RUN_COMPLETED_AT: ${{ steps.producer_attempt.outputs.run_completed_at }}
+          OBSERVE_JOB_STARTED_AT: ${{ steps.producer_attempt.outputs.observe_job_started_at }}
+          OBSERVE_JOB_COMPLETED_AT: ${{ steps.producer_attempt.outputs.observe_job_completed_at }}
+          ARTIFACT_ID: ${{ steps.producer_attempt.outputs.artifact_id }}
+          ARTIFACT_NAME: ${{ steps.producer_attempt.outputs.artifact_name }}
+          ARTIFACT_EXPIRES_AT: ${{ steps.producer_attempt.outputs.artifact_expires_at }}
+          ARTIFACT_CREATED_AT: ${{ steps.producer_attempt.outputs.artifact_created_at }}
+          ARTIFACT_DIGEST: ${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}
+          ARTIFACT_SIZE: ${{ steps.producer_attempt.outputs.artifact_size_bytes }}
+          PRODUCER_EVENT: ${{ steps.producer_attempt.outputs.event }}
           INPUT_ERROR: ${{ steps.input_artifact.outputs.input_error }}
           INPUT_ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
           INPUT_ARTIFACT_ID: ${{ steps.input_artifact.outputs.artifact_id }}
@@ -1098,6 +1142,17 @@ jobs:
           )
           if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
           if [ -n "${PRODUCER_HEAD_SHA}" ]; then args+=(--producer-head-sha "${PRODUCER_HEAD_SHA}"); fi
+          args+=(
+            --producer-run-attempt "${PRODUCER_RUN_ATTEMPT}"
+            --producer-run-started-at "${PRODUCER_RUN_STARTED_AT}"
+            --producer-run-completed-at "${PRODUCER_RUN_COMPLETED_AT}"
+            --producer-observe-job-started-at "${OBSERVE_JOB_STARTED_AT}"
+            --producer-observe-job-completed-at "${OBSERVE_JOB_COMPLETED_AT}"
+            --producer-artifact-created-at "${ARTIFACT_CREATED_AT}"
+            --producer-artifact-digest-sha256 "${ARTIFACT_DIGEST}"
+            --producer-artifact-size-bytes "${ARTIFACT_SIZE}"
+            --producer-event "${PRODUCER_EVENT}"
+          )
           if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
           if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
           if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then
@@ -1185,6 +1240,18 @@ jobs:
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
           PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
           PRODUCER_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
+          PRODUCER_RUN_ATTEMPT: ${{ steps.producer_attempt.outputs.run_attempt }}
+          PRODUCER_RUN_STARTED_AT: ${{ steps.producer_attempt.outputs.run_started_at }}
+          PRODUCER_RUN_COMPLETED_AT: ${{ steps.producer_attempt.outputs.run_completed_at }}
+          OBSERVE_JOB_STARTED_AT: ${{ steps.producer_attempt.outputs.observe_job_started_at }}
+          OBSERVE_JOB_COMPLETED_AT: ${{ steps.producer_attempt.outputs.observe_job_completed_at }}
+          ARTIFACT_ID: ${{ steps.producer_attempt.outputs.artifact_id }}
+          ARTIFACT_NAME: ${{ steps.producer_attempt.outputs.artifact_name }}
+          ARTIFACT_EXPIRES_AT: ${{ steps.producer_attempt.outputs.artifact_expires_at }}
+          ARTIFACT_CREATED_AT: ${{ steps.producer_attempt.outputs.artifact_created_at }}
+          ARTIFACT_DIGEST: ${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}
+          ARTIFACT_SIZE: ${{ steps.producer_attempt.outputs.artifact_size_bytes }}
+          PRODUCER_EVENT: ${{ steps.producer_attempt.outputs.event }}
           INPUT_ERROR: ${{ steps.input_artifact.outputs.input_error }}
           INPUT_ARTIFACT_NAME: ${{ steps.select.outputs.expected_input_name }}
           INPUT_ARTIFACT_ID: ${{ steps.input_artifact.outputs.artifact_id }}
@@ -1263,6 +1330,17 @@ jobs:
             )
           if [ -n "${INPUT_ARTIFACT_ID}" ]; then args+=(--input-artifact-id "${INPUT_ARTIFACT_ID}"); fi
           if [ -n "${PRODUCER_HEAD_SHA}" ]; then args+=(--producer-head-sha "${PRODUCER_HEAD_SHA}"); fi
+          args+=(
+            --producer-run-attempt "${PRODUCER_RUN_ATTEMPT}"
+            --producer-run-started-at "${PRODUCER_RUN_STARTED_AT}"
+            --producer-run-completed-at "${PRODUCER_RUN_COMPLETED_AT}"
+            --producer-observe-job-started-at "${OBSERVE_JOB_STARTED_AT}"
+            --producer-observe-job-completed-at "${OBSERVE_JOB_COMPLETED_AT}"
+            --producer-artifact-created-at "${ARTIFACT_CREATED_AT}"
+            --producer-artifact-digest-sha256 "${ARTIFACT_DIGEST}"
+            --producer-artifact-size-bytes "${ARTIFACT_SIZE}"
+            --producer-event "${PRODUCER_EVENT}"
+          )
           if [ -n "${INPUT_ADMISSION_FILE}" ]; then args+=(--collector-admission-file "${INPUT_ADMISSION_FILE}"); fi
           if [ -n "${INPUT_ARCHIVE_PATH}" ]; then args+=(--collector-archive "${INPUT_ARCHIVE_PATH}"); fi
             if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.completeness-proof-inputs.v1.schema.json",
+  "title": "Datapan completeness proof evidence input index v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evaluation_epoch", "inputs"],
+  "properties": {
+    "schema_version": {"const": "datapan.completeness-proof-inputs.v1"},
+    "evaluation_epoch": {"type": "string", "format": "date-time"},
+    "evaluation_context": {"$ref": "#/$defs/evaluation_context"},
+    "inputs": {"type": "array", "items": {"$ref": "#/$defs/input"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "bytes": {"type": "integer", "minimum": 0}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "evaluation_context": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "baseline_main_sha", "baseline_input_index", "baseline_registry", "baseline_operation_manifest", "baseline_release_manifest", "baseline_policy", "baseline_scope_registry", "candidate_registry", "candidate_operation_manifest"],
+      "properties": {
+        "mode": {"const": "candidate"},
+        "baseline_main_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "baseline_input_index": {"$ref": "#/$defs/artifact"},
+        "baseline_registry": {"$ref": "#/$defs/artifact"},
+        "baseline_operation_manifest": {"$ref": "#/$defs/artifact"},
+        "baseline_release_manifest": {"$ref": "#/$defs/artifact"},
+        "baseline_policy": {"$ref": "#/$defs/artifact"},
+        "baseline_scope_registry": {"$ref": "#/$defs/artifact"},
+        "candidate_registry": {"$ref": "#/$defs/artifact"},
+        "candidate_operation_manifest": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "input": {
+      "type": "object", "additionalProperties": false,
+      "required": ["input_id", "scope_id", "role", "artifact_type", "root", "path", "bytes", "sha256", "namespace", "producer", "observed_at"],
+      "properties": {
+        "input_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+        "scope_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+        "role": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_]+$"},
+        "artifact_type": {"enum": ["source_profile", "local_inventory", "source_snapshot", "authority_denominator", "proof_v1", "import_admission", "import_receipt", "import_attestation", "pipeline_run", "pipeline_jobs", "pipeline_artifact", "pipeline_log", "pipeline_contents_snapshot", "pipeline_state_reference", "pipeline_git_commit", "pipeline_git_tree", "pipeline_git_blob", "checkpoint", "composition_receipt", "promotion_journal", "publication_receipt", "publication_source_binding", "consumer_readback", "health_receipt", "health_state"]},
+        "root": {"enum": ["repository", "evidence"]},
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "namespace": {"enum": ["repository_snapshot", "historical_admitted", "live_operational", "fixture"]},
+        "producer": {
+          "type": "object", "additionalProperties": false,
+          "required": ["repository", "identity"],
+          "properties": {
+            "repository": {"type": "string", "minLength": 1},
+            "identity": {"type": "string", "minLength": 1},
+            "revision": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40,64}$"},
+            "run_id": {"type": ["string", "null"], "pattern": "^[0-9]+$"},
+            "attempt": {"type": ["integer", "null"], "minimum": 1},
+            "workflow_id": {"type": ["integer", "null"], "minimum": 1},
+            "workflow_path": {"type": ["string", "null"]},
+            "event": {"type": ["string", "null"]}
+          }
+        },
+        "observed_at": {"type": ["string", "null"], "format": "date-time"},
+        "subject": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "source_sha256": {"$ref": "#/$defs/sha256"},
+            "manifest_sha256": {"$ref": "#/$defs/sha256"},
+            "operation_manifest_sha256": {"$ref": "#/$defs/sha256"},
+            "registry_sha256": {"$ref": "#/$defs/sha256"},
+            "payload_sha256": {"$ref": "#/$defs/sha256"},
+            "identity_set_sha256": {"$ref": "#/$defs/sha256"},
+            "generation_id": {"$ref": "#/$defs/sha256"},
+            "scope_id": {"type": "string", "minLength": 1},
+            "source_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+            "resource_kind": {"enum": ["api_catalog_metadata", "api_operation_manifest", "file_dataset", "curated_payload_snapshot", "payload_rows"]},
+            "identity_algorithm": {"type": "string", "minLength": 1},
+            "promotion_run_id": {"type": "string", "pattern": "^[0-9]+$"},
+            "promotion_attempt": {"type": "integer", "minimum": 1},
+            "source_revision": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+            "pointer_revision": {"type": "string", "minLength": 1},
+            "run_id": {"type": "string", "pattern": "^[0-9]+$"},
+            "attempt": {"type": "integer", "minimum": 1},
+            "admission_revision": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+            "stage": {"enum": ["source", "processor", "promotion", "health", "publisher", "acknowledgement"]}
+          }
+        }
+      }
+    }
+  }
+}

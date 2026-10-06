@@ -1,0 +1,45 @@
+{
+  "artifacts": [
+    {
+      "archive_download_url": "https://api.github.com/repos/StatPan/datapan-registry/actions/artifacts/11302706307/zip",
+      "created_at": "2026-10-04T11:43:11Z",
+      "digest": "sha256:c3790f63940efcc260ee94b628cd4622c2ac81a9294507aa93f94348af373699",
+      "expired": false,
+      "expires_at": "2026-10-18T11:43:11Z",
+      "id": 11302706307,
+      "name": "huggingface-registry-distribution-stage",
+      "node_id": "MDg6QXJ0aWZhY3QxMTMwMjcwNjMwNw==",
+      "size_in_bytes": 11883,
+      "updated_at": "2026-10-04T11:43:11Z",
+      "url": "https://api.github.com/repos/StatPan/datapan-registry/actions/artifacts/11302706307",
+      "workflow_run": {
+        "head_branch": "main",
+        "head_repository_id": 1278568329,
+        "head_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "id": 37199628001,
+        "repository_id": 1278568329
+      }
+    },
+    {
+      "archive_download_url": "https://api.github.com/repos/StatPan/datapan-registry/actions/artifacts/11301727720/zip",
+      "created_at": "2026-10-04T11:43:34Z",
+      "digest": "sha256:b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227",
+      "expired": false,
+      "expires_at": "2026-11-03T11:43:34Z",
+      "id": 11301727720,
+      "name": "huggingface-registry-publication-receipts",
+      "node_id": "MDg6QXJ0aWZhY3QxMTMwMTcyNzcyMA==",
+      "size_in_bytes": 1090,
+      "updated_at": "2026-10-04T11:43:34Z",
+      "url": "https://api.github.com/repos/StatPan/datapan-registry/actions/artifacts/11301727720",
+      "workflow_run": {
+        "head_branch": "main",
+        "head_repository_id": 1278568329,
+        "head_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "id": 37199628001,
+        "repository_id": 1278568329
+      }
+    }
+  ],
+  "total_count": 2
+}

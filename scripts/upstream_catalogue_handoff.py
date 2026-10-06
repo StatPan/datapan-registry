@@ -563,6 +563,143 @@ def validate_admission_row(value: Any) -> dict[str, Any]:
     return dict(value)
 
 
+COLLECTOR_ADMISSION_ENVELOPE_KEYS = {
+    "schema_version", "repository", "producer_run_id", "run_attempt", "head_sha",
+    "run_started_at", "run_completed_at", "observe_job_started_at", "observe_job_completed_at",
+    "artifact_id", "artifact_name", "artifact_expires_at", "artifact_created_at",
+    "artifact_digest_sha256", "artifact_size_bytes", "archive_sha256", "archive_size_bytes",
+    "observed_at", "refresh_evidence_sha256", "event",
+}
+COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS = {
+    "repository", "producer_run_id", "run_attempt", "head_sha", "run_started_at",
+    "run_completed_at", "observe_job_started_at", "observe_job_completed_at", "artifact_id",
+    "artifact_name", "artifact_expires_at", "artifact_created_at", "artifact_digest_sha256",
+    "artifact_size_bytes", "event",
+}
+
+
+def validate_collector_admission_envelope(
+    value: Any,
+    *,
+    expected: Mapping[str, Any],
+    evidence: Any,
+    candidate_sha256: str | None,
+    evidence_sha256: str | None,
+    diff_sha256: str | None,
+    source_id: str,
+    archive_path: pathlib.Path | None,
+    producer_run_url: str,
+    now: dt.datetime,
+) -> dict[str, Any]:
+    """Authenticate one collector envelope against selected API and input bytes.
+
+    ``expected`` is the complete producer/artifact API selection, populated
+    independently from the envelope. A partial selection cannot authorize the
+    envelope's self-asserted attempt, interval, or artifact metadata.
+    """
+    identity_expected = {
+        "repository", "producer_run_id", "artifact_id", "artifact_name",
+        "artifact_expires_at", "head_sha",
+    }
+    if not isinstance(expected, Mapping):
+        raise HandoffError("collector_handoff_admission_authenticated_metadata_missing")
+    if set(expected) - COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS:
+        raise HandoffError("collector_handoff_admission_authenticated_metadata_invalid")
+    if set(expected) != COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS:
+        raise HandoffError("collector_handoff_admission_authenticated_metadata_missing")
+    if not isinstance(value, dict) or set(value) != COLLECTOR_ADMISSION_ENVELOPE_KEYS:
+        raise HandoffError("collector_handoff_admission_metadata_shape_invalid")
+
+    if (
+        value.get("schema_version") != "datapan.upstream-catalogue-admission-envelope.v1"
+        or any(value.get(key) != expected[key] for key in identity_expected)
+        or value.get("event") not in {"schedule", "workflow_dispatch"}
+        or not re.fullmatch(r"[a-f0-9]{40}", str(value.get("head_sha") or ""))
+    ):
+        raise HandoffError("collector_handoff_admission_identity_mismatch")
+    if any(value.get(key) != expected[key] for key in COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS - identity_expected):
+        raise HandoffError("collector_handoff_admission_authenticated_metadata_mismatch")
+
+    run_attempt = value.get("run_attempt")
+    artifact_size = value.get("artifact_size_bytes")
+    archive_size = value.get("archive_size_bytes")
+    if (
+        not isinstance(run_attempt, int) or isinstance(run_attempt, bool) or run_attempt < 1
+        or not isinstance(artifact_size, int) or isinstance(artifact_size, bool) or artifact_size <= 0
+        or not isinstance(archive_size, int) or isinstance(archive_size, bool) or archive_size <= 0
+        or artifact_size != archive_size
+        or not re.fullmatch(r"[a-f0-9]{64}", str(value.get("artifact_digest_sha256") or ""))
+        or not re.fullmatch(r"[a-f0-9]{64}", str(value.get("archive_sha256") or ""))
+        or value.get("archive_sha256") != value.get("artifact_digest_sha256")
+        or value.get("refresh_evidence_sha256") != evidence_sha256
+        or not evidence_sha256 or not candidate_sha256
+        or value.get("observed_at") != (evidence.get("observed_at") if isinstance(evidence, dict) else None)
+    ):
+        raise HandoffError("collector_handoff_admission_evidence_mismatch")
+    if (
+        not HEX64.fullmatch(candidate_sha256)
+        or not HEX64.fullmatch(evidence_sha256)
+        or (diff_sha256 is not None and not HEX64.fullmatch(diff_sha256))
+    ):
+        raise HandoffError("collector_handoff_admission_evidence_mismatch")
+    snapshot = evidence.get("snapshot") if isinstance(evidence, dict) else None
+    diff = evidence.get("diff") if isinstance(evidence, dict) else None
+    if (
+        not isinstance(snapshot, Mapping) or snapshot.get("sha256") != candidate_sha256
+        or (diff_sha256 is not None and (not isinstance(diff, Mapping) or diff.get("sha256") != diff_sha256))
+    ):
+        raise HandoffError("collector_handoff_admission_evidence_mismatch")
+
+    try:
+        times = {
+            field: parse_time(value[field])
+            for field in (
+                "run_started_at", "run_completed_at", "observe_job_started_at", "observe_job_completed_at",
+                "artifact_created_at", "artifact_expires_at", "observed_at",
+            )
+        }
+    except HandoffError as exc:
+        raise HandoffError("collector_handoff_admission_timestamp_invalid") from exc
+    started = times["run_started_at"]
+    completed = times["run_completed_at"]
+    job_started = times["observe_job_started_at"]
+    job_completed = times["observe_job_completed_at"]
+    created = times["artifact_created_at"]
+    if (
+        completed < started or job_started < started or job_completed < job_started or job_completed > completed
+        or created < job_started or created > job_completed
+        or times["artifact_expires_at"] <= now
+    ):
+        raise HandoffError("collector_handoff_artifact_attempt_interval_invalid")
+
+    if (
+        archive_path is None or archive_path.is_symlink() or not archive_path.is_file()
+    ):
+        raise HandoffError("collector_handoff_archive_missing")
+    try:
+        archive_size_actual = archive_path.stat().st_size
+        if archive_size_actual <= 0 or archive_size_actual > 268435456:
+            raise HandoffError("collector_handoff_archive_digest_or_size_mismatch")
+        archive_digest = hashlib.sha256()
+        with archive_path.open("rb") as archive_file:
+            for chunk in iter(lambda: archive_file.read(1024 * 1024), b""):
+                archive_digest.update(chunk)
+        archive_sha = archive_digest.hexdigest()
+    except OSError as exc:
+        raise HandoffError("collector_handoff_archive_missing") from exc
+    if archive_sha != value["archive_sha256"] or archive_size_actual != archive_size:
+        raise HandoffError("collector_handoff_archive_digest_or_size_mismatch")
+    if producer_run_url != f"https://github.com/{expected['repository']}/actions/runs/{expected['producer_run_id']}":
+        raise HandoffError("collector_handoff_producer_url_mismatch")
+    if (
+        not isinstance(evidence, dict) or evidence.get("source_id") != source_id
+        or not isinstance(evidence.get("collection"), Mapping)
+        or evidence["collection"].get("succeeded") is not True
+    ):
+        raise HandoffError("collector_handoff_source_evidence_not_successful")
+    return dict(value)
+
+
 def validate_ledger(value: Any) -> dict[str, Any]:
     if not isinstance(value, dict) or set(value) != {
         "schema_version", "legacy_discovery_floor", "admitted_observations",

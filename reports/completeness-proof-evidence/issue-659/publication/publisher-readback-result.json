@@ -1,0 +1,279 @@
+{
+  "checks": [
+    {
+      "check": "publisher_run_is_exact_completed_success",
+      "detail": {
+        "conclusion": "success",
+        "created_at": "2026-10-04T11:42:11Z",
+        "event": "workflow_dispatch",
+        "head_branch": "main",
+        "head_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "id": 37199628001,
+        "path": ".github/workflows/huggingface-distribution.yml",
+        "run_attempt": 1,
+        "status": "completed",
+        "updated_at": "2026-10-04T11:43:38Z",
+        "workflow_id": 311133646
+      },
+      "passed": true
+    },
+    {
+      "check": "publisher_gates_and_receipt_upload_all_succeeded",
+      "detail": {
+        "jobs": [
+          {
+            "conclusion": "success",
+            "id": 111428459497,
+            "name": "validate"
+          }
+        ],
+        "required_step_conclusions": {
+          "Bind and check out the exact publication source": [
+            "success"
+          ],
+          "Compose source-bound publication receipt": [
+            "success"
+          ],
+          "Generate and validate shards": [
+            "success"
+          ],
+          "Generate exact-manifest verification and readiness receipts": [
+            "success"
+          ],
+          "Materialize canonical Registry from the immutable public mirror": [
+            "success"
+          ],
+          "Publish two-phase immutable distribution": [
+            "success"
+          ],
+          "Stage complete manifest-bound distribution": [
+            "success"
+          ],
+          "Test distribution contract": [
+            "success"
+          ],
+          "Upload publication receipts": [
+            "success"
+          ],
+          "Verify published pointer anonymously": [
+            "success"
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "publisher_run_has_one_unexpired_receipt_artifact",
+      "detail": {
+        "matching_artifacts": [
+          {
+            "digest": "sha256:b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227",
+            "expired": false,
+            "expires_at": "2026-11-03T11:43:34Z",
+            "id": 11301727720,
+            "name": "huggingface-registry-publication-receipts",
+            "size_in_bytes": 1090
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "check": "receipt_artifact_is_bound_to_exact_publisher_run",
+      "detail": {
+        "digest": "sha256:b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227",
+        "expired": false,
+        "expires_at": "2026-11-03T11:43:34Z",
+        "id": 11301727720,
+        "name": "huggingface-registry-publication-receipts",
+        "size_in_bytes": 1090,
+        "workflow_run": {
+          "head_branch": "main",
+          "head_repository_id": 1278568329,
+          "head_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+          "id": 37199628001,
+          "repository_id": 1278568329
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "receipt_zip_bytes_match_github_api_digest",
+      "detail": {
+        "api_digest": "sha256:b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227",
+        "artifact_id": 11301727720,
+        "origin": "/home/statpan/workspace/opensource/datapan-registry/.datapan/preparation/continuous-spec-goal-20261004/post-publication-ack/publisher-run-37199628001-progress/publication-receipts.zip",
+        "zip_bytes": 1090,
+        "zip_sha256": "b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227"
+      },
+      "passed": true
+    },
+    {
+      "check": "receipt_zip_has_only_expected_members",
+      "detail": {
+        "members": [
+          "hf-source-binding.json",
+          "hf-publication-receipt.json"
+        ]
+      },
+      "passed": true
+    },
+    {
+      "check": "receipt_source_binding_matches_requested_source_workflow_pair",
+      "detail": {
+        "event_name": "workflow_dispatch",
+        "git_ref": "refs/heads/main",
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+        "repository": "StatPan/datapan-registry",
+        "schema_version": "datapan.registry-publication-source-binding.v1",
+        "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+        "source_tree_sha": "ff6a93bed060e8bd9ef2738efdc2672d228f35f8",
+        "status": "bound",
+        "workflow_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616"
+      },
+      "passed": true
+    },
+    {
+      "check": "receipt_claims_exact_verified_payload_and_native_anonymous_readback",
+      "detail": {
+        "anonymous_verification": {
+          "artifacts": 196,
+          "dataset": "StatPan/datapan-registry",
+          "release_manifest": "verified",
+          "revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+          "status": "verified"
+        },
+        "publication": {
+          "artifacts": 196,
+          "dataset": "StatPan/datapan-registry",
+          "payload_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+          "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+          "status": "published"
+        },
+        "schema_version": "datapan.registry-publication-receipt.v1",
+        "source_binding": {
+          "event_name": "workflow_dispatch",
+          "git_ref": "refs/heads/main",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "repository": "StatPan/datapan-registry",
+          "schema_version": "datapan.registry-publication-source-binding.v1",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "source_tree_sha": "ff6a93bed060e8bd9ef2738efdc2672d228f35f8",
+          "status": "bound",
+          "workflow_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616"
+        },
+        "status": "verified"
+      },
+      "passed": true
+    },
+    {
+      "check": "hf_main_and_immutable_pointer_revision_are_identical",
+      "detail": {
+        "artifact_count": 196,
+        "immutable_pointer_sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+        "main_pointer_sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+        "receipt_payload_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "receipt_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "registry_record": {
+          "bytes": 139155499,
+          "kind": "registry",
+          "path": "data/data-go-kr.registry.json",
+          "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+        },
+        "release_manifest": {
+          "bytes": 47724,
+          "kind": "release_manifest",
+          "path": "manifest.json",
+          "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
+        },
+        "repo_head": "d53085285e1eaa5ab894a45514e4220eb8725be9"
+      },
+      "passed": true
+    },
+    {
+      "check": "immutable_release_manifest_and_registry_pointer_match_expected",
+      "detail": {
+        "bytes": 47724,
+        "path": "manifest.json",
+        "registry_pointer_record": {
+          "bytes": 139155499,
+          "kind": "registry",
+          "path": "data/data-go-kr.registry.json",
+          "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+        },
+        "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
+      },
+      "passed": true
+    },
+    {
+      "check": "immutable_registry_stream_matches_expected_sha_and_size",
+      "detail": {
+        "bytes_streamed": 139155499,
+        "path": "data/data-go-kr.registry.json",
+        "revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+        "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+        "stored_registry_bytes": false
+      },
+      "passed": true
+    },
+    {
+      "check": "hf_current_pointer_and_repo_head_remained_stable",
+      "detail": {
+        "main_pointer_sha256_after": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+        "main_pointer_sha256_before": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+        "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "repo_head_after": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "repo_head_before": "d53085285e1eaa5ab894a45514e4220eb8725be9"
+      },
+      "passed": true
+    }
+  ],
+  "expected_pair": {
+    "dataset": "StatPan/datapan-registry",
+    "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+    "registry_bytes": 139155499,
+    "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+    "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+    "workflow_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616"
+  },
+  "generated_at": "2026-10-04T11:48:04.144691+00:00",
+  "no_hf_token_read": true,
+  "no_publish_or_provider_calls": true,
+  "overall": "VERIFIED_EXPECTED_PUBLIC_IDENTITIES",
+  "publication": {
+    "dataset": "StatPan/datapan-registry",
+    "full_distribution_artifacts_receipt_verified": 196,
+    "independently_downloaded_artifacts": [
+      "manifest.json",
+      "data/data-go-kr.registry.json"
+    ],
+    "manifest_bytes": 47724,
+    "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+    "payload_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+    "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+    "pointer_sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+    "registry_bytes_streamed": 139155499,
+    "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+  },
+  "publisher": {
+    "attempt": 1,
+    "conclusion": "success",
+    "created_at": "2026-10-04T11:42:11Z",
+    "run_id": 37199628001,
+    "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+    "updated_at": "2026-10-04T11:43:38Z",
+    "workflow_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616"
+  },
+  "publisher_attempt": 1,
+  "publisher_run_id": 37199628001,
+  "read_only": true,
+  "receipt_artifact": {
+    "id": 11301727720,
+    "name": "huggingface-registry-publication-receipts",
+    "zip_bytes": 1090,
+    "zip_sha256": "b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227"
+  },
+  "schema_version": "datapan.hf-publication-anonymous-readback.v1",
+  "scope_note": "This verifies the exact receipt-bound pointer and expected manifest/registry identities anonymously. It relies on the successful publisher receipt for the other 194 distribution artifacts and makes no diagnostic, Web adoption, manual runtime acceptance, or full-scope freshness claim.",
+  "script_sha256": "be939eac436aae620f0d3f731c4163b2a3fe86eaedd695c844ae0feb5d1a8e30"
+}

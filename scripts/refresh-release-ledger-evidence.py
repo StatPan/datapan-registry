@@ -26,12 +26,17 @@ class Command:
 
 WRITE_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-schema-artifacts.py", "--write")),
+    Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--write")),
     Command(("python3", "scripts/generate-diagnostic-current-source-applicability.py", "--write")),
     Command(("python3", "scripts/generate-source-contract-rollup.py")),
     Command(("python3", "scripts/generate-error-action-routing-rollup.py")),
     Command(("python3", "scripts/generate-failure-recovery-rollup.py")),
-    Command(("python3", "scripts/generate-operation-denominator-rollup.py")),
+    # The completeness proof rollup consumes the exact generated #605
+    # operation-manifest inventory, so refresh it before its denominator and
+    # proof consumers (not later in the convergence pass).
     Command(("python3", "scripts/generate-data-go-kr-operation-manifest.py")),
+    Command(("python3", "scripts/generate-operation-denominator-rollup.py")),
+    Command(("python3", "scripts/generate-completeness-proof-rollup.py", "--write")),
     Command(("python3", "scripts/generate-current-runtime-evidence-projection.py")),
     Command(("python3", "scripts/generate-runtime-freshness-queue.py")),
     Command(("python3", "scripts/generate-sustainable-coverage.py")),
@@ -95,6 +100,8 @@ CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-error-action-routing-rollup.py", "--check")),
     Command(("python3", "scripts/generate-failure-recovery-rollup.py", "--check")),
     Command(("python3", "scripts/generate-operation-denominator-rollup.py", "--check")),
+    Command(("python3", "scripts/generate-completeness-proof-rollup.py", "--check")),
+    Command(("python3", "-m", "unittest", "tests/test_generate_completeness_proof_rollup.py", "tests/test_completeness_publication_evidence.py", "tests/test_completeness_scope_registration.py", "tests/test_completeness_proof_rollup_cli.py", "tests/test_completeness_future_observation_chain.py")),
     Command(("python3", "scripts/validate-data-go-kr-operation-manifest.py")),
     Command(("python3", "scripts/generate-current-runtime-evidence-projection.py", "--check")),
     Command(("python3", "scripts/generate-runtime-freshness-queue.py", "--check")),
@@ -204,6 +211,15 @@ def check() -> None:
 
 def self_test() -> None:
     labels = [command.label for command in WRITE_COMMANDS]
+    operation_manifest = "python3 scripts/generate-data-go-kr-operation-manifest.py"
+    completeness_rollup = "python3 scripts/generate-completeness-proof-rollup.py --write"
+    denominator_rollup = "python3 scripts/generate-operation-denominator-rollup.py"
+    if not (
+        labels.index(operation_manifest)
+        < labels.index(denominator_rollup)
+        < labels.index(completeness_rollup)
+    ):
+        raise ValueError("self-test failed: #605 operation inventory must precede denominator and completeness consumers")
     manifest_sync_indices = [
         index
         for index, label in enumerate(labels)

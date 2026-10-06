@@ -1,0 +1,209 @@
+{
+  "jobs": [
+    {
+      "check_run_url": "https://api.github.com/repos/StatPan/datapan-registry/check-runs/111428459497",
+      "completed_at": "2026-10-04T11:43:37Z",
+      "conclusion": "success",
+      "created_at": "2026-10-04T11:42:13Z",
+      "head_branch": "main",
+      "head_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+      "html_url": "https://github.com/StatPan/datapan-registry/actions/runs/37199628001/job/111428459497",
+      "id": 111428459497,
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "name": "validate",
+      "node_id": "CR_kwDOTDVnic8AAAAZ8adb6Q",
+      "run_attempt": 1,
+      "run_id": 37199628001,
+      "run_url": "https://api.github.com/repos/StatPan/datapan-registry/actions/runs/37199628001",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions",
+      "runner_id": 1000017343,
+      "runner_name": "GitHub Actions 1000017343",
+      "started_at": "2026-10-04T11:42:15Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completed_at": "2026-10-04T11:42:17Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "started_at": "2026-10-04T11:42:16Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:27Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "started_at": "2026-10-04T11:42:17Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:27Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "number": 3,
+          "started_at": "2026-10-04T11:42:27Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:27Z",
+          "conclusion": "success",
+          "name": "Bind and check out the exact publication source",
+          "number": 4,
+          "started_at": "2026-10-04T11:42:27Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:28Z",
+          "conclusion": "success",
+          "name": "Check out current datapan-cli consumer",
+          "number": 5,
+          "started_at": "2026-10-04T11:42:27Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:29Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-go@v5",
+          "number": 6,
+          "started_at": "2026-10-04T11:42:28Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:33Z",
+          "conclusion": "success",
+          "name": "Install validation and publication clients",
+          "number": 7,
+          "started_at": "2026-10-04T11:42:29Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:34Z",
+          "conclusion": "success",
+          "name": "Test distribution contract",
+          "number": 8,
+          "started_at": "2026-10-04T11:42:33Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:39Z",
+          "conclusion": "success",
+          "name": "Materialize canonical Registry from the immutable public mirror",
+          "number": 9,
+          "started_at": "2026-10-04T11:42:34Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:42:54Z",
+          "conclusion": "success",
+          "name": "Generate and validate shards",
+          "number": 10,
+          "started_at": "2026-10-04T11:42:39Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:10Z",
+          "conclusion": "success",
+          "name": "Generate exact-manifest verification and readiness receipts",
+          "number": 11,
+          "started_at": "2026-10-04T11:42:54Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:11Z",
+          "conclusion": "success",
+          "name": "Stage complete manifest-bound distribution",
+          "number": 12,
+          "started_at": "2026-10-04T11:43:10Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:11Z",
+          "conclusion": "success",
+          "name": "Upload staged evidence",
+          "number": 13,
+          "started_at": "2026-10-04T11:43:11Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:15Z",
+          "conclusion": "success",
+          "name": "Publish two-phase immutable distribution",
+          "number": 14,
+          "started_at": "2026-10-04T11:43:11Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:34Z",
+          "conclusion": "success",
+          "name": "Verify published pointer anonymously",
+          "number": 15,
+          "started_at": "2026-10-04T11:43:15Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:34Z",
+          "conclusion": "success",
+          "name": "Compose source-bound publication receipt",
+          "number": 16,
+          "started_at": "2026-10-04T11:43:34Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:34Z",
+          "conclusion": "success",
+          "name": "Upload publication receipts",
+          "number": 17,
+          "started_at": "2026-10-04T11:43:34Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:34Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-go@v5",
+          "number": 31,
+          "started_at": "2026-10-04T11:43:34Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:35Z",
+          "conclusion": "success",
+          "name": "Post Check out current datapan-cli consumer",
+          "number": 32,
+          "started_at": "2026-10-04T11:43:34Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:35Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "number": 33,
+          "started_at": "2026-10-04T11:43:35Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:35Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 34,
+          "started_at": "2026-10-04T11:43:35Z",
+          "status": "completed"
+        },
+        {
+          "completed_at": "2026-10-04T11:43:35Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 35,
+          "started_at": "2026-10-04T11:43:35Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://api.github.com/repos/StatPan/datapan-registry/actions/jobs/111428459497",
+      "workflow_name": "Publish Hugging Face Registry distribution"
+    }
+  ],
+  "total_count": 1
+}

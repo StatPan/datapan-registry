@@ -387,8 +387,47 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     candidate_path = args.candidate.resolve()
     evidence_path = args.refresh_evidence.resolve()
     diff_path = args.diff.resolve()
-    admission = handoff.validate_admission_row(load_json(args.collector_admission, 2 * 1024 * 1024))
+    admission_envelope = load_json(args.collector_admission, 64 * 1024)
     evidence = load_json(evidence_path, 256 * 1024 * 1024)
+    candidate_sha256 = sha256_bytes(candidate_path.read_bytes())
+    evidence_sha256 = sha256_bytes(evidence_path.read_bytes())
+    diff_sha256 = sha256_bytes(diff_path.read_bytes())
+    authenticated_metadata = {
+        "repository": repository,
+        "producer_run_id": args.producer_run_id,
+        "run_attempt": args.producer_run_attempt,
+        "head_sha": args.producer_head_sha,
+        "run_started_at": args.producer_run_started_at,
+        "run_completed_at": args.producer_run_completed_at,
+        "observe_job_started_at": args.producer_observe_job_started_at,
+        "observe_job_completed_at": args.producer_observe_job_completed_at,
+        "artifact_id": args.producer_artifact_id,
+        "artifact_name": args.producer_artifact_name,
+        "artifact_expires_at": args.producer_artifact_expires_at,
+        "artifact_created_at": args.producer_artifact_created_at,
+        "artifact_digest_sha256": args.producer_artifact_digest_sha256,
+        "artifact_size_bytes": args.producer_artifact_size_bytes,
+        "event": args.producer_event,
+    }
+    if (
+        set(authenticated_metadata) != handoff.COLLECTOR_ADMISSION_AUTHENTICATED_FIELDS
+        or any(value is None or value == "" for value in authenticated_metadata.values())
+        or not args.collector_archive
+        or not args.producer_run_url
+    ):
+        raise ValueError("derivation_collector_admission_authenticated_metadata_missing")
+    admission = handoff.validate_collector_admission_envelope(
+        admission_envelope,
+        expected=authenticated_metadata,
+        evidence=evidence,
+        candidate_sha256=candidate_sha256,
+        evidence_sha256=evidence_sha256,
+        diff_sha256=diff_sha256,
+        source_id="data_go_kr",
+        archive_path=args.collector_archive,
+        producer_run_url=args.producer_run_url,
+        now=dt.datetime.now(dt.timezone.utc),
+    )
     if not isinstance(evidence, Mapping) or evidence.get("collection", {}).get("succeeded") is not True:
         return unavailable("current_observation_not_successful")
     producer_head = str(admission.get("head_sha") or "")
@@ -414,15 +453,36 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "observed_at": admission["observed_at"],
         "observation_count": target.get("observation_count"),
         "original_baseline_sha256": sha256_bytes(source_root.joinpath("data/data-go-kr.registry.json").read_bytes()),
-        "candidate_sha256": sha256_bytes(candidate_path.read_bytes()),
-        "evidence_sha256": sha256_bytes(evidence_path.read_bytes()),
+        "candidate_sha256": candidate_sha256,
+        "evidence_sha256": evidence_sha256,
         "diff_sha256": sha256_bytes(diff_path.read_bytes()),
         "source_policy_sha256": sha256_bytes(policy_bytes),
         "provider_index_sha256": sha256_bytes(adapter_bytes),
     })
-    if admission.get("candidate_sha256") != original["candidate_sha256"] or admission.get("refresh_evidence_sha256") != original["evidence_sha256"]:
-        raise ValueError("derivation_current_admission_artifact_mismatch")
     target_admission = admission_for_checkpoint(target, index, handoff)
+    expected_durable_admission = {
+        "admission_id": handoff.admission_id(
+            str(admission["producer_run_id"]), admission["run_attempt"], str(admission["refresh_evidence_sha256"]),
+        ),
+        "producer_run_id": str(admission["producer_run_id"]),
+        "run_attempt": admission["run_attempt"],
+        "head_sha": admission["head_sha"],
+        "run_started_at": admission["run_started_at"],
+        "artifact_id": str(admission["artifact_id"]),
+        "artifact_name": admission["artifact_name"],
+        "artifact_expires_at": admission["artifact_expires_at"],
+        "artifact_digest_sha256": admission["artifact_digest_sha256"],
+        "artifact_size_bytes": admission["artifact_size_bytes"],
+        "refresh_evidence_sha256": evidence_sha256,
+        "observed_at": admission["observed_at"],
+        "candidate_sha256": candidate_sha256,
+    }
+    admission_mismatches = [
+        key for key, value in expected_durable_admission.items()
+        if target_admission.get(key) != value
+    ]
+    if admission_mismatches:
+        raise ValueError("derivation_current_admission_durable_row_mismatch")
     target_original = derivation.original_observation_from_checkpoint(target, target_admission)
     if target_original != original:
         return unavailable("selected_parent_is_different_source_observation")
@@ -862,6 +922,22 @@ def main() -> int:
     parser.add_argument("--repository", required=True)
     parser.add_argument("--default-branch", default="main")
     parser.add_argument("--collector-admission", type=pathlib.Path, required=True)
+    parser.add_argument("--collector-archive", type=pathlib.Path)
+    parser.add_argument("--producer-run-url")
+    parser.add_argument("--producer-run-id")
+    parser.add_argument("--producer-run-attempt", type=int)
+    parser.add_argument("--producer-head-sha")
+    parser.add_argument("--producer-run-started-at")
+    parser.add_argument("--producer-run-completed-at")
+    parser.add_argument("--producer-observe-job-started-at")
+    parser.add_argument("--producer-observe-job-completed-at")
+    parser.add_argument("--producer-artifact-id")
+    parser.add_argument("--producer-artifact-name")
+    parser.add_argument("--producer-artifact-expires-at")
+    parser.add_argument("--producer-artifact-created-at")
+    parser.add_argument("--producer-artifact-digest-sha256")
+    parser.add_argument("--producer-artifact-size-bytes", type=int)
+    parser.add_argument("--producer-event", choices=["schedule", "workflow_dispatch"])
     parser.add_argument("--candidate", type=pathlib.Path, required=True)
     parser.add_argument("--refresh-evidence", type=pathlib.Path, required=True)
     parser.add_argument("--diff", type=pathlib.Path, required=True)

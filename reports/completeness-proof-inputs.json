@@ -1,0 +1,1481 @@
+{
+  "evaluation_epoch": "2026-10-04T13:23:00Z",
+  "inputs": [
+    {
+      "artifact_type": "local_inventory",
+      "bytes": 139155499,
+      "input_id": "data-go-kr.api-catalog.source_catalog_snapshot",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "data/data-go-kr.registry.json",
+      "producer": {
+        "identity": "local-inventory-only",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_catalog_snapshot",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-catalog",
+      "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+    },
+    {
+      "artifact_type": "source_profile",
+      "bytes": 2819,
+      "input_id": "data-go-kr.api-catalog.source_profile",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "sources/data_go_kr.json",
+      "producer": {
+        "identity": "configured-source-profile",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_profile",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-catalog",
+      "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+    },
+    {
+      "artifact_type": "pipeline_git_blob",
+      "bytes": 46171,
+      "input_id": "data-go-kr.api-operations.659-health.health-receipt-blob-api",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/receipt-blob-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "health_receipt_blob_api",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "89456e1d9da0b98e456a173ad65fcc986e3dccc8fe2fe51bc984e2879562dc54",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_blob",
+      "bytes": 48461,
+      "input_id": "data-go-kr.api-operations.659-health.health-state-blob-api",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/state-blob-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "health_state_blob_api",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "7e5dc2109f923b88253fcc3524ec5364a9b5e49bb3e5409764a415149929309f",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_state_reference",
+      "bytes": 475,
+      "input_id": "data-go-kr.api-operations.659-health.health-state-ref",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/state-ref.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "health_state_ref",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "4de6ad1b30b33ddba4a3116e6c31332573ddb3c86ca651e87a5fb72eabbc1253",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_tree",
+      "bytes": 20550,
+      "input_id": "data-go-kr.api-operations.659-health.health-state-tree",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/state-tree-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "health_state_tree",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "0d90640826b27e9cc5e7a347c5717f79a7f190992bb6f8f07a098a7d8af4c9ef",
+      "subject": {
+        "admission_revision": "0c96ada8a9e2a0489dcb6e0e7cf79286d4ac407a",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "import_admission",
+      "bytes": 1524,
+      "input_id": "data-go-kr.api-operations.historical_import_admission",
+      "namespace": "historical_admitted",
+      "observed_at": "2026-09-22T23:50:50.428978Z",
+      "path": "reports/runtime-freshness-import-admissions/35798122454.json",
+      "producer": {
+        "identity": "merged-main-admitted-633-run",
+        "repository": "StatPan/datapan-registry",
+        "revision": "47a0f6e71d4d73734670bc3da9b64d94f0339f1d",
+        "run_id": "35798122454"
+      },
+      "role": "historical_import_admission",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "60978d52419913b68ef65f4a9e6e5cf86bfe17b8f9879f24311ee086a6733bce"
+    },
+    {
+      "artifact_type": "import_attestation",
+      "bytes": 2351,
+      "input_id": "data-go-kr.api-operations.historical_import_attestation",
+      "namespace": "historical_admitted",
+      "observed_at": "2026-09-23T06:51:42Z",
+      "path": "reports/runtime-freshness-import-attestations/35798122454.json",
+      "producer": {
+        "identity": "merged-main-admitted-633-run",
+        "repository": "StatPan/datapan-registry",
+        "revision": "44aaf067056c6ba231685ca9284a3cfbcd861ca5",
+        "run_id": "35798122454"
+      },
+      "role": "historical_import_attestation",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "c0475151034f87f372f8d1039bd9ba71609f33cfe355762a8290faa04f9b3330"
+    },
+    {
+      "artifact_type": "import_receipt",
+      "bytes": 317867,
+      "input_id": "data-go-kr.api-operations.historical_import_receipt",
+      "namespace": "historical_admitted",
+      "observed_at": "2026-09-22T23:50:50.428978Z",
+      "path": "reports/runtime-freshness-imports/35798122454.json",
+      "producer": {
+        "identity": "merged-main-admitted-633-run",
+        "repository": "StatPan/datapan-registry",
+        "revision": "47a0f6e71d4d73734670bc3da9b64d94f0339f1d",
+        "run_id": "35798122454"
+      },
+      "role": "historical_import_receipt",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "21b96547f72183d6475c9be50b4d279cb5ad8704ab338ed243ac16d806da7ef7"
+    },
+    {
+      "artifact_type": "local_inventory",
+      "bytes": 24366827,
+      "input_id": "data-go-kr.api-operations.local_operation_manifest",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "reports/data-go-kr/operation-manifest.json",
+      "producer": {
+        "identity": "local-inventory-only",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "local_operation_manifest",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "b68601aee31acdb90b0a655dcb079c185af2c7fdd107333712c9b84e6a2700be"
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 19573,
+      "input_id": "data-go-kr.api-operations.659-health.pipeline-artifact-archive",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/archive.zip",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "pipeline_artifact_archive",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "53fad2c80cd0c00fbecf2658f6d13b3254b84bce9e65e3449d3a1d326b5f231e",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 17130060,
+      "input_id": "data-go-kr.api-operations.659-processor.pipeline-artifact-archive",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/archive.zip",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "pipeline_artifact_archive",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "0ae987e7ad8f90ee142827630ac1f5d1873de0128b0cb7c039b89e902b90bb50",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 746,
+      "input_id": "data-go-kr.api-operations.659-health.pipeline-artifact-metadata",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/artifacts.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "pipeline_artifact_metadata",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "13ca1b5b8ed50f31aad8e86b93bb96a8221b128ade95ac2209fb2459d4a0e03f",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 753,
+      "input_id": "data-go-kr.api-operations.659-processor.pipeline-artifact-metadata",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/artifacts.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "pipeline_artifact_metadata",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "2b4668bef0532dd0014fc7a98948b2313e32ec12b6cabaf4f59e67c9d6c20e6d",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 745,
+      "input_id": "data-go-kr.api-operations.659-source.pipeline-artifact-metadata",
+      "namespace": "live_operational",
+      "observed_at": "2026-09-29T23:47:58Z",
+      "path": "reports/completeness-proof-evidence/issue-659/source/collector-artifacts.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions source evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "4321df1868754045ff3705b5c133c9fad2abde6e",
+        "run_id": "36646768289",
+        "workflow_id": 311036678,
+        "workflow_path": ".github/workflows/upstream-catalog-refresh.yml"
+      },
+      "role": "pipeline_artifact_metadata",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "2b7efbd3ba3a773f885cda8aff869407c39347734662410cf545290f87342f7f",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "source"
+      }
+    },
+    {
+      "artifact_type": "pipeline_jobs",
+      "bytes": 2732,
+      "input_id": "data-go-kr.api-operations.659-health.pipeline-jobs",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/jobs.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "pipeline_jobs",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "f8cf0c29d9466d1324f7bf749caa59956c3cf3381c85d8c5294d070c71242ce0",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_jobs",
+      "bytes": 5930,
+      "input_id": "data-go-kr.api-operations.659-processor.pipeline-jobs",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/jobs.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "pipeline_jobs",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "0cf72c95dc64f9af65c42a5162514991e83d9e4e68b2e2dc6f349cd92ebf1f72",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_jobs",
+      "bytes": 3947,
+      "input_id": "data-go-kr.api-operations.659-promotion.pipeline-jobs",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:21:36Z",
+      "path": "reports/completeness-proof-evidence/issue-659/promotion/jobs.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions promotion evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205271032",
+        "workflow_id": 373708872,
+        "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+      },
+      "role": "pipeline_jobs",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "08c1a957f9d5cc26516e04e36279f0e17debfef65d72148048d23cc2fcd1331c",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "promotion"
+      }
+    },
+    {
+      "artifact_type": "pipeline_jobs",
+      "bytes": 3454,
+      "input_id": "data-go-kr.api-operations.659-source.pipeline-jobs",
+      "namespace": "live_operational",
+      "observed_at": "2026-09-29T23:47:58Z",
+      "path": "reports/completeness-proof-evidence/issue-659/source/collector-jobs.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions source evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "4321df1868754045ff3705b5c133c9fad2abde6e",
+        "run_id": "36646768289",
+        "workflow_id": 311036678,
+        "workflow_path": ".github/workflows/upstream-catalog-refresh.yml"
+      },
+      "role": "pipeline_jobs",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "5b12d7e253499261a162e91fdf9ca0c355a53a7dbefd79b3b6feea5f3ad3f0e6",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "source"
+      }
+    },
+    {
+      "artifact_type": "pipeline_log",
+      "bytes": 13460,
+      "input_id": "data-go-kr.api-operations.659-promotion.pipeline-log-archive",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:21:36Z",
+      "path": "reports/completeness-proof-evidence/issue-659/promotion/log.txt.gz",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions promotion evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205271032",
+        "workflow_id": 373708872,
+        "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+      },
+      "role": "pipeline_log_archive",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "e211bd08e876b7515f90037270c95e99f2ea3d524374f66a3a5e3ce42d361c62",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "promotion"
+      }
+    },
+    {
+      "artifact_type": "pipeline_run",
+      "bytes": 12531,
+      "input_id": "data-go-kr.api-operations.659-health.pipeline-run",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:22:27Z",
+      "path": "reports/completeness-proof-evidence/issue-659/health/run.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "pipeline_run",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "610b7990bf39619e579e418519486c1e66b1d7640da7da0cf215e7c69dfc589a",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_run",
+      "bytes": 12530,
+      "input_id": "data-go-kr.api-operations.659-processor.pipeline-run",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/run.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "pipeline_run",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "9ff811fe056ae9770cf7df477fb81be2d6a7ff04a026c8441a0fc7c445fae852",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_run",
+      "bytes": 12534,
+      "input_id": "data-go-kr.api-operations.659-promotion.pipeline-run",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:21:36Z",
+      "path": "reports/completeness-proof-evidence/issue-659/promotion/run.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions promotion evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205271032",
+        "workflow_id": 373708872,
+        "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+      },
+      "role": "pipeline_run",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "7603fdb0bfb4b8a7190ee4097db166e5dfcba199ace689e43cf3d829b17f548c",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "promotion"
+      }
+    },
+    {
+      "artifact_type": "pipeline_run",
+      "bytes": 12635,
+      "input_id": "data-go-kr.api-operations.659-source.pipeline-run",
+      "namespace": "live_operational",
+      "observed_at": "2026-09-29T23:47:58Z",
+      "path": "reports/completeness-proof-evidence/issue-659/source/collector-run.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions source evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "4321df1868754045ff3705b5c133c9fad2abde6e",
+        "run_id": "36646768289",
+        "workflow_id": 311036678,
+        "workflow_path": ".github/workflows/upstream-catalog-refresh.yml"
+      },
+      "role": "pipeline_run",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "2c3f121ef83ed9cb944f3453b235e9d686e128b54bdca0a72b8fc68f71c4082e",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "source"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 28722,
+      "input_id": "data-go-kr.api-operations.659-processor.processor-generation-api",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/generation-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "processor_generation_api",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "42bbe49df96b5396d91567e18a0ae20d175f58f7d966eeb94263405c697cb05e",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 83603,
+      "input_id": "data-go-kr.api-operations.659-processor.processor-index-api",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/index-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "processor_index_api",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "5a68c23ac55e0f69b47754c9ff66800fe4e71bbe6ce6512fbd22c475edbf51c4",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_state_reference",
+      "bytes": 452,
+      "input_id": "data-go-kr.api-operations.659-processor.processor-state-ref",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/state-ref.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "processor_state_ref",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "c339dd1175b8424885d006b6f1aa5292a8b4ece661572c8435476715eafea1eb",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 1454,
+      "input_id": "data-go-kr.api-operations.659-processor.processor-state-root-api",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:20:25Z",
+      "path": "reports/completeness-proof-evidence/issue-659/processor/state-root-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "processor_state_root_api",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "50d12768e9f04e5f4b0d53d9f0d99b86241012b462e2848a432ca9ba311ac5ca",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_blob",
+      "bytes": 142430,
+      "input_id": "data-go-kr.api-operations.659-promotion.promotion-journal-blob-api",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:21:36Z",
+      "path": "reports/completeness-proof-evidence/issue-659/promotion/journal-blob-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions promotion evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205271032",
+        "workflow_id": 373708872,
+        "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+      },
+      "role": "promotion_journal_blob_api",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "c5cde5c059e192f01f1f425cc101021d9ccd07047d9ef8bb25449736f60ad9bd",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "promotion"
+      }
+    },
+    {
+      "artifact_type": "pipeline_state_reference",
+      "bytes": 445,
+      "input_id": "data-go-kr.api-operations.659-promotion.promotion-state-ref",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:21:36Z",
+      "path": "reports/completeness-proof-evidence/issue-659/promotion/state-ref.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions promotion evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205271032",
+        "workflow_id": 373708872,
+        "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+      },
+      "role": "promotion_state_ref",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "8249ba641c13bbf96ba03c48a78dda9c339dee6052488792a3d8db654bfe86eb",
+      "subject": {
+        "admission_revision": "f1a91c2d7a50e5663ff7d6476cd11352af44f16d",
+        "stage": "promotion"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_tree",
+      "bytes": 225321,
+      "input_id": "data-go-kr.api-operations.659-promotion.promotion-state-tree",
+      "namespace": "live_operational",
+      "observed_at": "2026-10-04T13:21:36Z",
+      "path": "reports/completeness-proof-evidence/issue-659/promotion/state-tree-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions promotion evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205271032",
+        "workflow_id": 373708872,
+        "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+      },
+      "role": "promotion_state_tree",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "3b4983cd6436c0290faa930952ccd9ed66f5e6e0cff36a7d5dc770de2b5c44fa",
+      "subject": {
+        "admission_revision": "0c96ada8a9e2a0489dcb6e0e7cf79286d4ac407a",
+        "stage": "promotion"
+      }
+    },
+    {
+      "artifact_type": "source_profile",
+      "bytes": 2819,
+      "input_id": "data-go-kr.api-operations.source_profile",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "sources/data_go_kr.json",
+      "producer": {
+        "identity": "configured-source-profile",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_profile",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+    },
+    {
+      "artifact_type": "source_profile",
+      "bytes": 2819,
+      "input_id": "data-go-kr.file-datasets.source_profile",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "sources/data_go_kr.json",
+      "producer": {
+        "identity": "configured-source-profile",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_profile",
+      "root": "repository",
+      "scope_id": "data-go-kr.file-datasets",
+      "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+    },
+    {
+      "artifact_type": "local_inventory",
+      "bytes": 961,
+      "input_id": "ecos.api-operations.local_operation_denominator",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "reports/ecos/operation-denominator.json",
+      "producer": {
+        "identity": "local-inventory-only",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "local_operation_denominator",
+      "root": "repository",
+      "scope_id": "ecos.api-operations",
+      "sha256": "d8619c61c2a718547ad5867b0125b74c21cf46d8cc3b74f369062e087387c62b"
+    },
+    {
+      "artifact_type": "source_profile",
+      "bytes": 3292,
+      "input_id": "ecos.api-operations.source_profile",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "sources/ecos.json",
+      "producer": {
+        "identity": "configured-source-profile",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_profile",
+      "root": "repository",
+      "scope_id": "ecos.api-operations",
+      "sha256": "2f4202ee24201e821666cdc7c55b724e979d94024b3f8289120e6c39c6584750"
+    },
+    {
+      "artifact_type": "local_inventory",
+      "bytes": 888,
+      "input_id": "kosis.api-operations.local_operation_denominator",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "reports/kosis/operation-denominator.json",
+      "producer": {
+        "identity": "local-inventory-only",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "local_operation_denominator",
+      "root": "repository",
+      "scope_id": "kosis.api-operations",
+      "sha256": "5e03008ac38a5c4a98f235c91a92b6b1a147fcb930e8e6c681240e984a10c081"
+    },
+    {
+      "artifact_type": "source_profile",
+      "bytes": 2949,
+      "input_id": "kosis.api-operations.source_profile",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "sources/kosis.json",
+      "producer": {
+        "identity": "configured-source-profile",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_profile",
+      "root": "repository",
+      "scope_id": "kosis.api-operations",
+      "sha256": "2fcff2cd1e5e7968473d0ecfc8a35ee90f0bafa4b5f2d82005f4ed00e3d1d344"
+    },
+    {
+      "artifact_type": "local_inventory",
+      "bytes": 930,
+      "input_id": "open-assembly.api-operations.local_operation_denominator",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "reports/open-assembly/operation-denominator.json",
+      "producer": {
+        "identity": "local-inventory-only",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "local_operation_denominator",
+      "root": "repository",
+      "scope_id": "open-assembly.api-operations",
+      "sha256": "d14aab4e423b66f5bb7539c87d1ec34634ac85a06d10c2dcbc9369dba4df7e52"
+    },
+    {
+      "artifact_type": "source_profile",
+      "bytes": 2923,
+      "input_id": "open-assembly.api-operations.source_profile",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "sources/open_assembly.json",
+      "producer": {
+        "identity": "configured-source-profile",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_profile",
+      "root": "repository",
+      "scope_id": "open-assembly.api-operations",
+      "sha256": "f8459b47e6642d5350377ca8f3e6608021808614602de48e2cb6090525e1aaae"
+    },
+    {
+      "artifact_type": "local_inventory",
+      "bytes": 970,
+      "input_id": "seoul-open-data.api-operations.local_operation_denominator",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "reports/seoul-open-data/operation-denominator.json",
+      "producer": {
+        "identity": "local-inventory-only",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "local_operation_denominator",
+      "root": "repository",
+      "scope_id": "seoul-open-data.api-operations",
+      "sha256": "7c44a8357903f223df195e6e48165b5fe058e4372bdcfe7c3022af80b5266b54"
+    },
+    {
+      "artifact_type": "source_profile",
+      "bytes": 3432,
+      "input_id": "seoul-open-data.api-operations.source_profile",
+      "namespace": "repository_snapshot",
+      "observed_at": null,
+      "path": "sources/seoul_open_data.json",
+      "producer": {
+        "identity": "configured-source-profile",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "source_profile",
+      "root": "repository",
+      "scope_id": "seoul-open-data.api-operations",
+      "sha256": "9ae73b337e2fd44e667087f50f538d123fe00e90afd03ab221e6b90fc9aef7a8"
+    },
+    {
+      "artifact_type": "pipeline_git_commit",
+      "bytes": 1238,
+      "input_id": "processor-state-commit",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/processor/state-commit-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "processor_state_commit",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "7772e07c52dff5501b6efd113ffb572f912c098cb04721d55813f380e3c9ae4b",
+      "subject": {
+        "admission_revision": "e7d898ff78e18fd69d64ac795b76ebf12f575cb0",
+        "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_tree",
+      "bytes": 3005,
+      "input_id": "processor-state-tree",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/processor/state-tree-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions processor evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37204681028",
+        "workflow_id": 373610259,
+        "workflow_path": ".github/workflows/upstream-catalogue-process.yml"
+      },
+      "role": "processor_state_tree",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "1bff55612a77af70cd976df9f54279e9da9862e628fba99544fdebcaf68793cf",
+      "subject": {
+        "admission_revision": "e7d898ff78e18fd69d64ac795b76ebf12f575cb0",
+        "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+        "stage": "processor"
+      }
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 9753118,
+      "input_id": "source-collector-artifact",
+      "namespace": "live_operational",
+      "observed_at": "2026-09-29T23:44:39Z",
+      "path": "reports/completeness-proof-evidence/issue-659/source/collector-artifact.zip",
+      "producer": {
+        "attempt": 1,
+        "event": "schedule",
+        "identity": "captured GitHub Actions source evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "4321df1868754045ff3705b5c133c9fad2abde6e",
+        "run_id": "36646768289",
+        "workflow_id": 311036678,
+        "workflow_path": ".github/workflows/upstream-catalog-refresh.yml"
+      },
+      "role": "pipeline_artifact_archive",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "39aef6af5140c1e213952ee307f16c9280d06d8fa6eebd6f9969e1b95a6a6de7",
+      "subject": {
+        "admission_revision": "ca8b62329cdc0af2f8438bc45d290a5a31b4b17b",
+        "stage": "source"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_commit",
+      "bytes": 1264,
+      "input_id": "promotion-state-commit",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/promotion/state-commit-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions promotion evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205271032",
+        "workflow_id": 373708872,
+        "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+      },
+      "role": "promotion_state_commit",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "dc3b7c7909b74d44ffc90bde88a0df5a8a87a6e832460bf17c6365e7e058ade5",
+      "subject": {
+        "admission_revision": "0c96ada8a9e2a0489dcb6e0e7cf79286d4ac407a",
+        "stage": "promotion"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_commit",
+      "bytes": 1243,
+      "input_id": "health-state-commit",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/health/state-commit-api.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_run",
+        "identity": "captured GitHub Actions health evidence",
+        "repository": "StatPan/datapan-registry",
+        "revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+        "run_id": "37205341388",
+        "workflow_id": 373633151,
+        "workflow_path": ".github/workflows/upstream-catalogue-health.yml"
+      },
+      "role": "health_state_commit",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "67cfe7c4078497f15686a02e60a679bb401e4add1d18776e189ea801275cb269",
+      "subject": {
+        "admission_revision": "0c96ada8a9e2a0489dcb6e0e7cf79286d4ac407a",
+        "stage": "health"
+      }
+    },
+    {
+      "artifact_type": "pipeline_run",
+      "bytes": 13894,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-producer-run",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-run.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_dispatch",
+        "identity": "retained publisher workflow run API",
+        "repository": "StatPan/datapan-registry",
+        "revision": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "run_id": "37199628001",
+        "workflow_id": 311133646,
+        "workflow_path": ".github/workflows/huggingface-distribution.yml"
+      },
+      "role": "publication_producer_run",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "e7a138b8b7ed0b44c94a357ade01847694de93383a8ab1f337d4ba922e0a592e",
+      "subject": {
+        "stage": "publisher"
+      }
+    },
+    {
+      "artifact_type": "pipeline_jobs",
+      "bytes": 7023,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-producer-jobs",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-jobs.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_dispatch",
+        "identity": "retained publisher workflow attempt jobs API",
+        "repository": "StatPan/datapan-registry",
+        "revision": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "run_id": "37199628001",
+        "workflow_id": 311133646,
+        "workflow_path": ".github/workflows/huggingface-distribution.yml"
+      },
+      "role": "publication_producer_jobs",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "7c23cf4e18b3788c621b005a5b09b764a1916cb3cd3d358f441051ed2ac77754",
+      "subject": {
+        "stage": "publisher"
+      }
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 1801,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-output-artifact",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-artifacts.json",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_dispatch",
+        "identity": "retained publisher workflow artifact API",
+        "repository": "StatPan/datapan-registry",
+        "revision": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "run_id": "37199628001",
+        "workflow_id": 311133646,
+        "workflow_path": ".github/workflows/huggingface-distribution.yml"
+      },
+      "role": "publication_output_artifact",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "fa1d0a60b9af3a96bf189c98ec8c958415561d5d44ff0ba07f62b5eb06e825ae",
+      "subject": {
+        "stage": "publisher"
+      }
+    },
+    {
+      "artifact_type": "pipeline_artifact",
+      "bytes": 1090,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-artifact-archive",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-receipts.zip",
+      "producer": {
+        "attempt": 1,
+        "event": "workflow_dispatch",
+        "identity": "retained exact publisher receipt artifact bytes",
+        "repository": "StatPan/datapan-registry",
+        "revision": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "run_id": "37199628001",
+        "workflow_id": 311133646,
+        "workflow_path": ".github/workflows/huggingface-distribution.yml"
+      },
+      "role": "publication_artifact_archive",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227",
+      "subject": {
+        "stage": "publisher"
+      }
+    },
+    {
+      "artifact_type": "pipeline_run",
+      "bytes": 12658,
+      "input_id": "data-go-kr.api-operations.659-publication.acknowledgement-run",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-run.json",
+      "producer": {
+        "attempt": 2,
+        "event": "workflow_run",
+        "identity": "retained acknowledgement workflow run API",
+        "repository": "StatPan/datapan-registry",
+        "revision": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "run_id": "37199709258",
+        "workflow_id": 373708873,
+        "workflow_path": ".github/workflows/canonical-update-publication-ack.yml"
+      },
+      "role": "acknowledgement_run",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "489b1b808cbe665dab6af5fd3bd6006b588ca357bbd30aabfd16dad44365fe25",
+      "subject": {
+        "stage": "acknowledgement"
+      }
+    },
+    {
+      "artifact_type": "pipeline_jobs",
+      "bytes": 2704,
+      "input_id": "data-go-kr.api-operations.659-publication.acknowledgement-jobs",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-jobs.json",
+      "producer": {
+        "attempt": 2,
+        "event": "workflow_run",
+        "identity": "retained acknowledgement workflow attempt jobs API",
+        "repository": "StatPan/datapan-registry",
+        "revision": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "run_id": "37199709258",
+        "workflow_id": 373708873,
+        "workflow_path": ".github/workflows/canonical-update-publication-ack.yml"
+      },
+      "role": "acknowledgement_jobs",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "6b5f64e22fcfbcbc658824ab248f8d71f6ea00e16e27df66c254a379e9cae404",
+      "subject": {
+        "stage": "acknowledgement"
+      }
+    },
+    {
+      "artifact_type": "pipeline_log",
+      "bytes": 18035,
+      "input_id": "data-go-kr.api-operations.659-publication.acknowledgement-log-archive",
+      "namespace": "live_operational",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-logs.zip",
+      "producer": {
+        "attempt": 2,
+        "event": "workflow_run",
+        "identity": "retained acknowledgement workflow job log archive",
+        "repository": "StatPan/datapan-registry",
+        "revision": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+        "run_id": "37199709258",
+        "workflow_id": 373708873,
+        "workflow_path": ".github/workflows/canonical-update-publication-ack.yml"
+      },
+      "role": "acknowledgement_log_archive",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "11d9495f1a01e41a62145e0b2f90ab9396b377365c82b0be6a4535a2fcb70780",
+      "subject": {
+        "stage": "acknowledgement"
+      }
+    },
+    {
+      "artifact_type": "publication_receipt",
+      "bytes": 1086,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-receipt",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-receipt.json",
+      "producer": {
+        "identity": "retained #659 publication evidence",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_receipt",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "6c14adf8f8717f939f6e901f2f4d135055f558a22c1edda0f90e95942280b88d",
+      "subject": {
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+        "payload_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+        "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+        "source_revision": "6a5138c792f4b7402da0c5ab439646bd752a307f"
+      }
+    },
+    {
+      "artifact_type": "publication_source_binding",
+      "bytes": 483,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-source-binding",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-binding.json",
+      "producer": {
+        "identity": "retained #659 publication evidence",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_source_binding",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "2201aaac56f5a5b77b45d9e946a152a617264c5f04b617e2c2af3e765d3908e1",
+      "subject": {
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+        "source_revision": "6a5138c792f4b7402da0c5ab439646bd752a307f"
+      }
+    },
+    {
+      "artifact_type": "pipeline_git_commit",
+      "bytes": 304443,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-source-commit",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-commit.json",
+      "producer": {
+        "identity": "exact source commit API response",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_source_commit",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "c38f5e34909f85bbc27b425b943c9946650650206efb1093811354c64b7a1b02",
+      "subject": {
+        "source_revision": "6a5138c792f4b7402da0c5ab439646bd752a307f"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 47724,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-source-manifest",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-manifest.json",
+      "producer": {
+        "identity": "manifest bytes read from exact source commit",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_source_manifest",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+      "subject": {
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+        "source_revision": "6a5138c792f4b7402da0c5ab439646bd752a307f"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 637,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-workflow",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-workflow.json",
+      "producer": {
+        "identity": "publisher workflow identity API response",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_workflow",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "840af19aeaf9c04733013b082939b8fa66bf9c1f735eb3a6036ee1d7957a0a24"
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 17159,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-repo-metadata-before",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-repo-metadata-before.json",
+      "producer": {
+        "identity": "anonymous distribution repository metadata before read-back",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_repo_metadata_before",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "b5f25a2f8d958288f90b213aed576a950c9daa5087a2e8d2722d5e7333def2aa"
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 42969,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-pointer-before",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-before.json",
+      "producer": {
+        "identity": "anonymous distribution index before read-back",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_pointer_before",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+      "subject": {
+        "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 17159,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-repo-metadata-after",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-repo-metadata-after.json",
+      "producer": {
+        "identity": "anonymous distribution repository metadata after read-back",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_repo_metadata_after",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "b5f25a2f8d958288f90b213aed576a950c9daa5087a2e8d2722d5e7333def2aa"
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 42969,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-pointer-after",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-after.json",
+      "producer": {
+        "identity": "anonymous distribution index after read-back",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_pointer_after",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+      "subject": {
+        "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 42969,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-pointer-immutable",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-immutable.json",
+      "producer": {
+        "identity": "immutable anonymous distribution index read-back",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_pointer_immutable",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd",
+      "subject": {
+        "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9"
+      }
+    },
+    {
+      "artifact_type": "pipeline_contents_snapshot",
+      "bytes": 47724,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-anonymous-manifest",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-anonymous-manifest.json",
+      "producer": {
+        "identity": "anonymous immutable release manifest bytes",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_anonymous_manifest",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+      "subject": {
+        "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
+      }
+    },
+    {
+      "artifact_type": "consumer_readback",
+      "bytes": 10760,
+      "input_id": "data-go-kr.api-operations.659-publication.publication-anonymous-payload",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-readback-result.json",
+      "producer": {
+        "identity": "bounded anonymous immutable registry stream check",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "publication_anonymous_payload",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "13d2ebc601512eb351fc72b499cee947371294dd6cc7101caa409c19dd811387",
+      "subject": {
+        "payload_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+      }
+    },
+    {
+      "artifact_type": "promotion_journal",
+      "bytes": 99817,
+      "input_id": "data-go-kr.api-operations.659-publication.acknowledgement-journal-before",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-journal-before.json",
+      "producer": {
+        "identity": "exact promotion journal read before ACK reconciliation",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "acknowledgement_journal_before",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "af9e081e258b051b406f557b6678b489ba05d9977f09e45c2b3dd07be3831c5f"
+    },
+    {
+      "artifact_type": "promotion_journal",
+      "bytes": 103164,
+      "input_id": "data-go-kr.api-operations.659-publication.acknowledgement-journal-after",
+      "namespace": "historical_admitted",
+      "observed_at": null,
+      "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-journal-after.json",
+      "producer": {
+        "identity": "exact promotion journal after ACK read-back reconciliation",
+        "repository": "StatPan/datapan-registry"
+      },
+      "role": "acknowledgement_journal_after",
+      "root": "repository",
+      "scope_id": "data-go-kr.api-operations",
+      "sha256": "9c992fbcaa05c071a37509622f0e396775e60102b6f22efd555ad849b04875cf"
+    }
+  ],
+  "schema_version": "datapan.completeness-proof-inputs.v1"
+}

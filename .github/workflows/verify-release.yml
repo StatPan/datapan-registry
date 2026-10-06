@@ -93,6 +93,10 @@ jobs:
           git fetch --no-tags --depth=8 origin e34062309a48b0e0b6c0f38add32f0cdec088616
           git fetch --no-tags --depth=1 origin 1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07
 
+      - name: Fetch bounded trusted main history for retained evidence checks
+        working-directory: datapan-registry
+        run: git fetch --no-tags --depth=64 origin +refs/heads/main:refs/remotes/origin/main
+
       - name: Validate external CLI checkout identity
         working-directory: datapan-registry
         run: |
@@ -267,6 +271,8 @@ jobs:
           python scripts/validate-completeness-proof.py --check
           python scripts/validate-completeness-proof.py --self-test
           python -m unittest tests/test_validate_completeness_proof.py
+          python scripts/generate-completeness-proof-rollup.py --check
+          python -m unittest tests/test_generate_completeness_proof_rollup.py tests/test_completeness_publication_evidence.py tests/test_completeness_scope_registration.py tests/test_completeness_proof_rollup_cli.py tests/test_completeness_future_observation_chain.py
           python scripts/validate-operation-materialization-plan.py
           python scripts/validate-safetydata-operation-candidates.py
           python scripts/validate-safetydata-registry-patches.py
@@ -324,6 +330,7 @@ jobs:
           python -m py_compile scripts/generate-source-runtime-evidence-rollup.py
           python -m py_compile scripts/generate-sustainable-coverage.py
           python -m py_compile scripts/validate-completeness-proof.py
+          python -m py_compile scripts/completeness_publication_evidence.py scripts/generate-completeness-proof-rollup.py
           python -m py_compile scripts/run-upstream-refresh.py
           python -m py_compile scripts/validate-source-refresh-policy.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py

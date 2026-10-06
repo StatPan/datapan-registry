@@ -1,0 +1,1542 @@
+{
+  "evaluation_context": {
+    "mode": "repository"
+  },
+  "evaluation_epoch": "2026-10-04T13:23:00Z",
+  "input_index": {
+    "bytes": 59841,
+    "path": "canonical-semantic-json:reports/completeness-proof-inputs.json",
+    "sha256": "63f35d81ae6890d1ee07c9e5c28810f1932b14ba0818efbd41ee84af86d048bb"
+  },
+  "policy": {
+    "bytes": 4114,
+    "path": "policy/completeness-proof.json",
+    "sha256": "f1199f36335bf0eb16a59279c30d03b819acfa8e1f833431d9a0c674adf896b6"
+  },
+  "schema_version": "datapan.completeness-proof-rollup.v1",
+  "scope_registry": {
+    "bytes": 8035,
+    "path": "policy/completeness-proof-scopes.json",
+    "sha256": "74c0e48ea9cb240049fe4aa04b367f4b9c26e3d96928ed57fc0aa884a155dc36"
+  },
+  "scopes": [
+    {
+      "authority_state": "unavailable",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-data",
+      "facets": [
+        {
+          "details": {
+            "data_catalog_receipt_is_not_row_evidence": true,
+            "evidence_owner": "StatPan/datapan-data"
+          },
+          "evidence": [],
+          "facet_id": "payload_authority",
+          "missing_evidence": [
+            {
+              "code": "payload_row_identity_authority_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#630"
+            }
+          ],
+          "state": "blocked"
+        },
+        {
+          "details": {
+            "consumer_read_back_required_for_updated": true
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "unknown-until-row-authority-is-admitted",
+      "identity_owner": "StatPan/datapan-data",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [],
+        "identity_algorithm": "unknown-until-row-authority-is-admitted",
+        "local_identity_count": null,
+        "state": "missing"
+      },
+      "missing_evidence": [
+        {
+          "code": "payload_row_identity_authority_missing",
+          "owner": "StatPan/datapan-registry",
+          "ticket": "#630"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "StatPan/datapan-data",
+      "resource_kind": "payload_rows",
+      "scope_id": "curated-payload.rows",
+      "selector": {
+        "kind": "query",
+        "value": "authoritative payload row identity set (not admitted)"
+      },
+      "source_id": "curated_payload"
+    },
+    {
+      "authority_state": "unavailable",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-data",
+      "facets": [
+        {
+          "details": {
+            "data_catalog_receipt_is_not_row_evidence": true,
+            "evidence_owner": "StatPan/datapan-data"
+          },
+          "evidence": [],
+          "facet_id": "payload_authority",
+          "missing_evidence": [
+            {
+              "code": "curated_payload_portfolio_registration_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#630"
+            }
+          ],
+          "state": "blocked"
+        },
+        {
+          "details": {
+            "consumer_read_back_required_for_updated": true
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "unknown-until-snapshot-portfolio-is-registered",
+      "identity_owner": "StatPan/datapan-data",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [],
+        "identity_algorithm": "unknown-until-snapshot-portfolio-is-registered",
+        "local_identity_count": null,
+        "state": "missing"
+      },
+      "missing_evidence": [
+        {
+          "code": "curated_payload_portfolio_registration_missing",
+          "owner": "StatPan/datapan-registry",
+          "ticket": "#630"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "StatPan/datapan-data",
+      "resource_kind": "curated_payload_snapshot",
+      "scope_id": "curated-payload.snapshot-portfolio",
+      "selector": {
+        "kind": "snapshot",
+        "value": "declared curated payload portfolio (inventory absent)"
+      },
+      "source_id": "curated_payload"
+    },
+    {
+      "authority_state": "unknown",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-registry",
+      "facets": [
+        {
+          "details": {
+            "authority_state": "unknown",
+            "local_inventory_is_not_authority": true
+          },
+          "evidence": [],
+          "facet_id": "source_authority",
+          "missing_evidence": [
+            {
+              "code": "authoritative_catalog_snapshot_missing",
+              "owner": "StatPan/datapan-data",
+              "ticket": "StatPan/datapan-data#1190"
+            }
+          ],
+          "state": "unknown"
+        },
+        {
+          "details": {
+            "consumer_read_back_required_for_updated": true
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "source-profile-identity-fields-v1",
+      "identity_owner": "StatPan/datapan-data",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [
+          {
+            "bytes": 139155499,
+            "path": "data/data-go-kr.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          {
+            "bytes": 2819,
+            "path": "sources/data_go_kr.json",
+            "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+          }
+        ],
+        "identity_algorithm": "source-profile-identity-fields-v1",
+        "local_identity_count": null,
+        "state": "observed"
+      },
+      "missing_evidence": [
+        {
+          "code": "authoritative_catalog_snapshot_missing",
+          "owner": "StatPan/datapan-data",
+          "ticket": "StatPan/datapan-data#1190"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "data.go.kr",
+      "resource_kind": "api_catalog_metadata",
+      "scope_id": "data-go-kr.api-catalog",
+      "selector": {
+        "kind": "catalog",
+        "value": "data/data-go-kr.registry.json"
+      },
+      "source_id": "data_go_kr"
+    },
+    {
+      "authority_state": "unknown",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-registry",
+      "facets": [
+        {
+          "details": {
+            "attempt": null,
+            "current_subject_applicable": false,
+            "historical_manifest_sha256": "3507d67912a40106c8e48dfd19bb978d3d37b2a9e9a10e571e5fb42734e395d3",
+            "historical_operation_manifest_sha256": "931be9cfcc4aa2ce0b444221de2044b624e6dbdcff8af1288be295b7d202f04a",
+            "merge_commit": "47a0f6e71d4d73734670bc3da9b64d94f0339f1d",
+            "merged_at": "2026-09-23T06:51:42Z",
+            "run_id": "35798122454"
+          },
+          "evidence": [
+            {
+              "bytes": 1524,
+              "path": "reports/runtime-freshness-import-admissions/35798122454.json",
+              "sha256": "60978d52419913b68ef65f4a9e6e5cf86bfe17b8f9879f24311ee086a6733bce"
+            },
+            {
+              "bytes": 317867,
+              "path": "reports/runtime-freshness-imports/35798122454.json",
+              "sha256": "21b96547f72183d6475c9be50b4d279cb5ad8704ab338ed243ac16d806da7ef7"
+            },
+            {
+              "bytes": 2351,
+              "path": "reports/runtime-freshness-import-attestations/35798122454.json",
+              "sha256": "c0475151034f87f372f8d1039bd9ba71609f33cfe355762a8290faa04f9b3330"
+            }
+          ],
+          "facet_id": "import_durability",
+          "missing_evidence": [
+            {
+              "code": "current_contract_import_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#633"
+            }
+          ],
+          "state": "historical"
+        },
+        {
+          "details": {
+            "percentage_promotion_allowed": false
+          },
+          "evidence": [],
+          "facet_id": "terminal_execution",
+          "missing_evidence": [
+            {
+              "code": "terminal_execution_coverage_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#597"
+            }
+          ],
+          "state": "blocked"
+        },
+        {
+          "details": {
+            "attempt": 1,
+            "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+            "observation_authenticated": true,
+            "observed_at": "2026-09-29T23:44:39Z",
+            "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+            "run_id": "36646768289",
+            "step_completed_at": "2026-09-29T23:47:49Z"
+          },
+          "evidence": [
+            {
+              "bytes": 12635,
+              "path": "reports/completeness-proof-evidence/issue-659/source/collector-run.json",
+              "sha256": "2c3f121ef83ed9cb944f3453b235e9d686e128b54bdca0a72b8fc68f71c4082e"
+            },
+            {
+              "bytes": 9753118,
+              "path": "reports/completeness-proof-evidence/issue-659/source/collector-artifact.zip",
+              "sha256": "39aef6af5140c1e213952ee307f16c9280d06d8fa6eebd6f9969e1b95a6a6de7"
+            }
+          ],
+          "facet_id": "source_observation",
+          "missing_evidence": [
+            {
+              "code": "post_repair_observation_baseline_unbound",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "StatPan/datapan-registry#722"
+            }
+          ],
+          "state": "historical"
+        },
+        {
+          "details": {
+            "candidate_bytes": 139155499,
+            "candidate_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+            "current_input_contract_changed_paths": [
+              ".github/workflows/upstream-catalogue-process.yml",
+              "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+              "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
+              "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+              "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+              "schemas/datapan.specs.v1.schema.json",
+              "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+              "scripts/compose-upstream-catalogue-candidate.py",
+              "scripts/generate-batch-link-detail-registry-patches.py",
+              "scripts/generate-seoul-oa109-subject-snapshot.py",
+              "scripts/process-upstream-catalogue-candidate.py",
+              "scripts/seoul_oa109_operation_declaration.py",
+              "scripts/upstream_catalogue_handoff.py"
+            ],
+            "current_input_contract_compatible": false,
+            "detail_retry_count": 908,
+            "detail_unattempted_count": 884,
+            "full_scope_fresh": null,
+            "health_candidate_relation_valid": true,
+            "health_last_good_source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+            "health_main_manifest_sha256": "c0e3708881fb39815205b7358d70ef9c7c0b712422d073589d8edff95f16d54e",
+            "health_main_matches_current_subject": false,
+            "health_main_payload_matches_current": true,
+            "health_main_release_manifest_matches_current": false,
+            "health_main_revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
+            "health_observation_count": 1,
+            "health_processor_observation_matches": true,
+            "health_promotion_execution_matches": true,
+            "health_receipt_sha256": "37a79f569435549f9315336c59a06fad165aff7954fd5f4ef5a2ce86a7ef95be",
+            "health_run_id": "37205341388",
+            "health_source_observation_matches": true,
+            "pending_count": 4382,
+            "processor_generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+            "processor_run_attempt": 1,
+            "processor_run_id": "37204681028",
+            "promotion_candidate_acknowledgement_statuses": [],
+            "promotion_candidate_available": false,
+            "promotion_candidate_key": null,
+            "promotion_candidate_lifecycle_status": null,
+            "promotion_journal_sha256": "9c992fbcaa05c071a37509622f0e396775e60102b6f22efd555ad849b04875cf",
+            "promotion_processor_generation_matches": true,
+            "promotion_run_id": "37205271032",
+            "publication_allowed": null,
+            "source_observed_at": "2026-09-29T23:44:39Z",
+            "source_run_id": "36646768289"
+          },
+          "evidence": [
+            {
+              "bytes": 19573,
+              "path": "reports/completeness-proof-evidence/issue-659/health/archive.zip",
+              "sha256": "53fad2c80cd0c00fbecf2658f6d13b3254b84bce9e65e3449d3a1d326b5f231e"
+            },
+            {
+              "bytes": 33300,
+              "path": "reports/completeness-proof-evidence/issue-659/health/receipt-blob-api.json",
+              "sha256": "37a79f569435549f9315336c59a06fad165aff7954fd5f4ef5a2ce86a7ef95be"
+            },
+            {
+              "bytes": 12531,
+              "path": "reports/completeness-proof-evidence/issue-659/health/run.json",
+              "sha256": "610b7990bf39619e579e418519486c1e66b1d7640da7da0cf215e7c69dfc589a"
+            },
+            {
+              "bytes": 34960,
+              "path": "reports/completeness-proof-evidence/issue-659/health/state-blob-api.json",
+              "sha256": "55a4c2a1f78833785961875c287aebf67270333fea534f4c654d6f2a91c8032a"
+            },
+            {
+              "bytes": 17130060,
+              "path": "reports/completeness-proof-evidence/issue-659/processor/archive.zip",
+              "sha256": "0ae987e7ad8f90ee142827630ac1f5d1873de0128b0cb7c039b89e902b90bb50"
+            },
+            {
+              "bytes": 19555,
+              "path": "reports/completeness-proof-evidence/issue-659/processor/generation-api.json",
+              "sha256": "2f934e3843c649c6c0c87d84b4292e1e4b2d9a561fd5389583f28f251b6dad3e"
+            },
+            {
+              "bytes": 59741,
+              "path": "reports/completeness-proof-evidence/issue-659/processor/index-api.json",
+              "sha256": "f6e0cac75072bd282de0bf3f36fe3370d876b5901adcea95eb09b395bb91f7d6"
+            },
+            {
+              "bytes": 12530,
+              "path": "reports/completeness-proof-evidence/issue-659/processor/run.json",
+              "sha256": "9ff811fe056ae9770cf7df477fb81be2d6a7ff04a026c8441a0fc7c445fae852"
+            },
+            {
+              "bytes": 103164,
+              "path": "reports/completeness-proof-evidence/issue-659/promotion/journal-blob-api.json",
+              "sha256": "9c992fbcaa05c071a37509622f0e396775e60102b6f22efd555ad849b04875cf"
+            },
+            {
+              "bytes": 13460,
+              "path": "reports/completeness-proof-evidence/issue-659/promotion/log.txt.gz",
+              "sha256": "e211bd08e876b7515f90037270c95e99f2ea3d524374f66a3a5e3ce42d361c62"
+            },
+            {
+              "bytes": 12534,
+              "path": "reports/completeness-proof-evidence/issue-659/promotion/run.json",
+              "sha256": "7603fdb0bfb4b8a7190ee4097db166e5dfcba199ace689e43cf3d829b17f548c"
+            },
+            {
+              "bytes": 2704,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-jobs.json",
+              "sha256": "6b5f64e22fcfbcbc658824ab248f8d71f6ea00e16e27df66c254a379e9cae404"
+            },
+            {
+              "bytes": 103164,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-journal-after.json",
+              "sha256": "9c992fbcaa05c071a37509622f0e396775e60102b6f22efd555ad849b04875cf"
+            },
+            {
+              "bytes": 99817,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-journal-before.json",
+              "sha256": "af9e081e258b051b406f557b6678b489ba05d9977f09e45c2b3dd07be3831c5f"
+            },
+            {
+              "bytes": 18035,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-logs.zip",
+              "sha256": "11d9495f1a01e41a62145e0b2f90ab9396b377365c82b0be6a4535a2fcb70780"
+            },
+            {
+              "bytes": 12658,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-run.json",
+              "sha256": "489b1b808cbe665dab6af5fd3bd6006b588ca357bbd30aabfd16dad44365fe25"
+            },
+            {
+              "bytes": 47724,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-anonymous-manifest.json",
+              "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
+            },
+            {
+              "bytes": 1801,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-artifacts.json",
+              "sha256": "fa1d0a60b9af3a96bf189c98ec8c958415561d5d44ff0ba07f62b5eb06e825ae"
+            },
+            {
+              "bytes": 7023,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-jobs.json",
+              "sha256": "7c23cf4e18b3788c621b005a5b09b764a1916cb3cd3d358f441051ed2ac77754"
+            },
+            {
+              "bytes": 42969,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-after.json",
+              "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd"
+            },
+            {
+              "bytes": 42969,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-before.json",
+              "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd"
+            },
+            {
+              "bytes": 42969,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-immutable.json",
+              "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd"
+            },
+            {
+              "bytes": 10760,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-readback-result.json",
+              "sha256": "13d2ebc601512eb351fc72b499cee947371294dd6cc7101caa409c19dd811387"
+            },
+            {
+              "bytes": 1086,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-receipt.json",
+              "sha256": "6c14adf8f8717f939f6e901f2f4d135055f558a22c1edda0f90e95942280b88d"
+            },
+            {
+              "bytes": 1090,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-receipts.zip",
+              "sha256": "b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227"
+            },
+            {
+              "bytes": 17159,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-repo-metadata-after.json",
+              "sha256": "b5f25a2f8d958288f90b213aed576a950c9daa5087a2e8d2722d5e7333def2aa"
+            },
+            {
+              "bytes": 17159,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-repo-metadata-before.json",
+              "sha256": "b5f25a2f8d958288f90b213aed576a950c9daa5087a2e8d2722d5e7333def2aa"
+            },
+            {
+              "bytes": 13894,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-run.json",
+              "sha256": "e7a138b8b7ed0b44c94a357ade01847694de93383a8ab1f337d4ba922e0a592e"
+            },
+            {
+              "bytes": 483,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-binding.json",
+              "sha256": "2201aaac56f5a5b77b45d9e946a152a617264c5f04b617e2c2af3e765d3908e1"
+            },
+            {
+              "bytes": 304443,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-commit.json",
+              "sha256": "c38f5e34909f85bbc27b425b943c9946650650206efb1093811354c64b7a1b02"
+            },
+            {
+              "bytes": 47724,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-manifest.json",
+              "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
+            },
+            {
+              "bytes": 637,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-workflow.json",
+              "sha256": "840af19aeaf9c04733013b082939b8fa66bf9c1f735eb3a6036ee1d7957a0a24"
+            },
+            {
+              "bytes": 9753118,
+              "path": "reports/completeness-proof-evidence/issue-659/source/collector-artifact.zip",
+              "sha256": "39aef6af5140c1e213952ee307f16c9280d06d8fa6eebd6f9969e1b95a6a6de7"
+            },
+            {
+              "bytes": 12635,
+              "path": "reports/completeness-proof-evidence/issue-659/source/collector-run.json",
+              "sha256": "2c3f121ef83ed9cb944f3453b235e9d686e128b54bdca0a72b8fc68f71c4082e"
+            }
+          ],
+          "facet_id": "specification_pipeline",
+          "missing_evidence": [
+            {
+              "code": "post_fix_source_and_complete_scope_acceptance_pending",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#634"
+            }
+          ],
+          "state": "historical"
+        },
+        {
+          "details": {
+            "attempt": 1,
+            "health_is_not_new_source_observation": true,
+            "observation_count": 1,
+            "post_state_sha256": "55a4c2a1f78833785961875c287aebf67270333fea534f4c654d6f2a91c8032a",
+            "pre_state_sha256": "3bde52aa9fde3e511bc00c040356966ee7608e82775ad7015e6ca3fda6bafcf1",
+            "receipt_seal": "1789b7574de56797cc68a75770a28ca55070a0cdaab533a769de4f62cd3bc860",
+            "receipt_sha256": "37a79f569435549f9315336c59a06fad165aff7954fd5f4ef5a2ce86a7ef95be",
+            "run_id": "37205341388",
+            "state_commit": "a7a2347953010052b316675d879e41e0c7982f65"
+          },
+          "evidence": [
+            {
+              "bytes": 12531,
+              "path": "reports/completeness-proof-evidence/issue-659/health/run.json",
+              "sha256": "610b7990bf39619e579e418519486c1e66b1d7640da7da0cf215e7c69dfc589a"
+            },
+            {
+              "bytes": 19573,
+              "path": "reports/completeness-proof-evidence/issue-659/health/archive.zip",
+              "sha256": "53fad2c80cd0c00fbecf2658f6d13b3254b84bce9e65e3449d3a1d326b5f231e"
+            },
+            {
+              "bytes": 34960,
+              "path": "reports/completeness-proof-evidence/issue-659/health/state-blob-api.json",
+              "sha256": "55a4c2a1f78833785961875c287aebf67270333fea534f4c654d6f2a91c8032a"
+            },
+            {
+              "bytes": 33300,
+              "path": "reports/completeness-proof-evidence/issue-659/health/receipt-blob-api.json",
+              "sha256": "37a79f569435549f9315336c59a06fad165aff7954fd5f4ef5a2ce86a7ef95be"
+            }
+          ],
+          "facet_id": "health_observation",
+          "missing_evidence": [
+            {
+              "code": "health_receipt_does_not_establish_additional_source_observations",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "historical"
+        },
+        {
+          "details": {
+            "acknowledgement_attempt": 2,
+            "acknowledgement_job_completed_at": "2026-10-04T12:35:16Z",
+            "acknowledgement_job_started_at": "2026-10-04T12:34:46Z",
+            "acknowledgement_journal_observed_at": "2026-10-04T12:35:04.198997Z",
+            "acknowledgement_log_result_at": "2026-10-04T12:35:14.892701Z",
+            "acknowledgement_log_sha256": "11d9495f1a01e41a62145e0b2f90ab9396b377365c82b0be6a4535a2fcb70780",
+            "anonymous_readback_observed_at": "2026-10-04T11:48:04.144691Z",
+            "candidate_release_publication_unproven": false,
+            "classification": "historical_delivery_only",
+            "consumer_read_back_required_for_updated": true,
+            "current_release_manifest_sha256": "274469e73b8893bb6ba458e07db92c2e745cf1732dd13c5233a4b22e2b25740d",
+            "current_release_subject_applicable": false,
+            "currentness_established": false,
+            "cutover_established": false,
+            "evaluation_epoch": "2026-10-04T13:23:00Z",
+            "payload_equivalent_to_current_registry": true,
+            "publisher_anonymous_verify_step_completed_at": "2026-10-04T11:43:34Z",
+            "publisher_artifact_available_at_evaluation": true,
+            "publisher_artifact_expires_at": "2026-11-03T11:43:34Z",
+            "publisher_artifact_sha256": "b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227",
+            "publisher_job_completed_at": "2026-10-04T11:43:37Z",
+            "publisher_job_started_at": "2026-10-04T11:42:15Z",
+            "publisher_publish_step_completed_at": "2026-10-04T11:43:15Z",
+            "receipt_cutover_required": false,
+            "receipt_sha256": "6c14adf8f8717f939f6e901f2f4d135055f558a22c1edda0f90e95942280b88d",
+            "release_authority": false,
+            "subject": {
+              "acknowledgement_attempt": 2,
+              "acknowledgement_run_id": 37199709258,
+              "candidate_generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+              "candidate_head_sha": "8b086826fb1e30ea949cfb8222a252e7aa09fa40",
+              "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+              "payload_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+              "pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+              "publisher_attempt": 1,
+              "publisher_head_sha": "e34062309a48b0e0b6c0f38add32f0cdec088616",
+              "publisher_run_id": 37199628001,
+              "pull_request": 686,
+              "registry_bytes": 139155499,
+              "registry_path": "data/data-go-kr.registry.json",
+              "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+              "repository": "StatPan/datapan-registry",
+              "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+              "source_tree_sha": "ff6a93bed060e8bd9ef2738efdc2672d228f35f8"
+            },
+            "updated_claim_established": false
+          },
+          "evidence": [
+            {
+              "bytes": 13894,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-run.json",
+              "sha256": "e7a138b8b7ed0b44c94a357ade01847694de93383a8ab1f337d4ba922e0a592e"
+            },
+            {
+              "bytes": 7023,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-jobs.json",
+              "sha256": "7c23cf4e18b3788c621b005a5b09b764a1916cb3cd3d358f441051ed2ac77754"
+            },
+            {
+              "bytes": 1801,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-artifacts.json",
+              "sha256": "fa1d0a60b9af3a96bf189c98ec8c958415561d5d44ff0ba07f62b5eb06e825ae"
+            },
+            {
+              "bytes": 1090,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-receipts.zip",
+              "sha256": "b7adeada021bbdd1449b7d03b3d73c4094d8213844c42f9a81e0bf1207f05227"
+            },
+            {
+              "bytes": 1086,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-receipt.json",
+              "sha256": "6c14adf8f8717f939f6e901f2f4d135055f558a22c1edda0f90e95942280b88d"
+            },
+            {
+              "bytes": 483,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-binding.json",
+              "sha256": "2201aaac56f5a5b77b45d9e946a152a617264c5f04b617e2c2af3e765d3908e1"
+            },
+            {
+              "bytes": 304443,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-commit.json",
+              "sha256": "c38f5e34909f85bbc27b425b943c9946650650206efb1093811354c64b7a1b02"
+            },
+            {
+              "bytes": 47724,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-source-manifest.json",
+              "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
+            },
+            {
+              "bytes": 637,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-workflow.json",
+              "sha256": "840af19aeaf9c04733013b082939b8fa66bf9c1f735eb3a6036ee1d7957a0a24"
+            },
+            {
+              "bytes": 17159,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-repo-metadata-before.json",
+              "sha256": "b5f25a2f8d958288f90b213aed576a950c9daa5087a2e8d2722d5e7333def2aa"
+            },
+            {
+              "bytes": 42969,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-before.json",
+              "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd"
+            },
+            {
+              "bytes": 17159,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-repo-metadata-after.json",
+              "sha256": "b5f25a2f8d958288f90b213aed576a950c9daa5087a2e8d2722d5e7333def2aa"
+            },
+            {
+              "bytes": 42969,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-after.json",
+              "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd"
+            },
+            {
+              "bytes": 42969,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-pointer-immutable.json",
+              "sha256": "000080f945cdb851700c156d2ab7114077b55cd4edc61316cbc42bcecbe672cd"
+            },
+            {
+              "bytes": 47724,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-anonymous-manifest.json",
+              "sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50"
+            },
+            {
+              "bytes": 10760,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/publisher-readback-result.json",
+              "sha256": "13d2ebc601512eb351fc72b499cee947371294dd6cc7101caa409c19dd811387"
+            },
+            {
+              "bytes": 12658,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-run.json",
+              "sha256": "489b1b808cbe665dab6af5fd3bd6006b588ca357bbd30aabfd16dad44365fe25"
+            },
+            {
+              "bytes": 2704,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-jobs.json",
+              "sha256": "6b5f64e22fcfbcbc658824ab248f8d71f6ea00e16e27df66c254a379e9cae404"
+            },
+            {
+              "bytes": 18035,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-logs.zip",
+              "sha256": "11d9495f1a01e41a62145e0b2f90ab9396b377365c82b0be6a4535a2fcb70780"
+            },
+            {
+              "bytes": 99817,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-journal-before.json",
+              "sha256": "af9e081e258b051b406f557b6678b489ba05d9977f09e45c2b3dd07be3831c5f"
+            },
+            {
+              "bytes": 103164,
+              "path": "reports/completeness-proof-evidence/issue-659/publication/acknowledgement-journal-after.json",
+              "sha256": "9c992fbcaa05c071a37509622f0e396775e60102b6f22efd555ad849b04875cf"
+            }
+          ],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "current_release_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "historical"
+        },
+        {
+          "details": {
+            "cutover_active": false,
+            "native_publication_scope_requires_cutover": false
+          },
+          "evidence": [],
+          "facet_id": "receipt_cutover",
+          "missing_evidence": [
+            {
+              "code": "producer_receipt_cutover_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#592"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "sha256-length-prefixed-utf8-v1",
+      "identity_owner": "StatPan/datapan-registry",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [
+          {
+            "bytes": 24366827,
+            "path": "reports/data-go-kr/operation-manifest.json",
+            "sha256": "b68601aee31acdb90b0a655dcb079c185af2c7fdd107333712c9b84e6a2700be"
+          },
+          {
+            "bytes": 2819,
+            "path": "sources/data_go_kr.json",
+            "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+          }
+        ],
+        "identity_algorithm": "sha256-length-prefixed-utf8-v1",
+        "local_identity_count": 12662,
+        "state": "observed"
+      },
+      "missing_evidence": [
+        {
+          "code": "authoritative_catalog_observation_missing",
+          "owner": "StatPan/datapan-data",
+          "ticket": "StatPan/datapan-data#1190"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "data.go.kr",
+      "resource_kind": "api_operation_manifest",
+      "scope_id": "data-go-kr.api-operations",
+      "selector": {
+        "kind": "manifest",
+        "value": "reports/data-go-kr/operation-manifest.json"
+      },
+      "source_id": "data_go_kr"
+    },
+    {
+      "authority_state": "unavailable",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-registry",
+      "facets": [
+        {
+          "details": {
+            "authority_state": "unavailable",
+            "local_inventory_is_not_authority": true
+          },
+          "evidence": [],
+          "facet_id": "source_authority",
+          "missing_evidence": [
+            {
+              "code": "authoritative_file_dataset_snapshot_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#609"
+            }
+          ],
+          "state": "blocked"
+        },
+        {
+          "details": {
+            "consumer_read_back_required_for_updated": true
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "unknown-until-file-dataset-snapshot-admitted",
+      "identity_owner": "StatPan/datapan-data",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [
+          {
+            "bytes": 2819,
+            "path": "sources/data_go_kr.json",
+            "sha256": "ab6f6b24f7556e16deac864ad0b349021023ef40a374f3555ca54e37c22ccbc6"
+          }
+        ],
+        "identity_algorithm": "unknown-until-file-dataset-snapshot-admitted",
+        "local_identity_count": null,
+        "state": "missing"
+      },
+      "missing_evidence": [
+        {
+          "code": "authoritative_file_dataset_snapshot_missing",
+          "owner": "StatPan/datapan-registry",
+          "ticket": "#609"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "data.go.kr",
+      "resource_kind": "file_dataset",
+      "scope_id": "data-go-kr.file-datasets",
+      "selector": {
+        "kind": "catalog",
+        "value": "authoritative data.go.kr file-list snapshot (not admitted)"
+      },
+      "source_id": "data_go_kr"
+    },
+    {
+      "authority_state": "unknown",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-registry",
+      "facets": [
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "import_durability",
+          "missing_evidence": [
+            {
+              "code": "durable_import_attestation_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#633"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "local_operation_catalog_is_not_execution_evidence": true
+          },
+          "evidence": [],
+          "facet_id": "terminal_execution",
+          "missing_evidence": [
+            {
+              "code": "source_execution_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#634"
+            }
+          ],
+          "state": "unknown"
+        },
+        {
+          "details": {
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
+          },
+          "evidence": [],
+          "facet_id": "specification_pipeline",
+          "missing_evidence": [
+            {
+              "code": "authenticated_b_c_health_chain_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "acknowledgement_local": null,
+            "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
+            "receipt_cutover_required": false
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "source_observation",
+          "missing_evidence": [
+            {
+              "code": "new_authenticated_source_observation_missing",
+              "owner": "StatPan/datapan-data",
+              "ticket": "StatPan/datapan-data#1190"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "health_is_not_source_observation": true
+          },
+          "evidence": [],
+          "facet_id": "health_observation",
+          "missing_evidence": [
+            {
+              "code": "health_producer_receipt_missing",
+              "owner": "StatPan/datapan-health",
+              "ticket": "StatPan/datapan-health#33"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "cutover_active": false,
+            "native_publication_scope_requires_cutover": false
+          },
+          "evidence": [],
+          "facet_id": "receipt_cutover",
+          "missing_evidence": [
+            {
+              "code": "producer_receipt_cutover_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#592"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_owner": "StatPan/datapan-registry",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [
+          {
+            "bytes": 961,
+            "path": "reports/ecos/operation-denominator.json",
+            "sha256": "d8619c61c2a718547ad5867b0125b74c21cf46d8cc3b74f369062e087387c62b"
+          },
+          {
+            "bytes": 3292,
+            "path": "sources/ecos.json",
+            "sha256": "2f4202ee24201e821666cdc7c55b724e979d94024b3f8289120e6c39c6584750"
+          }
+        ],
+        "identity_algorithm": "operation-id-exact-string-set-v1",
+        "local_identity_count": 1,
+        "state": "observed"
+      },
+      "missing_evidence": [
+        {
+          "code": "authoritative_source_identity_set_missing",
+          "owner": "StatPan/datapan-registry",
+          "ticket": "#630"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "ECOS",
+      "resource_kind": "api_operation_manifest",
+      "scope_id": "ecos.api-operations",
+      "selector": {
+        "kind": "manifest",
+        "value": "reports/ecos/operation-denominator.json"
+      },
+      "source_id": "ecos"
+    },
+    {
+      "authority_state": "unknown",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-registry",
+      "facets": [
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "import_durability",
+          "missing_evidence": [
+            {
+              "code": "durable_import_attestation_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#633"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "local_operation_catalog_is_not_execution_evidence": true
+          },
+          "evidence": [],
+          "facet_id": "terminal_execution",
+          "missing_evidence": [
+            {
+              "code": "source_execution_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#634"
+            }
+          ],
+          "state": "unknown"
+        },
+        {
+          "details": {
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
+          },
+          "evidence": [],
+          "facet_id": "specification_pipeline",
+          "missing_evidence": [
+            {
+              "code": "authenticated_b_c_health_chain_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "acknowledgement_local": null,
+            "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
+            "receipt_cutover_required": false
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "source_observation",
+          "missing_evidence": [
+            {
+              "code": "new_authenticated_source_observation_missing",
+              "owner": "StatPan/datapan-data",
+              "ticket": "StatPan/datapan-data#1190"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "health_is_not_source_observation": true
+          },
+          "evidence": [],
+          "facet_id": "health_observation",
+          "missing_evidence": [
+            {
+              "code": "health_producer_receipt_missing",
+              "owner": "StatPan/datapan-health",
+              "ticket": "StatPan/datapan-health#33"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "cutover_active": false,
+            "native_publication_scope_requires_cutover": false
+          },
+          "evidence": [],
+          "facet_id": "receipt_cutover",
+          "missing_evidence": [
+            {
+              "code": "producer_receipt_cutover_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#592"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_owner": "StatPan/datapan-registry",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [
+          {
+            "bytes": 888,
+            "path": "reports/kosis/operation-denominator.json",
+            "sha256": "5e03008ac38a5c4a98f235c91a92b6b1a147fcb930e8e6c681240e984a10c081"
+          },
+          {
+            "bytes": 2949,
+            "path": "sources/kosis.json",
+            "sha256": "2fcff2cd1e5e7968473d0ecfc8a35ee90f0bafa4b5f2d82005f4ed00e3d1d344"
+          }
+        ],
+        "identity_algorithm": "operation-id-exact-string-set-v1",
+        "local_identity_count": 1,
+        "state": "observed"
+      },
+      "missing_evidence": [
+        {
+          "code": "authoritative_source_identity_set_missing",
+          "owner": "StatPan/datapan-registry",
+          "ticket": "#630"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "KOSIS",
+      "resource_kind": "api_operation_manifest",
+      "scope_id": "kosis.api-operations",
+      "selector": {
+        "kind": "manifest",
+        "value": "reports/kosis/operation-denominator.json"
+      },
+      "source_id": "kosis"
+    },
+    {
+      "authority_state": "unknown",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-registry",
+      "facets": [
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "import_durability",
+          "missing_evidence": [
+            {
+              "code": "durable_import_attestation_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#633"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "local_operation_catalog_is_not_execution_evidence": true
+          },
+          "evidence": [],
+          "facet_id": "terminal_execution",
+          "missing_evidence": [
+            {
+              "code": "source_execution_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#634"
+            }
+          ],
+          "state": "unknown"
+        },
+        {
+          "details": {
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
+          },
+          "evidence": [],
+          "facet_id": "specification_pipeline",
+          "missing_evidence": [
+            {
+              "code": "authenticated_b_c_health_chain_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "acknowledgement_local": null,
+            "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
+            "receipt_cutover_required": false
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "source_observation",
+          "missing_evidence": [
+            {
+              "code": "new_authenticated_source_observation_missing",
+              "owner": "StatPan/datapan-data",
+              "ticket": "StatPan/datapan-data#1190"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "health_is_not_source_observation": true
+          },
+          "evidence": [],
+          "facet_id": "health_observation",
+          "missing_evidence": [
+            {
+              "code": "health_producer_receipt_missing",
+              "owner": "StatPan/datapan-health",
+              "ticket": "StatPan/datapan-health#33"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "cutover_active": false,
+            "native_publication_scope_requires_cutover": false
+          },
+          "evidence": [],
+          "facet_id": "receipt_cutover",
+          "missing_evidence": [
+            {
+              "code": "producer_receipt_cutover_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#592"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_owner": "StatPan/datapan-registry",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [
+          {
+            "bytes": 930,
+            "path": "reports/open-assembly/operation-denominator.json",
+            "sha256": "d14aab4e423b66f5bb7539c87d1ec34634ac85a06d10c2dcbc9369dba4df7e52"
+          },
+          {
+            "bytes": 2923,
+            "path": "sources/open_assembly.json",
+            "sha256": "f8459b47e6642d5350377ca8f3e6608021808614602de48e2cb6090525e1aaae"
+          }
+        ],
+        "identity_algorithm": "operation-id-exact-string-set-v1",
+        "local_identity_count": 1,
+        "state": "observed"
+      },
+      "missing_evidence": [
+        {
+          "code": "authoritative_source_identity_set_missing",
+          "owner": "StatPan/datapan-registry",
+          "ticket": "#630"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "open.assembly.go.kr",
+      "resource_kind": "api_operation_manifest",
+      "scope_id": "open-assembly.api-operations",
+      "selector": {
+        "kind": "manifest",
+        "value": "reports/open-assembly/operation-denominator.json"
+      },
+      "source_id": "open_assembly"
+    },
+    {
+      "authority_state": "unknown",
+      "claims": {
+        "complete": false,
+        "current": false,
+        "updated": false
+      },
+      "evidence_owner": "StatPan/datapan-registry",
+      "facets": [
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "import_durability",
+          "missing_evidence": [
+            {
+              "code": "durable_import_attestation_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#633"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "local_operation_catalog_is_not_execution_evidence": true
+          },
+          "evidence": [],
+          "facet_id": "terminal_execution",
+          "missing_evidence": [
+            {
+              "code": "source_execution_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#634"
+            }
+          ],
+          "state": "unknown"
+        },
+        {
+          "details": {
+            "missing_stages": [],
+            "validated_present_stage_evidence": []
+          },
+          "evidence": [],
+          "facet_id": "specification_pipeline",
+          "missing_evidence": [
+            {
+              "code": "authenticated_b_c_health_chain_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "acknowledgement_local": null,
+            "consumer_read_back_required_for_updated": true,
+            "missing_stages": [],
+            "publisher_attempt": null,
+            "publisher_readback": null,
+            "receipt_cutover_required": false
+          },
+          "evidence": [],
+          "facet_id": "immutable_publication_read_back",
+          "missing_evidence": [
+            {
+              "code": "same_subject_publication_read_back_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#659"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {},
+          "evidence": [],
+          "facet_id": "source_observation",
+          "missing_evidence": [
+            {
+              "code": "new_authenticated_source_observation_missing",
+              "owner": "StatPan/datapan-data",
+              "ticket": "StatPan/datapan-data#1190"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "health_is_not_source_observation": true
+          },
+          "evidence": [],
+          "facet_id": "health_observation",
+          "missing_evidence": [
+            {
+              "code": "health_producer_receipt_missing",
+              "owner": "StatPan/datapan-health",
+              "ticket": "StatPan/datapan-health#33"
+            }
+          ],
+          "state": "missing"
+        },
+        {
+          "details": {
+            "cutover_active": false,
+            "native_publication_scope_requires_cutover": false
+          },
+          "evidence": [],
+          "facet_id": "receipt_cutover",
+          "missing_evidence": [
+            {
+              "code": "producer_receipt_cutover_evidence_missing",
+              "owner": "StatPan/datapan-registry",
+              "ticket": "#592"
+            }
+          ],
+          "state": "missing"
+        }
+      ],
+      "identity_algorithm": "operation-id-exact-string-set-v1",
+      "identity_owner": "StatPan/datapan-registry",
+      "inventory_context": {
+        "authoritative": false,
+        "evidence": [
+          {
+            "bytes": 970,
+            "path": "reports/seoul-open-data/operation-denominator.json",
+            "sha256": "7c44a8357903f223df195e6e48165b5fe058e4372bdcfe7c3022af80b5266b54"
+          },
+          {
+            "bytes": 3432,
+            "path": "sources/seoul_open_data.json",
+            "sha256": "9ae73b337e2fd44e667087f50f538d123fe00e90afd03ab221e6b90fc9aef7a8"
+          }
+        ],
+        "identity_algorithm": "operation-id-exact-string-set-v1",
+        "local_identity_count": 1,
+        "state": "observed"
+      },
+      "missing_evidence": [
+        {
+          "code": "authoritative_source_identity_set_missing",
+          "owner": "StatPan/datapan-registry",
+          "ticket": "#630"
+        }
+      ],
+      "proof": null,
+      "proof_state": "blocked",
+      "provider": "data.seoul.go.kr",
+      "resource_kind": "api_operation_manifest",
+      "scope_id": "seoul-open-data.api-operations",
+      "selector": {
+        "kind": "manifest",
+        "value": "reports/seoul-open-data/operation-denominator.json"
+      },
+      "source_id": "seoul_open_data"
+    }
+  ],
+  "summary": {
+    "claims": {
+      "complete": 0,
+      "current": 0,
+      "updated": 0
+    },
+    "registered_scopes": 9,
+    "states": {
+      "blocked": 9,
+      "complete": 0,
+      "partial": 0,
+      "unknown": 0
+    }
+  }
+}
