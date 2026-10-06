@@ -1193,31 +1193,37 @@ def processor_composer_source_identity(
         "GIT_PAGER": "cat",
     })
     deadline = time.monotonic() + PROCESSOR_COMPOSER_READ_TIMEOUT_SECONDS
+    process: subprocess.Popen[bytes] | None = None
+    selector: selectors.BaseSelector | None = None
+    stdout = None
+    stderr = None
     try:
-        process = subprocess.Popen(
-            argv,
-            cwd=root,
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            close_fds=True,
-            env=environment,
-        )
-    except OSError:
-        # Missing local producer history can never grant the historical
-        # encoding. The complete current projection remains mandatory.
-        return None
+        try:
+            process = subprocess.Popen(
+                argv,
+                cwd=root,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                close_fds=True,
+                env=environment,
+            )
+        except OSError:
+            # Missing local producer history can never grant the historical
+            # encoding. The complete current projection remains mandatory.
+            return None
 
-    assert process.stdout is not None
-    assert process.stderr is not None
-    selector = selectors.DefaultSelector()
-    digest = hashlib.sha256()
-    counts = {"stdout": 0, "stderr": 0}
-    streams = {
-        process.stdout: ("stdout", MAX_PROCESSOR_COMPOSER_BYTES),
-        process.stderr: ("stderr", MAX_PROCESSOR_COMPOSER_STDERR_BYTES),
-    }
-    try:
+        stdout = process.stdout
+        stderr = process.stderr
+        if stdout is None or stderr is None:
+            return None
+        selector = selectors.DefaultSelector()
+        digest = hashlib.sha256()
+        counts = {"stdout": 0, "stderr": 0}
+        streams = {
+            stdout: ("stdout", MAX_PROCESSOR_COMPOSER_BYTES),
+            stderr: ("stderr", MAX_PROCESSOR_COMPOSER_STDERR_BYTES),
+        }
         for stream in streams:
             os.set_blocking(stream.fileno(), False)
             selector.register(stream, selectors.EVENT_READ)
@@ -1256,13 +1262,23 @@ def processor_composer_source_identity(
     except (OSError, ValueError):
         return None
     finally:
-        if process.poll() is None:
-            _terminate_and_reap_processor_composer_read(process)
-        else:
-            process.wait()
-        selector.close()
-        process.stdout.close()
-        process.stderr.close()
+        try:
+            if process is not None:
+                if process.poll() is None:
+                    _terminate_and_reap_processor_composer_read(process)
+                else:
+                    process.wait()
+        finally:
+            try:
+                if selector is not None:
+                    selector.close()
+            finally:
+                try:
+                    if stdout is not None:
+                        stdout.close()
+                finally:
+                    if stderr is not None:
+                        stderr.close()
 
 
 def authenticate_contract_diagnostic_encoding(

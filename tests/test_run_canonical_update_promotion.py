@@ -6,6 +6,7 @@ import importlib.util
 import hashlib
 import copy
 import datetime as dt
+import errno
 import io
 import json
 import os
@@ -1370,6 +1371,248 @@ class ProcessorBundleContractTests(unittest.TestCase):
                         os.kill(pid, 0)
                     with self.assertRaises(ChildProcessError):
                         os.waitpid(pid, os.WNOHANG)
+
+    def test_composer_identity_owns_every_post_spawn_fault_and_cancellation(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            fake_git = fake_bin / "git"
+            fake_git.write_text(
+                f"#!{sys.executable}\n"
+                "import os, pathlib, signal, time\n"
+                "pathlib.Path(os.environ['FAKE_GIT_PID']).write_text(str(os.getpid()))\n"
+                "def term(_signum, _frame):\n"
+                "    pathlib.Path(os.environ['FAKE_GIT_TERM']).write_text('terminate\\n')\n"
+                "signal.signal(signal.SIGTERM, term)\n"
+                "pathlib.Path(os.environ['FAKE_GIT_READY']).write_text('ready\\n')\n"
+                "while True:\n"
+                "    time.sleep(1)\n",
+                encoding="utf-8",
+            )
+            fake_git.chmod(0o755)
+            real_popen = subprocess.Popen
+            real_cleanup = RUNNER._terminate_and_reap_processor_composer_read
+
+            class FaultingStdout:
+                def __init__(self, stream) -> None:
+                    self.stream = stream
+
+                def fileno(self) -> int:
+                    return self.stream.fileno()
+
+                @property
+                def closed(self) -> bool:
+                    return self.stream.closed
+
+                def close(self) -> None:
+                    self.stream.close()
+                    raise RuntimeError("stdout close fault")
+
+            def exercise(
+                label: str,
+                selector_factory,
+                *,
+                expected_exception: type[BaseException] | None = None,
+                cleanup_fault: bool = False,
+                stdout_close_fault: bool = False,
+            ) -> object | None:
+                pid_path = root / f"{label}.pid"
+                ready_path = root / f"{label}.ready"
+                term_path = root / f"{label}.term"
+                processes = []
+                original_streams = []
+
+                def wait_until_ready() -> None:
+                    deadline = time.monotonic() + 2.0
+                    while time.monotonic() < deadline:
+                        if ready_path.is_file():
+                            return
+                        if processes and processes[0].poll() is not None:
+                            break
+                        time.sleep(0.005)
+                    raise AssertionError(f"{label} child did not become ready")
+
+                def spawn(*args, **kwargs):
+                    process = real_popen(*args, **kwargs)
+                    processes.append(process)
+                    original_streams.append((process.stdout, process.stderr))
+                    if stdout_close_fault:
+                        process.stdout = FaultingStdout(process.stdout)
+                    return process
+
+                def faulting_cleanup(process) -> None:
+                    real_cleanup(process)
+                    raise RuntimeError("process cleanup fault")
+
+                environment = {
+                    "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}",
+                    "FAKE_GIT_PID": str(pid_path),
+                    "FAKE_GIT_READY": str(ready_path),
+                    "FAKE_GIT_TERM": str(term_path),
+                }
+                selector = selector_factory(wait_until_ready)
+                try:
+                    with contextlib.ExitStack() as stack:
+                        stack.enter_context(mock.patch.dict(RUNNER.os.environ, environment, clear=False))
+                        stack.enter_context(mock.patch.object(
+                            RUNNER, "PROCESSOR_COMPOSER_TERMINATE_GRACE_SECONDS", 0.05,
+                        ))
+                        stack.enter_context(mock.patch.object(
+                            RUNNER.subprocess, "Popen", side_effect=spawn,
+                        ))
+                        stack.enter_context(mock.patch.object(
+                            RUNNER.selectors, "DefaultSelector", side_effect=selector,
+                        ))
+                        if cleanup_fault:
+                            stack.enter_context(mock.patch.object(
+                                RUNNER,
+                                "_terminate_and_reap_processor_composer_read",
+                                side_effect=faulting_cleanup,
+                            ))
+                        if expected_exception is None:
+                            result = RUNNER.processor_composer_source_identity(root, "a" * 40)
+                        else:
+                            with self.assertRaises(expected_exception):
+                                RUNNER.processor_composer_source_identity(root, "a" * 40)
+                            result = None
+
+                    self.assertEqual(len(processes), 1)
+                    process = processes[0]
+                    stdout, stderr = original_streams[0]
+                    self.assertIsNotNone(process.returncode)
+                    self.assertTrue(stdout.closed)
+                    self.assertTrue(stderr.closed)
+                    self.assertEqual(term_path.read_text(encoding="utf-8"), "terminate\n")
+                    pid = int(pid_path.read_text(encoding="utf-8"))
+                    with self.assertRaises(ProcessLookupError):
+                        os.kill(pid, 0)
+                    with self.assertRaises(ChildProcessError):
+                        os.waitpid(pid, os.WNOHANG)
+                    return result
+                finally:
+                    for process in processes:
+                        if process.poll() is None:
+                            process.kill()
+                            process.wait()
+                        for stream in (process.stdout, process.stderr):
+                            if stream is not None and not stream.closed:
+                                try:
+                                    stream.close()
+                                except RuntimeError:
+                                    pass
+
+            class RegistrationFaultSelector:
+                def __init__(self, wait_until_ready) -> None:
+                    self.wait_until_ready = wait_until_ready
+                    self.registered = 0
+                    self.closed = False
+
+                def register(self, _stream, _events) -> None:
+                    self.registered += 1
+                    if self.registered == 2:
+                        self.wait_until_ready()
+                        raise OSError(errno.EMFILE, "selector register fault")
+
+                def close(self) -> None:
+                    self.closed = True
+
+            class SelectFaultSelector:
+                def __init__(
+                    self, wait_until_ready, fault: BaseException, *, close_fault: bool = False,
+                ) -> None:
+                    self.wait_until_ready = wait_until_ready
+                    self.fault = fault
+                    self.close_fault = close_fault
+                    self.closed = False
+
+                def register(self, _stream, _events) -> None:
+                    pass
+
+                def get_map(self) -> dict[str, bool]:
+                    return {"owned": True}
+
+                def select(self, _timeout):
+                    self.wait_until_ready()
+                    raise self.fault
+
+                def close(self) -> None:
+                    self.closed = True
+                    if self.close_fault:
+                        raise RuntimeError("selector close fault")
+
+            def constructor_fault(wait_until_ready):
+                def construct():
+                    wait_until_ready()
+                    raise OSError(errno.EMFILE, "selector constructor fault")
+
+                return construct
+
+            self.assertIsNone(exercise("constructor", constructor_fault))
+
+            registration_instances = []
+
+            def registration_fault(wait_until_ready):
+                selector = RegistrationFaultSelector(wait_until_ready)
+                registration_instances.append(selector)
+                return lambda: selector
+
+            self.assertIsNone(exercise("registration", registration_fault))
+            self.assertTrue(registration_instances[0].closed)
+
+            cancellation_instances = []
+
+            def cancellation(wait_until_ready):
+                selector = SelectFaultSelector(wait_until_ready, KeyboardInterrupt())
+                cancellation_instances.append(selector)
+                return lambda: selector
+
+            exercise("cancellation", cancellation, expected_exception=KeyboardInterrupt)
+            self.assertTrue(cancellation_instances[0].closed)
+
+            cleanup_instances = []
+
+            def cleanup_error(wait_until_ready):
+                selector = SelectFaultSelector(
+                    wait_until_ready, OSError(errno.EIO, "selector read fault"),
+                )
+                cleanup_instances.append(selector)
+                return lambda: selector
+
+            exercise(
+                "process-cleanup", cleanup_error,
+                expected_exception=RuntimeError, cleanup_fault=True,
+            )
+            self.assertTrue(cleanup_instances[0].closed)
+
+            selector_close_instances = []
+
+            def selector_close_error(wait_until_ready):
+                selector = SelectFaultSelector(
+                    wait_until_ready,
+                    OSError(errno.EIO, "selector read fault"),
+                    close_fault=True,
+                )
+                selector_close_instances.append(selector)
+                return lambda: selector
+
+            exercise("selector-close", selector_close_error, expected_exception=RuntimeError)
+            self.assertTrue(selector_close_instances[0].closed)
+
+            stdout_close_instances = []
+
+            def stdout_close_error(wait_until_ready):
+                selector = SelectFaultSelector(
+                    wait_until_ready, OSError(errno.EIO, "selector read fault"),
+                )
+                stdout_close_instances.append(selector)
+                return lambda: selector
+
+            exercise(
+                "stdout-close", stdout_close_error,
+                expected_exception=RuntimeError, stdout_close_fault=True,
+            )
+            self.assertTrue(stdout_close_instances[0].closed)
 
 
 class DurableProcessorRecoveryTests(unittest.TestCase):
