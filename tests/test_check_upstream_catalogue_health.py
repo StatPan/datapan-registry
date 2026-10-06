@@ -1016,6 +1016,39 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             )
             self.assertEqual(replay["state_sha256"], state["state_sha256"])
 
+    def test_link_contract_api_key_id_schema_accepts_unicode_and_rejects_controls(self) -> None:
+        schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json").read_text(
+                encoding="utf-8",
+            ),
+        )
+        record_schema = {
+            "$schema": schema["$schema"],
+            "$ref": "#/$defs/link_contract_diagnostic_record",
+            "$defs": schema["$defs"],
+        }
+        jsonschema.Draft202012Validator.check_schema(record_schema)
+        validator = jsonschema.Draft202012Validator(record_schema)
+        _, record = diagnostic_checkpoint()
+
+        for identity in ("safe-id", "공공데이터-식별자", "api-😀", "x" * 128):
+            with self.subTest(accepted=repr(identity)):
+                accepted = copy.deepcopy(record)
+                accepted["api_key"]["id"] = identity
+                validator.validate(accepted)
+
+        rejected_identities = (
+            "", "x" * 129,
+            *(f"safe{chr(codepoint)}id" for codepoint in range(32)),
+            "safe\x7fid",
+        )
+        for identity in rejected_identities:
+            with self.subTest(rejected=repr(identity)):
+                rejected = copy.deepcopy(record)
+                rejected["api_key"]["id"] = identity
+                with self.assertRaises(jsonschema.ValidationError):
+                    validator.validate(rejected)
+
     def test_link_contract_diagnostic_tampering_cannot_initialize_health_state(self) -> None:
         checkpoint_value, diagnostic = diagnostic_checkpoint()
         with tempfile.TemporaryDirectory() as directory:

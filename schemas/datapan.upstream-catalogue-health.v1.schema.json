@@ -173,7 +173,7 @@
           "required": ["provider", "id"],
           "properties": {
             "provider": {"const": "data.go.kr"},
-            "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[^\\u0000-\\u001f\\u007f]+$"}
+            "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[^\u0000-\u001f\u007f]+$"}
           }
         },
         "worker_status": {"enum": ["retry", "quarantined"]},

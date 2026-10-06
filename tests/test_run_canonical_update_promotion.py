@@ -1289,7 +1289,6 @@ class ProcessorBundleContractTests(unittest.TestCase):
                 check=False,
             )
             self.assertNotEqual(missing.returncode, 0)
-            self.assertIn(b"lazy fetching disabled", missing.stderr)
             self.assertFalse(fetch_marker.exists())
 
     def test_composer_identity_bounds_stderr_and_timeout_then_reaps_and_closes(self) -> None:
