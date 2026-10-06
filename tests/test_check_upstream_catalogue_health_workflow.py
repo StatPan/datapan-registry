@@ -60,11 +60,18 @@ class UpstreamCatalogueHealthWorkflowTest(unittest.TestCase):
             if step.get("name") == "Checkout the trusted default branch"
         )
         self.assertEqual(checkout["with"]["fetch-depth"], "0")
+        self.assertEqual(checkout["with"]["ref"], "${{ github.sha }}")
         setup = next(
             step for step in self.workflow["jobs"]["inspect"]["steps"]
             if step.get("name") == "Set up explicit UTC evaluation time and dependencies"
         )
         self.assertIn("'PyYAML==6.0.2'", setup["run"])
+        evaluate = next(
+            step for step in self.workflow["jobs"]["inspect"]["steps"]
+            if step.get("name") == "Evaluate GitHub observations and durable checkpoints"
+        )
+        self.assertEqual(evaluate["env"]["HEALTH_EVALUATOR_SOURCE_SHA"], "${{ github.sha }}")
+        self.assertIn("--evaluator-source-sha \"${HEALTH_EVALUATOR_SOURCE_SHA}\"", evaluate["run"])
 
     def test_state_update_uses_bounded_non_force_fast_forward_push(self) -> None:
         steps = self.workflow["jobs"]["inspect"]["steps"]

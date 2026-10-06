@@ -594,6 +594,23 @@ class CanonicalUpdateCITests(unittest.TestCase):
             )
             self.assertIn("${{ github.sha }}", steps[guard_index]["env"]["ACTUAL_HEAD_SHA"])
 
+    def test_verify_release_runs_terminal_evidence_intake_tests_and_compiles_sources(self) -> None:
+        import yaml
+
+        workflow_path = pathlib.Path(__file__).parents[1] / ".github/workflows/verify-release.yml"
+        workflow = yaml.load(workflow_path.read_text(), Loader=yaml.BaseLoader)
+        steps = workflow["jobs"]["verify"]["steps"]
+        policy_step = next(step for step in steps if step.get("name") == "Validate registry policy artifacts")
+        run_text = policy_step["run"]
+        self.assertIn(
+            "python -m unittest tests/test_canonical_update_terminal_evidence.py tests/test_check_upstream_catalogue_terminal_intake.py",
+            run_text,
+        )
+        self.assertIn(
+            "python3 -m py_compile scripts/canonical_update_terminal_evidence.py scripts/run-canonical-update-promotion.py scripts/check-upstream-catalogue-health.py",
+            run_text,
+        )
+
 
 class CanonicalUpdateCIJournalIntegrationTests(unittest.TestCase):
     """Exercise helper state transitions through the real promotion journal."""

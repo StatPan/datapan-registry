@@ -1777,6 +1777,395 @@ def screen_processor_recovery_candidate(
     }, None
 
 
+MAX_TERMINAL_OUTCOME_GENERATIONS = 64
+TERMINAL_OUTCOME_SCHEMA_VERSION = "datapan.canonical-update-promotion-terminal-outcome.v1"
+TERMINAL_OUTCOME_WORKFLOW_PATH = ".github/workflows/canonical-update-promotion.yml"
+TERMINAL_OUTCOME_SCHEMA_PATH = "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json"
+TERMINAL_OUTCOME_ROOT = pathlib.PurePosixPath(".datapan/ci/canonical-update-promotion-outcomes")
+TERMINAL_EVALUATOR_SOURCE_PATHS = (
+    ".github/workflows/canonical-update-promotion.yml",
+    "scripts/run-canonical-update-promotion.py",
+    "scripts/canonical_update_pr.py",
+    "scripts/canonical_update_ci.py",
+    "scripts/refresh-canonical-snapshot-evidence.py",
+    "scripts/upstream-catalogue-state-branch.py",
+    "scripts/upstream_catalogue_handoff.py",
+    "scripts/compose-upstream-catalogue-candidate.py",
+    "scripts/generate-batch-link-detail-registry-patches.py",
+    "scripts/seoul_oa109_operation_declaration.py",
+    "scripts/upstream_catalogue_derivation.py",
+    "scripts/materialize-canonical-registry.py",
+    "scripts/check-upstream-catalogue-health.py",
+    "scripts/canonical_update_terminal_evidence.py",
+    "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "schemas/datapan.specs.v1.schema.json",
+    "schemas/datapan.provider-index.v1.schema.json",
+    "schemas/datapan.catalog-diff.v1.schema.json",
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "policy/upstream-catalogue-health.json",
+)
+
+
+def terminal_generation_record(
+    checkpoint: Mapping[str, Any], *, status: str, reason_code: str | None,
+    screened: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Project bounded source and artifact identities for one screened B generation."""
+    locator = checkpoint.get("output_artifact") if isinstance(checkpoint.get("output_artifact"), Mapping) else {}
+    name_match = re.fullmatch(
+        r"upstream-catalogue-processing-([0-9]{6,20})-([1-9][0-9]*)",
+        str(locator.get("name", "")),
+    )
+    run_id = str(locator.get("run_id", ""))
+    run_attempt = int(name_match.group(2)) if name_match and name_match.group(1) == run_id else None
+    screened_run = screened.get("run") if isinstance(screened, Mapping) and isinstance(screened.get("run"), Mapping) else {}
+    bundle = screened.get("bundle") if isinstance(screened, Mapping) and isinstance(screened.get("bundle"), Mapping) else {}
+    observation = checkpoint.get("last_observation") if isinstance(checkpoint.get("last_observation"), Mapping) else {}
+    outcome = checkpoint.get("outcome") if isinstance(checkpoint.get("outcome"), Mapping) else {}
+    producer = {
+        "run_id": run_id if re.fullmatch(r"[0-9]{6,20}", run_id) else None,
+        "run_attempt": run_attempt,
+        "head_sha": screened_run.get("head_sha") if re.fullmatch(r"[a-f0-9]{40}", str(screened_run.get("head_sha", ""))) else None,
+        "artifact_id": str(locator.get("artifact_id")) if re.fullmatch(r"[0-9]{1,20}", str(locator.get("artifact_id", ""))) else None,
+        "artifact_name": locator.get("name") if isinstance(locator.get("name"), str) else None,
+        "artifact_expires_at": locator.get("expires_at") if isinstance(locator.get("expires_at"), str) else None,
+        "bundle_manifest_sha256": locator.get("bundle_manifest_sha256") if re.fullmatch(r"[a-f0-9]{64}", str(locator.get("bundle_manifest_sha256", ""))) else None,
+    }
+    composition = None
+    if isinstance(bundle, Mapping):
+        registry_path = bundle.get("registry_path")
+        registry_bytes = bundle.get("registry_bytes")
+        registry_sha = bundle.get("registry_sha256")
+        if (
+            isinstance(registry_path, str)
+            and type(registry_bytes) is int and registry_bytes > 0
+            and isinstance(registry_sha, str) and re.fullmatch(r"[a-f0-9]{64}", registry_sha)
+        ):
+            composition = {
+                "baseline_sha256": bundle.get("composition_baseline_sha256", bundle.get("baseline_sha256")),
+                "registry_path": registry_path,
+                "registry_bytes": registry_bytes,
+                "registry_sha256": registry_sha,
+                "composition_receipt_sha256": bundle.get("composition_receipt_sha256"),
+            }
+            for key in ("baseline_sha256", "composition_receipt_sha256"):
+                value = composition.get(key)
+                if not isinstance(value, str) or not re.fullmatch(r"[a-f0-9]{64}", value):
+                    composition[key] = None
+    checkpoint_observation = None
+    if isinstance(observation, Mapping):
+        observed_at = observation.get("observed_at")
+        producer_run_id = observation.get("producer_run_id")
+        refresh_sha = observation.get("refresh_evidence_sha256")
+        collection_status = observation.get("collection_status")
+        execution_mode = observation.get("execution_mode")
+        if (
+            isinstance(observed_at, str)
+            and isinstance(producer_run_id, str)
+            and collection_status in {"success", "failure", "missing"}
+            and execution_mode in {"live", "fixture"}
+        ):
+            checkpoint_observation = {
+                "observed_at": observed_at,
+                "producer_run_id": producer_run_id,
+                "refresh_evidence_sha256": refresh_sha if refresh_sha is None or re.fullmatch(r"[a-f0-9]{64}", str(refresh_sha)) else None,
+                "collection_status": collection_status,
+                "execution_mode": execution_mode,
+                "claim": "checkpoint_reported_last_observation",
+            }
+    def optional_count(key: str) -> int | None:
+        value = outcome.get(key)
+        return value if type(value) is int and value >= 0 else None
+    safe_reason = reason_code if isinstance(reason_code, str) and re.fullmatch(r"[a-z0-9_]{1,96}", reason_code) else None
+    return {
+        "generation_id": checkpoint.get("generation_id") if re.fullmatch(r"[a-f0-9]{64}", str(checkpoint.get("generation_id", ""))) else None,
+        "checkpoint_sha256": checkpoint.get("checkpoint_sha256") if re.fullmatch(r"[a-f0-9]{64}", str(checkpoint.get("checkpoint_sha256", ""))) else None,
+        "source_id": checkpoint.get("source_id") if isinstance(checkpoint.get("source_id"), str) else None,
+        "source_scope": checkpoint.get("source_scope") if isinstance(checkpoint.get("source_scope"), str) else None,
+        "status": status,
+        "reason_code": safe_reason,
+        "producer": producer,
+        "checkpoint_observation": checkpoint_observation,
+        "checkpoint_observation_count": (
+            checkpoint.get("observation_count")
+            if type(checkpoint.get("observation_count")) is int and checkpoint.get("observation_count") >= 1
+            else None
+        ),
+        "generation_baseline_sha256": (
+            checkpoint.get("generation_inputs", {}).get("baseline_sha256")
+            if isinstance(checkpoint.get("generation_inputs"), Mapping)
+            and re.fullmatch(r"[a-f0-9]{64}", str(checkpoint.get("generation_inputs", {}).get("baseline_sha256", "")))
+            else None
+        ),
+        "checkpoint_derivation_sha256": (
+            hashlib.sha256(canonical_json(checkpoint.get("generation_inputs", {}).get("same_observation_derivation"))).hexdigest()
+            if isinstance(checkpoint.get("generation_inputs"), Mapping)
+            and isinstance(checkpoint.get("generation_inputs", {}).get("same_observation_derivation"), Mapping)
+            else None
+        ),
+        "composition": composition,
+        "pending_count": optional_count("pending_count"),
+        "detail_retry_count": optional_count("detail_retry_count"),
+        "detail_unattempted_count": optional_count("detail_unattempted_count"),
+    }
+
+
+def terminal_recovery_result(
+    *, status: str, candidate_available: bool, generations: Sequence[Mapping[str, Any]],
+    evaluated_main: Mapping[str, Any] | None = None, selected_generation_id: str | None = None,
+    preparation_returned: bool = False,
+) -> dict[str, Any]:
+    rows = list(generations[:MAX_TERMINAL_OUTCOME_GENERATIONS])
+    return {
+        "kind": "recover-ready",
+        "status": status,
+        "candidate_available": candidate_available,
+        "evaluated_main": dict(evaluated_main) if isinstance(evaluated_main, Mapping) else None,
+        "selected_generation_id": selected_generation_id,
+        "preparation_returned": preparation_returned,
+        "generation_count": len(generations),
+        "generation_results_truncated": len(generations) > len(rows),
+        "generations": rows,
+    }
+
+
+def terminal_main_identity(identity: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    """Project only the authenticated C main identity into the versioned receipt shape."""
+    if not isinstance(identity, Mapping):
+        return None
+    revision = identity.get("main_sha", identity.get("revision"))
+    manifest_sha = identity.get("manifest_sha256")
+    path = identity.get("registry_path")
+    byte_count = identity.get("registry_bytes")
+    registry_sha = identity.get("registry_sha256")
+    if (
+        not isinstance(revision, str) or not re.fullmatch(r"[a-f0-9]{40}", revision)
+        or not isinstance(manifest_sha, str) or not re.fullmatch(r"[a-f0-9]{64}", manifest_sha)
+        or not isinstance(path, str) or not path
+        or type(byte_count) is not int or byte_count < 1
+        or not isinstance(registry_sha, str) or not re.fullmatch(r"[a-f0-9]{64}", registry_sha)
+    ):
+        return None
+    return {
+        "revision": revision,
+        "manifest_sha256": manifest_sha,
+        "registry_path": path,
+        "registry_bytes": byte_count,
+        "registry_sha256": registry_sha,
+    }
+
+
+def terminal_mode_result(mode: str) -> dict[str, Any]:
+    """Use one strict result shape for non-recovery invocations without inventing recovery facts."""
+    return {
+        "kind": mode,
+        "status": "mode_completed_without_recovery_outcome",
+        "candidate_available": False,
+        "evaluated_main": None,
+        "selected_generation_id": None,
+        "preparation_returned": False,
+        "generation_count": 0,
+        "generation_results_truncated": False,
+        "generations": [],
+    }
+
+
+def terminal_utc_now() -> str:
+    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def terminal_execution_failure_code(exc: Exception) -> str:
+    if isinstance(exc, PromotionError):
+        message = str(exc)
+        if message.startswith("stale_base:"):
+            return "stale_base_revalidation_required"
+        if message.startswith("terminal_outcome_evaluator_source_mismatch"):
+            return "evaluator_source_mismatch"
+        if message.startswith("terminal_outcome"):
+            return "terminal_outcome_contract_invalid"
+    return "controlled_execution_failure"
+
+
+class TerminalOutcomeRecorder:
+    """Write one attempt-bound C execution record; never overwrite a prior attempt path."""
+
+    def __init__(
+        self, root: pathlib.Path, output: pathlib.Path, *, repository: str,
+        mode: str, evaluator_source_sha: str, run_id: str, run_attempt: str,
+        event_name: str,
+    ) -> None:
+        if (
+            not re.fullmatch(r"[a-f0-9]{40}", evaluator_source_sha)
+            or not re.fullmatch(r"[0-9]{1,20}", run_id)
+            or not re.fullmatch(r"[1-9][0-9]{0,8}", run_attempt)
+            or mode not in {"recover-ready", "reconcile-prs", "refresh-owned-source", "reconcile-publication"}
+            or event_name not in {"schedule", "workflow_run", "workflow_dispatch", "local"}
+            or not re.fullmatch(r"[^\s/]+/[^\s/]+", repository)
+        ):
+            raise PromotionError("terminal_outcome_invocation_identity_invalid")
+        root = root.resolve(strict=True)
+        candidate = output if output.is_absolute() else root / output
+        resolved_parent = candidate.parent.resolve(strict=False)
+        try:
+            relative_parent = resolved_parent.relative_to(root)
+        except ValueError as exc:
+            raise PromotionError("terminal_outcome_output_outside_repository") from exc
+        expected_parent = pathlib.PurePosixPath(
+            *TERMINAL_OUTCOME_ROOT.parts, run_id, str(int(run_attempt)), mode,
+        )
+        if (
+            tuple(relative_parent.parts[:len(TERMINAL_OUTCOME_ROOT.parts)]) != tuple(TERMINAL_OUTCOME_ROOT.parts)
+            or pathlib.PurePosixPath(*relative_parent.parts) != expected_parent
+            or candidate.name != "terminal-outcome.json"
+            or any((root.joinpath(*relative_parent.parts[:index])).is_symlink() for index in range(1, len(relative_parent.parts) + 1))
+        ):
+            raise PromotionError("terminal_outcome_output_path_invalid")
+        if resolved_parent.exists():
+            if not resolved_parent.is_dir() or any(resolved_parent.iterdir()):
+                raise PromotionError("terminal_outcome_stale_output_present")
+            resolved_parent.chmod(0o700)
+        else:
+            resolved_parent.mkdir(parents=True, mode=0o700, exist_ok=False)
+        output_path = resolved_parent / "terminal-outcome.json"
+        working_head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+        if not re.fullmatch(r"[a-f0-9]{40}", working_head_sha):
+            raise PromotionError("terminal_outcome_checkout_identity_invalid")
+        initial_checkout_sha = os.environ.get("C_INITIAL_CHECKOUT_SHA", evaluator_source_sha)
+        if not re.fullmatch(r"[a-f0-9]{40}", initial_checkout_sha):
+            raise PromotionError("terminal_outcome_initial_checkout_identity_invalid")
+        source_files_match = initial_checkout_sha == evaluator_source_sha
+        trusted_schema: dict[str, Any] | None = None
+        if source_files_match:
+            for relative in TERMINAL_EVALUATOR_SOURCE_PATHS:
+                try:
+                    current = root.joinpath(*pathlib.PurePosixPath(relative).parts).read_bytes()
+                    expected = subprocess.run(
+                        ("git", "show", f"{evaluator_source_sha}:{relative}"),
+                        cwd=root, capture_output=True, check=False, timeout=10,
+                    )
+                except (OSError, subprocess.TimeoutExpired):
+                    source_files_match = False
+                    break
+                if expected.returncode != 0 or expected.stdout != current:
+                    source_files_match = False
+                    break
+                if relative == TERMINAL_OUTCOME_SCHEMA_PATH:
+                    try:
+                        loaded_schema = json.loads(expected.stdout)
+                    except (UnicodeDecodeError, json.JSONDecodeError):
+                        source_files_match = False
+                        break
+                    if not isinstance(loaded_schema, dict):
+                        source_files_match = False
+                        break
+                    trusted_schema = loaded_schema
+        if trusted_schema is None:
+            try:
+                schema_result = subprocess.run(
+                    ("git", "show", f"{evaluator_source_sha}:{TERMINAL_OUTCOME_SCHEMA_PATH}"),
+                    cwd=root, capture_output=True, check=False, timeout=10,
+                )
+                trusted_schema = json.loads(schema_result.stdout) if schema_result.returncode == 0 else None
+            except (OSError, subprocess.TimeoutExpired, UnicodeDecodeError, json.JSONDecodeError):
+                trusted_schema = None
+        if not isinstance(trusted_schema, dict):
+            raise PromotionError("terminal_outcome_schema_unavailable_at_evaluator_source")
+        self.path = output_path
+        self.sha_path = resolved_parent / "terminal-outcome.sha256"
+        self.root = root
+        self.schema = trusted_schema
+        self.source_matches = source_files_match
+        self._output_initialized = False
+        self.document: dict[str, Any] = {
+            "schema_version": TERMINAL_OUTCOME_SCHEMA_VERSION,
+            "repository": repository,
+            "workflow_path": TERMINAL_OUTCOME_WORKFLOW_PATH,
+            "invocation": {
+                "mode": mode,
+                "run_id": run_id,
+                "run_attempt": int(run_attempt),
+                "event": event_name,
+            },
+            "evaluator": {
+                "source_sha": evaluator_source_sha,
+                "workflow_checkout_sha": initial_checkout_sha,
+                "working_tree_head_sha": working_head_sha,
+                "checkout_matches_source": initial_checkout_sha == evaluator_source_sha,
+                "loaded_files_match_source": source_files_match,
+            },
+            "execution_status": "started",
+            "started_at": terminal_utc_now(),
+            "completed_at": None,
+            "failure_code": None,
+            "outcome": None,
+        }
+        self._write_document()
+
+    def _write_document(self) -> None:
+        import jsonschema
+
+        jsonschema.Draft202012Validator(self.schema, format_checker=jsonschema.FormatChecker()).validate(self.document)
+        payload = canonical_json(self.document) + b"\n"
+        temporary = self.path.with_name(".terminal-outcome.tmp")
+        fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            with os.fdopen(fd, "wb") as stream:
+                stream.write(payload)
+                stream.flush()
+                os.fsync(stream.fileno())
+            temporary.chmod(0o600)
+            if self._output_initialized:
+                os.replace(temporary, self.path)
+            else:
+                os.link(temporary, self.path)
+                temporary.unlink()
+                self._output_initialized = True
+            self.path.chmod(0o600)
+        finally:
+            temporary.unlink(missing_ok=True)
+
+    def finish(self, outcome: Mapping[str, Any]) -> None:
+        self.document.update({
+            "execution_status": "completed",
+            "completed_at": terminal_utc_now(),
+            "outcome": dict(outcome),
+        })
+        self._write_document()
+        digest_line = f"{hashlib.sha256(self.path.read_bytes()).hexdigest()}  terminal-outcome.json\n".encode("ascii")
+        fd = os.open(self.sha_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        try:
+            with os.fdopen(fd, "wb") as stream:
+                stream.write(digest_line)
+                stream.flush()
+                os.fsync(stream.fileno())
+            self.sha_path.chmod(0o600)
+        except BaseException:
+            self.sha_path.unlink(missing_ok=True)
+            raise
+
+    def fail(self, reason_code: str) -> None:
+        stable_reason = reason_code if re.fullmatch(r"[a-z0-9_]{1,96}", reason_code) else "controlled_execution_failure"
+        self.document.update({
+            "execution_status": "failed",
+            "completed_at": terminal_utc_now(),
+            "failure_code": stable_reason,
+            "outcome": None,
+        })
+        self._write_document()
+        digest_line = f"{hashlib.sha256(self.path.read_bytes()).hexdigest()}  terminal-outcome.json\n".encode("ascii")
+        fd = os.open(self.sha_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(digest_line)
+            stream.flush()
+            os.fsync(stream.fileno())
+        self.sha_path.chmod(0o600)
+
+
 def select_first_eligible_processor_bundle(
     root: pathlib.Path,
     repository: str,
@@ -1791,6 +2180,8 @@ def select_first_eligible_processor_bundle(
     composition_schema: Mapping[str, Any],
     composition_helper: Any,
     already_canonical: list[dict[str, Any]] | None = None,
+    terminal_generations: list[dict[str, Any]] | None = None,
+    terminal_context: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any] | None, list[dict[str, str]]]:
     """Screen generations in observation order and stop at the first valid bundle."""
     already_canonical_rows = already_canonical if already_canonical is not None else []
@@ -1805,6 +2196,9 @@ def select_first_eligible_processor_bundle(
     canonical_identity = (
         canonical_context.get("identity") if isinstance(canonical_context, Mapping) else None
     )
+    if terminal_context is not None and isinstance(canonical_identity, Mapping):
+        terminal_context["evaluated_main"] = terminal_main_identity(canonical_identity)
+    terminal_rows = terminal_generations if terminal_generations is not None else []
     for checkpoint in candidates:
         generation_id = str(checkpoint.get("generation_id", ""))
         screened, reason = screen_processor_recovery_candidate(
@@ -1820,6 +2214,10 @@ def select_first_eligible_processor_bundle(
         )
         if screened is None:
             blocked.append({"generation_id": generation_id, "reason": str(reason)})
+            terminal_rows.append(terminal_generation_record(
+                checkpoint, status="blocked",
+                reason_code=reason if isinstance(reason, str) else "processor_screen_rejected",
+            ))
             continue
         bundle = screened.get("bundle", {})
         if not isinstance(canonical_identity, Mapping):
@@ -1840,6 +2238,10 @@ def select_first_eligible_processor_bundle(
                 "detail_unattempted_count": outcome.get("detail_unattempted_count"),
                 "candidate_available": False,
             })
+            terminal_rows.append(terminal_generation_record(
+                checkpoint, status="already_canonical", reason_code="already_canonical_payload",
+                screened=screened,
+            ))
             continue
         if bundle.get("baseline_sha256") != canonical_identity.get("registry_sha256"):
             # A different payload composed from an older immutable baseline
@@ -1849,6 +2251,10 @@ def select_first_eligible_processor_bundle(
                 "generation_id": generation_id,
                 "reason": "processor_baseline_stale_for_current_canonical",
             })
+            terminal_rows.append(terminal_generation_record(
+                checkpoint, status="blocked", reason_code="processor_baseline_stale_for_current_canonical",
+                screened=screened,
+            ))
             continue
         already_active_payload = any(
             isinstance(row, Mapping)
@@ -1864,6 +2270,10 @@ def select_first_eligible_processor_bundle(
             # Another B observation may have a distinct generation while
             # composing the same bytes. It is already represented by this
             # active PR, so don't let that no-op starve a later candidate.
+            terminal_rows.append(terminal_generation_record(
+                checkpoint, status="already_represented", reason_code="active_promotion_payload_exists",
+                screened=screened,
+            ))
             continue
         revision = journal_record_for(
             journal,
@@ -1873,11 +2283,22 @@ def select_first_eligible_processor_bundle(
             str(bundle.get("registry_sha256", "")),
         )
         if revision is not None and revision.get("superseded_by") is not None:
+            terminal_rows.append(terminal_generation_record(
+                checkpoint, status="already_represented", reason_code="generation_superseded",
+                screened=screened,
+            ))
             continue
         if revision is not None and revision.get("status") != "prepared":
             # Exact payload redelivery is idempotent, even if the producer's
             # heartbeat or Actions artifact locator has advanced.
+            terminal_rows.append(terminal_generation_record(
+                checkpoint, status="already_represented", reason_code="generation_already_recorded",
+                screened=screened,
+            ))
             continue
+        terminal_rows.append(terminal_generation_record(
+            checkpoint, status="selected", reason_code=None, screened=screened,
+        ))
         screened["prior_revision"] = revision
         return screened, blocked
     return None, blocked
@@ -4471,7 +4892,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     }, sort_keys=True))
 
 
-def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Path) -> None:
+def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Path) -> dict[str, Any]:
     """Recover at most one durable B ready artifact using current trusted C code."""
     repository = os.environ["GITHUB_REPOSITORY"]
     default_branch = (
@@ -4504,18 +4925,43 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     candidates, blocked = list_recoverable_processor_checkpoints(
         args.state_root.resolve(), schema_path, journal,
     )
+    terminal_generations: list[dict[str, Any]] = [
+        {
+            "generation_id": row.get("generation_id") if re.fullmatch(r"[a-f0-9]{64}", str(row.get("generation_id", ""))) else None,
+            "checkpoint_sha256": None,
+            "source_id": "data_go_kr",
+            "source_scope": "aggregate_supported_catalog",
+            "status": "blocked",
+            "reason_code": row.get("reason") if isinstance(row.get("reason"), str) and re.fullmatch(r"[a-z0-9_]{1,96}", row.get("reason", "")) else "processor_checkpoint_unavailable",
+            "producer": {"run_id": None, "run_attempt": None, "head_sha": None, "artifact_id": None, "artifact_name": None, "artifact_expires_at": None, "bundle_manifest_sha256": None},
+            "checkpoint_observation": None,
+            "checkpoint_observation_count": None,
+            "generation_baseline_sha256": None,
+            "checkpoint_derivation_sha256": None,
+            "composition": None,
+            "pending_count": None,
+            "detail_retry_count": None,
+            "detail_unattempted_count": None,
+        }
+        for row in blocked
+    ]
     if not candidates:
+        result = terminal_recovery_result(
+            status="no-eligible-ready-processor-bundle" if blocked else "no-undelivered-ready-processor-bundle",
+            candidate_available=False, generations=terminal_generations,
+        )
         print(json.dumps({
-            "status": "no-eligible-ready-processor-bundle" if blocked else "no-undelivered-ready-processor-bundle",
+            "status": result["status"],
             "candidate_available": False,
             "blocked_generations": blocked,
         }, sort_keys=True))
-        return
+        return result
 
     composition_schema = load_object(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
     composition_helper = load_canonical_update_pr(root)
     current_head_sha = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
     already_canonical: list[dict[str, Any]] = []
+    terminal_context: dict[str, Any] = {}
     screened, blocked = select_first_eligible_processor_bundle(
         root, repository, candidates, blocked,
         journal=journal,
@@ -4526,19 +4972,29 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
         composition_schema=composition_schema,
         composition_helper=composition_helper,
         already_canonical=already_canonical,
+        terminal_generations=terminal_generations,
+        terminal_context=terminal_context,
     )
     if screened is None:
+        all_generations_canonical = (
+            bool(terminal_generations)
+            and len(terminal_generations) <= MAX_TERMINAL_OUTCOME_GENERATIONS
+            and all(row.get("status") == "already_canonical" for row in terminal_generations)
+        )
+        status = "already-canonical-payload" if all_generations_canonical else "no-eligible-ready-processor-bundle"
+        result = terminal_recovery_result(
+            status=status,
+            candidate_available=False,
+            generations=terminal_generations,
+            evaluated_main=terminal_context.get("evaluated_main"),
+        )
         print(json.dumps({
-            "status": (
-                "already-canonical-payload"
-                if already_canonical and not blocked
-                else "no-eligible-ready-processor-bundle"
-            ),
+            "status": status,
             "candidate_available": False,
             "blocked_generations": blocked,
             "already_canonical_generations": already_canonical,
         }, sort_keys=True))
-        return
+        return result
     if already_canonical:
         print(json.dumps({
             "status": "skipped-already-canonical-processor-bundles",
@@ -4554,6 +5010,14 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     args.processor_artifact_id = screened["artifact_id"]
     args._authenticated_canonical_context = screened.get("canonical_context")
     execute_candidate_preparation(args, root)
+    return terminal_recovery_result(
+        status="candidate_preparation_returned",
+        candidate_available=True,
+        generations=terminal_generations,
+        evaluated_main=terminal_context.get("evaluated_main"),
+        selected_generation_id=str(screened.get("generation_id", "")),
+        preparation_returned=True,
+    )
 
 
 def reconcile_open_promotions(root: pathlib.Path, *, prepare_only: bool = False) -> None:
@@ -5267,32 +5731,59 @@ def main() -> int:
     parser.add_argument("--target-main-sha")
     parser.add_argument("--processor-state-sha")
     parser.add_argument("--processor-state-repo", type=pathlib.Path)
+    parser.add_argument("--evaluator-source-sha", help="Exact trusted C workflow checkout SHA captured before candidate work")
+    parser.add_argument("--terminal-outcome-output", type=pathlib.Path, help="Exclusive attempt-specific terminal outcome JSON path under .datapan/ci/canonical-update-promotion-outcomes")
     parser.add_argument("--prepare-only", action="store_true", help="generate and validate a local candidate commit without uploading LFS, creating issues/PRs, or writing promotion state")
     args = parser.parse_args()
     root = args.repository_root.resolve()
+    outcome_recorder: TerminalOutcomeRecorder | None = None
     try:
         repo = os.environ.get("GITHUB_REPOSITORY", "")
         if not repo or "/" not in repo:
             raise PromotionError("GITHUB_REPOSITORY is required")
+        if args.terminal_outcome_output is not None:
+            evaluator_source_sha = args.evaluator_source_sha or os.environ.get("C_EVALUATOR_SOURCE_SHA", "")
+            outcome_recorder = TerminalOutcomeRecorder(
+                root,
+                args.terminal_outcome_output,
+                repository=repo,
+                mode=args.mode,
+                evaluator_source_sha=evaluator_source_sha,
+                run_id=os.environ.get("GITHUB_RUN_ID", ""),
+                run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+                event_name=os.environ.get("GITHUB_EVENT_NAME", "local"),
+            )
+            if not outcome_recorder.source_matches:
+                raise PromotionError("terminal_outcome_evaluator_source_mismatch")
         if args.processor_state_sha and args.mode != "refresh-owned-source":
             raise PromotionError("processor state pins are available only for explicit owned source refresh")
         if args.mode == "recover-ready":
             required = (args.state_root, args.datapan_cli)
             if any(value is None for value in required):
                 raise PromotionError("ready recovery requires durable processor state and the pinned Datapan CLI")
-            recover_ready_processor_candidate(args, root)
+            outcome = recover_ready_processor_candidate(args, root)
         elif args.mode == "refresh-owned-source":
             run_source_refresh(args, root)
+            outcome = terminal_mode_result(args.mode)
         elif args.mode == "reconcile-prs":
             reconcile_open_promotions(root, prepare_only=args.prepare_only)
+            outcome = terminal_mode_result(args.mode)
         else:
             if args.prepare_only:
                 raise PromotionError("--prepare-only cannot be combined with reconcile-publication")
             if args.publication_receipt is None:
                 raise PromotionError("reconcile-publication mode requires the downloaded immutable #592 receipt")
             reconcile_publication(root, args.publication_receipt.resolve())
+            outcome = terminal_mode_result(args.mode)
+        if outcome_recorder is not None:
+            outcome_recorder.finish(outcome)
         return 0
     except Exception as exc:  # noqa: BLE001
+        if outcome_recorder is not None:
+            try:
+                outcome_recorder.fail(terminal_execution_failure_code(exc))
+            except Exception:
+                print("FAIL canonical update promotion terminal outcome could not be sealed", file=sys.stderr)
         print(f"FAIL canonical update promotion: {exc}", file=sys.stderr)
         return 1
 

@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+  "title": "Datapan Canonical Update Promotion Terminal Outcome v1",
+  "description": "Attempt-bound, bounded C execution evidence. Native Actions metadata authenticates the artifact and completion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "repository", "workflow_path", "invocation", "evaluator",
+    "execution_status", "started_at", "completed_at", "failure_code", "outcome"
+  ],
+  "properties": {
+    "schema_version": {"const": "datapan.canonical-update-promotion-terminal-outcome.v1"},
+    "repository": {"type": "string", "pattern": "^[^\\s/]+/[^\\s/]+$"},
+    "workflow_path": {"const": ".github/workflows/canonical-update-promotion.yml"},
+    "invocation": {"$ref": "#/$defs/invocation"},
+    "evaluator": {"$ref": "#/$defs/evaluator"},
+    "execution_status": {"enum": ["started", "completed", "failed"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "completed_at": {"type": ["string", "null"], "format": "date-time"},
+    "failure_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+    "outcome": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/outcome"}]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"execution_status": {"const": "started"}}, "required": ["execution_status"]},
+      "then": {"properties": {"completed_at": {"type": "null"}, "failure_code": {"type": "null"}, "outcome": {"type": "null"}}}
+    },
+    {
+      "if": {"properties": {"execution_status": {"const": "completed"}}, "required": ["execution_status"]},
+      "then": {"properties": {"completed_at": {"type": "string"}, "failure_code": {"type": "null"}, "outcome": {"$ref": "#/$defs/outcome"}}}
+    },
+    {
+      "if": {"properties": {"execution_status": {"const": "failed"}}, "required": ["execution_status"]},
+      "then": {"properties": {"completed_at": {"type": "string"}, "failure_code": {"type": "string"}, "outcome": {"type": "null"}}}
+    }
+  ],
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "invocation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "run_id", "run_attempt", "event"],
+      "properties": {
+        "mode": {"enum": ["recover-ready", "reconcile-prs", "refresh-owned-source", "reconcile-publication"]},
+        "run_id": {"type": "string", "pattern": "^[0-9]{1,20}$"},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "event": {"enum": ["schedule", "workflow_run", "workflow_dispatch", "local"]}
+      }
+    },
+    "evaluator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_sha", "workflow_checkout_sha", "working_tree_head_sha", "checkout_matches_source", "loaded_files_match_source"],
+      "properties": {
+        "source_sha": {"$ref": "#/$defs/revision"},
+        "workflow_checkout_sha": {"$ref": "#/$defs/revision"},
+        "working_tree_head_sha": {"$ref": "#/$defs/revision"},
+        "checkout_matches_source": {"type": "boolean"},
+        "loaded_files_match_source": {"type": "boolean"}
+      }
+    },
+    "main_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["revision", "manifest_sha256", "registry_path", "registry_bytes", "registry_sha256"],
+      "properties": {
+        "revision": {"$ref": "#/$defs/revision"},
+        "manifest_sha256": {"$ref": "#/$defs/digest"},
+        "registry_path": {"type": "string", "minLength": 1, "maxLength": 256},
+        "registry_bytes": {"type": "integer", "minimum": 1, "maximum": 1073741824},
+        "registry_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "outcome": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "status", "candidate_available", "evaluated_main", "selected_generation_id", "preparation_returned", "generation_count", "generation_results_truncated", "generations"],
+      "properties": {
+        "kind": {"enum": ["recover-ready", "reconcile-prs", "refresh-owned-source", "reconcile-publication"]},
+        "status": {"enum": ["no-eligible-ready-processor-bundle", "no-undelivered-ready-processor-bundle", "already-canonical-payload", "candidate_preparation_returned", "mode_completed_without_recovery_outcome"]},
+        "candidate_available": {"type": "boolean"},
+        "evaluated_main": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/main_identity"}]},
+        "selected_generation_id": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "preparation_returned": {"type": "boolean"},
+        "generation_count": {"type": "integer", "minimum": 0, "maximum": 10000},
+        "generation_results_truncated": {"type": "boolean"},
+        "generations": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/generation"}}
+      }
+    },
+    "generation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["generation_id", "checkpoint_sha256", "source_id", "source_scope", "status", "reason_code", "producer", "checkpoint_observation", "checkpoint_observation_count", "generation_baseline_sha256", "checkpoint_derivation_sha256", "composition", "pending_count", "detail_retry_count", "detail_unattempted_count"],
+      "properties": {
+        "generation_id": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "checkpoint_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "source_id": {"type": ["string", "null"], "maxLength": 128},
+        "source_scope": {"type": ["string", "null"], "maxLength": 128},
+        "status": {"enum": ["blocked", "already_canonical", "selected", "already_represented"]},
+        "reason_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "producer": {"$ref": "#/$defs/producer"},
+        "checkpoint_observation": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/checkpoint_observation"}]},
+        "checkpoint_observation_count": {"type": ["integer", "null"], "minimum": 1},
+        "generation_baseline_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "checkpoint_derivation_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "composition": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/composition"}]},
+        "pending_count": {"type": ["integer", "null"], "minimum": 0},
+        "detail_retry_count": {"type": ["integer", "null"], "minimum": 0},
+        "detail_unattempted_count": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "producer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "run_attempt", "head_sha", "artifact_id", "artifact_name", "artifact_expires_at", "bundle_manifest_sha256"],
+      "properties": {
+        "run_id": {"type": ["string", "null"], "pattern": "^[0-9]{6,20}$"},
+        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
+        "head_sha": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/revision"}]},
+        "artifact_id": {"type": ["string", "null"], "pattern": "^[0-9]{1,20}$"},
+        "artifact_name": {"type": ["string", "null"], "maxLength": 128},
+        "artifact_expires_at": {"type": ["string", "null"], "format": "date-time"},
+        "bundle_manifest_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]}
+      }
+    },
+    "checkpoint_observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["claim", "observed_at", "producer_run_id", "refresh_evidence_sha256", "collection_status", "execution_mode"],
+      "properties": {
+        "claim": {"const": "checkpoint_reported_last_observation"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "producer_run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "refresh_evidence_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "collection_status": {"enum": ["success", "failure", "missing"]},
+        "execution_mode": {"enum": ["live", "fixture"]}
+      }
+    },
+    "composition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["baseline_sha256", "registry_path", "registry_bytes", "registry_sha256", "composition_receipt_sha256"],
+      "properties": {
+        "baseline_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "registry_path": {"type": "string", "minLength": 1, "maxLength": 256},
+        "registry_bytes": {"type": "integer", "minimum": 1, "maximum": 1073741824},
+        "registry_sha256": {"$ref": "#/$defs/digest"},
+        "composition_receipt_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]}
+      }
+    }
+  }
+}

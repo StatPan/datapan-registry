@@ -131,6 +131,11 @@ EXPECTED_INDEPENDENT_ADDITIONS = [
         "kind": "historical_subject_snapshot",
         "authority_ticket": "StatPan/datapan-registry#739",
     },
+    {
+        "path": "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+        "kind": "schema",
+        "authority_ticket": "StatPan/datapan-registry#741",
+    },
 ]
 
 

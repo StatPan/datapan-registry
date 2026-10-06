@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 114,
+  "count": 115,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -946,8 +946,8 @@
       "title": "Datapan Upstream Catalogue Health Receipt v1",
       "contract": "upstream-catalogue-health",
       "version": "v1",
-      "bytes": 13859,
-      "sha256": "4510f39a7a85a352020828aef123036c0e877796f8ebd4a829b3fe64ca6c4689"
+      "bytes": 20971,
+      "sha256": "13af38e44a1b0d70c676810d0db5f0e4dc96bbbd1cec447f4c205eea64c4a0a1"
     },
     {
       "path": "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
@@ -1029,6 +1029,15 @@
       "version": "v1",
       "bytes": 4008,
       "sha256": "d7206a49e5b3011ed44d8b9cd48e4a9f97eef3619a78ba5402db6f2dbe4ce543"
+    },
+    {
+      "path": "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+      "title": "Datapan Canonical Update Promotion Terminal Outcome v1",
+      "contract": "canonical-update-promotion-terminal-outcome",
+      "version": "v1",
+      "bytes": 8811,
+      "sha256": "da60e5b93d7befffea9e6bd2844f2c95748f647f8f5faa4813c7219ab01313c4"
     }
   ]
 }

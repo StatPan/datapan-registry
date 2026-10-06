@@ -38,7 +38,7 @@ jobs:
       - name: Checkout the trusted default branch
         uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ github.sha }}
           path: datapan-registry
           fetch-depth: 0
           lfs: false
@@ -113,6 +113,7 @@ jobs:
         env:
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+          HEALTH_EVALUATOR_SOURCE_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
           . .datapan/ci/upstream-health-venv/bin/activate
@@ -123,6 +124,7 @@ jobs:
             --promotion-ack "${HEALTH_INPUTS}/promotion/reports/canonical-update-promotion-receipt.json" \
             --health-state "${HEALTH_INPUTS}/health-state/state.json" \
             --main-revision "$(git rev-parse HEAD)" \
+            --evaluator-source-sha "${HEALTH_EVALUATOR_SOURCE_SHA}" \
             --workflow-run-id "${GITHUB_RUN_ID}" \
             --workflow-run-attempt "${GITHUB_RUN_ATTEMPT}" \
             --output "${HEALTH_INPUTS}/health-receipt.json" \
