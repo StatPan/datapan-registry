@@ -119,12 +119,13 @@ def _registry_identity_from_manifest(manifest_bytes: bytes) -> RegistryIdentity:
 
 
 def _looks_like_lfs_pointer(raw: bytes) -> bool:
-    first = raw.split(b"\n", 1)[0].lstrip()
+    candidate = raw.lstrip(b" \t\r\n")
+    first = candidate.split(b"\n", 1)[0].lstrip()
     if first.startswith((b"[", b"{")):
         return False
     return (
         first.startswith((b"version ", b"oid "))
-        or b"https://git-lfs.github.com/spec/v1" in raw[:512]
+        or b"https://git-lfs.github.com/spec/v1" in candidate[:512]
     )
 
 
@@ -246,19 +247,22 @@ class RegistryRepresentationClassificationTest(unittest.TestCase):
         self.assertEqual(_classify_registry_blob(self.manifest, self.pointer), ("lfs_pointer", self.identity))
         self.assertEqual(_classify_registry_blob(self.manifest, self.payload), ("materialized", self.identity))
         url_payload = b'[{"description":"https://git-lfs.github.com/spec/v1"}]\n'
-        url_manifest = write_json_bytes({
-            "source_registry": CANONICAL_REGISTRY_PATH,
-            "artifacts": [{
-                "path": CANONICAL_REGISTRY_PATH,
-                "kind": "registry",
-                "bytes": len(url_payload),
-                "sha256": sha256_bytes(url_payload),
-            }],
-        })
-        self.assertEqual(
-            _classify_registry_blob(url_manifest, url_payload)[0],
-            "materialized",
-        )
+        for leading in (b"", b"\n", b"\r\n"):
+            candidate = leading + url_payload
+            manifest = write_json_bytes({
+                "source_registry": CANONICAL_REGISTRY_PATH,
+                "artifacts": [{
+                    "path": CANONICAL_REGISTRY_PATH,
+                    "kind": "registry",
+                    "bytes": len(candidate),
+                    "sha256": sha256_bytes(candidate),
+                }],
+            })
+            with self.subTest(leading=leading):
+                self.assertEqual(
+                    _classify_registry_blob(manifest, candidate)[0],
+                    "materialized",
+                )
 
     def test_pointer_fields_must_be_exact_and_match_manifest(self) -> None:
         malformed = [
