@@ -591,19 +591,25 @@ class VerifyReleaseRunAdapterTests(unittest.TestCase):
         cli_pr = {
             "number": 652,
             "url": "https://github.com/StatPan/datapan-registry/pull/652",
-            "state": "OPEN",
+            "state": "MERGED",
             "body": "owned",
             "headRefName": "automation/canonical-update/data-go-kr-aaaaaaaaaaaa",
             "headRefOid": "b" * 40,
             "baseRefName": "main",
-            "mergeCommit": None,
+            "mergeCommit": {"oid": "c" * 40},
         }
         rest_pr = {
+            "state": "closed",
+            "merged": True,
+            "merged_at": "2026-10-01T00:00:00Z",
             "base": {
                 "sha": "a" * 40,
                 "repo": {"full_name": "StatPan/datapan-registry"},
             },
-            "head": {"repo": {"full_name": "StatPan/datapan-registry"}},
+            "head": {
+                "sha": "b" * 40,
+                "repo": {"full_name": "StatPan/datapan-registry"},
+            },
         }
         with (
             mock.patch.object(RUNNER, "gh_json", return_value=cli_pr),
@@ -614,6 +620,10 @@ class VerifyReleaseRunAdapterTests(unittest.TestCase):
         self.assertEqual(observed["repository"], "StatPan/datapan-registry")
         self.assertEqual(observed["headRepository"], "StatPan/datapan-registry")
         self.assertEqual(observed["baseRefOid"], "a" * 40)
+        self.assertEqual(observed["state"], "MERGED")
+        self.assertIs(observed["merged"], True)
+        self.assertEqual(observed["mergedAt"], "2026-10-01T00:00:00Z")
+        self.assertEqual(observed["mergeCommit"], {"oid": "c" * 40})
 
     def test_dispatch_request_uses_documented_api_version_header(self) -> None:
         class Response:

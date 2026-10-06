@@ -16,6 +16,7 @@ import tempfile
 import unittest
 from collections.abc import Mapping
 from datetime import timezone
+from typing import Any
 from unittest import mock
 import shutil
 import zipfile
@@ -55,6 +56,44 @@ HEALTH_TESTS = load_script(
 
 def read_json(path: pathlib.Path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+_USE_READBACK_MERGED = object()
+
+
+def primary_pr_transport(
+    readback: Mapping[str, Any],
+    *,
+    cli_state: str | None = None,
+    rest_merged: Any = _USE_READBACK_MERGED,
+    include_rest_merged: bool = True,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Split one normalized fixture into the two native GitHub response shapes."""
+    state = cli_state or str(readback.get("state") or "")
+    cli = {
+        key: copy.deepcopy(readback.get(key))
+        for key in (
+            "number", "url", "body", "headRefName", "headRefOid",
+            "baseRefName", "mergeCommit",
+        )
+    }
+    cli["state"] = state
+    merged = readback.get("merged") if rest_merged is _USE_READBACK_MERGED else rest_merged
+    rest = {
+        "state": "closed" if state in {"CLOSED", "MERGED"} else "open",
+        "merged_at": "2026-10-01T00:00:00Z" if merged is True else None,
+        "base": {
+            "sha": readback.get("baseRefOid") or "0" * 40,
+            "repo": {"full_name": readback.get("repository")},
+        },
+        "head": {
+            "sha": readback.get("headRefOid"),
+            "repo": {"full_name": readback.get("headRepository")},
+        },
+    }
+    if include_rest_merged:
+        rest["merged"] = merged
+    return cli, rest
 
 
 def actual_admission(checkpoint: dict, summary: dict) -> dict:
@@ -1048,6 +1087,9 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         authenticated_overrides: dict[str, Any] | None = None,
         source_checkout_head: str | None = None,
         omitted_authenticated_fields: set[str] | None = None,
+        pr_cli_state: str = "MERGED",
+        pr_rest_merged: Any = True,
+        include_pr_rest_merged: bool = True,
     ) -> dict[str, Any]:
         """Run the actual prepare CLI coordinator with remote boundaries stubbed."""
         main_root = self.helper.root / f"prepared-main-{label}"
@@ -1217,6 +1259,12 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         index_path = self.helper.state_dir / "sources/data_go_kr/index.json"
         original_index = index_path.read_bytes()
         original_index_value = PROCESSOR.load_json(index_path)
+        generations_dir = self.helper.state_dir / "sources/data_go_kr/generations"
+        original_generation_paths = sorted(
+            path.relative_to(generations_dir).as_posix()
+            for path in generations_dir.rglob("*") if path.is_file()
+        )
+        original_detail_calls = list(self.detail_calls)
         original_admission_rows = HANDOFF.validate_ledger(
             original_index_value["collector_handoff"],
         )["admitted_observations"]
@@ -1288,27 +1336,37 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             args.collector_admission.write_bytes(self.admission_path.read_bytes())
         else:
             args.collector_admission.write_text(json.dumps(admission_value_override, sort_keys=True), encoding="utf-8")
-        if mutate_pr_readback:
-            def bad_pr_readback(_root, _repository, number):
-                return {
-                    "number": number, "state": "CLOSED", "repository": "StatPan/datapan-registry",
-                    "headRepository": "StatPan/datapan-registry",
-                    "headRefName": current_c["ownership"]["branch"],
-                    "headRefOid": "f" * 40, "baseRefName": "main",
-                    "mergeCommit": {"oid": current_c["pr"]["merge_commit_sha"]},
-                    "merged": True, "body": current_c["ownership"]["body"],
-                }
-            pr_readback = bad_pr_readback
-        else:
-            def pr_readback(_root, _repository, number):
-                return {
-                    "number": number, "state": "CLOSED", "repository": "StatPan/datapan-registry",
-                    "headRepository": "StatPan/datapan-registry",
-                    "headRefName": current_c["ownership"]["branch"],
-                    "headRefOid": current_c["ownership"]["expected_head_sha"], "baseRefName": "main",
-                    "mergeCommit": {"oid": current_c["pr"]["merge_commit_sha"]},
-                    "merged": True, "body": current_c["ownership"]["body"],
-                }
+        normalized_pr_readback = {
+            "number": current_c["pr"]["number"], "url": current_c["pr"].get("url"),
+            "state": pr_cli_state, "repository": "StatPan/datapan-registry",
+            "headRepository": "StatPan/datapan-registry",
+            "headRefName": current_c["ownership"]["branch"],
+            "headRefOid": "f" * 40 if mutate_pr_readback else current_c["ownership"]["expected_head_sha"],
+            "baseRefName": "main", "baseRefOid": prepared_main_sha,
+            "mergeCommit": {"oid": current_c["pr"]["merge_commit_sha"]},
+            "merged": pr_rest_merged, "body": current_c["ownership"]["body"],
+        }
+        cli_pr, rest_pr = primary_pr_transport(
+            normalized_pr_readback,
+            cli_state=pr_cli_state,
+            rest_merged=pr_rest_merged,
+            include_rest_merged=include_pr_rest_merged,
+        )
+        pr_cli_reads: list[int] = []
+        pr_rest_reads: list[str] = []
+
+        def pr_cli_transport(_root: pathlib.Path, *argv: str) -> dict[str, Any]:
+            if argv[:2] != ("pr", "view"):
+                raise AssertionError(f"unexpected PR CLI transport request: {argv!r}")
+            pr_cli_reads.append(int(argv[2]))
+            return copy.deepcopy(cli_pr)
+
+        def pr_rest_transport(_root: pathlib.Path, endpoint: str, *argv: str) -> dict[str, Any]:
+            expected = f"repos/StatPan/datapan-registry/pulls/{current_c['pr']['number']}"
+            if endpoint != expected or argv != ("--method", "GET"):
+                raise AssertionError(f"unexpected PR REST transport request: {(endpoint, *argv)!r}")
+            pr_rest_reads.append(endpoint)
+            return copy.deepcopy(rest_pr)
 
         journal_snapshot = (None, None) if journal_unavailable else (journal, c["readback"]["journal_ref_sha"])
         current_identity_patch = (
@@ -1341,7 +1399,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 PROMOTION, "gh_rest_bytes",
                 side_effect=lambda _root, endpoint: archives[endpoint.split("/actions/artifacts/", 1)[1].split("/", 1)[0]],
             ),
-            mock.patch.object(PROMOTION, "gh_pr_readback", side_effect=pr_readback),
+            mock.patch.object(PROMOTION, "gh_json", side_effect=pr_cli_transport),
+            mock.patch.object(PROMOTION, "gh_rest_json", side_effect=pr_rest_transport),
             mock.patch("subprocess.run", side_effect=fake_health_subprocess),
         ):
             stdout, stderr = io.StringIO(), io.StringIO()
@@ -1350,11 +1409,25 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr),
             ):
                 result_code = PREPARATION.main()
+            if pr_cli_reads or pr_rest_reads:
+                self.assertEqual(pr_cli_reads, [current_c["pr"]["number"]])
+                self.assertEqual(
+                    pr_rest_reads,
+                    [f"repos/StatPan/datapan-registry/pulls/{current_c['pr']['number']}"],
+                )
             if result_code != 0:
                 detail = json.loads(stderr.getvalue())
                 self.assertEqual(
                     index_path.read_bytes(), original_index,
                 )
+                self.assertEqual(
+                    sorted(
+                        path.relative_to(generations_dir).as_posix()
+                        for path in generations_dir.rglob("*") if path.is_file()
+                    ),
+                    original_generation_paths,
+                )
+                self.assertEqual(self.detail_calls, original_detail_calls)
                 current_rows = HANDOFF.validate_ledger(
                     PROCESSOR.load_json(index_path)["collector_handoff"],
                 )["admitted_observations"]
@@ -1375,6 +1448,14 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 self.assertEqual(outputs["derivation_path"], plan["derivation_path"])
                 self.assertEqual(outputs["generation_id"], plan["generation_id"])
         self.assertEqual(index_path.read_bytes(), original_index)
+        self.assertEqual(
+            sorted(
+                path.relative_to(generations_dir).as_posix()
+                for path in generations_dir.rglob("*") if path.is_file()
+            ),
+            original_generation_paths,
+        )
+        self.assertEqual(self.detail_calls, original_detail_calls)
         current_rows = HANDOFF.validate_ledger(
             PROCESSOR.load_json(index_path)["collector_handoff"],
         )["admitted_observations"]
@@ -1393,6 +1474,9 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         wrong_attempt: bool = False,
         current_head_sha: str | None = None,
         canonical_identity: Mapping[str, Any] | None = None,
+        pr_cli_state: str = "MERGED",
+        pr_rest_merged: Any = True,
+        include_pr_rest_merged: bool = True,
     ) -> None:
         """Exercise the production C-side lineage validator with local API/Git adapters."""
         bundle_dir = self.output_by_generation[checkpoint["generation_id"]]
@@ -1427,13 +1511,35 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         }
         body = row["ownership"]["body"]
         pr_readback = {
-            "number": row["pr"]["number"], "state": "CLOSED",
+            "number": row["pr"]["number"], "url": row["pr"].get("url"), "state": pr_cli_state,
             "repository": "StatPan/datapan-registry", "headRepository": "StatPan/datapan-registry",
             "headRefName": row["ownership"]["branch"],
             "headRefOid": row["ownership"]["expected_head_sha"], "baseRefName": "main",
+            "baseRefOid": current_head_sha or baseline["main_sha"],
             "mergeCommit": {"oid": row["pr"]["merge_commit_sha"]}, "merged": True,
             "body": body,
         }
+        cli_pr, rest_pr = primary_pr_transport(
+            pr_readback,
+            cli_state=pr_cli_state,
+            rest_merged=pr_rest_merged,
+            include_rest_merged=include_pr_rest_merged,
+        )
+        cli_reads: list[int] = []
+        rest_reads: list[str] = []
+
+        def pr_cli_transport(_root: pathlib.Path, *argv: str) -> dict[str, Any]:
+            if argv[:2] != ("pr", "view"):
+                raise AssertionError(f"unexpected C PR CLI transport request: {argv!r}")
+            cli_reads.append(int(argv[2]))
+            return copy.deepcopy(cli_pr)
+
+        def pr_rest_transport(_root: pathlib.Path, endpoint: str, *argv: str) -> dict[str, Any]:
+            expected = f"repos/StatPan/datapan-registry/pulls/{row['pr']['number']}"
+            if endpoint != expected or argv != ("--method", "GET"):
+                raise AssertionError(f"unexpected C PR REST transport request: {(endpoint, *argv)!r}")
+            rest_reads.append(endpoint)
+            return copy.deepcopy(rest_pr)
 
         def fake_command(argv, cwd, *, allowed_returncodes=frozenset({0}), env=None):
             del cwd, env
@@ -1473,14 +1579,22 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
 
         with (
             mock.patch.object(PROMOTION, "command", side_effect=fake_command),
-            mock.patch.object(PROMOTION, "gh_pr_readback", return_value=pr_readback),
+            mock.patch.object(PROMOTION, "gh_json", side_effect=pr_cli_transport),
+            mock.patch.object(PROMOTION, "gh_rest_json", side_effect=pr_rest_transport),
             mock.patch("subprocess.run", side_effect=fake_subprocess),
         ):
-            PROMOTION.validate_same_observation_derivation_for_c(
-                self.helper.root, self.helper.state_dir, checkpoint, bundle, journal, c["readback"]["journal_ref_sha"],
-                current_head_sha=current_head_sha or baseline["main_sha"],
-                canonical_identity=dict(canonical_identity or baseline),
-            )
+            validated = False
+            try:
+                PROMOTION.validate_same_observation_derivation_for_c(
+                    self.helper.root, self.helper.state_dir, checkpoint, bundle, journal, c["readback"]["journal_ref_sha"],
+                    current_head_sha=current_head_sha or baseline["main_sha"],
+                    canonical_identity=dict(canonical_identity or baseline),
+                )
+                validated = True
+            finally:
+                if validated or cli_reads or rest_reads:
+                    self.assertEqual(cli_reads, [row["pr"]["number"]])
+                    self.assertEqual(rest_reads, [f"repos/StatPan/datapan-registry/pulls/{row['pr']['number']}"])
 
     def _select_actual_derived_candidate(
         self, checkpoint: dict[str, Any], journal: dict[str, Any], c: dict[str, Any],
@@ -1507,18 +1621,30 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         }
         row = journal["records"][0]
         pr_readback = {
-            "number": row["pr"]["number"], "state": "CLOSED",
+            "number": row["pr"]["number"], "url": row["pr"].get("url"), "state": "MERGED",
             "repository": "StatPan/datapan-registry", "headRepository": "StatPan/datapan-registry",
             "headRefName": row["ownership"]["branch"],
             "headRefOid": row["ownership"]["expected_head_sha"], "baseRefName": "main",
+            "baseRefOid": c["baseline"]["main_sha"],
             "mergeCommit": {"oid": row["pr"]["merge_commit_sha"]}, "merged": True,
             "body": row["ownership"]["body"],
         }
+        cli_pr, rest_pr = primary_pr_transport(pr_readback)
         pr_reads: list[int] = []
+        rest_reads: list[str] = []
 
-        def read_pr(_root, _repository, number):
-            pr_reads.append(int(number))
-            return pr_readback
+        def pr_cli_transport(_root: pathlib.Path, *argv: str) -> dict[str, Any]:
+            if argv[:2] != ("pr", "view"):
+                raise AssertionError(f"unexpected selector PR CLI transport request: {argv!r}")
+            pr_reads.append(int(argv[2]))
+            return copy.deepcopy(cli_pr)
+
+        def pr_rest_transport(_root: pathlib.Path, endpoint: str, *argv: str) -> dict[str, Any]:
+            expected = f"repos/StatPan/datapan-registry/pulls/{row['pr']['number']}"
+            if endpoint != expected or argv != ("--method", "GET"):
+                raise AssertionError(f"unexpected selector PR REST transport request: {(endpoint, *argv)!r}")
+            rest_reads.append(endpoint)
+            return copy.deepcopy(rest_pr)
 
         composition_schema = read_json(ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
         composition_helper = PROMOTION.load_canonical_update_pr(ROOT)
@@ -1537,7 +1663,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             mock.patch.object(PROMOTION, "authenticated_current_canonical_context", return_value={
                 "identity": c["baseline"], "rows": json.loads(c["payload"]),
             }),
-            mock.patch.object(PROMOTION, "gh_pr_readback", side_effect=read_pr),
+            mock.patch.object(PROMOTION, "gh_json", side_effect=pr_cli_transport),
+            mock.patch.object(PROMOTION, "gh_rest_json", side_effect=pr_rest_transport),
         ):
             selected, blocked = PROMOTION.select_first_eligible_processor_bundle(
                 ROOT, "StatPan/datapan-registry", [checkpoint], [], journal,
@@ -1546,6 +1673,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 composition_schema=composition_schema, composition_helper=composition_helper,
                 already_canonical=already_canonical,
             )
+        if pr_reads or rest_reads:
+            self.assertEqual(rest_reads, [f"repos/StatPan/datapan-registry/pulls/{row['pr']['number']}"])
         return selected, blocked, already_canonical, pr_reads
 
     def _health_receipt_for_derived_candidate(
@@ -1662,6 +1791,21 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             self._prepare_authenticated_plan(
                 b1, journal1, c1, label="mismatched-c-pr-readback", mutate_pr_readback=True,
             )
+        native_merge_failures = (
+            ("cli-closed", "CLOSED", True, True),
+            ("cli-open", "OPEN", True, True),
+            ("rest-not-merged", "MERGED", False, True),
+            ("rest-merged-missing", "MERGED", True, False),
+        )
+        for label, cli_state, rest_merged, include_rest_merged in native_merge_failures:
+            with self.subTest(preparation_native_merge_failure=label):
+                with self.assertRaisesRegex(ValueError, "canonical_parent_PR_live_readback_mismatch"):
+                    self._prepare_authenticated_plan(
+                        b1, journal1, c1, label=f"native-{label}-c-pr-readback",
+                        pr_cli_state=cli_state,
+                        pr_rest_merged=rest_merged,
+                        include_pr_rest_merged=include_rest_merged,
+                    )
         plan1 = self._prepare_authenticated_plan(b1, journal1, c1, label="first-recursive-intake")
         self.assertTrue(plan1["eligible"], plan1)
         env1 = read_json(pathlib.Path(plan1["derivation_path"]))
@@ -1687,6 +1831,15 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertIsNotNone(selected_b2)
         self.assertEqual(selected_b2["generation_id"], b2["generation_id"])
         self.assertEqual(pr_reads_b2, [journal1["records"][0]["pr"]["number"]])
+        for label, cli_state, rest_merged, include_rest_merged in native_merge_failures:
+            with self.subTest(c_validation_native_merge_failure=label):
+                with self.assertRaisesRegex(PROMOTION.PromotionError, "strict C validation"):
+                    self._validate_c_derivation(
+                        b2, journal1, c1,
+                        pr_cli_state=cli_state,
+                        pr_rest_merged=rest_merged,
+                        include_pr_rest_merged=include_rest_merged,
+                    )
         with self.assertRaisesRegex(PROMOTION.PromotionError, "strict C validation"):
             self._validate_c_derivation(b2, journal1, c1, wrong_attempt=True)
         journal2, c2 = self._synthetic_c_journal(b2, 2)

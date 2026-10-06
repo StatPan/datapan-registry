@@ -2671,7 +2671,7 @@ def validate_same_observation_derivation_for_c(
         body = readback.get("body")
         if (
             readback.get("number") != reference["pr_number"]
-            or readback.get("state") != "CLOSED"
+            or readback.get("state") != "MERGED"
             or readback.get("repository") != reference["repository"]
             or readback.get("headRepository") != reference["repository"]
             or readback.get("headRefName") != reference["pr_branch"]

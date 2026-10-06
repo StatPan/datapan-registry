@@ -254,7 +254,7 @@ def authenticate_live_canonical_parent(
     body = live.get("body") if isinstance(live, Mapping) else None
     if (
         live.get("number") != number
-        or live.get("state") != "CLOSED"
+        or live.get("state") != "MERGED"
         or live.get("repository") != repository
         or live.get("headRepository") != repository
         or live.get("headRefName") != readback.get("pr_branch")
