@@ -268,6 +268,44 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertFalse(github_output.exists())
             self.assertFalse(unavailable_path.exists())
 
+    def test_new_observation_without_selected_parent_returns_without_reading_admission_inputs(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="catalogue-new-observation-preparation-") as temp:
+            root = pathlib.Path(temp)
+            state_dir = root / "state"
+            index_path = state_dir / "sources/data_go_kr/index.json"
+            index_path.parent.mkdir(parents=True)
+            index_bytes = json.dumps({
+                "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+                "generations": [], "detail_queue_cursor": 0, "detail_retry_state": {},
+            }, sort_keys=True).encode("utf-8") + b"\n"
+            index_path.write_bytes(index_bytes)
+            output_dir = root / "output"
+            github_output = root / "github-output"
+            unavailable = root / "must-not-be-read"
+            command = [
+                sys.executable,
+                str(ROOT / "scripts/prepare-upstream-catalogue-derivation.py"),
+                "--main-root", str(unavailable / "main"),
+                "--source-root", str(unavailable / "source"),
+                "--state-dir", str(state_dir),
+                "--repository", REPOSITORY, "--default-branch", "main",
+                "--collector-admission", str(unavailable / "admission.json"),
+                "--candidate", str(unavailable / "candidate.json"),
+                "--refresh-evidence", str(unavailable / "evidence.json"),
+                "--diff", str(unavailable / "diff.json"),
+                "--resume-bundle", str(unavailable / "bundle"),
+                "--output-dir", str(output_dir), "--github-output", str(github_output),
+            ]
+            result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(json.loads(result.stdout), {
+                "eligible": False,
+                "reason": "new_observation_no_existing_processor_parent",
+            })
+            self.assertIn("derivation_enabled=false", github_output.read_text(encoding="utf-8"))
+            self.assertEqual(index_path.read_bytes(), index_bytes)
+            self.assertFalse(unavailable.exists())
+
     def test_triggers_and_trusted_run_gates_are_explicit(self) -> None:
         triggers = self.workflow["on"]
         self.assertEqual(triggers["workflow_run"]["workflows"], ["Upstream catalog refresh"])
@@ -348,6 +386,25 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("--claim-only", claim["run"])
         self.assertEqual(claim["env"]["TARGET_GENERATION_ID"], "${{ steps.select.outputs.generation_id }}")
         self.assertEqual(derivation["id"], "derivation")
+        self.assertEqual(
+            derivation["env"]["PRODUCER_RUN_ATTEMPT"],
+            "${{ steps.producer_attempt.outputs.run_attempt }}",
+        )
+        self.assertEqual(
+            derivation["env"]["ARTIFACT_DIGEST"],
+            "${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}",
+        )
+        self.assertIn("--collector-archive", derivation["run"])
+        self.assertIn("--producer-observe-job-started-at", derivation["run"])
+        self.assertIn("--producer-artifact-size-bytes", derivation["run"])
+        for step_id in ("claim", "run_processor"):
+            consumer = next(step for step in steps if step.get("id") == step_id)
+            self.assertEqual(
+                consumer["env"]["PRODUCER_RUN_ATTEMPT"],
+                "${{ steps.producer_attempt.outputs.run_attempt }}",
+            )
+            self.assertIn("--producer-run-attempt", consumer["run"])
+            self.assertIn("--producer-artifact-digest-sha256", consumer["run"])
 
     def test_trusted_bootstrap_code_uses_exact_producer_worktree_inputs(self) -> None:
         job = self.workflow["jobs"]["process"]

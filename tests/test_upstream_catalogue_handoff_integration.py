@@ -111,6 +111,16 @@ def write_admission_bundle(
         "refresh_evidence_sha256": evidence_sha256,
         "event": "schedule",
     }
+    if not hasattr(fixture, "admission_expected_by_id"):
+        fixture.admission_expected_by_id = {}
+    fixture.admission_expected_by_id[str(run_id)] = {
+        key: envelope[key] for key in (
+            "repository", "producer_run_id", "run_attempt", "head_sha", "run_started_at",
+            "run_completed_at", "observe_job_started_at", "observe_job_completed_at", "artifact_id",
+            "artifact_name", "artifact_expires_at", "artifact_created_at", "artifact_digest_sha256",
+            "artifact_size_bytes", "event",
+        )
+    }
     admission_path = fixture.root / f"producer-{run_id}-admission.json"
     admission_path.write_text(json.dumps(envelope, sort_keys=True), encoding="utf-8")
     return admission_path, archive, artifact_id
@@ -140,6 +150,17 @@ def admission_args(fixture, *, run_id: str, admission_path: pathlib.Path,
     args.input_artifact_id = artifact_id
     args.artifact_name = f"upstream-catalog-refresh-{run_id}"
     args.artifact_expires_at = EXPIRES
+    args.producer_run_url = f"https://github.com/{REPOSITORY}/actions/runs/{run_id}"
+    expected = fixture.admission_expected_by_id[str(run_id)]
+    args.producer_run_attempt = expected["run_attempt"]
+    args.producer_run_started_at = expected["run_started_at"]
+    args.producer_run_completed_at = expected["run_completed_at"]
+    args.producer_observe_job_started_at = expected["observe_job_started_at"]
+    args.producer_observe_job_completed_at = expected["observe_job_completed_at"]
+    args.producer_artifact_created_at = expected["artifact_created_at"]
+    args.producer_artifact_digest_sha256 = expected["artifact_digest_sha256"]
+    args.producer_artifact_size_bytes = expected["artifact_size_bytes"]
+    args.producer_event = expected["event"]
     return args
 
 
@@ -223,6 +244,104 @@ class FakeProducerActionsApi:
 
 
 class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
+    def test_shared_envelope_validator_rejects_identity_bytes_and_observation_substitution(self):
+        _support, fixture, processor = processor_fixture(self)
+        observed_at = "2026-10-03T10:02:00Z"
+        fixture.write_real_composer_inputs([], [rest_row()], observed_at)
+        fixture.now = "2026-10-04T00:00:00Z"
+        admission_path, archive, artifact_id = write_admission_bundle(
+            fixture, processor, run_id="500", observed_at=observed_at,
+        )
+        envelope = json.loads(admission_path.read_text(encoding="utf-8"))
+        expected = dict(fixture.admission_expected_by_id["500"])
+        evidence = processor.load_json(fixture.evidence_path)
+        candidate_sha256 = processor.file_sha256(fixture.candidate_path)
+        evidence_sha256 = processor.file_sha256(fixture.evidence_path)
+        diff_sha256 = processor.file_sha256(fixture.diff_path)
+        now = datetime.fromisoformat(fixture.now.replace("Z", "+00:00"))
+        producer_url = f"https://github.com/{REPOSITORY}/actions/runs/500"
+
+        def validate(
+            value=None, *, selected=None, selected_evidence=None, selected_candidate=None,
+            selected_evidence_sha=None, selected_diff=None, selected_archive=None,
+            source_id="data_go_kr", url=producer_url,
+        ):
+            return processor.validate_collector_admission_envelope(
+                envelope if value is None else value,
+                expected=expected if selected is None else selected,
+                evidence=evidence if selected_evidence is None else selected_evidence,
+                candidate_sha256=candidate_sha256 if selected_candidate is None else selected_candidate,
+                evidence_sha256=evidence_sha256 if selected_evidence_sha is None else selected_evidence_sha,
+                diff_sha256=diff_sha256 if selected_diff is None else selected_diff,
+                source_id=source_id, archive_path=archive if selected_archive is None else selected_archive,
+                producer_run_url=url, now=now,
+            )
+
+        self.assertEqual(validate(), envelope)
+        malformed = []
+        missing = dict(envelope)
+        missing.pop("head_sha")
+        malformed.append(("missing-field", missing, expected, "collector_handoff_admission_metadata_shape_invalid"))
+        extra = {**envelope, "unexpected": True}
+        malformed.append(("extra-field", extra, expected, "collector_handoff_admission_metadata_shape_invalid"))
+        for field, replacement in (
+            ("schema_version", "legacy"), ("repository", "Elsewhere/repo"),
+            ("event", "pull_request"), ("head_sha", "b" * 40),
+            ("producer_run_id", "599"), ("artifact_id", "599"),
+            ("artifact_name", "wrong-artifact-name"),
+            ("artifact_expires_at", "2026-11-05T00:00:00Z"),
+        ):
+            changed = dict(envelope)
+            changed[field] = replacement
+            malformed.append((field, changed, expected, "collector_handoff_admission_identity_mismatch"))
+        wrong_attempt = dict(expected)
+        wrong_attempt["run_attempt"] = 2
+        malformed.append(("selected-attempt", envelope, wrong_attempt, "collector_handoff_admission_authenticated_metadata_mismatch"))
+        wrong_artifact = dict(expected)
+        wrong_artifact["artifact_digest_sha256"] = "f" * 64
+        malformed.append(("selected-artifact-digest", envelope, wrong_artifact, "collector_handoff_admission_authenticated_metadata_mismatch"))
+        for label, value, selected, reason in malformed:
+            with self.subTest(case=label), self.assertRaisesRegex(ValueError, reason):
+                validate(value, selected=selected)
+
+        bad_interval = dict(envelope)
+        bad_interval["run_completed_at"] = "2026-10-03T08:59:00Z"
+        interval_expected = dict(expected)
+        interval_expected["run_completed_at"] = bad_interval["run_completed_at"]
+        with self.assertRaisesRegex(ValueError, "collector_handoff_artifact_attempt_interval_invalid"):
+            validate(bad_interval, selected=interval_expected)
+        expired = dict(envelope)
+        expired["artifact_expires_at"] = "2026-10-03T23:59:59Z"
+        expired_expected = dict(expected)
+        expired_expected["artifact_expires_at"] = expired["artifact_expires_at"]
+        with self.assertRaisesRegex(ValueError, "collector_handoff_artifact_attempt_interval_invalid"):
+            validate(expired, selected=expired_expected)
+
+        archive_bytes = archive.read_bytes()
+        changed_bytes = bytearray(archive_bytes)
+        changed_bytes[0] ^= 1
+        changed_archive = fixture.root / "changed-archive.zip"
+        changed_archive.write_bytes(changed_bytes)
+        with self.assertRaisesRegex(ValueError, "collector_handoff_archive_digest_or_size_mismatch"):
+            validate(selected_archive=changed_archive)
+        size_archive = fixture.root / "wrong-size-archive.zip"
+        size_archive.write_bytes(archive_bytes + b"x")
+        with self.assertRaisesRegex(ValueError, "collector_handoff_archive_digest_or_size_mismatch"):
+            validate(selected_archive=size_archive)
+
+        changed_evidence = dict(envelope)
+        changed_evidence["refresh_evidence_sha256"] = "f" * 64
+        with self.assertRaisesRegex(ValueError, "collector_handoff_admission_evidence_mismatch"):
+            validate(changed_evidence)
+        with self.assertRaisesRegex(ValueError, "collector_handoff_admission_evidence_mismatch"):
+            validate(selected_candidate="e" * 64)
+        with self.assertRaisesRegex(ValueError, "collector_handoff_admission_evidence_mismatch"):
+            validate(selected_diff="d" * 64)
+        with self.assertRaisesRegex(ValueError, "collector_handoff_source_evidence_not_successful"):
+            validate(source_id="different_source")
+        with self.assertRaisesRegex(ValueError, "collector_handoff_producer_url_mismatch"):
+            validate(url="https://github.com/Elsewhere/repo/actions/runs/500")
+
     def test_initial_empty_index_claim_admits_exact_observation_and_binds_helper_revision(self):
         _support, fixture, processor = processor_fixture(self)
         observed_at = "2026-10-03T10:02:00Z"
@@ -262,6 +381,26 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         self.assertTrue(fixture.checkpoint_path(checkpoint).is_file())
         indexed = next(item for item in index["generations"] if item["generation_id"] == checkpoint["generation_id"])
         self.assertEqual(indexed["status"], "enriching")
+
+    def test_claim_rejects_attempt_metadata_that_differs_from_authenticated_selection(self):
+        _support, fixture, processor = processor_fixture(self)
+        observed_at = "2026-10-03T10:02:00Z"
+        fixture.write_real_composer_inputs([], [rest_row()], observed_at)
+        fixture.now = "2026-10-04T00:00:00Z"
+        admission_path, archive, artifact_id = write_admission_bundle(
+            fixture, processor, run_id="502", observed_at=observed_at,
+        )
+        args = admission_args(
+            fixture, run_id="502", admission_path=admission_path,
+            archive=archive, artifact_id=artifact_id, claim_only=True,
+        )
+        args.producer_run_attempt = 2
+        with self.assertRaisesRegex(ValueError, "collector_handoff_admission_authenticated_metadata_mismatch"):
+            processor.process(
+                args, fetcher=lambda *_: self.fail("rejected admission must not request detail"),
+            )
+        index_path = fixture.state_dir / "sources/data_go_kr/index.json"
+        self.assertFalse(index_path.exists())
 
     @unittest.skipUnless(
         (ROOT / "scripts/compose-upstream-catalogue-candidate.py").is_file(),

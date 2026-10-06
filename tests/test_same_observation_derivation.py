@@ -665,6 +665,23 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "refresh_evidence_sha256": hashlib.sha256(self.helper.evidence_path.read_bytes()).hexdigest(),
             "event": "schedule",
         }
+        self.admission_metadata = {
+            "repository": value["repository"],
+            "producer_run_id": value["producer_run_id"],
+            "run_attempt": value["run_attempt"],
+            "head_sha": value["head_sha"],
+            "run_started_at": value["run_started_at"],
+            "run_completed_at": value["run_completed_at"],
+            "observe_job_started_at": value["observe_job_started_at"],
+            "observe_job_completed_at": value["observe_job_completed_at"],
+            "artifact_id": value["artifact_id"],
+            "artifact_name": value["artifact_name"],
+            "artifact_expires_at": value["artifact_expires_at"],
+            "artifact_created_at": value["artifact_created_at"],
+            "artifact_digest_sha256": value["artifact_digest_sha256"],
+            "artifact_size_bytes": value["artifact_size_bytes"],
+            "event": value["event"],
+        }
         path = self.helper.root / "collector-admission.json"
         path.write_text(json.dumps(value, sort_keys=True), encoding="utf-8")
         return path, archive_path
@@ -1014,6 +1031,10 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         current_manifest_bytes: bytes | None = None,
         journal_unavailable: bool = False,
         current_identity_override: dict[str, Any] | None = None,
+        admission_value_override: Any | None = None,
+        authenticated_overrides: dict[str, Any] | None = None,
+        source_checkout_head: str | None = None,
+        omitted_authenticated_fields: set[str] | None = None,
     ) -> dict[str, Any]:
         """Run the actual prepare CLI coordinator with remote boundaries stubbed."""
         main_root = self.helper.root / f"prepared-main-{label}"
@@ -1155,7 +1176,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
 
         def fake_preparation_git(root: pathlib.Path, *argv: str) -> str:
             if tuple(argv) == ("rev-parse", "HEAD") and root == source_root:
-                return self.observation_head
+                return source_checkout_head or self.observation_head
             if tuple(argv) == ("rev-parse", "HEAD") and root == main_root:
                 return prepared_main_sha
             if tuple(argv) == ("show", f"{self.observation_head}:policy/source-refresh.json"):
@@ -1180,16 +1201,46 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "upstream_catalogue_derivation.py": DERIVATION,
             "process-upstream-catalogue-candidate.py": PROCESSOR,
         }
-        original_index = (self.helper.state_dir / "sources/data_go_kr/index.json").read_bytes()
+        index_path = self.helper.state_dir / "sources/data_go_kr/index.json"
+        original_index = index_path.read_bytes()
+        original_index_value = PROCESSOR.load_json(index_path)
+        original_admission_rows = HANDOFF.validate_ledger(
+            original_index_value["collector_handoff"],
+        )["admitted_observations"]
+        original_admission = next(
+            row for row in original_admission_rows
+            if row["producer_run_id"] == self.observation_run
+            and row["run_attempt"] == self.admission_metadata["run_attempt"]
+        )
         args = argparse.Namespace(
             main_root=main_root, source_root=source_root, state_dir=self.helper.state_dir,
             target_generation_id=target["generation_id"], repository="StatPan/datapan-registry",
             default_branch="main", collector_admission=self.helper.root / f"admitted-a-{label}.json",
+            collector_archive=self.archive_path,
+            producer_run_url=f"https://github.com/StatPan/datapan-registry/actions/runs/{self.observation_run}",
+            producer_run_id=self.observation_run,
+            producer_run_attempt=self.admission_metadata["run_attempt"],
+            producer_head_sha=self.admission_metadata["head_sha"],
+            producer_run_started_at=self.admission_metadata["run_started_at"],
+            producer_run_completed_at=self.admission_metadata["run_completed_at"],
+            producer_observe_job_started_at=self.admission_metadata["observe_job_started_at"],
+            producer_observe_job_completed_at=self.admission_metadata["observe_job_completed_at"],
+            producer_artifact_id=self.admission_metadata["artifact_id"],
+            producer_artifact_name=self.admission_metadata["artifact_name"],
+            producer_artifact_expires_at=self.admission_metadata["artifact_expires_at"],
+            producer_artifact_created_at=self.admission_metadata["artifact_created_at"],
+            producer_artifact_digest_sha256=self.admission_metadata["artifact_digest_sha256"],
+            producer_artifact_size_bytes=self.admission_metadata["artifact_size_bytes"],
+            producer_event=self.admission_metadata["event"],
             candidate=self.helper.candidate_path, refresh_evidence=self.helper.evidence_path,
             diff=self.helper.diff_path,
             resume_bundle=self.output_by_generation.get(target["generation_id"], self.helper.root),
             output_dir=output_root,
         )
+        for field, value in (authenticated_overrides or {}).items():
+            if not hasattr(args, field):
+                raise AssertionError(f"unknown authenticated producer field: {field}")
+            setattr(args, field, value)
         args.github_output = output_root / "github-output"
         preparation_argv = [
             str(PREPARATION.__file__),
@@ -1197,14 +1248,33 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "--state-dir", str(args.state_dir), "--target-generation-id", str(args.target_generation_id),
             "--repository", args.repository, "--default-branch", args.default_branch,
             "--collector-admission", str(args.collector_admission),
+            "--collector-archive", str(args.collector_archive),
+            "--producer-run-url", args.producer_run_url,
+            "--producer-run-id", args.producer_run_id,
+            "--producer-run-attempt", str(args.producer_run_attempt),
+            "--producer-head-sha", args.producer_head_sha,
+            "--producer-run-started-at", args.producer_run_started_at,
+            "--producer-run-completed-at", args.producer_run_completed_at,
+            "--producer-observe-job-started-at", args.producer_observe_job_started_at,
+            "--producer-observe-job-completed-at", args.producer_observe_job_completed_at,
+            "--producer-artifact-id", args.producer_artifact_id,
+            "--producer-artifact-name", args.producer_artifact_name,
+            "--producer-artifact-expires-at", args.producer_artifact_expires_at,
+            "--producer-artifact-created-at", args.producer_artifact_created_at,
+            "--producer-artifact-digest-sha256", args.producer_artifact_digest_sha256,
+            "--producer-artifact-size-bytes", str(args.producer_artifact_size_bytes),
+            "--producer-event", args.producer_event,
             "--candidate", str(args.candidate), "--refresh-evidence", str(args.refresh_evidence),
             "--diff", str(args.diff), "--resume-bundle", str(args.resume_bundle),
             "--output-dir", str(args.output_dir), "--github-output", str(args.github_output),
         ]
-        index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
-        admitted_rows = HANDOFF.validate_ledger(index["collector_handoff"])["admitted_observations"]
-        admitted_row = next(row for row in admitted_rows if row["producer_run_id"] == self.observation_run)
-        args.collector_admission.write_text(json.dumps(admitted_row, sort_keys=True), encoding="utf-8")
+        for field in omitted_authenticated_fields or set():
+            position = preparation_argv.index(field)
+            del preparation_argv[position:position + 2]
+        if admission_value_override is None:
+            args.collector_admission.write_bytes(self.admission_path.read_bytes())
+        else:
+            args.collector_admission.write_text(json.dumps(admission_value_override, sort_keys=True), encoding="utf-8")
         if mutate_pr_readback:
             def bad_pr_readback(_root, _repository, number):
                 return {
@@ -1269,6 +1339,20 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 result_code = PREPARATION.main()
             if result_code != 0:
                 detail = json.loads(stderr.getvalue())
+                self.assertEqual(
+                    index_path.read_bytes(), original_index,
+                )
+                current_rows = HANDOFF.validate_ledger(
+                    PROCESSOR.load_json(index_path)["collector_handoff"],
+                )["admitted_observations"]
+                current_admission = next(
+                    row for row in current_rows
+                    if row["producer_run_id"] == self.observation_run
+                    and row["run_attempt"] == self.admission_metadata["run_attempt"]
+                )
+                self.assertEqual(current_admission, original_admission)
+                self.assertFalse(output_root.exists())
+                self.assertFalse(args.github_output.exists())
                 raise ValueError(str(detail.get("reason") or "derivation_cli_failed"))
             plan = read_json(output_root / "preparation-result.json")
             outputs = dict(line.split("=", 1) for line in args.github_output.read_text(encoding="utf-8").splitlines())
@@ -1277,7 +1361,18 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 self.assertEqual(len(canonical_context_calls), 1)
                 self.assertEqual(outputs["derivation_path"], plan["derivation_path"])
                 self.assertEqual(outputs["generation_id"], plan["generation_id"])
-        self.assertEqual((self.helper.state_dir / "sources/data_go_kr/index.json").read_bytes(), original_index)
+        self.assertEqual(index_path.read_bytes(), original_index)
+        current_rows = HANDOFF.validate_ledger(
+            PROCESSOR.load_json(index_path)["collector_handoff"],
+        )["admitted_observations"]
+        current_admission = next(
+            row for row in current_rows
+            if row["producer_run_id"] == self.observation_run
+            and row["run_attempt"] == self.admission_metadata["run_attempt"]
+        )
+        self.assertEqual(current_admission, original_admission)
+        self.assertEqual(current_admission["admitted_at"], original_admission["admitted_at"])
+        self.assertEqual(current_admission["generation_id"], original_admission["generation_id"])
         return plan
 
     def _validate_c_derivation(
@@ -2856,6 +2951,57 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertEqual(index_path.read_bytes(), before_index)
         self.assertEqual(len(self.claim_runs), 2)
         self.assertEqual(len(self.detail_calls), 2)
+
+    def test_preparation_rejects_durable_row_or_wrong_api_identity_before_claim(self) -> None:
+        target = self._run_claim_and_worker(1)
+        journal, c = self._synthetic_c_journal(target, 1)
+        index_path = self.helper.state_dir / "sources/data_go_kr/index.json"
+        admitted_rows = HANDOFF.validate_ledger(
+            PROCESSOR.load_json(index_path)["collector_handoff"],
+        )["admitted_observations"]
+        durable_row = next(row for row in admitted_rows if row["producer_run_id"] == self.observation_run)
+        calls_before = (len(self.claim_runs), len(self.detail_calls))
+
+        with self.assertRaisesRegex(ValueError, "collector_handoff_admission_metadata_shape_invalid"):
+            self._prepare_authenticated_plan(
+                target, journal, c, label="reject-durable-row-as-envelope",
+                admission_value_override=durable_row,
+            )
+        self.assertEqual((len(self.claim_runs), len(self.detail_calls)), calls_before)
+
+        with self.assertRaisesRegex(ValueError, "collector_handoff_admission_identity_mismatch"):
+            self._prepare_authenticated_plan(
+                target, journal, c, label="reject-api-artifact-id-mismatch",
+                authenticated_overrides={"producer_artifact_id": "99000000999"},
+            )
+        self.assertEqual((len(self.claim_runs), len(self.detail_calls)), calls_before)
+
+        with self.assertRaisesRegex(ValueError, "derivation_collector_admission_authenticated_metadata_missing"):
+            self._prepare_authenticated_plan(
+                target, journal, c, label="reject-missing-selected-attempt",
+                omitted_authenticated_fields={"--producer-run-attempt"},
+            )
+        self.assertEqual((len(self.claim_runs), len(self.detail_calls)), calls_before)
+
+        with self.assertRaisesRegex(ValueError, "derivation_source_checkout_does_not_match_producer_head"):
+            self._prepare_authenticated_plan(
+                target, journal, c, label="reject-source-checkout-mismatch",
+                source_checkout_head="b" * 40,
+            )
+        self.assertEqual((len(self.claim_runs), len(self.detail_calls)), calls_before)
+
+        index = PROCESSOR.load_json(index_path)
+        selected_row = next(
+            row for row in index["collector_handoff"]["admitted_observations"]
+            if row["producer_run_id"] == self.observation_run
+        )
+        selected_row["candidate_sha256"] = "f" * 64
+        index_path.write_text(json.dumps(index, sort_keys=True), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "derivation_current_admission_durable_row_mismatch"):
+            self._prepare_authenticated_plan(
+                target, journal, c, label="reject-selected-durable-row-substitution",
+            )
+        self.assertEqual((len(self.claim_runs), len(self.detail_calls)), calls_before)
 
 
 if __name__ == "__main__":

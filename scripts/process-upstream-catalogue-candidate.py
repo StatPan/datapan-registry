@@ -38,6 +38,7 @@ from upstream_catalogue_handoff import (  # noqa: E402
     empty_ledger,
     find_admitted_observation,
     validate_admission_row,
+    validate_collector_admission_envelope,
     validate_ledger,
 )
 import upstream_catalogue_derivation as DERIVATION  # noqa: E402
@@ -2158,74 +2159,49 @@ def validate_collector_admission(
         envelope = load_json(path, maximum_bytes=64 * 1024)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         raise ValueError("collector_handoff_admission_metadata_invalid") from exc
-    expected_keys = {
-        "schema_version", "repository", "producer_run_id", "run_attempt", "head_sha",
-        "run_started_at", "run_completed_at", "observe_job_started_at", "observe_job_completed_at",
-        "artifact_id", "artifact_name",
-        "artifact_expires_at", "artifact_created_at", "artifact_digest_sha256",
-        "artifact_size_bytes", "archive_sha256", "archive_size_bytes", "observed_at",
-        "refresh_evidence_sha256", "event",
+    expected: dict[str, Any] = {
+        "repository": args.repository,
+        "producer_run_id": str(args.producer_run_id),
+        "artifact_id": str(args.input_artifact_id or ""),
+        "artifact_name": artifact_name,
+        "artifact_expires_at": artifact_expires_at,
+        "head_sha": args.producer_head_sha,
     }
-    if not isinstance(envelope, dict) or set(envelope) != expected_keys:
-        raise ValueError("collector_handoff_admission_metadata_shape_invalid")
-    if (
-        envelope.get("schema_version") != "datapan.upstream-catalogue-admission-envelope.v1"
-        or envelope.get("repository") != args.repository
-        or str(envelope.get("producer_run_id")) != str(args.producer_run_id)
-        or str(envelope.get("artifact_id")) != str(args.input_artifact_id or "")
-        or envelope.get("artifact_name") != artifact_name
-        or envelope.get("artifact_expires_at") != artifact_expires_at
-        or envelope.get("event") not in {"schedule", "workflow_dispatch"}
-        or envelope.get("head_sha") != args.producer_head_sha
-        or not re.fullmatch(r"[a-f0-9]{40}", str(envelope.get("head_sha") or ""))
-    ):
-        raise ValueError("collector_handoff_admission_identity_mismatch")
-    run_attempt = envelope.get("run_attempt")
-    artifact_size = envelope.get("artifact_size_bytes")
-    archive_size = envelope.get("archive_size_bytes")
-    if (
-        not isinstance(run_attempt, int) or isinstance(run_attempt, bool) or run_attempt < 1
-        or not isinstance(artifact_size, int) or isinstance(artifact_size, bool) or artifact_size <= 0
-        or not isinstance(archive_size, int) or isinstance(archive_size, bool) or archive_size <= 0
-        or artifact_size != archive_size
-        or not re.fullmatch(r"[a-f0-9]{64}", str(envelope.get("artifact_digest_sha256") or ""))
-        or not re.fullmatch(r"[a-f0-9]{64}", str(envelope.get("archive_sha256") or ""))
-        or envelope.get("archive_sha256") != envelope.get("artifact_digest_sha256")
-        or envelope.get("refresh_evidence_sha256") != evidence_sha256
-        or not evidence_sha256 or not candidate_sha256
-        or envelope.get("observed_at") != (evidence.get("observed_at") if isinstance(evidence, dict) else None)
-        or envelope.get("event") not in {"schedule", "workflow_dispatch"}
-    ):
-        raise ValueError("collector_handoff_admission_evidence_mismatch")
-    for field in (
-        "run_started_at", "run_completed_at", "observe_job_started_at", "observe_job_completed_at",
-        "artifact_created_at", "artifact_expires_at", "observed_at",
-    ):
-        try:
-            parse_timestamp(str(envelope[field]))
-        except (TypeError, ValueError) as exc:
+    expected_arg_names = {
+        "run_attempt": "producer_run_attempt",
+        "run_started_at": "producer_run_started_at",
+        "run_completed_at": "producer_run_completed_at",
+        "observe_job_started_at": "producer_observe_job_started_at",
+        "observe_job_completed_at": "producer_observe_job_completed_at",
+        "artifact_created_at": "producer_artifact_created_at",
+        "artifact_digest_sha256": "producer_artifact_digest_sha256",
+        "artifact_size_bytes": "producer_artifact_size_bytes",
+        "event": "producer_event",
+    }
+    for field, attr in expected_arg_names.items():
+        value = getattr(args, attr, None)
+        if value is not None:
+            expected[field] = value
+    diff_sha256 = file_sha256(args.diff) if getattr(args, "diff", None) and args.diff.is_file() else None
+    try:
+        envelope = validate_collector_admission_envelope(
+            envelope,
+            expected=expected,
+            evidence=evidence,
+            candidate_sha256=candidate_sha256,
+            evidence_sha256=evidence_sha256,
+            diff_sha256=diff_sha256,
+            source_id=args.source,
+            archive_path=args.collector_archive,
+            producer_run_url=args.producer_run_url,
+            now=now,
+        )
+    except HandoffError as exc:
+        if str(exc).startswith("handoff_timestamp_"):
             raise ValueError("collector_handoff_admission_timestamp_invalid") from exc
-    started = parse_timestamp(envelope["run_started_at"])
-    completed = parse_timestamp(envelope["run_completed_at"])
-    job_started = parse_timestamp(envelope["observe_job_started_at"])
-    job_completed = parse_timestamp(envelope["observe_job_completed_at"])
-    created = parse_timestamp(envelope["artifact_created_at"])
-    if (
-        completed < started or job_started < started or job_completed < job_started or job_completed > completed
-        or created < job_started or created > job_completed
-        or parse_timestamp(envelope["artifact_expires_at"]) <= now
-    ):
-        raise ValueError("collector_handoff_artifact_attempt_interval_invalid")
-    if not args.collector_archive or not args.collector_archive.is_file():
-        raise ValueError("collector_handoff_archive_missing")
-    archive_sha = file_sha256(args.collector_archive)
-    archive_size_actual = args.collector_archive.stat().st_size
-    if archive_sha != envelope["archive_sha256"] or archive_size_actual != archive_size:
-        raise ValueError("collector_handoff_archive_digest_or_size_mismatch")
-    if args.producer_run_url != f"https://github.com/{args.repository}/actions/runs/{args.producer_run_id}":
-        raise ValueError("collector_handoff_producer_url_mismatch")
-    if not isinstance(evidence, dict) or evidence.get("source_id") != args.source or evidence.get("collection", {}).get("succeeded") is not True:
-        raise ValueError("collector_handoff_source_evidence_not_successful")
+        raise ValueError(str(exc)) from exc
+    run_attempt = envelope["run_attempt"]
+    archive_size = envelope["archive_size_bytes"]
     row = {
         "admission_id": admission_id(str(args.producer_run_id), run_attempt, str(evidence_sha256)),
         "producer_run_id": str(args.producer_run_id),
@@ -3552,6 +3528,15 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--producer-run-url", default=os.environ.get("GITHUB_SERVER_URL", "") + "/" + os.environ.get("GITHUB_REPOSITORY", "") + "/actions/runs/" + os.environ.get("GITHUB_RUN_ID", "local"))
     parser.add_argument("--artifact-name")
     parser.add_argument("--producer-head-sha")
+    parser.add_argument("--producer-run-attempt", type=int)
+    parser.add_argument("--producer-run-started-at")
+    parser.add_argument("--producer-run-completed-at")
+    parser.add_argument("--producer-observe-job-started-at")
+    parser.add_argument("--producer-observe-job-completed-at")
+    parser.add_argument("--producer-artifact-created-at")
+    parser.add_argument("--producer-artifact-digest-sha256")
+    parser.add_argument("--producer-artifact-size-bytes", type=int)
+    parser.add_argument("--producer-event", choices=["schedule", "workflow_dispatch"])
     parser.add_argument("--collector-admission-file", type=pathlib.Path, help=argparse.SUPPRESS)
     parser.add_argument("--collector-archive", type=pathlib.Path, help=argparse.SUPPRESS)
     parser.add_argument("--resume-enrichment-evidence", type=pathlib.Path)
