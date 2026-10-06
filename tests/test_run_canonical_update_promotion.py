@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import contextlib
 import importlib.util
 import hashlib
@@ -1075,6 +1076,108 @@ class ProcessorBundleContractTests(unittest.TestCase):
                     with self.assertRaises(RUNNER.PromotionError):
                         RUNNER.validate_processor_contract_diagnostic_outputs(bundle, admitted)
 
+    def test_c_authenticates_historical_encoding_only_from_exact_composer_identity(self) -> None:
+        fixture = json.loads((
+            pathlib.Path(__file__).parent
+            / "fixtures/upstream_catalogue/legacy-link-contract-composer-9fa015c.json"
+        ).read_text(encoding="utf-8"))
+        receipt = json.loads(base64.b64decode(
+            fixture["payloads"]["composition-receipt.json"]["base64"], validate=True,
+        ))
+        outcome = fixture["enrichment_evidence"]["worker_outcomes"][0]
+        admitted = [{
+            "api_key": copy.deepcopy(outcome["api_key"]),
+            "worker_status": outcome["status"],
+            "source_sha256": outcome["source_sha256"],
+            "guide_sha256": outcome["guide_sha256"],
+            "worker_outcome_sha256": hashlib.sha256(RUNNER.canonical_json(outcome)).hexdigest(),
+            "detail_status": "legacy_detail_unknown",
+            "next_action": "inspect_bound_validation_evidence",
+        }]
+        self.assertEqual(
+            RUNNER.authenticate_contract_diagnostic_encoding(
+                receipt, RUNNER.HISTORICAL_LINK_CONTRACT_COMPOSER,
+            ),
+            "historical",
+        )
+        self.assertEqual(
+            RUNNER.authenticate_contract_diagnostic_encoding(receipt, None),
+            "projected",
+        )
+        with self.assertRaisesRegex(RUNNER.PromotionError, "differs from its authenticated producer"):
+            RUNNER.authenticate_contract_diagnostic_encoding(
+                receipt, {"bytes": 1, "sha256": "a" * 64},
+            )
+
+        with tempfile.TemporaryDirectory() as raw:
+            bundle = pathlib.Path(raw)
+            original_bytes: dict[str, bytes] = {}
+            for name in ("semantic-diff.json", "regeneration-queue.json", "quarantine.json"):
+                payload = base64.b64decode(fixture["payloads"][name]["base64"], validate=True)
+                original_bytes[name] = payload
+                (bundle / name).write_bytes(payload)
+            RUNNER.validate_processor_contract_diagnostic_outputs(
+                bundle, admitted, encoding="historical",
+            )
+            self.assertEqual(
+                {name: (bundle / name).read_bytes() for name in original_bytes},
+                original_bytes,
+            )
+
+            modern = copy.deepcopy(admitted)
+            modern[0].update({
+                "detail_status": "verified",
+                "contract_failure": {
+                    "version": 1,
+                    "reason": "no_reviewed_declaration",
+                    "unresolved_requirements": ["reviewed_operation_declaration"],
+                    "next_action": "review_authoritative_declaration",
+                },
+                "next_action": "review_authoritative_declaration",
+            })
+            with self.assertRaisesRegex(RUNNER.PromotionError, "cannot carry a modern"):
+                RUNNER.validate_processor_contract_diagnostic_outputs(
+                    bundle, modern, encoding="historical",
+                )
+
+            for label, mutate in {
+                "wrong_requirements": lambda value: value["regeneration-queue.json"]["items"][0].update(
+                    required_evidence=[],
+                ),
+                "mixed_projection": lambda value: value["semantic-diff.json"]["api_decisions"][0].update(
+                    contract_failure_status="legacy_detail_unknown",
+                ),
+                "duplicate": lambda value: value["semantic-diff.json"]["api_decisions"].append(
+                    copy.deepcopy(value["semantic-diff.json"]["api_decisions"][0]),
+                ),
+            }.items():
+                with self.subTest(case=label):
+                    values = {name: json.loads(payload) for name, payload in original_bytes.items()}
+                    mutate(values)
+                    for name, value in values.items():
+                        (bundle / name).write_bytes(RUNNER.canonical_json(value))
+                    with self.assertRaises(RUNNER.PromotionError):
+                        RUNNER.validate_processor_contract_diagnostic_outputs(
+                            bundle, admitted, encoding="historical",
+                        )
+
+    def test_composer_identity_uses_exact_authenticated_git_blob_and_unavailable_is_modern(self) -> None:
+        root = pathlib.Path(__file__).parents[1]
+        head = subprocess.run(
+            ("git", "rev-parse", "HEAD"), cwd=root, check=True, text=True, capture_output=True,
+        ).stdout.strip()
+        expected_bytes = (root / RUNNER.PROCESSOR_COMPOSITION_INPUTS["composer"]).read_bytes()
+        self.assertEqual(
+            RUNNER.processor_composer_source_identity(root, head),
+            {"bytes": len(expected_bytes), "sha256": hashlib.sha256(expected_bytes).hexdigest()},
+        )
+        with mock.patch.object(
+            RUNNER.subprocess, "run",
+            return_value=subprocess.CompletedProcess(("git", "show"), 128, stdout=b"", stderr=b"missing"),
+        ):
+            self.assertIsNone(RUNNER.processor_composer_source_identity(root, "f" * 40))
+        self.assertIsNone(RUNNER.processor_composer_source_identity(root, "not-a-sha"))
+
 
 class DurableProcessorRecoveryTests(unittest.TestCase):
     repository = "StatPan/datapan-registry"
@@ -1239,6 +1342,91 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             RUNNER.canonical_json(uploaded_copy),
         )
         return bundle, checkpoint, uploaded_copy
+
+    def historical_link_contract_bundle(
+        self,
+        root: pathlib.Path,
+    ) -> tuple[pathlib.Path, dict, dict[str, bytes], dict]:
+        fixture_path = (
+            pathlib.Path(__file__).parent
+            / "fixtures/upstream_catalogue/legacy-link-contract-composer-9fa015c.json"
+        )
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        payloads: dict[str, bytes] = {}
+        for name, record in fixture["payloads"].items():
+            payload = base64.b64decode(record["base64"], validate=True)
+            self.assertEqual(len(payload), record["bytes"])
+            self.assertEqual(hashlib.sha256(payload).hexdigest(), record["sha256"])
+            payloads[name] = payload
+
+        composition = json.loads(payloads["composition-receipt.json"])
+        generation_inputs = composition["input_digests"]
+        checkpoint = self.checkpoint(
+            candidate_sha256=generation_inputs["candidate"]["sha256"],
+            baseline_sha256=generation_inputs["baseline"]["sha256"],
+        )
+        outcome = fixture["enrichment_evidence"]["worker_outcomes"][0]
+        checkpoint["detail_records"] = [{
+            "id": outcome["api_key"]["id"],
+            "status": outcome["status"],
+            "source_sha256": outcome["source_sha256"],
+            "guide_sha256": outcome["guide_sha256"],
+            "failure_diagnostic": copy.deepcopy(outcome["failure_diagnostic"]),
+            "link_metadata": copy.deepcopy(outcome["link_metadata"]),
+        }]
+        checkpoint["detail_queue_cursor"] = 1
+
+        evidence_bytes = (
+            json.dumps(
+                fixture["enrichment_evidence"], ensure_ascii=False, indent=2, sort_keys=True,
+            ) + "\n"
+        ).encode("utf-8")
+        self.assertEqual(
+            hashlib.sha256(evidence_bytes).hexdigest(),
+            composition["input_digests"]["enrichment_evidence"]["sha256"],
+        )
+        result = {
+            "status": "ready",
+            "reason": "ready",
+            "generation_id": checkpoint["generation_id"],
+            "source_id": checkpoint["source_id"],
+            "producer_run_id": checkpoint["last_observation"]["producer_run_id"],
+            "processor_run_id": "70000000001-2",
+            "processor_artifact_run_id": "70000000001",
+            "processing_replay": False,
+            "candidate_available": True,
+        }
+        payloads["upstream-catalogue-enrichment-evidence.json"] = evidence_bytes
+        payloads["upstream-catalogue-processing-result.json"] = RUNNER.canonical_json(result)
+
+        bundle = root / "historical-link-contract-bundle"
+        bundle.mkdir()
+        digests = []
+        for name in RUNNER.REQUIRED_PROCESSOR_FILES:
+            payload = payloads[name]
+            (bundle / name).write_bytes(payload)
+            digests.append({
+                "path": name,
+                "sha256": hashlib.sha256(payload).hexdigest(),
+                "bytes": len(payload),
+            })
+        checkpoint["output_digests"] = digests
+        checkpoint["output_artifact"].update({
+            "artifact_id": "123456",
+            "expires_at": self.expiry,
+            "bundle_manifest_sha256": hashlib.sha256(RUNNER.canonical_json(digests)).hexdigest(),
+        })
+        uploaded_copy = copy.deepcopy(checkpoint)
+        uploaded_copy["output_artifact"]["artifact_id"] = None
+        uploaded_copy["output_artifact"]["expires_at"] = "2026-10-30T00:00:00Z"
+        uploaded_copy["last_heartbeat_at"] = uploaded_copy["observed_at"]
+        self.seal(uploaded_copy)
+        checkpoint["last_heartbeat_at"] = "2026-10-03T00:05:00Z"
+        self.seal(checkpoint)
+        (bundle / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+            RUNNER.canonical_json(uploaded_copy),
+        )
+        return bundle, checkpoint, payloads, fixture
 
     def ready_bundle_with_worker_pending_composition(
         self,
@@ -1843,16 +2031,171 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             helper = mock.Mock()
             with (
                 mock.patch.object(RUNNER, "validate_processor_link_metadata", return_value=diagnostics),
+                mock.patch.object(RUNNER, "processor_composer_source_identity", return_value=None),
                 mock.patch.object(RUNNER, "validate_processor_contract_diagnostic_outputs") as authenticate,
             ):
                 validated = RUNNER.validate_processor_bundle(
                     checkpoint, bundle, {}, helper, root=SCRIPT.parents[1],
+                    producer_head_sha=self.source_sha,
                     defer_seoul_declaration=True,
                 )
 
             helper.validate_composition.assert_called_once()
-            authenticate.assert_called_once_with(bundle, diagnostics)
+            authenticate.assert_called_once_with(bundle, diagnostics, encoding="projected")
             self.assertEqual(validated["contract_diagnostics"], diagnostics)
+
+    def test_actual_c_bundle_accepts_authentic_historical_composer_bytes_unchanged(self) -> None:
+        repository_root = pathlib.Path(__file__).parents[1]
+        with tempfile.TemporaryDirectory() as raw:
+            temp_root = pathlib.Path(raw)
+            bundle, checkpoint, payloads, fixture = self.historical_link_contract_bundle(temp_root)
+            before = {name: (bundle / name).read_bytes() for name in RUNNER.REQUIRED_PROCESSOR_FILES}
+            RUNNER.verify_processor_checkpoint(checkpoint, self.schema(temp_root))
+            composition_schema = RUNNER.load_object(
+                repository_root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+            )
+            composition_helper = RUNNER.load_canonical_update_pr(repository_root)
+            producer_commit = fixture["provenance"]["producer_commit"]
+            with mock.patch.object(
+                RUNNER, "processor_composer_source_identity",
+                wraps=lambda root, head: (
+                    dict(RUNNER.HISTORICAL_LINK_CONTRACT_COMPOSER)
+                    if root == repository_root and head == producer_commit else None
+                ),
+            ) as source_identity:
+                validated = RUNNER.validate_processor_bundle(
+                    checkpoint, bundle, composition_schema, composition_helper,
+                    root=repository_root, producer_head_sha=producer_commit,
+                    defer_seoul_declaration=True,
+                )
+            source_identity.assert_called_once_with(repository_root, producer_commit)
+            self.assertEqual(validated["status"], "ready")
+            self.assertEqual(validated["registry_sha256"], hashlib.sha256(
+                payloads["composed-candidate.registry.json"],
+            ).hexdigest())
+            self.assertEqual(len(validated["contract_diagnostics"]), 1)
+            self.assertEqual(validated["contract_diagnostics"][0]["detail_status"], "legacy_detail_unknown")
+            self.assertEqual(
+                {name: (bundle / name).read_bytes() for name in RUNNER.REQUIRED_PROCESSOR_FILES},
+                before,
+            )
+
+            for label, identity in {
+                "missing_head": None,
+                "unavailable_head": None,
+                "receipt_head_mismatch": {"bytes": 1, "sha256": "a" * 64},
+            }.items():
+                with self.subTest(case=label), mock.patch.object(
+                    RUNNER, "processor_composer_source_identity", return_value=identity,
+                ):
+                    with self.assertRaises(RUNNER.PromotionError):
+                        RUNNER.validate_processor_bundle(
+                            checkpoint, bundle, composition_schema, composition_helper,
+                            root=repository_root,
+                            producer_head_sha=None if label == "missing_head" else "f" * 40,
+                            defer_seoul_declaration=True,
+                        )
+
+    def test_current_composer_projects_the_same_legacy_worker_input_strictly(self) -> None:
+        repository_root = pathlib.Path(__file__).parents[1]
+        fixture = json.loads((
+            pathlib.Path(__file__).parent
+            / "fixtures/upstream_catalogue/legacy-link-contract-composer-9fa015c.json"
+        ).read_text(encoding="utf-8"))
+        composer = RUNNER.load_module(
+            repository_root / "scripts/compose-upstream-catalogue-candidate.py",
+            "current_composer_same_legacy_worker_input_test",
+        )
+        baseline = copy.deepcopy(fixture["baseline"])
+        candidate = copy.deepcopy(fixture["candidate"])
+        evidence = copy.deepcopy(fixture["enrichment_evidence"])
+        baseline_bytes = composer.stable_json_bytes(baseline)
+        candidate_bytes = composer.stable_json_bytes(candidate)
+        evidence_bytes = composer.stable_json_bytes(evidence)
+        old_receipt = json.loads(base64.b64decode(
+            fixture["payloads"]["composition-receipt.json"]["base64"], validate=True,
+        ))
+        input_digests = copy.deepcopy(old_receipt["input_digests"])
+        current_composer_bytes = (repository_root / RUNNER.PROCESSOR_COMPOSITION_INPUTS["composer"]).read_bytes()
+        input_digests.update({
+            "baseline": {"bytes": len(baseline_bytes), "sha256": hashlib.sha256(baseline_bytes).hexdigest()},
+            "candidate": {"bytes": len(candidate_bytes), "sha256": hashlib.sha256(candidate_bytes).hexdigest()},
+            "enrichment_evidence": {
+                "bytes": len(evidence_bytes), "sha256": hashlib.sha256(evidence_bytes).hexdigest(),
+            },
+            "composer": {
+                "bytes": len(current_composer_bytes),
+                "sha256": hashlib.sha256(current_composer_bytes).hexdigest(),
+            },
+        })
+        result = composer.compose_registries(
+            baseline, candidate,
+            {"adapters": [{"hosts": ["link.example.gov", "data.seoul.go.kr"]}]},
+            baseline_sha256=input_digests["baseline"]["sha256"],
+            candidate_sha256=input_digests["candidate"]["sha256"],
+            provider_index_sha256=evidence["provider_index_sha256"],
+            enrichment_evidence=evidence,
+            registry_schema=RUNNER.load_object(repository_root / "schemas/datapan.specs.v1.schema.json"),
+        )
+        current_payloads = composer.build_bundle(
+            result, input_digests=input_digests,
+            run_id="70000000001",
+            run_url="https://github.com/StatPan/datapan-registry/actions/runs/70000000001",
+        )
+        self.assertEqual(
+            RUNNER.authenticate_contract_diagnostic_encoding(
+                json.loads(current_payloads["composition-receipt.json"]),
+                input_digests["composer"],
+            ),
+            "projected",
+        )
+        with tempfile.TemporaryDirectory() as raw:
+            bundle = pathlib.Path(raw)
+            for name, payload in current_payloads.items():
+                (bundle / name).write_bytes(payload)
+            (bundle / "upstream-catalogue-enrichment-evidence.json").write_bytes(evidence_bytes)
+            outcome = evidence["worker_outcomes"][0]
+            checkpoint = {
+                "detail_records": [{
+                    "id": outcome["api_key"]["id"],
+                    "status": outcome["status"],
+                    "source_sha256": outcome["source_sha256"],
+                    "guide_sha256": outcome["guide_sha256"],
+                    "failure_diagnostic": copy.deepcopy(outcome["failure_diagnostic"]),
+                    "link_metadata": copy.deepcopy(outcome["link_metadata"]),
+                }],
+            }
+            diagnostics = RUNNER.validate_processor_link_metadata(
+                checkpoint, bundle, root=repository_root, validate_seoul=False,
+            )
+            RUNNER.validate_processor_contract_diagnostic_outputs(bundle, diagnostics)
+            self.assertEqual(diagnostics[0]["detail_status"], "legacy_detail_unknown")
+            for name, collection in (
+                ("semantic-diff.json", "api_decisions"),
+                ("regeneration-queue.json", "items"),
+                ("quarantine.json", "items"),
+            ):
+                rows = json.loads((bundle / name).read_bytes())[collection]
+                row = next(item for item in rows if item["api_key"] == outcome["api_key"])
+                self.assertEqual(row["contract_failure_status"], "legacy_detail_unknown")
+                self.assertEqual(row["next_action"], "inspect_bound_validation_evidence")
+                self.assertRegex(row["worker_outcome_sha256"], r"^[a-f0-9]{64}$")
+
+            stripped = {
+                name: json.loads((bundle / name).read_bytes())
+                for name in ("semantic-diff.json", "regeneration-queue.json", "quarantine.json")
+            }
+            for name, collection in (
+                ("semantic-diff.json", "api_decisions"),
+                ("regeneration-queue.json", "items"),
+                ("quarantine.json", "items"),
+            ):
+                row = next(item for item in stripped[name][collection] if item["api_key"] == outcome["api_key"])
+                for field in RUNNER.CONTRACT_DIAGNOSTIC_PROJECTION_FIELDS:
+                    row.pop(field, None)
+                (bundle / name).write_bytes(RUNNER.canonical_json(stripped[name]))
+            with self.assertRaises(RUNNER.PromotionError):
+                RUNNER.validate_processor_contract_diagnostic_outputs(bundle, diagnostics)
 
     def test_recovery_entrypoint_uses_real_validator_for_worker_pending_receipt(self) -> None:
         repository_root = pathlib.Path(__file__).parents[1]

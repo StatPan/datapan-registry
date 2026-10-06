@@ -3769,9 +3769,37 @@ class CompletenessProofRollupTest(unittest.TestCase):
             input_root.mkdir()
             with mock.patch(__name__ + ".ROOT", shallow_root), mock.patch.object(MODULE, "ROOT", shallow_root):
                 repository, index_path, expected_generation = self._build_synthetic_matching_b_c_packet(input_root)
-                report = MODULE.build_report(
-                    root=repository, input_root=input_root, input_index_path=index_path,
+                packet_index = json.loads(index_path.read_bytes())
+                processor_run_input = next(
+                    item for item in packet_index["inputs"]
+                    if item.get("scope_id") == operation_scope["scope_id"]
+                    and item.get("subject", {}).get("stage") == "processor"
+                    and item.get("role") == "pipeline_run"
                 )
+                processor_run_root = repository if processor_run_input["root"] == "repository" else input_root
+                expected_processor_head = json.loads(
+                    (processor_run_root / processor_run_input["path"]).read_bytes(),
+                )["head_sha"]
+                original_import_module = MODULE.import_module
+                bundle_validation_heads: list[str | None] = []
+
+                def record_processor_bundle_context(name: str, path: pathlib.Path):
+                    loaded = original_import_module(name, path)
+                    if name == "completeness_processor_contract":
+                        original_validate = loaded.validate_processor_bundle
+
+                        def validate_with_recorded_head(*args: object, **kwargs: object):
+                            bundle_validation_heads.append(kwargs.get("producer_head_sha"))
+                            return original_validate(*args, **kwargs)
+
+                        loaded.validate_processor_bundle = validate_with_recorded_head
+                    return loaded
+
+                with mock.patch.object(MODULE, "import_module", side_effect=record_processor_bundle_context):
+                    report = MODULE.build_report(
+                        root=repository, input_root=input_root, input_index_path=index_path,
+                    )
+                self.assertEqual(bundle_validation_heads, [expected_processor_head])
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
         delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")

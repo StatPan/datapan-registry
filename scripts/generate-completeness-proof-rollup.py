@@ -2471,7 +2471,10 @@ def validate_processor_stage(
         composition_helper = promotion.load_canonical_update_pr(root)
         composition_schema = object_at(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json", "composition schema")
         try:
-            bundle = promotion.validate_processor_bundle(checkpoint, output_dir, composition_schema, composition_helper)
+            bundle = promotion.validate_processor_bundle(
+                checkpoint, output_dir, composition_schema, composition_helper,
+                root=root, producer_head_sha=str(run["head_sha"]), defer_seoul_declaration=True,
+            )
             current_input_contract_compatible, changed_input_paths = validate_processor_generation_inputs(
                 root=root, promotion=promotion, checkpoint=checkpoint,
                 processor_head_sha=run["head_sha"], composition_receipt=bundle.get("composition_receipt"),

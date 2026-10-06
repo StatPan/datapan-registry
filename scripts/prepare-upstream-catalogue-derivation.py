@@ -150,6 +150,7 @@ def authenticate_parent_bundle(
         allow_terminal_noop = True
     validated = runner.validate_processor_bundle(
         checkpoint, bundle_dir, composition_schema, composition_helper, root=root,
+        producer_head_sha=str(run["head_sha"]),
         canonical_context=canonical_context,
         allow_terminal_noop=allow_terminal_noop,
     )

@@ -71,6 +71,18 @@ PROCESSOR_COMPOSITION_INPUTS = {
     "composer": "scripts/compose-upstream-catalogue-candidate.py",
     "receipt_schema": "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
 }
+# The last admitted composer before #746 emitted no LINK contract projection.
+# Its exact source identity is the only historical encoding accepted below;
+# other producer revisions must carry the current complete projection.
+HISTORICAL_LINK_CONTRACT_COMPOSER = {
+    "bytes": 78840,
+    "sha256": "bf55d918b9763512b59c00ae4ff252342ec48b0ee687f46926a34448d5bbdc53",
+}
+HISTORICAL_LINK_CONTRACT_REQUIRED_EVIDENCE = [
+    "current_link_detail_page",
+    "operation_source_provenance",
+    "registered_adapter_host",
+]
 PROCESSOR_COMPATIBILITY_FILES = (
     *PROCESSOR_INPUT_PROVENANCE.values(),
     "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
@@ -1137,11 +1149,59 @@ CONTRACT_DIAGNOSTIC_PROJECTION_FIELDS = frozenset({
 })
 
 
+def processor_composer_source_identity(
+    root: pathlib.Path,
+    producer_head_sha: str,
+) -> dict[str, Any] | None:
+    """Read the exact composer bytes from an already authenticated B source commit."""
+    if not re.fullmatch(r"[a-f0-9]{40}", producer_head_sha):
+        return None
+    composer_path = PROCESSOR_COMPOSITION_INPUTS["composer"]
+    argv = ("git", "show", f"{producer_head_sha}:{composer_path}")
+    print(f"+ [{root}] {shlex.join(argv)}", flush=True)
+    try:
+        result = subprocess.run(argv, cwd=root, capture_output=True, check=False)
+    except OSError:
+        # Missing local producer history can never grant the historical
+        # encoding. The complete current projection remains mandatory.
+        return None
+    if result.returncode != 0:
+        return None
+    source = result.stdout
+    return {"bytes": len(source), "sha256": hashlib.sha256(source).hexdigest()}
+
+
+def authenticate_contract_diagnostic_encoding(
+    composition_receipt: Mapping[str, Any],
+    producer_composer: Mapping[str, Any] | None,
+) -> str:
+    """Bind the historical/current row encoding to the native composer source."""
+    if producer_composer is None:
+        return "projected"
+    input_digests = composition_receipt.get("input_digests")
+    receipt_composer = input_digests.get("composer") if isinstance(input_digests, Mapping) else None
+    if (
+        not isinstance(receipt_composer, Mapping)
+        or isinstance(receipt_composer.get("bytes"), bool)
+        or not isinstance(receipt_composer.get("bytes"), int)
+        or receipt_composer.get("bytes") < 1
+        or not isinstance(receipt_composer.get("sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", receipt_composer["sha256"])
+        or dict(receipt_composer) != dict(producer_composer)
+    ):
+        raise PromotionError("composition receipt composer identity differs from its authenticated producer source")
+    return "historical" if dict(receipt_composer) == HISTORICAL_LINK_CONTRACT_COMPOSER else "projected"
+
+
 def validate_processor_contract_diagnostic_outputs(
     bundle_dir: pathlib.Path,
     contract_diagnostics: Sequence[Mapping[str, Any]],
+    *,
+    encoding: str = "projected",
 ) -> None:
     """Authenticate the composer's complete per-subject diagnostic projection."""
+    if encoding not in {"historical", "projected"}:
+        raise PromotionError("processor contract diagnostic output encoding is unsupported")
     if len(contract_diagnostics) > 128:
         raise PromotionError("processor contract diagnostic projection exceeds its bounded subject limit")
 
@@ -1203,6 +1263,8 @@ def validate_processor_contract_diagnostic_outputs(
 
     for key, expected_row in expected.items():
         modern = expected_row.get("detail_status") == "verified"
+        if encoding == "historical" and modern:
+            raise PromotionError("historical composer cannot carry a modern contract diagnostic")
         shared: dict[str, Any] = {
             "worker_outcome_sha256": expected_row.get("worker_outcome_sha256"),
             "next_action": expected_row.get("next_action"),
@@ -1223,6 +1285,10 @@ def validate_processor_contract_diagnostic_outputs(
 
         decision = decision_by_key.get(key)
         queue_row = queue_by_key.get(key)
+        quarantine_row = quarantine_by_key.get(key)
+        if encoding == "historical":
+            shared = {}
+            required_evidence = HISTORICAL_LINK_CONTRACT_REQUIRED_EVIDENCE
         worker_status = expected_row.get("worker_status")
         expected_disposition = "retain_worker_pending" if worker_status == "retry" else "quarantine"
         expected_reason = "worker_detail_retry" if worker_status == "retry" else "worker_detail_quarantined"
@@ -1240,7 +1306,6 @@ def validate_processor_contract_diagnostic_outputs(
             or supplied_projection(queue_row) != shared
         ):
             raise PromotionError("processor contract diagnostic differs from its semantic decision or queue projection")
-        quarantine_row = quarantine_by_key.get(key)
         if worker_status == "quarantined":
             if (
                 not isinstance(quarantine_row, Mapping)
@@ -1252,13 +1317,13 @@ def validate_processor_contract_diagnostic_outputs(
         elif quarantine_row is not None:
             raise PromotionError("processor retry contract diagnostic was incorrectly projected as quarantined")
 
-    expected_keys = set(expected)
+    expected_keys = set(expected) if encoding == "projected" else set()
     projected_decisions = {key for key, row in decision_by_key.items() if supplied_projection(row)}
     projected_queue = {key for key, row in queue_by_key.items() if supplied_projection(row)}
     projected_quarantine = {key for key, row in quarantine_by_key.items() if supplied_projection(row)}
     expected_quarantine = {
         key for key, row in expected.items() if row.get("worker_status") == "quarantined"
-    }
+    } if encoding == "projected" else set()
     if projected_decisions != expected_keys or projected_queue != expected_keys or projected_quarantine != expected_quarantine:
         raise PromotionError("processor contract diagnostic composition coverage is incomplete")
 
@@ -1612,6 +1677,7 @@ def validate_processor_bundle(
     composition_helper: Any,
     *,
     root: pathlib.Path | None = None,
+    producer_head_sha: str | None = None,
     canonical_context: Mapping[str, Any] | None = None,
     allow_terminal_noop: bool = False,
     defer_seoul_declaration: bool = False,
@@ -1801,8 +1867,14 @@ def validate_processor_bundle(
         )
     except Exception as exc:
         raise PromotionError(f"composer did not admit a valid {expected_composition_status} candidate receipt") from exc
+    diagnostic_encoding = "projected"
+    if contract_diagnostics and root is not None and producer_head_sha is not None:
+        producer_composer = processor_composer_source_identity(root, producer_head_sha)
+        diagnostic_encoding = authenticate_contract_diagnostic_encoding(composition, producer_composer)
     if root is not None or contract_diagnostics:
-        validate_processor_contract_diagnostic_outputs(bundle_dir, contract_diagnostics)
+        validate_processor_contract_diagnostic_outputs(
+            bundle_dir, contract_diagnostics, encoding=diagnostic_encoding,
+        )
     outcome = checkpoint.get("outcome", {})
     if processor_status == "no-change":
         if candidate_sha != composition_baseline_sha or outcome.get("composer_status") != "no_change" or int(outcome.get("pending_count", -1)) != 0 or int(outcome.get("detail_retry_count", -1)) != 0:
@@ -1886,6 +1958,7 @@ def screen_processor_recovery_candidate(
     try:
         bundle = validate_processor_bundle(
             checkpoint, bundle_dir, composition_schema, composition_helper, root=root,
+            producer_head_sha=str(run["head_sha"]),
             canonical_context=canonical_context,
             allow_terminal_noop=True,
             defer_seoul_declaration=True,
@@ -4552,6 +4625,7 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
     validation_journal_sha: str | None = None
     bundle = validate_processor_bundle(
         checkpoint, bundle_dir, composition_schema, helper, root=root,
+        producer_head_sha=args.workflow_run_head_sha,
         canonical_context=canonical_context,
         allow_terminal_noop=not explicit_source_refresh,
         defer_seoul_declaration=True,
@@ -5819,6 +5893,7 @@ def prepare_source_refresh_candidate(
     canonical_context = authenticated_current_canonical_context(root, target_main)
     bundle = validate_processor_bundle(
         checkpoint, bundle_dir, composition_schema, helper, root=root,
+        producer_head_sha=str(run["head_sha"]),
         canonical_context=canonical_context,
         allow_terminal_noop=False,
         defer_seoul_declaration=True,
