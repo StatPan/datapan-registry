@@ -351,6 +351,10 @@ class SameObservationNativeLineageTests(unittest.TestCase):
             scripts = pathlib.Path(temp) / "scripts"
             scripts.mkdir()
             (scripts / "canonical_update_pr.py").write_bytes((ROOT / "scripts/canonical_update_pr.py").read_bytes())
+            shutil.copy2(
+                ROOT / "scripts/canonical_update_terminal_evidence.py",
+                scripts / "canonical_update_terminal_evidence.py",
+            )
             checker = scripts / "check-upstream-catalogue-health.py"
             checker.write_text(
                 (ROOT / "scripts/check-upstream-catalogue-health.py").read_text(encoding="utf-8")
