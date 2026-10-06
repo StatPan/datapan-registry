@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import importlib.util
 import io
 import json
@@ -3753,11 +3754,56 @@ class CompletenessProofRollupTest(unittest.TestCase):
             scope for scope in registry["scopes"]
             if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
         )
+        execution_root = ROOT.resolve()
+        execution_contract_path = execution_root / "scripts/run-canonical-update-promotion.py"
+        execution_checkpoint_schema_path = (
+            execution_root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+        )
+        execution_helper_path = execution_root / "scripts/canonical_update_pr.py"
+        execution_composition_schema_path = (
+            execution_root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json"
+        )
+        execution_source_identity = {
+            "contract": hashlib.sha256(execution_contract_path.read_bytes()).hexdigest(),
+            "checkpoint_schema": hashlib.sha256(
+                execution_checkpoint_schema_path.read_bytes(),
+            ).hexdigest(),
+            "helper": hashlib.sha256(execution_helper_path.read_bytes()).hexdigest(),
+            "composition_schema": hashlib.sha256(
+                execution_composition_schema_path.read_bytes(),
+            ).hexdigest(),
+        }
+        execution_head = subprocess.check_output(
+            ["git", "rev-parse", "HEAD^{commit}"], cwd=execution_root, text=True,
+        ).strip()
+
+        def git_state(repository: pathlib.Path) -> tuple[str, str, str, str, bytes | None]:
+            head = subprocess.check_output(
+                ["git", "rev-parse", "HEAD^{commit}"], cwd=repository, text=True,
+            ).strip()
+            origin_main = subprocess.check_output(
+                ["git", "rev-parse", "refs/remotes/origin/main^{commit}"],
+                cwd=repository, text=True,
+            ).strip()
+            head_tree = subprocess.check_output(
+                ["git", "rev-parse", f"{head}^{{tree}}"], cwd=repository, text=True,
+            ).strip()
+            origin_tree = subprocess.check_output(
+                ["git", "rev-parse", f"{origin_main}^{{tree}}"], cwd=repository, text=True,
+            ).strip()
+            shallow_path = pathlib.Path(subprocess.check_output(
+                ["git", "rev-parse", "--path-format=absolute", "--git-path", "shallow"],
+                cwd=repository, text=True,
+            ).strip())
+            shallow = shallow_path.read_bytes() if shallow_path.exists() else None
+            return head, origin_main, head_tree, origin_tree, shallow
+
         with tempfile.TemporaryDirectory(
             prefix="completeness-synthetic-matching-b-c-shallow-", dir=ROOT.parent,
         ) as name:
             base = pathlib.Path(name)
             shallow_root, pr_head, trusted_main, _trusted_tree = self._make_genuine_shallow_local_source(base)
+            shallow_state_before = git_state(shallow_root)
             self.assertEqual(
                 subprocess.check_output(
                     ["git", "rev-parse", "--is-shallow-repository"], cwd=shallow_root, text=True,
@@ -3765,6 +3811,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 "true",
             )
             self.assertNotEqual(pr_head, trusted_main)
+            self.assertEqual(shallow_state_before[0], pr_head)
+            self.assertEqual(shallow_state_before[1], trusted_main)
+            self.assertEqual(shallow_state_before[3], _trusted_tree)
             input_root = base / "evidence"
             input_root.mkdir()
             with mock.patch(__name__ + ".ROOT", shallow_root), mock.patch.object(MODULE, "ROOT", shallow_root):
@@ -3780,17 +3829,90 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 expected_processor_head = json.loads(
                     (processor_run_root / processor_run_input["path"]).read_bytes(),
                 )["head_sha"]
+                processor_archive_input = next(
+                    item for item in packet_index["inputs"]
+                    if item.get("scope_id") == operation_scope["scope_id"]
+                    and item.get("subject", {}).get("stage") == "processor"
+                    and item.get("role") == "pipeline_artifact_archive"
+                )
+                processor_archive_root = (
+                    repository if processor_archive_input["root"] == "repository" else input_root
+                )
+                processor_archive_path = processor_archive_root / processor_archive_input["path"]
+                processor_archive_before = processor_archive_path.read_bytes()
+                archive_identity = (
+                    len(processor_archive_before),
+                    hashlib.sha256(processor_archive_before).hexdigest(),
+                )
+                fixture_state_before = git_state(repository)
                 original_import_module = MODULE.import_module
                 bundle_validation_heads: list[str | None] = []
+                execution_contract_identities: list[tuple[pathlib.Path, str]] = []
+                execution_schema_requests: list[pathlib.Path] = []
+                execution_helper_requests: list[pathlib.Path] = []
+                wrong_head_rejections: list[str] = []
 
                 def record_processor_bundle_context(name: str, path: pathlib.Path):
-                    loaded = original_import_module(name, path)
+                    requested_path = path.resolve()
+                    execution_path = execution_contract_path if name == "completeness_processor_contract" else path
+                    loaded = original_import_module(name, execution_path)
                     if name == "completeness_processor_contract":
+                        self.assertEqual(
+                            requested_path,
+                            (repository / "scripts/run-canonical-update-promotion.py").resolve(),
+                        )
+                        loaded_path = pathlib.Path(loaded.__file__).resolve()
+                        loaded_sha256 = hashlib.sha256(loaded_path.read_bytes()).hexdigest()
+                        execution_contract_identities.append((loaded_path, loaded_sha256))
+                        self.assertEqual(loaded_path, execution_contract_path)
+                        self.assertEqual(loaded_sha256, execution_source_identity["contract"])
+
+                        original_verify_checkpoint = loaded.verify_processor_checkpoint
+
+                        def verify_with_execution_schema(value: dict[str, object], schema_path: pathlib.Path):
+                            execution_schema_requests.append(schema_path.resolve())
+                            return original_verify_checkpoint(value, execution_checkpoint_schema_path)
+
+                        loaded.verify_processor_checkpoint = verify_with_execution_schema
                         original_validate = loaded.validate_processor_bundle
 
                         def validate_with_recorded_head(*args: object, **kwargs: object):
-                            bundle_validation_heads.append(kwargs.get("producer_head_sha"))
-                            return original_validate(*args, **kwargs)
+                            actual_head = kwargs.get("producer_head_sha")
+                            bundle_validation_heads.append(actual_head)
+                            self.assertEqual(kwargs.get("root"), repository)
+                            self.assertEqual(
+                                args[2], json.loads(execution_composition_schema_path.read_bytes()),
+                            )
+                            helper_path = pathlib.Path(args[3].__file__).resolve()
+                            execution_helper_requests.append(helper_path)
+                            self.assertEqual(
+                                helper_path, (repository / "scripts/canonical_update_pr.py").resolve(),
+                            )
+                            self.assertEqual(
+                                hashlib.sha256(helper_path.read_bytes()).hexdigest(),
+                                execution_source_identity["helper"],
+                            )
+                            result = original_validate(*args, **kwargs)
+                            producer_composer = loaded.processor_composer_source_identity(
+                                repository, str(actual_head),
+                            )
+                            self.assertEqual(
+                                loaded.authenticate_contract_diagnostic_encoding(
+                                    result["composition_receipt"], producer_composer,
+                                ),
+                                "projected",
+                            )
+                            self.assertNotEqual(execution_head, actual_head)
+                            wrong_composer = loaded.processor_composer_source_identity(
+                                repository, execution_head,
+                            )
+                            self.assertIsNotNone(wrong_composer)
+                            with self.assertRaises(loaded.PromotionError) as rejected:
+                                loaded.authenticate_contract_diagnostic_encoding(
+                                    result["composition_receipt"], wrong_composer,
+                                )
+                            wrong_head_rejections.append(str(rejected.exception))
+                            return result
 
                         loaded.validate_processor_bundle = validate_with_recorded_head
                     return loaded
@@ -3800,6 +3922,38 @@ class CompletenessProofRollupTest(unittest.TestCase):
                         root=repository, input_root=input_root, input_index_path=index_path,
                     )
                 self.assertEqual(bundle_validation_heads, [expected_processor_head])
+                self.assertEqual(
+                    execution_contract_identities,
+                    [(execution_contract_path, execution_source_identity["contract"])],
+                )
+                self.assertEqual(len(wrong_head_rejections), 1)
+                self.assertIn("authenticated producer source", wrong_head_rejections[0])
+                self.assertEqual(
+                    set(execution_schema_requests),
+                    {(repository / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").resolve()},
+                )
+                self.assertEqual(
+                    execution_helper_requests,
+                    [(repository / "scripts/canonical_update_pr.py").resolve()],
+                )
+                self.assertEqual(
+                    hashlib.sha256(execution_checkpoint_schema_path.read_bytes()).hexdigest(),
+                    execution_source_identity["checkpoint_schema"],
+                )
+                self.assertEqual(
+                    hashlib.sha256(execution_composition_schema_path.read_bytes()).hexdigest(),
+                    execution_source_identity["composition_schema"],
+                )
+                self.assertEqual(git_state(repository), fixture_state_before)
+                self.assertEqual(processor_archive_path.read_bytes(), processor_archive_before)
+                self.assertEqual(
+                    (
+                        processor_archive_path.stat().st_size,
+                        hashlib.sha256(processor_archive_path.read_bytes()).hexdigest(),
+                    ),
+                    archive_identity,
+                )
+            self.assertEqual(git_state(shallow_root), shallow_state_before)
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
         delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")
