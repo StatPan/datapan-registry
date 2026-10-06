@@ -32,12 +32,12 @@ redistributing, contributing, or reporting a vulnerability.
   operation denominator (`100.0%`), covering `21537` operations in total.
 - Runtime operation evidence: `0` unique operation identities out of
   `21537` (`0.0%`); fresh successful evidence covers `0` unique operations
-  (`0.0%`) as of `2026-09-30T01:45:58.529244Z`.
+  (`0.0%`) as of `2026-10-06T02:13:16.222351Z`.
 - Runtime freshness: `0` current operations have fresh verified
   evidence within the `30` day window; `0` have current-bound evidence within the
   `90` day expiry window (`0` stale, `0` recent non-verified).
   `0` are expired and `0` have unknown timestamps. The projection retains
-  `7181` historical input rows separately (`7180` unbound, `1` ambiguous).
+  `7981` historical input rows separately (`7980` unbound, `1` ambiguous).
 - Required consumer proof: `3` of `3` required consumers (`datapan-cli`,
   `release-operator`, `studio`) are proven (`100.0%`).
 - Prepared snapshot version: `0.1.1-dev` (from `manifest.json`); published releases: [GitHub Releases](https://github.com/StatPan/datapan-registry/releases/latest).
@@ -54,8 +54,8 @@ redistributing, contributing, or reporting a vulnerability.
 - Missing external adapter hosts: `11`
 - Provider split readiness: `ready`
   (`138` adapters, `138` verification-capable, `23` call-capable)
-- Runtime verification evidence: `7181` bounded checks merged into
-  `reports/latest-verification.json` (`3577` verified, `946` failed, `2658`
+- Runtime verification evidence: `7981` bounded checks merged into
+  `reports/latest-verification.json` (`3724` verified, `1084` failed, `3173`
   skipped)
 - Runtime evidence growth target: `0` fresh verified current-contract results are below
   the unrounded `10%` release target (`2154` results); `2154` additional results are
