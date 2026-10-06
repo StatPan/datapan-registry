@@ -1,0 +1,1333 @@
+{
+  "evaluated_at": "2026-10-06T17:15:24Z",
+  "execution_mode": "live",
+  "faults": [
+    {
+      "execution_identity": {
+        "head_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+        "run_attempt": 1,
+        "run_id": "37498547935",
+        "run_started_at": "2026-10-06T16:48:04Z"
+      },
+      "fault_key": "014ee9134c1007db5d29fdbb8a8b43f7475ad048b688219d0657d7d13058cd0c",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+      "owner_ticket": 659,
+      "reason": "candidate_ready_with_pending_scope",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "candidate"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+        "run_attempt": 1,
+        "run_id": "37383510680",
+        "run_started_at": "2026-10-05T22:36:07Z"
+      },
+      "fault_key": "11ffda719f0916056b7b33d1bb78eb044d9f40feb648ef21fff660ddd8464144",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "fault_key": "121fc2b2229e014199160ec2ec285a75023a2a2eea0db0f7c02777a3295dfaad",
+      "owner_ticket": 659,
+      "reason": "promotion_ack_missing",
+      "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "promotion"
+    },
+    {
+      "fault_key": "1cec466b94b9cd7bcab633b30b3d3ce46c31776f50323f1a6dee49ab705f81b2",
+      "owner_ticket": 659,
+      "reason": "promotion_record_for_different_generation",
+      "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+      "severity": "warning",
+      "source_id": "data_go_kr",
+      "stage": "promotion"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "0a97b3540c4b72f4e4a1cd487266af192e3b9fbc",
+        "run_attempt": 1,
+        "run_id": "37448302819",
+        "run_started_at": "2026-10-06T10:13:06Z"
+      },
+      "fault_key": "b4021740984ee00974b3d88a9ec9c8032d415f11ec43fd0e7f900b96b14baac3",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+        "run_attempt": 1,
+        "run_id": "37337128325",
+        "run_started_at": "2026-10-05T15:58:21Z"
+      },
+      "fault_key": "bea9771887d0ff86628005286019cb0a0036ac9fcdb69f7d8e72888ce864a136",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "6e871b6a7fbd9ae466d87792c6813d26f44e2eea",
+        "run_attempt": 1,
+        "run_id": "37406600388",
+        "run_started_at": "2026-10-06T02:56:39Z"
+      },
+      "fault_key": "c91e3b910dc2cbc6b8f5ea1b3a9292f42d0b5662126cccd16dbd05e4cd0170bd",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    }
+  ],
+  "health_workflow": {
+    "revision": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+    "run_attempt": 1,
+    "run_id": "37502083178"
+  },
+  "policy_sha256": "084ebb5730bc6e3d2c34e88683a490c0c976dd595e98e0a1aae6e163f1887b30",
+  "receipt_sha256": "c5d13b89444279600506792d8a0eafbb0052159b815d0e22702598c2990e46d5",
+  "repository": "StatPan/datapan-registry",
+  "schema_version": "datapan.upstream-catalogue-health.v1",
+  "source_policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc",
+  "sources": [
+    {
+      "canonical": {
+        "already_canonical_candidate": null,
+        "current_candidate_evaluation": {
+          "evaluated_main": {
+            "manifest_sha256": "7c090a4b717e9855c47f3f40a165cb08e320b38f38d69ef49566c9b8740e7d41",
+            "registry_bytes": 139155499,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+            "revision": "9fa015c2b3075ff50c003c14f682ae9560c3247d"
+          },
+          "evaluation_mode": "live",
+          "evaluator_source_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+          "producer": {
+            "artifact_id": "11330590151",
+            "bundle_manifest_sha256": "63c712a4f7556c8a00713607cab5e2d403d380bd66f240204ddc8d6addc7cf2a",
+            "checkpoint_sha256": "654fb2cba3ac1f70e044cde99ff3d920fec30e01090d1d3f4273469cccae4333",
+            "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
+            "head_sha": null,
+            "run_attempt": 1,
+            "run_id": "37275335526"
+          },
+          "reason_code": "processor_bundle_or_input_contract_incompatible",
+          "revalidation_required": true,
+          "stage": "processor_bundle_screen",
+          "status": "rejected"
+        },
+        "last_good": {
+          "artifact_identity": {
+            "bytes": 139155499,
+            "path": "data/data-go-kr.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "observed_at": "2026-10-04T12:35:04.198997+00:00",
+          "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+          "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+          "publication_run_attempt": 2,
+          "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+          "publication_run_id": 37199709258,
+          "publication_run_jobs_completed_at": "2026-10-04T12:35:16Z",
+          "publisher_run_verified": true,
+          "source_id": "data_go_kr",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "status": "read-back-confirmed",
+          "verified": true
+        },
+        "main": {
+          "manifest_sha256": "7c090a4b717e9855c47f3f40a165cb08e320b38f38d69ef49566c9b8740e7d41",
+          "registry_bytes": 139155499,
+          "registry_path": "data/data-go-kr.registry.json",
+          "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+          "revision": "9fa015c2b3075ff50c003c14f682ae9560c3247d"
+        },
+        "promotion_execution": {
+          "execution_failure": null,
+          "latest_execution_run": {
+            "conclusion": "skipped",
+            "created_at": "2026-10-06T16:49:09Z",
+            "event": "workflow_run",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37498689048",
+            "run_started_at": "2026-10-06T16:49:09Z",
+            "status": "completed",
+            "updated_at": "2026-10-06T16:49:10Z",
+            "workflow_id": 373708872
+          },
+          "latest_successful_execution_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-06T10:46:46Z",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "0a97b3540c4b72f4e4a1cd487266af192e3b9fbc",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37452026359",
+            "run_started_at": "2026-10-06T10:46:46Z",
+            "status": "completed",
+            "updated_at": "2026-10-06T10:48:12Z",
+            "workflow_id": 373708872
+          }
+        },
+        "promotion_stage": null,
+        "promotion_status": "unavailable",
+        "promotion_terminal_evidence": {
+          "attempts_considered": 1,
+          "reason_code": "terminal_evidence_unavailable_or_rejected",
+          "records": [
+            {
+              "mode": "reconcile-prs",
+              "result": {
+                "artifact": null,
+                "completed_at": null,
+                "current_applicability": {
+                  "matching_generations": [],
+                  "reason_code": "terminal_source_tree_entry_invalid",
+                  "status": "not_checked"
+                },
+                "execution_status": null,
+                "failure_code": null,
+                "invocation": {
+                  "event": "schedule",
+                  "head_sha": "0a97b3540c4b72f4e4a1cd487266af192e3b9fbc",
+                  "mode": "reconcile-prs",
+                  "repository": "StatPan/datapan-registry",
+                  "run_attempt": 1,
+                  "run_id": "37452026359",
+                  "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+                },
+                "mode_step_conclusion": null,
+                "outcome": null,
+                "reason_code": "terminal_source_tree_entry_invalid",
+                "run_conclusion": "success",
+                "run_status": "completed",
+                "started_at": null,
+                "status": "unavailable"
+              },
+              "run_attempt": 1,
+              "run_id": "37452026359"
+            },
+            {
+              "mode": "recover-ready",
+              "result": {
+                "artifact": null,
+                "completed_at": null,
+                "current_applicability": {
+                  "matching_generations": [],
+                  "reason_code": "terminal_source_tree_entry_invalid",
+                  "status": "not_checked"
+                },
+                "execution_status": null,
+                "failure_code": null,
+                "invocation": {
+                  "event": "schedule",
+                  "head_sha": "0a97b3540c4b72f4e4a1cd487266af192e3b9fbc",
+                  "mode": "recover-ready",
+                  "repository": "StatPan/datapan-registry",
+                  "run_attempt": 1,
+                  "run_id": "37452026359",
+                  "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+                },
+                "mode_step_conclusion": null,
+                "outcome": null,
+                "reason_code": "terminal_source_tree_entry_invalid",
+                "run_conclusion": "success",
+                "run_status": "completed",
+                "started_at": null,
+                "status": "unavailable"
+              },
+              "run_attempt": 1,
+              "run_id": "37452026359"
+            }
+          ],
+          "status": "unavailable"
+        },
+        "publication": null
+      },
+      "collector": {
+        "age_seconds": 581472,
+        "expected_interval_seconds": 604800,
+        "grace_seconds": 86400,
+        "latest_execution_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "latest_successful_execution_run": {
+            "attempt_evidence": {
+              "job_count": 1,
+              "jobs_api_endpoint": "repos/StatPan/datapan-registry/actions/runs/36646768289/attempts/1/jobs",
+              "jobs_sha256": "8d695da88da9f429cc550d42590b5577152b33699e50c7f6b7f71599ee6f59ca"
+            },
+            "conclusion": "success",
+            "disposition": "success",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+            "path": ".github/workflows/upstream-catalog-refresh.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "36646768289",
+            "run_started_at": "2026-09-29T23:44:12Z",
+            "status": "completed",
+            "workflow_id": 311036678
+          },
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        },
+        "latest_scheduled_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11068634862",
+              "expired": false,
+              "expires_at": "2026-10-29T23:47:49Z",
+              "name": "upstream-catalog-refresh-36646768289"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-09-29T23:44:12Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
+          "run_attempt": 1,
+          "run_id": "36646768289",
+          "status": "completed",
+          "updated_at": "2026-09-29T23:47:58Z"
+        }
+      },
+      "faults": [
+        {
+          "execution_identity": {
+            "head_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+            "run_attempt": 1,
+            "run_id": "37498547935",
+            "run_started_at": "2026-10-06T16:48:04Z"
+          },
+          "fault_key": "014ee9134c1007db5d29fdbb8a8b43f7475ad048b688219d0657d7d13058cd0c",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "fault_key": "05506191ad05b53d5faaaf58672bec300d8d3580264d943264098f8eb4acdb27",
+          "owner_ticket": 659,
+          "reason": "candidate_ready_with_pending_scope",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "candidate"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+            "run_attempt": 1,
+            "run_id": "37383510680",
+            "run_started_at": "2026-10-05T22:36:07Z"
+          },
+          "fault_key": "11ffda719f0916056b7b33d1bb78eb044d9f40feb648ef21fff660ddd8464144",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "fault_key": "121fc2b2229e014199160ec2ec285a75023a2a2eea0db0f7c02777a3295dfaad",
+          "owner_ticket": 659,
+          "reason": "promotion_ack_missing",
+          "recommended_action": "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "promotion"
+        },
+        {
+          "fault_key": "1cec466b94b9cd7bcab633b30b3d3ce46c31776f50323f1a6dee49ab705f81b2",
+          "owner_ticket": 659,
+          "reason": "promotion_record_for_different_generation",
+          "recommended_action": "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+          "severity": "warning",
+          "source_id": "data_go_kr",
+          "stage": "promotion"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "0a97b3540c4b72f4e4a1cd487266af192e3b9fbc",
+            "run_attempt": 1,
+            "run_id": "37448302819",
+            "run_started_at": "2026-10-06T10:13:06Z"
+          },
+          "fault_key": "b4021740984ee00974b3d88a9ec9c8032d415f11ec43fd0e7f900b96b14baac3",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+            "run_attempt": 1,
+            "run_id": "37337128325",
+            "run_started_at": "2026-10-05T15:58:21Z"
+          },
+          "fault_key": "bea9771887d0ff86628005286019cb0a0036ac9fcdb69f7d8e72888ce864a136",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "6e871b6a7fbd9ae466d87792c6813d26f44e2eea",
+            "run_attempt": 1,
+            "run_id": "37406600388",
+            "run_started_at": "2026-10-06T02:56:39Z"
+          },
+          "fault_key": "c91e3b910dc2cbc6b8f5ea1b3a9292f42d0b5662126cccd16dbd05e4cd0170bd",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        }
+      ],
+      "observation": {
+        "age_seconds": 581445,
+        "collection_status": "success",
+        "execution_mode": "live",
+        "max_age_seconds": 691200,
+        "observed_at": "2026-09-29T23:44:39Z",
+        "producer_run_id": "36646768289",
+        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
+        "state": "fresh"
+      },
+      "overall": "blocked",
+      "processor": {
+        "attempts_by_id": {
+          "15003164": 1,
+          "15005257": 1,
+          "15006273": 1,
+          "15007088": 1,
+          "15008409": 1,
+          "15008517": 1,
+          "15013677": 1,
+          "15013679": 1,
+          "15014832": 1,
+          "15015158": 1,
+          "15015163": 1,
+          "15015164": 1,
+          "15015212": 1,
+          "15019347": 1,
+          "15019666": 1,
+          "15020786": 1,
+          "15020843": 1,
+          "15020966": 1,
+          "15021305": 1,
+          "15024888": 1,
+          "15027423": 1,
+          "15027426": 1,
+          "15028101": 1,
+          "15029122": 1,
+          "15031993": 1,
+          "15031994": 1,
+          "15032073": 1,
+          "15032578": 1,
+          "15032581": 1,
+          "15032588": 1,
+          "15032592": 1,
+          "15032604": 1,
+          "15032613": 1,
+          "15032644": 1,
+          "15032647": 1,
+          "15032650": 1,
+          "15032652": 1,
+          "15032656": 1,
+          "15032657": 1,
+          "15032659": 1,
+          "15032678": 1,
+          "15032684": 1,
+          "15032685": 1,
+          "15032686": 1,
+          "15032687": 1,
+          "15032688": 1,
+          "15032691": 1,
+          "15032693": 1,
+          "15032694": 1,
+          "15032695": 1,
+          "15032696": 1,
+          "15032697": 1,
+          "15032703": 1,
+          "15032710": 1,
+          "15032712": 1,
+          "15032715": 1,
+          "15032716": 1,
+          "15032733": 1,
+          "15032735": 1,
+          "15032747": 1,
+          "15032794": 1,
+          "15032796": 1,
+          "15032807": 1,
+          "15032809": 1,
+          "15032813": 1,
+          "15032817": 1,
+          "15032826": 1,
+          "15032829": 1,
+          "15032835": 1,
+          "15032837": 1,
+          "15032848": 1,
+          "15032849": 1,
+          "15032850": 1,
+          "15032852": 1,
+          "15032855": 1,
+          "15032865": 1,
+          "15032866": 1,
+          "15032867": 1,
+          "15032868": 1,
+          "15032872": 1,
+          "15032912": 1,
+          "15032919": 1,
+          "15032920": 1,
+          "15032938": 1,
+          "15032941": 1,
+          "15032958": 1,
+          "15033015": 1,
+          "15033016": 1,
+          "15033017": 1,
+          "15033020": 1,
+          "15033021": 1,
+          "15033027": 1,
+          "15033028": 1,
+          "15033029": 1,
+          "15033030": 1,
+          "15033031": 1,
+          "15033032": 1,
+          "15033036": 1,
+          "15033040": 1,
+          "15033041": 1,
+          "15033042": 1,
+          "15033043": 1,
+          "15033044": 1,
+          "15033045": 1,
+          "15033047": 1,
+          "15033054": 1,
+          "15033055": 1,
+          "15033059": 1,
+          "15033065": 1,
+          "15033066": 1,
+          "15033067": 1,
+          "15033076": 1,
+          "15033077": 1,
+          "15033078": 1,
+          "15033079": 1,
+          "15033080": 1,
+          "15033095": 1,
+          "15033103": 1,
+          "15033104": 1,
+          "15033105": 1,
+          "15033116": 1,
+          "15033117": 1,
+          "15033128": 1,
+          "15033131": 1,
+          "15033143": 1,
+          "15033155": 1,
+          "15033159": 1,
+          "15033160": 1,
+          "15033161": 1,
+          "15033164": 1,
+          "15033170": 1,
+          "15033171": 1,
+          "15033172": 1,
+          "15033173": 1,
+          "15033174": 1,
+          "15033176": 1,
+          "15033177": 1,
+          "15033178": 1,
+          "15033184": 1,
+          "15033186": 1,
+          "15033188": 1,
+          "15033199": 1,
+          "15033212": 1,
+          "15033213": 1,
+          "15033219": 1,
+          "15033221": 1,
+          "15033226": 1,
+          "15033231": 1,
+          "15033496": 1,
+          "15033498": 1,
+          "15034324": 1,
+          "15037980": 1,
+          "15037982": 1,
+          "15038281": 1,
+          "15038284": 1,
+          "15038449": 1,
+          "15038450": 1,
+          "15038451": 1,
+          "15038496": 1,
+          "15038776": 1,
+          "15038873": 1,
+          "15038878": 1,
+          "15038880": 1,
+          "15038885": 1,
+          "15040263": 1,
+          "15040835": 1,
+          "15040836": 1,
+          "15040895": 1,
+          "15041698": 1,
+          "15041699": 1,
+          "15041700": 1,
+          "15041703": 1,
+          "15041764": 1,
+          "15041765": 1,
+          "15041766": 1,
+          "15041768": 1,
+          "15041769": 1,
+          "15041770": 1,
+          "15041771": 1,
+          "15041772": 1,
+          "15041773": 1,
+          "15041881": 1,
+          "15042319": 1,
+          "15043066": 1,
+          "15043204": 1,
+          "15043313": 1,
+          "15043314": 1,
+          "15043464": 1,
+          "15044244": 1,
+          "15045335": 1,
+          "15045467": 1,
+          "15047488": 1,
+          "15047612": 1,
+          "15054967": 1,
+          "15056017": 1,
+          "15056424": 1,
+          "15056513": 1,
+          "15056560": 1,
+          "15056566": 1,
+          "15056568": 1,
+          "15056579": 1,
+          "15056581": 1,
+          "15056627": 1,
+          "15056636": 1,
+          "15056647": 1,
+          "15056648": 1,
+          "15056663": 1,
+          "15056712": 1,
+          "15056777": 1,
+          "15056784": 1,
+          "15056797": 1,
+          "15056810": 1,
+          "15056811": 1,
+          "15056816": 1,
+          "15056821": 1,
+          "15056834": 1,
+          "15056854": 1,
+          "15056858": 1,
+          "15056865": 1,
+          "15056883": 1,
+          "15056911": 1,
+          "15056915": 1,
+          "15056931": 1,
+          "15056986": 1,
+          "15057007": 1,
+          "15057008": 1,
+          "15057017": 1,
+          "15057026": 1,
+          "15057028": 1,
+          "15057031": 1,
+          "15057038": 1,
+          "15057039": 1,
+          "15057041": 1,
+          "15057080": 1,
+          "15057092": 1,
+          "15057103": 1,
+          "15057123": 1,
+          "15057134": 1,
+          "15057144": 1,
+          "15057146": 1,
+          "15057150": 3,
+          "15057156": 3,
+          "15057160": 3,
+          "15057172": 3,
+          "15057226": 3,
+          "15057248": 3,
+          "15057261": 3,
+          "15057358": 3,
+          "15057366": 3,
+          "15057370": 3,
+          "15057413": 3,
+          "15057429": 3,
+          "15057430": 3,
+          "15057472": 3,
+          "15057476": 3,
+          "15057477": 3,
+          "15057491": 2,
+          "15057499": 2,
+          "15057505": 2,
+          "15057514": 2,
+          "15057515": 2,
+          "15057523": 2,
+          "15057542": 2,
+          "15057559": 2
+        },
+        "attempts_consumed": 40,
+        "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+        "checkpoint_observed_at": "2026-09-29T23:44:39Z",
+        "checkpoint_sha256": "654fb2cba3ac1f70e044cde99ff3d920fec30e01090d1d3f4273469cccae4333",
+        "detail_queue_cursor": 264,
+        "detail_records": [
+          {
+            "failure_diagnostic": {
+              "code": "resolved_link_operation_contract_unproven",
+              "phase": "resolver"
+            },
+            "guide_sha256": null,
+            "id": "15057491",
+            "link_metadata": {
+              "dataset_id": "15057491",
+              "method": "data_go_kr_select_api_link_url_v1",
+              "page": {
+                "bytes": 178834,
+                "effective_url": "https://www.data.go.kr/data/15057491/openapi.do",
+                "observed_at": "2026-10-05T07:01:23Z",
+                "sha256": "4ba3b4b4a8b15e3e448df254f6809e60ba4d3e49fedd80b2cf6fd54c98fd745a",
+                "url": "https://www.data.go.kr/data/15057491/openapi.do"
+              },
+              "public_data_detail_pk": "uddi:52889df3-93ae-4aeb-a959-8fc0e8b0d579_201811011041",
+              "public_data_pk": "15057491",
+              "resolver": {
+                "bytes": 177,
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057491",
+                "observed_at": "2026-10-05T07:01:24Z",
+                "public_data_detail_pk": "uddi:52889df3-93ae-4aeb-a959-8fc0e8b0d579_201811011041",
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057491",
+                "resolved_url": "http://open.law.go.kr/LSO/openApi/guideResult.do?htmlName=detcListGuide",
+                "resolved_url_sha256": "5b76b1212d77959c6a7cf5e1c17fd9f577f819a8dba4e13b761dded997842ad5",
+                "sha256": "67c3f3d3be884904667526ac402be9a17405ce4ef87bec21a8633de49469abf6"
+              }
+            },
+            "source_sha256": "ec2df2c0547ec7f7c1993bf5dfbc69b4b91176c799692c9709574b716224db72",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "resolved_link_operation_contract_unproven",
+              "phase": "resolver"
+            },
+            "guide_sha256": null,
+            "id": "15057499",
+            "link_metadata": {
+              "dataset_id": "15057499",
+              "method": "data_go_kr_select_api_link_url_v1",
+              "page": {
+                "bytes": 179262,
+                "effective_url": "https://www.data.go.kr/data/15057499/openapi.do",
+                "observed_at": "2026-10-05T07:01:26Z",
+                "sha256": "51dbd2fe147401eea4d92a406046e633ff758731a01be3355620806635af8426",
+                "url": "https://www.data.go.kr/data/15057499/openapi.do"
+              },
+              "public_data_detail_pk": "uddi:5315edc0-1ec5-491a-a3ff-af9658539fa1",
+              "public_data_pk": "15057499",
+              "resolver": {
+                "bytes": 172,
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057499",
+                "observed_at": "2026-10-05T07:01:27Z",
+                "public_data_detail_pk": "uddi:5315edc0-1ec5-491a-a3ff-af9658539fa1",
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057499",
+                "resolved_url": "http://open.law.go.kr/LSO/openApi/guideResult.do?htmlName=custAdmrulJoListGuide",
+                "resolved_url_sha256": "7fc052eb8b6eadce914ec4ac80c7fb0d0a33076b0cf91243263e82739e46a342",
+                "sha256": "86792db538662c8d14937b308cd52fd415823e0c310cc5e3da787a5b384d3c0c"
+              }
+            },
+            "source_sha256": "82f558e7f6252b6c7e372eec848338b538a804d58b96bd2ab8ffd258faf816fa",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "resolved_link_operation_contract_unproven",
+              "phase": "resolver"
+            },
+            "guide_sha256": null,
+            "id": "15057505",
+            "link_metadata": {
+              "dataset_id": "15057505",
+              "method": "data_go_kr_select_api_link_url_v1",
+              "page": {
+                "bytes": 178812,
+                "effective_url": "https://www.data.go.kr/data/15057505/openapi.do",
+                "observed_at": "2026-10-05T07:01:28Z",
+                "sha256": "1d3790df12ac3fa0a8bafa0e808d58d8247cfe4067bae9642d5d8def2a2f033f",
+                "url": "https://www.data.go.kr/data/15057505/openapi.do"
+              },
+              "public_data_detail_pk": "uddi:53964bcf-ec8f-4cff-adb3-9fde45955de5_201811011118",
+              "public_data_pk": "15057505",
+              "resolver": {
+                "bytes": 179,
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057505",
+                "observed_at": "2026-10-05T07:01:28Z",
+                "public_data_detail_pk": "uddi:53964bcf-ec8f-4cff-adb3-9fde45955de5_201811011118",
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057505",
+                "resolved_url": "http://open.law.go.kr/LSO/openApi/guideResult.do?htmlName=thdCmpListGuide",
+                "resolved_url_sha256": "6e8bcb24384061403b6014b577ef14e603ef58191b0b8eb15fcff40db2f131c6",
+                "sha256": "b08dcafde61c0c4311b0c5244f02c7f4ee1a4e4d8db0b9f7484a5be35e191cad"
+              }
+            },
+            "source_sha256": "2557066e4c2b0cfa5b994350bb084bd0e3a748f9b48ba56facf0f281925d265f",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "unsafe_or_unregistered_operation_host",
+              "phase": "resolver"
+            },
+            "guide_sha256": "72af1d6295bcf66928a25acc448d04920fa7f0174278253c5a619a4d7a1ce621",
+            "id": "15057514",
+            "source_sha256": "59173a725b99022687e202acd09c41ee9ce6d81584b4463f68dce32e91df7837",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "resolved_link_operation_contract_unproven",
+              "phase": "resolver"
+            },
+            "guide_sha256": null,
+            "id": "15057515",
+            "link_metadata": {
+              "dataset_id": "15057515",
+              "method": "data_go_kr_select_api_link_url_v1",
+              "page": {
+                "bytes": 176598,
+                "effective_url": "https://www.data.go.kr/data/15057515/openapi.do",
+                "observed_at": "2026-10-05T07:01:32Z",
+                "sha256": "0e3c3a2db472f9cae43ea58cc41ac274531372c550c0fc07b0ce47c91883e30e",
+                "url": "https://www.data.go.kr/data/15057515/openapi.do"
+              },
+              "public_data_detail_pk": "uddi:546efd49-5493-415b-acf4-fae961d845ac_201811221434",
+              "public_data_pk": "15057515",
+              "resolver": {
+                "bytes": 168,
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057515",
+                "observed_at": "2026-10-05T07:01:32Z",
+                "public_data_detail_pk": "uddi:546efd49-5493-415b-acf4-fae961d845ac_201811221434",
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057515",
+                "resolved_url": "http://www.jeju.go.kr/open/data/guide.htm?act=view&seq=1122342",
+                "resolved_url_sha256": "4b9057c3e4e1e218f5435f11d7f9a999ba320ba8305aa2c72683d0306772c760",
+                "sha256": "97e287803795408d08f850accbf158471a0f74b732d9720179f3acd989c600f2"
+              }
+            },
+            "source_sha256": "37d282d35ac3f4a74689ce17c6e574e864fb7f4e38bfaab75a3c90872e04465c",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "resolved_link_operation_contract_unproven",
+              "phase": "resolver"
+            },
+            "guide_sha256": null,
+            "id": "15057523",
+            "link_metadata": {
+              "dataset_id": "15057523",
+              "method": "data_go_kr_select_api_link_url_v1",
+              "page": {
+                "bytes": 179310,
+                "effective_url": "https://www.data.go.kr/data/15057523/openapi.do",
+                "observed_at": "2026-10-05T07:01:34Z",
+                "sha256": "f6e8fcaffc59bc9ead4e8d4cffd99ac305abdab51ed979f60fba3fe6727c01a6",
+                "url": "https://www.data.go.kr/data/15057523/openapi.do"
+              },
+              "public_data_detail_pk": "uddi:54db77c9-87f2-4069-a02d-affdc280da48",
+              "public_data_pk": "15057523",
+              "resolver": {
+                "bytes": 165,
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057523",
+                "observed_at": "2026-10-05T07:01:34Z",
+                "public_data_detail_pk": "uddi:54db77c9-87f2-4069-a02d-affdc280da48",
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057523",
+                "resolved_url": "http://www.law.go.kr/LSO/openApi/guideResult.do?htmlName=lsEfYdInfoGuide",
+                "resolved_url_sha256": "2defe2565d4ee3f8ca57376df446a094ee6180035f482497668a109e1dc15c7b",
+                "sha256": "8fc72148eb5864b2b09633a7447196da30bf0abd3b83cfb0573b06485d949f13"
+              }
+            },
+            "source_sha256": "f60f33fd7ae9c5ce9f463656ed11d6bf233e42e43428d76fefd9e323cfb3e483",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "resolved_link_operation_contract_unproven",
+              "phase": "resolver"
+            },
+            "guide_sha256": null,
+            "id": "15057542",
+            "link_metadata": {
+              "dataset_id": "15057542",
+              "method": "data_go_kr_select_api_link_url_v1",
+              "page": {
+                "bytes": 178681,
+                "effective_url": "https://www.data.go.kr/data/15057542/openapi.do",
+                "observed_at": "2026-10-05T07:01:36Z",
+                "sha256": "878e478707b05117ed20782c7ce055403e9dcf42a60891a2a4346261c89187ad",
+                "url": "https://www.data.go.kr/data/15057542/openapi.do"
+              },
+              "public_data_detail_pk": "uddi:55f7fe46-9e1a-4fd1-a745-82bd5de64c0d",
+              "public_data_pk": "15057542",
+              "resolver": {
+                "bytes": 165,
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057542",
+                "observed_at": "2026-10-05T07:01:36Z",
+                "public_data_detail_pk": "uddi:55f7fe46-9e1a-4fd1-a745-82bd5de64c0d",
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057542",
+                "resolved_url": "http://www.law.go.kr/LSO/openApi/guideResult.do?htmlName=admrulListGuide",
+                "resolved_url_sha256": "65759208eab8e443725c31cab196f942cb3d555e7e3e6a2de3d1d17e00a770cb",
+                "sha256": "d9d857d9f806cad838b897b9692f359a308b83988b443102ca5287a5f69a73ed"
+              }
+            },
+            "source_sha256": "cff0dc29f6acf409aa890b41d901bd5842a7afef665e3b6048f3f2621d1902aa",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "resolved_link_operation_contract_unproven",
+              "phase": "resolver"
+            },
+            "guide_sha256": null,
+            "id": "15057559",
+            "link_metadata": {
+              "dataset_id": "15057559",
+              "method": "data_go_kr_select_api_link_url_v1",
+              "page": {
+                "bytes": 180216,
+                "effective_url": "https://www.data.go.kr/data/15057559/openapi.do",
+                "observed_at": "2026-10-05T07:01:38Z",
+                "sha256": "7e83bdb2215cdaa82424856dfa42ad83996e552af84148c41d5b01fb03aa2f74",
+                "url": "https://www.data.go.kr/data/15057559/openapi.do"
+              },
+              "public_data_detail_pk": "uddi:573f01db-dea5-4bbb-8a54-f7f2d80fe02f",
+              "public_data_pk": "15057559",
+              "resolver": {
+                "bytes": 148,
+                "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057559",
+                "observed_at": "2026-10-05T07:01:39Z",
+                "public_data_detail_pk": "uddi:573f01db-dea5-4bbb-8a54-f7f2d80fe02f",
+                "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=15057559",
+                "resolved_url": "http://www.juso.go.kr/externalLink/goUrl.do?menuId=DT18",
+                "resolved_url_sha256": "1baeab46c6bbf3d4969c2aa644e80f5d3e85596b524e2f70b6ecde26d455e7ba",
+                "sha256": "5bd549a83fa0d591d685f71283d6db67da26bceb00bf6b38f12d9a3358c2b121"
+              }
+            },
+            "source_sha256": "d252dfa88cebe5b950db670a03917cd54ea8011cf6dd568dfe86a7d5104e5aff",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057150",
+            "source_sha256": "94e5ef130e4afb6eafb90200ff3d31802ff860431fe5c73cc86f7628dd18b02c",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057156",
+            "source_sha256": "ed257d089eb6766d512d146d024fbefb18646be031c57ec364763e39bf32a9fd",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057160",
+            "source_sha256": "c2ac21abfaec41dcd837a0e03751f2e497b4c7c849a4d1de43a6298a9159a9c7",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057172",
+            "source_sha256": "5f9065ac043ada38186f42568e326aedb3ead340b17e92560065a2c57beb8a5f",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057226",
+            "source_sha256": "5ea26a3c3a62a432ba54d26243286363ca2548fe4cfb6ea2f232c11ec24e5374",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057248",
+            "source_sha256": "6132a2e6525ce97a12a122067563d5540b748eef124e41f67e743c67872340e9",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057261",
+            "source_sha256": "608c483ed7a559921666f289c39819b633257ce9d5de1725a856a5c0784e14b0",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout"
+            },
+            "guide_sha256": null,
+            "id": "15057358",
+            "source_sha256": "af7a45a51805ba5b766851b069e27c2ff6437220ea0a76fa1d6d56bcbe837baf",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": null,
+            "id": "15057366",
+            "source_sha256": "49c1b30a3a56b7badb1d7884b180df2846b7b8b2f49f759338da2f768ee4a64c",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": null,
+            "id": "15057370",
+            "source_sha256": "6f4f5f97ff353d2646ff8f239d873350d85d283bec6a55acf55348846a23bb37",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": null,
+            "id": "15057413",
+            "source_sha256": "dfeb13a2466e5ed83031b2f748c7bbde161dac3f5adad302c17dbc89c658ec32",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": "ecac7bde12fc5d2a855aaefeecf84cf1233aeb8499015fa6cad558974aba87b4",
+            "id": "15057429",
+            "source_sha256": "661bfce4ac34a7e4089ca5a9f3750ff7786ae349cf824a7370d0dae772b45c89",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": null,
+            "id": "15057430",
+            "source_sha256": "660a78efb8948b709857ac360a43a243f90161418409890a104d5fb5a9b12a0a",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": "979ccb6da5d0f4f45e358d40d68b4dd4d0dc5d33c8f9a0eaf971d8bf3bd21782",
+            "id": "15057472",
+            "source_sha256": "2c2b83f402552a0f163cd8952482f41f6484659a5172150a46b71abeec16ef3c",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": null,
+            "id": "15057476",
+            "source_sha256": "0f4e3985f0a5f4594de1fcfc49e3da3e11abfd36e49c1bc99f3f1d7aa18fe51d",
+            "status": "quarantined"
+          },
+          {
+            "failure_diagnostic": {
+              "code": "timeout",
+              "phase": "page"
+            },
+            "guide_sha256": null,
+            "id": "15057477",
+            "source_sha256": "09b6a86af1d8af42733ca7e7dc2a96014b575d5a98f5007f2ad61db9d9c5199c",
+            "status": "quarantined"
+          }
+        ],
+        "execution_failure": {
+          "conclusion": "failure",
+          "created_at": "2026-10-06T16:48:04Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37498547935",
+          "run_started_at": "2026-10-06T16:48:04Z",
+          "status": "completed",
+          "updated_at": "2026-10-06T16:49:06Z",
+          "workflow_id": 373610259
+        },
+        "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
+        "last_heartbeat_at": "2026-10-05T07:02:44Z",
+        "last_observation": {
+          "collection_status": "success",
+          "execution_mode": "live",
+          "observed_at": "2026-09-29T23:44:39Z",
+          "producer_run_id": "36646768289",
+          "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+        },
+        "last_progress_at": "2026-10-05T07:01:19Z",
+        "latest_execution_run": {
+          "conclusion": "failure",
+          "created_at": "2026-10-06T16:48:04Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37498547935",
+          "run_started_at": "2026-10-06T16:48:04Z",
+          "status": "completed",
+          "updated_at": "2026-10-06T16:49:06Z",
+          "workflow_id": 373610259
+        },
+        "latest_successful_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-05T07:00:26Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "0085b357289755d6b3fb60a7259bd85da42d2962",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37275335526",
+          "run_started_at": "2026-10-05T07:00:26Z",
+          "status": "completed",
+          "updated_at": "2026-10-05T07:02:55Z",
+          "workflow_id": 373610259
+        },
+        "lease": null,
+        "outcome": {
+          "attempts_this_invocation": 16,
+          "composer_status": "ready_scoped",
+          "detail_failure_counts": {
+            "missing_link_detail_operations": 112,
+            "resolved_link_operation_contract_unproven": 7,
+            "timeout": 72,
+            "unsafe_or_unregistered_operation_host": 1
+          },
+          "detail_reason_unavailable_count": 716,
+          "detail_retry_count": 884,
+          "detail_unattempted_count": 900,
+          "pending_count": 4382,
+          "reason": "scoped_candidate_ready_pending_outcomes_retained"
+        },
+        "output_artifact": {
+          "artifact_id": "11330590151",
+          "bundle_manifest_sha256": "63c712a4f7556c8a00713607cab5e2d403d380bd66f240204ddc8d6addc7cf2a",
+          "expires_at": "2026-11-04T07:02:45Z",
+          "name": "upstream-catalogue-processing-37275335526-1",
+          "repository": "StatPan/datapan-registry",
+          "run_id": "37275335526"
+        },
+        "output_digests": [
+          {
+            "bytes": 139155499,
+            "path": "composed-candidate.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          {
+            "bytes": 85703345,
+            "path": "ready-scope.registry.json",
+            "sha256": "1e82aa849995beb4a9c9d8eaca8d355dfd5fb9a78233af70e749b99f81b76084"
+          },
+          {
+            "bytes": 11553822,
+            "path": "semantic-diff.json",
+            "sha256": "4d8ca6a9e26f87d4d062e8c548de2881c4f57c4b05c6e861c1d754743bc1ab00"
+          },
+          {
+            "bytes": 3502582,
+            "path": "regeneration-queue.json",
+            "sha256": "c75d260283bc99fc6cf672ec66e925209823ad161499f1ae7b6f2e1063db8983"
+          },
+          {
+            "bytes": 680019,
+            "path": "quarantine.json",
+            "sha256": "5bbd1a1108aa767505c8685b9f9ca10acb8b641732d08d9a807932459a7ee02b"
+          },
+          {
+            "bytes": 939105,
+            "path": "composition-receipt.json",
+            "sha256": "333736d537f5154c78dbafb95bf4f1ac6562348d21d4cd488c5549776f823fd2"
+          },
+          {
+            "bytes": 258065,
+            "path": "upstream-catalogue-enrichment-evidence.json",
+            "sha256": "0766471a1050fb219db63717ff1c7751ccf0159e7b1e0f7ac48a78bfe36ee232"
+          },
+          {
+            "bytes": 819,
+            "path": "upstream-catalogue-processing-result.json",
+            "sha256": "5748d8def1aac377cd0784ba448a9c32b6e9a08a9bdb56233327e50fec3993e6"
+          }
+        ],
+        "request_reservation": {
+          "attempt_budget": 24,
+          "attempts_made": 16,
+          "expires_at": "2026-10-05T07:46:12Z",
+          "fencing_token": 2,
+          "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
+          "owner_run_id": "37275335526-1",
+          "records": [
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": null,
+              "id": "15057491",
+              "source_sha256": "ec2df2c0547ec7f7c1993bf5dfbc69b4b91176c799692c9709574b716224db72"
+            },
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": null,
+              "id": "15057499",
+              "source_sha256": "82f558e7f6252b6c7e372eec848338b538a804d58b96bd2ab8ffd258faf816fa"
+            },
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": null,
+              "id": "15057505",
+              "source_sha256": "2557066e4c2b0cfa5b994350bb084bd0e3a748f9b48ba56facf0f281925d265f"
+            },
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": "72af1d6295bcf66928a25acc448d04920fa7f0174278253c5a619a4d7a1ce621",
+              "id": "15057514",
+              "source_sha256": "59173a725b99022687e202acd09c41ee9ce6d81584b4463f68dce32e91df7837"
+            },
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": null,
+              "id": "15057515",
+              "source_sha256": "37d282d35ac3f4a74689ce17c6e574e864fb7f4e38bfaab75a3c90872e04465c"
+            },
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": null,
+              "id": "15057523",
+              "source_sha256": "f60f33fd7ae9c5ce9f463656ed11d6bf233e42e43428d76fefd9e323cfb3e483"
+            },
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": null,
+              "id": "15057542",
+              "source_sha256": "cff0dc29f6acf409aa890b41d901bd5842a7afef665e3b6048f3f2621d1902aa"
+            },
+            {
+              "attempts_reserved": 2,
+              "guide_sha256": null,
+              "id": "15057559",
+              "source_sha256": "d252dfa88cebe5b950db670a03917cd54ea8011cf6dd568dfe86a7d5104e5aff"
+            }
+          ],
+          "reserved_at": "2026-10-05T07:01:15Z",
+          "reserved_attempts": 16
+        },
+        "state": "ready"
+      },
+      "recommended_recovery": [
+        "Inspect the existing owned promotion reconciliation workflow `.github/workflows/canonical-update-promotion.yml` for the recorded candidate, then confirm its durable PR acknowledgement; preserve last-good canonical evidence and do not repeat provider requests. Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available.",
+        "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+        "Review the linked candidate PR and existing publication gates; keep last-good canonical evidence available."
+      ],
+      "source_id": "data_go_kr"
+    }
+  ],
+  "summary": {
+    "blocked": 1,
+    "degraded": 0,
+    "fault_count": 8,
+    "fixture": 0,
+    "healthy": 0,
+    "last_good_count": 1,
+    "live_fresh_observation_count": 1,
+    "source_count": 1
+  }
+}
