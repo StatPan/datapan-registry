@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-09-30T01:45:58.529244Z",
+  "generated_at": "2026-10-06T02:13:16.222351Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 7181,
-    "verified": 3577,
-    "failed": 946,
-    "skipped": 2658,
+    "total": 7981,
+    "verified": 3724,
+    "failed": 1084,
+    "skipped": 3173,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "verified",
-        "count": 3577,
+        "count": 3724,
         "status": "verified"
       },
       {
         "key": "skipped",
-        "count": 2658,
+        "count": 3173,
         "status": "skipped"
       },
       {
         "key": "failed",
-        "count": 946,
+        "count": 1084,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 1017,
+        "count": 1360,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 584,
+        "count": 621,
         "reason": "approval_required"
       },
       {
@@ -57,6 +57,11 @@
         "reason": "calspia_request_timeout"
       },
       {
+        "key": "jeonju_missing_required_params",
+        "count": 87,
+        "reason": "jeonju_missing_required_params"
+      },
+      {
         "key": "missing_endpoint",
         "count": 81,
         "reason": "missing_endpoint"
@@ -72,14 +77,24 @@
         "reason": "chungnam_http_404"
       },
       {
-        "key": "jeonju_missing_required_params",
-        "count": 67,
-        "reason": "jeonju_missing_required_params"
-      },
-      {
         "key": "vworld_request_timeout",
         "count": 62,
         "reason": "vworld_request_timeout"
+      },
+      {
+        "key": "ekape_missing_required_params",
+        "count": 49,
+        "reason": "ekape_missing_required_params"
+      },
+      {
+        "key": "qnet_separate_service_key_required",
+        "count": 46,
+        "reason": "qnet_separate_service_key_required"
+      },
+      {
+        "key": "epost_wadl_metadata_only",
+        "count": 43,
+        "reason": "epost_wadl_metadata_only"
       },
       {
         "key": "daejeon_request_timeout",
@@ -87,9 +102,14 @@
         "reason": "daejeon_request_timeout"
       },
       {
-        "key": "epost_wadl_metadata_only",
-        "count": 34,
-        "reason": "epost_wadl_metadata_only"
+        "key": "geoje_missing_required_params",
+        "count": 37,
+        "reason": "geoje_missing_required_params"
+      },
+      {
+        "key": "external_provider_adapter_missing",
+        "count": 36,
+        "reason": "external_provider_adapter_missing"
       },
       {
         "key": "hug_request_timeout",
@@ -102,14 +122,9 @@
         "reason": "open-assembly_http_400"
       },
       {
-        "key": "qnet_separate_service_key_required",
+        "key": "qnet_missing_required_params",
         "count": 28,
-        "reason": "qnet_separate_service_key_required"
-      },
-      {
-        "key": "ekape_missing_required_params",
-        "count": 27,
-        "reason": "ekape_missing_required_params"
+        "reason": "qnet_missing_required_params"
       },
       {
         "key": "anyang_request_failed",
@@ -122,9 +137,9 @@
         "reason": "kipris-plus_http_404"
       },
       {
-        "key": "geoje_missing_required_params",
-        "count": 25,
-        "reason": "geoje_missing_required_params"
+        "key": "uiryeong_missing_required_params",
+        "count": 26,
+        "reason": "uiryeong_missing_required_params"
       },
       {
         "key": "lofin365_request_failed",
@@ -132,9 +147,9 @@
         "reason": "lofin365_request_failed"
       },
       {
-        "key": "external_provider_adapter_missing",
-        "count": 24,
-        "reason": "external_provider_adapter_missing"
+        "key": "sisul_wadl_metadata_only",
+        "count": 25,
+        "reason": "sisul_wadl_metadata_only"
       },
       {
         "key": "open-law_request_timeout",
@@ -147,19 +162,14 @@
         "reason": "lofin365_request_timeout"
       },
       {
-        "key": "sisul_wadl_metadata_only",
-        "count": 20,
-        "reason": "sisul_wadl_metadata_only"
-      },
-      {
         "key": "chungnam_http_403",
         "count": 19,
         "reason": "chungnam_http_403"
       },
       {
-        "key": "qnet_missing_required_params",
+        "key": "provider returned HTML instead of data",
         "count": 19,
-        "reason": "qnet_missing_required_params"
+        "reason": "provider returned HTML instead of data"
       },
       {
         "key": "tour_service_root_missing_operation_path",
@@ -167,9 +177,9 @@
         "reason": "tour_service_root_missing_operation_path"
       },
       {
-        "key": "uiryeong_missing_required_params",
-        "count": 18,
-        "reason": "uiryeong_missing_required_params"
+        "key": "ulsan_missing_required_params",
+        "count": 19,
+        "reason": "ulsan_missing_required_params"
       },
       {
         "key": "naqs_mutation_endpoint",
@@ -177,9 +187,9 @@
         "reason": "naqs_mutation_endpoint"
       },
       {
-        "key": "ulsan_missing_required_params",
-        "count": 16,
-        "reason": "ulsan_missing_required_params"
+        "key": "andong_service_not_registered",
+        "count": 14,
+        "reason": "andong_service_not_registered"
       },
       {
         "key": "malformed_endpoint",
@@ -192,19 +202,24 @@
         "reason": "lofin365_http_400"
       },
       {
+        "key": "epost_missing_required_params",
+        "count": 12,
+        "reason": "epost_missing_required_params"
+      },
+      {
         "key": "incheon_http_400",
         "count": 12,
         "reason": "incheon_http_400"
       },
       {
+        "key": "itfind_missing_required_params",
+        "count": 12,
+        "reason": "itfind_missing_required_params"
+      },
+      {
         "key": "oneclick_connection_refused",
         "count": 11,
         "reason": "oneclick_connection_refused"
-      },
-      {
-        "key": "andong_service_not_registered",
-        "count": 10,
-        "reason": "andong_service_not_registered"
       },
       {
         "key": "epost_unsupported_protocol",
@@ -222,14 +237,19 @@
         "reason": "qnet_wadl_metadata_only"
       },
       {
-        "key": "epost_missing_required_params",
-        "count": 8,
-        "reason": "epost_missing_required_params"
+        "key": "sisul_missing_required_params",
+        "count": 9,
+        "reason": "sisul_missing_required_params"
       },
       {
         "key": "korad_wadl_metadata_only",
         "count": 8,
         "reason": "korad_wadl_metadata_only"
+      },
+      {
+        "key": "airport_service_key_not_registered",
+        "count": 7,
+        "reason": "airport_service_key_not_registered"
       },
       {
         "key": "humetro_service_access_denied",
@@ -247,14 +267,9 @@
         "reason": "context deadline exceeded"
       },
       {
-        "key": "itfind_missing_required_params",
+        "key": "jeonju_http_405_method_not_allowed",
         "count": 6,
-        "reason": "itfind_missing_required_params"
-      },
-      {
-        "key": "sisul_missing_required_params",
-        "count": 6,
-        "reason": "sisul_missing_required_params"
+        "reason": "jeonju_http_405_method_not_allowed"
       },
       {
         "key": "sisul_request_timeout",
@@ -265,6 +280,11 @@
         "key": "uiryeong_service_key_not_registered",
         "count": 6,
         "reason": "uiryeong_service_key_not_registered"
+      },
+      {
+        "key": "HTTP 에러",
+        "count": 5,
+        "reason": "HTTP 에러"
       },
       {
         "key": "andong_missing_required_params",
@@ -282,14 +302,14 @@
         "reason": "lh_ebid_service_key_not_registered"
       },
       {
+        "key": "정상",
+        "count": 5,
+        "reason": "정상"
+      },
+      {
         "key": "HTTP 403",
         "count": 4,
         "reason": "HTTP 403"
-      },
-      {
-        "key": "airport_service_key_not_registered",
-        "count": 4,
-        "reason": "airport_service_key_not_registered"
       },
       {
         "key": "ekape_service_key_not_registered",
@@ -300,6 +320,11 @@
         "key": "emuseum_missing_required_params",
         "count": 4,
         "reason": "emuseum_missing_required_params"
+      },
+      {
+        "key": "jeju_missing_required_params",
+        "count": 4,
+        "reason": "jeju_missing_required_params"
       },
       {
         "key": "nongsaro_request_timeout",
@@ -315,6 +340,11 @@
         "key": "seoul_bus_service_key_not_registered",
         "count": 4,
         "reason": "seoul_bus_service_key_not_registered"
+      },
+      {
+        "key": "airport_missing_required_params",
+        "count": 3,
+        "reason": "airport_missing_required_params"
       },
       {
         "key": "consumer_request_timeout",
@@ -342,14 +372,9 @@
         "reason": "ulsan_service_key_not_registered"
       },
       {
-        "key": "HTTP 에러",
+        "key": "HTTP 400",
         "count": 2,
-        "reason": "HTTP 에러"
-      },
-      {
-        "key": "airport_missing_required_params",
-        "count": 2,
-        "reason": "airport_missing_required_params"
+        "reason": "HTTP 400"
       },
       {
         "key": "daejeon_http_404",
@@ -372,19 +397,24 @@
         "reason": "hrfco_http_400"
       },
       {
-        "key": "jeju_missing_required_params",
+        "key": "lh_ebid_missing_required_params",
         "count": 2,
-        "reason": "jeju_missing_required_params"
+        "reason": "lh_ebid_missing_required_params"
       },
       {
-        "key": "jeonju_http_405_method_not_allowed",
+        "key": "qnet_connection_validation_failed",
         "count": 2,
-        "reason": "jeonju_http_405_method_not_allowed"
+        "reason": "qnet_connection_validation_failed"
       },
       {
         "key": "seoul_bus_missing_required_params",
         "count": 2,
         "reason": "seoul_bus_missing_required_params"
+      },
+      {
+        "key": "접속성공",
+        "count": 2,
+        "reason": "접속성공"
       },
       {
         "key": "Get \"http://apis.data.go.kr/1360000/AmmIwxxmService/getAirmet?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
@@ -492,9 +522,469 @@
         "reason": "Get \"http://apis.data.go.kr/6310000/ulsanair/getUlsanairList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/atCancerUseByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/atCancerUseByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/brca1DnaExamByCenter?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/brca1DnaExamByCenter?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/brca1DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/brca1DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/brca2DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/brca2DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/brstCosvOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/brstCosvOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/brstRemoveOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/brstRemoveOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/btrTubOvarOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/btrTubOvarOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/dtlDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/dtlDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/dtlExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/dtlExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/hormoneTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/hormoneTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/hysterectomyOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/hysterectomyOper?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/iparExamResultByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/iparExamResultByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/iperExamResultByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/iperExamResultByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/ipprExamResultByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/ipprExamResultByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/medPrcpByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/medPrcpByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/oprByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/oprByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/patientNumber?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/patientNumber?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/radTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/radTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551172/brst/radTpyRsByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551172/brst/radTpyRsByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/B551553/TradFoodInfoService/getFoodCateogryList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/B551553/TradFoodInfoService/getFoodCateogryList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"http://apis.data.go.kr/B552474/EduInfoService/getEduCode?[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"http://apis.data.go.kr/B552474/EduInfoService/getEduCode?[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongcarwash/getUiryeongcarwashList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongcarwash/getUiryeongcarwashList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongcultural/uiryeongculturalList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongcultural/uiryeongculturalList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeonghospital/uiryeonghospitalList?[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeonghospital/uiryeonghospitalList?[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongmaintenance/getUiryeongmaintenanceList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongmaintenance/getUiryeongmaintenanceList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongmotelinfo/getUiryeongmotelinfoList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongmotelinfo/getUiryeongmotelinfoList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongnursetree/getUiryeongnursetreeList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongnursetree/getUiryeongnursetreeList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongphysical/uiryeongphysicalList?[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongphysical/uiryeongphysicalList?[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongrelics/uiryeongrelicsList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongrelics/uiryeongrelicsList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongrestarea/getUiryeongrestareaList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongrestarea/getUiryeongrestareaList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongseniorwelfare/getUiryeongseniorwelfareList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongseniorwelfare/getUiryeongseniorwelfareList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongsingleparent/getUiryeongsingleparentList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongsingleparent/getUiryeongsingleparentList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongsmokefree/getUiryeongsmokefreeList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongsmokefree/getUiryeongsmokefreeList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongstation/uiryeongstationList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongstation/uiryeongstationList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://data.uiryeong.go.kr/rest/uiryeongvilex/getUiryeongvilexList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://data.uiryeong.go.kr/rest/uiryeongvilex/getUiryeongvilexList?[redacted credential assignment]&numOfRows=1&pageNo=1\": context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://openapi.its.ulsan.kr/UlsanAPI/BusStopInfo.xo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://openapi.its.ulsan.kr/UlsanAPI/BusStopInfo.xo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://openapi.its.ulsan.kr/UlsanAPI/RouteInfo.xo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://openapi.its.ulsan.kr/UlsanAPI/RouteInfo.xo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://openapi.its.ulsan.kr/UlsanAPI/TCardStoreInfo.xo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://openapi.its.ulsan.kr/UlsanAPI/TCardStoreInfo.xo?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1262000/InterInstConferenceInfoService/getInterInstConferenceInfo?numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1262000/InterInstConferenceInfoService/getInterInstConferenceInfo?numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471000/TheEatingCollagenProductService2021/getEatingCollagenProductList1?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471000/TheEatingCollagenProductService2021/getEatingCollagenProductList1?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getAffInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getAffInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentCaptureList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentCaptureList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentChapterList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentChapterList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentParticpationList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getContentParticpationList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseAppCancleList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseAppCancleList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseApplicationList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseApplicationList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseAvgList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseAvgList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseCencleList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseCencleList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseCompleteInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseCompleteInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseCompleteList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseCompleteList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseContentCountList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseContentCountList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseDescriplist?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseDescriplist?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseOccurInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseOccurInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseProgressList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseProgressList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseThumCountList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getCourseThumCountList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getNationInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getNationInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getOrganizationInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1471057/TheAPECHarmonizationCenterService02/getOrganizationInfoList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getBreastCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getBreastCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getColorectalCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getColorectalCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getGastricCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getGastricCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getThyroidCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/CancerRegistryMetaService/getThyroidCancerRegistryMetaInfo1?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/atCancerUseByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/atCancerUseByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/brca1DnaExamByCenter?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/brca1DnaExamByCenter?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/brca1DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/brca1DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/brca2DnaExamResultByCenter?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/brca2DnaExamResultByCenter?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/brca2DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/brca2DnaExamResultUdfMut?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/dtlDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/dtlDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/dtlExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/dtlExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/hormoneTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/hormoneTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/hysterectomy?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/hysterectomy?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/oprByCode?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/oprByCode?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/patientNumber?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/patientNumber?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/radTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/radTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/radTpyRsByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/radTpyRsByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/surgicalApproachByMethod?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/surgicalApproachByMethod?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/tubalOvarianResectionYn?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/tubalOvarianResectionYn?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/ovry/vdoExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/ovry/vdoExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/dtlDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/dtlDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/dtlExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/dtlExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/fNdGlobulinTest?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/fNdGlobulinTest?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/hormoneTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/hormoneTpyByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/oprByCode?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/oprByCode?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/oprByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/oprByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/patientNumber?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/patientNumber?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/radActiveIodineTpy?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/radActiveIodineTpy?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/radActiveIodineTpyDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/radActiveIodineTpyDiagByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/radActiveTpy?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/radActiveTpy?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/tpyTrackByStatus?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/tpyTrackByStatus?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/tyrogenPrcp?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/tyrogenPrcp?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B551172/thrd/vdoExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B551172/thrd/vdoExamByType?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B553748/SellerCompanyListServiceV2/getSellerCompanyListV2?numOfRows=1&pageNo=1&returnType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B553748/SellerCompanyListServiceV2/getSellerCompanyListV2?numOfRows=1&pageNo=1&returnType=json&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "car365_http_400",
@@ -517,6 +1007,11 @@
         "reason": "gblib_endpoint_not_found"
       },
       {
+        "key": "geoje_result_code_99",
+        "count": 1,
+        "reason": "geoje_result_code_99"
+      },
+      {
         "key": "gicoms_request_timeout",
         "count": 1,
         "reason": "gicoms_request_timeout"
@@ -537,14 +1032,19 @@
         "reason": "jeju_method_not_allowed"
       },
       {
+        "key": "jeju_request_timeout",
+        "count": 1,
+        "reason": "jeju_request_timeout"
+      },
+      {
         "key": "kosmes_request_timeout",
         "count": 1,
         "reason": "kosmes_request_timeout"
       },
       {
-        "key": "lh_ebid_missing_required_params",
+        "key": "myhome_request_timeout",
         "count": 1,
-        "reason": "lh_ebid_missing_required_params"
+        "reason": "myhome_request_timeout"
       },
       {
         "key": "myhome_service_key_not_registered",
@@ -565,17 +1065,12 @@
         "key": "psis_request_timeout",
         "count": 1,
         "reason": "psis_request_timeout"
-      },
-      {
-        "key": "qnet_connection_validation_failed",
-        "count": 1,
-        "reason": "qnet_connection_validation_failed"
       }
     ],
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 1875,
+        "count": 2451,
         "provider": "data.go.kr"
       },
       {
@@ -604,6 +1099,11 @@
         "provider": "opendart"
       },
       {
+        "key": "q-net",
+        "count": 212,
+        "provider": "q-net"
+      },
+      {
         "key": "culture",
         "count": 178,
         "provider": "culture"
@@ -619,11 +1119,6 @@
         "provider": "seoul-open-data"
       },
       {
-        "key": "q-net",
-        "count": 147,
-        "provider": "q-net"
-      },
-      {
         "key": "daejeon",
         "count": 114,
         "provider": "daejeon"
@@ -632,6 +1127,11 @@
         "key": "kipris-plus",
         "count": 109,
         "provider": "kipris-plus"
+      },
+      {
+        "key": "jeonju",
+        "count": 104,
+        "provider": "jeonju"
       },
       {
         "key": "chungnam",
@@ -659,9 +1159,9 @@
         "provider": "open-law"
       },
       {
-        "key": "jeonju",
+        "key": "ekape",
         "count": 80,
-        "provider": "jeonju"
+        "provider": "ekape"
       },
       {
         "key": "kric",
@@ -677,6 +1177,11 @@
         "key": "dongjak",
         "count": 70,
         "provider": "dongjak"
+      },
+      {
+        "key": "epost",
+        "count": 69,
+        "provider": "epost"
       },
       {
         "key": "ecvam",
@@ -704,14 +1209,19 @@
         "provider": "seogwipo"
       },
       {
+        "key": "uiryeong",
+        "count": 62,
+        "provider": "uiryeong"
+      },
+      {
+        "key": "geoje",
+        "count": 60,
+        "provider": "geoje"
+      },
+      {
         "key": "lofin365",
         "count": 59,
         "provider": "lofin365"
-      },
-      {
-        "key": "epost",
-        "count": 56,
-        "provider": "epost"
       },
       {
         "key": "nfqs",
@@ -729,14 +1239,14 @@
         "provider": "kopis"
       },
       {
-        "key": "ekape",
-        "count": 49,
-        "provider": "ekape"
-      },
-      {
         "key": "keit",
         "count": 48,
         "provider": "keit"
+      },
+      {
+        "key": "sisul",
+        "count": 48,
+        "provider": "sisul"
       },
       {
         "key": "foodsafetykorea",
@@ -749,24 +1259,9 @@
         "provider": "kma-apihub"
       },
       {
-        "key": "geoje",
-        "count": 41,
-        "provider": "geoje"
-      },
-      {
         "key": "openfiscaldata",
         "count": 40,
         "provider": "openfiscaldata"
-      },
-      {
-        "key": "sisul",
-        "count": 40,
-        "provider": "sisul"
-      },
-      {
-        "key": "uiryeong",
-        "count": 40,
-        "provider": "uiryeong"
       },
       {
         "key": "nie-ecobank",
@@ -814,9 +1309,19 @@
         "provider": "anyang"
       },
       {
+        "key": "itfind",
+        "count": 26,
+        "provider": "itfind"
+      },
+      {
         "key": "tour",
         "count": 26,
         "provider": "tour"
+      },
+      {
+        "key": "ulsan",
+        "count": 26,
+        "provider": "ulsan"
       },
       {
         "key": "yuseong",
@@ -849,9 +1354,9 @@
         "provider": "mnd-open-data"
       },
       {
-        "key": "ulsan",
-        "count": 20,
-        "provider": "ulsan"
+        "key": "andong",
+        "count": 19,
+        "provider": "andong"
       },
       {
         "key": "iwest",
@@ -874,19 +1379,14 @@
         "provider": "ecos"
       },
       {
-        "key": "andong",
-        "count": 15,
-        "provider": "andong"
+        "key": "korad",
+        "count": 16,
+        "provider": "korad"
       },
       {
         "key": "its",
         "count": 15,
         "provider": "its"
-      },
-      {
-        "key": "korad",
-        "count": 15,
-        "provider": "korad"
       },
       {
         "key": "incheon",
@@ -899,14 +1399,14 @@
         "provider": "consumer"
       },
       {
-        "key": "itfind",
-        "count": 13,
-        "provider": "itfind"
-      },
-      {
         "key": "jejudatahub",
         "count": 13,
         "provider": "jejudatahub"
+      },
+      {
+        "key": "lh-ebid",
+        "count": 12,
+        "provider": "lh-ebid"
       },
       {
         "key": "utic",
@@ -922,6 +1422,11 @@
         "key": "smartfarm-korea",
         "count": 11,
         "provider": "smartfarm-korea"
+      },
+      {
+        "key": "airport",
+        "count": 10,
+        "provider": "airport"
       },
       {
         "key": "fairdata",
@@ -944,14 +1449,19 @@
         "provider": "seoul-bus"
       },
       {
+        "key": "humetro",
+        "count": 9,
+        "provider": "humetro"
+      },
+      {
+        "key": "kpx",
+        "count": 9,
+        "provider": "kpx"
+      },
+      {
         "key": "cancer",
         "count": 8,
         "provider": "cancer"
-      },
-      {
-        "key": "humetro",
-        "count": 8,
-        "provider": "humetro"
       },
       {
         "key": "milipass",
@@ -969,6 +1479,11 @@
         "provider": "safe182"
       },
       {
+        "key": "jeju",
+        "count": 7,
+        "provider": "jeju"
+      },
+      {
         "key": "sisul-www",
         "count": 7,
         "provider": "sisul-www"
@@ -977,11 +1492,6 @@
         "key": "wamis",
         "count": 7,
         "provider": "wamis"
-      },
-      {
-        "key": "airport",
-        "count": 6,
-        "provider": "airport"
       },
       {
         "key": "codil",
@@ -1009,16 +1519,6 @@
         "provider": "koagi"
       },
       {
-        "key": "kpx",
-        "count": 6,
-        "provider": "kpx"
-      },
-      {
-        "key": "lh-ebid",
-        "count": 6,
-        "provider": "lh-ebid"
-      },
-      {
         "key": "gims",
         "count": 5,
         "provider": "gims"
@@ -1032,11 +1532,6 @@
         "key": "happysd",
         "count": 4,
         "provider": "happysd"
-      },
-      {
-        "key": "jeju",
-        "count": 4,
-        "provider": "jeju"
       },
       {
         "key": "koroad",
@@ -1082,6 +1577,11 @@
         "key": "mpva-egonghun",
         "count": 2,
         "provider": "mpva-egonghun"
+      },
+      {
+        "key": "myhome",
+        "count": 2,
+        "provider": "myhome"
       },
       {
         "key": "qia",
@@ -1179,11 +1679,6 @@
         "provider": "much"
       },
       {
-        "key": "myhome",
-        "count": 1,
-        "provider": "myhome"
-      },
-      {
         "key": "naa",
         "count": 1,
         "provider": "naa"
@@ -1242,7 +1737,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 1756,
+        "count": 2320,
         "host": "apis.data.go.kr"
       },
       {
@@ -1281,6 +1776,11 @@
         "host": "www.calspia.go.kr"
       },
       {
+        "key": "openapi.q-net.or.kr",
+        "count": 151,
+        "host": "openapi.q-net.or.kr"
+      },
+      {
         "key": "data.seoul.go.kr",
         "count": 136,
         "host": "data.seoul.go.kr"
@@ -1296,9 +1796,9 @@
         "host": "plus.kipris.or.kr"
       },
       {
-        "key": "openapi.q-net.or.kr",
+        "key": "openapi.jeonju.go.kr",
         "count": 104,
-        "host": "openapi.q-net.or.kr"
+        "host": "openapi.jeonju.go.kr"
       },
       {
         "key": "www.work24.go.kr",
@@ -1316,9 +1816,9 @@
         "host": "seogu.go.kr"
       },
       {
-        "key": "openapi.jeonju.go.kr",
+        "key": "data.ekape.or.kr",
         "count": 80,
-        "host": "openapi.jeonju.go.kr"
+        "host": "data.ekape.or.kr"
       },
       {
         "key": "data.kric.go.kr",
@@ -1351,6 +1851,11 @@
         "host": "www.nongsaro.go.kr"
       },
       {
+        "key": "data.uiryeong.go.kr",
+        "count": 62,
+        "host": "data.uiryeong.go.kr"
+      },
+      {
         "key": "open.law.go.kr",
         "count": 62,
         "host": "open.law.go.kr"
@@ -1359,6 +1864,16 @@
         "key": "www.chungnam.go.kr",
         "count": 62,
         "host": "www.chungnam.go.kr"
+      },
+      {
+        "key": "c.q-net.or.kr",
+        "count": 60,
+        "host": "c.q-net.or.kr"
+      },
+      {
+        "key": "data.geoje.go.kr",
+        "count": 60,
+        "host": "data.geoje.go.kr"
       },
       {
         "key": "www.lofin365.go.kr",
@@ -1381,14 +1896,19 @@
         "host": "www.jeju.go.kr"
       },
       {
+        "key": "openapi.epost.go.kr:80",
+        "count": 53,
+        "host": "openapi.epost.go.kr:80"
+      },
+      {
         "key": "www.seogwipo.go.kr",
         "count": 51,
         "host": "www.seogwipo.go.kr"
       },
       {
-        "key": "data.ekape.or.kr",
-        "count": 49,
-        "host": "data.ekape.or.kr"
+        "key": "data.sisul.or.kr",
+        "count": 48,
+        "host": "data.sisul.or.kr"
       },
       {
         "key": "www.foodsafetykorea.go.kr",
@@ -1399,31 +1919,6 @@
         "key": "apihub.kma.go.kr",
         "count": 45,
         "host": "apihub.kma.go.kr"
-      },
-      {
-        "key": "openapi.epost.go.kr:80",
-        "count": 44,
-        "host": "openapi.epost.go.kr:80"
-      },
-      {
-        "key": "c.q-net.or.kr",
-        "count": 42,
-        "host": "c.q-net.or.kr"
-      },
-      {
-        "key": "data.geoje.go.kr",
-        "count": 41,
-        "host": "data.geoje.go.kr"
-      },
-      {
-        "key": "data.sisul.or.kr",
-        "count": 40,
-        "host": "data.sisul.or.kr"
-      },
-      {
-        "key": "data.uiryeong.go.kr",
-        "count": 40,
-        "host": "data.uiryeong.go.kr"
       },
       {
         "key": "www.nabis.go.kr",
@@ -1486,6 +1981,16 @@
         "host": "openapi.seoul.go.kr:8088"
       },
       {
+        "key": "open.itfind.or.kr",
+        "count": 26,
+        "host": "open.itfind.or.kr"
+      },
+      {
+        "key": "openapi.its.ulsan.kr",
+        "count": 26,
+        "host": "openapi.its.ulsan.kr"
+      },
+      {
         "key": "www.anyang.go.kr",
         "count": 26,
         "host": "www.anyang.go.kr"
@@ -1516,9 +2021,9 @@
         "host": "opendata.mnd.go.kr"
       },
       {
-        "key": "openapi.its.ulsan.kr",
-        "count": 20,
-        "host": "openapi.its.ulsan.kr"
+        "key": "www.andong.go.kr",
+        "count": 19,
+        "host": "www.andong.go.kr"
       },
       {
         "key": "www.xn--6-6v7en42by2es7i6jc.com",
@@ -1546,29 +2051,24 @@
         "host": "ecos.bok.or.kr"
       },
       {
+        "key": "openapi.epost.go.kr",
+        "count": 16,
+        "host": "openapi.epost.go.kr"
+      },
+      {
         "key": "scienceon.kisti.re.kr",
         "count": 16,
         "host": "scienceon.kisti.re.kr"
       },
       {
-        "key": "www.andong.go.kr",
-        "count": 15,
-        "host": "www.andong.go.kr"
-      },
-      {
         "key": "www.korad.or.kr",
-        "count": 15,
+        "count": 16,
         "host": "www.korad.or.kr"
       },
       {
         "key": "www.its.go.kr",
         "count": 14,
         "host": "www.its.go.kr"
-      },
-      {
-        "key": "open.itfind.or.kr",
-        "count": 13,
-        "host": "open.itfind.or.kr"
       },
       {
         "key": "www.consumer.go.kr",
@@ -1586,9 +2086,14 @@
         "host": "ifac.or.kr"
       },
       {
-        "key": "openapi.epost.go.kr",
+        "key": "openapi.coast.kr",
         "count": 12,
-        "host": "openapi.epost.go.kr"
+        "host": "openapi.coast.kr"
+      },
+      {
+        "key": "openapi.ebid.lh.or.kr",
+        "count": 12,
+        "host": "openapi.ebid.lh.or.kr"
       },
       {
         "key": "www.utic.go.kr",
@@ -1604,6 +2109,11 @@
         "key": "www.lawmaking.go.kr",
         "count": 11,
         "host": "www.lawmaking.go.kr"
+      },
+      {
+        "key": "openapi.airport.co.kr",
+        "count": 10,
+        "host": "openapi.airport.co.kr"
       },
       {
         "key": "ws.bus.go.kr",
@@ -1636,6 +2146,16 @@
         "host": "data.floodmap.go.kr"
       },
       {
+        "key": "data.humetro.busan.kr",
+        "count": 9,
+        "host": "data.humetro.busan.kr"
+      },
+      {
+        "key": "openapi.kpx.or.kr",
+        "count": 9,
+        "host": "openapi.kpx.or.kr"
+      },
+      {
         "key": "thegoodnight.daegu.go.kr",
         "count": 9,
         "host": "thegoodnight.daegu.go.kr"
@@ -1644,11 +2164,6 @@
         "key": "cancer.go.kr",
         "count": 8,
         "host": "cancer.go.kr"
-      },
-      {
-        "key": "data.humetro.busan.kr",
-        "count": 8,
-        "host": "data.humetro.busan.kr"
       },
       {
         "key": "openapi.pqis.go.kr",
@@ -1669,6 +2184,11 @@
         "key": "www.sobujang.net",
         "count": 8,
         "host": "www.sobujang.net"
+      },
+      {
+        "key": "data.jeju.go.kr",
+        "count": 7,
+        "host": "data.jeju.go.kr"
       },
       {
         "key": "localfood.chungnam.go.kr",
@@ -1711,24 +2231,9 @@
         "host": "folkency.nfm.go.kr"
       },
       {
-        "key": "openapi.airport.co.kr",
+        "key": "its.gyeongju.go.kr:81",
         "count": 6,
-        "host": "openapi.airport.co.kr"
-      },
-      {
-        "key": "openapi.coast.kr",
-        "count": 6,
-        "host": "openapi.coast.kr"
-      },
-      {
-        "key": "openapi.ebid.lh.or.kr",
-        "count": 6,
-        "host": "openapi.ebid.lh.or.kr"
-      },
-      {
-        "key": "openapi.kpx.or.kr",
-        "count": 6,
-        "host": "openapi.kpx.or.kr"
+        "host": "its.gyeongju.go.kr:81"
       },
       {
         "key": "seedpedia.koagi.or.kr",
@@ -1781,11 +2286,6 @@
         "host": "car.daegu.go.kr"
       },
       {
-        "key": "data.jeju.go.kr",
-        "count": 4,
-        "host": "data.jeju.go.kr"
-      },
-      {
         "key": "openapi.work.go.kr",
         "count": 4,
         "host": "openapi.work.go.kr"
@@ -1794,6 +2294,11 @@
         "key": "opendata.koroad.or.kr",
         "count": 4,
         "host": "opendata.koroad.or.kr"
+      },
+      {
+        "key": "www.cid.or.kr",
+        "count": 4,
+        "host": "www.cid.or.kr"
       },
       {
         "key": "www.happysd.or.kr",
@@ -1816,11 +2321,6 @@
         "host": "franchise.ftc.go.kr"
       },
       {
-        "key": "its.gyeongju.go.kr:81",
-        "count": 3,
-        "host": "its.gyeongju.go.kr:81"
-      },
-      {
         "key": "oneclick.law.go.kr",
         "count": 3,
         "host": "oneclick.law.go.kr"
@@ -1841,6 +2341,16 @@
         "host": "www.gimhae.go.kr"
       },
       {
+        "key": "data.myhome.go.kr:443",
+        "count": 2,
+        "host": "data.myhome.go.kr:443"
+      },
+      {
+        "key": "data.wanju.go.kr",
+        "count": 2,
+        "host": "data.wanju.go.kr"
+      },
+      {
         "key": "e-gonghun.mpva.go.kr",
         "count": 2,
         "host": "e-gonghun.mpva.go.kr"
@@ -1854,11 +2364,6 @@
         "key": "unipass.customs.go.kr",
         "count": 2,
         "host": "unipass.customs.go.kr"
-      },
-      {
-        "key": "www.cid.or.kr",
-        "count": 2,
-        "host": "www.cid.or.kr"
       },
       {
         "key": "www.hrfco.go.kr",
@@ -1909,16 +2414,6 @@
         "key": "car.go.kr",
         "count": 1,
         "host": "car.go.kr"
-      },
-      {
-        "key": "data.myhome.go.kr:443",
-        "count": 1,
-        "host": "data.myhome.go.kr:443"
-      },
-      {
-        "key": "data.wanju.go.kr",
-        "count": 1,
-        "host": "data.wanju.go.kr"
       },
       {
         "key": "happy.daegu.go.kr",
@@ -2104,12 +2599,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5311,
+        "count": 5547,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 1756,
+        "count": 2320,
         "kind": "data_go_kr_gateway"
       },
       {
