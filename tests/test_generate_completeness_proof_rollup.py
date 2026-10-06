@@ -845,7 +845,6 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 raise ValueError("shallow source boundary metadata is unavailable") from error
             if not source_shallow_bytes:
                 raise ValueError("shallow source boundary metadata is empty")
-
         subprocess.run(
             ["git", "clone", "--quiet", "--shared", "--no-checkout", str(source_root), str(repository)],
             check=True,
@@ -1146,6 +1145,114 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(checked_out_tree, source_tree)
         return trusted_main, source_tree
 
+    def _read_native_shallow_boundaries(
+        self, source_root: pathlib.Path,
+    ) -> tuple[str, pathlib.Path, bytes | None]:
+        """Read Git's own shallow state and exact common boundary bytes."""
+        source_root = source_root.resolve()
+        source_shallow_state = subprocess.check_output(
+            ["git", "rev-parse", "--is-shallow-repository"],
+            cwd=source_root,
+            text=True,
+        ).strip()
+        if source_shallow_state not in {"true", "false"}:
+            raise ValueError("source shallow state is not a recognized Git value")
+        source_shallow_path = pathlib.Path(subprocess.check_output(
+            ["git", "rev-parse", "--path-format=absolute", "--git-path", "shallow"],
+            cwd=source_root,
+            text=True,
+        ).strip())
+        if not source_shallow_path.is_absolute():
+            raise ValueError("source shallow boundary path is not absolute")
+        source_shallow_bytes: bytes | None = None
+        if source_shallow_state == "true":
+            try:
+                source_shallow_bytes = source_shallow_path.read_bytes()
+            except OSError as error:
+                raise ValueError("shallow source boundary metadata is unavailable") from error
+            if not source_shallow_bytes:
+                raise ValueError("shallow source boundary metadata is empty")
+            # Let Git parse both the native boundary syntax and the selected
+            # ref graph before these bytes are trusted by another repository.
+            subprocess.run(
+                ["git", "rev-list", "--all", "--parents"],
+                cwd=source_root,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        return source_shallow_state, source_shallow_path, source_shallow_bytes
+
+    def _install_borrowed_origin_shallow_boundaries(
+        self,
+        source_root: pathlib.Path,
+        origin_git_dir: pathlib.Path,
+        *,
+        source_shallow_state: str,
+        source_shallow_bytes: bytes | None,
+    ) -> tuple[pathlib.Path, bytes | None]:
+        """Preserve exact boundaries in a fresh bare origin that borrows source objects."""
+        source_root = source_root.resolve()
+        origin_git_dir = origin_git_dir.resolve()
+        destination_shallow_path = pathlib.Path(subprocess.check_output(
+            [
+                "git", "--git-dir", str(origin_git_dir), "rev-parse",
+                "--path-format=absolute", "--git-path", "shallow",
+            ],
+            cwd=source_root,
+            text=True,
+        ).strip())
+        if not destination_shallow_path.is_absolute():
+            raise ValueError("bare-origin shallow boundary path is not absolute")
+
+        if source_shallow_state == "false":
+            destination_state = subprocess.check_output(
+                ["git", "--git-dir", str(origin_git_dir), "rev-parse", "--is-shallow-repository"],
+                cwd=source_root,
+                text=True,
+            ).strip()
+            if destination_state != "false" or destination_shallow_path.exists():
+                raise ValueError("full-history source produced a shallow bare origin")
+            if source_shallow_bytes is not None:
+                raise ValueError("full-history source unexpectedly supplied shallow boundary bytes")
+            return destination_shallow_path, None
+
+        if source_shallow_state != "true":
+            raise ValueError("source shallow state is not a recognized Git value")
+        if not source_shallow_bytes:
+            raise ValueError("shallow source boundary metadata is empty")
+
+        try:
+            destination_bytes = destination_shallow_path.read_bytes()
+        except FileNotFoundError:
+            destination_bytes = None
+        except OSError as error:
+            raise ValueError("bare-origin shallow boundary metadata is unavailable") from error
+
+        if destination_bytes is not None:
+            if not destination_bytes:
+                raise ValueError("bare-origin shallow boundary metadata is empty")
+            if destination_bytes != source_shallow_bytes:
+                raise ValueError("bare-origin shallow boundary metadata conflicts with source")
+        else:
+            with destination_shallow_path.open("xb") as stream:
+                stream.write(source_shallow_bytes)
+
+        destination_state = subprocess.check_output(
+            ["git", "--git-dir", str(origin_git_dir), "rev-parse", "--is-shallow-repository"],
+            cwd=source_root,
+            text=True,
+        ).strip()
+        if destination_state != "true":
+            raise ValueError("bare origin did not accept source shallow boundaries")
+        try:
+            copied_bytes = destination_shallow_path.read_bytes()
+        except OSError as error:
+            raise ValueError("bare-origin shallow boundary metadata is unavailable after copy") from error
+        if copied_bytes != source_shallow_bytes:
+            raise ValueError("bare-origin shallow boundary metadata differs from source")
+        return destination_shallow_path, copied_bytes
+
     def _make_genuine_shallow_local_source(
         self, directory: pathlib.Path, *, source_root: pathlib.Path = ROOT,
     ) -> tuple[pathlib.Path, str, str, str]:
@@ -1163,10 +1270,18 @@ class CompletenessProofRollupTest(unittest.TestCase):
             ["git", "rev-parse", "--verify", f"{trusted_main}^{{tree}}"], cwd=source_root, text=True,
         ).strip()
         source_object_dir = pathlib.Path(subprocess.check_output(
-            ["git", "rev-parse", "--git-path", "objects"], cwd=source_root, text=True,
-        ).strip())
+            ["git", "rev-parse", "--path-format=absolute", "--git-path", "objects"],
+            cwd=source_root,
+            text=True,
+        ).strip()).resolve()
         if not source_object_dir.is_absolute():
-            source_object_dir = (source_root / source_object_dir).resolve()
+            raise ValueError("source object directory path is not absolute")
+        source_shallow_state, source_shallow_path, source_shallow_bytes = (
+            self._read_native_shallow_boundaries(source_root)
+        )
+        source_shallow_file_before = (
+            source_shallow_path.read_bytes() if source_shallow_path.exists() else None
+        )
 
         remote = directory / "shallow-source-origin.git"
         subprocess.run(
@@ -1175,6 +1290,12 @@ class CompletenessProofRollupTest(unittest.TestCase):
         alternate = remote / "objects/info/alternates"
         alternate.parent.mkdir(parents=True, exist_ok=True)
         alternate.write_text(str(source_object_dir) + "\n", encoding="utf-8")
+        destination_shallow_path, _copied_shallow_bytes = self._install_borrowed_origin_shallow_boundaries(
+            source_root,
+            remote,
+            source_shallow_state=source_shallow_state,
+            source_shallow_bytes=source_shallow_bytes,
+        )
         subprocess.run(
             ["git", "--git-dir", str(remote), "update-ref", "refs/heads/main", trusted_main], check=True,
         )
@@ -1232,6 +1353,28 @@ class CompletenessProofRollupTest(unittest.TestCase):
             subprocess.check_output(["git", "rev-parse", "--is-shallow-repository"], cwd=checkout, text=True).strip(),
             "true",
         )
+        self.assertEqual(
+            subprocess.check_output(["git", "rev-parse", "HEAD^{commit}"], cwd=source_root, text=True).strip(),
+            pr_head,
+        )
+        self.assertEqual(
+            subprocess.check_output(
+                ["git", "rev-parse", "refs/remotes/origin/main^{commit}"], cwd=source_root, text=True,
+            ).strip(),
+            trusted_main,
+        )
+        self.assertEqual(
+            subprocess.check_output(
+                ["git", "rev-parse", "--is-shallow-repository"], cwd=source_root, text=True,
+            ).strip(),
+            source_shallow_state,
+        )
+        source_shallow_file_after = source_shallow_path.read_bytes() if source_shallow_path.exists() else None
+        self.assertEqual(source_shallow_file_after, source_shallow_file_before)
+        if source_shallow_state == "true":
+            self.assertEqual(destination_shallow_path.read_bytes(), source_shallow_bytes)
+        else:
+            self.assertFalse(destination_shallow_path.exists())
 
         # Verify Release materializes this manifest-bound LFS object before
         # running the feature suite. Reuse those local bytes without a pull.
@@ -1899,6 +2042,156 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 )
             self.assertFalse((root / "wrong-main-checkout").exists())
 
+    def test_borrowed_origin_shallow_boundary_guards_fail_before_transport(self) -> None:
+        """Invalid borrowed-origin boundaries stop before refs or transport."""
+        def git(
+            args: list[str], *, cwd: pathlib.Path | None = None, check: bool = True,
+        ) -> subprocess.CompletedProcess[str]:
+            result = subprocess.run(
+                ["git", *args], cwd=cwd, check=False, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            )
+            if check and result.returncode:
+                raise AssertionError(f"git {' '.join(args)} failed: {result.stderr[-2000:]}")
+            return result
+
+        def output(args: list[str], *, cwd: pathlib.Path) -> str:
+            return git(args, cwd=cwd).stdout.strip()
+
+        def assert_no_transport(directory: pathlib.Path, *, origin_exists: bool) -> None:
+            origin = directory / "shallow-source-origin.git"
+            self.assertEqual(origin.exists(), origin_exists)
+            self.assertFalse((directory / "shallow-pr-checkout").exists())
+            if origin_exists:
+                refs = git(["--git-dir", str(origin), "show-ref"], cwd=directory, check=False)
+                self.assertEqual(refs.returncode, 1, refs.stderr)
+                self.assertEqual(refs.stdout, "")
+
+        with tempfile.TemporaryDirectory(prefix="completeness-borrowed-origin-guards-") as name:
+            root = pathlib.Path(name)
+            remote = root / "origin.git"
+            seed = root / "seed"
+            source = root / "source"
+            git(["init", "--quiet", "--bare", "--initial-branch=main", str(remote)])
+            git(["init", "--quiet", "--initial-branch=main", str(seed)])
+            for key, value in (
+                ("user.name", "Completeness borrowed-origin guard test"),
+                ("user.email", "completeness-borrowed-origin@example.invalid"),
+                ("commit.gpgsign", "false"),
+            ):
+                git(["config", key, value], cwd=seed)
+            git(["remote", "add", "origin", str(remote)], cwd=seed)
+
+            (seed / "main.txt").write_text("trusted main\n", encoding="utf-8")
+            git(["add", "main.txt"], cwd=seed)
+            git(["commit", "--quiet", "-m", "trusted main"], cwd=seed)
+            trusted_main = output(["rev-parse", "HEAD^{commit}"], cwd=seed)
+            git(["push", "--quiet", "origin", "main"], cwd=seed)
+
+            git(["switch", "--quiet", "--orphan", "fixture-pr"], cwd=seed)
+            (seed / "fixture-pr.txt").write_text("fixture PR\n", encoding="utf-8")
+            git(["add", "fixture-pr.txt"], cwd=seed)
+            git(["commit", "--quiet", "-m", "fixture PR"], cwd=seed)
+            git(["push", "--quiet", "origin", "fixture-pr"], cwd=seed)
+
+            git([
+                "clone", "--quiet", "--no-tags", "--depth=1", "--branch", "fixture-pr",
+                f"file://{remote}", str(source),
+            ])
+            git([
+                "fetch", "--quiet", "--no-tags", "--depth=64", "origin",
+                "+refs/heads/main:refs/remotes/origin/main",
+            ], cwd=source)
+            source_shallow_path = pathlib.Path(output(
+                ["rev-parse", "--path-format=absolute", "--git-path", "shallow"], cwd=source,
+            ))
+            source_shallow_bytes = source_shallow_path.read_bytes()
+            self.assertTrue(source_shallow_bytes)
+            self.assertEqual(output(["rev-parse", "--is-shallow-repository"], cwd=source), "true")
+            source_head = output(["rev-parse", "HEAD^{commit}"], cwd=source)
+            source_main = output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=source)
+            source_tree = output(["rev-parse", f"{source_main}^{{tree}}"], cwd=source)
+            source_refs = output(["show-ref"], cwd=source)
+            self.assertEqual(source_main, trusted_main)
+            self.assertNotEqual(source_head, source_main)
+
+            def assert_source_unchanged() -> None:
+                self.assertEqual(source_shallow_path.read_bytes(), source_shallow_bytes)
+                self.assertEqual(output(["rev-parse", "HEAD^{commit}"], cwd=source), source_head)
+                self.assertEqual(output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=source), source_main)
+                self.assertEqual(output(["rev-parse", f"{source_main}^{{tree}}"], cwd=source), source_tree)
+                self.assertEqual(output(["show-ref"], cwd=source), source_refs)
+
+            malformed_directory = root / "malformed-source"
+            try:
+                source_shallow_path.write_bytes(b"not-a-git-object-id\n")
+                with self.assertRaises(subprocess.CalledProcessError):
+                    self._read_native_shallow_boundaries(source)
+                with self.assertRaises(subprocess.CalledProcessError):
+                    self._make_genuine_shallow_local_source(malformed_directory, source_root=source)
+                assert_no_transport(malformed_directory, origin_exists=False)
+            finally:
+                source_shallow_path.write_bytes(source_shallow_bytes)
+            assert_source_unchanged()
+
+            unavailable_directory = root / "unavailable-source"
+            native_read_bytes = pathlib.Path.read_bytes
+
+            def deny_source_boundary_bytes(path: pathlib.Path) -> bytes:
+                if path == source_shallow_path:
+                    raise PermissionError("instrumented unavailable native shallow metadata")
+                return native_read_bytes(path)
+
+            # Permission bits are ineffective under an elevated test runner;
+            # instrument only the native boundary read and leave Git commands
+            # and all transport operations unmocked.
+            with mock.patch.object(pathlib.Path, "read_bytes", deny_source_boundary_bytes):
+                with self.assertRaisesRegex(ValueError, "shallow source boundary metadata is unavailable"):
+                    self._read_native_shallow_boundaries(source)
+                with self.assertRaisesRegex(ValueError, "shallow source boundary metadata is unavailable"):
+                    self._make_genuine_shallow_local_source(unavailable_directory, source_root=source)
+                assert_no_transport(unavailable_directory, origin_exists=False)
+            assert_source_unchanged()
+
+            # Git does not report an empty shallow file as a shallow
+            # repository, so instrument the declared-shallow seam to exercise
+            # the impossible race/guard state without mocking transport.
+            empty_source_directory = root / "instrumented-empty-source"
+            with mock.patch.object(
+                self,
+                "_read_native_shallow_boundaries",
+                return_value=("true", source_shallow_path, b""),
+            ):
+                with self.assertRaisesRegex(ValueError, "shallow source boundary metadata is empty"):
+                    self._make_genuine_shallow_local_source(empty_source_directory, source_root=source)
+            assert_no_transport(empty_source_directory, origin_exists=True)
+            assert_source_unchanged()
+
+            for label, destination_bytes, pattern in (
+                ("empty-destination", b"", "bare-origin shallow boundary metadata is empty"),
+                (
+                    "conflicting-destination",
+                    trusted_main.encode("ascii") + b"\n",
+                    "bare-origin shallow boundary metadata conflicts with source",
+                ),
+            ):
+                with self.subTest(destination_guard=label):
+                    directory = root / label
+                    origin = directory / "shallow-source-origin.git"
+                    origin.mkdir(parents=True)
+                    git(["init", "--quiet", "--bare", "--initial-branch=main", str(origin)])
+                    origin_shallow = pathlib.Path(output([
+                        "--git-dir", str(origin), "rev-parse", "--path-format=absolute",
+                        "--git-path", "shallow",
+                    ], cwd=directory))
+                    self.assertNotEqual(destination_bytes, source_shallow_bytes)
+                    origin_shallow.write_bytes(destination_bytes)
+                    with self.assertRaisesRegex(ValueError, pattern):
+                        self._make_genuine_shallow_local_source(directory, source_root=source)
+                    self.assertEqual(origin_shallow.read_bytes(), destination_bytes)
+                    assert_no_transport(directory, origin_exists=True)
+                    assert_source_unchanged()
+
     def test_shared_clone_preserves_shallow_boundary_for_linked_worktree(self) -> None:
         """A shared clone retains the linked source's authentic shallow boundary."""
         def git(args: list[str], *, cwd: pathlib.Path | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -1991,6 +2284,53 @@ class CompletenessProofRollupTest(unittest.TestCase):
             old_destination = root / "old-shared-clone"
             destination = root / "verified-main-clone"
 
+            def assert_borrowed_origin_round_trip(source_root: pathlib.Path, label: str) -> None:
+                source_head_before = output(["rev-parse", "HEAD^{commit}"], cwd=source_root)
+                source_head_tree_before = output(["rev-parse", "HEAD^{tree}"], cwd=source_root)
+                source_main_before = output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=source_root)
+                source_main_tree_before = output(["rev-parse", f"{source_main_before}^{{tree}}"], cwd=source_root)
+                source_state, source_boundary_path, source_boundary_bytes = (
+                    self._read_native_shallow_boundaries(source_root)
+                )
+                self.assertEqual(source_state, "true")
+                self.assertIsInstance(source_boundary_bytes, bytes)
+                source_refs_before = output(["show-ref"], cwd=source_root)
+                self.assertGreater(
+                    (source_root / "data/data-go-kr.registry.json").stat().st_size, 1024,
+                )
+
+                directory = root / f"{label}-bare-origin-round-trip"
+                directory.mkdir()
+                checkout, pr_head, trusted_main, trusted_tree = self._make_genuine_shallow_local_source(
+                    directory, source_root=source_root,
+                )
+                bare_origin = directory / "shallow-source-origin.git"
+                origin_shallow = bare_origin / "shallow"
+                self.assertEqual(origin_shallow.read_bytes(), source_boundary_bytes)
+                self.assertEqual(
+                    output(["--git-dir", str(bare_origin), "rev-parse", "--is-shallow-repository"], cwd=source_root),
+                    "true",
+                )
+                self.assertEqual(pr_head, source_head_before)
+                self.assertEqual(trusted_main, source_main_before)
+                self.assertEqual(trusted_tree, source_main_tree_before)
+                self.assertEqual(output(["rev-parse", "HEAD^{commit}"], cwd=checkout), pr_head)
+                self.assertEqual(output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=checkout), trusted_main)
+                self.assertEqual(output(["rev-parse", "HEAD^{tree}"], cwd=checkout), source_head_tree_before)
+                self.assertEqual(
+                    output(["rev-parse", "refs/remotes/origin/main^{tree}"], cwd=checkout),
+                    trusted_tree,
+                )
+                self.assertEqual(output(["rev-parse", "--is-shallow-repository"], cwd=checkout), "true")
+                self.assertEqual(git(["rev-list", "--all", "--parents"], cwd=checkout, check=False).returncode, 0)
+                self.assertEqual(source_boundary_path.read_bytes(), source_boundary_bytes)
+                self.assertEqual(output(["rev-parse", "HEAD^{commit}"], cwd=source_root), source_head_before)
+                self.assertEqual(
+                    output(["rev-parse", "refs/remotes/origin/main^{commit}"], cwd=source_root),
+                    source_main_before,
+                )
+                self.assertEqual(output(["show-ref"], cwd=source_root), source_refs_before)
+
             git(["init", "--quiet", "--bare", "--initial-branch=main", str(remote)])
             git(["init", "--quiet", "--initial-branch=main", str(seed)])
             for key, value in (
@@ -2014,7 +2354,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
 
             git(["switch", "--quiet", "--orphan", "source-history"], cwd=seed)
             (seed / "missing-parent.txt").write_text("omitted by the shallow boundary\n", encoding="utf-8")
-            git(["add", "missing-parent.txt"], cwd=seed)
+            fixture_registry = seed / "data/data-go-kr.registry.json"
+            fixture_registry.parent.mkdir(parents=True)
+            fixture_registry.write_text(json.dumps({"fixture": "x" * 2048}) + "\n", encoding="utf-8")
+            git(["add", "missing-parent.txt", "data/data-go-kr.registry.json"], cwd=seed)
             git(["commit", "--quiet", "-m", "shallow source parent"], cwd=seed)
             missing_parent = output(["rev-parse", "HEAD^{commit}"], cwd=seed)
             (seed / "boundary.txt").write_text("native boundary\n", encoding="utf-8")
@@ -2039,6 +2382,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             source_shallow_lines = source_shallow_bytes.decode("ascii").splitlines()
             self.assertEqual(len(source_shallow_lines), 2)
             self.assertIn(boundary_commit, source_shallow_lines)
+            assert_borrowed_origin_round_trip(source, "ordinary-source")
 
             standalone_destination = root / "native-standalone-clone"
             standalone_result, standalone_fetches, standalone_error = invoke_and_capture_fetch(
@@ -2090,6 +2434,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             source_common_dir = pathlib.Path(output(
                 ["rev-parse", "--path-format=absolute", "--git-common-dir"], cwd=linked,
             ))
+            assert_borrowed_origin_round_trip(linked, "linked-source")
 
             git(["clone", "--quiet", "--shared", "--no-checkout", str(linked), str(old_destination)])
             old_shallow_path = pathlib.Path(output(
