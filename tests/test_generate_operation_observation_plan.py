@@ -38,8 +38,8 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         summary = index["summary"]
         self.assertEqual(summary["known_operations"], 12666)
         self.assertEqual(summary["known_operations"], sum(scope["registered_operations"] for scope in index["source_scopes"]))
-        self.assertEqual(summary["request_plans_complete"], 1)
-        self.assertEqual(summary["request_plans_incomplete"], 12665)
+        self.assertEqual(summary["request_plans_complete"], 15)
+        self.assertEqual(summary["request_plans_incomplete"], 12651)
         self.assertEqual(summary["runtime_bindings_bound"], 0)
         self.assertEqual(summary["runtime_bindings_unbound"], 12666)
         self.assertEqual(summary["admitted"], 0)
@@ -195,7 +195,7 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             ("15001808", "16811", "655adc96663128905bf0f778af0b4e00311abce240bb5d7d09f0a6a40ce81e03"),
         }
         document_inputs = index["generation_inputs"]["document_evidence"]
-        self.assertEqual(len(document_inputs), 105)
+        self.assertEqual(len(document_inputs), 171)
         self.assertTrue(any(item["path"].endswith("15001697-24807.json") for item in document_inputs))
         self.assertTrue(any(item["path"].endswith("15001808-16811.json") for item in document_inputs))
         self.assertTrue(all(item["bytes"] > 0 and len(item["sha256"]) == 64 for item in document_inputs))
@@ -295,6 +295,46 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         self.assertEqual(sidecar["effect"]["status"], "unknown")
         self.assertIsNone(sidecar["effect"]["classification"])
         self.assertEqual(sidecar["response_contract"]["success_branches"][0]["schema_shape"]["status"], "incomplete")
+
+        # This profile must be applied through its exact method, effect, auth,
+        # and optional-input gates across the full denominator, not via a
+        # hand-maintained operation allowlist.
+        expected_profile_ids = {
+            "0004cea4696c10954bc7db92690058078e6dd3a7ffddd92c61e7f4061e83ef0a",
+            "002fc82b62ee5ef4c7bee1d5adabaddfc8ee3a0bc177093430e860ee588cae0f",
+            "0056feae6364d6c9ac1847df845f3ac914038945f596c6782c011c1b99543ea7",
+            "00d3c1379f31537f7b2fdc5e9532c7a80b2d372afadc2c2efe928f72926e7faa",
+            "01b21791ff8f125fc023c74d53a27f8e0105d98c215bcf5675983090dd96db4e",
+            "0209e26aca2704f993251f3798606a9bf167c07849efc56e7ec490a35f5d2700",
+            "0294826332c0b8bad67b975db24d721753d1e375f7396d1b28a86818b1fcdc04",
+            "02e2c621078d023e747971cac1ed800e169d056c1c74a8e5392a95249b7170f7",
+            "045a909c56d3852db8198cf6196d2f89b7672bb8f1871b173b3071108f79dc92",
+            "0461acf23da58c91d4f278b4285d058b8671da4f56809f9a854320aa0dfe2c25",
+            "0465843e13ccd0ac0a809aca5c23ee40d1f0c6504902ca966e65ec7bddce1fe1",
+            "04d1170f65e3e7f6f36ba0e84490f9825ba8ee51f543fb48734142d6f0c858dc",
+            "05192c4ae28526fa5472ae7326785dfbd0c2ad49b77e951607562c9fa9af6e33",
+            "0527dbed99c86d1a86ab5707a2f90706408841ac854e16ece3067236df4ebb3f",
+        }
+        profile_records = {
+            row["operation_identity"]["operation_id"]: row
+            for row in records
+            if row["request_plan"]["status"] == "complete"
+            and row["operation_identity"]["operation_id"] != operation_id
+        }
+        self.assertEqual(set(profile_records), expected_profile_ids)
+        for profiled_id, profiled_record in profile_records.items():
+            self.assertEqual(profiled_record["runtime_binding"]["status"], "unbound", profiled_id)
+            self.assertEqual(profiled_record["admission"]["status"], "not_admitted", profiled_id)
+            profiled_contract = profiled_record["request_plan"]["request_contract"]
+            self.assertEqual(profiled_contract["response_assertion"]["kind"], "observation_only", profiled_id)
+            self.assertEqual(profiled_contract["response_assertion"]["empty_result_semantics"], "not_applicable", profiled_id)
+            self.assertEqual([item["name"] for item in profiled_contract["parameters"]], ["serviceKey"], profiled_id)
+            self.assertEqual(profiled_contract["parameters"][0]["value_strategy"]["kind"], "credential_reference", profiled_id)
+            self.assertEqual(profiled_contract["limits"]["request_budget"], 1, profiled_id)
+            assertion_path = f"reports/operation-response-assertions/{profiled_id}.json"
+            assertion_artifact = json.loads(outputs[assertion_path])
+            self.assertEqual(assertion_artifact["assertion"], {"mode": "observation_only"}, profiled_id)
+            self.assertEqual(assertion_artifact["operation_identity"]["operation_id"], profiled_id)
         self.assertEqual(index["summary"]["admitted"], 0)
 
     def test_v2_normalizer_preserves_unknown_collection_and_separates_http_error_branches(self):
@@ -328,12 +368,12 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         evidence_schema = ROOT / "schemas/datapan.operation-document-evidence.v1.schema.json"
         self.assertEqual(
             self.compiler.sha256(SCHEMA_PATH.read_bytes()),
-            "f56ec01a26662e05092118497bdc4d1c24612c35db870358ffb2058e9127454f",
+            "cafa93014d7a32ef072f74df1a730f681e5b206440e4a83e9cdf426f6686e162",
         )
         policy_schema = ROOT / "schemas/datapan.operation-observation-policy.v1.schema.json"
         self.assertEqual(
             self.compiler.sha256(policy_schema.read_bytes()),
-            "16fa872c0e7d598e55d81814867566576f1962479627ac43eebd66d1d2a62d0f",
+            "acd9e80d3f41e4a0f16b010975fc716bf1ead5c5a3b128c12d03dd51b025f31d",
         )
         self.assertEqual(
             self.compiler.sha256(evidence_schema.read_bytes()),
@@ -428,6 +468,61 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
                 current.write_text(subprocess.run(
                     ["git", "-C", str(root), "show", f"{revision}:{relative}"], check=True, capture_output=True
                 ).stdout.decode("utf-8"), encoding="utf-8")
+
+    def test_source_revision_ancestor_check_works_after_bounded_shallow_checkout_deepen(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            origin = root / "origin"
+            bare = root / "origin.git"
+            checkout = root / "ci-checkout"
+            origin.mkdir()
+            paths = {
+                "scripts/generator.py": "pinned generator\n",
+                "schemas/datapan.operation-observation-plan.v1.schema.json": "pinned schema\n",
+                "manifest.json": "pinned manifest\n",
+                "denominators/operations.json": "pinned denominator\n",
+                "policy/legacy.json": "pinned policy\n",
+                "data/provider-index.json": "pinned provider index\n",
+            }
+            for relative, value in paths.items():
+                path = origin / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(value, encoding="utf-8")
+            subprocess.run(["git", "-C", str(origin), "init", "-q", "--initial-branch=main"], check=True)
+            subprocess.run(["git", "-C", str(origin), "config", "user.email", "test@example.invalid"], check=True)
+            subprocess.run(["git", "-C", str(origin), "config", "user.name", "Test"], check=True)
+
+            def commit(message: str) -> str:
+                subprocess.run(["git", "-C", str(origin), "add", "."], check=True)
+                subprocess.run(["git", "-C", str(origin), "commit", "-qm", message], check=True)
+                return subprocess.run(["git", "-C", str(origin), "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
+
+            source_revision = commit("pinned operation-plan source")
+            for commit_index in range(5):
+                (origin / "progress.txt").write_text(f"release commit {commit_index}\n", encoding="utf-8")
+                release_head = commit(f"release update {commit_index}")
+            subprocess.run(["git", "clone", "-q", "--bare", str(origin), str(bare)], check=True)
+            subprocess.run(["git", "clone", "-q", "--depth=1", "--branch", "main", f"file://{bare}", str(checkout)], check=True)
+            subprocess.run(["git", "-C", str(checkout), "fetch", "--no-tags", "--depth=1", "origin", source_revision], check=True)
+
+            by_path = {relative: {"path": relative} for relative in paths}
+            index = {
+                "registry_revision": source_revision,
+                "generation_inputs": {
+                    "generator_path": "scripts/generator.py",
+                    "operation_manifest": by_path["manifest.json"],
+                    "operation_denominators": [by_path["denominators/operations.json"]],
+                    "legacy_policy": by_path["policy/legacy.json"],
+                    "provider_index": by_path["data/provider-index.json"],
+                    "document_evidence": [],
+                },
+                "source_scopes": [{"source_artifacts": []}],
+            }
+            with self.assertRaisesRegex(self.compiler.PlanError, "not an ancestor"):
+                self.compiler.verify_source_revision(index, checkout)
+
+            subprocess.run(["git", "-C", str(checkout), "fetch", "--no-tags", "--depth=128", "origin", release_head], check=True)
+            self.compiler.verify_source_revision(index, checkout)
 
     def test_partial_source_denominator_must_match_profile_and_candidate_ids(self):
         profile = {"source_id": "ecos", "provider": "ECOS", "adapter": {"name": "ecos", "status": "registered"}}
@@ -598,13 +693,28 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         for path in shard_paths:
             self.assertEqual(artifact_paths[path]["kind"], "operation_observation_plan_shard")
             self.assertEqual(artifact_paths[path]["schema"], self.schema["$id"])
-        evidence_schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v1.schema.json").read_text(encoding="utf-8"))
+        index = json.loads((ROOT / index_path).read_text(encoding="utf-8"))
+        indexed_document_artifacts = {row["path"] for row in index["generation_inputs"]["document_evidence"]}
+        indexed_document_artifacts.update(
+            ref["path"]
+            for scope in index["source_scopes"]
+            for ref in scope["source_artifacts"]
+            if ref["path"].startswith("reports/operation-document-evidence/")
+            and artifact_paths.get(ref["path"], {}).get("kind") == "operation_document_evidence"
+        )
         self.assertEqual(
             {path for path, row in artifact_paths.items() if row["kind"] == "operation_document_evidence"},
-            {row["path"] for row in json.loads((ROOT / index_path).read_text(encoding="utf-8"))["generation_inputs"]["document_evidence"]},
+            indexed_document_artifacts,
         )
         for path, row in artifact_paths.items():
             if row["kind"] == "operation_document_evidence":
+                if "/receipts/" in path:
+                    evidence_schema_path = "schemas/datapan.operation-document-capture-receipt.v2.schema.json"
+                elif "/v2/" in path or "/source-scopes/" in path:
+                    evidence_schema_path = "schemas/datapan.operation-document-evidence.v2.schema.json"
+                else:
+                    evidence_schema_path = "schemas/datapan.operation-document-evidence.v1.schema.json"
+                evidence_schema = json.loads((ROOT / evidence_schema_path).read_text(encoding="utf-8"))
                 self.assertEqual(row["schema"], evidence_schema["$id"])
 
 

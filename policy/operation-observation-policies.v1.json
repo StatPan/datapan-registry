@@ -50,7 +50,59 @@
       }
     }
   ],
-  "profiles": [],
+  "profiles": [
+    {
+      "profile_id": "data-go-kr-rest-service-key-observation-only",
+      "selector": {
+        "source_id": "data_go_kr",
+        "provider": "data.go.kr",
+        "protocol": "REST",
+        "effect": "read_only",
+        "method": "GET",
+        "authentication": {
+          "requirement": "required",
+          "mechanism": "service_key",
+          "placement": "query",
+          "parameter_name": "serviceKey"
+        }
+      },
+      "review": {
+        "review_ref": "https://github.com/StatPan/datapan-registry/issues/759",
+        "reviewed_by": "StatPan Registry maintainers",
+        "rationale": "This bounded profile authorizes construction of one documented HTTPS GET retrieval request with the exact documented query credential reference and no noncredential input values. It omits only documented optional parameters with minimum cardinality zero, and records response semantics as observation-only. It does not authorize provider calls, assert response health, bind credentials or quotas, or admit runtime execution."
+      },
+      "request": {
+        "effect_review": {
+          "classification": "read_only",
+          "basis": "rfc9110_safe_method_and_retrieval_purpose",
+          "rfc_reference": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1",
+          "purpose_terms": [
+            "조회",
+            "목록",
+            "검색",
+            "현황",
+            "retrieve",
+            "list",
+            "search",
+            "read",
+            "lookup"
+          ],
+          "rationale": "Apply only when the exact operation-specific GET and official title/purpose establish retrieval, listing, searching, or reading, and no mutation, action, or caller-controlled operation selector is present. This is request-effect classification only; it grants no provider-call, credential, quota, entitlement, or response-health authority."
+        },
+        "parameter_strategies": [],
+        "omit_unmapped_optional_parameters": true,
+        "limits": {
+          "request_budget": 1,
+          "timeout_ms": 10000,
+          "max_request_bytes": 4096,
+          "max_response_bytes": 1048576
+        },
+        "response": {
+          "mode": "observation_only"
+        }
+      }
+    }
+  ],
   "effect_profiles": [
     {
       "profile_id": "data-go-kr-reviewed-retrieval-read-only",

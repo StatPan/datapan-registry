@@ -1442,6 +1442,8 @@ def profile_matches_operation(
                 and parameter["cardinality"].get("minimum") == 0
             ):
                 return False
+            if profile["request"]["response"] == {"mode": "observation_only"} and location != "query":
+                return False
         else:
             try:
                 _require_policy_strategy_matches_type(strategy, data_type, parameter["name"])
@@ -1596,7 +1598,11 @@ def apply_effect_profile_review(
 
 
 def profile_matches_response(response: dict[str, Any], response_contract: dict[str, Any]) -> bool:
-    """Match a reusable branch policy only when every source branch is covered once."""
+    """Match a reusable response policy without promoting unknown response semantics."""
+    if response == {"mode": "observation_only"}:
+        # This arm is deliberately independent of provider response completeness:
+        # the compiled plan records a source-backed request, not a healthy result.
+        return True
     branches = response_contract.get("success_branches")
     if not isinstance(branches, list) or not branches or len(branches) != len(response["branches"]):
         return False
@@ -1742,6 +1748,17 @@ def compile_profile_assertion(
     profile_index: int,
 ) -> dict[str, Any]:
     response = profile["request"]["response"]
+    operation_id_fields = {key: operation_identity[key] for key in ("operation_id", "dataset_id", "operation_name", "upstream_operation_key")}
+    if response == {"mode": "observation_only"}:
+        return {
+            "schema_version": "datapan.operation-response-assertion.v2",
+            "artifact_kind": "operation_response_assertion",
+            "source_binding": {key: operation_identity[key] for key in ("source_id", "provider", "protocol")},
+            "operation_identity": operation_id_fields,
+            "document_evidence": document_ref,
+            "review": profile["review"],
+            "assertion": {"mode": "observation_only"},
+        }
     response_contract = document["response_contract"]
     source_branches = response_contract["success_branches"]
 
@@ -2125,7 +2142,14 @@ def compile_reviewed_operation_plan(
         transport_refs.append(_contract_fact_ref(document_ref, "#/transport/port"))
     else:
         fail(endpoint.get("port") is None, "registered endpoint port is not documented by the operation source")
-    fail(not (identity["protocol"] == "REST" and transport["http_method"] == "HEAD"), "HEAD does not establish a usable response-body observation contract")
+    fail(
+        not (
+            identity["protocol"] == "REST"
+            and transport["http_method"] == "HEAD"
+            and assertion_artifact.get("assertion") != {"mode": "observation_only"}
+        ),
+        "HEAD does not establish a usable response-body assertion",
+    )
 
     if identity["protocol"] == "SOAP":
         soap_values: dict[str, Any] = {}

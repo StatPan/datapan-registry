@@ -76,16 +76,24 @@ jobs:
           path: datapan-registry
           lfs: false
 
-      - name: Fetch pinned operation-plan source revision
+      - name: Fetch pinned operation-plan source revision and bounded release ancestry
         working-directory: datapan-registry
+        env:
+          RELEASE_HEAD_SHA: ${{ github.sha }}
         run: |
           source_revision="$(python3 -c 'import json; print(json.load(open("reports/operation-observation-plan/index.json"))["registry_revision"])')"
           if [[ ! "${source_revision}" =~ ^[0-9a-f]{40}$ ]]; then
             echo "Invalid operation-plan source revision"
             exit 1
           fi
+          if [[ ! "${RELEASE_HEAD_SHA}" =~ ^[0-9a-f]{40}$ ]] || [[ "$(git rev-parse HEAD)" != "${RELEASE_HEAD_SHA}" ]]; then
+            echo "Checked-out release head does not match the workflow commit"
+            exit 1
+          fi
           git fetch --no-tags --depth=1 origin "${source_revision}"
+          git fetch --no-tags --depth=128 origin "${RELEASE_HEAD_SHA}"
           git cat-file -e "${source_revision}^{commit}"
+          git merge-base --is-ancestor "${source_revision}" HEAD
 
       - name: Fetch pinned historical diagnostic source object
         working-directory: datapan-registry
