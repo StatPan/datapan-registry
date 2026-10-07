@@ -25,7 +25,7 @@
     "manifest": {
       "path": "manifest.json",
       "generated_at": "2026-07-11T10:28:35Z",
-      "artifact_count": 201,
+      "artifact_count": 264,
       "source_registry": "data/data-go-kr.registry.json"
     },
     "readiness": {
@@ -107,8 +107,8 @@
       "evidence_artifacts": [
         {
           "path": "schemas/index.json",
-          "bytes": 47568,
-          "sha256": "48ec967c7ae0955fcd4f1a4a8bb4435b26711d68245f8a78ee19f5c861044d1e",
+          "bytes": 49269,
+          "sha256": "d52608fe8adbe4914b1dc26644e65c2552d018007e3580380b72dc70b56361c4",
           "manifest_bound": true,
           "kind": "schema_index",
           "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
@@ -122,20 +122,32 @@
         "evidence"
       ],
       "operator_commands": [
+        "python3 scripts/generate-operation-observation-plan.py --source-revision <compiler-source-commit-sha>",
+        "python3 scripts/register-operation-observation-plan-artifacts.py --write",
+        "python3 scripts/sync-release-schema-artifacts.py --write",
         "python3 scripts/sync-release-manifest-artifacts.py --write"
       ],
       "check_commands": [
+        "python3 scripts/generate-operation-observation-plan.py --check",
+        "python3 scripts/register-operation-observation-plan-artifacts.py --check",
+        "python3 scripts/sync-release-schema-artifacts.py --check",
         "python3 scripts/sync-release-manifest-artifacts.py --check",
         "python3 scripts/validate-release-ledger-ownership.py",
         "python3 scripts/validate-release-report-artifacts.py"
       ],
       "workflow_fragments": {
         ".github/workflows/verify-release.yml": [
+          "python scripts/generate-operation-observation-plan.py --check",
+          "python scripts/register-operation-observation-plan-artifacts.py --check",
+          "python scripts/sync-release-schema-artifacts.py --check",
           "python scripts/sync-release-manifest-artifacts.py --check",
           "python scripts/validate-release-ledger-ownership.py",
           "python scripts/validate-release-report-artifacts.py"
         ],
         ".github/workflows/release-draft.yml": [
+          "python scripts/generate-operation-observation-plan.py --check",
+          "python scripts/register-operation-observation-plan-artifacts.py --check",
+          "python scripts/sync-release-schema-artifacts.py --check",
           "python scripts/sync-release-manifest-artifacts.py --check",
           "python scripts/validate-release-ledger-ownership.py",
           "python scripts/validate-release-report-artifacts.py"
@@ -145,9 +157,33 @@
       "evidence_artifacts": [
         {
           "path": "docs/release-ledger-ownership.json",
-          "bytes": 28797,
-          "sha256": "882a57f01c8a7dbf44b377c1d2e25ac959b4cfe485407efa459d6ab9e9cd5b58",
+          "bytes": 30260,
+          "sha256": "30ac955883ec3e48eb4291c914e0a1d10d23e153a4e4f3d4b3be3fbf2ad2d287",
           "manifest_bound": false
+        },
+        {
+          "path": "reports/operation-document-evidence/15001697-24807.json",
+          "bytes": 24671,
+          "sha256": "acd463a3ebe33218ab0ecb560695343acd3feeb89c65a5ae84043ada5820c489",
+          "manifest_bound": true,
+          "kind": "operation_document_evidence",
+          "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v1.schema.json"
+        },
+        {
+          "path": "reports/operation-document-evidence/15001808-16811.json",
+          "bytes": 13962,
+          "sha256": "7d3655282289d4be3c76b9001d795e198317208f1969f7cb3f78b68105260af3",
+          "manifest_bound": true,
+          "kind": "operation_document_evidence",
+          "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v1.schema.json"
+        },
+        {
+          "path": "reports/operation-observation-plan/index.json",
+          "bytes": 32713,
+          "sha256": "cfbe4524b1c13b67e4f5947bb772c9ebde0562aa05e1f2c77349fd40118f84f5",
+          "manifest_bound": true,
+          "kind": "operation_observation_plan",
+          "schema": "https://schemas.datapan.dev/datapan.operation-observation-plan.v1.schema.json"
         }
       ]
     },

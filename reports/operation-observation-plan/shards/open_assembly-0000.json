@@ -1,0 +1,83 @@
+{
+  "artifact_kind": "shard",
+  "records": [
+    {
+      "admission": {
+        "evidence_refs": [],
+        "reasons": [
+          "request_plan_incomplete",
+          "runtime_binding_unbound"
+        ],
+        "status": "not_admitted"
+      },
+      "artifact_kind": "operation_plan",
+      "operation_identity": {
+        "operation_id": "open-assembly-opensrvapi-list",
+        "protocol": "HTTP",
+        "registered_endpoint": {
+          "host": "open.assembly.go.kr",
+          "path": "/portal/openapi/OPENSRVAPI"
+        }
+      },
+      "request_plan": {
+        "evidence_refs": [
+          {
+            "artifact_path": "reports/open-assembly/operation-denominator.json",
+            "evidence_kind": "operation_denominator",
+            "json_pointer": "#/operations/0",
+            "sha256": "d14aab4e423b66f5bb7539c87d1ec34634ac85a06d10c2dcbc9369dba4df7e52"
+          }
+        ],
+        "missing_fields": [
+          "transport_and_method_authority",
+          "operation_effect_read_only_authority",
+          "parameter_inventory_and_location",
+          "parameter_cardinality",
+          "safe_value_strategy_for_required_inputs",
+          "authentication_placement",
+          "request_resource_limits",
+          "response_assertion_and_empty_result_semantics"
+        ],
+        "status": "incomplete"
+      },
+      "runtime_binding": {
+        "evidence_refs": [],
+        "missing_fields": [
+          "credential_entitlement_reference",
+          "shared_quota_scopes_and_limits",
+          "observation_period"
+        ],
+        "status": "unbound"
+      },
+      "schema_version": "datapan.operation-observation-plan.v1",
+      "source_binding": {
+        "adapter_id": "open-assembly",
+        "inventory_status": "partial",
+        "inventory_unknown": true,
+        "provider": "open.assembly.go.kr",
+        "source_artifacts": [
+          {
+            "bytes": 930,
+            "path": "reports/open-assembly/operation-denominator.json",
+            "sha256": "d14aab4e423b66f5bb7539c87d1ec34634ac85a06d10c2dcbc9369dba4df7e52"
+          },
+          {
+            "bytes": 2923,
+            "path": "sources/open_assembly.json",
+            "sha256": "f8459b47e6642d5350377ca8f3e6608021808614602de48e2cb6090525e1aaae"
+          },
+          {
+            "bytes": 1909,
+            "path": "reports/open-assembly/runtime-candidates.json",
+            "sha256": "4f2c2d7633d03f6a084ad63c32946c8842066420353e5e64f4e70d5111a0e407"
+          }
+        ],
+        "source_id": "open_assembly",
+        "test_only": false
+      }
+    }
+  ],
+  "schema_version": "datapan.operation-observation-plan.v1",
+  "shard_index": 0,
+  "source_id": "open_assembly"
+}
