@@ -44,11 +44,6 @@ def build_records() -> list[dict[str, object]]:
     source_bytes = SOURCE.read_bytes()
     source_hash = sha256(source_bytes)
     source = json.loads(source_bytes)
-    source_ref = {
-        "path": SOURCE.relative_to(ROOT).as_posix(),
-        "sha256": source_hash,
-        "bytes": len(source_bytes),
-    }
     records = []
 
     for key in ("rest", "soap"):
@@ -133,7 +128,6 @@ def build_records() -> list[dict[str, object]]:
                 "inventory_status": "source_complete",
                 "inventory_unknown": False,
                 "test_only": True,
-                "source_artifacts": [source_ref],
             },
             "operation_identity": {
                 "operation_id": spec["operation_id"],

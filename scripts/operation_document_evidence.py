@@ -41,7 +41,7 @@ EVIDENCE_DIR = ROOT / "reports/operation-document-evidence"
 EVIDENCE_V2_DIR = EVIDENCE_DIR / "v2"
 SCHEMA_VERSION = "datapan.operation-document-evidence.v2"
 PARSER_ID = "registered-operation-document-parser"
-PARSER_VERSION = "2.1.1"
+PARSER_VERSION = "2.1.2"
 HOST = "www.data.go.kr"
 DETAIL_ROUTE = "/tcs/dss/selectApiDetailFunction.do"
 DOWNLOAD_ROUTE = "/cmm/cmm/fileDownload.do"
@@ -362,6 +362,49 @@ def _safe_operation_document_text(value: Any) -> str | None:
     if any(char in text for char in "{}[]<>`=?|\\"):
         return None
     return text
+
+
+def _classify_seoul_result_code(code: str, message: str) -> str:
+    """Classify a Seoul result only when its official message says so.
+
+    Code prefixes are identifiers, not authority for an outcome class. A
+    message that does not establish one of these narrow meanings remains
+    unknown even when its code begins with ``ERROR``.
+    """
+    normalized = " ".join(message.split())
+    if code == "INFO-200" and "해당하는 데이터가 없습니다" in normalized:
+        return "empty_result"
+    if code == "INFO-100" and "인증키가 유효하지 않습니다" in normalized:
+        return "credential"
+    if (
+        code == "ERROR-336"
+        and "최대 1000건" in normalized
+        and "넘지 않도록" in normalized
+    ):
+        return "size_limit"
+    if (
+        code == "ERROR-335"
+        and "샘플데이터" in normalized
+        and "최대 5건" in normalized
+    ):
+        return "size_limit"
+    if "서버 오류" in normalized or "데이터베이스 연결 오류" in normalized:
+        return "server"
+    if code.startswith("ERROR-") and any(
+        phrase in normalized
+        for phrase in (
+            "필수 값이 누락",
+            "파일타입 값이 누락",
+            "서비스를 찾을 수 없습니다",
+            "요청시작위치 값을 확인",
+            "요청종료위치 값을 확인",
+            "타입이 유효하지 않습니다",
+            "요청종료위치 보다 요청시작위치가 더 큽니다",
+            "요청종료위치 값은 1 ~ 5 사이만 가능합니다",
+        )
+    ):
+        return "bad_request"
+    return "unknown"
 
 
 def _split_explicit_enum(value: str, *, parameter_name: str) -> list[str] | None:
@@ -2097,22 +2140,17 @@ def parse_seoul_openapi_evidence(
             success_values.append(code)
             success_code_refs.extend([code_ref, message_ref])
             continue
-        if code == "INFO-200":
-            classification = "empty_result"
+        if code.startswith("ERROR-"):
+            # The table declares this code as an error regardless of whether
+            # its message supports a narrower provider-error class.
+            error_values.append(code)
+            error_code_refs.extend([code_ref, message_ref])
+        classification = _classify_seoul_result_code(code, row[1])
+        if classification == "empty_result":
             info_empty_ref = _source_ref(
                 _cell_locator(api_page_source, "html_table_cell", code_table_index, row_index, 1),
                 "provider_no_matching_data_code_semantics",
             )
-        elif code == "ERROR-336":
-            classification = "size_limit"
-        elif code.startswith("ERROR-5") or code.startswith("ERROR-6"):
-            classification = "server"
-        elif code.startswith("ERROR-"):
-            classification = "bad_request"
-            error_values.append(code)
-            error_code_refs.extend([code_ref, message_ref])
-        else:
-            classification = "unknown"
         codes.append({"value": code, "classification": classification, "source_refs": [code_ref, message_ref]})
     if not success_values or not info_empty_ref:
         raise EvidenceError("seoul_result_success_or_empty_semantics_missing")

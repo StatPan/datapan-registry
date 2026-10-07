@@ -216,7 +216,10 @@ def _seoul_openapi_pages(*, sample_url: str | None = None) -> tuple[bytes, bytes
     codes = _table([
         ["INFO-000", "정상 처리되었습니다."],
         ["INFO-200", "해당하는 데이터가 없습니다."],
-        ["ERROR-336", "요청 데이터가 최대 크기를 초과했습니다."],
+        ["INFO-100", "인증키가 유효하지 않습니다."],
+        ["ERROR-336", "데이터요청은 한번에 최대 1000건을 넘지 않도록 수정하세요."],
+        ["ERROR-500", "일반 오류입니다."],
+        ["ERROR-601", "SQL 문장 오류 입니다."],
     ])
     openapi_raw = (request + sample + output + codes).encode("utf-8")
     dataset_raw = (
@@ -346,8 +349,16 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         self.assertEqual(params["STATION_CD"]["requiredness"]["value"], "optional")
         self.assertEqual(evidence["response_assertion"]["empty_result_semantics"]["status"], "unknown")
         result_codes = evidence["response_contract"]["documented_error_contract"]["codes"]
-        self.assertEqual(next(code["classification"] for code in result_codes if code["value"] == "INFO-200"), "empty_result")
-        self.assertNotIn("INFO-200", evidence["response_contract"]["provider_result_codes"]["error_values"]["values"])
+        classes = {code["value"]: code["classification"] for code in result_codes}
+        self.assertEqual(classes["INFO-200"], "empty_result")
+        self.assertEqual(classes["INFO-100"], "credential")
+        self.assertEqual(classes["ERROR-336"], "size_limit")
+        self.assertEqual(classes["ERROR-500"], "unknown")
+        self.assertEqual(classes["ERROR-601"], "unknown")
+        error_values = evidence["response_contract"]["provider_result_codes"]["error_values"]["values"]
+        self.assertEqual(set(error_values), {"ERROR-336", "ERROR-500", "ERROR-601"})
+        self.assertNotIn("INFO-200", error_values)
+
         encoded = json.dumps(evidence, ensure_ascii=False)
         for private in ("PRIVATE_KEY", "http://openapi.seoul.go.kr", "list_total_count\":\"", "sample_url"):
             self.assertNotIn(private, encoded)
@@ -359,6 +370,14 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         broken = copy.deepcopy(evidence)
         broken["transport"].pop("port_source_refs")
         self.assertTrue(list(validator.iter_errors(broken)))
+
+    def test_seoul_result_classes_require_message_semantics_not_code_prefixes(self) -> None:
+        self.assertEqual(DOCS._classify_seoul_result_code("ERROR-500", "일반 오류입니다."), "unknown")
+        self.assertEqual(DOCS._classify_seoul_result_code("ERROR-601", "SQL 문장 오류 입니다."), "unknown")
+        self.assertEqual(DOCS._classify_seoul_result_code("ERROR-500", "오류 내용을 수정하세요."), "unknown")
+        self.assertEqual(DOCS._classify_seoul_result_code("ERROR-500", "서버 오류입니다."), "server")
+        self.assertEqual(DOCS._classify_seoul_result_code("ERROR-336", "최대 1000건을 넘지 않도록 수정하세요."), "size_limit")
+        self.assertEqual(DOCS._classify_seoul_result_code("INFO-100", "인증키가 유효하지 않습니다."), "credential")
 
     def test_seoul_path_sample_rejects_userinfo_fragment_and_query(self) -> None:
         operation = {
