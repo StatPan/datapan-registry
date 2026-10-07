@@ -294,7 +294,7 @@
             "kind": { "enum": ["reviewed_enum", "reviewed_literal"] },
             "authority": { "enum": ["reviewed_policy", "synthetic_fixture"] },
             "selected_value": {
-              "oneOf": [
+              "anyOf": [
                 { "type": "string", "minLength": 1 },
                 { "type": "integer" },
                 { "type": "number" },

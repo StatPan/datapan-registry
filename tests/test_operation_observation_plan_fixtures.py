@@ -101,6 +101,12 @@ class OperationObservationPlanFixtureTests(unittest.TestCase):
         with self.assertRaises(jsonschema.ValidationError):
             self.validator.validate(rest)
 
+    def test_reviewed_literal_accepts_integer_selected_value(self):
+        record = copy.deepcopy(self.generated[1])
+        literal = record["request_plan"]["request_contract"]["parameters"][0]["value_strategy"]
+        literal["selected_value"] = 7
+        self.validator.validate(record)
+
     def test_schema_allows_explicit_unauthenticated_runtime_without_credential_ref(self):
         record = copy.deepcopy(self.generated[0])
         authentication = record["request_plan"]["request_contract"]["authentication"]
