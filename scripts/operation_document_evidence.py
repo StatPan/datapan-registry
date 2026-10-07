@@ -9,6 +9,7 @@ directory, and emits redacted digest-bound evidence for offline review.
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import hashlib
 import html
@@ -22,6 +23,7 @@ import re
 import socket
 import ssl
 import sys
+import subprocess
 import tempfile
 import time
 import urllib.parse
@@ -33,12 +35,13 @@ from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "reports/data-go-kr/operation-manifest.json"
-QUEUE = ROOT / "reports/operation-document-evidence/queue.v1.jsonl"
-RECONCILIATION = ROOT / "reports/operation-document-evidence/reconciliation.v1.json"
+QUEUE = ROOT / "reports/operation-document-evidence/queue.v2.jsonl"
+RECONCILIATION = ROOT / "reports/operation-document-evidence/reconciliation.v2.json"
 EVIDENCE_DIR = ROOT / "reports/operation-document-evidence"
-SCHEMA_VERSION = "datapan.operation-document-evidence.v1"
-PARSER_ID = "data-go-kr-operation-document-parser"
-PARSER_VERSION = "1.3.0"
+EVIDENCE_V2_DIR = EVIDENCE_DIR / "v2"
+SCHEMA_VERSION = "datapan.operation-document-evidence.v2"
+PARSER_ID = "registered-operation-document-parser"
+PARSER_VERSION = "2.0.0"
 HOST = "www.data.go.kr"
 DETAIL_ROUTE = "/tcs/dss/selectApiDetailFunction.do"
 DOWNLOAD_ROUTE = "/cmm/cmm/fileDownload.do"
@@ -52,6 +55,14 @@ MAX_DOCX_MEMBER_BYTES = 8 * 1024 * 1024
 MAX_XML_BYTES = 8 * 1024 * 1024
 REQUEST_TIMEOUT_SECONDS = 35
 MAX_BATCH_OPERATIONS = 50
+MIN_DOCUMENT_REQUEST_INTERVAL_SECONDS = 1.0
+MAX_PRIVATE_CAPTURE_ROOT_BYTES = 1024 * 1024 * 1024
+MAX_SCHEMA_VARIANTS_PER_RESPONSE = 16
+MAX_KOSIS_GUIDE_BYTES = 3 * 1024 * 1024
+MAX_KOSIS_MANUAL_BYTES = 16 * 1024 * 1024
+KOSIS_GUIDE_SHA256 = "ffa38d0e4afaf09d54b8e3542fe815b5a4cc1237a4376b4812ce49fd15b07c52"
+KOSIS_MANUAL_SHA256 = "0d2de8e58bebdeb1546b9accc805407c6c8fc0ece0eaba9af2ef6fcc578fb821"
+KOSIS_REGISTRY_REVISION = "dcb4ae423fcc1612ce3678cbb79eeab0b4e7517f"
 SOURCE_PROFILES = {
     "data_go_kr_v1": {
         "host": HOST,
@@ -107,6 +118,7 @@ def _safe_operation_identity(operation: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(provenance, dict):
         raise EvidenceError("operation_identity_missing")
     identity = {
+        "source_id": "data_go_kr",
         "operation_id": operation.get("operation_id"),
         "provider": provenance.get("provider"),
         "dataset_id": provenance.get("dataset_id"),
@@ -152,7 +164,7 @@ def build_queue(manifest: dict[str, Any]) -> list[dict[str, Any]]:
         seen.add(identity["operation_id"])
         source_profile_id = "safetydata_v1" if identity["source_system"] == "safetydata.go.kr" else "data_go_kr_v1"
         queue.append({
-            "schema_version": "datapan.operation-document-work-item.v1",
+            "schema_version": "datapan.operation-document-work-item.v2",
             "operation_identity": identity,
             "status": "pending",
             "source_profile_id": source_profile_id,
@@ -383,34 +395,36 @@ def _provider_quota_facts(
             else:
                 amount_column = next((idx for idx, cell in enumerate(row) if re.search(r"[0-9]", cell)), 0)
                 observations.append((amounts[0], unit, _cell_locator(source_id, kind, table_index, row_index, amount_column, part=part)))
+    unknown_scope = {"value": None, "status": "unknown", "source_refs": []}
     if not observations:
-        return {"value": None, "unit": None, "status": "not_parsed", "source_refs": []}
+        return {"value": None, "unit": None, "status": "not_parsed", "source_refs": [], "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     refs = [_source_ref(locator, "provider_quota") for _, _, locator in observations]
     if any(unit == "conflict" for _, unit, _ in observations):
-        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     if any(amount is None for amount, _, _ in observations):
-        return {"value": None, "unit": None, "status": "unknown", "source_refs": refs}
+        return {"value": None, "unit": None, "status": "unknown", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     distinct = {(amount, unit) for amount, unit, _ in observations}
     if len(distinct) != 1:
-        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     amount, unit = next(iter(distinct))
-    return {"value": amount, "unit": unit, "status": "documented", "source_refs": refs}
+    return {"value": amount, "unit": unit, "status": "documented", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
 
 
 def _combine_quota_facts(facts: list[dict[str, Any]]) -> dict[str, Any]:
+    unknown_scope = {"value": None, "status": "unknown", "source_refs": []}
     parsed = [fact for fact in facts if fact["status"] != "not_parsed"]
     refs = [ref for fact in parsed for ref in fact["source_refs"]]
     if not parsed:
-        return {"value": None, "unit": None, "status": "not_parsed", "source_refs": []}
+        return {"value": None, "unit": None, "status": "not_parsed", "source_refs": [], "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     if any(fact["status"] == "conflict" for fact in parsed):
-        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     if any(fact["status"] == "unknown" for fact in parsed):
-        return {"value": None, "unit": None, "status": "unknown", "source_refs": refs}
+        return {"value": None, "unit": None, "status": "unknown", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     values = {(fact["value"], fact["unit"]) for fact in parsed}
     if len(values) != 1:
-        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
     value, unit = next(iter(values))
-    return {"value": value, "unit": unit, "status": "documented", "source_refs": refs}
+    return {"value": value, "unit": unit, "status": "documented", "source_refs": refs, "scope": dict(unknown_scope), "account_tier": dict(unknown_scope)}
 
 
 def _safe_url_parts(value: str) -> dict[str, str] | None:
@@ -475,10 +489,10 @@ def _docx_tables(raw: bytes) -> list[list[list[str]]]:
     return tables
 
 
-def _make_source_binding(source_id: str, raw: bytes, media_type: str, path: str, method: str, retrieved_at: str, capture_role: str) -> dict[str, Any]:
+def _make_source_binding(source_id: str, raw: bytes, media_type: str, path: str, method: str, retrieved_at: str, capture_role: str, host: str = HOST) -> dict[str, Any]:
     return {
         "source_id": source_id,
-        "origin": {"scheme": "https", "host": HOST, "path": path, "method": method, "query_values_stored": False, "body_values_stored": False},
+        "origin": {"scheme": "https", "host": host, "path": path, "method": method, "query_values_stored": False, "body_values_stored": False},
         "media_type": media_type,
         "bytes": len(raw),
         "sha256": _sha256(raw),
@@ -496,10 +510,17 @@ def _unknown_response_contract() -> dict[str, Any]:
     unknown_codes = {"status": "unknown", "values": [], "source_refs": []}
     return {
         "accepted_http_status_codes": {"status": "unknown", "values": [], "source_refs": []},
+        "payload": {"status": "unknown", "kind": "unknown", "media_types": [], "source_refs": []},
+        "schema_shape": {"status": "unknown", "source_refs": []},
+        "coded_result_field_inventory": {"status": "unknown", "candidates": [], "source_refs": []},
+        "success_branches": [],
+        "documented_http_error_branches": [],
         "documented_fields": [],
         "required_fields": [],
         "provider_result_codes": {"status": "unknown", "evidence_strength": "unknown", "path": None, "value_type": None, "success_values": dict(unknown_codes), "error_values": dict(unknown_codes), "source_refs": []},
         "result_collection": {"status": "unknown", "path": None, "container_path": None, "item_path": None, "container_cardinality": {"status": "unknown", "minimum": None, "maximum": None, "source_refs": []}, "value_type": None, "source_refs": []},
+        "declared_output_fields": [],
+        "documented_error_contract": {"status": "unknown", "format": "unknown", "code_path": None, "message_path": None, "codes": [], "source_refs": []},
     }
 
 
@@ -911,10 +932,26 @@ def parse_openapi_evidence(
     responses = operation_spec.get("responses")
     if not isinstance(responses, dict):
         raise EvidenceError("openapi_responses_invalid")
-    success_responses = [(code, response) for code, response in responses.items() if re.fullmatch(r"2[0-9][0-9]", str(code)) and isinstance(response, dict)]
-    produces = operation_spec.get("produces", document.get("produces", []))
+    numeric_responses = [
+        (code, response)
+        for code, response in responses.items()
+        if re.fullmatch(r"[1-5][0-9][0-9]", str(code)) and isinstance(response, dict)
+    ]
+    success_responses = [(code, response) for code, response in numeric_responses if 200 <= int(code) <= 299]
+    if isinstance(operation_spec.get("produces"), list):
+        produces = operation_spec["produces"]
+        produces_pointer = _json_pointer_child(operation_pointer, "produces")
+    else:
+        produces = document.get("produces", [])
+        produces_pointer = "#/produces"
     if not isinstance(produces, list):
         produces = []
+    payload_refs = [
+        ref(_json_pointer_child(produces_pointer, index), "response_media_type")
+        for index, value in enumerate(produces)
+        if isinstance(value, str)
+    ]
+    payload_media_types = sorted({str(value).split(";", 1)[0].strip().casefold() for value in produces if isinstance(value, str) and value.strip()})
     normalized_produces = {str(value).split(";", 1)[0].strip().casefold() for value in produces if isinstance(value, str)}
     response_format = "json" if normalized_produces and any(value == "application/json" or value.endswith("+json") for value in normalized_produces) and not any("xml" in value for value in normalized_produces) else "xml" if normalized_produces and any("xml" in value for value in normalized_produces) and not any(value == "application/json" or value.endswith("+json") for value in normalized_produces) else None
     accepted_status_refs = [
@@ -924,13 +961,27 @@ def parse_openapi_evidence(
     accepted_status_codes = sorted({int(code) for code, _ in success_responses})
     response_contract = {
         "accepted_http_status_codes": {"status": "documented" if accepted_status_codes else "unknown", "values": accepted_status_codes, "source_refs": accepted_status_refs},
+        "payload": {"status": "documented" if response_format else "conflict" if normalized_produces else "unknown", "kind": response_format or "unknown", "media_types": payload_media_types, "source_refs": payload_refs},
+        "schema_shape": {"status": "unknown", "source_refs": []},
+        "coded_result_field_inventory": {"status": "unknown", "candidates": [], "source_refs": []},
+        "success_branches": [],
+        "documented_http_error_branches": [],
         "documented_fields": [],
         "required_fields": [],
         "provider_result_codes": {"status": "unknown", "evidence_strength": "unknown", "path": None, "value_type": None, "success_values": {"status": "unknown", "values": [], "source_refs": []}, "error_values": {"status": "unknown", "values": [], "source_refs": []}, "source_refs": []},
         "result_collection": {"status": "unknown", "path": None, "container_path": None, "item_path": None, "container_cardinality": {"status": "unknown", "minimum": None, "maximum": None, "source_refs": []}, "value_type": None, "source_refs": []},
+        "declared_output_fields": [],
+        "documented_error_contract": {"status": "unknown", "format": "unknown", "code_path": None, "message_path": None, "codes": [], "source_refs": []},
     }
     array_facts: list[tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None, dict[str, Any], list[dict[str, Any]]]] = []
+    branch_array_facts: dict[tuple[int, str, int | None], list[tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None, dict[str, Any], list[dict[str, Any]]]]] = {}
     result_code_facts: list[tuple[dict[str, Any] | None, str | None, list[dict[str, Any]]]] = []
+    branch_result_code_facts: dict[tuple[int, str, int | None], list[tuple[dict[str, Any] | None, str | None, list[dict[str, Any]]]]] = {}
+    code_candidate_facts: list[dict[str, Any]] = []
+    schema_shape_results: list[tuple[bool, list[dict[str, Any]]]] = []
+    active_response_status_code = 0
+    active_schema_variant: dict[str, Any] = {"kind": "single", "index": None}
+    active_branch_key: tuple[int, str, int | None] = (0, "single", None)
 
     def response_path(tokens: list[str], xml_segments: list[dict[str, Any] | None], path_known: bool) -> dict[str, Any] | None:
         if response_format == "json" and path_known:
@@ -993,7 +1044,7 @@ def parse_openapi_evidence(
                 else:
                     field_status = "documented" if field_type else "unknown"
                 cardinality = {"status": cardinality_status, "minimum": minimum, "maximum": 1 if cardinality_status == "documented" else None, "source_refs": cardinality_refs}
-                field_fact = {"status": field_status, "path": path_value, "value_type": field_type, "cardinality": cardinality, "source_refs": field_refs}
+                field_fact = {"http_status_code": active_response_status_code, "schema_variant": copy.deepcopy(active_schema_variant), "name": field_name, "status": field_status, "path": path_value, "value_type": field_type, "cardinality": cardinality, "source_refs": field_refs}
                 response_contract["documented_fields"].append(field_fact)
                 response_fields.append(field_name)
                 response_refs.extend(field_refs)
@@ -1001,7 +1052,12 @@ def parse_openapi_evidence(
                     response_contract["required_fields"].append({**field_fact, "source_refs": [*field_refs, *cardinality_refs]})
                 normalized_field_name = re.sub(r"[^a-z0-9]", "", field_name.casefold())
                 if normalized_field_name in {"resultcode", "responsecode", "returncode"}:
-                    result_code_facts.append((path_value, field_type, [*field_refs, *cardinality_refs]))
+                    code_fact = (path_value, field_type, [*field_refs, *cardinality_refs])
+                    result_code_facts.append(code_fact)
+                    branch_result_code_facts.setdefault(active_branch_key, []).append(code_fact)
+                    code_candidate_facts.append({"http_status_code": active_response_status_code, "schema_variant": copy.deepcopy(active_schema_variant), "name": field_name, "classification": "recognized_result_code_name", "path": path_value, "value_type": field_type, "source_refs": [*field_refs, *cardinality_refs]})
+                elif normalized_field_name in {"code", "status", "success", "error", "result", "response"}:
+                    code_candidate_facts.append({"http_status_code": active_response_status_code, "schema_variant": copy.deepcopy(active_schema_variant), "name": field_name, "classification": "ambiguous_code_semantics", "path": path_value, "value_type": field_type, "source_refs": [*field_refs, *cardinality_refs]})
                 if field_type == "array":
                     container_path = None
                     item_path = None
@@ -1022,7 +1078,9 @@ def parse_openapi_evidence(
                             # that selected container so consumers can tell an
                             # absent container from an empty present one.
                             item_path = {"kind": "xml_qname_path", "segments": [{"namespace": item_namespace, "local_name": item_name}]}
-                    array_facts.append((path_value, container_path, item_path, cardinality, [*field_refs, *cardinality_refs]))
+                    array_fact = (path_value, container_path, item_path, cardinality, [*field_refs, *cardinality_refs])
+                    array_facts.append(array_fact)
+                    branch_array_facts.setdefault(active_branch_key, []).append(array_fact)
                     items = child_resolved.get("items")
                     if isinstance(items, dict):
                         # JSON Pointer has no wildcard token, so nested array
@@ -1042,16 +1100,131 @@ def parse_openapi_evidence(
         if isinstance(items, dict) and resolved.get("type") == "array":
             collect_schema(items, _json_pointer_child(resolved_pointer, "items"), data_tokens, xml_segments, inherited_namespace, path_known, visited)
 
-    for status_code, response in success_responses:
+    def inspect_response_shape(schema_value: Any, schema_pointer: str, visited: set[str]) -> tuple[bool, list[dict[str, Any]]]:
+        resolved, resolved_pointer, ref_pointers = _openapi_resolve(document, schema_value, schema_pointer)
+        refs = [ref(schema_pointer, "response_schema_shape_root"), *[ref(item, "response_schema_shape_reference") for item in ref_pointers]]
+        if not isinstance(resolved, dict) or resolved_pointer in visited:
+            return False, refs
+        visited.add(resolved_pointer)
+        schema_type = resolved.get("type")
+        if schema_type in {"string", "integer", "number", "boolean"}:
+            if "type" in resolved:
+                refs.append(ref(_json_pointer_child(resolved_pointer, "type"), "response_schema_scalar_type"))
+            return True, refs
+        if schema_type == "array":
+            items = resolved.get("items")
+            if not isinstance(items, (dict, bool)):
+                return False, refs
+            refs.append(ref(_json_pointer_child(resolved_pointer, "type"), "response_schema_array_type"))
+            complete, item_refs = inspect_response_shape(items, _json_pointer_child(resolved_pointer, "items"), visited.copy())
+            return complete, [*refs, *item_refs]
+        properties = resolved.get("properties")
+        if schema_type == "object" or isinstance(properties, dict):
+            if not isinstance(properties, dict) or resolved.get("additionalProperties") is not False:
+                return False, refs
+            refs.append(ref(_json_pointer_child(resolved_pointer, "additionalProperties"), "response_schema_closed_object"))
+            if "type" in resolved:
+                refs.append(ref(_json_pointer_child(resolved_pointer, "type"), "response_schema_object_type"))
+            complete = True
+            for property_name, child_schema in properties.items():
+                child_pointer = _json_pointer_child(_json_pointer_child(resolved_pointer, "properties"), property_name)
+                child_complete, child_refs = inspect_response_shape(child_schema, child_pointer, visited.copy())
+                complete = complete and child_complete
+                refs.extend(child_refs)
+            return complete, refs
+        return False, refs
+
+    max_schema_variants = MAX_SCHEMA_VARIANTS_PER_RESPONSE
+    for status_code, response in numeric_responses:
+        active_response_status_code = int(status_code)
+        is_http_success = 200 <= active_response_status_code <= 299
+        status_evidence_kind = "accepted_http_success_status" if is_http_success else "documented_http_error_status"
         schema_value = response.get("schema")
-        if schema_value is not None:
-            response_pointer = _json_pointer_child(_json_pointer_child(operation_pointer, "responses"), status_code)
-            root_schema, root_pointer, _ = _openapi_resolve(document, schema_value, _json_pointer_child(response_pointer, "schema"))
-            root_xml = root_schema.get("xml") if isinstance(root_schema, dict) and isinstance(root_schema.get("xml"), dict) else {}
-            root_name = root_xml.get("name")
-            root_namespace = root_xml.get("namespace")
-            root_xml_segments = [{"namespace": root_namespace if isinstance(root_namespace, str) else None, "local_name": root_name}] if isinstance(root_name, str) and root_name else [None]
-            collect_schema(schema_value, _json_pointer_child(response_pointer, "schema"), [], root_xml_segments, root_namespace if isinstance(root_namespace, str) else None, True, set())
+        response_pointer = _json_pointer_child(_json_pointer_child(operation_pointer, "responses"), status_code)
+        schema_pointer = _json_pointer_child(response_pointer, "schema")
+        variants: list[tuple[str, int | None, Any, str]]
+        union_keys = [key for key in ("oneOf", "anyOf") if isinstance(schema_value, dict) and key in schema_value]
+        if not union_keys:
+            variants = [("single", None, schema_value, schema_pointer)]
+        elif len(union_keys) == 1 and isinstance(schema_value.get(union_keys[0]), list) and 0 < len(schema_value[union_keys[0]]) <= max_schema_variants and all(isinstance(item, (dict, bool)) for item in schema_value[union_keys[0]]):
+            union_kind = union_keys[0]
+            variants = [(union_kind, index, member, _json_pointer_child(_json_pointer_child(schema_pointer, union_kind), index)) for index, member in enumerate(schema_value[union_kind])]
+        else:
+            # Do not flatten ambiguous, malformed, or oversized unions.
+            # Preserve the exact root pointer and mark its shape incomplete.
+            variants = [("unsupported_union", None, None, schema_pointer)]
+        for variant_kind, variant_index, variant_schema, variant_pointer in variants:
+            active_schema_variant = {"kind": variant_kind, "index": variant_index}
+            active_branch_key = (active_response_status_code, variant_kind, variant_index)
+            if schema_value is None or variant_kind == "unsupported_union":
+                shape_complete = False
+                missing_schema_kind = "success_response_schema_not_declared" if is_http_success else "http_error_response_schema_not_declared"
+                shape_refs = [ref(response_pointer if schema_value is None else schema_pointer, missing_schema_kind if schema_value is None else "response_schema_union_unresolved")]
+            else:
+                shape_complete, shape_refs = inspect_response_shape(variant_schema, variant_pointer, set())
+            schema_shape_results.append((shape_complete, shape_refs))
+            status_ref = ref(response_pointer, status_evidence_kind)
+            schema_source = {
+                "status": "documented" if schema_value is not None else "not_established",
+                "json_pointer": variant_pointer if schema_value is not None else None,
+                "source_refs": [ref(variant_pointer, "response_schema_variant_root")] if schema_value is not None else [ref(response_pointer, "success_response_schema_not_declared" if is_http_success else "http_error_response_schema_not_declared")],
+            }
+            root_shape: dict[str, Any] = {"status": "unknown", "kind": "unknown", "qname": None, "source_refs": list(schema_source["source_refs"])}
+            if schema_value is not None and variant_kind != "unsupported_union":
+                root_schema, root_pointer, root_ref_pointers = _openapi_resolve(document, variant_schema, variant_pointer)
+                root_type = root_schema.get("type") if isinstance(root_schema, dict) else None
+                root_xml = root_schema.get("xml") if isinstance(root_schema, dict) and isinstance(root_schema.get("xml"), dict) else {}
+                root_name = root_xml.get("name")
+                root_namespace = root_xml.get("namespace")
+                root_kind = None
+                root_qname = None
+                if response_format == "xml":
+                    if isinstance(root_name, str) and root_name and isinstance(root_namespace, str) and root_namespace:
+                        root_kind = "xml_element"
+                        root_qname = {"namespace": root_namespace, "local_name": root_name}
+                        root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "xml"), "response_root_xml_qname"))
+                elif root_type == "array":
+                    root_kind = "array"
+                    root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "type"), "response_root_array_type"))
+                elif root_type == "object" or isinstance(root_schema, dict) and isinstance(root_schema.get("properties"), dict):
+                    root_kind = "object"
+                    root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "type"), "response_root_object_type") if isinstance(root_type, str) else ref(_json_pointer_child(root_pointer, "properties"), "response_root_object_properties"))
+                elif root_type in {"string", "integer", "number", "boolean"}:
+                    root_kind = "scalar"
+                    root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "type"), "response_root_scalar_type"))
+                root_shape.update(status="documented" if root_kind else "unknown", kind=root_kind or "unknown", qname=root_qname)
+                root_shape["source_refs"].extend(ref(pointer, "response_root_schema_reference") for pointer in root_ref_pointers)
+            branch_collection = response_contract["success_branches"] if is_http_success else response_contract["documented_http_error_branches"]
+            branch_collection.append({
+                "http_status_code": active_response_status_code,
+                "schema_variant": copy.deepcopy(active_schema_variant),
+                "payload": {"status": response_contract["payload"]["status"], "kind": response_format or "unknown", "media_types": payload_media_types, "source_refs": payload_refs},
+                "schema_shape": {"status": "complete" if shape_complete else "incomplete", "source_refs": shape_refs},
+                "schema_source": schema_source,
+                "root_shape": root_shape,
+                "documented_fields": [],
+                "required_fields": [],
+                "coded_result_field_inventory": {"status": "complete" if shape_complete else "incomplete", "candidates": [], "source_refs": shape_refs},
+                "provider_result_codes": {"status": "unknown", "evidence_strength": "unknown", "path": None, "value_type": None, "success_values": {"status": "unknown", "values": [], "source_refs": []}, "error_values": {"status": "unknown", "values": [], "source_refs": []}, "source_refs": []},
+                "result_collection": {"status": "unknown", "path": None, "container_path": None, "item_path": None, "container_cardinality": {"status": "unknown", "minimum": None, "maximum": None, "source_refs": []}, "value_type": None, "source_refs": []},
+                "source_refs": [status_ref, ref(response_pointer, "success_response_branch" if is_http_success else "http_error_response_branch"), *schema_source["source_refs"]],
+            })
+            if schema_value is not None and variant_kind != "unsupported_union":
+                root_schema, root_pointer, _ = _openapi_resolve(document, variant_schema, variant_pointer)
+                root_xml = root_schema.get("xml") if isinstance(root_schema, dict) and isinstance(root_schema.get("xml"), dict) else {}
+                root_name = root_xml.get("name")
+                root_namespace = root_xml.get("namespace")
+                root_xml_segments = [{"namespace": root_namespace if isinstance(root_namespace, str) else None, "local_name": root_name}] if isinstance(root_name, str) and root_name else [None]
+                collect_schema(variant_schema, variant_pointer, [], root_xml_segments, root_namespace if isinstance(root_namespace, str) else None, True, set())
+    if schema_shape_results:
+        shape_status = "complete" if response_contract["success_branches"] and all(complete for complete, _ in schema_shape_results) else "incomplete"
+        shape_refs = [source_ref for _, refs in schema_shape_results for source_ref in refs]
+        response_contract["schema_shape"].update(status=shape_status, source_refs=shape_refs)
+        response_contract["coded_result_field_inventory"].update(
+            status="complete" if shape_status == "complete" else "incomplete",
+            candidates=code_candidate_facts,
+            source_refs=[*shape_refs, *[source_ref for candidate in code_candidate_facts for source_ref in candidate["source_refs"]]],
+        )
     # Preserve order while de-duplicating field labels for the compatibility
     # assertion; the structured facts above retain their distinct paths.
     response_fields = list(dict.fromkeys(response_fields))
@@ -1077,12 +1250,12 @@ def parse_openapi_evidence(
                     for media_type, raw_example in examples.items():
                         if not isinstance(media_type, str) or not (media_type.casefold() == "application/json" or media_type.casefold().endswith("+json")):
                             continue
+                        # JSON-encoded strings are nested documents: a child
+                        # pointer would not resolve in the original Swagger
+                        # source. Do not promote them without a nested binding.
                         example = raw_example
-                        if isinstance(example, str) and len(example.encode("utf-8")) <= 1024 * 1024:
-                            try:
-                                example = _json_load_no_duplicates(example)
-                            except EvidenceError:
-                                continue
+                        if not isinstance(example, dict):
+                            continue
                         selected: Any = example
                         for token in field_tokens:
                             if not isinstance(selected, dict) or token not in selected:
@@ -1117,50 +1290,6 @@ def parse_openapi_evidence(
         response_contract["provider_result_codes"]["status"] = "unknown"
         response_contract["provider_result_codes"]["evidence_strength"] = "unknown"
         response_contract["provider_result_codes"]["source_refs"] = [source_ref for _, _, refs in result_code_facts for source_ref in refs]
-    elif success_responses:
-        def schema_excludes_code(schema_value: Any, schema_pointer: str, visited: set[str]) -> bool:
-            resolved, resolved_pointer, _ = _openapi_resolve(document, schema_value, schema_pointer)
-            if not isinstance(resolved, dict) or resolved_pointer in visited:
-                return False
-            visited.add(resolved_pointer)
-            schema_type = resolved.get("type")
-            if schema_type in {"string", "integer", "number", "boolean"}:
-                return True
-            if schema_type == "array":
-                items_schema = resolved.get("items")
-                return items_schema is not None and schema_excludes_code(items_schema, _json_pointer_child(resolved_pointer, "items"), visited)
-            if schema_type == "object" or isinstance(resolved.get("properties"), dict):
-                properties = resolved.get("properties")
-                if not isinstance(properties, dict) or resolved.get("additionalProperties") is not False:
-                    return False
-                return all(
-                    schema_excludes_code(
-                        child_schema,
-                        _json_pointer_child(_json_pointer_child(resolved_pointer, "properties"), property_name),
-                        visited.copy(),
-                    )
-                    for property_name, child_schema in properties.items()
-                )
-            return False
-
-        exclusion_refs: list[dict[str, Any]] = []
-        all_responses_exclude_codes = True
-        for status_code, response in success_responses:
-            response_pointer = _json_pointer_child(_json_pointer_child(operation_pointer, "responses"), status_code)
-            schema_pointer = _json_pointer_child(response_pointer, "schema")
-            schema_value = response.get("schema")
-            if schema_value is None or not schema_excludes_code(schema_value, schema_pointer, set()):
-                all_responses_exclude_codes = False
-                break
-            exclusion_refs.append(ref(schema_pointer, "provider_result_codes_not_applicable_by_complete_response_schema"))
-        if all_responses_exclude_codes and exclusion_refs:
-            response_contract["provider_result_codes"].update(
-                status="not_applicable",
-                evidence_strength="complete_response_schema",
-                success_values={"status": "not_applicable", "values": [], "source_refs": exclusion_refs},
-                error_values={"status": "not_applicable", "values": [], "source_refs": exclusion_refs},
-                source_refs=exclusion_refs,
-            )
     if len(array_facts) == 1:
         array_path, container_path, item_path, container_cardinality, array_refs = array_facts[0]
         collection_status = "documented" if array_path is not None and (response_format == "json" or container_path is not None and item_path is not None and container_cardinality["status"] == "documented") else "unknown"
@@ -1169,6 +1298,35 @@ def parse_openapi_evidence(
         response_contract["result_collection"].update(status=collection_status, path=array_path if response_format == "json" else None, container_path=container_path, item_path=item_path, container_cardinality=container_cardinality, value_type="array", source_refs=array_refs)
     elif array_facts:
         response_contract["result_collection"]["source_refs"] = [source_ref for _, _, _, _, refs in array_facts for source_ref in refs]
+
+    for branch in [*response_contract["success_branches"], *response_contract["documented_http_error_branches"]]:
+        branch_status = branch["http_status_code"]
+        branch_variant = branch["schema_variant"]
+        branch_key = (branch_status, branch_variant["kind"], branch_variant["index"])
+        branch["documented_fields"] = [field for field in response_contract["documented_fields"] if field["http_status_code"] == branch_status and field["schema_variant"] == branch_variant]
+        branch["required_fields"] = [field for field in response_contract["required_fields"] if field["http_status_code"] == branch_status and field["schema_variant"] == branch_variant]
+        branch_candidates = [candidate for candidate in code_candidate_facts if candidate["http_status_code"] == branch_status and candidate["schema_variant"] == branch_variant]
+        branch["coded_result_field_inventory"].update(
+            candidates=branch_candidates,
+            source_refs=[*branch["schema_shape"]["source_refs"], *[source_ref for candidate in branch_candidates for source_ref in candidate["source_refs"]]],
+        )
+        branch_codes = branch_result_code_facts.get(branch_key, [])
+        if len(branch_codes) == 1:
+            branch_path, branch_type, branch_refs = branch_codes[0]
+            branch["provider_result_codes"].update(path=branch_path, value_type=branch_type, source_refs=branch_refs)
+            if len(result_code_facts) == 1 and response_contract["provider_result_codes"]["path"] == branch_path:
+                branch["provider_result_codes"] = copy.deepcopy(response_contract["provider_result_codes"])
+        elif branch_codes:
+            branch["provider_result_codes"]["source_refs"] = [source_ref for _, _, refs in branch_codes for source_ref in refs]
+        branch_arrays = branch_array_facts.get(branch_key, [])
+        if len(branch_arrays) == 1:
+            branch_path, container_path, item_path, container_cardinality, branch_refs = branch_arrays[0]
+            collection_status = "documented" if branch_path is not None and (response_format == "json" or container_path is not None and item_path is not None and container_cardinality["status"] == "documented") else "unknown"
+            if response_format == "json":
+                container_cardinality = {"status": "not_applicable", "minimum": None, "maximum": None, "source_refs": []}
+            branch["result_collection"].update(status=collection_status, path=branch_path if response_format == "json" else None, container_path=container_path, item_path=item_path, container_cardinality=container_cardinality, value_type="array", source_refs=branch_refs)
+        elif branch_arrays:
+            branch["result_collection"]["source_refs"] = [source_ref for _, _, _, _, refs in branch_arrays for source_ref in refs]
 
     scheme_refs = [
         ref(_json_pointer_child("#/schemes", index), "transport_scheme")
@@ -1192,6 +1350,7 @@ def parse_openapi_evidence(
         "schema_version": SCHEMA_VERSION,
         "parser": {"id": PARSER_ID, "version": PARSER_VERSION},
         "identity": identity,
+        "operation_document": {"title": {"value": identity["operation_name"], "status": "registered_manifest", "source_refs": identity.get("source_refs", [])}, "purpose": {"value": None, "status": "unknown", "source_refs": []}},
         "source_bindings": [source_binding],
         "parse_status": "parsed_with_unknowns",
         "transport": {
@@ -1205,11 +1364,12 @@ def parse_openapi_evidence(
             "envelope_namespace": {"value": None, "status": "not_applicable", "source_refs": []},
             "operation_qname": {"value": None, "status": "not_applicable", "source_refs": []},
             "body_encoding": {"value": None, "status": "not_applicable", "source_refs": []},
+            "fixed_query_selectors": [],
         },
         "effect": {"classification": None, "status": "unknown", "authority": "operation_document", "source_refs": []},
         "parameters": parameters,
         "authentication": authentication,
-        "limits": {"provider_quota": {"value": None, "unit": None, "status": "not_parsed", "source_refs": []}, "request_budget": {"value": None, "status": "not_a_provider_fact", "source_refs": []}},
+        "limits": {"provider_quota": {"value": None, "unit": None, "status": "not_parsed", "source_refs": [], "scope": {"value": None, "status": "unknown", "source_refs": []}, "account_tier": {"value": None, "status": "unknown", "source_refs": []}}, "request_budget": {"value": None, "status": "not_a_provider_fact", "source_refs": []}},
         "response_assertion": {"kind": "documented_response_fields" if response_fields else "unknown", "fields": response_fields, "empty_result_semantics": {"value": None, "status": "unknown", "source_refs": []}, "source_refs": response_refs},
         "response_contract": response_contract,
         "explicit_unknowns": [value for value in explicit_unknowns if value],
@@ -1538,6 +1698,7 @@ def parse_evidence(
         "schema_version": SCHEMA_VERSION,
         "parser": {"id": PARSER_ID, "version": PARSER_VERSION},
         "identity": identity,
+        "operation_document": {"title": {"value": identity["operation_name"], "status": "registered_manifest", "source_refs": identity.get("source_refs", [])}, "purpose": {"value": None, "status": "unknown", "source_refs": []}},
         "source_bindings": [page_binding, detail_binding, guide_binding],
         "parse_status": "parsed_with_unknowns",
         "transport": {
@@ -1551,6 +1712,7 @@ def parse_evidence(
             "envelope_namespace": {"value": None, "status": "not_applicable" if identity["protocol"] != "SOAP" else "unknown", "source_refs": []},
             "operation_qname": {"value": None, "status": "not_applicable" if identity["protocol"] != "SOAP" else "unknown", "source_refs": []},
             "body_encoding": {"value": None, "status": "not_applicable" if identity["protocol"] != "SOAP" else "unknown", "source_refs": []},
+            "fixed_query_selectors": [],
         },
         "effect": effect,
         "parameters": parameters,
@@ -1580,21 +1742,254 @@ def _url_has_query_key_from_cell(tables: list[list[list[str]]], locator: dict[st
     return False
 
 
+def parse_kosis_evidence(
+    operation: dict[str, Any],
+    *,
+    guide_raw: bytes,
+    manual_raw: bytes,
+    guide_retrieved_at: str,
+    manual_retrieved_at: str,
+) -> dict[str, Any]:
+    """Parse the exact registered KOSIS table-selection operation from official docs.
+
+    This parser never interprets the fixed `method=getList` selector as an HTTP
+    method and never promotes examples/defaults into request values.
+    """
+    candidate_id = operation.get("candidate_id")
+    if candidate_id != "kosis-statistics-data-dt-1b41" or operation.get("endpoint_template") != "https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList":
+        raise EvidenceError("kosis_operation_identity_mismatch")
+    if not guide_raw.startswith(b"<!") and b"statisticsParameterData.do" not in guide_raw:
+        raise EvidenceError("kosis_guide_operation_not_found")
+    if not manual_raw.startswith(b"%PDF-"):
+        raise EvidenceError("kosis_manual_format_invalid")
+    if len(guide_raw) > MAX_KOSIS_GUIDE_BYTES or len(manual_raw) > MAX_KOSIS_MANUAL_BYTES:
+        raise EvidenceError("kosis_document_size_limit")
+    if _sha256(guide_raw) != KOSIS_GUIDE_SHA256 or _sha256(manual_raw) != KOSIS_MANUAL_SHA256:
+        raise EvidenceError("kosis_document_revision_unreviewed")
+    try:
+        manual_page = subprocess.run(
+            ["pdftotext", "-layout", "-f", "16", "-l", "16", "-", "-"],
+            input=manual_raw,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=5,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise EvidenceError("kosis_manual_page_extraction_failed") from exc
+    manual_page_text = manual_page.stdout.decode("utf-8", errors="replace")
+    if manual_page.returncode != 0 or len(manual_page.stdout) > 65536 or "1.4.2" not in manual_page_text or "분당 200건" not in manual_page_text:
+        raise EvidenceError("kosis_manual_error_quota_facts_unverified")
+    guide = _parse_html(guide_raw)
+    if len(guide.tables) <= 3 or len(guide.tables[2]) < 2 or len(guide.tables[3]) < 2:
+        raise EvidenceError("kosis_operation_tables_missing")
+    request_rows = guide.tables[2]
+    output_rows = guide.tables[3]
+    request_header = request_rows[0]
+    output_header = output_rows[0]
+    if request_header[:2] != ["요청변수", "변수타입"] or output_header[:3] != ["출력변수", "설명", "형식"]:
+        raise EvidenceError("kosis_operation_table_shape_ambiguous")
+
+    guide_source_id = "kosis_official_devguide"
+    manual_source_id = "kosis_official_api_manual"
+    endpoint_bytes = b"/openapi/Param/statisticsParameterData.do?method=getList"
+    endpoint_start = guide_raw.find(endpoint_bytes)
+    if endpoint_start < 0 or guide_raw.find(endpoint_bytes, endpoint_start + 1) >= 0:
+        raise EvidenceError("kosis_operation_endpoint_ambiguous")
+    endpoint_locator = {"source_id": guide_source_id, "kind": "html_byte_range", "byte_start": endpoint_start, "byte_end": endpoint_start + len(endpoint_bytes)}
+    title_bytes = "통계표선택 방법".encode("utf-8")
+    title_start = guide_raw.find(title_bytes)
+    if title_start < 0:
+        raise EvidenceError("kosis_operation_title_missing")
+    title_locator = {"source_id": guide_source_id, "kind": "html_byte_range", "byte_start": title_start, "byte_end": title_start + len(title_bytes)}
+
+    guide_binding = _make_source_binding(guide_source_id, guide_raw, "text/html", "/openapi/devGuide/devGuide_0201List.do", "GET", guide_retrieved_at, "operation_request_and_declared_output_tables", host="kosis.kr")
+    manual_binding = _make_source_binding(manual_source_id, manual_raw, "application/pdf", "/openapi/file/openApi_manual_v1.0.pdf", "GET", manual_retrieved_at, "source_error_and_quota_semantics", host="kosis.kr")
+
+    def cell_ref(source_id: str, table: int, row: int, cell: int, kind: str) -> dict[str, Any]:
+        return _source_ref(_cell_locator(source_id, "html_table_cell", table, row, cell), kind)
+
+    def doc_unknown(source_refs: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+        return {"value": None, "status": "unknown", "source_refs": source_refs or []}
+
+    parameters: list[dict[str, Any]] = []
+    auth_refs: list[dict[str, Any]] = []
+    conditional_fields = {"startPrdDe", "endPrdDe", "newEstPrdCnt", "prdInterval"}
+    for row_index, row in enumerate(request_rows[1:], 1):
+        if len(row) < 2:
+            raise EvidenceError("kosis_request_parameter_row_invalid")
+        type_index = next((index for index, cell in enumerate(row) if cell.strip() in {"String", "Integer", "Number", "Boolean"}), None)
+        if type_index is None or type_index == 0:
+            raise EvidenceError("kosis_request_parameter_type_missing")
+        name_index = next((index for index in range(type_index - 1, -1, -1) if re.search(r"[A-Za-z][A-Za-z0-9]*", row[index])), None)
+        raw_name = row[name_index].strip() if name_index is not None else ""
+        data_type = row[type_index].strip()
+        name_match = re.search(r"([A-Za-z][A-Za-z0-9]*)\s*$", raw_name)
+        range_match = re.fullmatch(r"\s*(objL)([0-9]+)\s*~\s*(objL)([0-9]+)\s*", raw_name, re.IGNORECASE)
+        names = [f"objL{number}" for number in range(int(range_match.group(2)), int(range_match.group(4)) + 1)] if range_match else ([name_match.group(1)] if name_match else [])
+        if not names or data_type != "String":
+            raise EvidenceError("kosis_request_parameter_name_or_type_ambiguous")
+        note_text = " ".join(row[type_index + 1:])
+        if "필수" in note_text:
+            requiredness_value = "required"
+            requiredness_status = "documented"
+        elif "선택" in note_text and not any(name in conditional_fields for name in names):
+            requiredness_value = "optional"
+            requiredness_status = "documented"
+        elif any(name in conditional_fields for name in names):
+            requiredness_value = "conditional"
+            requiredness_status = "documented"
+        else:
+            requiredness_value = None
+            requiredness_status = "unknown"
+        name_ref = cell_ref(guide_source_id, 2, row_index, name_index, "parameter_name")
+        type_ref = cell_ref(guide_source_id, 2, row_index, type_index, "parameter_data_type")
+        required_index = next((index for index, cell in enumerate(row) if "필수" in cell or "선택" in cell), len(row) - 1)
+        required_ref = cell_ref(guide_source_id, 2, row_index, required_index, "parameter_requiredness")
+        for name in names:
+            row_refs = [name_ref, type_ref, required_ref]
+            if name == "apiKey":
+                auth_refs.extend([name_ref, cell_ref(guide_source_id, 2, row_index, min(type_index + 1, len(row) - 1), "authentication_credential_description"), required_ref])
+            parameters.append({
+                "name": name,
+                "location": {"value": "query", "status": "documented", "source_refs": [name_ref, _source_ref(endpoint_locator, "operation_request_url_query_parameters")]},
+                "cardinality": {"minimum": None, "maximum": None, "status": "unknown", "source_refs": [name_ref]},
+                "requiredness": {"value": requiredness_value, "status": requiredness_status, "condition": "source_describes_alternative_period_selection" if requiredness_value == "conditional" else None, "source_refs": [required_ref]},
+                "size": {"value": None, "observed_values": [], "status": "unknown", "source_refs": []},
+                "data_type": {"value": data_type, "status": "documented", "source_refs": [type_ref]},
+                "enum": {"values": [], "status": "unknown", "source_refs": [name_ref]},
+                "default": {"value": None, "status": "unknown", "source_refs": [name_ref]},
+                "sample": {"present": False, "value_stored": False, "source_refs": []},
+                "source_refs": row_refs,
+            })
+
+    outputs: list[dict[str, Any]] = []
+    for row_index, row in enumerate(output_rows[1:], 1):
+        if len(row) < 3 or not row[0].strip() or not row[2].strip():
+            raise EvidenceError("kosis_declared_output_field_invalid")
+        output_name = row[0].strip()
+        output_type = row[2].strip()
+        refs = [cell_ref(guide_source_id, 3, row_index, 0, "declared_output_field_name"), cell_ref(guide_source_id, 3, row_index, 2, "declared_output_field_type")]
+        outputs.append({"name": output_name, "data_type": output_type, "size": output_type.partition("(")[2].rstrip(")") or None, "source_refs": refs})
+
+    manual_ref = lambda entry, kind="kosis_manual_error_contract": _source_ref({"source_id": manual_source_id, "kind": "pdf_page_section", "page_number": 16, "section": "1.4", "entry": entry}, kind)
+    error_contract_ref = manual_ref("XML error envelope fields err and errMsg")
+    code_rows = [("10", "credential"), ("11", "credential"), ("20", "bad_request"), ("21", "bad_request"), ("30", "empty_result"), ("31", "size_limit"), ("40", "quota"), ("41", "size_limit"), ("42", "quota"), ("50", "server")]
+    documented_error_codes = [{"value": code, "classification": classification, "source_refs": [manual_ref(f"error code {code}")]} for code, classification in code_rows]
+    unknown_response = _unknown_response_contract()
+    unknown_response["declared_output_fields"] = outputs
+    unknown_response["documented_error_contract"] = {
+        "status": "documented",
+        "format": "xml",
+        "code_path": {"kind": "xml_qname_path", "segments": [{"namespace": None, "local_name": "error"}, {"namespace": None, "local_name": "err"}]},
+        "message_path": {"kind": "xml_qname_path", "segments": [{"namespace": None, "local_name": "error"}, {"namespace": None, "local_name": "errMsg"}]},
+        "codes": documented_error_codes,
+        "source_refs": [error_contract_ref],
+    }
+    identity_refs = [_source_ref(endpoint_locator, "registered_operation_endpoint_binding"), _source_ref(title_locator, "official_operation_title")]
+    identity = {"source_id": "kosis", "operation_id": candidate_id, "provider": "KOSIS", "protocol": "REST", "operation_name": operation.get("label"), "source_refs": identity_refs}
+    candidate_path = ROOT / "reports/kosis/runtime-candidates.json"
+    profile_path = ROOT / "sources/kosis.json"
+    candidate_document = _strict_read_json(candidate_path)
+    profile_document = _strict_read_json(profile_path)
+    candidate_matches = [item for item in candidate_document.get("candidates", []) if item.get("candidate_id") == candidate_id]
+    if len(candidate_matches) != 1 or candidate_matches[0].get("endpoint_template") != operation.get("endpoint_template") or profile_document.get("source_id") != "kosis":
+        raise EvidenceError("kosis_registry_binding_mismatch")
+    registry_binding = {
+        "registry_revision": KOSIS_REGISTRY_REVISION,
+        "source_id": "kosis",
+        "operation_id": candidate_id,
+        "source_profile_artifact": "sources/kosis.json",
+        "source_profile_sha256": _sha256(profile_path.read_bytes()),
+        "source_profile_json_pointer": "#/source_id",
+        "candidate_artifact": "reports/kosis/runtime-candidates.json",
+        "candidate_artifact_sha256": _sha256(candidate_path.read_bytes()),
+        "candidate_json_pointer": "#/candidates/0",
+    }
+    quota_ref = manual_ref("error code 40 rate limit of 200 requests per minute", "provider_quota")
+    result = {
+        "schema_version": SCHEMA_VERSION,
+        "parser": {"id": PARSER_ID, "version": PARSER_VERSION},
+        "identity": identity,
+        "registry_binding": registry_binding,
+        "operation_document": {
+            "title": {"value": "통계표선택 방법", "status": "documented", "source_refs": [_source_ref(title_locator, "official_operation_title")]},
+            "purpose": {"value": None, "status": "not_found_in_parsed_operation_sources", "source_refs": []},
+        },
+        "source_bindings": [guide_binding, manual_binding],
+        "parse_status": "parsed_with_unknowns",
+        "transport": {
+            "protocol": {"value": "REST", "status": "documented", "source_refs": [identity_refs[0]]},
+            "scheme": {"value": "https", "status": "documented", "source_refs": [identity_refs[0]]},
+            "host": {"value": "kosis.kr", "status": "documented", "source_refs": [identity_refs[0]]},
+            "path": {"value": "/openapi/Param/statisticsParameterData.do", "status": "documented", "source_refs": [identity_refs[0]]},
+            "http_method": {"value": None, "status": "unknown", "authority_scope": "not_found_in_parsed_operation_sources", "source_refs": []},
+            "soap_action": {"value": None, "status": "not_applicable", "source_refs": []},
+            "soap_version": {"value": None, "status": "not_applicable", "source_refs": []},
+            "envelope_namespace": {"value": None, "status": "not_applicable", "source_refs": []},
+            "operation_qname": {"value": None, "status": "not_applicable", "source_refs": []},
+            "body_encoding": {"value": None, "status": "not_applicable", "source_refs": []},
+            "fixed_query_selectors": [{"name": "method", "value": "getList", "role": "operation_selector", "status": "documented", "source_refs": [_source_ref(endpoint_locator, "operation_fixed_query_selector")] }],
+        },
+        "effect": {"classification": "read_only", "status": "documented", "authority": "operation_document", "source_refs": [_source_ref(title_locator, "statistics_table_selection_operation"), *[item["source_refs"][0] for item in outputs[:1]]]},
+        "parameters": parameters,
+        "authentication": {"requirement": "required", "status": "documented", "mechanism": "api_key", "parameter_names": ["apiKey"], "placement": "query", "source_refs": auth_refs},
+        "limits": {"provider_quota": {"value": 200, "unit": "requests/minute", "status": "documented", "source_refs": [quota_ref], "scope": {"value": None, "status": "unknown", "source_refs": []}, "account_tier": {"value": None, "status": "unknown", "source_refs": []}}, "request_budget": {"value": None, "status": "not_a_provider_fact", "source_refs": []}},
+        "response_assertion": {"kind": "unknown", "fields": [], "empty_result_semantics": {"value": None, "status": "unknown", "source_refs": []}, "source_refs": []},
+        "response_contract": unknown_response,
+        "explicit_unknowns": ["operation_http_method_not_established", "parameter_cardinality_not_established", "period_selection_condition_not_fully_normalized", "success_http_status_not_established", "success_response_shape_not_established", "success_result_collection_not_established", "successful_result_code_semantics_not_established", "operation_purpose_sentence_not_found_in_parsed_sources", "provider_quota_scope_not_established", "provider_quota_account_tier_not_established", "response_empty_result_semantics_not_declared"],
+    }
+    _validate_evidence(result)
+    return result
+
+
 def _validate_evidence(value: dict[str, Any]) -> None:
     if value.get("schema_version") != SCHEMA_VERSION:
         raise EvidenceError("evidence_schema_version_invalid")
     if value.get("parse_status") not in {"parsed_with_unknowns", "parsed_complete", "ambiguous", "unsupported"}:
         raise EvidenceError("evidence_parse_status_invalid")
+    bindings_by_id: dict[str, dict[str, Any]] = {}
     for binding in value.get("source_bindings", []):
         if not re.fullmatch(r"[a-f0-9]{64}", binding.get("sha256", "")) or binding.get("bytes", 0) <= 0:
             raise EvidenceError("evidence_source_binding_invalid")
-        if binding.get("origin", {}).get("host") not in {HOST, "www.safetydata.go.kr"} or "?" in binding.get("origin", {}).get("path", ""):
+        if binding.get("origin", {}).get("host") not in {HOST, "www.safetydata.go.kr", "kosis.kr", "ecos.bok.or.kr", "open.assembly.go.kr", "data.seoul.go.kr", "openapi.seoul.go.kr"} or "?" in binding.get("origin", {}).get("path", ""):
             raise EvidenceError("evidence_source_origin_unsafe")
+        source_id = binding.get("source_id")
+        if not isinstance(source_id, str) or source_id in bindings_by_id:
+            raise EvidenceError("evidence_source_id_duplicate_or_missing")
+        bindings_by_id[source_id] = binding
+    source_id = value.get("identity", {}).get("source_id")
+    if source_id not in {"data_go_kr", "kosis", "ecos", "open_assembly", "seoul_open_data"}:
+        raise EvidenceError("evidence_identity_source_id_invalid")
+    for source_ref in _iter_source_refs(value):
+        locator_source = source_ref.get("locator", {}).get("source_id")
+        if locator_source not in bindings_by_id:
+            raise EvidenceError("evidence_source_reference_unbound")
+    if source_id == "kosis":
+        identity = value["identity"]
+        selectors = value.get("transport", {}).get("fixed_query_selectors", [])
+        if identity.get("operation_id") != "kosis-statistics-data-dt-1b41" or identity.get("provider") != "KOSIS" or identity.get("protocol") != "REST":
+            raise EvidenceError("kosis_operation_identity_invalid")
+        if value.get("transport", {}).get("http_method", {}).get("value") is not None:
+            raise EvidenceError("kosis_http_method_must_remain_source_derived")
+        if not isinstance(selectors, list) or len(selectors) != 1 or selectors[0].get("name") != "method" or selectors[0].get("value") != "getList" or selectors[0].get("role") != "operation_selector":
+            raise EvidenceError("kosis_fixed_query_selector_invalid")
     for parameter in value.get("parameters", []):
         if parameter.get("sample", {}).get("value_stored") is not False:
             raise EvidenceError("sample_value_must_not_be_stored")
         if parameter.get("sample", {}).get("present") not in {True, False}:
             raise EvidenceError("sample_presence_invalid")
+
+
+def _iter_source_refs(value: Any):
+    if isinstance(value, dict):
+        if isinstance(value.get("locator"), dict) and isinstance(value.get("evidence_kind"), str):
+            yield value
+        for child in value.values():
+            yield from _iter_source_refs(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _iter_source_refs(child)
 
 
 def write_capture(path: pathlib.Path, raw: bytes) -> None:
@@ -1607,6 +2002,40 @@ def write_capture(path: pathlib.Path, raw: bytes) -> None:
     temp.write_bytes(raw)
     temp.chmod(0o600)
     temp.replace(path)
+
+
+class _OfficialDocumentRequestPacer:
+    """Serialize source-document requests with a conservative 1 s interval."""
+
+    def __init__(self, interval_seconds: float = MIN_DOCUMENT_REQUEST_INTERVAL_SECONDS) -> None:
+        self.interval_seconds = interval_seconds
+        self.last_started: float | None = None
+
+    def wait(self) -> None:
+        now = time.monotonic()
+        if self.last_started is not None:
+            remaining = self.interval_seconds - (now - self.last_started)
+            if remaining > 0:
+                time.sleep(remaining)
+        self.last_started = time.monotonic()
+
+
+def _capture_root_size(path: pathlib.Path) -> int:
+    total = 0
+    try:
+        for entry in path.rglob("*"):
+            if entry.is_file() and not entry.is_symlink():
+                total += entry.stat().st_size
+    except OSError as exc:
+        raise EvidenceError("capture_root_size_unavailable") from exc
+    return total
+
+
+def _write_captured_document(root: pathlib.Path, path: pathlib.Path, raw: bytes) -> None:
+    previous_bytes = path.stat().st_size if path.is_file() else 0
+    if _capture_root_size(root) - previous_bytes + len(raw) > MAX_PRIVATE_CAPTURE_ROOT_BYTES:
+        raise EvidenceError("source_capture_disk_budget_exceeded")
+    write_capture(path, raw)
 
 
 def prepare_private_capture_root(path: pathlib.Path) -> pathlib.Path:
@@ -1637,11 +2066,16 @@ def _capture_document_status(reason_code: str | None) -> tuple[str, str]:
         return "unsupported", "implement_legacy_ole_or_hwp_guide_adapter"
     if reason_code == "safetydata_parser_not_yet_available":
         return "unsupported", "implement_safetydata_document_profile"
-    if any(token in reason_code for token in ("ambiguous", "duplicate", "conflict", "changed")):
+    if reason_code in {"official_document_not_found", "operation_document_attachment_not_found"}:
+        return "missing", "locate_official_document"
+    if any(token in reason_code for token in ("ambiguous", "duplicate", "conflict")):
         return "ambiguous", "resolve_operation_document_match"
     if any(token in reason_code for token in ("not_yet_available", "unsupported", "format_unavailable")):
         return "unsupported", "implement_or_register_document_adapter"
-    return "missing", "retry_or_locate_official_document"
+    # Transport, deadline, changed-source, and unclassified failures stay
+    # retryable. A transient documentation failure is never evidence that the
+    # registered provider operation or its documentation is absent.
+    return "retryable", "retry_official_document_capture"
 
 
 def _write_capture_receipt(
@@ -1653,20 +2087,24 @@ def _write_capture_receipt(
     content_types: dict[str, str] | None = None,
     retrieved_at: dict[str, str] | None = None,
 ) -> None:
+    if content_types is None:
+        content_types = _capture_content_types(folder)
+    if retrieved_at is None:
+        retrieved_at = _capture_retrieval_times(folder)
     documents = []
     for role, filename in (("catalogue", "catalogue.html"), ("operation_detail", "operation-detail.html"), ("reference_guide", "reference-guide.bin")):
         path = folder / filename
         present = path.is_file()
         raw = path.read_bytes() if present else b""
         detected_type, detected_encoding = _document_media_type(role, raw) if present else (None, None)
-        media_type = _normalize_content_type((content_types or {}).get(role), detected_type) if present else None
+        media_type = _normalize_content_type(content_types.get(role), detected_type) if present else None
         encoding = _content_type_encoding(media_type) if present else None
         if present and encoding is None:
             encoding = detected_encoding
-        documents.append({"role": role, "present": present, "bytes": len(raw), "sha256": _sha256(raw) if present else None, "media_type": media_type, "encoding": encoding, "retrieved_at": (retrieved_at or {}).get(role) if present else None})
+        documents.append({"role": role, "present": present, "bytes": len(raw), "sha256": _sha256(raw) if present else None, "media_type": media_type, "encoding": encoding, "retrieved_at": retrieved_at.get(role) if present else None})
     evidence_path = folder / "evidence.json"
     receipt = {
-        "schema_version": "datapan.operation-document-capture-receipt.v1",
+        "schema_version": "datapan.operation-document-capture-receipt.v2",
         "operation_id": identity["operation_id"],
         "status": status,
         "reason_code": reason_code,
@@ -1912,6 +2350,8 @@ def _fetch_official_unbounded(
         response = connection.getresponse()
         if 300 <= response.status < 400:
             raise EvidenceError("source_redirect_rejected")
+        if response.status == 404:
+            raise EvidenceError("official_document_not_found")
         if response.status != 200:
             raise EvidenceError("source_http_status_rejected")
         content_encoding = response.getheader("Content-Encoding", "identity").lower()
@@ -1961,7 +2401,11 @@ def _fetch_official_unbounded(
         _ = original_create
 
 
-def _capture_one(operation: dict[str, Any], capture_root: pathlib.Path) -> dict[str, Any]:
+def _capture_one(
+    operation: dict[str, Any],
+    capture_root: pathlib.Path,
+    request_pacer: _OfficialDocumentRequestPacer | None = None,
+) -> dict[str, Any]:
     identity = _safe_operation_identity(operation)
     dataset_id, key = identity["dataset_id"], identity["upstream_operation_key"]
     folder = capture_root / dataset_id / key
@@ -1984,18 +2428,22 @@ def _capture_one(operation: dict[str, Any], capture_root: pathlib.Path) -> dict[
         page_raw = page_path.read_bytes()
         page_at = source_retrieved_at.get("catalogue") or _capture_file_time(page_path)
         if not detail_path.exists() or not guide_path.exists():
+            if request_pacer:
+                request_pacer.wait()
             refreshed_page, _headers, new_cookies = _fetch_official(f"https://{HOST}/data/{dataset_id}/openapi.do", purpose="catalogue", max_bytes=MAX_PAGE_BYTES, cookies=cookies)
             cookies.update(new_cookies)
             if _sha256(refreshed_page) != _sha256(page_raw):
                 raise EvidenceError("catalogue_document_changed_during_resume")
             source_media_types["catalogue"] = _headers.get("content-type", "")
     else:
+        if request_pacer:
+            request_pacer.wait()
         page_raw, page_headers, new_cookies = _fetch_official(f"https://{HOST}/data/{dataset_id}/openapi.do", purpose="catalogue", max_bytes=MAX_PAGE_BYTES, cookies=cookies)
         cookies.update(new_cookies)
         page_at = page_headers.get("date") or _utc_now()
         source_retrieved_at["catalogue"] = page_at
         source_media_types["catalogue"] = page_headers.get("content-type", "")
-        write_capture(page_path, page_raw)
+        _write_captured_document(capture_root, page_path, page_raw)
     page = _parse_html(page_raw)
     page_matches = [item for item in page.options if item.get("value") == key and item.get("name") == identity["operation_name"]]
     if page.hidden.get("publicDataPk") != [dataset_id]:
@@ -2024,13 +2472,17 @@ def _capture_one(operation: dict[str, Any], capture_root: pathlib.Path) -> dict[
         detail_at = source_retrieved_at.get("operation_detail") or _capture_file_time(detail_path)
     else:
         body = urllib.parse.urlencode({"oprtinSeqNo": key, "publicDataDetailPk": detail_pk, "publicDataPk": dataset_id}).encode("ascii")
+        if request_pacer:
+            request_pacer.wait()
         detail_raw, detail_headers, new_cookies = _fetch_official(f"https://{HOST}{DETAIL_ROUTE}", purpose="operation_detail", method="POST", body=body, max_bytes=MAX_DETAIL_BYTES, cookies=cookies)
         cookies.update(new_cookies)
         detail_at = detail_headers.get("date") or _utc_now()
         source_retrieved_at["operation_detail"] = detail_at
         source_media_types["operation_detail"] = detail_headers.get("content-type", "")
-        write_capture(detail_path, detail_raw)
+        _write_captured_document(capture_root, detail_path, detail_raw)
     attachments = page.attachments
+    if not attachments:
+        raise EvidenceError("operation_document_attachment_not_found")
     if len(attachments) != 1:
         raise EvidenceError("guide_attachment_ambiguous")
     file_id, file_sn = attachments[0]
@@ -2039,12 +2491,14 @@ def _capture_one(operation: dict[str, Any], capture_root: pathlib.Path) -> dict[
         guide_at = source_retrieved_at.get("reference_guide") or _capture_file_time(guide_path)
     else:
         query = urllib.parse.urlencode({"atchFileId": file_id, "fileDetailSn": file_sn})
+        if request_pacer:
+            request_pacer.wait()
         guide_raw, guide_headers, new_cookies = _fetch_official(f"https://{HOST}{DOWNLOAD_ROUTE}?{query}", purpose="reference_guide", max_bytes=MAX_GUIDE_BYTES, cookies=cookies)
         cookies.update(new_cookies)
         guide_at = guide_headers.get("date") or _utc_now()
         source_retrieved_at["reference_guide"] = guide_at
         source_media_types["reference_guide"] = guide_headers.get("content-type", "")
-        write_capture(guide_path, guide_raw)
+        _write_captured_document(capture_root, guide_path, guide_raw)
     try:
         evidence = parse_evidence(operation, page_raw=page_raw, detail_raw=detail_raw, guide_raw=guide_raw, page_retrieved_at=page_at, detail_retrieved_at=detail_at, guide_retrieved_at=guide_at, source_media_types=source_media_types)
     except EvidenceError as exc:
@@ -2062,7 +2516,7 @@ def reconcile(
     evidence_dir: pathlib.Path,
     capture_root: pathlib.Path | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    statuses = ("pending", "acquired", "parsed_with_unknowns", "parsed_complete", "missing", "ambiguous", "unsupported", "invalid")
+    statuses = ("pending", "retryable", "acquired", "parsed_with_unknowns", "parsed_complete", "missing", "ambiguous", "unsupported", "invalid")
     counts = {status: 0 for status in statuses}
     by_operation = {item["operation_identity"]["operation_id"]: item for item in queue}
     by_source_identity = {
@@ -2073,7 +2527,7 @@ def reconcile(
     invalid_ids: set[str] = set()
     unmatched_invalid = 0
     for path in sorted(evidence_dir.glob("*.json")):
-        if path.name == "reconciliation.v1.json":
+        if path.name.startswith("reconciliation."):
             continue
         path_match = re.fullmatch(r"([0-9]+)-([A-Za-z0-9:._-]+)\.json", path.name)
         matched_id = by_source_identity.get((path_match.group(1), path_match.group(2))) if path_match else None
@@ -2127,7 +2581,7 @@ def reconcile(
         counts[status] += 1
         work_items.append(item)
     report = {
-        "schema_version": "datapan.operation-document-reconciliation.v1",
+        "schema_version": "datapan.operation-document-reconciliation.v2",
         "manifest_binding": {"path": "reports/data-go-kr/operation-manifest.json", "sha256": _sha256(MANIFEST.read_bytes()) if MANIFEST.exists() else None, "source_snapshot_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"},
         "summary": {"registered_api_operations": len(queue), "statuses": counts, "invalid_artifacts_not_bound_to_registered_identity": unmatched_invalid, "coverage_complete": counts["parsed_complete"] == len(queue) and unmatched_invalid == 0},
         "scope": {"provider": "data.go.kr", "inventory": "registered_rest_and_soap_operations_only", "registered_protocols": {"REST": 12627, "SOAP": 35}, "link_operations_excluded": 8871, "operationless_catalog_entries_excluded": 473, "worldwide_provider_apis_included": False},
@@ -2142,6 +2596,9 @@ def reconcile(
                 "request_deadline_seconds": REQUEST_TIMEOUT_SECONDS,
                 "max_concurrent_requests_per_host": 1,
                 "max_batch_operations": MAX_BATCH_OPERATIONS,
+                "minimum_interval_between_document_requests_ms": int(MIN_DOCUMENT_REQUEST_INTERVAL_SECONDS * 1000),
+                "max_private_capture_root_bytes": MAX_PRIVATE_CAPTURE_ROOT_BYTES,
+                "max_schema_variants_per_response": MAX_SCHEMA_VARIANTS_PER_RESPONSE,
                 "max_response_bytes": {"catalogue": MAX_PAGE_BYTES, "operation_detail": MAX_DETAIL_BYTES, "reference_guide": MAX_GUIDE_BYTES},
                 "redirects_followed": False,
                 "compressed_responses_accepted": False,
@@ -2161,11 +2618,12 @@ def _capture_work_status(identity: dict[str, Any], capture_root: pathlib.Path | 
             receipt = _strict_read_json(receipt_path)
         except EvidenceError:
             return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_invalid"}
-        if receipt.get("schema_version") != "datapan.operation-document-capture-receipt.v1" or receipt.get("operation_id") != identity["operation_id"]:
+        version = receipt.get("schema_version")
+        if version not in {"datapan.operation-document-capture-receipt.v1", "datapan.operation-document-capture-receipt.v2"} or receipt.get("operation_id") != identity["operation_id"]:
             return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_identity_mismatch"}
         status = receipt.get("status")
         reason_code = receipt.get("reason_code")
-        allowed = {"acquired", "missing", "ambiguous", "unsupported"}
+        allowed = {"acquired", "missing", "ambiguous", "unsupported"} | ({"retryable"} if version.endswith(".v2") else set())
         if status not in allowed or (reason_code is not None and not re.fullmatch(r"[a-z][a-z0-9_]{0,127}", reason_code)):
             return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_status_invalid"}
         expected_files = {"catalogue": "catalogue.html", "operation_detail": "operation-detail.html", "reference_guide": "reference-guide.bin"}
@@ -2203,9 +2661,14 @@ def _capture_work_status(identity: dict[str, Any], capture_root: pathlib.Path | 
         next_action = {
             "acquired": "run_offline_document_parser",
             "missing": "retry_or_locate_official_document",
+            "retryable": "retry_official_document_capture",
             "ambiguous": "resolve_operation_document_match",
             "unsupported": "implement_legacy_ole_or_hwp_guide_adapter" if reason_code == "guide_format_unsupported_legacy_ole_document" else ("implement_safetydata_document_profile" if reason_code == "safetydata_parser_not_yet_available" else "implement_or_register_document_adapter"),
         }[status]
+        # Old v1 receipts used `missing` for every acquisition error. Do not
+        # treat those ambiguous historical failures as verified document loss.
+        if version.endswith(".v1") and status == "missing":
+            status, next_action = "retryable", "retry_official_document_capture"
         result: dict[str, Any] = {"status": status, "next_action": next_action}
         if reason_code:
             result["reason_code"] = reason_code
@@ -2215,7 +2678,7 @@ def _capture_work_status(identity: dict[str, Any], capture_root: pathlib.Path | 
     if all(present):
         return {"status": "acquired", "next_action": "run_offline_document_parser"}
     if any(present):
-        return {"status": "missing", "next_action": "retry_or_locate_official_document", "reason_code": "capture_incomplete"}
+        return {"status": "retryable", "next_action": "retry_official_document_capture", "reason_code": "capture_incomplete"}
     return None
 
 
@@ -2227,7 +2690,7 @@ def _capture_content_types(folder: pathlib.Path) -> dict[str, str]:
         receipt = _strict_read_json(receipt_path)
     except EvidenceError:
         return {}
-    if receipt.get("schema_version") != "datapan.operation-document-capture-receipt.v1":
+    if receipt.get("schema_version") not in {"datapan.operation-document-capture-receipt.v1", "datapan.operation-document-capture-receipt.v2"}:
         return {}
     result: dict[str, str] = {}
     for document in receipt.get("documents", []):
@@ -2272,7 +2735,7 @@ def _capture_retrieval_times(folder: pathlib.Path) -> dict[str, str]:
         receipt = _strict_read_json(receipt_path) if receipt_path.is_file() else {}
     except EvidenceError:
         receipt = {}
-    if receipt.get("schema_version") == "datapan.operation-document-capture-receipt.v1":
+    if receipt.get("schema_version") in {"datapan.operation-document-capture-receipt.v1", "datapan.operation-document-capture-receipt.v2"}:
         for document in receipt.get("documents", []):
             if not isinstance(document, dict) or not document.get("present"):
                 continue
@@ -2365,7 +2828,7 @@ def _main() -> int:
     parser.add_argument("--offset", type=int, default=0, help="Stable zero-based work-queue offset for bounded resumable batches")
     parser.add_argument("--operation-id", action="append", default=[], help="Select an exact registered operation identity; repeat up to the bounded batch limit")
     parser.add_argument("--parse-captures", action="store_true")
-    parser.add_argument("--evidence-dir", type=pathlib.Path, default=EVIDENCE_DIR)
+    parser.add_argument("--evidence-dir", type=pathlib.Path, default=EVIDENCE_V2_DIR)
     parser.add_argument("--queue", type=pathlib.Path, default=QUEUE)
     parser.add_argument("--reconciliation", type=pathlib.Path, default=RECONCILIATION)
     args = parser.parse_args()
@@ -2387,9 +2850,10 @@ def _main() -> int:
             args.capture_root = prepare_private_capture_root(args.capture_root)
             operations = {op["operation_id"]: op for op in manifest["operations"]}
             receipts = []
+            request_pacer = _OfficialDocumentRequestPacer()
             for item in selected:
                 try:
-                    receipts.append(_capture_one(operations[item["operation_identity"]["operation_id"]], args.capture_root))
+                    receipts.append(_capture_one(operations[item["operation_identity"]["operation_id"]], args.capture_root, request_pacer))
                 except EvidenceError as exc:
                     operation = operations[item["operation_identity"]["operation_id"]]
                     identity = _safe_operation_identity(operation)
@@ -2400,8 +2864,7 @@ def _main() -> int:
                     except OSError:
                         pass
                     status, _ = _capture_document_status(str(exc))
-                    if not (folder / "capture-receipt.json").is_file():
-                        _write_capture_receipt(folder, identity, status=status, reason_code=str(exc))
+                    _write_capture_receipt(folder, identity, status=status, reason_code=str(exc))
                     receipts.append({"operation_id": item["operation_identity"]["operation_id"], "status": status, "reason_code": str(exc)})
             print(json.dumps({"attempted": len(receipts), "statuses": {s: sum(1 for r in receipts if r["status"] == s) for s in sorted({r["status"] for r in receipts})}, "private_capture_root": True}, sort_keys=True))
         if args.parse_captures:

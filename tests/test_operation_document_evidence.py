@@ -224,7 +224,7 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
             from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema is an optional release-validation dependency")
-        schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v1.schema.json").read_text(encoding="utf-8"))
+        schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json").read_text(encoding="utf-8"))
         Draft202012Validator.check_schema(schema)
         evidence = DOCS.parse_evidence(
             _operation(), page_raw=_page(), detail_raw=_detail(), guide_raw=_docx(),
@@ -235,6 +235,43 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         broken = copy.deepcopy(evidence)
         broken["parameters"][0]["sample"]["value_stored"] = True
         self.assertTrue(list(validator.iter_errors(broken)))
+
+    def test_kosis_current_operation_sidecar_binds_fixed_selector_without_inventing_http_method(self) -> None:
+        try:
+            from jsonschema import Draft202012Validator
+        except ImportError:
+            self.skipTest("jsonschema is an optional release-validation dependency")
+        artifact = ROOT / "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json"
+        evidence = json.loads(artifact.read_text(encoding="utf-8"))
+        schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(evidence)), [])
+        self.assertEqual(evidence["identity"]["source_id"], "kosis")
+        self.assertEqual(evidence["identity"]["operation_id"], "kosis-statistics-data-dt-1b41")
+        self.assertEqual(evidence["operation_document"]["title"]["value"], "통계표선택 방법")
+        self.assertEqual(evidence["operation_document"]["purpose"]["status"], "not_found_in_parsed_operation_sources")
+        self.assertEqual(evidence["transport"]["path"]["value"], "/openapi/Param/statisticsParameterData.do")
+        self.assertIsNone(evidence["transport"]["http_method"]["value"])
+        self.assertEqual(evidence["transport"]["fixed_query_selectors"][0]["name"], "method")
+        self.assertEqual(evidence["transport"]["fixed_query_selectors"][0]["value"], "getList")
+        self.assertEqual(evidence["authentication"]["parameter_names"], ["apiKey"])
+        self.assertEqual(evidence["authentication"]["placement"], "query")
+        self.assertEqual(evidence["response_contract"]["documented_error_contract"]["format"], "xml")
+        self.assertIn("DT", {field["name"] for field in evidence["response_contract"]["declared_output_fields"]})
+        self.assertEqual(evidence["response_contract"]["success_branches"], [])
+        source_ids = {binding["source_id"] for binding in evidence["source_bindings"]}
+        refs = []
+        def visit(value):
+            if isinstance(value, dict):
+                if isinstance(value.get("locator"), dict):
+                    refs.append(value)
+                for child in value.values():
+                    visit(child)
+            elif isinstance(value, list):
+                for child in value:
+                    visit(child)
+        visit(evidence)
+        self.assertTrue(all(ref["locator"]["source_id"] in source_ids for ref in refs))
+        self.assertNotIn("https://kosis.kr/openapi/Param/", artifact.read_text(encoding="utf-8"))
 
     def test_inline_swagger_resolves_exact_registered_contract_without_storing_examples(self) -> None:
         raw = _swagger_page(_swagger_document())
@@ -306,6 +343,9 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         )
         contract = evidence["response_contract"]
         self.assertEqual(contract["accepted_http_status_codes"]["values"], [200])
+        self.assertEqual(contract["payload"]["kind"], "json")
+        self.assertEqual(contract["payload"]["media_types"], ["application/json"])
+        self.assertEqual(contract["schema_shape"]["status"], "incomplete")
         result_code = contract["provider_result_codes"]
         self.assertEqual(result_code["status"], "unknown")
         self.assertEqual(result_code["path"], {"kind": "json_pointer", "value": "#/header/resultCode"})
@@ -316,9 +356,158 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         self.assertEqual(contract["result_collection"]["container_path"], {"kind": "json_pointer", "value": "#/body"})
         self.assertIsNone(contract["result_collection"]["item_path"])
         self.assertEqual(contract["result_collection"]["value_type"], "array")
+        self.assertEqual(contract["coded_result_field_inventory"]["status"], "incomplete")
+        self.assertEqual(contract["coded_result_field_inventory"]["candidates"][0]["classification"], "recognized_result_code_name")
         fields = {item["path"]["value"]: item for item in contract["documented_fields"] if item["path"] and item["path"]["kind"] == "json_pointer"}
         self.assertEqual(fields["#/header/resultCode"]["value_type"], "string")
         self.assertEqual(contract["required_fields"], [])
+
+    def test_success_response_branches_preserve_distinct_status_schemas_and_fields(self) -> None:
+        document = _swagger_document()
+        document["paths"]["/health"]["get"]["responses"]["201"] = {
+            "description": "Created with status envelope",
+            "schema": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["status"],
+                "properties": {"status": {"type": "string"}},
+            },
+        }
+        evidence = DOCS.parse_openapi_evidence(
+            _operation(),
+            page_raw=_swagger_page(document),
+            page_retrieved_at="2026-10-07T03:00:00Z",
+        )
+        contract = evidence["response_contract"]
+        self.assertEqual(contract["accepted_http_status_codes"]["values"], [200, 201])
+        branches = {item["http_status_code"]: item for item in contract["success_branches"]}
+        self.assertEqual(branches[200]["schema_source"]["json_pointer"], "#/paths/~1health/get/responses/200/schema")
+        self.assertEqual(branches[200]["schema_shape"]["status"], "incomplete")
+        self.assertEqual(branches[200]["root_shape"], {"status": "documented", "kind": "object", "qname": None, "source_refs": branches[200]["root_shape"]["source_refs"]})
+        self.assertEqual(branches[201]["schema_source"]["json_pointer"], "#/paths/~1health/get/responses/201/schema")
+        self.assertEqual(branches[201]["schema_shape"]["status"], "complete")
+        self.assertEqual(branches[201]["root_shape"]["kind"], "object")
+        fields_by_status = {(item["http_status_code"], item["name"]): item for item in contract["documented_fields"]}
+        self.assertIn((200, "resultCode"), fields_by_status)
+        self.assertIn((201, "status"), fields_by_status)
+        candidates = contract["coded_result_field_inventory"]["candidates"]
+        self.assertEqual([(item["http_status_code"], item["name"]) for item in candidates], [(200, "resultCode"), (201, "status")])
+        self.assertEqual([item["name"] for item in branches[200]["coded_result_field_inventory"]["candidates"]], ["resultCode"])
+        self.assertEqual(branches[200]["provider_result_codes"]["status"], "unknown")
+        self.assertEqual(branches[200]["result_collection"]["path"], {"kind": "json_pointer", "value": "#/body/items"})
+        self.assertEqual(branches[201]["result_collection"]["status"], "unknown")
+        self.assertEqual(contract["schema_shape"]["status"], "incomplete")
+
+    def test_numeric_http_error_response_branches_preserve_status_and_union_member_scope(self) -> None:
+        document = _swagger_document()
+        document["paths"]["/health"]["get"]["responses"]["400"] = {
+            "description": "Bad request",
+            "schema": {
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "required": ["code"],
+                        "properties": {"code": {"type": "string"}},
+                    },
+                    {"type": "string"},
+                ],
+            },
+        }
+        document["paths"]["/health"]["get"]["responses"]["503"] = {
+            "description": "Service unavailable",
+            "schema": {"type": "array", "items": {"type": "string"}},
+        }
+        evidence = DOCS.parse_openapi_evidence(
+            _operation(),
+            page_raw=_swagger_page(document),
+            page_retrieved_at="2026-10-07T03:00:00Z",
+        )
+        contract = evidence["response_contract"]
+        self.assertEqual(contract["accepted_http_status_codes"]["values"], [200])
+        branches = contract["documented_http_error_branches"]
+        self.assertEqual(
+            [(item["http_status_code"], item["schema_variant"]) for item in branches],
+            [(400, {"kind": "oneOf", "index": 0}), (400, {"kind": "oneOf", "index": 1}), (503, {"kind": "single", "index": None})],
+        )
+        self.assertEqual(branches[0]["schema_source"]["json_pointer"], "#/paths/~1health/get/responses/400/schema/oneOf/0")
+        self.assertEqual(branches[0]["root_shape"]["kind"], "object")
+        self.assertEqual(branches[1]["root_shape"]["kind"], "scalar")
+        self.assertEqual(branches[2]["root_shape"]["kind"], "array")
+        status_refs = [item["locator"]["json_pointer"] for branch in branches for item in branch["source_refs"] if item["evidence_kind"] == "documented_http_error_status"]
+        self.assertEqual(status_refs, ["#/paths/~1health/get/responses/400", "#/paths/~1health/get/responses/400", "#/paths/~1health/get/responses/503"])
+        try:
+            from jsonschema import Draft202012Validator
+        except ImportError:
+            return
+        schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(evidence)), [])
+
+    def test_openapi_union_members_remain_disjoint_source_bound_response_branches(self) -> None:
+        document = _swagger_document()
+        document["paths"]["/health"]["get"]["responses"]["200"]["schema"] = {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["data"],
+                    "properties": {"data": {"type": "array", "items": {"type": "string"}}},
+                },
+                {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["error"],
+                    "properties": {"error": {"type": "string"}},
+                },
+            ]
+        }
+        evidence = DOCS.parse_openapi_evidence(
+            _operation(),
+            page_raw=_swagger_page(document),
+            page_retrieved_at="2026-10-07T03:00:00Z",
+        )
+        contract = evidence["response_contract"]
+        branches = contract["success_branches"]
+        self.assertEqual([(item["http_status_code"], item["schema_variant"]) for item in branches], [(200, {"kind": "oneOf", "index": 0}), (200, {"kind": "oneOf", "index": 1})])
+        self.assertEqual([item["schema_source"]["json_pointer"] for item in branches], [
+            "#/paths/~1health/get/responses/200/schema/oneOf/0",
+            "#/paths/~1health/get/responses/200/schema/oneOf/1",
+        ])
+        self.assertEqual(contract["schema_shape"]["status"], "complete")
+        self.assertEqual(branches[0]["root_shape"]["kind"], "object")
+        self.assertEqual(branches[0]["result_collection"]["path"], {"kind": "json_pointer", "value": "#/data"})
+        self.assertEqual(branches[1]["result_collection"]["status"], "unknown")
+        self.assertEqual([candidate["name"] for candidate in branches[1]["coded_result_field_inventory"]["candidates"]], ["error"])
+        self.assertEqual(branches[0]["coded_result_field_inventory"]["candidates"], [])
+        try:
+            from jsonschema import Draft202012Validator
+        except ImportError:
+            return
+        schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(evidence)), [])
+
+    def test_anyof_and_unbounded_unions_preserve_variant_scope_or_fail_closed(self) -> None:
+        document = _swagger_document()
+        document["paths"]["/health"]["get"]["responses"]["200"]["schema"] = {
+            "anyOf": [
+                {"type": "array", "items": {"type": "string"}},
+                {"type": "string"},
+            ]
+        }
+        anyof = DOCS.parse_openapi_evidence(
+            _operation(), page_raw=_swagger_page(document), page_retrieved_at="2026-10-07T03:00:00Z",
+        )["response_contract"]
+        self.assertEqual([branch["schema_variant"]["kind"] for branch in anyof["success_branches"]], ["anyOf", "anyOf"])
+        self.assertEqual(anyof["schema_shape"]["status"], "complete")
+
+        document["paths"]["/health"]["get"]["responses"]["200"]["schema"] = {"oneOf": []}
+        unsupported = DOCS.parse_openapi_evidence(
+            _operation(), page_raw=_swagger_page(document), page_retrieved_at="2026-10-07T03:00:00Z",
+        )["response_contract"]["success_branches"][0]
+        self.assertEqual(unsupported["schema_variant"], {"kind": "unsupported_union", "index": None})
+        self.assertEqual(unsupported["schema_shape"]["status"], "incomplete")
+        self.assertEqual(unsupported["root_shape"]["kind"], "unknown")
+        self.assertEqual(unsupported["documented_fields"], [])
 
     def test_labeled_success_response_example_emits_only_typed_result_code_literal(self) -> None:
         document = _swagger_document()
@@ -360,7 +549,7 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         self.assertEqual(contract["success_values"]["status"], "unknown")
         self.assertEqual(contract["success_values"]["values"], [])
 
-    def test_complete_closed_response_schema_can_mark_result_codes_not_applicable(self) -> None:
+    def test_closed_schema_records_ambiguous_status_without_marking_it_code_free(self) -> None:
         document = _swagger_document()
         document["paths"]["/health"]["get"]["responses"]["200"]["schema"] = {
             "type": "object",
@@ -373,15 +562,43 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
             page_retrieved_at="2026-10-07T03:00:00Z",
         )
         contract = evidence["response_contract"]["provider_result_codes"]
-        self.assertEqual(contract["status"], "not_applicable")
-        self.assertEqual(contract["evidence_strength"], "complete_response_schema")
-        self.assertTrue(contract["source_refs"])
+        self.assertEqual(contract["status"], "unknown")
+        self.assertEqual(contract["evidence_strength"], "unknown")
+        inventory = evidence["response_contract"]["coded_result_field_inventory"]
+        self.assertEqual(inventory["status"], "complete")
+        self.assertEqual(inventory["candidates"][0]["name"], "status")
+        self.assertEqual(inventory["candidates"][0]["classification"], "ambiguous_code_semantics")
+        self.assertEqual(evidence["response_contract"]["schema_shape"]["status"], "complete")
 
-    def test_open_response_schema_does_not_claim_result_codes_not_applicable(self) -> None:
+    def test_closed_code_free_shape_is_a_policy_input_without_auto_n_a(self) -> None:
         document = _swagger_document()
         document["paths"]["/health"]["get"]["responses"]["200"]["schema"] = {
-            "type": "object", "properties": {"status": {"type": "string"}},
+            "type": "object", "additionalProperties": False,
+            "properties": {"items": {
+                "type": "array", "items": {
+                    "type": "object", "additionalProperties": False,
+                    "properties": {"name": {"type": "string"}},
+                },
+            }},
         }
+        evidence = DOCS.parse_openapi_evidence(
+            _operation(),
+            page_raw=_swagger_page(document),
+            page_retrieved_at="2026-10-07T03:00:00Z",
+        )
+        response_contract = evidence["response_contract"]
+        self.assertEqual(response_contract["provider_result_codes"]["status"], "unknown")
+        self.assertEqual(response_contract["schema_shape"]["status"], "complete")
+        self.assertEqual(response_contract["coded_result_field_inventory"]["status"], "complete")
+        self.assertEqual(response_contract["coded_result_field_inventory"]["candidates"], [])
+        self.assertTrue(response_contract["schema_shape"]["source_refs"])
+        self.assertEqual(response_contract["accepted_http_status_codes"]["values"], [200])
+
+    def test_json_string_response_example_is_not_promoted_without_nested_locator(self) -> None:
+        document = _swagger_document()
+        response = document["paths"]["/health"]["get"]["responses"]["200"]
+        response["description"] = "Successful response"
+        response["examples"] = {"application/json": json.dumps({"header": {"resultCode": "00"}})}
         evidence = DOCS.parse_openapi_evidence(
             _operation(),
             page_raw=_swagger_page(document),
@@ -389,7 +606,8 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         )
         contract = evidence["response_contract"]["provider_result_codes"]
         self.assertEqual(contract["status"], "unknown")
-        self.assertEqual(contract["evidence_strength"], "unknown")
+        self.assertEqual(contract["success_values"]["values"], [])
+        self.assertNotIn("provider_result_code_success_official_example_value", [ref["evidence_kind"] for ref in contract["source_refs"]])
 
     def test_xml_collection_uses_absolute_required_container_and_relative_item_path(self) -> None:
         document = _swagger_document()
@@ -451,6 +669,32 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
             identity = DOCS._safe_operation_identity(_operation())
             self.assertEqual(DOCS._capture_work_status(identity, capture_root)["status"], "acquired")
 
+    def test_transient_source_failures_remain_retryable_not_missing(self) -> None:
+        self.assertEqual(DOCS._capture_document_status("source_deadline_exceeded"), ("retryable", "retry_official_document_capture"))
+        self.assertEqual(DOCS._capture_document_status("source_transport_failed"), ("retryable", "retry_official_document_capture"))
+        self.assertEqual(DOCS._capture_document_status("official_document_not_found"), ("missing", "locate_official_document"))
+        identity = DOCS._safe_operation_identity(_operation())
+        with tempfile.TemporaryDirectory() as temp:
+            capture_root = pathlib.Path(temp) / "captures"
+            folder = capture_root / identity["dataset_id"] / identity["upstream_operation_key"]
+            folder.mkdir(parents=True)
+            DOCS._write_capture_receipt(folder, identity, status="retryable", reason_code="source_deadline_exceeded")
+            state = DOCS._capture_work_status(identity, capture_root)
+            self.assertEqual(state, {"status": "retryable", "next_action": "retry_official_document_capture", "reason_code": "source_deadline_exceeded"})
+
+    def test_document_request_pacer_and_private_root_disk_cap_are_bounded(self) -> None:
+        pacer = DOCS._OfficialDocumentRequestPacer(1.0)
+        with mock.patch.object(DOCS.time, "monotonic", side_effect=[0.0, 0.0, 0.2, 1.0]), mock.patch.object(DOCS.time, "sleep") as sleep:
+            pacer.wait()
+            pacer.wait()
+        sleep.assert_called_once_with(0.8)
+        with tempfile.TemporaryDirectory() as temp:
+            root = pathlib.Path(temp) / "captures"
+            root.mkdir()
+            with mock.patch.object(DOCS, "MAX_PRIVATE_CAPTURE_ROOT_BYTES", 4):
+                with self.assertRaisesRegex(DOCS.EvidenceError, "source_capture_disk_budget_exceeded"):
+                    DOCS._write_captured_document(root, root / "catalogue.html", b"five bytes")
+
     def test_parse_captures_publishes_digest_only_receipt(self) -> None:
         try:
             import jsonschema
@@ -481,7 +725,7 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
             self.assertEqual(parsed, 1)
             receipt_path = output / "receipts/10001-9001.json"
             receipt = json.loads(receipt_path.read_text())
-            schema = json.loads((ROOT / "schemas/datapan.operation-document-capture-receipt.v1.schema.json").read_text())
+            schema = json.loads((ROOT / "schemas/datapan.operation-document-capture-receipt.v2.schema.json").read_text())
             jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(receipt)
             encoded = json.dumps(receipt, ensure_ascii=False)
             self.assertNotIn("https://", encoded)
@@ -687,22 +931,25 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
     def test_reconciliation_emits_exact_registered_statuses_and_next_actions(self) -> None:
         manifest = json.loads((ROOT / "reports/data-go-kr/operation-manifest.json").read_text(encoding="utf-8"))
         queue = DOCS.build_queue(manifest)
-        report, work_items = DOCS.reconcile(queue, ROOT / "reports/operation-document-evidence")
+        report, work_items = DOCS.reconcile(queue, DOCS.EVIDENCE_V2_DIR)
         self.assertEqual(sum(report["summary"]["statuses"].values()), len(queue))
-        self.assertEqual(report["summary"]["statuses"]["parsed_with_unknowns"], 4)
-        self.assertEqual(report["summary"]["statuses"]["pending"], len(queue) - 4)
+        v2_sidecars = list((ROOT / "reports/operation-document-evidence/v2").glob("*.json"))
+        self.assertEqual(report["summary"]["statuses"]["parsed_with_unknowns"], len(v2_sidecars))
+        self.assertEqual(report["summary"]["statuses"]["pending"], len(queue) - len(v2_sidecars))
         self.assertFalse(report["summary"]["coverage_complete"])
         safety = next(item for item in work_items if item["source_profile_id"] == "safetydata_v1")
         self.assertEqual(safety["next_action"], "implement_safetydata_document_profile")
         evidence_rows = [item for item in work_items if "evidence_ref" in item]
-        self.assertEqual(len(evidence_rows), 4)
+        self.assertEqual(len(evidence_rows), len(v2_sidecars))
         try:
             from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema is an optional release-validation dependency")
-        item_schema = json.loads((ROOT / "schemas/datapan.operation-document-work-item.v1.schema.json").read_text(encoding="utf-8"))
+        item_schema = json.loads((ROOT / "schemas/datapan.operation-document-work-item.v2.schema.json").read_text(encoding="utf-8"))
         validator = Draft202012Validator(item_schema)
         self.assertTrue(all(not list(validator.iter_errors(item)) for item in work_items))
+        reconciliation_schema = json.loads((ROOT / "schemas/datapan.operation-document-reconciliation.v2.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(list(Draft202012Validator(reconciliation_schema).iter_errors(report)), [])
 
     def test_capture_receipt_is_bound_to_private_raw_source_bytes(self) -> None:
         manifest = json.loads((ROOT / "reports/data-go-kr/operation-manifest.json").read_text(encoding="utf-8"))

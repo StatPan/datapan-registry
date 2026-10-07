@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 208,
+  "artifact_count": 222,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -76,8 +76,8 @@
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
-      "bytes": 4961,
-      "sha256": "ed2aba9b59a306840fbd0391db7a3f2e0525a839c3861d608ac4452f206802f6"
+      "bytes": 5011,
+      "sha256": "ddf9723f58c3627ec271b4c86cbf70f600f618a3b45dc383f93beb470ea249a7"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -478,8 +478,8 @@
     {
       "path": "schemas/datapan.operation-denominator.v1.schema.json",
       "kind": "schema",
-      "bytes": 2688,
-      "sha256": "341f07a99633101ad544a7bd1b01e3a9b6f59557ae7b08afb8d6efdd21691c6f"
+      "bytes": 5342,
+      "sha256": "57a04d69847fe1ba529440b7e645e4ec956984d3ad9c5ea9501e143aa3272347"
     },
     {
       "path": "schemas/datapan.runtime-freshness-queue.v1.schema.json",
@@ -700,8 +700,14 @@
     {
       "path": "schemas/datapan.operation-document-evidence.v1.schema.json",
       "kind": "schema",
-      "bytes": 12380,
-      "sha256": "0b4a5a7ab10eeccb523d2af8a8e62e76f14a6243eea00558ac49e9959e7a3d1d"
+      "bytes": 19189,
+      "sha256": "5dd5300171525010a9989fbd9981cd008bbd8b0faa694975c95fab59441991e6"
+    },
+    {
+      "path": "schemas/datapan.operation-document-capture-receipt.v1.schema.json",
+      "kind": "schema",
+      "bytes": 3015,
+      "sha256": "682c9e3f5833e718a25609bb126d5a564e84eb338eb33582f7618e9243be6029"
     },
     {
       "path": "schemas/datapan.operation-document-reconciliation.v1.schema.json",
@@ -716,11 +722,35 @@
       "sha256": "6f17a442071430ef2bbc5846be2bd8d92a2b2c0681f1462463f8cf0dfe46799a"
     },
     {
+      "path": "schemas/datapan.operation-document-capture-receipt.v2.schema.json",
+      "kind": "schema",
+      "bytes": 5164,
+      "sha256": "a59ecb961f866039b03306a008b9c0bfbad92f2b1078fe957dd1061a67653574"
+    },
+    {
+      "path": "schemas/datapan.operation-document-evidence.v2.schema.json",
+      "kind": "schema",
+      "bytes": 56069,
+      "sha256": "ae254f7dbbb13b33d47c77d2b48944c2692199024e92433f26fbc58b374584c9"
+    },
+    {
+      "path": "schemas/datapan.operation-document-reconciliation.v2.schema.json",
+      "kind": "schema",
+      "bytes": 7036,
+      "sha256": "86a7ab17271c55f1ca0e07681230a1064a050e44c8d612efcd0012b58a794bd6"
+    },
+    {
+      "path": "schemas/datapan.operation-document-work-item.v2.schema.json",
+      "kind": "schema",
+      "bytes": 3392,
+      "sha256": "b67024d6330b64b483aab8f562227ecd20518e1aff0679219f101faa65350b0f"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 48856,
-      "sha256": "2ad01455dd98c7e81fa0ce5080af46eabbe7c91964a38a4c07600a8d5a6e71ab"
+      "bytes": 51050,
+      "sha256": "62ff317cdbb7e79a0273fcb8b941e8e2959484199856563117e22a3428b1f630"
     },
     {
       "path": "data/data-go-kr.registry.json",
@@ -949,8 +979,8 @@
       "path": "reports/source-report-inventory.json",
       "kind": "source_report_inventory",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json",
-      "bytes": 62608,
-      "sha256": "ef86e55a9bf59e16d1b76cbc9eafee9539ce2c3ac6a87308d0899abb92ba3ffb"
+      "bytes": 62609,
+      "sha256": "3d577fa00e827b11ce377b1f7ad89e58e952ea45bb1e36179fc131192bbb8574"
     },
     {
       "path": "reports/data-go-kr/operation-manifest.json",
@@ -1323,6 +1353,69 @@
       "kind": "historical_subject_snapshot",
       "bytes": 13937,
       "sha256": "9336a1fe033af542b270364969264a26ae021906ed0f9e988f79775833119739"
+    },
+    {
+      "path": "reports/operation-document-evidence/v2/15000863-51077.json",
+      "kind": "operation_document_evidence",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "bytes": 122356,
+      "sha256": "c3d16473287f5ef1545c3c679aa48918d600ee356df96428fe60c55ec0ddaaa9"
+    },
+    {
+      "path": "reports/operation-document-evidence/v2/15001697-24807.json",
+      "kind": "operation_document_evidence",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "bytes": 27631,
+      "sha256": "560a9645cd6d36d76679c2e1be1b0d0673aa4320a1731d65433bc9892a396060"
+    },
+    {
+      "path": "reports/operation-document-evidence/v2/15001808-16811.json",
+      "kind": "operation_document_evidence",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "bytes": 16900,
+      "sha256": "70c29665149993c62fa78a7759cba09a0dbab6b2c8b360a8df2b7610e434bbea"
+    },
+    {
+      "path": "reports/operation-document-evidence/v2/15127755-57351.json",
+      "kind": "operation_document_evidence",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "bytes": 336776,
+      "sha256": "ff15cebbcb2d1926a4a1f540492f1c952fae0133300a2052929d972fbe60d3bf"
+    },
+    {
+      "path": "reports/operation-document-evidence/v2/15158559-69640.json",
+      "kind": "operation_document_evidence",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "bytes": 129678,
+      "sha256": "a2294dd51d16a8efa4073873699ea425a825e7ce4ad05788d3a41bdcbacca36d"
+    },
+    {
+      "path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+      "kind": "operation_document_evidence",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "bytes": 111121,
+      "sha256": "5fec21ce0de3106cfa6f2378ce32a9c38bc9f74e105a017b7c9ca62b29262ea9"
+    },
+    {
+      "path": "reports/operation-document-evidence/queue.v2.jsonl",
+      "kind": "operation_document_work_queue",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-work-item.v2.schema.json",
+      "bytes": 6260899,
+      "sha256": "9e2aa8b76f5c7b16ca13d6e0028d857038a7b8b65c8080bad02fc4149534dc99"
+    },
+    {
+      "path": "reports/operation-document-evidence/reconciliation.v2.json",
+      "kind": "operation_document_reconciliation",
+      "schema": "https://schemas.datapan.dev/datapan.operation-document-reconciliation.v2.schema.json",
+      "bytes": 1906,
+      "sha256": "bad95be05d32fe303e1a7fa7d920d1e7537af0b135b450395430f65ea152b773"
+    },
+    {
+      "path": "reports/kosis/operation-denominator.json",
+      "kind": "operation_denominator",
+      "schema": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
+      "bytes": 1712,
+      "sha256": "f9e434a6dc8234650e6ab19a04fa585abca8e1defbb95f72374c0415b00b7792"
     }
   ]
 }

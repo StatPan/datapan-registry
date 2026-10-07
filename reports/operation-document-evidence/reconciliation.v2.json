@@ -1,0 +1,61 @@
+{
+  "manifest_binding": {
+    "path": "reports/data-go-kr/operation-manifest.json",
+    "sha256": "b68601aee31acdb90b0a655dcb079c185af2c7fdd107333712c9b84e6a2700be",
+    "source_snapshot_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+  },
+  "schema_version": "datapan.operation-document-reconciliation.v2",
+  "scope": {
+    "inventory": "registered_rest_and_soap_operations_only",
+    "link_operations_excluded": 8871,
+    "operationless_catalog_entries_excluded": 473,
+    "provider": "data.go.kr",
+    "registered_protocols": {
+      "REST": 12627,
+      "SOAP": 35
+    },
+    "worldwide_provider_apis_included": false
+  },
+  "source_policy": {
+    "external_openapi_refs_followed": false,
+    "official_document_hosts": [
+      "www.data.go.kr",
+      "www.safetydata.go.kr"
+    ],
+    "provider_operation_calls": 0,
+    "raw_capture_directory_private": true,
+    "soap_wsdl_imports_followed": false,
+    "transport_bounds": {
+      "compressed_responses_accepted": false,
+      "max_batch_operations": 50,
+      "max_concurrent_requests_per_host": 1,
+      "max_document_requests_per_operation": 3,
+      "max_private_capture_root_bytes": 1073741824,
+      "max_response_bytes": {
+        "catalogue": 3145728,
+        "operation_detail": 1048576,
+        "reference_guide": 8388608
+      },
+      "max_schema_variants_per_response": 16,
+      "minimum_interval_between_document_requests_ms": 1000,
+      "redirects_followed": false,
+      "request_deadline_seconds": 35
+    }
+  },
+  "summary": {
+    "coverage_complete": false,
+    "invalid_artifacts_not_bound_to_registered_identity": 0,
+    "registered_api_operations": 12662,
+    "statuses": {
+      "acquired": 0,
+      "ambiguous": 0,
+      "invalid": 0,
+      "missing": 0,
+      "parsed_complete": 0,
+      "parsed_with_unknowns": 5,
+      "pending": 12657,
+      "retryable": 0,
+      "unsupported": 0
+    }
+  }
+}

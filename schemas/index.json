@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 119,
+  "count": 123,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -712,8 +712,8 @@
       "title": "Datapan supported operation denominator v1",
       "contract": "operation-denominator",
       "version": "v1",
-      "bytes": 2688,
-      "sha256": "341f07a99633101ad544a7bd1b01e3a9b6f59557ae7b08afb8d6efdd21691c6f"
+      "bytes": 5342,
+      "sha256": "57a04d69847fe1ba529440b7e645e4ec956984d3ad9c5ea9501e143aa3272347"
     },
     {
       "path": "schemas/datapan.runtime-freshness-queue.v1.schema.json",
@@ -1063,8 +1063,8 @@
       "title": "Datapan operation document reconciliation v1",
       "contract": "operation-document-reconciliation",
       "version": "v1",
-      "bytes": 4482,
-      "sha256": "7668a61c3a1439996860c911678d07781de88d85cd979718030d3f09643b8ba3"
+      "bytes": 3217,
+      "sha256": "3c5bbd05db59a86788093171a87d5bdb23f7aee1b92bd3d903182b2a65ebf44c"
     },
     {
       "path": "schemas/datapan.operation-document-work-item.v1.schema.json",
@@ -1072,8 +1072,44 @@
       "title": "Datapan operation document work item v1",
       "contract": "operation-document-work-item",
       "version": "v1",
-      "bytes": 2412,
-      "sha256": "0ab90317e5c05c6655c6e1fce1dded9689435dea2392a9f716a2a84f430bf7d9"
+      "bytes": 1532,
+      "sha256": "6f17a442071430ef2bbc5846be2bd8d92a2b2c0681f1462463f8cf0dfe46799a"
+    },
+    {
+      "path": "schemas/datapan.operation-document-capture-receipt.v2.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-capture-receipt.v2.schema.json",
+      "title": "Datapan official operation-document capture receipt v2",
+      "contract": "operation-document-capture-receipt",
+      "version": "v2",
+      "bytes": 5164,
+      "sha256": "a59ecb961f866039b03306a008b9c0bfbad92f2b1078fe957dd1061a67653574"
+    },
+    {
+      "path": "schemas/datapan.operation-document-evidence.v2.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "title": "Datapan registered operation document evidence v2",
+      "contract": "operation-document-evidence",
+      "version": "v2",
+      "bytes": 56069,
+      "sha256": "ae254f7dbbb13b33d47c77d2b48944c2692199024e92433f26fbc58b374584c9"
+    },
+    {
+      "path": "schemas/datapan.operation-document-reconciliation.v2.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-reconciliation.v2.schema.json",
+      "title": "Datapan operation document reconciliation v2",
+      "contract": "operation-document-reconciliation",
+      "version": "v2",
+      "bytes": 7036,
+      "sha256": "86a7ab17271c55f1ca0e07681230a1064a050e44c8d612efcd0012b58a794bd6"
+    },
+    {
+      "path": "schemas/datapan.operation-document-work-item.v2.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-work-item.v2.schema.json",
+      "title": "Datapan operation document work item v2",
+      "contract": "operation-document-work-item",
+      "version": "v2",
+      "bytes": 3392,
+      "sha256": "b67024d6330b64b483aab8f562227ecd20518e1aff0679219f101faa65350b0f"
     }
   ]
 }
