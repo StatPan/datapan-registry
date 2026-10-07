@@ -56,6 +56,24 @@ DETAIL_FAILURE_CODES = frozenset({
     "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven",
 })
 DETAIL_FAILURE_PHASES = frozenset({"page", "resolver"})
+CONTRACT_FAILURES = {
+    "no_reviewed_declaration": {
+        "unresolved_requirements": ["reviewed_operation_declaration"],
+        "next_action": "review_authoritative_declaration",
+    },
+    "subject_binding_unproven": {
+        "unresolved_requirements": ["subject_binding"],
+        "next_action": "verify_subject_binding",
+    },
+    "declaration_evidence_rejected": {
+        "unresolved_requirements": ["declaration_source_binding", "operation_contract_validation"],
+        "next_action": "review_declaration_evidence",
+    },
+    "validation_detail_unknown": {
+        "unresolved_requirements": [],
+        "next_action": "inspect_bound_validation_evidence",
+    },
+}
 DEFAULT_TIMEOUT_SECONDS = 12
 DEFAULT_RETRIES_PER_DETAIL = 2
 DEFAULT_MAX_ATTEMPTS = 24
@@ -83,6 +101,71 @@ class DetailPageObservation:
         self.effective_url = effective_url
         self.page_sha256 = page_sha256
         self.observed_at = observed_at
+
+
+class KnownDeclarationFailure(Exception):
+    """A fixed classification emitted only at an explicit failed boundary."""
+
+    def __init__(self, reason: str) -> None:
+        if reason not in CONTRACT_FAILURES:
+            raise ValueError("invalid_contract_failure_reason")
+        self.reason = reason
+
+
+def contract_failure_value(reason: str) -> dict[str, Any]:
+    detail = CONTRACT_FAILURES.get(reason)
+    if detail is None:
+        raise ValueError("invalid_contract_failure_reason")
+    return {
+        "version": 1,
+        "reason": reason,
+        "unresolved_requirements": list(detail["unresolved_requirements"]),
+        "next_action": detail["next_action"],
+    }
+
+
+def validate_contract_failure(value: Any, *, identity: str | None = None) -> dict[str, Any]:
+    if (
+        not isinstance(value, dict)
+        or set(value) != {"version", "reason", "unresolved_requirements", "next_action"}
+        or not isinstance(value.get("version"), int)
+        or isinstance(value.get("version"), bool)
+        or not isinstance(value.get("reason"), str)
+    ):
+        raise ValueError("invalid_contract_failure")
+    expected = contract_failure_value(value["reason"])
+    if value != expected:
+        raise ValueError("invalid_contract_failure")
+    if identity is not None:
+        subject_id = str(SEOUL_DECLARATION.DECLARATION["subject"]["portal_dataset_id"])
+        if (
+            value["reason"] == "no_reviewed_declaration" and identity == subject_id
+            or value["reason"] in {"subject_binding_unproven", "declaration_evidence_rejected"}
+            and identity != subject_id
+        ):
+            raise ValueError("invalid_contract_failure_subject_binding")
+    return expected
+
+
+def seoul_subject_binding_matches(row: Any, identity: str) -> bool:
+    """Check only the fixed subject identity fields, not guide or operation evidence."""
+    subject = SEOUL_DECLARATION.DECLARATION["subject"]
+    if not isinstance(row, Mapping):
+        return False
+    source = row.get("source")
+    source = source if isinstance(source, Mapping) else {}
+    raw = source.get("raw")
+    raw = raw if isinstance(raw, Mapping) else {}
+    return (
+        row.get("provider") == subject["provider"]
+        and str(row.get("id") or "") == identity == str(subject["portal_dataset_id"])
+        and source.get("system") == subject["source_system"]
+        and source.get("url") == subject["source_url"]
+        and raw.get("api_type") == subject["source_api_type"]
+        and raw.get("id") == subject["source_uddi"]
+        and raw.get("list_id") == subject["portal_dataset_id"]
+        and raw.get("meta_url") == subject["source_meta_url"]
+    )
 
 
 class LinkResolverObservation:
@@ -566,7 +649,7 @@ def source_retry_state(index_path: pathlib.Path) -> dict[str, dict[str, Any]]:
         parse_timestamp(str(row.get("last_attempt_at")))
         if "failure_diagnostic" in row:
             try:
-                validate_failure_diagnostic(row["failure_diagnostic"])
+                validate_failure_diagnostic(row["failure_diagnostic"], identity=identity)
             except ValueError as exc:
                 raise ValueError("corrupt_detail_retry_state") from exc
     return retry_state
@@ -805,8 +888,12 @@ def safe_error_class(exc: BaseException) -> str:
     return name[:64]
 
 
-def validate_failure_diagnostic(value: Any) -> dict[str, Any]:
-    if not isinstance(value, dict) or "code" not in value or set(value) - {"code", "http_status", "phase"}:
+def validate_failure_diagnostic(value: Any, *, identity: str | None = None) -> dict[str, Any]:
+    if (
+        not isinstance(value, dict)
+        or "code" not in value
+        or set(value) - {"code", "http_status", "phase", "contract_failure"}
+    ):
         raise ValueError("invalid_detail_failure_diagnostic")
     code = value.get("code")
     if not isinstance(code, str) or code not in DETAIL_FAILURE_CODES:
@@ -825,6 +912,15 @@ def validate_failure_diagnostic(value: Any) -> dict[str, Any]:
         ):
             raise ValueError("invalid_detail_failure_diagnostic")
         result["http_status"] = status
+    if "contract_failure" in value:
+        if code != "resolved_link_operation_contract_unproven" or result.get("phase") != "resolver":
+            raise ValueError("invalid_detail_failure_diagnostic")
+        try:
+            result["contract_failure"] = validate_contract_failure(
+                value["contract_failure"], identity=identity,
+            )
+        except ValueError as exc:
+            raise ValueError("invalid_detail_failure_diagnostic") from exc
     return result
 
 
@@ -1137,7 +1233,22 @@ def validated_resume_records(
         or not isinstance(evidence.get("records"), list)
     ):
         raise ValueError("resume_enrichment_binding_mismatch")
+    owner_detail_by_id: dict[str, dict[str, Any]] = {}
+    for owner_detail in owner.get("detail_records", []):
+        if not isinstance(owner_detail, dict):
+            continue
+        owner_identity = str(owner_detail.get("id") or "")
+        if owner_identity:
+            if owner_identity in owner_detail_by_id:
+                raise ValueError("resume_checkpoint_detail_identity_invalid")
+            owner_detail_by_id[owner_identity] = owner_detail
+    owner_contract_failure_ids = {
+        identity for identity, detail in owner_detail_by_id.items()
+        if isinstance(detail.get("failure_diagnostic"), dict)
+        and "contract_failure" in detail["failure_diagnostic"]
+    }
     locally_materialized_declarations: dict[str, dict[str, Any]] = {}
+    outcome_ids: set[str] = set()
     if "worker_outcomes" in evidence:
         outcomes = evidence["worker_outcomes"]
         if not isinstance(outcomes, list):
@@ -1146,7 +1257,6 @@ def validated_resume_records(
             str(record.get("api_key", {}).get("id") or "")
             for record in evidence["records"] if isinstance(record, dict) and isinstance(record.get("api_key"), dict)
         }
-        outcome_ids: set[str] = set()
         for outcome in outcomes:
             if (
                 not isinstance(outcome, dict)
@@ -1163,9 +1273,10 @@ def validated_resume_records(
                 or (outcome.get("guide_sha256") is not None and not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("guide_sha256"))))
             ):
                 raise ValueError("resume_worker_outcome_invalid")
+            identity = str(outcome["api_key"].get("id") or "")
             if "failure_diagnostic" in outcome:
                 try:
-                    diagnostic = validate_failure_diagnostic(outcome["failure_diagnostic"])
+                    diagnostic = validate_failure_diagnostic(outcome["failure_diagnostic"], identity=identity)
                 except ValueError as exc:
                     raise ValueError("resume_worker_outcome_invalid") from exc
             else:
@@ -1189,7 +1300,6 @@ def validated_resume_records(
                 and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
             ):
                 raise ValueError("resume_worker_link_metadata_missing")
-            identity = str(outcome["api_key"].get("id") or "")
             if not identity or identity in outcome_ids or identity in successful_ids:
                 raise ValueError("resume_worker_outcome_identity_invalid")
             row = candidate_by_id.get(identity)
@@ -1200,6 +1310,27 @@ def validated_resume_records(
             ):
                 raise ValueError("resume_worker_outcome_binding_mismatch")
             outcome_ids.add(identity)
+            owner_detail = owner_detail_by_id.get(identity)
+            owner_diagnostic = owner_detail.get("failure_diagnostic") if owner_detail else None
+            if (
+                isinstance(owner_diagnostic, dict) and "contract_failure" in owner_diagnostic
+                or isinstance(diagnostic, dict) and "contract_failure" in diagnostic
+            ):
+                owner_has_diagnostic = isinstance(owner_detail, dict) and "failure_diagnostic" in owner_detail
+                outcome_has_diagnostic = isinstance(outcome, dict) and "failure_diagnostic" in outcome
+                owner_has_metadata = isinstance(owner_detail, dict) and "link_metadata" in owner_detail
+                outcome_has_metadata = isinstance(outcome, dict) and "link_metadata" in outcome
+                if (
+                    not isinstance(owner_detail, dict)
+                    or owner_detail.get("status") != outcome.get("status")
+                    or owner_detail.get("source_sha256") != outcome.get("source_sha256")
+                    or owner_detail.get("guide_sha256") != outcome.get("guide_sha256")
+                    or owner_has_diagnostic != outcome_has_diagnostic
+                    or owner_has_diagnostic and owner_detail.get("failure_diagnostic") != outcome.get("failure_diagnostic")
+                    or owner_has_metadata != outcome_has_metadata
+                    or owner_has_metadata and owner_detail.get("link_metadata") != outcome.get("link_metadata")
+                ):
+                    raise ValueError("resume_worker_contract_failure_binding_mismatch")
             if (
                 isinstance(diagnostic, dict)
                 and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
@@ -1210,6 +1341,8 @@ def validated_resume_records(
                 )
                 if materialized is not None:
                     locally_materialized_declarations[identity] = materialized
+    if owner_contract_failure_ids - outcome_ids:
+        raise ValueError("resume_worker_contract_failure_outcome_missing")
     owner_inputs = owner.get("generation_inputs", {}) if isinstance(owner, dict) else {}
     expected_extractor_revision = (
         owner_inputs.get("extractor_revision") if allow_parent_extractor_revision
@@ -1891,7 +2024,9 @@ def append_generation_index(
                     and prior.get("guide_sha256") == retry_entry["guide_sha256"]
                     and "failure_diagnostic" in prior
                 ):
-                    retry_entry["failure_diagnostic"] = validate_failure_diagnostic(prior["failure_diagnostic"])
+                    retry_entry["failure_diagnostic"] = validate_failure_diagnostic(
+                        prior["failure_diagnostic"], identity=identity,
+                    )
                 retry_state[identity] = retry_entry
     for record in checkpoint.get("detail_records", []):
         if not isinstance(record, dict):
@@ -1907,7 +2042,9 @@ def append_generation_index(
                 and current.get("source_sha256") == record.get("source_sha256")
                 and current.get("guide_sha256") == record.get("guide_sha256")
             ):
-                current["failure_diagnostic"] = validate_failure_diagnostic(record["failure_diagnostic"])
+                current["failure_diagnostic"] = validate_failure_diagnostic(
+                    record["failure_diagnostic"], identity=identity,
+                )
     if len(retry_state) > DEFAULT_MAX_RETRY_STATES:
         raise ValueError("detail_retry_state_capacity_exceeded")
     if collector_admission is not None:
@@ -2858,7 +2995,9 @@ def process(
         else:
             attempt_counts[identity] = max(int(attempt_counts.get(identity, 0)), int(prior_state["attempts"]))
             if "failure_diagnostic" in prior_state:
-                retained_failure_diagnostics[identity] = validate_failure_diagnostic(prior_state["failure_diagnostic"])
+                retained_failure_diagnostics[identity] = validate_failure_diagnostic(
+                    prior_state["failure_diagnostic"], identity=identity,
+                )
     checkpoint["detail_retry_reset_ids"] = sorted(reset_ids)[-DEFAULT_MAX_RETRY_STATES:]
     reset_identity_set = set(checkpoint["detail_retry_reset_ids"])
     if reset_identity_set:
@@ -3161,7 +3300,9 @@ def process(
                 )
                 try:
                     if identity != SEOUL_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]:
-                        raise SEOUL_DECLARATION.DeclarationError("no_pinned_operation_declaration_for_subject")
+                        raise KnownDeclarationFailure("no_reviewed_declaration")
+                    if not seoul_subject_binding_matches(row, identity):
+                        raise KnownDeclarationFailure("subject_binding_unproven")
                     declared_operation = SEOUL_DECLARATION.build_operation(row, observed_guide)
                     declaration_provenance = SEOUL_DECLARATION.build_provenance(
                         row,
@@ -3197,9 +3338,21 @@ def process(
                         "source_provenance": source_provenance,
                         "declaration_provenance": declaration_provenance,
                     }
-                    SEOUL_DECLARATION.validate_enriched_record(row, declaration_record)
+                    try:
+                        SEOUL_DECLARATION.validate_enriched_record(row, declaration_record)
+                    except SEOUL_DECLARATION.DeclarationError:
+                        raise KnownDeclarationFailure("declaration_evidence_rejected") from None
                     failure_diagnostic = None
                     row_status = "enriched"
+                except KnownDeclarationFailure as exc:
+                    row_operations = []
+                    declaration_provenance = None
+                    row_status = "quarantined"
+                    failure_diagnostic = {
+                        "code": "resolved_link_operation_contract_unproven",
+                        "phase": "resolver",
+                        "contract_failure": contract_failure_value(exc.reason),
+                    }
                 except (SEOUL_DECLARATION.DeclarationError, KeyError, TypeError, ValueError):
                     row_operations = []
                     declaration_provenance = None
@@ -3207,6 +3360,7 @@ def process(
                     failure_diagnostic = {
                         "code": "resolved_link_operation_contract_unproven",
                         "phase": "resolver",
+                        "contract_failure": contract_failure_value("validation_detail_unknown"),
                     }
                 break
             except Exception as exc:
@@ -3251,7 +3405,9 @@ def process(
             "source_sha256": fingerprint, "guide_sha256": guide_fingerprint,
         }
         if row_status != "enriched" and failure_diagnostic is not None:
-            worker_record["failure_diagnostic"] = validate_failure_diagnostic(failure_diagnostic)
+            worker_record["failure_diagnostic"] = validate_failure_diagnostic(
+                failure_diagnostic, identity=identity,
+            )
         if row_status != "enriched" and link_metadata is not None:
             worker_record["link_metadata"] = link_metadata
         worker_records.append(worker_record)
@@ -3298,7 +3454,9 @@ def process(
             "guide_sha256": row["guide_sha256"],
         }
         if "failure_diagnostic" in row:
-            outcome["failure_diagnostic"] = validate_failure_diagnostic(row["failure_diagnostic"])
+            outcome["failure_diagnostic"] = validate_failure_diagnostic(
+                row["failure_diagnostic"], identity=str(outcome["api_key"]["id"]),
+            )
         if "link_metadata" in row:
             outcome["link_metadata"] = DETAIL_HELPERS.validate_link_metadata(
                 row["link_metadata"], row["id"], registered_hosts,
@@ -3313,13 +3471,15 @@ def process(
         }
         diagnostic = retained_failure_diagnostics.get(row["id"])
         if diagnostic is not None:
-            outcome["failure_diagnostic"] = validate_failure_diagnostic(diagnostic)
+            outcome["failure_diagnostic"] = validate_failure_diagnostic(
+                diagnostic, identity=str(outcome["api_key"]["id"]),
+            )
         unresolved_worker_outcomes.append(outcome)
     detail_failure_counts: dict[str, int] = {}
     for row in unresolved_worker_outcomes:
         diagnostic = row.get("failure_diagnostic")
         if isinstance(diagnostic, dict):
-            code = validate_failure_diagnostic(diagnostic)["code"]
+            code = validate_failure_diagnostic(diagnostic, identity=str(row["api_key"]["id"]))["code"]
             detail_failure_counts[code] = detail_failure_counts.get(code, 0) + 1
     detail_failure_counts = dict(sorted(detail_failure_counts.items()))
     detail_reason_unavailable_count = sum("failure_diagnostic" not in row for row in unresolved_worker_outcomes)

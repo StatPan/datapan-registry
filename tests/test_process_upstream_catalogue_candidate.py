@@ -432,7 +432,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         outcome = evidence["worker_outcomes"][0]
         self.assertEqual(outcome["status"], "quarantined")
         self.assertEqual(outcome["failure_diagnostic"], {
-            "code": "resolved_link_operation_contract_unproven", "phase": "resolver",
+            "code": "resolved_link_operation_contract_unproven",
+            "phase": "resolver",
+            "contract_failure": MODULE.contract_failure_value("no_reviewed_declaration"),
         })
 
     def test_seoul_oa109_declaration_flows_through_worker_resume_and_composer(self) -> None:
@@ -1340,6 +1342,25 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             )
             owner_path = self.checkpoint_path(checkpoint)
             owner_path.write_text(json.dumps(MODULE.seal_checkpoint(checkpoint)), encoding="utf-8")
+
+        stripped_contract_failure = copy.deepcopy(original_evidence)
+        stripped_contract_failure["worker_outcomes"][0]["failure_diagnostic"].pop("contract_failure")
+        rebind_evidence(stripped_contract_failure)
+        with self.assertRaisesRegex(ValueError, "resume_worker_contract_failure_binding_mismatch"):
+            MODULE.validated_resume_records(
+                evidence_path,
+                checkpoint=checkpoint,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=json.loads(
+                    (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+                ),
+                provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
+                candidate_by_id={self.new_link["id"]: self.new_link},
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+            )
+        rebind_evidence(original_evidence)
 
         secret_evidence = copy.deepcopy(original_evidence)
         secret_metadata = secret_evidence["worker_outcomes"][0]["link_metadata"]

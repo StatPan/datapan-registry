@@ -1659,10 +1659,21 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         )
         canonical_context_calls: list[tuple[Any, ...]] = []
         original_canonical_context = PROMOTION.authenticated_current_canonical_context
+        processor_bundle_head_calls: list[tuple[str, str]] = []
+        original_validate_processor_bundle = PROMOTION.validate_processor_bundle
 
         def record_canonical_context(*context_args: Any, **context_kwargs: Any) -> Any:
             canonical_context_calls.append(context_args)
             return original_canonical_context(*context_args, **context_kwargs)
+
+        def record_processor_bundle_head(*bundle_args: Any, **bundle_kwargs: Any) -> Any:
+            checkpoint = bundle_args[0]
+            run_id, _attempt, _name = PROMOTION.processor_attempt_from_locator(checkpoint)
+            expected_head = str(run_by_id[run_id]["head_sha"])
+            supplied_head = bundle_kwargs.get("producer_head_sha")
+            self.assertEqual(supplied_head, expected_head)
+            processor_bundle_head_calls.append((run_id, supplied_head))
+            return original_validate_processor_bundle(*bundle_args, **bundle_kwargs)
 
         with (
             mock.patch.object(PREPARATION, "load_module", side_effect=lambda path, _name: module_by_filename[path.name]),
@@ -1675,6 +1686,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             mock.patch.object(PROMOTION, "load_promotion_journal_snapshot", return_value=journal_snapshot),
             current_identity_patch,
             mock.patch.object(PROMOTION, "authenticated_current_canonical_context", side_effect=record_canonical_context),
+            mock.patch.object(PROMOTION, "validate_processor_bundle", side_effect=record_processor_bundle_head),
             mock.patch.object(PROMOTION, "command", side_effect=fake_runner_command),
             mock.patch.object(PROMOTION, "processor_run_api", side_effect=lambda _root, _repo, run_id, _attempt: run_by_id[run_id]),
             mock.patch.object(PROMOTION, "processor_artifact_api", side_effect=lambda _root, _repo, _run_id, artifact_id: metadata_by_id.get(artifact_id)),
@@ -1728,6 +1740,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             self.assertEqual(outputs["derivation_enabled"], str(plan.get("eligible") is True).lower())
             if plan.get("eligible") is True:
                 self.assertEqual(len(canonical_context_calls), 1)
+                self.assertTrue(processor_bundle_head_calls)
                 self.assertEqual(outputs["derivation_path"], plan["derivation_path"])
                 self.assertEqual(outputs["generation_id"], plan["generation_id"])
         self.assertEqual(index_path.read_bytes(), original_index)

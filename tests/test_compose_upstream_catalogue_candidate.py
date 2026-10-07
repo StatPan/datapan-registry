@@ -104,6 +104,16 @@ def worker_enrichment(outcomes: list[dict], records: list[dict] | None = None) -
     }
 
 
+def contract_failure(reason: str) -> dict:
+    mapped = composer.CONTRACT_FAILURES[reason]
+    return {
+        "version": 1,
+        "reason": reason,
+        "unresolved_requirements": list(mapped["unresolved_requirements"]),
+        "next_action": mapped["next_action"],
+    }
+
+
 def enrichment_evidence(candidate_row: dict, operations: list[dict], *, candidate_sha: str = "b" * 64) -> dict:
     page_url = composer.canonical_detail_page_url(candidate_row)
     evidence_operations = copy.deepcopy(operations)
@@ -166,14 +176,39 @@ class CatalogueCompositionTests(unittest.TestCase):
         outcome.update({
             "failure_diagnostic": {
                 "code": "resolved_link_operation_contract_unproven", "phase": "resolver",
+                "contract_failure": contract_failure("no_reviewed_declaration"),
             },
             "link_metadata": metadata,
         })
+        outcome_digest = composer.digest_json(outcome)
         result = compose([baseline], [candidate], enrichment_evidence=worker_enrichment([outcome]))
         self.assertEqual(result["composed_registry"][0]["operations"], baseline["operations"])
         self.assertEqual(result["semantic_diff"]["quarantined_api_keys"], [
             {"provider": "data.go.kr", "id": "2"},
         ])
+        decision = result["semantic_diff"]["api_decisions"][0]
+        self.assertEqual(decision["contract_failure"], contract_failure("no_reviewed_declaration"))
+        self.assertEqual(decision["worker_outcome_sha256"], outcome_digest)
+        self.assertEqual(decision["next_action"], "review_authoritative_declaration")
+        queue_item = result["regeneration_queue"]["items"][0]
+        self.assertEqual(queue_item["contract_failure"], contract_failure("no_reviewed_declaration"))
+        self.assertEqual(queue_item["worker_outcome_sha256"], outcome_digest)
+        self.assertEqual(queue_item["required_evidence"], ["reviewed_operation_declaration"])
+        self.assertEqual(queue_item["next_action"], "review_authoritative_declaration")
+        quarantine_item = result["quarantine"]["items"][0]
+        self.assertEqual(quarantine_item["contract_failure"], contract_failure("no_reviewed_declaration"))
+        self.assertEqual(quarantine_item["worker_outcome_sha256"], outcome_digest)
+
+        legacy = copy.deepcopy(outcome)
+        legacy["failure_diagnostic"].pop("contract_failure")
+        legacy_bytes = composer.canonical_json_bytes(legacy)
+        legacy_result = compose([baseline], [candidate], enrichment_evidence=worker_enrichment([legacy]))
+        legacy_queue_item = legacy_result["regeneration_queue"]["items"][0]
+        self.assertEqual(legacy_queue_item["required_evidence"], [])
+        self.assertEqual(legacy_queue_item["contract_failure_status"], "legacy_detail_unknown")
+        self.assertEqual(legacy_queue_item["next_action"], "inspect_bound_validation_evidence")
+        self.assertEqual(legacy_queue_item["worker_outcome_sha256"], composer.digest_json(legacy))
+        self.assertEqual(composer.canonical_json_bytes(legacy), legacy_bytes)
 
         secret_query = copy.deepcopy(outcome)
         secret_url = "http://data.seoul.go.kr/dataList?client%5Fsecret=SYNTHETIC_TEST_VALUE"
@@ -303,6 +338,51 @@ class CatalogueCompositionTests(unittest.TestCase):
         malformed_status["failure_diagnostic"] = {"code": "timeout", "http_status": 503}
         with self.assertRaises(composer.CompositionError):
             compose([], [candidate], enrichment_evidence=worker_enrichment([malformed_status]))
+
+    def test_contract_failure_mapping_and_subject_binding_are_closed(self):
+        candidate = link_api("19000003", operations=False)
+        outcome = worker_outcome(candidate, "quarantined")
+        outcome.update({
+            "failure_diagnostic": {
+                "code": "resolved_link_operation_contract_unproven",
+                "phase": "resolver",
+                "contract_failure": contract_failure("no_reviewed_declaration"),
+            },
+            "link_metadata": {
+                "method": "data_go_kr_select_api_link_url_v1",
+                "dataset_id": "19000003",
+                "public_data_pk": "19000003",
+                "public_data_detail_pk": "uddi:test-contract-failure",
+                "page": {
+                    "url": "https://www.data.go.kr/data/19000003/openapi.do",
+                    "effective_url": "https://www.data.go.kr/data/19000003/openapi.do",
+                    "sha256": "a" * 64, "bytes": 100, "observed_at": "2026-10-01T00:00:00Z",
+                },
+                "resolver": {
+                    "request_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=19000003",
+                    "effective_url": "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=19000003",
+                    "sha256": "b" * 64, "bytes": 190, "observed_at": "2026-10-01T00:00:00Z",
+                    "public_data_detail_pk": "uddi:test-contract-failure",
+                    "resolved_url": "http://link.example.gov/catalogue/landing",
+                    "resolved_url_sha256": hashlib.sha256(b"http://link.example.gov/catalogue/landing").hexdigest(),
+                },
+            },
+        })
+        for mutate in (
+            lambda value: value.update(version=2),
+            lambda value: value.update(reason="unbounded_reason"),
+            lambda value: value.update(unresolved_requirements=["operation_contract_validation", "declaration_source_binding"]),
+            lambda value: value.update(extra="unsupported"),
+        ):
+            forged = copy.deepcopy(outcome)
+            mutate(forged["failure_diagnostic"]["contract_failure"])
+            with self.assertRaises(composer.CompositionError):
+                compose([], [candidate], enrichment_evidence=worker_enrichment([forged]))
+
+        forged_subject = copy.deepcopy(outcome)
+        forged_subject["failure_diagnostic"]["contract_failure"] = contract_failure("subject_binding_unproven")
+        with self.assertRaisesRegex(composer.CompositionError, "subject binding"):
+            compose([], [candidate], enrichment_evidence=worker_enrichment([forged_subject]))
 
     def test_real_link_empty_import_retains_baseline_contract_operations(self):
         fixture_path = ROOT / "tests/fixtures/catalogue-composition-real-link-cases.json"

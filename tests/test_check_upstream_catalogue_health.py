@@ -12,6 +12,8 @@ import tempfile
 import unittest
 from unittest import mock
 
+import jsonschema
+
 
 ROOT = pathlib.Path(__file__).parents[1]
 SCRIPT = ROOT / "scripts" / "check-upstream-catalogue-health.py"
@@ -206,6 +208,84 @@ def synthetic_candidate_screen(
         "registry_bytes": len(registry_bytes),
         "registry_sha256": registry_sha,
     }
+
+
+def link_contract_failure(reason: str) -> dict:
+    mapped = HEALTH.LINK_CONTRACT_FAILURES[reason]
+    return {
+        "version": 1,
+        "reason": reason,
+        "unresolved_requirements": list(mapped["unresolved_requirements"]),
+        "next_action": mapped["next_action"],
+    }
+
+
+def diagnostic_checkpoint(
+    *, identity: str = "19000003", reason: str = "no_reviewed_declaration",
+) -> tuple[dict, dict]:
+    checkpoint_value = screenable_ready_checkpoint()
+    source_sha = "2" * 64
+    guide_sha = None
+    resolved_url = "http://data.seoul.go.kr/dataList/datasetView.do?infId=OA-109"
+    metadata = {
+        "method": "data_go_kr_select_api_link_url_v1",
+        "dataset_id": identity,
+        "public_data_pk": identity,
+        "public_data_detail_pk": f"uddi:health-{identity}",
+        "page": {
+            "url": f"https://www.data.go.kr/data/{identity}/openapi.do",
+            "effective_url": f"https://www.data.go.kr/data/{identity}/openapi.do",
+            "sha256": "4" * 64,
+            "bytes": 100,
+            "observed_at": "2026-09-30T20:21:00Z",
+        },
+        "resolver": {
+            "request_url": f"https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk={identity}",
+            "effective_url": f"https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk={identity}",
+            "sha256": "5" * 64,
+            "bytes": 190,
+            "observed_at": "2026-09-30T20:21:00Z",
+            "public_data_detail_pk": f"uddi:health-{identity}",
+            "resolved_url": resolved_url,
+            "resolved_url_sha256": HEALTH.sha256_bytes(resolved_url.encode("utf-8")),
+        },
+    }
+    failure = link_contract_failure(reason)
+    checkpoint_value["detail_records"] = [{
+        "id": identity,
+        "status": "quarantined",
+        "source_sha256": source_sha,
+        "guide_sha256": guide_sha,
+        "failure_diagnostic": {
+            "code": "resolved_link_operation_contract_unproven",
+            "phase": "resolver",
+            "contract_failure": copy.deepcopy(failure),
+        },
+        "link_metadata": metadata,
+    }]
+    checkpoint_value.pop("checkpoint_sha256", None)
+    checkpoint_value["checkpoint_sha256"] = HEALTH.sha256_bytes(
+        HEALTH.canonical_json(checkpoint_value),
+    )
+    worker_outcome = {
+        "api_key": {"provider": "data.go.kr", "id": identity},
+        "status": "quarantined",
+        "source_sha256": source_sha,
+        "guide_sha256": guide_sha,
+        "failure_diagnostic": copy.deepcopy(checkpoint_value["detail_records"][0]["failure_diagnostic"]),
+        "link_metadata": copy.deepcopy(metadata),
+    }
+    record = {
+        "api_key": {"provider": "data.go.kr", "id": identity},
+        "worker_status": "quarantined",
+        "source_sha256": source_sha,
+        "guide_sha256": guide_sha,
+        "worker_outcome_sha256": HEALTH.sha256_bytes(HEALTH.canonical_json(worker_outcome)),
+        "detail_status": "verified",
+        "next_action": failure["next_action"],
+        "contract_failure": failure,
+    }
+    return checkpoint_value, record
 
 
 def promotion_attempt_evidence(
@@ -827,7 +907,291 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         self.assertEqual(source["observation"]["producer_run_id"], RUN_ID)
         self.assertTrue(canonical["last_good"]["verified"])
         self.assertIsNone(canonical["publication"])
+        self.assertEqual(source["processor"]["link_contract_diagnostics"], {
+            "schema_version": "datapan.upstream-catalogue-link-contract-diagnostics.v1",
+            "status": "rejected",
+            "applicability": "unavailable",
+            "reason_code": "processor_bundle_or_input_contract_incompatible",
+            "generation_id": None,
+            "checkpoint_sha256": None,
+            "producer": None,
+            "records": [],
+        })
         HEALTH.validate_schema(report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "receipt")
+
+    def test_link_contract_diagnostics_reuse_one_screen_and_follow_candidate_context(self) -> None:
+        contexts = (
+            ("current", "verified", None),
+            ("promotion_required", "rejected", "candidate_payload_requires_promotion"),
+            ("historical", "rejected", "candidate_baseline_stale_for_current_main"),
+        )
+        reports: dict[str, dict] = {}
+        for label, expected_status, expected_reason in contexts:
+            with self.subTest(context=label), tempfile.TemporaryDirectory() as directory:
+                checkpoint_value, diagnostic = diagnostic_checkpoint()
+                payload = f"diagnostic candidate {label}\n".encode("utf-8")
+                candidate_screen, identity = synthetic_candidate_screen(
+                    checkpoint_value, pathlib.Path(directory) / "bundle", payload,
+                )
+                screened = candidate_screen(None)
+                screened["run"]["head_sha"] = "a" * 40
+                screened["bundle"]["contract_diagnostics"] = [copy.deepcopy(diagnostic)]
+                if label == "promotion_required":
+                    current = HEALTH.manifest_registry_identity(
+                        ROOT / "manifest.json", ROOT / "data/data-go-kr.registry.json",
+                    )
+                    screened["bundle"]["baseline_sha256"] = current["registry_sha256"]
+                calls = 0
+
+                def screen_once(_checkpoint: dict) -> dict:
+                    nonlocal calls
+                    calls += 1
+                    return {
+                        "status": "verified",
+                        "stage": "complete",
+                        "reason_code": None,
+                        "screened": copy.deepcopy(screened),
+                    }
+
+                manifest_patch = (
+                    mock.patch.object(HEALTH, "manifest_registry_identity", return_value=identity)
+                    if label == "current" else contextlib.nullcontext()
+                )
+                with manifest_patch:
+                    report = self.run_health(
+                        pathlib.Path(directory) / "health", cp=[checkpoint_value],
+                        processor_candidate_screen=screen_once,
+                    )
+                reports[label] = report
+                source = report["sources"][0]
+                evaluation = source["canonical"]["current_candidate_evaluation"]
+                projection = source["processor"]["link_contract_diagnostics"]
+                self.assertEqual(calls, 1)
+                self.assertEqual(evaluation["status"], expected_status)
+                self.assertEqual(evaluation["reason_code"], expected_reason)
+                self.assertEqual(projection["status"], "verified")
+                self.assertEqual(
+                    projection["applicability"], "historical" if label == "historical" else "current",
+                )
+                self.assertEqual(projection["reason_code"], expected_reason)
+                self.assertEqual(projection["generation_id"], checkpoint_value["generation_id"])
+                self.assertEqual(projection["checkpoint_sha256"], checkpoint_value["checkpoint_sha256"])
+                self.assertEqual(projection["records"], [diagnostic])
+                self.assertNotIn("link_metadata", projection["records"][0])
+                HEALTH.validate_schema(
+                    report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "receipt",
+                )
+
+        forged_schema_mapping = copy.deepcopy(reports["current"])
+        forged_schema_mapping["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0][
+            "next_action"
+        ] = "inspect_bound_validation_evidence"
+        with self.assertRaises(jsonschema.ValidationError):
+            HEALTH.validate_schema(
+                forged_schema_mapping,
+                ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+                "forged receipt",
+            )
+
+        with tempfile.TemporaryDirectory() as directory:
+            temp = pathlib.Path(directory)
+            receipt = reports["current"]
+            receipt_path = temp / "receipt.json"
+            receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+            state_root = temp / "worktree/health/upstream-catalogue"
+            first = PERSIST.persist(
+                receipt_path, state_root, ROOT / "policy/upstream-catalogue-health.json",
+                "StatPan/datapan-registry",
+            )
+            state = json.loads((state_root / "state.json").read_text(encoding="utf-8"))
+            archived_path = temp / "worktree" / first["receipt_path"]
+            archived = json.loads(archived_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                archived["sources"][0]["processor"]["link_contract_diagnostics"],
+                receipt["sources"][0]["processor"]["link_contract_diagnostics"],
+            )
+            replay = PERSIST.persist(
+                receipt_path, state_root, ROOT / "policy/upstream-catalogue-health.json",
+                "StatPan/datapan-registry",
+            )
+            self.assertEqual(replay["state_sha256"], state["state_sha256"])
+
+    def test_link_contract_api_key_id_schema_accepts_unicode_and_rejects_controls(self) -> None:
+        schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json").read_text(
+                encoding="utf-8",
+            ),
+        )
+        record_schema = {
+            "$schema": schema["$schema"],
+            "$ref": "#/$defs/link_contract_diagnostic_record",
+            "$defs": schema["$defs"],
+        }
+        jsonschema.Draft202012Validator.check_schema(record_schema)
+        validator = jsonschema.Draft202012Validator(record_schema)
+        _, record = diagnostic_checkpoint()
+
+        for identity in ("safe-id", "공공데이터-식별자", "api-😀", "x" * 128):
+            with self.subTest(accepted=repr(identity)):
+                accepted = copy.deepcopy(record)
+                accepted["api_key"]["id"] = identity
+                validator.validate(accepted)
+
+        rejected_identities = (
+            "", "x" * 129,
+            *(f"safe{chr(codepoint)}id" for codepoint in range(32)),
+            "safe\x7fid",
+        )
+        for identity in rejected_identities:
+            with self.subTest(rejected=repr(identity)):
+                rejected = copy.deepcopy(record)
+                rejected["api_key"]["id"] = identity
+                with self.assertRaises(jsonschema.ValidationError):
+                    validator.validate(rejected)
+
+    def test_link_contract_diagnostic_tampering_cannot_initialize_health_state(self) -> None:
+        checkpoint_value, diagnostic = diagnostic_checkpoint()
+        with tempfile.TemporaryDirectory() as directory:
+            candidate_screen, identity = synthetic_candidate_screen(
+                checkpoint_value, pathlib.Path(directory) / "bundle", b"current diagnostic payload\n",
+            )
+            screened = candidate_screen(None)
+            screened["run"]["head_sha"] = "a" * 40
+            screened["bundle"]["contract_diagnostics"] = [diagnostic]
+            envelope = {
+                "status": "verified",
+                "stage": "complete",
+                "reason_code": None,
+                "screened": screened,
+            }
+            with mock.patch.object(HEALTH, "manifest_registry_identity", return_value=identity):
+                valid = self.run_health(
+                    pathlib.Path(directory) / "health", cp=[checkpoint_value],
+                    processor_candidate_screen=lambda _checkpoint: copy.deepcopy(envelope),
+                )
+
+        def source_mismatch(receipt: dict) -> None:
+            receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0]["source_sha256"] = "7" * 64
+
+        def producer_mismatch(receipt: dict) -> None:
+            receipt["sources"][0]["processor"]["link_contract_diagnostics"]["producer"]["artifact_id"] = "88776655"
+
+        def copied_outcome_digest(receipt: dict) -> None:
+            receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"][0][
+                "worker_outcome_sha256"
+            ] = "8" * 64
+
+        def duplicate_record(receipt: dict) -> None:
+            records = receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"]
+            records.append(copy.deepcopy(records[0]))
+
+        def extra_subject(receipt: dict) -> None:
+            records = receipt["sources"][0]["processor"]["link_contract_diagnostics"]["records"]
+            extra = copy.deepcopy(records[0])
+            extra["api_key"]["id"] = "unrelated"
+            records.append(extra)
+
+        def wrong_current_context(receipt: dict) -> None:
+            receipt["sources"][0]["canonical"]["current_candidate_evaluation"].update({
+                "status": "rejected",
+                "reason_code": "candidate_baseline_stale_for_current_main",
+                "revalidation_required": True,
+            })
+
+        def stripped_projection(receipt: dict) -> None:
+            receipt["sources"][0]["processor"].pop("link_contract_diagnostics")
+
+        for label, mutate, expected in (
+            ("source", source_mismatch, "record_binding"),
+            ("producer", producer_mismatch, "producer_binding"),
+            ("copied_digest", copied_outcome_digest, "record_binding"),
+            ("duplicate", duplicate_record, "record_identity"),
+            ("extra", extra_subject, "record_binding"),
+            ("context", wrong_current_context, "current_context"),
+            ("stripped", stripped_projection, "projection_missing_for_modern_detail"),
+        ):
+            with self.subTest(case=label), tempfile.TemporaryDirectory() as directory:
+                root = pathlib.Path(directory)
+                receipt = copy.deepcopy(valid)
+                mutate(receipt)
+                receipt = HEALTH.seal_receipt(receipt)
+                HEALTH.validate_schema(
+                    receipt, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "receipt",
+                )
+                receipt_path = root / "receipt.json"
+                receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+                state_root = root / "worktree/health/upstream-catalogue"
+                with mock.patch.object(PERSIST, "initialize_owner") as initialize_owner:
+                    with self.assertRaisesRegex(ValueError, expected):
+                        PERSIST.persist(
+                            receipt_path, state_root,
+                            ROOT / "policy/upstream-catalogue-health.json",
+                            "StatPan/datapan-registry",
+                        )
+                initialize_owner.assert_not_called()
+                self.assertFalse(state_root.exists())
+
+    def test_link_contract_projection_rejects_malformed_and_preserves_legacy_unknown(self) -> None:
+        checkpoint_value, record = diagnostic_checkpoint()
+        screened = {
+            "generation_id": checkpoint_value["generation_id"],
+            "artifact_id": checkpoint_value["output_artifact"]["artifact_id"],
+            "run": {"id": "123456789", "run_attempt": 2, "head_sha": "a" * 40},
+            "bundle": {},
+        }
+        producer = {
+            "generation_id": checkpoint_value["generation_id"],
+            "checkpoint_sha256": checkpoint_value["checkpoint_sha256"],
+            "run_id": "123456789",
+            "run_attempt": 2,
+            "head_sha": "a" * 40,
+            "artifact_id": "99887766",
+            "bundle_manifest_sha256": checkpoint_value["output_artifact"]["bundle_manifest_sha256"],
+        }
+        evaluation = {"status": "verified", "reason_code": None, "producer": producer}
+
+        legacy = copy.deepcopy(record)
+        legacy.pop("contract_failure")
+        legacy["detail_status"] = "legacy_detail_unknown"
+        legacy["next_action"] = "inspect_bound_validation_evidence"
+        screened["bundle"]["contract_diagnostics"] = [legacy]
+        projection = HEALTH.link_contract_diagnostic_projection(
+            checkpoint_value, screened, evaluation, "live",
+        )
+        self.assertEqual(projection["status"], "verified")
+        self.assertEqual(projection["records"], [legacy])
+
+        def duplicate(rows: list[dict]) -> None:
+            rows.append(copy.deepcopy(rows[0]))
+
+        def private_field(rows: list[dict]) -> None:
+            rows[0]["resolver_url"] = "https://private.example.invalid/path"
+
+        def forged_mapping(rows: list[dict]) -> None:
+            rows[0] = copy.deepcopy(record)
+            rows[0]["contract_failure"]["next_action"] = "inspect_bound_validation_evidence"
+
+        def overflow(rows: list[dict]) -> None:
+            rows[:] = [
+                {**copy.deepcopy(legacy), "api_key": {"provider": "data.go.kr", "id": str(index)}}
+                for index in range(129)
+            ]
+
+        for label, mutate in {
+            "duplicate": duplicate,
+            "private_field": private_field,
+            "forged_mapping": forged_mapping,
+            "overflow": overflow,
+        }.items():
+            with self.subTest(case=label):
+                changed = copy.deepcopy(screened)
+                mutate(changed["bundle"]["contract_diagnostics"])
+                rejected = HEALTH.link_contract_diagnostic_projection(
+                    checkpoint_value, changed, evaluation, "live",
+                )
+                self.assertEqual(rejected["status"], "rejected")
+                self.assertEqual(rejected["records"], [])
+                self.assertIsNone(rejected["producer"])
 
     def test_evaluator_and_evaluated_main_are_separate_and_fixture_never_claims_source(self) -> None:
         evaluator = "9" * 40
