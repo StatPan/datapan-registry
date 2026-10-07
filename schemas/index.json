@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-10-07T00:00:00Z",
   "datapan_version": "0.1.0-dev",
-  "count": 126,
+  "count": 127,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 5139,
-      "sha256": "1bb0bb7475b353cf1b0532c533a5db8e7065010c5067364b6a1a0201c4076983"
+      "bytes": 5188,
+      "sha256": "c09386e5f1da16ed82958bdc966bb5ac018daa93b446951a50ebcaa0aac11b2d"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -1072,8 +1072,8 @@
       "title": "Datapan operation observation plan v1",
       "contract": "operation-observation-plan",
       "version": "v1",
-      "bytes": 31312,
-      "sha256": "d0d5ee3be85703ca3617204c699a0c33db621f1e32b8d67aa401402d39d2fd9b"
+      "bytes": 51431,
+      "sha256": "f56ec01a26662e05092118497bdc4d1c24612c35db870358ffb2058e9127454f"
     },
     {
       "path": "schemas/datapan.operation-observation-policy.v1.schema.json",
@@ -1081,8 +1081,8 @@
       "title": "Datapan Operation Observation Reviewed Policy v1",
       "contract": "operation-observation-policy",
       "version": "v1",
-      "bytes": 26091,
-      "sha256": "f618594c584aa1e55f9e27c65d9780730ab1ae9b58e47a0c60790c2efe997c4b"
+      "bytes": 28409,
+      "sha256": "16fa872c0e7d598e55d81814867566576f1962479627ac43eebd66d1d2a62d0f"
     },
     {
       "path": "schemas/datapan.operation-response-assertion.v1.schema.json",
@@ -1099,8 +1099,8 @@
       "title": "Datapan Operation Response Assertion v2",
       "contract": "operation-response-assertion",
       "version": "v2",
-      "bytes": 24432,
-      "sha256": "0e30d07b2755ab4944773c08be2cd9e5dd50ab75338a607a2728d8d4353b12bd"
+      "bytes": 27286,
+      "sha256": "78878ab22183e419e58d2a15b0a6a32bc585a3822cfa5a3a4bfd9f23d893055b"
     },
     {
       "path": "schemas/datapan.operation-document-capture-receipt.v2.schema.json",
@@ -1117,8 +1117,8 @@
       "title": "Datapan registered operation document evidence v2",
       "contract": "operation-document-evidence",
       "version": "v2",
-      "bytes": 56113,
-      "sha256": "d8501e9175e02db4457cdffdf7fbdb801dbb828288ac4fb3b22ba324ca40d598"
+      "bytes": 57563,
+      "sha256": "d6edb7dad63b9d7cdac6753fc02cba962cb8d96d7c01119c031935abfc973108"
     },
     {
       "path": "schemas/datapan.operation-document-reconciliation.v2.schema.json",
@@ -1137,6 +1137,15 @@
       "version": "v2",
       "bytes": 3392,
       "sha256": "b67024d6330b64b483aab8f562227ecd20518e1aff0679219f101faa65350b0f"
+    },
+    {
+      "path": "schemas/datapan.operation-document-capture-receipt.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-capture-receipt.v1.schema.json",
+      "title": "Datapan official operation-document capture receipt v1",
+      "contract": "operation-document-capture-receipt",
+      "version": "v1",
+      "bytes": 3015,
+      "sha256": "682c9e3f5833e718a25609bb126d5a564e84eb338eb33582f7618e9243be6029"
     }
   ]
 }

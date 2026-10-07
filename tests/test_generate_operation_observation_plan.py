@@ -14,6 +14,7 @@ import jsonschema
 ROOT = Path(__file__).resolve().parents[1]
 COMPILER_PATH = ROOT / "scripts/generate-operation-observation-plan.py"
 SCHEMA_PATH = ROOT / "schemas/datapan.operation-observation-plan.v1.schema.json"
+REGISTRAR_PATH = ROOT / "scripts/register-operation-observation-plan-artifacts.py"
 
 
 def load_module(name: str, path: Path):
@@ -37,8 +38,8 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         summary = index["summary"]
         self.assertEqual(summary["known_operations"], 12666)
         self.assertEqual(summary["known_operations"], sum(scope["registered_operations"] for scope in index["source_scopes"]))
-        self.assertEqual(summary["request_plans_complete"], 0)
-        self.assertEqual(summary["request_plans_incomplete"], 12666)
+        self.assertEqual(summary["request_plans_complete"], 1)
+        self.assertEqual(summary["request_plans_incomplete"], 12665)
         self.assertEqual(summary["runtime_bindings_bound"], 0)
         self.assertEqual(summary["runtime_bindings_unbound"], 12666)
         self.assertEqual(summary["admitted"], 0)
@@ -59,6 +60,24 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         )
         self.validator.validate(index)
         self.assertEqual(index["registry_revision"], self.compiler.current_revision(ROOT))
+        seoul_plan = next(
+            record
+            for path, raw in outputs.items()
+            if "/shards/" in path
+            for record in json.loads(raw)["records"]
+            if record["operation_identity"]["operation_id"] == "seoul-open-data-subway-station-list"
+        )
+        self.assertEqual(seoul_plan["operation_identity"]["registered_endpoint"]["port"], 8088)
+        self.assertIn("secure_transport_required", seoul_plan["request_plan"]["missing_fields"])
+        endpoint_missing_plan = next(
+            record
+            for path, raw in outputs.items()
+            if "/shards/" in path
+            for record in json.loads(raw)["records"]
+            if record["operation_identity"]["operation_id"] == "0465a66688ad765264b2aa5f116098b2877f37d1a0ab5ecbd1d0be14fcff4424"
+        )
+        self.assertNotIn("registered_endpoint", endpoint_missing_plan["operation_identity"])
+        self.assertIn("registered_endpoint_missing", endpoint_missing_plan["request_plan"]["missing_fields"])
         self.assertTrue(all(item["bytes"] > 0 and len(item["sha256"]) == 64 for item in index["generation_inputs"]["document_evidence"]))
         data_go_artifacts = {ref["path"] for scope in index["source_scopes"] if scope["source_id"] == "data_go_kr" for ref in scope["source_artifacts"]}
         self.assertTrue({
@@ -68,6 +87,12 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             "schemas/datapan.operation-observation-policy.v1.schema.json",
             "schemas/datapan.operation-response-assertion.v2.schema.json",
             "schemas/datapan.operation-document-evidence.v1.schema.json",
+            "schemas/datapan.operation-document-evidence.v2.schema.json",
+            "schemas/datapan.operation-document-capture-receipt.v2.schema.json",
+            "schemas/datapan.operation-document-work-item.v2.schema.json",
+            "schemas/datapan.operation-document-reconciliation.v2.schema.json",
+            "reports/operation-document-evidence/queue.v2.jsonl",
+            "reports/operation-document-evidence/reconciliation.v2.json",
             "scripts/operation_document_evidence.py",
             "scripts/generate-operation-observation-plan.py",
         }.issubset(data_go_artifacts))
@@ -80,6 +105,88 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             self.assertLessEqual(len(ids), 256)
             self.assertEqual(ids, sorted(ids))
 
+    def test_all_owned_schema_local_references_resolve(self):
+        schema_paths = sorted((ROOT / "schemas").glob("datapan.*.schema.json"))
+        self.assertGreater(len(schema_paths), 0)
+        for path in schema_paths:
+            schema = json.loads(path.read_text(encoding="utf-8"))
+            jsonschema.Draft202012Validator.check_schema(schema)
+
+            def visit(value):
+                if isinstance(value, dict):
+                    reference = value.get("$ref")
+                    if isinstance(reference, str) and reference.startswith("#/"):
+                        with self.subTest(schema=path.name, ref=reference):
+                            self.compiler.json_pointer_value(schema, reference)
+                    for child in value.values():
+                        visit(child)
+                elif isinstance(value, list):
+                    for child in value:
+                        visit(child)
+
+            visit(schema)
+
+    def test_registered_endpoint_preserves_only_explicit_ports(self):
+        self.assertEqual(
+            self.compiler.registered_endpoint("http://openapi.seoul.go.kr:8088/example"),
+            {"host": "openapi.seoul.go.kr", "port": 8088, "path": "/example"},
+        )
+        self.assertEqual(
+            self.compiler.registered_endpoint("https://example.invalid/path"),
+            {"host": "example.invalid", "path": "/path"},
+        )
+        self.assertEqual(
+            self.compiler.registered_endpoint("https://example.invalid:443/path"),
+            {"host": "example.invalid", "port": 443, "path": "/path"},
+        )
+        self.assertTrue(
+            self.compiler.registered_paths_match(
+                "/{KEY}/{TYPE}/{SERVICE}/{START_INDEX}/{END_INDEX}",
+                "/{KEY}/{format}/{service}/{start_index}/{end_index}",
+            )
+        )
+        self.assertFalse(
+            self.compiler.registered_paths_match(
+                "/{KEY}/station/{SERVICE}",
+                "/{KEY}/bus/{SERVICE}",
+            )
+        )
+
+    def test_release_manifest_closes_over_plan_inputs_and_document_sidecars(self):
+        registrar = load_module("operation_observation_manifest_registrar", REGISTRAR_PATH)
+        manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
+        expected = registrar.expected_manifest(manifest)
+        rows = expected["artifacts"]
+        paths = {row["path"] for row in rows}
+        index = json.loads((ROOT / "reports/operation-observation-plan/index.json").read_text(encoding="utf-8"))
+        referenced = {
+            ref["path"]
+            for scope in index["source_scopes"]
+            for ref in scope["source_artifacts"]
+        }
+        referenced.update(
+            ref["path"]
+            for ref in index["generation_inputs"]["document_evidence"]
+        )
+        self.assertTrue(referenced.issubset(paths))
+        evidence_paths = {
+            path.relative_to(ROOT).as_posix()
+            for path in (ROOT / "reports/operation-document-evidence").rglob("*")
+            if path.is_file()
+        }
+        self.assertTrue(evidence_paths.issubset(paths))
+        self.assertIn("scripts/generate-operation-observation-plan.py", paths)
+        self.assertIn("scripts/operation_document_evidence.py", paths)
+        self.assertIn("policy/operation-observation-policies.v1.json", paths)
+        schema_index_rows = [row for row in rows if row["path"] == "schemas/index.json"]
+        self.assertEqual(len(schema_index_rows), 1)
+        self.assertEqual(schema_index_rows[0]["kind"], "schema_index")
+        schema_paths = [entry["path"] for entry in json.loads((ROOT / "schemas/index.json").read_text(encoding="utf-8"))["schemas"]]
+        self.assertEqual([row["path"] for row in rows if row["kind"] == "schema"], schema_paths)
+        self.assertIn("reports/operation-response-assertions/fee64750123f617a1c230a30f012a0f3330ede1cc92587716d6ad386c37da0bb.json", paths)
+        release_schema = json.loads((ROOT / "schemas/datapan.release-manifest.v1.schema.json").read_text(encoding="utf-8"))
+        jsonschema.Draft202012Validator(release_schema, format_checker=jsonschema.FormatChecker()).validate(expected)
+
     def test_real_operation_document_evidence_reconciles_canary_and_noncanary_without_admission(self):
         index, outputs = self.compiler.build(ROOT)
         expected_identities = {
@@ -87,10 +194,9 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             ("15001808", "16811", "655adc96663128905bf0f778af0b4e00311abce240bb5d7d09f0a6a40ce81e03"),
         }
         document_inputs = index["generation_inputs"]["document_evidence"]
-        self.assertEqual(
-            {Path(item["path"]).name for item in document_inputs},
-            {"15001697-24807.json", "15001808-16811.json"},
-        )
+        self.assertEqual(len(document_inputs), 105)
+        self.assertTrue(any(item["path"].endswith("15001697-24807.json") for item in document_inputs))
+        self.assertTrue(any(item["path"].endswith("15001808-16811.json") for item in document_inputs))
         self.assertTrue(all(item["bytes"] > 0 and len(item["sha256"]) == 64 for item in document_inputs))
         records = [
             record
@@ -122,14 +228,95 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             self.assertTrue(any(ref["json_pointer"] == "#/effect" for ref in refs))
             self.assertTrue(any(ref["json_pointer"] == "#/transport/http_method" for ref in refs))
             self.assertTrue(all(ref["artifact_path"].endswith(f"{dataset_id}-{upstream_key}.json") for ref in refs))
-            sidecar = json.loads((ROOT / f"reports/operation-document-evidence/{dataset_id}-{upstream_key}.json").read_text(encoding="utf-8"))
+            sidecars = {
+                ref["artifact_path"]: json.loads((ROOT / ref["artifact_path"]).read_text(encoding="utf-8"))
+                for ref in refs
+            }
+            sidecar = sidecars[refs[0]["artifact_path"]]
             self.assertEqual(sidecar["transport"]["http_method"]["value"], None)
             self.assertEqual(sidecar["transport"]["http_method"]["status"], "unknown")
             self.assertEqual(sidecar["effect"]["classification"], "read_only")
-            self.assertTrue(all(self.compiler.json_pointer_value(sidecar, ref["json_pointer"]) is not None for ref in refs))
+            self.assertTrue(
+                all(
+                    self.compiler.json_pointer_value(sidecars[ref["artifact_path"]], ref["json_pointer"]) is not None
+                    for ref in refs
+                )
+            )
 
         noncanary = by_id["655adc96663128905bf0f778af0b4e00311abce240bb5d7d09f0a6a40ce81e03"]
         self.assertNotIn("legacy_selectors", noncanary["operation_identity"])
+
+    def test_documented_safe_request_compiles_observation_only_without_claiming_response_health(self):
+        index, outputs = self.compiler.build(ROOT)
+        records = [
+            record
+            for path, raw in outputs.items()
+            if "/shards/" in path
+            for record in json.loads(raw)["records"]
+        ]
+        operation_id = "fee64750123f617a1c230a30f012a0f3330ede1cc92587716d6ad386c37da0bb"
+        record = next(row for row in records if row["operation_identity"]["operation_id"] == operation_id)
+        self.assertEqual(record["request_plan"]["status"], "complete")
+        self.assertEqual(record["runtime_binding"]["status"], "unbound")
+        self.assertEqual(record["admission"]["status"], "not_admitted")
+        contract = record["request_plan"]["request_contract"]
+        self.assertEqual(contract["transport"]["http_method"], "GET")
+        self.assertEqual(contract["transport"]["authority"], "operation_document")
+        self.assertEqual(contract["operation_effect"]["authority"], "reviewed_policy")
+        self.assertEqual(contract["authentication"]["requirement"], "required")
+        self.assertEqual(contract["authentication"]["placement"], "query")
+        self.assertEqual([parameter["name"] for parameter in contract["parameters"]], ["serviceKey"])
+        self.assertEqual(contract["parameters"][0]["value_strategy"], {
+            "kind": "credential_reference",
+            "authority": "runtime_binding",
+            "binding_field": "credential_reference",
+        })
+        response_assertion = contract["response_assertion"]
+        self.assertEqual(response_assertion["kind"], "observation_only")
+        self.assertEqual(response_assertion["empty_result_semantics"], "not_applicable")
+        self.assertNotIn("expected_status_codes", response_assertion)
+        refs = response_assertion["evidence_refs"]
+        evidence = {(ref["artifact_path"], ref["json_pointer"], ref["evidence_kind"]) for ref in refs}
+        evidence_file = "reports/operation-document-evidence/v2/15158559-69640.json"
+        self.assertIn((evidence_file, "#/transport/http_method", "operation_document"), evidence)
+        self.assertIn((evidence_file, "#/operation_document/title", "operation_document"), evidence)
+        self.assertIn((evidence_file, "#/operation_document/purpose", "operation_document"), evidence)
+        self.assertIn((evidence_file, "#/authentication", "operation_document"), evidence)
+        self.assertIn((evidence_file, "#/parameters", "operation_document"), evidence)
+        self.assertIn((evidence_file, "#/response_contract", "operation_document"), evidence)
+        self.assertIn(("policy/operation-observation-policies.v1.json", "#/policies/0/request/response_assertion_artifact", "reviewed_policy"), evidence)
+        self.assertIn(("policy/operation-observation-policies.v1.json", "#/policies/0/review", "reviewed_policy"), evidence)
+        assertion_file = ROOT / f"reports/operation-response-assertions/{operation_id}.json"
+        assertion_artifact = json.loads(assertion_file.read_text(encoding="utf-8"))
+        self.assertEqual(assertion_artifact["assertion"], {"mode": "observation_only"})
+        self.assertEqual(assertion_artifact["document_evidence"]["path"], evidence_file)
+        sidecar = json.loads((ROOT / "reports/operation-document-evidence/v2/15158559-69640.json").read_text(encoding="utf-8"))
+        self.assertEqual(sidecar["effect"]["status"], "unknown")
+        self.assertIsNone(sidecar["effect"]["classification"])
+        self.assertEqual(sidecar["response_contract"]["success_branches"][0]["schema_shape"]["status"], "incomplete")
+        self.assertEqual(index["summary"]["admitted"], 0)
+
+    def test_v2_normalizer_preserves_unknown_collection_and_separates_http_error_branches(self):
+        document = json.loads((ROOT / "reports/operation-document-evidence/v2/15158559-69640.json").read_text(encoding="utf-8"))
+        normalized = self.compiler.normalize_operation_document_evidence_v2(document)
+        self.assertEqual(normalized["source_parse_status"], document["parse_status"])
+        self.assertEqual(len(normalized["response"]["success_branches"]), 1)
+        self.assertEqual(normalized["response"]["http_error_branches"], [])
+        self.assertEqual(normalized["response"]["success_branches"][0]["classification"], "success")
+        self.assertEqual(normalized["response"]["success_branches"][0]["schema_shape_status"], "incomplete")
+        self.assertEqual(normalized["response"]["success_branches"][0]["coded_result_inventory_status"], "incomplete")
+        self.assertEqual(normalized["response"]["result_collection"]["status"], "unknown")
+        self.assertIsInstance(normalized["response"]["result_collection"], dict)
+
+        synthetic = json.loads(json.dumps(document))
+        error_branch = json.loads(json.dumps(synthetic["response_contract"]["success_branches"][0]))
+        error_branch["http_status_code"] = 429
+        synthetic["response_contract"]["documented_http_error_branches"].append(error_branch)
+        branch_union = self.compiler.normalize_operation_document_evidence_v2(synthetic)["response"]
+        self.assertEqual([branch["http_status_code"] for branch in branch_union["success_branches"]], [200])
+        self.assertEqual([branch["http_status_code"] for branch in branch_union["http_error_branches"]], [429])
+        self.assertEqual(branch_union["http_error_branches"][0]["classification"], "provider_error")
+        self.assertNotEqual(branch_union["success_branches"][0]["source"], branch_union["http_error_branches"][0]["source"])
 
     def test_identity_set_digest_uses_sorted_canonical_json_array(self):
         ids = ["operation-z", "operation-a", "operation-m"]
@@ -140,12 +327,47 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         evidence_schema = ROOT / "schemas/datapan.operation-document-evidence.v1.schema.json"
         self.assertEqual(
             self.compiler.sha256(SCHEMA_PATH.read_bytes()),
-            "b0bb4254fa76c00de9ce20b7f8c32c84823362a0862be7cf7d2438cfb74c1e8e",
+            "f56ec01a26662e05092118497bdc4d1c24612c35db870358ffb2058e9127454f",
+        )
+        policy_schema = ROOT / "schemas/datapan.operation-observation-policy.v1.schema.json"
+        self.assertEqual(
+            self.compiler.sha256(policy_schema.read_bytes()),
+            "16fa872c0e7d598e55d81814867566576f1962479627ac43eebd66d1d2a62d0f",
         )
         self.assertEqual(
             self.compiler.sha256(evidence_schema.read_bytes()),
             "0b4a5a7ab10eeccb523d2af8a8e62e76f14a6243eea00558ac49e9959e7a3d1d",
         )
+        assertion_schema = ROOT / "schemas/datapan.operation-response-assertion.v2.schema.json"
+        self.assertEqual(
+            self.compiler.sha256(assertion_schema.read_bytes()),
+            "78878ab22183e419e58d2a15b0a6a32bc585a3822cfa5a3a4bfd9f23d893055b",
+        )
+        evidence_v2_schema = ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json"
+        self.assertEqual(
+            self.compiler.sha256(evidence_v2_schema.read_bytes()),
+            "d6edb7dad63b9d7cdac6753fc02cba962cb8d96d7c01119c031935abfc973108",
+        )
+
+    def test_previous_plan_schema_rejects_observation_only_kind(self):
+        previous = subprocess.run(
+            ["git", "-C", str(ROOT), "show", "b0ff9e7cb3ec5cdcecb35a8fc416123a525b286d:schemas/datapan.operation-observation-plan.v1.schema.json"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        old_schema = json.loads(previous.stdout)
+        assertion = {
+            "kind": "observation_only",
+            "assertion_ref": "reports/observation.json#/assertion",
+            "empty_result_semantics": "not_applicable",
+            "evidence_refs": [{"artifact_path": "policy.json", "sha256": "a" * 64, "json_pointer": "#/assertion", "evidence_kind": "reviewed_policy"}],
+        }
+        old_assertion_schema = self.compiler.json_pointer_value(
+            old_schema, "#/$defs/request_contract/properties/response_assertion"
+        )
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.Draft202012Validator(old_assertion_schema).validate(assertion)
 
     def test_source_revision_rejects_changed_legacy_and_provider_index_inputs(self):
         with tempfile.TemporaryDirectory() as directory:

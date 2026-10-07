@@ -386,6 +386,153 @@ class ReviewedOperationPolicyCompilerTests(unittest.TestCase):
             self.assertNotIn("credential_reference", record["runtime_binding"])
             self.assertEqual(contract["response_assertion"]["kind"], "soap_fault_free")
 
+    def test_documented_unnamespaced_qname_is_valid(self):
+        self.assertEqual(
+            self.compiler._clark_qname({"namespace": "", "local_name": "GetItemsResponse"}, "response.root_shape.qname"),
+            {"namespace": "", "local_name": "GetItemsResponse"},
+        )
+        jsonschema.Draft202012Validator(
+            self.plan_schema["$defs"]["qname"], format_checker=jsonschema.FormatChecker()
+        ).validate({"namespace": "", "local_name": "GetItemsResponse"})
+
+    def test_reviewed_read_only_effect_requires_operation_method_and_retrieval_purpose(self):
+        operation = {"operation_id": "operation-1", "protocol": "REST"}
+        selector = {"source_id": "data_go_kr", "provider": "data.go.kr", "protocol": "REST", "method": "GET"}
+        effect_review = {
+            "classification": "read_only",
+            "basis": "rfc9110_safe_method_and_retrieval_purpose",
+            "rfc_reference": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1",
+            "purpose_terms": ["조회"],
+            "rationale": "Reviewed read-only classification scoped to official retrieval-purpose text and an operation-specific safe method.",
+        }
+        source_ref = {"evidence_kind": "operation_http_method"}
+        document = {
+            "identity": {"source_id": "data_go_kr", "provider": "data.go.kr", "protocol": "REST", "operation_id": "operation-1"},
+            "transport": {
+                "http_method": {"status": "documented", "authority_scope": "operation_specific", "value": "GET", "source_refs": [source_ref]},
+                "fixed_query_selectors": [],
+            },
+            "effect": {"status": "unknown", "classification": None},
+            "operation_document": {
+                "title": {"status": "documented", "value": "기관 현황 목록", "source_refs": [{"evidence_kind": "official_operation_title"}]},
+                "purpose": {"status": "documented", "value": "기관 현황을 조회한다.", "source_refs": [{"evidence_kind": "official_operation_purpose"}]},
+            },
+            "parameters": [],
+        }
+        self.assertTrue(self.compiler.reviewed_read_only_effect_matches(selector, effect_review, "data_go_kr", "data.go.kr", operation, document))
+
+        mutations = copy.deepcopy(document)
+        mutations["operation_document"]["purpose"]["value"] = "기관을 등록하고 조회한다."
+        self.assertFalse(self.compiler.reviewed_read_only_effect_matches(selector, effect_review, "data_go_kr", "data.go.kr", operation, mutations))
+        service_method = copy.deepcopy(document)
+        service_method["transport"]["http_method"]["authority_scope"] = "service_level_only"
+        self.assertFalse(self.compiler.reviewed_read_only_effect_matches(selector, effect_review, "data_go_kr", "data.go.kr", operation, service_method))
+        post_method = copy.deepcopy(document)
+        post_method["transport"]["http_method"]["value"] = "POST"
+        self.assertFalse(self.compiler.reviewed_read_only_effect_matches(selector, effect_review, "data_go_kr", "data.go.kr", operation, post_method))
+        action_parameter = copy.deepcopy(document)
+        action_parameter["parameters"] = [{"name": "action"}]
+        self.assertFalse(self.compiler.reviewed_read_only_effect_matches(selector, effect_review, "data_go_kr", "data.go.kr", operation, action_parameter))
+        conflicting_effect = copy.deepcopy(document)
+        conflicting_effect["effect"] = {"status": "documented", "classification": "mutating"}
+        self.assertFalse(self.compiler.reviewed_read_only_effect_matches(selector, effect_review, "data_go_kr", "data.go.kr", operation, conflicting_effect))
+        wrong_identity = copy.deepcopy(document)
+        wrong_identity["identity"]["operation_id"] = "other-operation"
+        self.assertFalse(self.compiler.reviewed_read_only_effect_matches(selector, effect_review, "data_go_kr", "data.go.kr", operation, wrong_identity))
+
+    def test_complete_plan_can_bind_reviewed_read_only_effect_without_forging_provider_fact(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            fixture = self._fixture(root, "REST")
+            operation = fixture["operation"]
+            old_document_ref = fixture["document_ref"]
+            document = fixture["document"]
+            document["effect"] = {"status": "unknown", "classification": None, "authority": "operation_document", "source_refs": []}
+            document["operation_document"] = {
+                "title": {
+                    "status": "documented",
+                    "value": "기관 현황 목록",
+                    "source_refs": [{"evidence_kind": "official_operation_title"}],
+                },
+                "purpose": {
+                    "status": "documented",
+                    "value": "기관 현황을 조회한다.",
+                    "source_refs": [{"evidence_kind": "official_operation_purpose"}],
+                },
+            }
+            new_document_ref = self._write_json(root, old_document_ref["path"], document)
+
+            assertion_path = root / f"reports/operation-response-assertions/{operation['operation_id']}.json"
+            assertion = json.loads(assertion_path.read_text(encoding="utf-8"))
+            assertion["document_evidence"] = new_document_ref
+
+            def rewrite_document_refs(value):
+                if isinstance(value, dict):
+                    if value.get("artifact_path") == old_document_ref["path"] and value.get("sha256") == old_document_ref["sha256"]:
+                        value["sha256"] = new_document_ref["sha256"]
+                    for child in value.values():
+                        rewrite_document_refs(child)
+                elif isinstance(value, list):
+                    for child in value:
+                        rewrite_document_refs(child)
+
+            rewrite_document_refs(assertion)
+            new_assertion_ref = self._write_json(root, f"reports/operation-response-assertions/{operation['operation_id']}.json", assertion)
+            fixture["document_ref"] = new_document_ref
+            fixture["scope"]["source_artifacts"] = [
+                new_document_ref if ref == old_document_ref else ref
+                for ref in fixture["scope"]["source_artifacts"]
+            ]
+            fixture["scope"]["source_artifacts"] = [
+                new_assertion_ref if ref["path"] == new_assertion_ref["path"] else ref
+                for ref in fixture["scope"]["source_artifacts"]
+            ]
+
+            policy_path = root / "policy/operation-observation-policies.v1.json"
+            policy_set = json.loads(policy_path.read_text(encoding="utf-8"))
+            policy = policy_set["policies"][0]
+            policy["document_evidence"] = new_document_ref
+            policy["request"]["response_assertion_artifact"] = new_assertion_ref
+            policy["request"]["effect_review"] = {
+                "classification": "read_only",
+                "basis": "rfc9110_safe_method_and_retrieval_purpose",
+                "rfc_reference": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1",
+                "purpose_terms": ["조회"],
+                "rationale": "A documented operation-specific GET plus the exact official retrieval purpose establishes a reviewed read-only request effect.",
+            }
+            policy_path.write_text(json.dumps(policy_set, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+            evidence = {operation["operation_id"]: {"document": document, "artifact_ref": new_document_ref}}
+            policies, _policy_set, policy_ref, _ = self.compiler.load_reviewed_operation_policies(root, [operation], evidence)
+            reviewed = policies[operation["operation_id"]]
+            identity = {key: operation["provenance"][key] for key in ("dataset_id", "operation_name", "upstream_operation_key")}
+            plan = self.compiler.make_incomplete_plan(
+                scope=fixture["scope"],
+                operation_id=operation["operation_id"],
+                protocol="REST",
+                identity=identity,
+                evidence={"artifact_path": "reports/data-go-kr/operation-manifest.json", "sha256": "a" * 64, "json_pointer": "#/operations/0", "evidence_kind": "operation_manifest"},
+            )
+            record = self.compiler.compile_reviewed_operation_plan(
+                plan,
+                operation,
+                document,
+                new_document_ref,
+                reviewed["policy"],
+                reviewed["artifact_ref"],
+                reviewed["index"],
+                reviewed["assertion"],
+                reviewed["assertion_ref"],
+                root,
+            )
+            self.plan_validator.validate(record)
+            self.compiler.validate_record(record, self.plan_schema, root, self.plan_validator)
+            effect = record["request_plan"]["request_contract"]["operation_effect"]
+            self.assertEqual(effect["authority"], "reviewed_policy")
+            self.assertFalse(any(ref["json_pointer"] == "#/effect" for ref in effect["evidence_refs"]))
+            self.assertTrue(any(ref["json_pointer"] == "#/operation_document/purpose" for ref in effect["evidence_refs"]))
+            self.assertTrue(any(ref["json_pointer"] == "#/policies/0/request/effect_review" for ref in effect["evidence_refs"]))
+
     def test_reviewed_policy_can_omit_only_documented_optional_parameters(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -2,6 +2,86 @@
   "$schema": "https://schemas.datapan.dev/datapan.operation-observation-policy.v1.schema.json",
   "schema_version": "datapan.operation-observation-policy.v1",
   "artifact_kind": "operation_observation_policy_set",
-  "policies": [],
-  "profiles": []
+  "policies": [
+    {
+      "identity": {
+        "source_id": "data_go_kr",
+        "operation_id": "fee64750123f617a1c230a30f012a0f3330ede1cc92587716d6ad386c37da0bb",
+        "provider": "data.go.kr",
+        "protocol": "REST",
+        "dataset_id": "15158559",
+        "operation_name": "버스 차고지 현황 정보",
+        "upstream_operation_key": "69640"
+      },
+      "document_evidence": {
+        "path": "reports/operation-document-evidence/v2/15158559-69640.json",
+        "sha256": "269d73ff8ed143911b726e6f1d9f2e2d8be87030a48b1774732ea9ff3bea1933",
+        "bytes": 129654
+      },
+      "review": {
+        "review_ref": "https://github.com/StatPan/datapan-registry/issues/759",
+        "reviewed_by": "StatPan Registry maintainers",
+        "rationale": "This reviewed policy authorizes construction of one source-documented retrieval request using the required credential reference and omission of the two documented optional query inputs. It makes no claim about response health, binds no runtime credential, quota, entitlement, or observation cadence, and does not admit provider execution."
+      },
+      "request": {
+        "effect_review": {
+          "classification": "read_only",
+          "basis": "rfc9110_safe_method_and_retrieval_purpose",
+          "rfc_reference": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1",
+          "purpose_terms": [
+            "현황",
+            "조회"
+          ],
+          "rationale": "The exact operation-specific GET and official title/purpose describe retrieval of current bus-depot status. No mutation, action, or caller-controlled operation selector is present. This classification authorizes only request construction and grants no execution or response-health authority."
+        },
+        "parameter_strategies": [],
+        "omit_unmapped_optional_parameters": true,
+        "limits": {
+          "request_budget": 1,
+          "timeout_ms": 10000,
+          "max_request_bytes": 4096,
+          "max_response_bytes": 1048576
+        },
+        "response_assertion_artifact": {
+          "path": "reports/operation-response-assertions/fee64750123f617a1c230a30f012a0f3330ede1cc92587716d6ad386c37da0bb.json",
+          "sha256": "7760d589a84008d07fad6a3230e2754c77634e04cbbbc88b70b49cc274fc2d73",
+          "bytes": 1234
+        }
+      }
+    }
+  ],
+  "profiles": [],
+  "effect_profiles": [
+    {
+      "profile_id": "data-go-kr-reviewed-retrieval-read-only",
+      "selector": {
+        "source_id": "data_go_kr",
+        "provider": "data.go.kr",
+        "protocol": "REST",
+        "method": "GET"
+      },
+      "effect_review": {
+        "classification": "read_only",
+        "basis": "rfc9110_safe_method_and_retrieval_purpose",
+        "rfc_reference": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1",
+        "purpose_terms": [
+          "조회",
+          "목록",
+          "검색",
+          "현황",
+          "retrieve",
+          "list",
+          "search",
+          "read",
+          "lookup"
+        ],
+        "rationale": "Apply only when an operation-specific GET is documented and the exact official operation purpose explicitly describes retrieval, listing, searching, or reading; reject purpose text indicating mutation and any caller-controlled action selector. This review classifies request effect only and grants no credential, quota, entitlement, or probe authority."
+      },
+      "review": {
+        "review_ref": "https://github.com/StatPan/datapan-registry/issues/759",
+        "reviewed_by": "StatPan Registry maintainers",
+        "rationale": "Narrowly scoped read-only effect classification for explicitly documented Data.go.kr REST retrieval operations; each output retains exact operation-document refs and remains subject to all separate request and runtime gates."
+      }
+    }
+  ]
 }

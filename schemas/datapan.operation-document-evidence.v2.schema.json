@@ -254,6 +254,30 @@
     "transport": {
       "type": "object",
       "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "port": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "port"
+            ]
+          },
+          "then": {
+            "required": [
+              "port_source_refs"
+            ],
+            "properties": {
+              "port_source_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ],
       "required": [
         "protocol",
         "scheme",
@@ -276,6 +300,17 @@
         },
         "host": {
           "$ref": "#/$defs/fact"
+        },
+        "port": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "port_source_refs": {
+          "$ref": "#/$defs/source_refs"
         },
         "path": {
           "$ref": "#/$defs/fact"
@@ -473,6 +508,7 @@
           ],
           "enum": [
             "query",
+            "path",
             "header",
             "soap_header",
             null
@@ -886,6 +922,34 @@
                 "unknown",
                 "not_found_in_parsed_operation_sources",
                 "registered_manifest"
+              ]
+            },
+            "source_refs": {
+              "$ref": "#/$defs/source_refs"
+            }
+          }
+        },
+        "service_status": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "classification",
+            "status",
+            "source_refs"
+          ],
+          "properties": {
+            "classification": {
+              "enum": [
+                "active",
+                "terminated",
+                "unknown"
+              ]
+            },
+            "status": {
+              "enum": [
+                "documented",
+                "unknown",
+                "not_found_in_parsed_operation_sources"
               ]
             },
             "source_refs": {

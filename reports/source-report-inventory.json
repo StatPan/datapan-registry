@@ -46,9 +46,9 @@
   ],
   "schema_index_input": {
     "path": "schemas/index.json",
-    "schemas": 115,
-    "bytes": 47568,
-    "sha256": "48ec967c7ae0955fcd4f1a4a8bb4435b26711d68245f8a78ee19f5c861044d1e"
+    "schemas": 123,
+    "bytes": 51050,
+    "sha256": "8d0a4f3099477b6b3bb2870dc71e44ae08a86bd18afa19143b0738da667b4037"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -1256,8 +1256,8 @@
         {
           "name": "operation-denominator.json",
           "path": "reports/kosis/operation-denominator.json",
-          "bytes": 888,
-          "sha256": "5e03008ac38a5c4a98f235c91a92b6b1a147fcb930e8e6c681240e984a10c081",
+          "bytes": 1712,
+          "sha256": "03c57ba3715b713d3ecac7be0cd5147d5d4f19187a79fb810dfce8a031255e9b",
           "schema_version": "datapan.operation-denominator.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
           "expected_schema_path": "schemas/datapan.operation-denominator.v1.schema.json",

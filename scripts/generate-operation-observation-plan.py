@@ -12,7 +12,7 @@ import re
 import subprocess
 import sys
 from typing import Any
-from urllib.parse import urlsplit
+from urllib.parse import parse_qsl, urlsplit
 
 import jsonschema
 
@@ -26,6 +26,14 @@ LEGACY_POLICY_PATH = ROOT / "policy/health-probe-canaries.json"
 PROVIDER_INDEX_PATH = ROOT / "data/provider-index.json"
 DOCUMENT_EVIDENCE_DIR = ROOT / "reports/operation-document-evidence"
 DOCUMENT_EVIDENCE_SCHEMA_PATH = ROOT / "schemas/datapan.operation-document-evidence.v1.schema.json"
+DOCUMENT_EVIDENCE_V2_DIR = ROOT / "reports/operation-document-evidence/v2"
+DOCUMENT_EVIDENCE_V2_SCOPE_DIR = ROOT / "reports/operation-document-evidence/source-scopes"
+DOCUMENT_EVIDENCE_V2_SCHEMA_PATH = ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json"
+DOCUMENT_CAPTURE_RECEIPT_V2_SCHEMA_PATH = ROOT / "schemas/datapan.operation-document-capture-receipt.v2.schema.json"
+DOCUMENT_WORK_ITEM_V2_SCHEMA_PATH = ROOT / "schemas/datapan.operation-document-work-item.v2.schema.json"
+DOCUMENT_RECONCILIATION_V2_SCHEMA_PATH = ROOT / "schemas/datapan.operation-document-reconciliation.v2.schema.json"
+DOCUMENT_EVIDENCE_V2_QUEUE_PATH = ROOT / "reports/operation-document-evidence/queue.v2.jsonl"
+DOCUMENT_EVIDENCE_V2_RECONCILIATION_PATH = ROOT / "reports/operation-document-evidence/reconciliation.v2.json"
 REVIEWED_POLICY_PATH = ROOT / "policy/operation-observation-policies.v1.json"
 REVIEWED_POLICY_SCHEMA_PATH = ROOT / "schemas/datapan.operation-observation-policy.v1.schema.json"
 RESPONSE_ASSERTION_DIR = ROOT / "reports/operation-response-assertions"
@@ -39,6 +47,22 @@ DENOMINATOR_PATHS = {
 SHARD_SIZE = 256
 QUOTA_SCOPE_PREFIX = b"datapan.quota-scope.v1\0"
 _EVIDENCE_CACHE: dict[Path, tuple[bytes, Any, str]] = {}
+_READ_PURPOSE_MARKERS = {
+    "조회": ("조회",),
+    "목록": ("목록",),
+    "검색": ("검색",),
+    "현황": ("현황",),
+    "retrieve": ("retrieve",),
+    "list": ("list",),
+    "search": ("search",),
+    "read": ("read",),
+    "lookup": ("lookup",),
+}
+_MUTATION_MARKERS = (
+    "등록", "수정", "삭제", "변경", "추가", "신청", "취소", "발급", "전송", "처리", "실행", "갱신", "업데이트", "작성", "제출",
+    "create", "update", "delete", "write", "submit", "insert", "modify", "cancel", "issue", "send", "execute", "apply", "withdraw", "remove",
+)
+_ACTION_PARAMETER_NAMES = {"action", "actiontype", "command", "method", "op", "operation", "operationid"}
 
 
 class PlanError(ValueError):
@@ -275,6 +299,369 @@ def document_evidence_pointers(document: dict[str, Any]) -> list[str]:
     return sorted(set(pointers))
 
 
+def _load_jsonl_rejecting_duplicate_keys(path: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            for line_number, line in enumerate(handle, 1):
+                if not line.strip():
+                    continue
+                value = json.loads(
+                    line,
+                    object_pairs_hook=lambda pairs: _reject_duplicate_pairs(pairs, path, line_number),
+                )
+                fail(isinstance(value, dict), f"invalid JSONL row in {path}:{line_number}")
+                rows.append(value)
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise PlanError(f"invalid operation-document queue JSONL: {path}") from exc
+    return rows
+
+
+def _reject_duplicate_pairs(pairs: list[tuple[str, Any]], path: Path, line_number: int) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        fail(key not in result, f"duplicate JSON key in {path}:{line_number}")
+        result[key] = value
+    return result
+
+
+def _document_evidence_v2_catalog(
+    root: Path,
+    operations: list[dict[str, Any]],
+    denominator_documents: dict[str, dict[str, Any]],
+    operation_manifest_ref: dict[str, Any],
+    source_snapshot_ref: dict[str, Any],
+) -> dict[tuple[str, str], dict[str, Any]]:
+    """Load the committed v2 document evidence without collapsing any source status."""
+    schema_path = root / DOCUMENT_EVIDENCE_V2_SCHEMA_PATH.relative_to(ROOT)
+    receipt_schema_path = root / DOCUMENT_CAPTURE_RECEIPT_V2_SCHEMA_PATH.relative_to(ROOT)
+    work_item_schema_path = root / DOCUMENT_WORK_ITEM_V2_SCHEMA_PATH.relative_to(ROOT)
+    reconciliation_schema_path = root / DOCUMENT_RECONCILIATION_V2_SCHEMA_PATH.relative_to(ROOT)
+    for path in (schema_path, receipt_schema_path, work_item_schema_path, reconciliation_schema_path):
+        fail(path.is_file(), f"operation-document-evidence v2 contract input is missing: {path.relative_to(root)}")
+    evidence_validator = jsonschema.Draft202012Validator(
+        load_json(schema_path), format_checker=jsonschema.FormatChecker()
+    )
+    receipt_validator = jsonschema.Draft202012Validator(
+        load_json(receipt_schema_path), format_checker=jsonschema.FormatChecker()
+    )
+    work_item_validator = jsonschema.Draft202012Validator(
+        load_json(work_item_schema_path), format_checker=jsonschema.FormatChecker()
+    )
+    reconciliation_validator = jsonschema.Draft202012Validator(
+        load_json(reconciliation_schema_path), format_checker=jsonschema.FormatChecker()
+    )
+
+    known: dict[tuple[str, str], dict[str, Any]] = {}
+    for operation in operations:
+        identity = operation_policy_identity("data_go_kr", "data.go.kr", operation)
+        known[("data_go_kr", identity["operation_id"])] = {
+            "provider": "data.go.kr",
+            "operation": operation,
+        }
+    for source_id, denominator in denominator_documents.items():
+        for operation in denominator.get("operations", []):
+            key = (source_id, operation.get("operation_id"))
+            fail(key not in known, f"duplicate registered operation identity across source scopes: {key}")
+            known[key] = {
+                "provider": denominator.get("provider"),
+                "operation": operation,
+            }
+
+    # Reconcile the full v2 acquisition queue against the exact Data.go.kr manifest.
+    # This queue reports acquisition state only; it never changes operation eligibility.
+    reconciliation_path = root / DOCUMENT_EVIDENCE_V2_RECONCILIATION_PATH.relative_to(ROOT)
+    queue_path = root / DOCUMENT_EVIDENCE_V2_QUEUE_PATH.relative_to(ROOT)
+    fail(reconciliation_path.is_file() and queue_path.is_file(), "v2 operation-document queue/reconciliation inputs are missing")
+    reconciliation = _load_json_rejecting_duplicate_keys(reconciliation_path)
+    errors = list(reconciliation_validator.iter_errors(reconciliation))
+    fail(not errors, f"invalid operation-document v2 reconciliation: {errors[0].message if errors else ''}")
+    fail(reconciliation.get("manifest_binding") == {
+        "path": operation_manifest_ref["path"],
+        "sha256": operation_manifest_ref["sha256"],
+        "source_snapshot_sha256": source_snapshot_ref["sha256"],
+    }, "operation-document v2 reconciliation is bound to another manifest or source snapshot")
+    queue = _load_jsonl_rejecting_duplicate_keys(queue_path)
+    for row in queue:
+        work_item_validator.validate(row)
+    gov_rows = [row for row in queue if row.get("operation_identity", {}).get("source_id") == "data_go_kr"]
+    expected_gov_ids = sorted(
+        operation["operation_id"] for operation in operations
+    )
+    actual_gov_ids = [row["operation_identity"]["operation_id"] for row in gov_rows]
+    fail(actual_gov_ids == sorted(actual_gov_ids), "operation-document v2 queue is not sorted by operation identity")
+    fail(actual_gov_ids == expected_gov_ids, "operation-document v2 queue does not match the exact registered Data.go.kr identity set")
+    statuses = Counter(row["status"] for row in gov_rows)
+    fail(statuses == Counter(reconciliation["summary"]["statuses"]), "operation-document v2 queue statuses differ from the reconciliation report")
+    fail(reconciliation["summary"]["registered_api_operations"] == len(operations), "operation-document v2 reconciliation denominator mismatch")
+    fail(reconciliation["summary"]["coverage_complete"] is False, "partial source-document acquisition cannot claim complete coverage")
+
+    documents: dict[tuple[str, str], dict[str, Any]] = {}
+    sidecar_paths = sorted((root / DOCUMENT_EVIDENCE_V2_DIR.relative_to(ROOT)).glob("*.json"))
+    sidecar_paths.extend(sorted((root / DOCUMENT_EVIDENCE_V2_SCOPE_DIR.relative_to(ROOT)).glob("*.json")))
+    for path in sidecar_paths:
+        document = _load_json_rejecting_duplicate_keys(path)
+        errors = list(evidence_validator.iter_errors(document))
+        fail(not errors, f"invalid operation-document evidence v2 {path.relative_to(root)}: {errors[0].message if errors else ''}")
+        identity = document["identity"]
+        source_id = identity["source_id"]
+        operation_id = identity["operation_id"]
+        key = (source_id, operation_id)
+        fail(key in known, f"operation-document v2 evidence is outside the registered denominator: {path.relative_to(root)}")
+        fail(key not in documents, f"duplicate operation-document v2 evidence identity: {key}")
+        expected = known[key]
+        fail(identity["provider"] == expected["provider"], f"operation-document v2 provider identity mismatch: {key}")
+        registered = expected["operation"]
+        if source_id == "data_go_kr":
+            provenance = registered.get("provenance", {})
+            expected_identity = {
+                "operation_id": operation_id,
+                "source_id": "data_go_kr",
+                "provider": "data.go.kr",
+                "protocol": registered.get("protocol"),
+                "dataset_id": provenance.get("dataset_id"),
+                "operation_name": provenance.get("operation_name"),
+                "upstream_operation_key": provenance.get("upstream_operation_key"),
+            }
+            for field, value in expected_identity.items():
+                fail(identity.get(field) == value, f"operation-document v2 identity mismatch at {field}: {key}")
+            expected_path = f"{identity['dataset_id']}-{identity['upstream_operation_key']}.json"
+            fail(path.name == expected_path and path.parent.name == "v2", f"operation-document v2 filename does not match its registered identity: {path.relative_to(root)}")
+            endpoint = registered_endpoint(registered.get("transport", {}).get("endpoint"))
+            if endpoint is None:
+                fail(
+                    registered.get("call_readiness", {}).get("status") == "endpoint_missing",
+                    f"registered operation lacks a canonical endpoint: {key}",
+                )
+        else:
+            fail(path.parent.name == "source-scopes" and path.name == f"{operation_id}.json", f"non-Data.go.kr evidence path does not match its registered identity: {path.relative_to(root)}")
+            endpoint = registered_endpoint(registered.get("endpoint_template"))
+            fail(endpoint is not None, f"registered operation lacks a canonical endpoint: {key}")
+            fail(identity.get("protocol") in {"REST", "SOAP", "HTTP"}, f"operation-document v2 protocol is unsupported: {key}")
+
+        transport = document["transport"]
+        host_fact, path_fact = transport.get("host", {}), transport.get("path", {})
+        # Partial acquisition is allowed to leave host/path unresolved. If the
+        # parser did establish either fact, it must agree exactly with the
+        # registered operation identity; unknown evidence must remain unknown.
+        endpoint_facts = [] if endpoint is None else [
+            ("host", host_fact, endpoint["host"]),
+            ("path", path_fact, endpoint["path"]),
+        ]
+        for field, fact, expected_value in endpoint_facts:
+            if fact.get("status") == "documented":
+                value = fact.get("value")
+                if field == "host":
+                    fail(isinstance(value, str) and value.casefold() == expected_value, f"operation-document v2 host differs from its registered endpoint: {key}")
+                else:
+                    fail(registered_paths_match(value, expected_value), f"operation-document v2 path differs from its registered endpoint: {key}")
+            else:
+                fail(fact.get("status") in {"unknown", "not_established"}, f"operation-document v2 {field} has an unsupported unresolved status: {key}")
+        documented_port = transport.get("port")
+        port_refs = transport.get("port_source_refs", [])
+        if documented_port is not None:
+            fail(type(documented_port) is int and 1 <= documented_port <= 65535, f"operation-document v2 port is invalid: {key}")
+            fail(bool(port_refs), f"operation-document v2 port lacks source evidence: {key}")
+            if endpoint is not None:
+                fail(endpoint.get("port") == documented_port, f"operation-document v2 port differs from its registered endpoint: {key}")
+        else:
+            fail(not port_refs, f"operation-document v2 has port evidence without a port value: {key}")
+        if source_id != "data_go_kr":
+            parsed = urlsplit(registered["endpoint_template"] if "://" in registered["endpoint_template"] else "https://" + registered["endpoint_template"].lstrip("/"))
+            registered_selectors = dict(parse_qsl(parsed.query, keep_blank_values=True))
+            for selector in transport.get("fixed_query_selectors", []):
+                if selector.get("status") == "documented":
+                    fail(registered_selectors.get(selector["name"]) == selector.get("value"), f"operation-document fixed selector differs from its registered endpoint: {key}")
+
+        source_ids = [binding["source_id"] for binding in document["source_bindings"]]
+        fail(len(source_ids) == len(set(source_ids)), f"duplicate v2 source binding IDs: {key}")
+        source_id_set = set(source_ids)
+
+        def check_v2_source_refs(value: Any) -> None:
+            if isinstance(value, dict):
+                refs = value.get("source_refs")
+                if refs is not None:
+                    fail(isinstance(refs, list), f"invalid v2 source refs: {key}")
+                    for ref in refs:
+                        locator = ref.get("locator", {})
+                        fail(locator.get("source_id") in source_id_set, f"unbound v2 source locator: {key}")
+                for child in value.values():
+                    check_v2_source_refs(child)
+            elif isinstance(value, list):
+                for child in value:
+                    check_v2_source_refs(child)
+
+        check_v2_source_refs(document)
+        ref = artifact_ref(path, root)
+        if source_id == "data_go_kr":
+            receipt_path = root / "reports/operation-document-evidence/v2/receipts" / path.name
+            fail(receipt_path.is_file(), f"operation-document v2 capture receipt is missing: {path.name}")
+            receipt = _load_json_rejecting_duplicate_keys(receipt_path)
+            receipt_validator.validate(receipt)
+            fail(receipt["operation_id"] == operation_id and receipt["evidence_sha256"] == ref["sha256"], f"operation-document v2 receipt binding mismatch: {key}")
+        documents[key] = {"document": document, "artifact_ref": ref}
+    return documents
+
+
+def normalize_operation_document_evidence_v2(document: dict[str, Any]) -> dict[str, Any]:
+    """Provide a lossless consumer view of v2 source facts and branch classes.
+
+    Raw evidence remains the provenance authority. This view only names the
+    fields consumers need and keeps success and numeric HTTP-error branches in
+    separate arrays. Every branch retains its full source object so statuses
+    such as ``incomplete`` and ``unknown`` cannot be flattened into absence.
+    """
+    fail(document.get("schema_version") == "datapan.operation-document-evidence.v2", "operation evidence normalizer requires v2")
+    response = document.get("response_contract")
+    fail(isinstance(response, dict), "operation evidence v2 has no response contract")
+    success = response.get("success_branches")
+    http_errors = response.get("documented_http_error_branches")
+    fail(isinstance(success, list) and isinstance(http_errors, list), "operation evidence v2 branch arrays are missing")
+
+    def branch_view(classification: str, index: int, branch: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "classification": classification,
+            "source_index": index,
+            "http_status_code": branch.get("http_status_code"),
+            "payload_status": branch.get("payload", {}).get("status"),
+            "schema_shape_status": branch.get("schema_shape", {}).get("status"),
+            "coded_result_inventory_status": branch.get("coded_result_field_inventory", {}).get("status"),
+            "result_collection_status": branch.get("result_collection", {}).get("status"),
+            "source": branch,
+        }
+
+    parse_status = document.get("parse_status", "unknown")
+    if isinstance(parse_status, dict):
+        parse_status = parse_status.get("status", "unknown")
+    return {
+        "schema_version": document["schema_version"],
+        "identity": document["identity"],
+        "source_parse_status": parse_status,
+        "transport": document.get("transport", {}),
+        "effect": document.get("effect", {}),
+        "parameters": document.get("parameters", []),
+        "authentication": document.get("authentication", {}),
+        "response": {
+            "payload": response.get("payload", {"status": "unknown"}),
+            "schema_shape": response.get("schema_shape", {"status": "unknown"}),
+            "coded_result_field_inventory": response.get("coded_result_field_inventory", {"status": "unknown"}),
+            "result_collection": response.get("result_collection", {"status": "unknown"}),
+            "empty_result_semantics": document.get("response_assertion", {}).get("empty_result_semantics", {"status": "unknown"}),
+            "success_branches": [branch_view("success", index, branch) for index, branch in enumerate(success)],
+            "http_error_branches": [branch_view("provider_error", index, branch) for index, branch in enumerate(http_errors)],
+        },
+        "raw_source": document,
+    }
+
+
+def apply_document_evidence_v2(record: dict[str, Any], captured: dict[str, Any]) -> None:
+    """Attach v2 facts without collapsing unknown or incomplete source states."""
+    document = captured["document"]
+    normalized = normalize_operation_document_evidence_v2(document)
+    ref = captured["artifact_ref"]
+    request_plan = record["request_plan"]
+    pointers = document_evidence_pointers(document)
+    pointers.extend(f"#/source_bindings/{index}" for index in range(len(document["source_bindings"])))
+    for pointer in sorted(set(pointers)):
+        request_plan["evidence_refs"].append(evidence_ref(ref, pointer, "operation_document"))
+
+    missing = request_plan["missing_fields"]
+
+    def clear(name: str) -> None:
+        if name in missing:
+            missing.remove(name)
+
+    protocol = normalized["identity"]["protocol"]
+    method = normalized["transport"].get("http_method", {})
+    if (
+        method.get("status") == "documented"
+        and method.get("authority_scope") == "operation_specific"
+        and method.get("value") in {"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+        and any(row.get("evidence_kind") == "operation_http_method" for row in method.get("source_refs", []))
+    ):
+        clear("soap_request_method_authority" if protocol == "SOAP" else "operation_method_authority")
+        clear("transport_and_method_authority")
+
+    effect = normalized.get("effect", {})
+    if (
+        effect.get("status") == "documented"
+        and effect.get("classification") == "read_only"
+        and effect.get("authority") == "operation_document"
+        and effect.get("source_refs")
+    ):
+        clear("operation_effect_read_only_authority")
+
+    parameters = normalized.get("parameters")
+    if isinstance(parameters, list) and parameters:
+        if all(
+            isinstance(parameter.get("location"), dict)
+            and parameter["location"].get("status") == "documented"
+            and parameter["location"].get("value") in {"query", "path", "header", "body", "soap_header"}
+            and parameter["location"].get("source_refs")
+            for parameter in parameters
+        ):
+            clear("parameter_location")
+            clear("parameter_inventory_and_location")
+        if all(
+            parameter.get("requiredness", {}).get("status") == "documented"
+            and parameter.get("requiredness", {}).get("value") in {"required", "optional"}
+            and parameter.get("cardinality", {}).get("status") == "documented"
+            and type(parameter.get("cardinality", {}).get("minimum")) is int
+            and (parameter.get("cardinality", {}).get("maximum") is None or type(parameter.get("cardinality", {}).get("maximum")) is int)
+            and parameter.get("requiredness", {}).get("source_refs")
+            and parameter.get("cardinality", {}).get("source_refs")
+            for parameter in parameters
+        ):
+            clear("parameter_cardinality")
+
+    authentication = normalized.get("authentication", {})
+    auth_is_grounded = (
+        authentication.get("status") == "documented"
+        and authentication.get("requirement") in {"required", "none"}
+        and authentication.get("source_refs")
+    )
+    if auth_is_grounded and authentication.get("requirement") == "required":
+        auth_is_grounded = (
+            authentication.get("mechanism") in {"service_key", "api_key", "basic", "oauth2", "mutual_tls", "other"}
+            and authentication.get("placement") in {"query", "header", "soap_header"}
+            and isinstance(authentication.get("parameter_names"), list)
+            and len(authentication["parameter_names"]) == 1
+            and isinstance(authentication["parameter_names"][0], str)
+            and bool(authentication["parameter_names"][0])
+        )
+    if auth_is_grounded:
+        clear("authentication_placement")
+
+    scheme = normalized["transport"].get("scheme", {})
+    if scheme.get("status") == "documented" and scheme.get("value") == "https":
+        clear("secure_transport_required")
+
+    # Keep v2 response states explicit in the plan's reason set. In particular,
+    # an unknown collection is never translated into an absent collection.
+    response = normalized["response"]
+    payload = response["payload"]
+    if payload.get("status") not in {"documented", "not_applicable"}:
+        missing.append("response_payload_kind")
+    success_branches = response["success_branches"]
+    error_branches = response["http_error_branches"]
+    if not success_branches or any(branch["schema_shape_status"] != "complete" for branch in success_branches):
+        missing.append("response_success_schema_shape")
+    if error_branches and any(branch["schema_shape_status"] != "complete" for branch in error_branches):
+        missing.append("response_http_error_branch_shape_incomplete")
+    branches = [*success_branches, *error_branches]
+    if any(branch["coded_result_inventory_status"] not in {"complete", "not_applicable"} for branch in branches):
+        missing.append("response_code_inventory_incomplete_or_ambiguous")
+    collection_statuses = [branch["result_collection_status"] for branch in success_branches]
+    if not collection_statuses:
+        collection_statuses.append(response["result_collection"].get("status"))
+    if any(status not in {"documented", "not_applicable"} for status in collection_statuses):
+        missing.append("response_collection_semantics_unknown")
+    empty = response["empty_result_semantics"]
+    if empty.get("status") != "documented" or empty.get("value") not in {"valid", "invalid"}:
+        missing.append("response_empty_result_policy_unknown")
+    request_plan["missing_fields"] = sorted(set(missing))
+
+
 def load_document_evidence(
     root: Path,
     operations: list[dict[str, Any]],
@@ -294,7 +681,7 @@ def load_document_evidence(
     documents: dict[str, dict[str, Any]] = {}
     recognized_name = re.compile(r"^[0-9]+-[A-Za-z0-9][A-Za-z0-9:._-]*\.json$")
     for path in sorted(evidence_dir.glob("*.json")):
-        if path.name in {"queue.v1.json", "reconciliation.v1.json"}:
+        if path.name in {"queue.v1.json", "reconciliation.v1.json", "reconciliation.v2.json"}:
             continue
         fail(recognized_name.fullmatch(path.name) is not None, f"unrecognized operation document evidence artifact: {path.name}")
         document = _load_json_rejecting_duplicate_keys(path)
@@ -595,6 +982,11 @@ def _validate_assertion_v2_fact_binding(
     assertion = assertion_artifact["assertion"]
     response_contract = document.get("response_contract")
     fail(isinstance(response_contract, dict), "operation document lacks normalized response-contract facts")
+    if assertion == {"mode": "observation_only"}:
+        # The reviewed arm deliberately makes no claim about response health.
+        # The artifact's document_evidence field binds these unresolved facts;
+        # no parser omission is promoted into a body/status predicate.
+        return
     source_branches = response_contract.get("success_branches")
     fail(isinstance(source_branches, list) and source_branches, "operation document lacks exact response branch facts")
     branches = assertion.get("branches")
@@ -870,6 +1262,7 @@ def load_reviewed_operation_policies(
     root: Path,
     operations: list[dict[str, Any]],
     document_evidence: dict[str, dict[str, Any]],
+    document_evidence_v2: dict[tuple[str, str], dict[str, Any]] | None = None,
 ) -> tuple[dict[str, dict[str, Any]], dict[str, Any], dict[str, Any], dict[str, Any]]:
     policy_path = root / REVIEWED_POLICY_PATH.relative_to(ROOT)
     policy_schema_path = root / REVIEWED_POLICY_SCHEMA_PATH.relative_to(ROOT)
@@ -884,6 +1277,7 @@ def load_reviewed_operation_policies(
     fail(not policy_errors, f"invalid reviewed operation policy set: {policy_errors[0].message if policy_errors else ''}")
 
     operations_by_id = {row["operation_id"]: row for row in operations}
+    document_evidence_v2 = document_evidence_v2 or {}
     fail(len(operations_by_id) == len(operations), "duplicate operation ID while loading reviewed policies")
     policy_ref = artifact_ref(policy_path, root)
     result: dict[str, dict[str, Any]] = {}
@@ -895,8 +1289,17 @@ def load_reviewed_operation_policies(
         operation = operations_by_id[operation_id]
         expected_identity = operation_policy_identity("data_go_kr", "data.go.kr", operation)
         fail(identity == expected_identity, f"reviewed policy identity differs from the registered operation: {operation_id}")
-        fail(operation_id in document_evidence, f"reviewed policy operation has no pinned official document evidence: {operation_id}")
-        captured = document_evidence[operation_id]
+        candidates = []
+        if operation_id in document_evidence:
+            candidates.append(document_evidence[operation_id])
+        if ("data_go_kr", operation_id) in document_evidence_v2:
+            candidates.append(document_evidence_v2[("data_go_kr", operation_id)])
+        fail(candidates, f"reviewed policy operation has no pinned official document evidence: {operation_id}")
+        captured_matches = [candidate for candidate in candidates if policy["document_evidence"] == candidate["artifact_ref"]]
+        fail(len(captured_matches) == 1, f"reviewed policy must bind exactly one current official document evidence artifact: {operation_id}")
+        captured = captured_matches[0]
+        if ("data_go_kr", operation_id) in document_evidence_v2:
+            fail(captured["artifact_ref"] == document_evidence_v2[("data_go_kr", operation_id)]["artifact_ref"], f"reviewed policy cannot use stale v1 evidence when v2 evidence is available: {operation_id}")
         fail(policy["document_evidence"] == captured["artifact_ref"], f"reviewed policy document digest differs from the pinned operation evidence: {operation_id}")
         fail(operation_id not in result, f"duplicate reviewed policy for operation: {operation_id}")
 
@@ -922,6 +1325,7 @@ def load_reviewed_operation_policies(
             "index": index,
             "policy": policy,
             "artifact_ref": policy_ref,
+            "captured": captured,
             "assertion": assertion_artifact,
             "assertion_ref": actual_assertion_ref,
         }
@@ -929,12 +1333,15 @@ def load_reviewed_operation_policies(
 
     profile_ids = [profile["profile_id"] for profile in policy_document["profiles"]]
     fail(len(profile_ids) == len(set(profile_ids)), "duplicate reviewed operation policy profile ID")
+    effect_profile_ids = [profile["profile_id"] for profile in policy_document.get("effect_profiles", [])]
+    fail(len(effect_profile_ids) == len(set(effect_profile_ids)), "duplicate reviewed operation effect profile ID")
 
     return result, policy_document, policy_ref, {
         "policy_schema": artifact_ref(policy_schema_path, root),
         "assertion_schema": artifact_ref(assertion_schema_path, root),
         "assertions": assertion_refs,
         "profiles": policy_document["profiles"],
+        "effect_profiles": policy_document.get("effect_profiles", []),
     }
 
 
@@ -952,12 +1359,22 @@ def profile_matches_operation(
         return False
 
     effect = document.get("effect", {})
-    if not (
+    documented_effect_match = (
         effect.get("status") == "documented"
         and effect.get("classification") == selector["effect"]
         and effect.get("authority") == "operation_document"
         and any(ref.get("evidence_kind") == "operation_effect" for ref in effect.get("source_refs", []))
-    ):
+    )
+    reviewed_effect = profile["request"].get("effect_review")
+    reviewed_effect_match = reviewed_effect is not None and reviewed_read_only_effect_matches(
+        selector,
+        reviewed_effect,
+        source_id,
+        provider,
+        operation,
+        document,
+    )
+    if not documented_effect_match and not reviewed_effect_match:
         return False
     method = document.get("transport", {}).get("http_method", {})
     if not (
@@ -1032,6 +1449,150 @@ def profile_matches_operation(
                 return False
 
     return profile_matches_response(profile["request"]["response"], document.get("response_contract", {}))
+
+
+def reviewed_read_only_effect_matches(
+    selector: dict[str, Any],
+    effect_review: dict[str, Any],
+    source_id: str,
+    provider: str,
+    operation: dict[str, Any],
+    document: dict[str, Any],
+) -> bool:
+    """Require safe-method and operation-specific retrieval facts for a reviewed effect classification."""
+    identity = document.get("identity", {})
+    if (
+        selector.get("source_id") != source_id
+        or selector.get("provider") != provider
+        or selector.get("protocol") != operation.get("protocol")
+        or identity.get("source_id") != source_id
+        or identity.get("provider") != provider
+        or identity.get("operation_id") != operation.get("operation_id")
+        or identity.get("protocol") != operation.get("protocol")
+        or effect_review.get("classification") != "read_only"
+        or effect_review.get("basis") != "rfc9110_safe_method_and_retrieval_purpose"
+        or effect_review.get("rfc_reference") != "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1"
+    ):
+        return False
+
+    method = document.get("transport", {}).get("http_method", {})
+    method_value = str(method.get("value", "")).upper()
+    expected_method = str(selector.get("method", "")).upper()
+    if not (
+        operation.get("protocol") == "REST"
+        and expected_method in {"GET", "HEAD"}
+        and method.get("status") == "documented"
+        and method.get("authority_scope") == "operation_specific"
+        and method_value == expected_method
+        and any(ref.get("evidence_kind") == "operation_http_method" for ref in method.get("source_refs", []))
+    ):
+        return False
+
+    # An explicit provider classification of mutation or an unknown effect
+    # stays source fact; only unknown can use this operator-policy path.
+    source_effect = document.get("effect", {})
+    if source_effect.get("status") == "documented":
+        if source_effect.get("classification") != "read_only":
+            return False
+    elif source_effect.get("status") != "unknown":
+        return False
+
+    operation_document = document.get("operation_document", {})
+    title = operation_document.get("title", {})
+    purpose = operation_document.get("purpose", {})
+    if not (
+        title.get("status") == "documented"
+        and purpose.get("status") == "documented"
+        and any(ref.get("evidence_kind") == "official_operation_title" for ref in title.get("source_refs", []))
+        and any(ref.get("evidence_kind") == "official_operation_purpose" for ref in purpose.get("source_refs", []))
+        and isinstance(title.get("value"), str)
+        and isinstance(purpose.get("value"), str)
+    ):
+        return False
+    title_text = title["value"].casefold()
+    purpose_text = purpose["value"].casefold()
+    combined = f"{title_text} {purpose_text}"
+    if any(marker.casefold() in combined for marker in _MUTATION_MARKERS):
+        return False
+    terms = effect_review.get("purpose_terms", [])
+    if not isinstance(terms, list) or not terms:
+        return False
+    if not all(term in _READ_PURPOSE_MARKERS for term in terms):
+        return False
+    if not any(_READ_PURPOSE_MARKERS[term][0].casefold() in purpose_text for term in terms):
+        return False
+
+    # Do not let an operator policy turn a caller-controlled action selector
+    # into a safe read. Fixed operation selectors are also conservatively
+    # excluded here; source-specific selector semantics need their own review.
+    transport = document.get("transport", {})
+    if any(
+        item.get("status") == "documented"
+        and item.get("role") in {"operation_selector", "action_selector", "command_selector"}
+        for item in transport.get("fixed_query_selectors", [])
+    ):
+        return False
+    if any(
+        isinstance(parameter.get("name"), str)
+        and parameter["name"].casefold() in _ACTION_PARAMETER_NAMES
+        for parameter in document.get("parameters", [])
+    ):
+        return False
+    return True
+
+
+def effect_profile_matches_operation(
+    profile: dict[str, Any],
+    source_id: str,
+    provider: str,
+    operation: dict[str, Any],
+    document: dict[str, Any],
+) -> bool:
+    selector = profile["selector"]
+    if (
+        selector.get("source_id") != source_id
+        or selector.get("provider") != provider
+        or selector.get("protocol") != operation.get("protocol")
+    ):
+        return False
+    return reviewed_read_only_effect_matches(
+        selector,
+        profile["effect_review"],
+        source_id,
+        provider,
+        operation,
+        document,
+    )
+
+
+def apply_effect_profile_review(
+    plan: dict[str, Any],
+    profile: dict[str, Any],
+    profile_index: int,
+    document: dict[str, Any],
+    document_ref: dict[str, Any],
+    policy_ref: dict[str, Any],
+) -> None:
+    """Record exact source and review refs for an independently resolved effect gate."""
+    refs = [
+        _contract_fact_ref(document_ref, "#/transport/http_method"),
+        _contract_fact_ref(document_ref, "#/operation_document/title"),
+        _contract_fact_ref(document_ref, "#/operation_document/purpose"),
+        evidence_ref(policy_ref, f"#/effect_profiles/{profile_index}", "reviewed_policy"),
+        evidence_ref(policy_ref, f"#/effect_profiles/{profile_index}/effect_review", "reviewed_policy"),
+        evidence_ref(policy_ref, f"#/effect_profiles/{profile_index}/review", "reviewed_policy"),
+    ]
+    existing = plan["request_plan"]["evidence_refs"]
+    by_identity = {(ref["artifact_path"], ref["sha256"], ref["json_pointer"], ref["evidence_kind"]) for ref in existing}
+    for ref in refs:
+        key = (ref["artifact_path"], ref["sha256"], ref["json_pointer"], ref["evidence_kind"])
+        if key not in by_identity:
+            existing.append(ref)
+            by_identity.add(key)
+    missing = plan["request_plan"].get("missing_fields", [])
+    for field in ("operation_method_authority", "operation_effect_read_only_authority"):
+        if field in missing:
+            missing.remove(field)
 
 
 def profile_matches_response(response: dict[str, Any], response_contract: dict[str, Any]) -> bool:
@@ -1490,7 +2051,7 @@ def _clark_qname(value: Any, field: str) -> dict[str, str]:
         namespace, local_name = value[1:].split("}", 1)
     else:
         raise PlanError(f"documented SOAP QName has unsupported representation: {field}")
-    fail(isinstance(namespace, str) and namespace, f"documented SOAP QName namespace is missing: {field}")
+    fail(isinstance(namespace, str), f"documented SOAP QName namespace is missing: {field}")
     fail(isinstance(local_name, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9._-]*", local_name) is not None, f"documented SOAP QName local name is invalid: {field}")
     return {"namespace": namespace, "local_name": local_name}
 
@@ -1534,6 +2095,7 @@ def compile_reviewed_operation_plan(
         if field == "scheme":
             value = value.casefold()
             fail(value in {"http", "https"}, "documented transport scheme is unsupported")
+            fail(value == "https", "reviewed production request plans require documented HTTPS transport")
         elif field == "host":
             value = value.casefold()
             fail("/" not in value and "?" not in value and "#" not in value, "documented transport host is not a host name")
@@ -1549,9 +2111,21 @@ def compile_reviewed_operation_plan(
 
     endpoint = registered_endpoint(operation.get("transport", {}).get("endpoint"))
     fail(endpoint is not None, "registered operation has no canonical endpoint host and path")
-    fail(transport["host"] == endpoint["host"] and transport["path"] == endpoint["path"], "documented operation endpoint differs from the registered endpoint")
-    method_evidence = operation.get("transport", {}).get("method_evidence")
-    fail(method_evidence != "registry_default_get", "registered default GET inference cannot establish request method authority")
+    fail(
+        transport["host"] == endpoint["host"]
+        and registered_paths_match(transport["path"], endpoint["path"]),
+        "documented operation endpoint differs from the registered endpoint",
+    )
+    documented_port = captured_transport.get("port")
+    if documented_port is not None:
+        fail(type(documented_port) is int and 1 <= documented_port <= 65535, "documented transport port is invalid")
+        fail(bool(captured_transport.get("port_source_refs")), "documented transport port has no exact source reference")
+        fail(endpoint.get("port") == documented_port, "documented transport port differs from the registered endpoint")
+        transport["port"] = documented_port
+        transport_refs.append(_contract_fact_ref(document_ref, "#/transport/port"))
+    else:
+        fail(endpoint.get("port") is None, "registered endpoint port is not documented by the operation source")
+    fail(not (identity["protocol"] == "REST" and transport["http_method"] == "HEAD"), "HEAD does not establish a usable response-body observation contract")
 
     if identity["protocol"] == "SOAP":
         soap_values: dict[str, Any] = {}
@@ -1574,13 +2148,47 @@ def compile_reviewed_operation_plan(
     transport["evidence_refs"] = transport_refs
 
     effect = document["effect"]
-    fail(effect.get("classification") == "read_only" and effect.get("status") == "documented" and effect.get("authority") == "operation_document", "operation effect is not documented as read-only")
-    fail(any(ref.get("evidence_kind") == "operation_effect" for ref in effect.get("source_refs", [])), "read-only effect lacks an operation-type source locator")
-    operation_effect = {
-        "classification": "read_only",
-        "authority": "operation_document",
-        "evidence_refs": [_contract_fact_ref(document_ref, "#/effect")],
-    }
+    if effect.get("classification") == "read_only" and effect.get("status") == "documented" and effect.get("authority") == "operation_document":
+        fail(any(ref.get("evidence_kind") == "operation_effect" for ref in effect.get("source_refs", [])), "read-only effect lacks an operation-type source locator")
+        operation_effect = {
+            "classification": "read_only",
+            "authority": "operation_document",
+            "evidence_refs": [_contract_fact_ref(document_ref, "#/effect")],
+        }
+    else:
+        effect_review = policy_entry["request"].get("effect_review")
+        fail(isinstance(effect_review, dict), "operation effect is neither documented read-only nor explicitly reviewed")
+        effect_selector = policy_entry.get("_effect_selector") or {
+            "source_id": identity["source_id"],
+            "provider": identity["provider"],
+            "protocol": identity["protocol"],
+            "method": transport["http_method"],
+        }
+        fail(
+            reviewed_read_only_effect_matches(
+                effect_selector,
+                effect_review,
+                "data_go_kr",
+                "data.go.kr",
+                {"operation_id": identity["operation_id"], "protocol": identity["protocol"]},
+                document,
+            ),
+            "reviewed read-only effect lacks an exact safe-method and retrieval-purpose match",
+        )
+        base = policy_pointer_base or f"#/policies/{policy_index}"
+        operation_effect = {
+            "classification": "read_only",
+            "authority": "reviewed_policy",
+            "evidence_refs": [
+                _contract_fact_ref(document_ref, "#/transport/http_method"),
+                _contract_fact_ref(document_ref, "#/operation_document/title"),
+                _contract_fact_ref(document_ref, "#/operation_document/purpose"),
+                evidence_ref(policy_ref, base + "/request/effect_review", "reviewed_policy"),
+                evidence_ref(policy_ref, base + "/review", "reviewed_policy"),
+            ],
+        }
+        if policy_pointer_base is not None:
+            operation_effect["evidence_refs"].append(evidence_ref(policy_ref, base + "/selector", "reviewed_policy"))
 
     auth = document["authentication"]
     fail(auth.get("status") == "documented" and auth.get("source_refs"), "operation authentication placement is not documented")
@@ -1724,43 +2332,68 @@ def compile_reviewed_operation_plan(
     assertion = assertion_artifact["assertion"]
     assertion_path = assertion_ref["path"]
     assertion_evidence = evidence_ref(assertion_ref, "#/assertion", "reviewed_policy")
-    if assertion["payload_kind"] == "json":
-        assertion_kind = "json_contract"
-    elif assertion["payload_kind"] == "xml":
-        assertion_kind = "xml_contract"
+    if assertion == {"mode": "observation_only"}:
+        observation_evidence = [
+            assertion_evidence,
+            evidence_ref(assertion_ref, "#/review", "reviewed_policy"),
+            _contract_fact_ref(document_ref, "#/response_contract"),
+            _contract_fact_ref(document_ref, "#/parameters"),
+            *transport_refs,
+            *operation_effect["evidence_refs"],
+            *auth_refs,
+            *[ref for parameter in output_parameters for ref in parameter["evidence_refs"]],
+            *limits["evidence_refs"],
+            _policy_evidence(policy_ref, policy_index, "/request/response_assertion_artifact", pointer_base=policy_pointer_base),
+            _policy_evidence(policy_ref, policy_index, "/review", pointer_base=policy_pointer_base),
+        ]
+        observation_evidence = list({
+            (ref["artifact_path"], ref["sha256"], ref["json_pointer"], ref["evidence_kind"]): ref
+            for ref in observation_evidence
+        }.values())
+        response_assertion = {
+            "kind": "observation_only",
+            "empty_result_semantics": "not_applicable",
+            "assertion_ref": f"{assertion_path}#/assertion",
+            "evidence_refs": observation_evidence,
+        }
     else:
-        fail(identity["protocol"] == "SOAP", "SOAP response assertion cannot bind a non-SOAP operation")
-        assertion_kind = "soap_fault_free"
-    assertion_refs = [assertion_evidence]
-    expected_status_codes: set[int] = set()
-    empty_semantics = set()
-    for branch in assertion["branches"]:
-        expected_status_codes.update(branch["selector"]["accepted_http_status_codes"])
-        if branch["classification"] == "success":
-            empty_semantics.add(branch["empty_result_semantics"])
+        if assertion["payload_kind"] == "json":
+            assertion_kind = "json_contract"
+        elif assertion["payload_kind"] == "xml":
+            assertion_kind = "xml_contract"
+        else:
+            fail(identity["protocol"] == "SOAP", "SOAP response assertion cannot bind a non-SOAP operation")
+            assertion_kind = "soap_fault_free"
+        assertion_refs = [assertion_evidence]
+        expected_status_codes: set[int] = set()
+        empty_semantics = set()
+        for branch in assertion["branches"]:
+            expected_status_codes.update(branch["selector"]["accepted_http_status_codes"])
+            if branch["classification"] == "success":
+                empty_semantics.add(branch["empty_result_semantics"])
+                if branch.get("result_collection") is not None:
+                    fail(branch["empty_result_semantics"] == branch["result_collection"]["semantics"], "branch empty semantics differ from its result collection")
+            assertion_refs.extend(branch["source_refs"])
+            assertion_refs.extend(branch["http_status_source_refs"])
+            assertion_refs.extend(branch["provider_result_code_evidence_refs"])
+            assertion_refs.extend(ref for field in branch["required_fields"] for ref in field["source_refs"])
+            if "provider_result_codes" in branch:
+                assertion_refs.extend(branch["provider_result_codes"]["source_refs"])
+                for error_class in branch["provider_result_codes"].get("error_classes", []):
+                    assertion_refs.extend(error_class["source_refs"])
             if branch.get("result_collection") is not None:
-                fail(branch["empty_result_semantics"] == branch["result_collection"]["semantics"], "branch empty semantics differ from its result collection")
-        assertion_refs.extend(branch["source_refs"])
-        assertion_refs.extend(branch["http_status_source_refs"])
-        assertion_refs.extend(branch["provider_result_code_evidence_refs"])
-        assertion_refs.extend(ref for field in branch["required_fields"] for ref in field["source_refs"])
-        if "provider_result_codes" in branch:
-            assertion_refs.extend(branch["provider_result_codes"]["source_refs"])
-            for error_class in branch["provider_result_codes"].get("error_classes", []):
-                assertion_refs.extend(error_class["source_refs"])
-        if branch.get("result_collection") is not None:
-            assertion_refs.extend(branch["result_collection"]["source_refs"])
-        assertion_refs.extend(branch["review_refs"])
-        for discriminator in branch["selector"]["discriminators"]:
-            assertion_refs.extend(discriminator["source_refs"])
-    fail(len(empty_semantics) == 1, "plan v1 requires one reviewed empty-result rule shared by all successful response branches")
-    response_assertion = {
-        "kind": assertion_kind,
-        "expected_status_codes": sorted(expected_status_codes),
-        "empty_result_semantics": next(iter(empty_semantics)),
-        "assertion_ref": f"{assertion_path}#/assertion",
-        "evidence_refs": assertion_refs,
-    }
+                assertion_refs.extend(branch["result_collection"]["source_refs"])
+            assertion_refs.extend(branch["review_refs"])
+            for discriminator in branch["selector"]["discriminators"]:
+                assertion_refs.extend(discriminator["source_refs"])
+        fail(len(empty_semantics) == 1, "plan v1 requires one reviewed empty-result rule shared by all successful response branches")
+        response_assertion = {
+            "kind": assertion_kind,
+            "expected_status_codes": sorted(expected_status_codes),
+            "empty_result_semantics": next(iter(empty_semantics)),
+            "assertion_ref": f"{assertion_path}#/assertion",
+            "evidence_refs": assertion_refs,
+        }
 
     contract = {
         "transport": transport,
@@ -1838,13 +2471,39 @@ def compile_reviewed_operation_plan(
     return plan
 
 
-def registered_endpoint(endpoint: str | None) -> dict[str, str] | None:
+def registered_endpoint(endpoint: str | None) -> dict[str, Any] | None:
     if not endpoint:
         return None
     parsed = urlsplit(endpoint if "://" in endpoint else "https://" + endpoint.lstrip("/"))
-    if not parsed.hostname or not parsed.path.startswith("/"):
+    if not parsed.hostname or not parsed.path.startswith("/") or parsed.username or parsed.password or parsed.fragment:
         return None
-    return {"host": parsed.hostname.lower(), "path": parsed.path}
+    result: dict[str, Any] = {"host": parsed.hostname.lower(), "path": parsed.path}
+    if parsed.port is not None:
+        result["port"] = parsed.port
+    return result
+
+
+def registered_paths_match(documented_path: str, registered_path: str) -> bool:
+    """Match route templates while preserving literals and placeholder positions."""
+    token_pattern = re.compile(r"(\{[^{}]+\})")
+
+    def tokens(path: str) -> tuple[tuple[str, str], ...] | None:
+        parts = token_pattern.split(path)
+        if "{" in token_pattern.sub("", path) or "}" in token_pattern.sub("", path):
+            return None
+        result = []
+        for part in parts:
+            if not part:
+                continue
+            if part.startswith("{") and part.endswith("}"):
+                result.append(("parameter", ""))
+            else:
+                result.append(("literal", part))
+        return tuple(result)
+
+    documented_tokens = tokens(documented_path)
+    registered_tokens = tokens(registered_path)
+    return documented_tokens is not None and documented_tokens == registered_tokens
 
 
 def legacy_policy_record(
@@ -1878,6 +2537,7 @@ def make_incomplete_plan(
     if protocol == "REST":
         missing = [
             "operation_method_authority",
+            "secure_transport_required",
             "operation_effect_read_only_authority",
             "parameter_location",
             "parameter_cardinality",
@@ -1889,6 +2549,7 @@ def make_incomplete_plan(
     elif protocol == "SOAP":
         missing = [
             "soap_request_method_authority",
+            "secure_transport_required",
             "operation_effect_read_only_authority",
             "parameter_location",
             "parameter_cardinality",
@@ -1900,6 +2561,7 @@ def make_incomplete_plan(
     else:
         missing = [
             "transport_and_method_authority",
+            "secure_transport_required",
             "operation_effect_read_only_authority",
             "parameter_inventory_and_location",
             "parameter_cardinality",
@@ -1959,9 +2621,20 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
     fail(manifest.get("source_snapshot") == source_snapshot_ref, "operation manifest source snapshot binding mismatch")
     policy_ref = artifact_ref(policy_path, root)
     provider_index_ref = artifact_ref(provider_index_path, root)
+    denominator_documents = {
+        source_id: load_json(root / path.relative_to(ROOT))
+        for source_id, path in DENOMINATOR_PATHS.items()
+    }
     document_evidence = load_document_evidence(root, operations)
+    document_evidence_v2 = _document_evidence_v2_catalog(
+        root,
+        operations,
+        denominator_documents,
+        manifest_ref,
+        source_snapshot_ref,
+    )
     reviewed_policies, _reviewed_policy_document, reviewed_policy_ref, reviewed_policy_inputs = load_reviewed_operation_policies(
-        root, operations, document_evidence
+        root, operations, document_evidence, document_evidence_v2
     )
     source_artifact_paths = [
         source_snapshot_path,
@@ -1975,6 +2648,12 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
         root / "schemas/datapan.operation-document-evidence.v1.schema.json",
         root / "schemas/datapan.operation-observation-policy.v1.schema.json",
         root / "schemas/datapan.operation-response-assertion.v2.schema.json",
+        root / "schemas/datapan.operation-document-evidence.v2.schema.json",
+        root / "schemas/datapan.operation-document-capture-receipt.v2.schema.json",
+        root / "schemas/datapan.operation-document-work-item.v2.schema.json",
+        root / "schemas/datapan.operation-document-reconciliation.v2.schema.json",
+        root / "reports/operation-document-evidence/queue.v2.jsonl",
+        root / "reports/operation-document-evidence/reconciliation.v2.json",
     ]
     for denominator_path in DENOMINATOR_PATHS.values():
         denominator_file = root / denominator_path.relative_to(ROOT)
@@ -1985,6 +2664,16 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
             root / denominator_document["provenance"]["catalog_artifact"],
         ])
     source_artifact_paths.extend(root / captured["artifact_ref"]["path"] for captured in document_evidence.values())
+    source_artifact_paths.extend(
+        root / captured["artifact_ref"]["path"]
+        for (source_id, _operation_id), captured in document_evidence_v2.items()
+        if source_id == "data_go_kr"
+    )
+    source_artifact_paths.extend(
+        root / "reports/operation-document-evidence/v2/receipts" / Path(captured["artifact_ref"]["path"]).name
+        for (source_id, _operation_id), captured in document_evidence_v2.items()
+        if source_id == "data_go_kr"
+    )
     source_artifact_paths.extend(root / ref["path"] for ref in reviewed_policy_inputs["assertions"].values())
     source_artifact_paths.extend([
         root / reviewed_policy_ref["path"],
@@ -2042,15 +2731,21 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
             evidence=evidence_ref(manifest_ref, f"#/operations/{index}", "operation_manifest"),
             legacy_policy=legacy,
         )
-        captured = document_evidence.get(operation_id)
+        if endpoint is None:
+            plan["request_plan"]["missing_fields"].append("registered_endpoint_missing")
+        reviewed = reviewed_policies.get(operation_id)
+        captured_v2 = document_evidence_v2.get(("data_go_kr", operation_id))
+        captured = reviewed["captured"] if reviewed else (document_evidence.get(operation_id) or captured_v2)
         if captured:
             document = captured["document"]
-            plan["request_plan"]["evidence_refs"].extend(
-                evidence_ref(captured["artifact_ref"], pointer, "operation_document")
-                for pointer in document_evidence_pointers(document)
-            )
-            _resolve_documented_missing_fields(plan, document)
-            reviewed = reviewed_policies.get(operation_id)
+            if document.get("schema_version") == "datapan.operation-document-evidence.v2":
+                apply_document_evidence_v2(plan, captured)
+            else:
+                plan["request_plan"]["evidence_refs"].extend(
+                    evidence_ref(captured["artifact_ref"], pointer, "operation_document")
+                    for pointer in document_evidence_pointers(document)
+                )
+                _resolve_documented_missing_fields(plan, document)
             if reviewed:
                 plan = compile_reviewed_operation_plan(
                     plan,
@@ -2094,12 +2789,13 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
                     profile_policy = {
                         "identity": operation_identity,
                         "document_evidence": captured["artifact_ref"],
-                        "review": profile["review"],
-                        "request": {
-                            **profile["request"],
-                            "response_assertion_artifact": assertion_ref,
-                        },
-                    }
+            "review": profile["review"],
+            "request": {
+                **profile["request"],
+                "response_assertion_artifact": assertion_ref,
+            },
+            "_effect_selector": profile["selector"],
+        }
                     if "runtime_binding" in profile:
                         profile_policy["runtime_binding"] = profile["runtime_binding"]
                     plan = compile_reviewed_operation_plan(
@@ -2112,15 +2808,40 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
                         profile_index,
                         assertion_artifact,
                         assertion_ref,
-                        root,
-                        policy_pointer_base=f"#/profiles/{profile_index}",
-                    )
+                    root,
+                    policy_pointer_base=f"#/profiles/{profile_index}",
+                )
+        if captured_v2 and plan["request_plan"]["status"] != "complete":
+            if captured is not captured_v2:
+                apply_document_evidence_v2(plan, captured_v2)
+            effect_matches = [
+                (effect_index, effect_profile)
+                for effect_index, effect_profile in enumerate(reviewed_policy_inputs["effect_profiles"])
+                if effect_profile_matches_operation(
+                    effect_profile,
+                    "data_go_kr",
+                    "data.go.kr",
+                    operation,
+                    captured_v2["document"],
+                )
+            ]
+            fail(len(effect_matches) <= 1, f"multiple reviewed effect profiles match the same operation: {operation_id}")
+            if effect_matches:
+                effect_index, effect_profile = effect_matches[0]
+                apply_effect_profile_review(
+                    plan,
+                    effect_profile,
+                    effect_index,
+                    captured_v2["document"],
+                    captured_v2["artifact_ref"],
+                    reviewed_policy_ref,
+                )
         rows_by_source["data_go_kr"].append(plan)
     fail(not legacy_map, "one or more legacy canaries do not map to the pinned operation manifest")
 
     denominator_paths: list[Path] = []
     for source_id, path in DENOMINATOR_PATHS.items():
-        denominator = load_json(root / path.relative_to(ROOT))
+        denominator = denominator_documents[source_id]
         fail(denominator.get("source_id") == source_id, f"operation denominator source ID mismatch: {source_id}")
         fail(denominator.get("scope", {}).get("kind") == "enumerated_supported_operations", f"non-enumerated scope is not an operation denominator: {source_id}")
         fail(denominator.get("scope", {}).get("unknown_upstream_operations_covered") is False, f"unknown upstream inventory mislabeled as covered: {source_id}")
@@ -2156,6 +2877,19 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
                 denominator_ref,
                 artifact_ref(profile, root),
                 artifact_ref(catalog, root),
+                *(
+                    [document_evidence_v2[(source_id, denominator["operations"][0]["operation_id"])]["artifact_ref"]]
+                    if (source_id, denominator["operations"][0]["operation_id"]) in document_evidence_v2
+                    else []
+                ),
+                *(
+                    [
+                        artifact_ref(root / "schemas/datapan.operation-document-evidence.v2.schema.json", root),
+                        artifact_ref(root / "scripts/operation_document_evidence.py", root),
+                    ]
+                    if (source_id, denominator["operations"][0]["operation_id"]) in document_evidence_v2
+                    else []
+                ),
             ],
         }
         scope_specs[source_id] = source_scope
@@ -2165,13 +2899,24 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
             endpoint = registered_endpoint(operation.get("endpoint_template"))
             if endpoint:
                 identity["registered_endpoint"] = endpoint
+            captured_v2 = document_evidence_v2.get((source_id, operation["operation_id"]))
+            operation_protocol = "HTTP"
+            if captured_v2:
+                evidence_identity = captured_v2["document"]["identity"]
+                operation_protocol = evidence_identity["protocol"]
+                if evidence_identity.get("operation_name"):
+                    identity["operation_name"] = evidence_identity["operation_name"]
             record = make_incomplete_plan(
                 scope=source_scope,
                 operation_id=operation["operation_id"],
-                protocol="HTTP",
+                protocol=operation_protocol,
                 identity=identity,
                 evidence=evidence_ref(denominator_ref, f"#/operations/{index}", "operation_denominator"),
             )
+            if endpoint is None:
+                record["request_plan"]["missing_fields"].append("registered_endpoint_missing")
+            if captured_v2:
+                apply_document_evidence_v2(record, captured_v2)
             rows_by_source[source_id].append(record)
         denominator_paths.append(root / path.relative_to(ROOT))
 
@@ -2236,10 +2981,11 @@ def build(root: Path = ROOT, revision: str | None = None) -> tuple[dict[str, Any
             "operation_denominators": operation_denominator_refs,
             "legacy_policy": policy_ref,
             "provider_index": provider_index_ref,
-            "document_evidence": [
-                captured["artifact_ref"]
-                for _operation_id, captured in sorted(document_evidence.items())
-            ],
+            "document_evidence": sorted(
+                [captured["artifact_ref"] for _operation_id, captured in document_evidence.items()]
+                + [captured["artifact_ref"] for _identity, captured in document_evidence_v2.items()],
+                key=lambda ref: ref["path"],
+            ),
         },
         "inventory_context": {
             "separate_link_operations": manifest["summary"]["exclusions"]["link_operations"],
@@ -2330,13 +3076,13 @@ def _validate_complete_contract_evidence(
                 if field == "http_method":
                     evidence_value = str(evidence_value).upper()
                 fail(evidence_value == expected_value, f"transport evidence mismatch: {field}")
+        if "port" in transport:
+            port_fact = exact_target(transport["evidence_refs"], "#/transport/port", "operation_document")
+            fail(type(port_fact) is int and port_fact == transport["port"], "transport evidence mismatch: port")
         if "operation_qname" in transport:
             source_fact = exact_target(transport["evidence_refs"], "#/transport/operation_qname", "operation_document")
             fail(isinstance(source_fact, dict) and source_fact.get("status") == "documented", "SOAP QName evidence is not documented")
             fail(_clark_qname(source_fact.get("value"), "operation_qname") == transport["operation_qname"], "SOAP operation QName evidence mismatch")
-
-        effect_fact = exact_target(contract["operation_effect"]["evidence_refs"], "#/effect", "operation_document")
-        fail(effect_fact.get("classification") == "read_only" and effect_fact.get("status") == "documented", "read-only effect evidence mismatch")
 
         policy_row_refs = [
             (ref, target)
@@ -2437,31 +3183,42 @@ def _validate_complete_contract_evidence(
         ]
         fail(len(assertion_rows) == 1 and assertion_artifact_target == assertion_rows[0], "response assertion does not resolve to its manifest-bound policy artifact")
         assertion = assertion_artifact_target
-        # The target is the assertion subobject; the surrounding artifact identity is checked while loading it.
-        expected_kind = {"json": "json_contract", "xml": "xml_contract", "soap_xml": "soap_fault_free"}[assertion["payload_kind"]]
-        fail(contract["response_assertion"]["kind"] == expected_kind, "response assertion kind differs from its typed artifact")
-        branch_statuses = sorted({code for branch in assertion["branches"] for code in branch["selector"]["accepted_http_status_codes"]})
-        branch_empty_semantics = {branch["empty_result_semantics"] for branch in assertion["branches"] if branch["classification"] == "success"}
-        fail(contract["response_assertion"]["expected_status_codes"] == branch_statuses, "accepted response status codes differ from the reviewed assertion branches")
-        fail(len(branch_empty_semantics) == 1 and contract["response_assertion"]["empty_result_semantics"] == next(iter(branch_empty_semantics)), "empty-result semantics differ from the reviewed assertion branches")
-        fail(contract["response_assertion"]["kind"] in {"json_contract", "xml_contract", "soap_fault_free"}, "HTTP-status-only assertion cannot establish response semantics")
         assertion_source_refs = []
-        for branch in assertion["branches"]:
-            assertion_source_refs.extend(branch["source_refs"])
-            assertion_source_refs.extend(branch["http_status_source_refs"])
-            assertion_source_refs.extend(branch["provider_result_code_evidence_refs"])
-            assertion_source_refs.extend(ref for field in branch["required_fields"] for ref in field["source_refs"])
-            if "provider_result_codes" in branch:
-                assertion_source_refs.extend(branch["provider_result_codes"]["source_refs"])
-                for error_class in branch["provider_result_codes"].get("error_classes", []):
-                    assertion_source_refs.extend(error_class["source_refs"])
-            if branch.get("result_collection") is not None:
-                assertion_source_refs.extend(branch["result_collection"]["source_refs"])
-            assertion_source_refs.extend(branch["review_refs"])
-            for discriminator in branch["selector"]["discriminators"]:
-                assertion_source_refs.extend(discriminator["source_refs"])
-        for source_ref in assertion_source_refs:
-            fail(source_ref in contract["response_assertion"]["evidence_refs"], "response assertion omits an exact operation-document fact reference")
+        observation_only = assertion == {"mode": "observation_only"}
+        if observation_only:
+            response_plan = contract["response_assertion"]
+            fail(response_plan["kind"] == "observation_only", "observation-only artifact must map to the observation-only plan kind")
+            fail(response_plan["empty_result_semantics"] == "not_applicable", "observation-only mode must not claim empty-result semantics")
+            fail("expected_status_codes" not in response_plan, "observation-only mode must not claim accepted HTTP statuses")
+            exact_target(response_plan["evidence_refs"], "#/response_contract", "operation_document")
+            exact_target(response_plan["evidence_refs"], policy_root_ref["json_pointer"] + "/request/response_assertion_artifact", "reviewed_policy")
+            for pointer in ("#/transport/http_method", "#/operation_document/title", "#/operation_document/purpose", "#/authentication", "#/parameters"):
+                exact_target(response_plan["evidence_refs"], pointer, "operation_document")
+        else:
+            # The target is the assertion subobject; the surrounding artifact identity is checked while loading it.
+            expected_kind = {"json": "json_contract", "xml": "xml_contract", "soap_xml": "soap_fault_free"}[assertion["payload_kind"]]
+            fail(contract["response_assertion"]["kind"] == expected_kind, "response assertion kind differs from its typed artifact")
+            branch_statuses = sorted({code for branch in assertion["branches"] for code in branch["selector"]["accepted_http_status_codes"]})
+            branch_empty_semantics = {branch["empty_result_semantics"] for branch in assertion["branches"] if branch["classification"] == "success"}
+            fail(contract["response_assertion"]["expected_status_codes"] == branch_statuses, "accepted response status codes differ from the reviewed assertion branches")
+            fail(len(branch_empty_semantics) == 1 and contract["response_assertion"]["empty_result_semantics"] == next(iter(branch_empty_semantics)), "empty-result semantics differ from the reviewed assertion branches")
+            fail(contract["response_assertion"]["kind"] in {"json_contract", "xml_contract", "soap_fault_free"}, "HTTP-status-only assertion cannot establish response semantics")
+            for branch in assertion["branches"]:
+                assertion_source_refs.extend(branch["source_refs"])
+                assertion_source_refs.extend(branch["http_status_source_refs"])
+                assertion_source_refs.extend(branch["provider_result_code_evidence_refs"])
+                assertion_source_refs.extend(ref for field in branch["required_fields"] for ref in field["source_refs"])
+                if "provider_result_codes" in branch:
+                    assertion_source_refs.extend(branch["provider_result_codes"]["source_refs"])
+                    for error_class in branch["provider_result_codes"].get("error_classes", []):
+                        assertion_source_refs.extend(error_class["source_refs"])
+                if branch.get("result_collection") is not None:
+                    assertion_source_refs.extend(branch["result_collection"]["source_refs"])
+                assertion_source_refs.extend(branch["review_refs"])
+                for discriminator in branch["selector"]["discriminators"]:
+                    assertion_source_refs.extend(discriminator["source_refs"])
+            for source_ref in assertion_source_refs:
+                fail(source_ref in contract["response_assertion"]["evidence_refs"], "response assertion omits an exact operation-document fact reference")
         assertion_artifact_refs = [
             ref for ref, _target in ref_targets
             if ref["artifact_path"] == assertion_path and ref["json_pointer"] == "#/assertion"
@@ -2493,6 +3250,52 @@ def _validate_complete_contract_evidence(
         fail(source_document.get("identity", {}).get("operation_id") == expected_identity["operation_id"], "operation-document identity differs from its selected operation")
         fail(assertion_document.get("document_evidence") == source_document_ref, "response assertion document binding differs from the selected operation")
         _validate_assertion_v2_fact_binding(assertion_document, source_document, source_document_ref)
+        if observation_only:
+            fail(assertion_document.get("review") == policy_row["review"], "observation-only assertion review differs from its selected policy")
+        if contract["operation_effect"]["authority"] == "operation_document":
+            effect_fact = exact_target(contract["operation_effect"]["evidence_refs"], "#/effect", "operation_document")
+            fail(effect_fact.get("classification") == "read_only" and effect_fact.get("status") == "documented", "read-only effect evidence mismatch")
+        elif contract["operation_effect"]["authority"] == "reviewed_policy":
+            effect_review = request_policy.get("effect_review")
+            fail(isinstance(effect_review, dict), "reviewed effect authority has no selected effect policy")
+            effect_review_target = exact_target(
+                contract["operation_effect"]["evidence_refs"],
+                policy_root_ref["json_pointer"] + "/request/effect_review",
+                "reviewed_policy",
+            )
+            fail(effect_review_target == effect_review, "reviewed effect evidence differs from its policy row")
+            review_target = exact_target(
+                contract["operation_effect"]["evidence_refs"],
+                policy_root_ref["json_pointer"] + "/review",
+                "reviewed_policy",
+            )
+            fail(review_target == policy_row["review"], "reviewed effect lacks its policy review record")
+            if is_profile_policy:
+                selector = policy_row["selector"]
+                exact_target(contract["operation_effect"]["evidence_refs"], policy_root_ref["json_pointer"] + "/selector", "reviewed_policy")
+            else:
+                selector = {
+                    "source_id": record["source_binding"]["source_id"],
+                    "provider": record["source_binding"]["provider"],
+                    "protocol": transport["protocol"],
+                    "method": transport["http_method"],
+                }
+            exact_target(contract["operation_effect"]["evidence_refs"], "#/transport/http_method", "operation_document")
+            exact_target(contract["operation_effect"]["evidence_refs"], "#/operation_document/title", "operation_document")
+            exact_target(contract["operation_effect"]["evidence_refs"], "#/operation_document/purpose", "operation_document")
+            fail(
+                reviewed_read_only_effect_matches(
+                    selector,
+                    effect_review,
+                    record["source_binding"]["source_id"],
+                    record["source_binding"]["provider"],
+                    {"operation_id": expected_identity["operation_id"], "protocol": transport["protocol"]},
+                    source_document,
+                ),
+                "reviewed read-only effect no longer matches the source facts",
+            )
+        else:
+            raise PlanError("unsupported production operation-effect authority")
         if is_profile_policy:
             profile_response = request_policy["response"]
             fail(profile_response["payload_kind"] == assertion["payload_kind"], "profile response payload kind differs from its assertion")

@@ -34,6 +34,14 @@
       "items": {
         "$ref": "#/$defs/profile"
       }
+    },
+    "effect_profiles": {
+      "description": "Reusable reviewed read-only classifications; actual operations must independently match exact operation-specific method and source-bound purpose facts.",
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/effect_profile"
+      }
     }
   },
   "$defs": {
@@ -147,6 +155,48 @@
         "rationale": {
           "$ref": "#/$defs/non_empty"
         }
+      }
+    },
+    "effect_review": {
+      "description": "A scoped operator classification used only with an operation-specific safe HTTP method and source-bound retrieval purpose. It cannot override documented mutation evidence.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "basis", "rfc_reference", "purpose_terms", "rationale"],
+      "properties": {
+        "classification": { "const": "read_only" },
+        "basis": { "const": "rfc9110_safe_method_and_retrieval_purpose" },
+        "rfc_reference": { "const": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1" },
+        "purpose_terms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 9,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["조회", "목록", "검색", "현황", "retrieve", "list", "search", "read", "lookup"]
+          }
+        },
+        "rationale": { "$ref": "#/$defs/non_empty" }
+      }
+    },
+    "effect_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "selector", "effect_review", "review"],
+      "properties": {
+        "profile_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$" },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_id", "provider", "protocol", "method"],
+          "properties": {
+            "source_id": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+            "provider": { "$ref": "#/$defs/non_empty" },
+            "protocol": { "const": "REST" },
+            "method": { "enum": ["GET", "HEAD"] }
+          }
+        },
+        "effect_review": { "$ref": "#/$defs/effect_review" },
+        "review": { "$ref": "#/$defs/review" }
       }
     },
     "value_strategy": {
@@ -461,6 +511,9 @@
             "response_assertion_artifact"
           ],
           "properties": {
+            "effect_review": {
+              "$ref": "#/$defs/effect_review"
+            },
             "parameter_strategies": {
               "type": "array",
               "maxItems": 256,
@@ -596,6 +649,9 @@
             "response"
           ],
           "properties": {
+            "effect_review": {
+              "$ref": "#/$defs/effect_review"
+            },
             "parameter_strategies": {
               "type": "array",
               "maxItems": 256,
