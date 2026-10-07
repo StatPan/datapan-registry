@@ -1,0 +1,182 @@
+{
+  "admission": {
+    "evidence_refs": [
+      {
+        "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+        "evidence_kind": "synthetic_fixture",
+        "json_pointer": "#/test_only",
+        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+      }
+    ],
+    "reasons": [],
+    "status": "admitted"
+  },
+  "artifact_kind": "operation_plan",
+  "operation_identity": {
+    "operation_id": "synthetic-soap-read",
+    "protocol": "SOAP",
+    "registered_endpoint": {
+      "host": "soap.example.invalid",
+      "path": "/service"
+    }
+  },
+  "request_plan": {
+    "evidence_refs": [
+      {
+        "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+        "evidence_kind": "synthetic_fixture",
+        "json_pointer": "#/operations/soap",
+        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+      }
+    ],
+    "request_contract": {
+      "authentication": {
+        "credential_reference_required": true,
+        "evidence_refs": [
+          {
+            "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+            "evidence_kind": "synthetic_fixture",
+            "json_pointer": "#/operations/soap/authentication",
+            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+          }
+        ],
+        "mechanism": "service_key",
+        "placement": "soap_header",
+        "requirement": "required"
+      },
+      "limits": {
+        "evidence_refs": [
+          {
+            "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+            "evidence_kind": "synthetic_fixture",
+            "json_pointer": "#/operations/soap/limits",
+            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+          }
+        ],
+        "max_request_bytes": 8192,
+        "max_response_bytes": 32768,
+        "request_budget": 1,
+        "timeout_ms": 1500
+      },
+      "parameter_inventory_evidence_refs": [
+        {
+          "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+          "evidence_kind": "synthetic_fixture",
+          "json_pointer": "#/operations/soap/parameters",
+          "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+        }
+      ],
+      "parameters": [
+        {
+          "cardinality": "required_single",
+          "evidence_refs": [
+            {
+              "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+              "evidence_kind": "synthetic_fixture",
+              "json_pointer": "#/operations/soap/parameters/0",
+              "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+            }
+          ],
+          "location": "body",
+          "name": "recordId",
+          "value_strategy": {
+            "authority": "synthetic_fixture",
+            "kind": "reviewed_literal"
+          }
+        }
+      ],
+      "response_assertion": {
+        "empty_result_semantics": "unknown",
+        "evidence_refs": [
+          {
+            "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+            "evidence_kind": "synthetic_fixture",
+            "json_pointer": "#/operations/soap/response_assertion",
+            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+          }
+        ],
+        "kind": "soap_fault_free"
+      },
+      "transport": {
+        "authority": "synthetic_fixture",
+        "evidence_refs": [
+          {
+            "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+            "evidence_kind": "synthetic_fixture",
+            "json_pointer": "#/operations/soap/transport",
+            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+          }
+        ],
+        "host": "soap.example.invalid",
+        "method_or_action": "urn:synthetic:Read",
+        "path": "/service",
+        "protocol": "SOAP",
+        "scheme": "https"
+      }
+    },
+    "status": "complete"
+  },
+  "runtime_binding": {
+    "credential_reference": "test-vault/open-data/rest-and-soap",
+    "evidence_refs": [
+      {
+        "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+        "evidence_kind": "synthetic_fixture",
+        "json_pointer": "#/operations/soap/runtime_binding",
+        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+      }
+    ],
+    "observation_period_seconds": 3600,
+    "quota_policies": [
+      {
+        "evidence_refs": [
+          {
+            "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+            "evidence_kind": "synthetic_fixture",
+            "json_pointer": "#/shared_quota_policy",
+            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+          }
+        ],
+        "max_concurrent": 1,
+        "minimum_interval_seconds": 60,
+        "requests_per_window": 2,
+        "scope_key": "synthetic:credential-group:local-test",
+        "scope_kind": "credential",
+        "scope_sha256": "9edfd346f33fb2c2b2308b096260bb16a9c5dc8910c216095c7f23fb3cc78ddf",
+        "window_seconds": 3600
+      },
+      {
+        "evidence_refs": [
+          {
+            "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+            "evidence_kind": "synthetic_fixture",
+            "json_pointer": "#/api_quota_policies/soap",
+            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+          }
+        ],
+        "max_concurrent": 1,
+        "minimum_interval_seconds": 3600,
+        "requests_per_window": 1,
+        "scope_key": "synthetic:api:soap-read",
+        "scope_kind": "api",
+        "scope_sha256": "c6b244bd62682a3292e54478f982767fec20d064a132cc88b34dc59d506a1ac4",
+        "window_seconds": 3600
+      }
+    ],
+    "status": "bound"
+  },
+  "schema_version": "datapan.operation-observation-plan.v1",
+  "source_binding": {
+    "inventory_status": "source_complete",
+    "inventory_unknown": false,
+    "provider": "synthetic-test-provider",
+    "source_artifacts": [
+      {
+        "bytes": 3093,
+        "path": "fixtures/operation-observation-plan/synthetic-source.json",
+        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+      }
+    ],
+    "source_id": "synthetic_test"
+  }
+}

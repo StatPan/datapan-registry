@@ -1,0 +1,110 @@
+{
+  "schema_version": "datapan.operation-observation-plan.synthetic-source.v1",
+  "test_only": true,
+  "operations": {
+    "rest": {
+      "operation_id": "synthetic-rest-list",
+      "protocol": "REST",
+      "transport": {
+        "scheme": "https",
+        "host": "api.example.invalid",
+        "path": "/v1/items",
+        "method_or_action": "GET"
+      },
+      "parameters": [
+        {
+          "name": "page",
+          "location": "query",
+          "cardinality": "required_single",
+          "value_strategy": { "kind": "bounded_integer", "minimum": 1, "maximum": 1 }
+        }
+      ],
+      "authentication": {
+        "requirement": "required",
+        "mechanism": "service_key",
+        "placement": "query",
+        "parameter_name": "serviceKey",
+        "credential_reference_required": true
+      },
+      "limits": {
+        "request_budget": 1,
+        "timeout_ms": 1000,
+        "max_request_bytes": 4096,
+        "max_response_bytes": 16384
+      },
+      "response_assertion": {
+        "kind": "http_status",
+        "expected_status_codes": [200],
+        "empty_result_semantics": "valid"
+      },
+      "runtime_binding": {
+        "credential_reference": "test-vault/open-data/rest-and-soap",
+        "observation_period_seconds": 3600
+      }
+    },
+    "soap": {
+      "operation_id": "synthetic-soap-read",
+      "protocol": "SOAP",
+      "transport": {
+        "scheme": "https",
+        "host": "soap.example.invalid",
+        "path": "/service",
+        "method_or_action": "urn:synthetic:Read"
+      },
+      "parameters": [
+        {
+          "name": "recordId",
+          "location": "body",
+          "cardinality": "required_single",
+          "value_strategy": { "kind": "reviewed_literal" }
+        }
+      ],
+      "authentication": {
+        "requirement": "required",
+        "mechanism": "service_key",
+        "placement": "soap_header",
+        "credential_reference_required": true
+      },
+      "limits": {
+        "request_budget": 1,
+        "timeout_ms": 1500,
+        "max_request_bytes": 8192,
+        "max_response_bytes": 32768
+      },
+      "response_assertion": {
+        "kind": "soap_fault_free",
+        "empty_result_semantics": "unknown"
+      },
+      "runtime_binding": {
+        "credential_reference": "test-vault/open-data/rest-and-soap",
+        "observation_period_seconds": 3600
+      }
+    }
+  },
+  "shared_quota_policy": {
+    "scope_kind": "credential",
+    "scope_key": "synthetic:credential-group:local-test",
+    "max_concurrent": 1,
+    "requests_per_window": 2,
+    "window_seconds": 3600,
+    "minimum_interval_seconds": 60
+  },
+  "api_quota_policies": {
+    "rest": {
+      "scope_kind": "api",
+      "scope_key": "synthetic:api:rest-list",
+      "max_concurrent": 1,
+      "requests_per_window": 1,
+      "window_seconds": 3600,
+      "minimum_interval_seconds": 3600
+    },
+    "soap": {
+      "scope_kind": "api",
+      "scope_key": "synthetic:api:soap-read",
+      "max_concurrent": 1,
+      "requests_per_window": 1,
+      "window_seconds": 3600,
+      "minimum_interval_seconds": 3600
+    }
+  }
+}
