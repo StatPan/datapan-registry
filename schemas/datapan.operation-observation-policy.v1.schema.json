@@ -42,6 +42,23 @@
       "minLength": 1,
       "maxLength": 512
     },
+    "qname": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "local_name"],
+      "properties": {
+        "namespace": {
+          "anyOf": [
+            { "type": "string", "format": "uri" },
+            { "const": "" }
+          ]
+        },
+        "local_name": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9._-]*$"
+        }
+      }
+    },
     "sha256": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"

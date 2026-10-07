@@ -1,11 +1,11 @@
 {
   "schema_version": "datapan.release-manifest.v1",
-  "generated_at": "2026-07-11T10:28:35Z",
+  "generated_at": "2026-10-07T00:00:00Z",
   "datapan_version": "0.1.1-dev",
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 267,
+  "artifact_count": 271,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -478,8 +478,8 @@
     {
       "path": "schemas/datapan.operation-denominator.v1.schema.json",
       "kind": "schema",
-      "bytes": 2688,
-      "sha256": "341f07a99633101ad544a7bd1b01e3a9b6f59557ae7b08afb8d6efdd21691c6f"
+      "bytes": 5342,
+      "sha256": "57a04d69847fe1ba529440b7e645e4ec956984d3ad9c5ea9501e143aa3272347"
     },
     {
       "path": "schemas/datapan.runtime-freshness-queue.v1.schema.json",
@@ -718,14 +718,14 @@
     {
       "path": "schemas/datapan.operation-observation-plan.v1.schema.json",
       "kind": "schema",
-      "bytes": 31280,
-      "sha256": "b0bb4254fa76c00de9ce20b7f8c32c84823362a0862be7cf7d2438cfb74c1e8e"
+      "bytes": 31312,
+      "sha256": "d0d5ee3be85703ca3617204c699a0c33db621f1e32b8d67aa401402d39d2fd9b"
     },
     {
       "path": "schemas/datapan.operation-observation-policy.v1.schema.json",
       "kind": "schema",
-      "bytes": 25673,
-      "sha256": "0ae093cf1422fe819af539089d4e7ba00190d74a4c3358f347e561e149d8c3ba"
+      "bytes": 26091,
+      "sha256": "f618594c584aa1e55f9e27c65d9780730ab1ae9b58e47a0c60790c2efe997c4b"
     },
     {
       "path": "schemas/datapan.operation-response-assertion.v1.schema.json",
@@ -740,11 +740,35 @@
       "sha256": "0e30d07b2755ab4944773c08be2cd9e5dd50ab75338a607a2728d8d4353b12bd"
     },
     {
+      "path": "schemas/datapan.operation-document-capture-receipt.v2.schema.json",
+      "kind": "schema",
+      "bytes": 5164,
+      "sha256": "a59ecb961f866039b03306a008b9c0bfbad92f2b1078fe957dd1061a67653574"
+    },
+    {
+      "path": "schemas/datapan.operation-document-evidence.v2.schema.json",
+      "kind": "schema",
+      "bytes": 56113,
+      "sha256": "d8501e9175e02db4457cdffdf7fbdb801dbb828288ac4fb3b22ba324ca40d598"
+    },
+    {
+      "path": "schemas/datapan.operation-document-reconciliation.v2.schema.json",
+      "kind": "schema",
+      "bytes": 7036,
+      "sha256": "86a7ab17271c55f1ca0e07681230a1064a050e44c8d612efcd0012b58a794bd6"
+    },
+    {
+      "path": "schemas/datapan.operation-document-work-item.v2.schema.json",
+      "kind": "schema",
+      "bytes": 3392,
+      "sha256": "b67024d6330b64b483aab8f562227ecd20518e1aff0679219f101faa65350b0f"
+    },
+    {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 50541,
-      "sha256": "36f12273d7d930bf26e8bbcab4ab29a44901bd0121c8f64619e153222a19bb07"
+      "bytes": 52282,
+      "sha256": "cde8998c53a9c3d39c9c115890235863c4dd62d80f804c43d216537f6c2147fa"
     },
     {
       "path": "data/data-go-kr.registry.json",

@@ -237,7 +237,7 @@
       "additionalProperties": false,
       "required": ["namespace", "local_name"],
       "properties": {
-        "namespace": { "type": "string", "format": "uri" },
+        "namespace": { "anyOf": [{ "type": "string", "format": "uri" }, { "const": "" }] },
         "local_name": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9._-]*$" }
       }
     },
