@@ -15,11 +15,14 @@ import html
 import http.client
 import ipaddress
 import json
+import multiprocessing
+import os
 import pathlib
 import re
 import socket
 import ssl
 import sys
+import tempfile
 import time
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -48,6 +51,18 @@ MAX_DOCX_MEMBER_BYTES = 8 * 1024 * 1024
 MAX_XML_BYTES = 8 * 1024 * 1024
 REQUEST_TIMEOUT_SECONDS = 35
 MAX_BATCH_OPERATIONS = 50
+SOURCE_PROFILES = {
+    "data_go_kr_v1": {
+        "host": HOST,
+        "routes": ["/data/{dataset_id}/openapi.do", DETAIL_ROUTE, DOWNLOAD_ROUTE],
+        "max_requests_per_operation": 3,
+    },
+    "safetydata_v1": {
+        "host": "www.safetydata.go.kr",
+        "routes": ["/disaster-data/getApiView", "/disaster-data/apiDataTable"],
+        "max_requests_per_operation": 2,
+    },
+}
 METHODS = {"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 
 
@@ -135,35 +150,12 @@ def build_queue(manifest: dict[str, Any]) -> list[dict[str, Any]]:
         if identity["operation_id"] in seen:
             raise EvidenceError("manifest_operation_id_collision")
         seen.add(identity["operation_id"])
-        dataset_id = identity["dataset_id"]
-        key = identity["upstream_operation_key"]
-        if identity["source_system"] == "safetydata.go.kr":
-            source_routes = [
-                {"purpose": "registered_operation_source_binding", "method": "GET", "host": "www.safetydata.go.kr", "path": "/disaster-data/view", "query_fields": ["dataSn"], "query_values_stored": False},
-                {"purpose": "operation_metadata", "method": "GET", "host": "www.safetydata.go.kr", "path": "/disaster-data/getApiView", "query_fields": ["dataSn"], "query_values_stored": False},
-                {"purpose": "operation_parameter_tables", "method": "GET", "host": "www.safetydata.go.kr", "path": "/disaster-data/apiDataTable", "query_fields": ["dataSn"], "query_values_stored": False},
-                {"purpose": "external_references", "method": "none", "host": None, "path": None, "status": "not_followed"},
-            ]
-        elif identity["protocol"] == "SOAP":
-            source_routes = [
-                {"purpose": "catalogue_operation_selector", "method": "GET", "host": HOST, "path": f"/data/{dataset_id}/openapi.do", "query_values_stored": False},
-                {"purpose": "operation_detail", "method": "POST", "host": HOST, "path": DETAIL_ROUTE, "body_fields": ["oprtinSeqNo", "publicDataDetailPk", "publicDataPk"], "body_values_stored": False},
-                {"purpose": "reference_guide", "method": "GET", "host": HOST, "path": DOWNLOAD_ROUTE, "query_fields": ["atchFileId", "fileDetailSn"], "query_values_stored": False},
-                {"purpose": "wsdl_imports", "method": "none", "host": None, "path": None, "status": "not_followed"},
-            ]
-        else:
-            source_routes = [
-                {"purpose": "catalogue_operation_selector", "method": "GET", "host": HOST, "path": f"/data/{dataset_id}/openapi.do", "query_values_stored": False},
-                {"purpose": "operation_detail", "method": "POST", "host": HOST, "path": DETAIL_ROUTE, "body_fields": ["oprtinSeqNo", "publicDataDetailPk", "publicDataPk"], "body_values_stored": False},
-                {"purpose": "reference_guide", "method": "GET", "host": HOST, "path": DOWNLOAD_ROUTE, "query_fields": ["atchFileId", "fileDetailSn"], "query_values_stored": False},
-                {"purpose": "openapi_external_references", "method": "none", "host": None, "path": None, "status": "not_followed"},
-            ]
+        source_profile_id = "safetydata_v1" if identity["source_system"] == "safetydata.go.kr" else "data_go_kr_v1"
         queue.append({
             "schema_version": "datapan.operation-document-work-item.v1",
             "operation_identity": identity,
             "status": "pending",
-            "source_routes": source_routes,
-            "request_budget": {"max_document_requests": 3, "max_bytes": MAX_PAGE_BYTES + MAX_DETAIL_BYTES + MAX_GUIDE_BYTES},
+            "source_profile_id": source_profile_id,
         })
     queue.sort(key=lambda item: item["operation_identity"]["operation_id"])
     return queue
@@ -444,11 +436,32 @@ def parse_evidence(
         raise EvidenceError("detail_request_parameter_table_missing")
     # The operation-detail fragment is already bound to one selected upstream key.
     detail_table_index, detail_columns, detail_rows = param_candidates[0]
-    guide_param_candidates = _find_param_tables(guide_tables)
-    following = [(idx, cols, rows) for idx, cols, rows in guide_param_candidates if idx > operation_table_index]
+    operation_indexes = [
+        index for index, rows in enumerate(guide_tables)
+        if "오퍼레이션 정보" in " ".join(cell for row in rows for cell in row)
+    ]
+    next_operation_indexes = [index for index in operation_indexes if index > operation_table_index]
+    section_end = min(next_operation_indexes) if next_operation_indexes else len(guide_tables)
+    selected_section = {
+        index: guide_tables[index]
+        for index in range(operation_table_index + 1, section_end)
+    }
+    guide_param_candidates = [
+        candidate for candidate in _find_param_tables(list(selected_section.values()))
+    ]
+    # _find_param_tables returns indexes relative to the selected section. Map
+    # them back to the source document so every locator remains exact.
+    selected_section_indexes = list(selected_section)
+    guide_param_candidates = [
+        (selected_section_indexes[relative_index], columns, rows)
+        for relative_index, columns, rows in guide_param_candidates
+    ]
+    following = sorted(guide_param_candidates, key=lambda item: item[0])
     if not following:
         raise EvidenceError("guide_request_parameter_table_missing")
-    guide_table_index, guide_columns, guide_rows = min(following, key=lambda item: item[0])
+    if len(following) > 2:
+        raise EvidenceError("guide_operation_parameter_tables_ambiguous")
+    guide_table_index, guide_columns, guide_rows = following[0]
 
     def parse_rows(rows: list[list[str]], columns: dict[str, int], source_id: str, kind: str, table_idx: int, part: str | None = None) -> dict[str, dict[str, Any]]:
         found: dict[str, dict[str, Any]] = {}
@@ -461,6 +474,8 @@ def parse_evidence(
                 continue
             if len(name) > 256 or any(ord(c) < 0x20 for c in name):
                 raise EvidenceError("parameter_name_invalid")
+            if name in found:
+                raise EvidenceError("parameter_name_duplicate_in_source")
             required, required_status = _requiredness(get("requiredness"))
             sample_cell = get("sample")
             size_text = get("size")
@@ -486,30 +501,41 @@ def parse_evidence(
     if not detail_params or not guide_params:
         raise EvidenceError("request_parameter_inventory_empty")
 
-    # A documented example URL proves query-key placement only. Values are discarded.
-    query_keys: set[str] = set()
-    endpoint_observations: list[tuple[dict[str, str], dict[str, Any]]] = []
+    # A documented example URL proves query-key placement only when it is in
+    # this operation's section and exactly matches the registered endpoint.
+    registered_endpoint = urllib.parse.urlsplit(str(operation.get("transport", {}).get("endpoint") or ""))
+    registered_host = (registered_endpoint.hostname or "").lower()
+    registered_path = registered_endpoint.path or "/"
+    query_key_observations: dict[str, list[dict[str, Any]]] = {}
+    endpoint_observations: list[tuple[dict[str, str], dict[str, Any], list[str]]] = []
     guide_service_method_refs: list[dict[str, Any]] = []
-    operation_doc_tables = {operation_table_index, guide_table_index}
-    for table_index, rows in enumerate(guide_tables):
-        if table_index in operation_doc_tables:
-            continue
+    first_operation_index = min(operation_indexes) if operation_indexes else operation_table_index
+    # The shared service interface declaration is only accepted from the
+    # pre-operation service section; a method mentioned under another
+    # operation cannot authorize the selected operation.
+    for table_index, rows in enumerate(guide_tables[:first_operation_index]):
+        for row_index, row in enumerate(rows):
+            for cell_index, value in enumerate(row):
+                if re.search(r"\bREST\s*\(\s*GET\s*,\s*POST\s*,\s*PUT\s*,\s*DELETE\s*\)", value, re.I):
+                    guide_service_method_refs.append(_source_ref(_cell_locator("reference_guide_docx", "docx_table_cell", table_index, row_index, cell_index, part="word/document.xml"), "service_level_interface_methods"))
+    for table_index, rows in selected_section.items():
         for row_index, row in enumerate(rows):
             for cell_index, value in enumerate(row):
                 if "http://" in value or "https://" in value:
                     for part_value in re.findall(r"https?://[^\s<>\"']+", value):
                         parts = _safe_url_parts(part_value.rstrip(",;.)}"))
                         if parts:
-                            endpoint_observations.append((parts, _cell_locator("reference_guide_docx", "docx_table_cell", table_index, row_index, cell_index, part="word/document.xml")))
+                            locator = _cell_locator("reference_guide_docx", "docx_table_cell", table_index, row_index, cell_index, part="word/document.xml")
+                            parsed_url = urllib.parse.urlsplit(part_value.rstrip(",;.)}"))
+                            keys = [key for key, _ in urllib.parse.parse_qsl(parsed_url.query, keep_blank_values=True, strict_parsing=False) if re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]{0,127}", key)]
+                            endpoint_observations.append((parts, locator, keys))
+                            if parts["host"] == registered_host and parts["path"] == registered_path:
+                                for key_name in keys:
+                                    query_key_observations.setdefault(key_name, []).append(locator)
                         try:
-                            parsed = urllib.parse.urlsplit(part_value.rstrip(",;.)}"))
-                            for key_name, _ in urllib.parse.parse_qsl(parsed.query, keep_blank_values=True, strict_parsing=False):
-                                if re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]{0,127}", key_name):
-                                    query_keys.add(key_name)
+                            urllib.parse.urlsplit(part_value.rstrip(",;.)}"))
                         except ValueError:
                             pass
-                if re.search(r"\bREST\s*\(\s*GET\s*,\s*POST\s*,\s*PUT\s*,\s*DELETE\s*\)", value, re.I):
-                    guide_service_method_refs.append(_source_ref(_cell_locator("reference_guide_docx", "docx_table_cell", table_index, row_index, cell_index, part="word/document.xml"), "service_level_interface_methods"))
 
     # Parse response parameter names from the table immediately following the
     # selected guide request table. No response sample cells are copied.
@@ -527,8 +553,7 @@ def parse_evidence(
 
     # Resolve endpoint from a URI cell by exact match against the registered
     # endpoint host/path; do not retain or emit query strings.
-    registered_endpoint = urllib.parse.urlsplit(str(operation.get("transport", {}).get("endpoint") or ""))
-    candidates = [(item, loc) for item, loc in endpoint_observations if item.get("host") == (registered_endpoint.hostname or "").lower() and item.get("path") == (registered_endpoint.path or "/")]
+    candidates = [(item, loc) for item, loc, _keys in endpoint_observations if item.get("host") == registered_host and item.get("path") == registered_path]
     if not candidates:
         # A service-level base URI is not an operation endpoint. Keep the
         # registered host/path only as a binding and mark the document path unknown.
@@ -570,10 +595,10 @@ def parse_evidence(
             "source_refs": [ref for x in (d, g) if x for ref in x["size"]["source_refs"]],
         }
         sample_presence = [x["sample"]["present"] for x in (d, g) if x]
-        location_in_sample = name in query_keys
+        location_in_sample = name in query_key_observations
         location_refs: list[dict[str, Any]] = []
         if location_in_sample:
-            location_refs = [_source_ref(loc, "example_request_query_key") for _, loc in endpoint_observations if _url_has_query_key_from_cell(guide_tables, loc, name)]
+            location_refs = [_source_ref(loc, "example_request_query_key") for loc in query_key_observations[name]]
         parameters.append({
             "name": name,
             "location": {"value": "query" if location_in_sample else None, "status": "demonstrated_by_example" if location_in_sample else "unknown", "source_refs": location_refs},
@@ -598,13 +623,14 @@ def parse_evidence(
     effect_refs = [_source_ref(locator, "operation_effect") for _, locator in effect_observations]
     effect = {"classification": "read_only" if operation_type in {"조회(목록)", "조회(단건)", "조회", "목록 조회"} else None, "status": "documented" if effect_refs else "unknown", "authority": "operation_document", "source_refs": effect_refs}
     auth_names = [p["name"] for p in parameters if p["name"].casefold().replace("_", "") in {"servicekey", "apikey", "authorization", "authkey"}]
+    service_key_in_example = "ServiceKey" in query_key_observations
     authentication = {
         "requirement": "required" if any(p["name"] == "ServiceKey" and p["requiredness"]["value"] == "required" for p in parameters) else None,
-        "status": "documented" if any(p["name"] == "ServiceKey" and p["requiredness"]["value"] == "required" for p in parameters) else ("indicated_by_example" if "ServiceKey" in query_keys else "unknown"),
-        "mechanism": "service_key" if auth_names or "ServiceKey" in query_keys else None,
-        "parameter_names": sorted(set(auth_names) | ({"ServiceKey"} if "ServiceKey" in query_keys else set())),
-        "placement": "query" if "ServiceKey" in query_keys else None,
-        "source_refs": [ref for p in parameters if p["name"] == "ServiceKey" for ref in p["requiredness"]["source_refs"]] + ([_source_ref(loc, "example_request_query_key") for _, loc in endpoint_observations if _url_has_query_key_from_cell(guide_tables, loc, "ServiceKey")] if "ServiceKey" in query_keys else []),
+        "status": "documented" if any(p["name"] == "ServiceKey" and p["requiredness"]["value"] == "required" for p in parameters) else ("indicated_by_example" if service_key_in_example else "unknown"),
+        "mechanism": "service_key" if auth_names or service_key_in_example else None,
+        "parameter_names": sorted(set(auth_names) | ({"ServiceKey"} if service_key_in_example else set())),
+        "placement": "query" if service_key_in_example else None,
+        "source_refs": [ref for p in parameters if p["name"] == "ServiceKey" for ref in p["requiredness"]["source_refs"]] + ([_source_ref(loc, "example_request_query_key") for loc in query_key_observations["ServiceKey"]] if service_key_in_example else []),
     }
     explicit_unknowns = [
         "operation_level_http_method_not_declared" if method["value"] is None else "",
@@ -735,6 +761,41 @@ def _public_ip_for(host: str, *, resolver: Any = socket.getaddrinfo) -> str:
     return sorted(set(ips))[0]
 
 
+def _fetch_official_worker(
+    url: str,
+    purpose: str,
+    method: str,
+    body: bytes | None,
+    cookies: dict[str, str] | None,
+    max_bytes: int,
+    resolver: Any,
+    output_dir: str,
+) -> None:
+    """Run the network operation in a killable process and save private output."""
+    root = pathlib.Path(output_dir)
+    try:
+        raw, headers, response_cookies = _fetch_official_unbounded(
+            url,
+            purpose=purpose,
+            method=method,
+            body=body,
+            cookies=cookies,
+            max_bytes=max_bytes,
+            resolver=resolver,
+        )
+        body_path = root / "body.bin"
+        body_path.write_bytes(raw)
+        body_path.chmod(0o600)
+        result = {"status": "ok", "headers": headers, "cookies": response_cookies}
+    except EvidenceError as exc:
+        result = {"status": "error", "error": str(exc)}
+    except BaseException:
+        result = {"status": "error", "error": "source_capture_failed"}
+    metadata_path = root / "result.json"
+    metadata_path.write_text(json.dumps(result, separators=(",", ":")), encoding="utf-8")
+    metadata_path.chmod(0o600)
+
+
 def _fetch_official(
     url: str,
     *,
@@ -746,14 +807,84 @@ def _fetch_official(
     deadline_seconds: float = REQUEST_TIMEOUT_SECONDS,
     resolver: Any = socket.getaddrinfo,
 ) -> tuple[bytes, dict[str, str], dict[str, str]]:
-    """Fetch one official documentation response without redirects/proxies."""
+    """Fetch with a hard wall-clock budget covering DNS through body EOF.
+
+    Socket timeouts do not bound DNS and can be defeated by a peer that keeps
+    a body read active while trickling bytes. Run the complete request in a
+    killable process so its DNS, TLS, response-header, and body phases share
+    one hard deadline.
+    """
+    if not isinstance(deadline_seconds, (int, float)) or deadline_seconds <= 0:
+        raise EvidenceError("source_deadline_invalid")
+    _validate_official_url(url, purpose=purpose)
+    if method not in {"GET", "POST"}:
+        raise EvidenceError("source_method_invalid")
+    if purpose == "operation_detail" and method != "POST":
+        raise EvidenceError("detail_method_invalid")
+    try:
+        context = multiprocessing.get_context("fork")
+    except ValueError as exc:
+        raise EvidenceError("source_deadline_process_unavailable") from exc
+    with tempfile.TemporaryDirectory(prefix="datapan-operation-doc-fetch-") as temp_dir:
+        pathlib.Path(temp_dir).chmod(0o700)
+        process = context.Process(
+            target=_fetch_official_worker,
+            args=(url, purpose, method, body, cookies, max_bytes, resolver, temp_dir),
+            daemon=True,
+        )
+        started = time.monotonic()
+        try:
+            process.start()
+            remaining = deadline_seconds - (time.monotonic() - started)
+            process.join(max(0.0, remaining))
+            if process.is_alive():
+                process.kill()
+                process.join(1.0)
+                raise EvidenceError("source_deadline_exceeded")
+            if process.exitcode != 0:
+                raise EvidenceError("source_capture_failed")
+            root = pathlib.Path(temp_dir)
+            metadata_path = root / "result.json"
+            if not metadata_path.is_file() or metadata_path.stat().st_size > 65536:
+                raise EvidenceError("source_capture_failed")
+            result = json.loads(metadata_path.read_text(encoding="utf-8"))
+            if result.get("status") == "error":
+                raise EvidenceError(result.get("error", "source_capture_failed"))
+            body_path = root / "body.bin"
+            if not body_path.is_file() or body_path.stat().st_size > max_bytes:
+                raise EvidenceError("source_capture_failed")
+            return body_path.read_bytes(), result["headers"], result["cookies"]
+        except EvidenceError:
+            if process.is_alive():
+                process.kill()
+                process.join(1.0)
+            raise
+        except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+            if process.is_alive():
+                process.kill()
+                process.join(1.0)
+            raise EvidenceError("source_capture_failed") from exc
+
+
+def _fetch_official_unbounded(
+    url: str,
+    *,
+    purpose: str,
+    method: str = "GET",
+    body: bytes | None = None,
+    cookies: dict[str, str] | None = None,
+    max_bytes: int,
+    deadline_seconds: float = REQUEST_TIMEOUT_SECONDS,
+    resolver: Any = socket.getaddrinfo,
+) -> tuple[bytes, dict[str, str], dict[str, str]]:
+    """Perform one validated official response fetch inside the bounded child."""
     parsed = _validate_official_url(url, purpose=purpose)
     if method not in {"GET", "POST"}:
         raise EvidenceError("source_method_invalid")
     if purpose == "operation_detail" and method != "POST":
         raise EvidenceError("detail_method_invalid")
-    ip = _public_ip_for(HOST, resolver=resolver)
     started = time.monotonic()
+    ip = _public_ip_for(HOST, resolver=resolver)
     context = ssl.create_default_context()
     connection = http.client.HTTPSConnection(HOST, 443, timeout=deadline_seconds, context=context)
     original_create = connection._create_connection
@@ -906,7 +1037,7 @@ def reconcile(queue: list[dict[str, Any]], evidence_dir: pathlib.Path) -> dict[s
         "manifest_binding": {"path": "reports/data-go-kr/operation-manifest.json", "sha256": _sha256(MANIFEST.read_bytes()) if MANIFEST.exists() else None, "source_snapshot_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"},
         "summary": {"registered_api_operations": len(queue), "statuses": counts, "coverage_complete": counts["pending"] == 0 and counts["invalid"] == 0},
         "scope": {"provider": "data.go.kr", "inventory": "registered_rest_and_soap_operations_only", "registered_protocols": {"REST": 12627, "SOAP": 35}, "link_operations_excluded": 8871, "operationless_catalog_entries_excluded": 473, "worldwide_provider_apis_included": False},
-        "source_policy": {"official_document_host": HOST, "provider_operation_calls": 0, "external_openapi_refs_followed": False, "soap_wsdl_imports_followed": False, "raw_capture_directory_private": True},
+        "source_policy": {"official_document_hosts": [HOST, "www.safetydata.go.kr"], "provider_operation_calls": 0, "external_openapi_refs_followed": False, "soap_wsdl_imports_followed": False, "raw_capture_directory_private": True},
     }
 
 

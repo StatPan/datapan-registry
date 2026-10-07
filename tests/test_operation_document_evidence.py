@@ -6,6 +6,7 @@ import io
 import json
 import pathlib
 import socket
+import time
 import unittest
 import zipfile
 from unittest import mock
@@ -68,6 +69,31 @@ def _docx() -> bytes:
     xml = (
         '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
         + service + operation + table([header, *request]) + table([header, *response]) + uri
+        + "</w:body></w:document>"
+    ).encode()
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("word/document.xml", xml)
+    return buffer.getvalue()
+
+
+def _docx_two_operations() -> bytes:
+    def cell(value: str) -> str:
+        return f"<w:tc><w:p><w:r><w:t>{escape(value)}</w:t></w:r></w:p></w:tc>"
+
+    def table(rows: list[list[str]]) -> str:
+        return "<w:tbl>" + "".join("<w:tr>" + "".join(cell(value) for value in row) + "</w:tr>" for row in rows) + "</w:tbl>"
+
+    header = ["항목명(영문)", "항목명(국문)", "항목크기", "항목구분", "샘플데이터", "항목설명"]
+    operation_one = table([["오퍼레이션 정보", "오퍼레이션명(국문)", "헬스체크 조회"], ["오퍼레이션 유형", "조회(목록)"]])
+    request_one = table([header, ["firstOnlyParam", "첫 번째 입력", "8", "필수", "PRIVATE_FIRST_SAMPLE", "입력"]])
+    operation_two = table([["오퍼레이션 정보", "오퍼레이션명(국문)", "다른 작업 조회"], ["오퍼레이션 유형", "조회(목록)"]])
+    request_two = table([header, ["secondOnlyParam", "두 번째 입력", "9", "필수", "PRIVATE_SECOND_SAMPLE", "입력"]])
+    response_two = table([header, ["borrowedResponseName", "다른 응답", "10", "필수", "PRIVATE_RESPONSE", "응답"]])
+    other_url = table([["https://apis.data.go.kr/demo/other?secondOnlyParam=PRIVATE_QUERY"]])
+    xml = (
+        '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'
+        + operation_one + request_one + operation_two + request_two + response_two + other_url
         + "</w:body></w:document>"
     ).encode()
     buffer = io.BytesIO()
@@ -154,6 +180,30 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
                 page_retrieved_at="2026-10-07T03:00:00Z", detail_retrieved_at="2026-10-07T03:01:00Z", guide_retrieved_at="2026-10-07T03:02:00Z",
             )
 
+    def test_duplicate_parameter_rows_are_rejected_instead_of_overwritten(self) -> None:
+        duplicated = [
+            ["ServiceKey", "서비스키", "4", "필수", "PRIVATE_ONE", "인증키"],
+            ["ServiceKey", "서비스키", "400", "선택", "PRIVATE_TWO", "충돌 행"],
+        ]
+        with self.assertRaisesRegex(DOCS.EvidenceError, "parameter_name_duplicate_in_source"):
+            DOCS.parse_evidence(
+                _operation(), page_raw=_page(), detail_raw=_detail(duplicated), guide_raw=_docx(),
+                page_retrieved_at="2026-10-07T03:00:00Z", detail_retrieved_at="2026-10-07T03:01:00Z", guide_retrieved_at="2026-10-07T03:02:00Z",
+            )
+
+    def test_docx_facts_stop_before_the_next_operation_section(self) -> None:
+        evidence = DOCS.parse_evidence(
+            _operation(), page_raw=_page(), detail_raw=_detail(), guide_raw=_docx_two_operations(),
+            page_retrieved_at="2026-10-07T03:00:00Z", detail_retrieved_at="2026-10-07T03:01:00Z", guide_retrieved_at="2026-10-07T03:02:00Z",
+        )
+        encoded = json.dumps(evidence, ensure_ascii=False)
+        self.assertNotIn("secondOnlyParam", encoded)
+        self.assertNotIn("borrowedResponseName", encoded)
+        self.assertNotIn("PRIVATE_SECOND_SAMPLE", encoded)
+        self.assertNotIn("PRIVATE_QUERY", encoded)
+        self.assertEqual(evidence["response_assertion"]["fields"], [])
+        self.assertEqual(evidence["transport"]["path"]["status"], "not_established")
+
     def test_docx_expansion_limit_rejects_zip_bomb(self) -> None:
         bomb = io.BytesIO()
         with zipfile.ZipFile(bomb, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -185,13 +235,64 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
             with self.assertRaisesRegex(DOCS.EvidenceError, "source_redirect_rejected"):
                 DOCS._fetch_official("https://www.data.go.kr/data/10001/openapi.do", purpose="catalogue", max_bytes=128)
 
+    def test_hard_deadline_covers_slow_dns_headers_and_trickled_body(self) -> None:
+        class Headers:
+            def get_all(self, _name): return []
+
+        class Response:
+            status = 200
+            headers = Headers()
+            def __init__(self, body_delay): self.body_delay = body_delay
+            def getheader(self, name, default=""):
+                return {"Content-Encoding": "identity", "Content-Length": ""}.get(name, default)
+            def read(self, _size):
+                if self.body_delay:
+                    time.sleep(0.08)
+                    return b"x"
+                return b""
+
+        class Connection:
+            def __init__(self, *_args, **_kwargs):
+                self.sock = None
+                self._create_connection = None
+                self.response_delay = False
+                self.body_delay = False
+            def request(self, *_args, **_kwargs): pass
+            def getresponse(self):
+                if self.response_delay:
+                    time.sleep(1.0)
+                return Response(self.body_delay)
+            def close(self): pass
+
+        url = "https://www.data.go.kr/data/10001/openapi.do"
+
+        def run_with_timeout(stage):
+            class StageConnection(Connection):
+                def __init__(self, *args, **kwargs):
+                    super().__init__(*args, **kwargs)
+                    self.response_delay = stage == "headers"
+                    self.body_delay = stage == "body"
+
+            slow_resolver = lambda *_args, **_kwargs: (time.sleep(1.0), [])[1]
+            public_resolver = lambda *_args, **_kwargs: [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("8.8.8.8", 443))]
+            started = time.monotonic()
+            resolver = slow_resolver if stage == "dns" else public_resolver
+            with mock.patch.object(DOCS.http.client, "HTTPSConnection", StageConnection):
+                with self.assertRaisesRegex(DOCS.EvidenceError, "source_deadline_exceeded"):
+                    DOCS._fetch_official(url, purpose="catalogue", max_bytes=16, deadline_seconds=0.2, resolver=resolver)
+            self.assertLess(time.monotonic() - started, 1.0)
+
+        for stage in ("dns", "headers", "body"):
+            with self.subTest(stage=stage):
+                run_with_timeout(stage)
+
     def test_full_registered_queue_keeps_safetydata_and_exclusions_separate(self) -> None:
         manifest = json.loads((ROOT / "reports/data-go-kr/operation-manifest.json").read_text(encoding="utf-8"))
         queue = DOCS.build_queue(manifest)
         self.assertEqual(len(queue), 12662)
-        safetydata = [row for row in queue if row["operation_identity"]["source_system"] == "safetydata.go.kr"]
+        safetydata = [row for row in queue if row["source_profile_id"] == "safetydata_v1"]
         self.assertEqual(len(safetydata), 180)
-        self.assertEqual(safetydata[0]["source_routes"][0]["host"], "www.safetydata.go.kr")
+        self.assertEqual(DOCS.SOURCE_PROFILES[safetydata[0]["source_profile_id"]]["host"], "www.safetydata.go.kr")
         self.assertEqual(manifest["summary"]["exclusions"]["link_operations"], 8871)
         self.assertEqual(manifest["summary"]["exclusions"]["operationless_catalog_entries"], 473)
 

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-document-reconciliation.v1.schema.json",
+  "title": "Datapan operation document reconciliation v1",
+  "description": "Separates parsed documentation evidence from pending work and registered-inventory exclusions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "manifest_binding", "summary", "scope", "source_policy"],
+  "properties": {
+    "schema_version": { "const": "datapan.operation-document-reconciliation.v1" },
+    "manifest_binding": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256", "source_snapshot_sha256"],
+      "properties": { "path": { "const": "reports/data-go-kr/operation-manifest.json" }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "source_snapshot_sha256": { "const": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0" } }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false, "required": ["registered_api_operations", "statuses", "coverage_complete"],
+      "properties": {
+        "registered_api_operations": { "const": 12662 },
+        "statuses": {
+          "type": "object", "additionalProperties": false,
+          "required": ["pending", "parsed_with_unknowns", "parsed_complete", "ambiguous", "unsupported", "invalid"],
+          "properties": { "pending": { "$ref": "#/$defs/count" }, "parsed_with_unknowns": { "$ref": "#/$defs/count" }, "parsed_complete": { "$ref": "#/$defs/count" }, "ambiguous": { "$ref": "#/$defs/count" }, "unsupported": { "$ref": "#/$defs/count" }, "invalid": { "$ref": "#/$defs/count" } }
+        },
+        "coverage_complete": { "type": "boolean" }
+      }
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false, "required": ["provider", "inventory", "registered_protocols", "link_operations_excluded", "operationless_catalog_entries_excluded", "worldwide_provider_apis_included"],
+      "properties": {
+        "provider": { "const": "data.go.kr" }, "inventory": { "const": "registered_rest_and_soap_operations_only" },
+        "registered_protocols": { "type": "object", "additionalProperties": false, "required": ["REST", "SOAP"], "properties": { "REST": { "const": 12627 }, "SOAP": { "const": 35 } } },
+        "link_operations_excluded": { "const": 8871 }, "operationless_catalog_entries_excluded": { "const": 473 }, "worldwide_provider_apis_included": { "const": false }
+      }
+    },
+    "source_policy": {
+      "type": "object", "additionalProperties": false, "required": ["official_document_hosts", "provider_operation_calls", "external_openapi_refs_followed", "soap_wsdl_imports_followed", "raw_capture_directory_private"],
+      "properties": { "official_document_hosts": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "enum": ["www.data.go.kr", "www.safetydata.go.kr"] } }, "provider_operation_calls": { "const": 0 }, "external_openapi_refs_followed": { "const": false }, "soap_wsdl_imports_followed": { "const": false }, "raw_capture_directory_private": { "const": true } }
+    }
+  },
+  "$defs": { "count": { "type": "integer", "minimum": 0 } }
+}
