@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 116,
+  "count": 118,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 4824,
-      "sha256": "68466294524f4da2b562eeaf57f1b525bbec5c28bc81536204318798d5600124"
+      "bytes": 4961,
+      "sha256": "ed2aba9b59a306840fbd0391db7a3f2e0525a839c3861d608ac4452f206802f6"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -1047,6 +1047,24 @@
       "version": "v1",
       "bytes": 12380,
       "sha256": "0b4a5a7ab10eeccb523d2af8a8e62e76f14a6243eea00558ac49e9959e7a3d1d"
+    },
+    {
+      "path": "schemas/datapan.operation-document-reconciliation.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-reconciliation.v1.schema.json",
+      "title": "Datapan operation document reconciliation v1",
+      "contract": "operation-document-reconciliation",
+      "version": "v1",
+      "bytes": 3217,
+      "sha256": "3c5bbd05db59a86788093171a87d5bdb23f7aee1b92bd3d903182b2a65ebf44c"
+    },
+    {
+      "path": "schemas/datapan.operation-document-work-item.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-work-item.v1.schema.json",
+      "title": "Datapan operation document work item v1",
+      "contract": "operation-document-work-item",
+      "version": "v1",
+      "bytes": 1532,
+      "sha256": "6f17a442071430ef2bbc5846be2bd8d92a2b2c0681f1462463f8cf0dfe46799a"
     }
   ]
 }
