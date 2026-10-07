@@ -1,0 +1,3865 @@
+{
+  "authentication": {
+    "mechanism": null,
+    "parameter_names": [
+      "numOfRows"
+    ],
+    "placement": "query",
+    "requirement": null,
+    "source_refs": [
+      {
+        "evidence_kind": "authentication_credential_description",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/description",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_name",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/name",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_placement",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/in",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_requiredness",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/required",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "status": "documented"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_effect_not_established_by_openapi",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15094809",
+    "operation_id": "084218a1e34059096a5b38ee760ea7bac79545815543b5f59fae0c19e69c5689",
+    "operation_name": "신용공여잔고추이",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "catalogue_dataset_identity",
+        "locator": {
+          "input_id": "publicDataPk",
+          "kind": "html_hidden_input",
+          "source_id": "catalogue_detail_page",
+          "value": "15094809"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/summary",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_endpoint_path",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_id",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/operationId",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "36961"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "일자별 신용공여 잔고 추이 정보를 제공"
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_title",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/summary",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "신용공여잔고추이"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "basDt",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_example_presence",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/example",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "integer"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "numOfRows",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_example_presence",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/example",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "integer"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "pageNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_example_presence",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/example",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "header",
+      "resultCode",
+      "resultMsg",
+      "body",
+      "numOfRows",
+      "pageNo",
+      "totalCount",
+      "items",
+      "item",
+      "basDt",
+      "crdTrFingWhl",
+      "crdTrFingScrs",
+      "crdTrFingKosdaq",
+      "crdTrLndrWhl",
+      "crdTrLndrScrs",
+      "crdTrLndrKosdaq",
+      "sbscCapLn",
+      "dpsgScrtMogFing"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema/properties/header",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/header",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/header/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/header/properties/resultCode",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/header/properties/resultCode/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/header/properties/resultMsg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/header/properties/resultMsg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema/properties/body",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/numOfRows",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/numOfRows/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/pageNo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/pageNo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/totalCount",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/totalCount/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/items",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/items4",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/items4/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/items4/properties/item",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/basDt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/basDt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingWhl",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingWhl/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingScrs",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingScrs/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingKosdaq",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingKosdaq/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrWhl",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrWhl/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrScrs",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrScrs/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrKosdaq",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrKosdaq/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/sbscCapLn",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/sbscCapLn/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/dpsgScrtMogFing",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 202028,
+          "byte_start": 177232,
+          "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/dpsgScrtMogFing/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [
+        {
+          "evidence_kind": "accepted_http_success_status",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "values": [
+        200
+      ]
+    },
+    "coded_result_field_inventory": {
+      "candidates": [
+        {
+          "classification": "recognized_result_code_name",
+          "http_status_code": 200,
+          "name": "resultCode",
+          "path": null,
+          "schema_variant": {
+            "index": null,
+            "kind": "single"
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "value_type": "string"
+        }
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/definitions/header/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/definitions/header/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/definitions/header",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "header",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema/properties/header",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultCode",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header/properties/resultCode/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultMsg",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header/properties/resultMsg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header/properties/resultMsg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "body",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema/properties/body",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "numOfRows",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/numOfRows",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/numOfRows/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "pageNo",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/pageNo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/pageNo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "totalCount",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/totalCount",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/totalCount/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "items",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/items",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/items4",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/items4/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/items4",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "item",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/items4/properties/item",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "basDt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/basDt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/basDt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "crdTrFingWhl",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingWhl",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingWhl/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "crdTrFingScrs",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingScrs",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingScrs/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "crdTrFingKosdaq",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingKosdaq",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingKosdaq/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "crdTrLndrWhl",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrWhl",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrWhl/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "crdTrLndrScrs",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrScrs",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrScrs/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "crdTrLndrKosdaq",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrKosdaq",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrKosdaq/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "sbscCapLn",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/sbscCapLn",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/sbscCapLn/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "dpsgScrtMogFing",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/dpsgScrtMogFing",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/dpsgScrtMogFing/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      }
+    ],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "unknown",
+      "media_types": [
+        "application/json",
+        "application/xml"
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/produces/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/produces/1",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "conflict"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_error_values_not_declared",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/definitions/header/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/definitions/header/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/definitions/header",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_success_values_not_declared",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/definitions/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": "string"
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "success_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [
+            {
+              "classification": "recognized_result_code_name",
+              "http_status_code": 200,
+              "name": "resultCode",
+              "path": null,
+              "schema_variant": {
+                "index": null,
+                "kind": "single"
+              },
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_schema",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/header/properties/resultCode",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_type",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/header/properties/resultCode/type",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "value_type": "string"
+            }
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "header",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema/properties/header",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultCode",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header/properties/resultCode/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultMsg",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header/properties/resultMsg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header/properties/resultMsg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "body",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema/properties/body",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "numOfRows",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/numOfRows",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/numOfRows/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "pageNo",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/pageNo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/pageNo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "totalCount",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/totalCount",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/totalCount/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "items",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Body_GrantingOfCreditBalanceInfo/properties/items",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/items4",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/items4/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/items4",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "item",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/items4/properties/item",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "basDt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/basDt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/basDt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "crdTrFingWhl",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingWhl",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingWhl/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "crdTrFingScrs",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingScrs",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingScrs/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "crdTrFingKosdaq",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingKosdaq",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrFingKosdaq/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "crdTrLndrWhl",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrWhl",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrWhl/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "crdTrLndrScrs",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrScrs",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrScrs/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "crdTrLndrKosdaq",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrKosdaq",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/crdTrLndrKosdaq/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "sbscCapLn",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/sbscCapLn",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/sbscCapLn/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 202028,
+                    "byte_start": 177232,
+                    "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "dpsgScrtMogFing",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/dpsgScrtMogFing",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/Item_GrantingOfCreditBalanceInfo/properties/dpsgScrtMogFing/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          }
+        ],
+        "http_status_code": 200,
+        "payload": {
+          "kind": "unknown",
+          "media_types": [
+            "application/json",
+            "application/xml"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/produces/1",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "conflict"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_error_values_not_declared",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_success_values_not_declared",
+                "locator": {
+                  "byte_end": 202028,
+                  "byte_start": 177232,
+                  "json_pointer": "#/definitions/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": "string"
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "object",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_object_type",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 202028,
+                "byte_start": 177232,
+                "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "accepted_http_success_status",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "success_response_branch",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_schema_variant_root",
+            "locator": {
+              "byte_end": 202028,
+              "byte_start": 177232,
+              "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get/responses/200/schema",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 224626,
+      "capture_role": "catalogue_identity_and_inline_openapi_operation",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15094809/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:42:30Z",
+      "sha256": "83c27193a008fe7da70294f3a9ba6617b52e262fb65116adfd454ad7cd2033ae",
+      "source_id": "catalogue_detail_page"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_host",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/host",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "operation_specific",
+      "source_refs": [
+        {
+          "evidence_kind": "operation_http_method",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo/get",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "GET"
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_path",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/paths/~1getGrantingOfCreditBalanceInfo",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/1160100/service/GetKofiaStatisticsInfoService/getGrantingOfCreditBalanceInfo"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_scheme",
+          "locator": {
+            "byte_end": 202028,
+            "byte_start": 177232,
+            "json_pointer": "#/schemes/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "https"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

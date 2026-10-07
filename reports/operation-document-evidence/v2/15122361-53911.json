@@ -1,0 +1,2964 @@
+{
+  "authentication": {
+    "mechanism": null,
+    "parameter_names": [],
+    "placement": null,
+    "requirement": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_effect_not_established_by_openapi",
+    "authentication_security_requirement_not_established",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15122361",
+    "operation_id": "05a5d27a40f0fe44b362519d603e7c03a035a5e3b0efa96d9fca576c8d45bdc3",
+    "operation_name": "버섯일반명 상세정보",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "catalogue_dataset_identity",
+        "locator": {
+          "input_id": "publicDataPk",
+          "kind": "html_hidden_input",
+          "source_id": "catalogue_detail_page",
+          "value": "15122361"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/summary",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_endpoint_path",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_id",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/operationId",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "53911"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "P순번, 이명순번, 버섯명(국문), 버섯명(학명), 버섯이름통일안, 명명자, 참조문헌 등의 버섯일반명 상세정보를 제공하는 서비스"
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_title",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/summary",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "버섯일반명 상세정보"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "identMstIndex",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "servicekey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "header_view",
+      "resultCode",
+      "resultMsg",
+      "repcategory",
+      "body_view",
+      "result_view",
+      "pIndex",
+      "synonymIndex",
+      "scNameKr",
+      "scNameSt",
+      "scName",
+      "author",
+      "ref",
+      "publishOrg"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultMsg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultMsg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/repcategory",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/repcategory/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/pIndex",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/pIndex/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/synonymIndex",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/synonymIndex/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameKr",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameKr/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameSt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameSt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scName",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scName/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/author",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/author/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/ref",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/ref/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/publishOrg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 184944,
+          "byte_start": 173717,
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/publishOrg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [
+        {
+          "evidence_kind": "accepted_http_success_status",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "values": [
+        200
+      ]
+    },
+    "coded_result_field_inventory": {
+      "candidates": [
+        {
+          "classification": "recognized_result_code_name",
+          "http_status_code": 200,
+          "name": "resultCode",
+          "path": null,
+          "schema_variant": {
+            "index": null,
+            "kind": "single"
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "value_type": "string"
+        }
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "header_view",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultCode",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultMsg",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultMsg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultMsg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "repcategory",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/repcategory",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/repcategory/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "body_view",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "result_view",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "pIndex",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/pIndex",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/pIndex/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "synonymIndex",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/synonymIndex",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/synonymIndex/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "scNameKr",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameKr",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameKr/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "scNameSt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameSt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameSt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "scName",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scName",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scName/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "author",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/author",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/author/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "ref",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/ref",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/ref/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "publishOrg",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/publishOrg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/publishOrg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      }
+    ],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "xml",
+      "media_types": [
+        "application/xml"
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/produces/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_error_values_not_declared",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_success_values_not_declared",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": "string"
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "success_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [
+            {
+              "classification": "recognized_result_code_name",
+              "http_status_code": 200,
+              "name": "resultCode",
+              "path": null,
+              "schema_variant": {
+                "index": null,
+                "kind": "single"
+              },
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_schema",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_type",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "value_type": "string"
+            }
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "header_view",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultCode",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultMsg",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultMsg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultMsg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "repcategory",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/repcategory",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/repcategory/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "body_view",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "result_view",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "pIndex",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/pIndex",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/pIndex/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "synonymIndex",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/synonymIndex",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/synonymIndex/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "scNameKr",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameKr",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameKr/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "scNameSt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameSt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scNameSt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "scName",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scName",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/scName/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "author",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/author",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/author/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "ref",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/ref",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/result_view/properties/ref/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 184944,
+                    "byte_start": 173717,
+                    "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "publishOrg",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/publishOrg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/body_view/properties/publishOrg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          }
+        ],
+        "http_status_code": 200,
+        "payload": {
+          "kind": "xml",
+          "media_types": [
+            "application/xml"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_error_values_not_declared",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_success_values_not_declared",
+                "locator": {
+                  "byte_end": 184944,
+                  "byte_start": 173717,
+                  "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/properties/header_view/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": "string"
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "xml_element",
+          "qname": {
+            "local_name": "response",
+            "namespace": null
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_xml_namespace_not_established",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema/xml",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 184944,
+                "byte_start": 173717,
+                "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "accepted_http_success_status",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "success_response_branch",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_schema_variant_root",
+            "locator": {
+              "byte_end": 184944,
+              "byte_start": 173717,
+              "json_pointer": "#/paths/~1selectSrchGnrlNmView/get/responses/200/schema",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 207561,
+      "capture_role": "catalogue_identity_and_inline_openapi_operation",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15122361/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:36:13Z",
+      "sha256": "e2897a37be8f6ecf131d6ae60239a101f80ed67070b663276671f96c9ea40c93",
+      "source_id": "catalogue_detail_page"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_host",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/host",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "operation_specific",
+      "source_refs": [
+        {
+          "evidence_kind": "operation_http_method",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView/get",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "GET"
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_path",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/paths/~1selectSrchGnrlNmView",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/1390804/NihhsMushroomGnrlNmInfo/selectSrchGnrlNmView"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_scheme",
+          "locator": {
+            "byte_end": 184944,
+            "byte_start": 173717,
+            "json_pointer": "#/schemes/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "https"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

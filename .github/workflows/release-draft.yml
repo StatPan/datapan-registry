@@ -150,6 +150,8 @@ jobs:
             scripts/validate-install-smoke-summaries.py \
             scripts/validate-release-consumer-compatibility.py \
             scripts/sync-release-manifest-artifacts.py \
+            scripts/register-operation-document-evidence-artifacts.py \
+            scripts/operation_document_evidence.py \
             scripts/validate-release-ledger-ownership.py \
             scripts/validate-release-ledger-goal-audit.py \
             scripts/validate-release-report-artifacts.py \
@@ -165,7 +167,9 @@ jobs:
             scripts/validate-operation-assertion-policies.py \
             scripts/generate-diagnostic-publication.py
           python scripts/sync-release-schema-artifacts.py --check
+          python scripts/register-operation-document-evidence-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
+          python -m unittest tests/test_operation_document_evidence.py tests/test_register_operation_document_evidence_artifacts.py
           python scripts/generate-data-go-kr-operation-manifest.py --check
           python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py

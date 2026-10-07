@@ -147,7 +147,10 @@ jobs:
           python -m pip install jsonschema
           python -m pip install --disable-pip-version-check 'PyYAML==6.0.2'
           python scripts/sync-release-schema-artifacts.py --check
+          python scripts/register-operation-document-evidence-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
+          python -m unittest tests/test_operation_document_evidence.py
+          python -m unittest tests/test_register_operation_document_evidence_artifacts.py
           python scripts/generate-data-go-kr-operation-manifest.py --check
           python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
@@ -334,6 +337,7 @@ jobs:
           python -m py_compile scripts/run-upstream-refresh.py
           python -m py_compile scripts/validate-source-refresh-policy.py
           python -m py_compile scripts/sync-release-manifest-artifacts.py
+          python -m py_compile scripts/register-operation-document-evidence-artifacts.py scripts/operation_document_evidence.py
           python -m py_compile scripts/generate-data-go-kr-operation-manifest.py
           python -m py_compile scripts/validate-data-go-kr-operation-manifest.py
           python -m py_compile scripts/generate-release-distribution-footprint.py

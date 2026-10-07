@@ -2,12 +2,12 @@
   "schema_version": "datapan.external-checkout-refs.v1",
   "repository": "StatPan/datapan-cli",
   "ref_kind": "commit_sha",
-  "ref": "e3b2fa44cb0f68d7e58e003fbd71ecde505878de",
+  "ref": "52ebf528d6c1d0cb04ab78a80273d5b49c5b6dec",
   "selection": {
-    "basis": "reviewed_and_merged_consumer_identity",
-    "source_issue": "StatPan/datapan-cli#163",
-    "source_pull_request": "StatPan/datapan-cli#164",
-    "notes": "This commit is the reviewed CLI consumer identity containing the opt-in bounded full-catalog import timeout contract and is reachable from datapan-cli main history."
+    "basis": "reviewed_immutable_pull_request_checkpoint",
+    "source_issue": "StatPan/datapan-cli#184",
+    "source_pull_request": "StatPan/datapan-cli#185",
+    "notes": "This immutable CLI PR head was reviewed for the Registry operation-plan schemas and artifact kinds. It is pinned as a compatibility checkpoint while PR #185 remains under CI/review; this does not claim the CLI change is merged."
   },
   "inventory_expectations": {
     "checkout_count": 10,

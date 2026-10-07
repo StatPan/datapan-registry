@@ -1,0 +1,4787 @@
+{
+  "authentication": {
+    "mechanism": "service_key",
+    "parameter_names": [
+      "serviceKey"
+    ],
+    "placement": "query",
+    "requirement": "required",
+    "source_refs": [
+      {
+        "evidence_kind": "authentication_credential_description",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/description",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_name",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/name",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_placement",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/in",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_requiredness",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/required",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "status": "documented"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_effect_not_established_by_openapi",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15111725",
+    "operation_id": "0bc289b3852cae1a6466a132f5e094488614f1deaf9a59507f570c218dc2d532",
+    "operation_name": "우체국보험 상품별 보장내용 정보 조회",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "catalogue_dataset_identity",
+        "locator": {
+          "input_id": "publicDataPk",
+          "kind": "html_hidden_input",
+          "source_id": "catalogue_detail_page",
+          "value": "15111725"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/summary",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_endpoint_path",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_id",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/operationId",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "50345"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "① 상품명을 이용하여 지급급부명, 지급내용문구 등 ② 우체국보험 보장내용 정보를 조회"
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_title",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/summary",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "우체국보험 상품별 보장내용 정보 조회"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "INSU_NM",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "numOfRows",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "pageNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "serviceKey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "response",
+      "header",
+      "resultCode",
+      "resultMsg",
+      "body",
+      "items",
+      "numOfRows",
+      "pageNo",
+      "totalCount",
+      "item",
+      "INSU_NM",
+      "SNTC_LINE_NO",
+      "APLCN_BGNG_YMD",
+      "APLCN_END_YMD",
+      "GIVE_BNFI_NM",
+      "GIVE_CN_SNTC_CN"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/properties/response",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/response",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/response/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/response/properties/header",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/header",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/header/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/header/properties/resultCode",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/header/properties/resultCode/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/header/properties/resultMsg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/header/properties/resultMsg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/response/properties/body",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/body",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/body/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/body/properties/items",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/properties/numOfRows",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/properties/numOfRows/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/properties/pageNo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/properties/pageNo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/properties/totalCount",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/properties/totalCount/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/items/properties/item",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema_reference",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/INSU_NM",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/INSU_NM/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/SNTC_LINE_NO",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/SNTC_LINE_NO/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/APLCN_BGNG_YMD",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/APLCN_BGNG_YMD/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/APLCN_END_YMD",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/APLCN_END_YMD/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/GIVE_BNFI_NM",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/GIVE_BNFI_NM/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/GIVE_CN_SNTC_CN",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 179780,
+          "byte_start": 174799,
+          "json_pointer": "#/definitions/item/properties/GIVE_CN_SNTC_CN/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [
+        {
+          "evidence_kind": "accepted_http_success_status",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "values": [
+        200
+      ]
+    },
+    "coded_result_field_inventory": {
+      "candidates": [
+        {
+          "classification": "ambiguous_code_semantics",
+          "http_status_code": 200,
+          "name": "response",
+          "path": {
+            "kind": "json_pointer",
+            "value": "#/response"
+          },
+          "schema_variant": {
+            "index": null,
+            "kind": "single"
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/properties/response",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema_reference",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/response",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/response/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "value_type": "object"
+        },
+        {
+          "classification": "recognized_result_code_name",
+          "http_status_code": 200,
+          "name": "resultCode",
+          "path": {
+            "kind": "json_pointer",
+            "value": "#/response/header/resultCode"
+          },
+          "schema_variant": {
+            "index": null,
+            "kind": "single"
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "value_type": "string"
+        }
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/properties/response",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_schema_reference",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/response",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/response/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/header/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/header/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/header",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "response",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/properties/response",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/response",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/response/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/response",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "header",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/header"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/response/properties/header",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultCode",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/header/resultCode"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header/properties/resultCode/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultMsg",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/header/resultMsg"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header/properties/resultMsg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header/properties/resultMsg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/response",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "body",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/response/properties/body",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/body",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/body/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/body",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "items",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/body/properties/items",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "numOfRows",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/numOfRows"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/properties/numOfRows",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/properties/numOfRows/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "pageNo",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/pageNo"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/properties/pageNo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/properties/pageNo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "totalCount",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/totalCount"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/properties/totalCount",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/properties/totalCount/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "item",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/item"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/items/properties/item",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_schema_reference",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "INSU_NM",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/item/INSU_NM"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/INSU_NM",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/INSU_NM/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "SNTC_LINE_NO",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/item/SNTC_LINE_NO"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/SNTC_LINE_NO",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/SNTC_LINE_NO/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "APLCN_BGNG_YMD",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/item/APLCN_BGNG_YMD"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/APLCN_BGNG_YMD",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/APLCN_BGNG_YMD/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "APLCN_END_YMD",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/item/APLCN_END_YMD"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/APLCN_END_YMD",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/APLCN_END_YMD/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "GIVE_BNFI_NM",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/item/GIVE_BNFI_NM"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/GIVE_BNFI_NM",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/GIVE_BNFI_NM/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "GIVE_CN_SNTC_CN",
+        "path": {
+          "kind": "json_pointer",
+          "value": "#/response/body/items/item/GIVE_CN_SNTC_CN"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/GIVE_CN_SNTC_CN",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/item/properties/GIVE_CN_SNTC_CN/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value_type": "string"
+      }
+    ],
+    "documented_http_error_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [],
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [],
+        "http_status_code": 101,
+        "payload": {
+          "kind": "json",
+          "media_types": [
+            "application/json"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": null
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "unknown",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "not_established"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "documented_http_error_status",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_branch",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_schema_not_declared",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      },
+      {
+        "coded_result_field_inventory": {
+          "candidates": [],
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [],
+        "http_status_code": 102,
+        "payload": {
+          "kind": "json",
+          "media_types": [
+            "application/json"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": null
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "unknown",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "not_established"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "documented_http_error_status",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_branch",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_schema_not_declared",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      },
+      {
+        "coded_result_field_inventory": {
+          "candidates": [],
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [],
+        "http_status_code": 103,
+        "payload": {
+          "kind": "json",
+          "media_types": [
+            "application/json"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": null
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "unknown",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "not_established"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "documented_http_error_status",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_branch",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_schema_not_declared",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      },
+      {
+        "coded_result_field_inventory": {
+          "candidates": [],
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [],
+        "http_status_code": 104,
+        "payload": {
+          "kind": "json",
+          "media_types": [
+            "application/json"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": null
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "unknown",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "not_established"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "documented_http_error_status",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_branch",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_schema_not_declared",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ],
+    "payload": {
+      "kind": "json",
+      "media_types": [
+        "application/json"
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/produces/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_error_values_not_declared",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": {
+        "kind": "json_pointer",
+        "value": "#/response/header/resultCode"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/header/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/header/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/definitions/header",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_success_values_not_declared",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/definitions/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": "string"
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/101",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/102",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/103",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/104",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "success_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [
+            {
+              "classification": "ambiguous_code_semantics",
+              "http_status_code": 200,
+              "name": "response",
+              "path": {
+                "kind": "json_pointer",
+                "value": "#/response"
+              },
+              "schema_variant": {
+                "index": null,
+                "kind": "single"
+              },
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_schema",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/properties/response",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_schema_reference",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/response",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_type",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/response/type",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "value_type": "object"
+            },
+            {
+              "classification": "recognized_result_code_name",
+              "http_status_code": 200,
+              "name": "resultCode",
+              "path": {
+                "kind": "json_pointer",
+                "value": "#/response/header/resultCode"
+              },
+              "schema_variant": {
+                "index": null,
+                "kind": "single"
+              },
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_schema",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/header/properties/resultCode",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_type",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/header/properties/resultCode/type",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "value_type": "string"
+            }
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/properties/response",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema_reference",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/response",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/response/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "response",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/properties/response",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/response",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/response/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/response",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "header",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/header"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/response/properties/header",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultCode",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/header/resultCode"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header/properties/resultCode/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultMsg",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/header/resultMsg"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header/properties/resultMsg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header/properties/resultMsg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/response",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "body",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/response/properties/body",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/body",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/body/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/body",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "items",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/body/properties/items",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "numOfRows",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/numOfRows"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/properties/numOfRows",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/properties/numOfRows/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "pageNo",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/pageNo"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/properties/pageNo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/properties/pageNo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "totalCount",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/totalCount"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/properties/totalCount",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/properties/totalCount/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "item",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/item"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/items/properties/item",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_schema_reference",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "INSU_NM",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/item/INSU_NM"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/INSU_NM",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/INSU_NM/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "SNTC_LINE_NO",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/item/SNTC_LINE_NO"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/SNTC_LINE_NO",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/SNTC_LINE_NO/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "APLCN_BGNG_YMD",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/item/APLCN_BGNG_YMD"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/APLCN_BGNG_YMD",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/APLCN_BGNG_YMD/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "APLCN_END_YMD",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/item/APLCN_END_YMD"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/APLCN_END_YMD",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/APLCN_END_YMD/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "GIVE_BNFI_NM",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/item/GIVE_BNFI_NM"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/GIVE_BNFI_NM",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/GIVE_BNFI_NM/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 179780,
+                    "byte_start": 174799,
+                    "json_pointer": "#/definitions/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "GIVE_CN_SNTC_CN",
+            "path": {
+              "kind": "json_pointer",
+              "value": "#/response/body/items/item/GIVE_CN_SNTC_CN"
+            },
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/GIVE_CN_SNTC_CN",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/item/properties/GIVE_CN_SNTC_CN/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented",
+            "value_type": "string"
+          }
+        ],
+        "http_status_code": 200,
+        "payload": {
+          "kind": "json",
+          "media_types": [
+            "application/json"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_error_values_not_declared",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": {
+            "kind": "json_pointer",
+            "value": "#/response/header/resultCode"
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/definitions/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_success_values_not_declared",
+                "locator": {
+                  "byte_end": 179780,
+                  "byte_start": 174799,
+                  "json_pointer": "#/definitions/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": "string"
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "object",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_object_type",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 179780,
+                "byte_start": 174799,
+                "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "accepted_http_success_status",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "success_response_branch",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_schema_variant_root",
+            "locator": {
+              "byte_end": 179780,
+              "byte_start": 174799,
+              "json_pointer": "#/paths/~1InsuranceGuranteeContent/get/responses/200/schema",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 202430,
+      "capture_role": "catalogue_identity_and_inline_openapi_operation",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15111725/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:49:04Z",
+      "sha256": "ff7af87f2afc1a24d8913858a821a116be6b660b4e344740d4baa21c44dd459d",
+      "source_id": "catalogue_detail_page"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_host",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/host",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "operation_specific",
+      "source_refs": [
+        {
+          "evidence_kind": "operation_http_method",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent/get",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "GET"
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_path",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/paths/~1InsuranceGuranteeContent",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/1721301/KrpostInsuranceGuaranteeContentView/InsuranceGuranteeContent"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_scheme",
+          "locator": {
+            "byte_end": 179780,
+            "byte_start": 174799,
+            "json_pointer": "#/schemes/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "https"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

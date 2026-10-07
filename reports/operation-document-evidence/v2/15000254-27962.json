@@ -1,0 +1,906 @@
+{
+  "authentication": {
+    "mechanism": "service_key",
+    "parameter_names": [
+      "serviceKey"
+    ],
+    "placement": null,
+    "requirement": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_level_http_method_not_declared",
+    "request_data_types_not_established",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15000254",
+    "operation_id": "0bc0db8397bc7db7d282c5baf0b126dcd77b36d488bded8f380c008181d16671",
+    "operation_name": "노선버스위치정류소",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "operation_selector_identity",
+        "locator": {
+          "kind": "html_select_option",
+          "option_index": 0,
+          "select_id": "open_api_detail_select",
+          "source_id": "catalogue_detail_page",
+          "text": "노선버스위치정류소",
+          "value": "27962"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "cell_index": 4,
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 0,
+          "source_id": "reference_guide_docx",
+          "table_index": 2
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "27962"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_selector_identity",
+          "locator": {
+            "kind": "html_select_option",
+            "option_index": 0,
+            "select_id": "open_api_detail_select",
+            "source_id": "catalogue_detail_page",
+            "text": "노선버스위치정류소",
+            "value": "27962"
+          }
+        },
+        {
+          "evidence_kind": "operation_name",
+          "locator": {
+            "cell_index": 4,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 0,
+            "source_id": "reference_guide_docx",
+            "table_index": 2
+          }
+        }
+      ],
+      "status": "registered_manifest",
+      "value": "노선버스위치정류소"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "name": "route",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "9"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "9"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 2,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 2,
+            "source_id": "reference_guide_docx",
+            "table_index": 3
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "name": "serviceKey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "100"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 3
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "100"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 1,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 3
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "SuccessYN",
+      "ReturnCode",
+      "ErrMsg",
+      "rowCount",
+      "MsgBody",
+      "BusPositionList",
+      "row index",
+      "ROUTE_ID",
+      "ROUTE_NM",
+      "ROUTETYPE",
+      "STATION_ID",
+      "STATION_ORD",
+      "MOBI_NUM",
+      "STATION_NM",
+      "PLATE_NO",
+      "LOW_PLATE_TP",
+      "EVENT_CD",
+      "ROUTE_STAT",
+      "TUR"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 1,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 2,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 3,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 4,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 5,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 6,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 7,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 8,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 9,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 10,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 11,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 12,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 13,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 14,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 15,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 16,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 17,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 18,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 19,
+          "source_id": "reference_guide_docx",
+          "table_index": 4
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [],
+      "status": "unknown",
+      "values": []
+    },
+    "coded_result_field_inventory": {
+      "candidates": [],
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "unknown",
+      "media_types": [],
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": null
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "success_branches": []
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 204292,
+      "capture_role": "operation_selector_and_guide_index",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15000254/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:49:00Z",
+      "sha256": "ef627dbc8c4465e2ed6dc484c95ec6cc8880392433769f259139b4e141c1256a",
+      "source_id": "catalogue_detail_page"
+    },
+    {
+      "bytes": 11033,
+      "capture_role": "operation_detail",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "POST",
+        "path": "/tcs/dss/selectApiDetailFunction.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:49:00Z",
+      "sha256": "7ef6e9d5c032897b1c7f5fb75baa00c80f5bccabfb250cdf0ddfc7c77a51832f",
+      "source_id": "operation_detail_html"
+    },
+    {
+      "bytes": 346594,
+      "capture_role": "service_and_operation_guide",
+      "media_type": "application/octet-stream; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/cmm/cmm/fileDownload.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:49:01Z",
+      "sha256": "43b5b52f14ddfcecde790a790badfc7cecb317d59db93730d0de0f6293caf4a9",
+      "source_id": "reference_guide_docx"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [],
+      "status": "not_established",
+      "value": null
+    },
+    "http_method": {
+      "authority_scope": "not_found_in_parsed_operation_sources",
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [],
+      "status": "not_established",
+      "value": null
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [],
+      "status": "not_established",
+      "value": null
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

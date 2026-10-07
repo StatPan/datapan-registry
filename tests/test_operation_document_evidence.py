@@ -1158,6 +1158,28 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         with self.assertRaisesRegex(DOCS.EvidenceError, "queue_batch_limit_invalid"):
             DOCS.select_queue_batch(queue, offset=0, limit=DOCS.MAX_BATCH_OPERATIONS + 1)
 
+    def test_resume_pending_selects_only_the_next_registered_pending_batch(self) -> None:
+        first = _operation()
+        second = copy.deepcopy(first)
+        second["operation_id"] = hashlib.sha256(b"second-pending-operation").hexdigest()
+        second["provenance"]["dataset_id"] = "10002"
+        second["provenance"]["upstream_operation_key"] = "9002"
+        registered = [
+            {"operation_identity": DOCS._safe_operation_identity(operation), "source_profile_id": "data_go_kr_v1"}
+            for operation in (first, second)
+        ]
+        checkpoint = [
+            {**item, "status": "pending", "next_action": "acquire_official_catalogue_detail_and_guide"}
+            for item in registered
+        ]
+        checkpoint[1] = {**checkpoint[1], "status": "ambiguous", "next_action": "review_ambiguous_operation_document_evidence"}
+
+        selected = DOCS.select_pending_queue_batch(registered, checkpoint, source_profile_id="data_go_kr_v1", limit=1)
+        self.assertEqual(len(selected), 1)
+        self.assertEqual(selected[0]["operation_identity"], registered[0]["operation_identity"])
+        with self.assertRaisesRegex(DOCS.EvidenceError, "queue_resume_checkpoint_incomplete"):
+            DOCS.select_pending_queue_batch(registered, checkpoint[:1], source_profile_id="data_go_kr_v1", limit=1)
+
     def test_reconciliation_emits_exact_registered_statuses_and_next_actions(self) -> None:
         manifest = json.loads((ROOT / "reports/data-go-kr/operation-manifest.json").read_text(encoding="utf-8"))
         queue = DOCS.build_queue(manifest)
@@ -1200,14 +1222,78 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
             report, work_items = DOCS.reconcile(queue, evidence_dir, capture_root)
             self.assertEqual(report["summary"]["statuses"]["acquired"], 1)
             self.assertEqual(next(item for item in work_items if item["operation_identity"]["operation_id"] == identity["operation_id"])["next_action"], "run_offline_document_parser")
-            DOCS._write_capture_receipt(folder, identity, status="unsupported", reason_code="guide_format_unsupported_legacy_ole_document")
-            state = DOCS._capture_work_status(identity, capture_root)
-            self.assertEqual(state["next_action"], "implement_legacy_ole_or_hwp_guide_adapter")
             (folder / "reference-guide.bin").write_bytes(b"changed")
             state = DOCS._capture_work_status(identity, capture_root)
             self.assertEqual(state["status"], "invalid")
             self.assertEqual(state["reason_code"], "capture_receipt_document_binding_invalid")
             self.assertNotIn("reference_guide", DOCS._capture_retrieval_times(folder))
+            DOCS._write_capture_receipt(folder, identity, status="unsupported", reason_code="guide_format_unsupported_legacy_ole_document")
+            state = DOCS._capture_work_status(identity, capture_root)
+            self.assertEqual(state["next_action"], "implement_legacy_ole_or_hwp_guide_adapter")
+
+    def test_reconciliation_across_two_capture_batches_preserves_earlier_outcomes(self) -> None:
+        first_operation = _operation()
+        second_operation = copy.deepcopy(first_operation)
+        second_operation["operation_id"] = hashlib.sha256(b"second-batch-operation").hexdigest()
+        second_operation["provenance"]["dataset_id"] = "10002"
+        second_operation["provenance"]["upstream_operation_key"] = "9002"
+        first_identity = DOCS._safe_operation_identity(first_operation)
+        second_identity = DOCS._safe_operation_identity(second_operation)
+        queue = [
+            {
+                "schema_version": "datapan.operation-document-work-item.v2",
+                "operation_identity": identity,
+                "status": "pending",
+                "source_profile_id": "data_go_kr_v1",
+                "next_action": "acquire_official_catalogue_detail_and_guide",
+            }
+            for identity in (first_identity, second_identity)
+        ]
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            first_batch = root / "batch-one"
+            second_batch = root / "batch-two"
+            evidence_dir = root / "evidence"
+
+            first_folder = first_batch / first_identity["dataset_id"] / first_identity["upstream_operation_key"]
+            first_folder.mkdir(parents=True)
+            DOCS._write_capture_receipt(
+                first_folder,
+                first_identity,
+                status="ambiguous",
+                reason_code="guide_operation_identity_ambiguous",
+            )
+
+            first_report, first_items = DOCS.reconcile(queue, evidence_dir, [first_batch])
+            self.assertEqual(first_report["summary"]["statuses"]["ambiguous"], 1)
+            self.assertEqual(next(item for item in first_items if item["operation_identity"] == first_identity)["status"], "ambiguous")
+
+            second_folder = second_batch / second_identity["dataset_id"] / second_identity["upstream_operation_key"]
+            second_folder.mkdir(parents=True)
+            for filename in ("catalogue.html", "operation-detail.html", "reference-guide.bin"):
+                path = second_folder / filename
+                path.write_bytes(filename.encode("ascii"))
+                path.chmod(0o600)
+            DOCS._write_capture_receipt(
+                second_folder,
+                second_identity,
+                status="acquired",
+                reason_code=None,
+                retrieved_at={
+                    "catalogue": "2026-10-07T03:00:00Z",
+                    "operation_detail": "2026-10-07T03:01:00Z",
+                    "reference_guide": "2026-10-07T03:02:00Z",
+                },
+            )
+
+            second_report, second_items = DOCS.reconcile(queue, evidence_dir, [first_batch, second_batch])
+            statuses = {item["operation_identity"]["operation_id"]: item["status"] for item in second_items}
+            self.assertEqual(statuses[first_identity["operation_id"]], "ambiguous")
+            self.assertEqual(statuses[second_identity["operation_id"]], "acquired")
+            self.assertEqual(second_report["summary"]["statuses"]["ambiguous"], 1)
+            self.assertEqual(second_report["summary"]["statuses"]["acquired"], 1)
+            self.assertEqual(second_report["summary"]["statuses"]["pending"], 0)
 
     def test_capture_root_must_be_dedicated_private_and_outside_repository(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

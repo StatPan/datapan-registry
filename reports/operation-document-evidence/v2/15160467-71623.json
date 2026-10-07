@@ -1,0 +1,3312 @@
+{
+  "authentication": {
+    "mechanism": "service_key",
+    "parameter_names": [
+      "serviceKey"
+    ],
+    "placement": "query",
+    "requirement": "required",
+    "source_refs": [
+      {
+        "evidence_kind": "authentication_credential_description",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/parameters/0/description",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_name",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/parameters/0/name",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_placement",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/parameters/0/in",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_requiredness",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/parameters/0/required",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "status": "documented"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_effect_not_established_by_openapi",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15160467",
+    "operation_id": "0c2960d58138e0ec41dbd879e39a5704f117ca5aca4b016f99a1f194501f80a0",
+    "operation_name": "월드잡플러스_마일리지 적립내역",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "catalogue_dataset_identity",
+        "locator": {
+          "input_id": "publicDataPk",
+          "kind": "html_hidden_input",
+          "source_id": "catalogue_detail_page",
+          "value": "15160467"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/summary",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_endpoint_path",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_id",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/operationId",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "71623"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "월드잡플러스 마일리지 적립 활동 현황 조회"
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_title",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/summary",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "월드잡플러스_마일리지 적립내역"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/3/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "integer"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/3/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "numOfRows",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/3/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/3/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/3/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/2/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "integer"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/2/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "pageNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/2/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/2/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/2/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/1/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/1/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "searchYear",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/1/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/1/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/1/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/0/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/0/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "serviceKey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/0/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/0/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/0/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "WORLDJOB",
+      "HEADER",
+      "ERR_CD",
+      "ERR_NM",
+      "BODY",
+      "ITEM",
+      "mileageCnt",
+      "mileageNo",
+      "mileageSj",
+      "mileageValue",
+      "totalCount",
+      "pageNo",
+      "numOfRows",
+      "lastPageNo"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_CD",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_CD/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_NM",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_NM/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageCnt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageCnt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageNo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageNo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageSj",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageSj/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageValue",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageValue/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/totalCount",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/totalCount/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/pageNo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/pageNo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/numOfRows",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/numOfRows/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/lastPageNo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181900,
+          "byte_start": 174043,
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/lastPageNo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [
+        {
+          "evidence_kind": "accepted_http_success_status",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/200",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "values": [
+        200
+      ]
+    },
+    "coded_result_field_inventory": {
+      "candidates": [],
+      "source_refs": [
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/100",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "WORLDJOB",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "HEADER",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "ERR_CD",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_CD",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_CD/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "ERR_NM",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_NM",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_NM/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "BODY",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "ITEM",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "array"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "mileageCnt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageCnt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageCnt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "mileageNo",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageNo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageNo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "mileageSj",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageSj",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageSj/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "mileageValue",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageValue",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageValue/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "totalCount",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/totalCount",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/totalCount/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "pageNo",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/pageNo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/pageNo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "numOfRows",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/numOfRows",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/numOfRows/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "lastPageNo",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/lastPageNo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/lastPageNo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "integer"
+      }
+    ],
+    "documented_http_error_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [],
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/100",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [],
+        "http_status_code": 100,
+        "payload": {
+          "kind": "xml",
+          "media_types": [
+            "application/xml"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": null
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "unknown",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/100",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/100",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": null,
+          "source_refs": [
+            {
+              "evidence_kind": "http_error_response_schema_not_declared",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/100",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "not_established"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "documented_http_error_status",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/100",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_branch",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/100",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "http_error_response_schema_not_declared",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/100",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ],
+    "payload": {
+      "kind": "xml",
+      "media_types": [
+        "application/xml"
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/produces/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": null
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_optional_by_schema_default",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "unknown",
+      "value_type": "array"
+    },
+    "schema_shape": {
+      "source_refs": [
+        {
+          "evidence_kind": "http_error_response_schema_not_declared",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/100",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "success_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [],
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "WORLDJOB",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "HEADER",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "ERR_CD",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_CD",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_CD/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "ERR_NM",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_NM",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/HEADER/properties/ERR_NM/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "BODY",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "ITEM",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "array"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "mileageCnt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageCnt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageCnt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "mileageNo",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageNo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageNo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "mileageSj",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageSj",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageSj/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "mileageValue",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageValue",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/items/properties/mileageValue/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "totalCount",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/totalCount",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/totalCount/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "pageNo",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/pageNo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/pageNo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "numOfRows",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/numOfRows",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/numOfRows/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181900,
+                    "byte_start": 174043,
+                    "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "lastPageNo",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/lastPageNo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/lastPageNo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "integer"
+          }
+        ],
+        "http_status_code": 200,
+        "payload": {
+          "kind": "xml",
+          "media_types": [
+            "application/xml"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": null
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": 1,
+            "minimum": 0,
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_optional_by_schema_default",
+                "locator": {
+                  "byte_end": 181900,
+                  "byte_start": 174043,
+                  "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "documented"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY/properties/ITEM/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/properties/WORLDJOB/properties/BODY",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown",
+          "value_type": "array"
+        },
+        "root_shape": {
+          "kind": "xml_element",
+          "qname": {
+            "local_name": "response",
+            "namespace": null
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_xml_namespace_not_established",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema/xml",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 181900,
+                "byte_start": 174043,
+                "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "accepted_http_success_status",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "success_response_branch",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_schema_variant_root",
+            "locator": {
+              "byte_end": 181900,
+              "byte_start": 174043,
+              "json_pointer": "#/paths/~1openApi38/get/responses/200/schema",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 204491,
+      "capture_role": "catalogue_identity_and_inline_openapi_operation",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15160467/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:49:56Z",
+      "sha256": "a4b6c001a698ff98c7bdfc2721a9793c196b8592b554adc6dccf6af0da51e606",
+      "source_id": "catalogue_detail_page"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_host",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/host",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "operation_specific",
+      "source_refs": [
+        {
+          "evidence_kind": "operation_http_method",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38/get",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "GET"
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_path",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/paths/~1openApi38",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/B490007/worldjob38/openApi38"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_scheme",
+          "locator": {
+            "byte_end": 181900,
+            "byte_start": 174043,
+            "json_pointer": "#/schemes/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "https"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}
