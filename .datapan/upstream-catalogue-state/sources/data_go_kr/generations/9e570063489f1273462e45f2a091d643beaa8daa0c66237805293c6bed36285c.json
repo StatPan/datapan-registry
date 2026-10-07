@@ -1,0 +1,61 @@
+{
+  "attempts_by_id": {},
+  "attempts_consumed": 0,
+  "checkpoint_sha256": "d03e3e6209f83ec8d27b3eb448c115baa448f9bad1a353880e622fcddefb4a83",
+  "detail_queue_cursor": 264,
+  "detail_records": [],
+  "detail_retry_reset_ids": [],
+  "fencing_token": 1,
+  "generation_id": "9e570063489f1273462e45f2a091d643beaa8daa0c66237805293c6bed36285c",
+  "generation_inputs": {
+    "adapter_revision": "b235d6f053bd8ec1f87d6a889a07912dfde1a944353eb640da8713fdf640e4d6",
+    "baseline_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+    "candidate_sha256": "20c8348aa598163e41f3e41e3a718b3da002ccb05f6b569683a53ed7db7fd4d0",
+    "extractor_revision": "884815d693ed8de1b98d2fb3ec16f3be62a5f426a31da6797633517039cb52ef",
+    "generator_revision": "45a26cf2e401e4536cedb4c33a26f49701274dea8008807ce21d207143550d21",
+    "observation_failure_sha256": null,
+    "policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc",
+    "source_id": "data_go_kr",
+    "source_scope": "aggregate_supported_catalog"
+  },
+  "input_artifacts": [
+    {
+      "artifact_id": "11452106799",
+      "candidate_sha256": "20c8348aa598163e41f3e41e3a718b3da002ccb05f6b569683a53ed7db7fd4d0",
+      "diff_sha256": "0d70adc82c133abf409073182a21ac5958d03c323f21991a18e1aa952e51e24c",
+      "evidence_sha256": "073ad359d966ee32b72af268af8e1fba4d723911a446c2e37f6594ea3816e5a0",
+      "expires_at": "2026-11-05T23:54:10Z",
+      "name": "upstream-catalog-refresh-37548691738",
+      "run_id": "37548691738"
+    }
+  ],
+  "last_heartbeat_at": "2026-10-07T16:26:41Z",
+  "last_observation": {
+    "collection_status": "success",
+    "execution_mode": "live",
+    "observed_at": "2026-10-06T23:50:34Z",
+    "producer_run_id": "37548691738",
+    "refresh_evidence_sha256": "073ad359d966ee32b72af268af8e1fba4d723911a446c2e37f6594ea3816e5a0"
+  },
+  "last_progress_at": "2026-10-07T16:26:41Z",
+  "lease": null,
+  "observation_count": 1,
+  "observed_at": "2026-10-06T23:50:34Z",
+  "outcome": {
+    "reason": "valueerror"
+  },
+  "output_artifact": {
+    "artifact_id": null,
+    "bundle_manifest_sha256": null,
+    "expires_at": "2026-11-06T16:26:38Z",
+    "name": "upstream-catalogue-processing-37651926031-1",
+    "repository": "StatPan/datapan-registry",
+    "run_id": "37651926031"
+  },
+  "output_digests": [],
+  "request_reservation": null,
+  "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+  "source_id": "data_go_kr",
+  "source_scope": "aggregate_supported_catalog",
+  "status": "quarantined"
+}
