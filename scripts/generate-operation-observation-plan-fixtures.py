@@ -58,16 +58,22 @@ def build_records() -> list[dict[str, object]]:
         parameters = []
         for index, parameter in enumerate(spec["parameters"]):
             strategy = parameter["value_strategy"]
-            strategy_contract = {
-                "kind": strategy["kind"],
-                "authority": "synthetic_fixture",
-            }
+            strategy_contract = {"kind": strategy["kind"]}
+            if strategy["kind"] == "credential_reference":
+                strategy_contract.update({"authority": "runtime_binding", "binding_field": "credential_reference"})
+            else:
+                strategy_contract["authority"] = "synthetic_fixture"
             strategy_contract.update(
-                {name: strategy[name] for name in ("minimum", "maximum", "offset_years") if name in strategy}
+                {
+                    name: strategy[name]
+                    for name in ("minimum", "maximum", "offset_years", "selection", "selected_value", "minimum_year", "maximum_year", "anchor")
+                    if name in strategy
+                }
             )
             parameters.append(
                 {
                     "name": parameter["name"],
+                    **({"qualified_name": parameter["qualified_name"]} if "qualified_name" in parameter else {}),
                     "location": parameter["location"],
                     "cardinality": parameter["cardinality"],
                     "value_strategy": strategy_contract,
@@ -85,6 +91,11 @@ def build_records() -> list[dict[str, object]]:
                 "protocol": spec["protocol"],
                 "authority": "synthetic_fixture",
                 "evidence_refs": [evidence("/transport")],
+            },
+            "operation_effect": {
+                **spec["effect"],
+                "authority": "synthetic_fixture",
+                "evidence_refs": [evidence("/effect")],
             },
             "parameter_inventory_evidence_refs": [evidence("/parameters")],
             "parameters": parameters,
@@ -118,8 +129,10 @@ def build_records() -> list[dict[str, object]]:
             "source_binding": {
                 "source_id": "synthetic_test",
                 "provider": "synthetic-test-provider",
+                "adapter_id": "synthetic-test",
                 "inventory_status": "source_complete",
                 "inventory_unknown": False,
+                "test_only": True,
                 "source_artifacts": [source_ref],
             },
             "operation_identity": {
@@ -135,6 +148,7 @@ def build_records() -> list[dict[str, object]]:
             "runtime_binding": {
                 "status": "bound",
                 "credential_reference": spec["runtime_binding"]["credential_reference"],
+                "credential_scope_key": source["shared_quota_policy"]["scope_key"],
                 "quota_policies": quota_policies,
                 "observation_period_seconds": spec["runtime_binding"]["observation_period_seconds"],
                 "evidence_refs": [pointer_ref(source_hash, f"#/operations/{key}/runtime_binding")],

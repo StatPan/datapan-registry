@@ -5,7 +5,7 @@
         "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
         "evidence_kind": "synthetic_fixture",
         "json_pointer": "#/test_only",
-        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+        "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
       }
     ],
     "reasons": [],
@@ -26,18 +26,19 @@
         "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
         "evidence_kind": "synthetic_fixture",
         "json_pointer": "#/operations/rest",
-        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+        "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
       }
     ],
     "request_contract": {
       "authentication": {
+        "cardinality": "required_single",
         "credential_reference_required": true,
         "evidence_refs": [
           {
             "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
             "evidence_kind": "synthetic_fixture",
             "json_pointer": "#/operations/rest/authentication",
-            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+            "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
           }
         ],
         "mechanism": "service_key",
@@ -51,7 +52,7 @@
             "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
             "evidence_kind": "synthetic_fixture",
             "json_pointer": "#/operations/rest/limits",
-            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+            "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
           }
         ],
         "max_request_bytes": 4096,
@@ -59,12 +60,24 @@
         "request_budget": 1,
         "timeout_ms": 1000
       },
+      "operation_effect": {
+        "authority": "synthetic_fixture",
+        "classification": "read_only",
+        "evidence_refs": [
+          {
+            "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+            "evidence_kind": "synthetic_fixture",
+            "json_pointer": "#/operations/rest/effect",
+            "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
+          }
+        ]
+      },
       "parameter_inventory_evidence_refs": [
         {
           "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
           "evidence_kind": "synthetic_fixture",
           "json_pointer": "#/operations/rest/parameters",
-          "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+          "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
         }
       ],
       "parameters": [
@@ -75,7 +88,7 @@
               "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
               "evidence_kind": "synthetic_fixture",
               "json_pointer": "#/operations/rest/parameters/0",
-              "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+              "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
             }
           ],
           "location": "query",
@@ -84,7 +97,27 @@
             "authority": "synthetic_fixture",
             "kind": "bounded_integer",
             "maximum": 1,
-            "minimum": 1
+            "minimum": 1,
+            "selected_value": 1,
+            "selection": "fixed"
+          }
+        },
+        {
+          "cardinality": "required_single",
+          "evidence_refs": [
+            {
+              "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
+              "evidence_kind": "synthetic_fixture",
+              "json_pointer": "#/operations/rest/parameters/1",
+              "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
+            }
+          ],
+          "location": "query",
+          "name": "serviceKey",
+          "value_strategy": {
+            "authority": "runtime_binding",
+            "binding_field": "credential_reference",
+            "kind": "credential_reference"
           }
         }
       ],
@@ -95,7 +128,7 @@
             "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
             "evidence_kind": "synthetic_fixture",
             "json_pointer": "#/operations/rest/response_assertion",
-            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+            "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
           }
         ],
         "expected_status_codes": [
@@ -110,11 +143,11 @@
             "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
             "evidence_kind": "synthetic_fixture",
             "json_pointer": "#/operations/rest/transport",
-            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+            "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
           }
         ],
         "host": "api.example.invalid",
-        "method_or_action": "GET",
+        "http_method": "GET",
         "path": "/v1/items",
         "protocol": "REST",
         "scheme": "https"
@@ -124,12 +157,13 @@
   },
   "runtime_binding": {
     "credential_reference": "test-vault/open-data/rest-and-soap",
+    "credential_scope_key": "synthetic:credential-group:local-test",
     "evidence_refs": [
       {
         "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
         "evidence_kind": "synthetic_fixture",
         "json_pointer": "#/operations/rest/runtime_binding",
-        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+        "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
       }
     ],
     "observation_period_seconds": 3600,
@@ -140,7 +174,7 @@
             "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
             "evidence_kind": "synthetic_fixture",
             "json_pointer": "#/shared_quota_policy",
-            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+            "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
           }
         ],
         "max_concurrent": 1,
@@ -157,7 +191,7 @@
             "artifact_path": "fixtures/operation-observation-plan/synthetic-source.json",
             "evidence_kind": "synthetic_fixture",
             "json_pointer": "#/api_quota_policies/rest",
-            "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+            "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
           }
         ],
         "max_concurrent": 1,
@@ -173,16 +207,18 @@
   },
   "schema_version": "datapan.operation-observation-plan.v1",
   "source_binding": {
+    "adapter_id": "synthetic-test",
     "inventory_status": "source_complete",
     "inventory_unknown": false,
     "provider": "synthetic-test-provider",
     "source_artifacts": [
       {
-        "bytes": 3093,
+        "bytes": 4248,
         "path": "fixtures/operation-observation-plan/synthetic-source.json",
-        "sha256": "6ee2f3ef868886d02c33aaa58ad0e4cce2eef4195d80433566bb211aad861a9e"
+        "sha256": "1532cc4a9d728d0cea6c614d4a0ade1f9ed22bfc33b28101de05f7855bf07d3c"
       }
     ],
-    "source_id": "synthetic_test"
+    "source_id": "synthetic_test",
+    "test_only": true
   }
 }

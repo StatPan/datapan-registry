@@ -9,14 +9,21 @@
         "scheme": "https",
         "host": "api.example.invalid",
         "path": "/v1/items",
-        "method_or_action": "GET"
+        "http_method": "GET"
       },
+      "effect": { "classification": "read_only" },
       "parameters": [
         {
           "name": "page",
           "location": "query",
           "cardinality": "required_single",
-          "value_strategy": { "kind": "bounded_integer", "minimum": 1, "maximum": 1 }
+          "value_strategy": { "kind": "bounded_integer", "minimum": 1, "maximum": 1, "selection": "fixed", "selected_value": 1 }
+        },
+        {
+          "name": "serviceKey",
+          "location": "query",
+          "cardinality": "required_single",
+          "value_strategy": { "kind": "credential_reference" }
         }
       ],
       "authentication": {
@@ -24,6 +31,7 @@
         "mechanism": "service_key",
         "placement": "query",
         "parameter_name": "serviceKey",
+        "cardinality": "required_single",
         "credential_reference_required": true
       },
       "limits": {
@@ -49,20 +57,35 @@
         "scheme": "https",
         "host": "soap.example.invalid",
         "path": "/service",
-        "method_or_action": "urn:synthetic:Read"
+        "http_method": "POST",
+        "soap_action": "urn:synthetic:Read",
+        "soap_version": "1.1",
+        "envelope_namespace": "http://schemas.xmlsoap.org/soap/envelope/",
+        "operation_qname": { "namespace": "urn:synthetic:items", "local_name": "Read" },
+        "body_encoding": "document_literal"
       },
+      "effect": { "classification": "read_only" },
       "parameters": [
         {
           "name": "recordId",
           "location": "body",
           "cardinality": "required_single",
-          "value_strategy": { "kind": "reviewed_literal" }
+          "value_strategy": { "kind": "reviewed_literal", "selected_value": "synthetic-item-1" }
+        },
+        {
+          "name": "ServiceKey",
+          "qualified_name": { "namespace": "urn:synthetic:auth", "local_name": "ServiceKey" },
+          "location": "soap_header",
+          "cardinality": "required_single",
+          "value_strategy": { "kind": "credential_reference" }
         }
       ],
       "authentication": {
         "requirement": "required",
         "mechanism": "service_key",
         "placement": "soap_header",
+        "header_qname": { "namespace": "urn:synthetic:auth", "local_name": "ServiceKey" },
+        "cardinality": "required_single",
         "credential_reference_required": true
       },
       "limits": {
@@ -73,7 +96,8 @@
       },
       "response_assertion": {
         "kind": "soap_fault_free",
-        "empty_result_semantics": "unknown"
+        "empty_result_semantics": "valid",
+        "assertion_ref": "fault-free-and-empty-valid"
       },
       "runtime_binding": {
         "credential_reference": "test-vault/open-data/rest-and-soap",
