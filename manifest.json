@@ -718,8 +718,8 @@
     {
       "path": "schemas/datapan.operation-observation-plan.v1.schema.json",
       "kind": "schema",
-      "bytes": 51431,
-      "sha256": "f56ec01a26662e05092118497bdc4d1c24612c35db870358ffb2058e9127454f"
+      "bytes": 51234,
+      "sha256": "cafa93014d7a32ef072f74df1a730f681e5b206440e4a83e9cdf426f6686e162"
     },
     {
       "path": "schemas/datapan.operation-observation-policy.v1.schema.json",
@@ -4194,14 +4194,14 @@
       "path": "schemas/index.json",
       "kind": "schema_index",
       "bytes": 52735,
-      "sha256": "24bb2ec0ac4836f8efbe8ea64d5f959d0963c607693ed8239da9bae76e447efa",
+      "sha256": "75ad34ac375f76cf93b98d3e74244ffe03ab38538b2f90d2e78b5f91416f2118",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
     },
     {
       "path": "scripts/generate-operation-observation-plan.py",
       "kind": "operation_observation_plan_source",
-      "bytes": 219933,
-      "sha256": "75eb3c90e8b478be53c03170ba8b3ef982bc3e22f6351feb3ebd4bfb4ea203dc"
+      "bytes": 220064,
+      "sha256": "6665a3cac6787fe56864aff7cb033c19d3ed3e2891e1906112cad0d831fda131"
     },
     {
       "path": "scripts/operation_document_evidence.py",

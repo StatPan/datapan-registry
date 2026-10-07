@@ -104,6 +104,7 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             ids = [record["operation_identity"]["operation_id"] for record in shard["records"]]
             self.assertLessEqual(len(ids), 256)
             self.assertEqual(ids, sorted(ids))
+            self.assertTrue(all("source_artifacts" not in record["source_binding"] for record in shard["records"]))
 
     def test_all_owned_schema_local_references_resolve(self):
         schema_paths = sorted((ROOT / "schemas").glob("datapan.*.schema.json"))

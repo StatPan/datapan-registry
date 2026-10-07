@@ -2573,7 +2573,10 @@ def make_incomplete_plan(
     plan: dict[str, Any] = {
         "schema_version": "datapan.operation-observation-plan.v1",
         "artifact_kind": "operation_plan",
-        "source_binding": scope,
+        "source_binding": {
+            key: scope[key]
+            for key in ("source_id", "provider", "adapter_id", "inventory_status", "inventory_unknown", "test_only")
+        },
         "operation_identity": {"operation_id": operation_id, "protocol": protocol, **identity},
         "request_plan": {
             "status": "incomplete",
@@ -3616,7 +3619,7 @@ def validate_artifacts(index_path: Path = INDEX_PATH, root: Path = ROOT) -> dict
             total_ids.add(pair)
         expected_binding = {
             field: scope[field]
-            for field in ("source_id", "provider", "adapter_id", "inventory_status", "inventory_unknown", "test_only", "source_artifacts")
+            for field in ("source_id", "provider", "adapter_id", "inventory_status", "inventory_unknown", "test_only")
         }
         for record in all_records:
             if record["source_binding"]["source_id"] == source_id:
