@@ -149,23 +149,26 @@
   },
   "operation_document": {
     "purpose": {
-      "source_refs": [],
-      "status": "unknown",
-      "value": null
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 179974,
+            "byte_start": 175254,
+            "json_pointer": "#/paths/~1getPublicgarageQry/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "서울시설공단 버스 차고지 현황 조회한다."
     },
     "title": {
       "source_refs": [
         {
-          "evidence_kind": "catalogue_dataset_identity",
-          "locator": {
-            "input_id": "publicDataPk",
-            "kind": "html_hidden_input",
-            "source_id": "catalogue_detail_page",
-            "value": "15158559"
-          }
-        },
-        {
-          "evidence_kind": "operation_name",
+          "evidence_kind": "official_operation_title",
           "locator": {
             "byte_end": 179974,
             "byte_start": 175254,
@@ -174,31 +177,9 @@
             "source_id": "catalogue_detail_page",
             "variable_name": "swaggerJson"
           }
-        },
-        {
-          "evidence_kind": "operation_endpoint_path",
-          "locator": {
-            "byte_end": 179974,
-            "byte_start": 175254,
-            "json_pointer": "#/paths/~1getPublicgarageQry",
-            "kind": "html_inline_json",
-            "source_id": "catalogue_detail_page",
-            "variable_name": "swaggerJson"
-          }
-        },
-        {
-          "evidence_kind": "operation_id",
-          "locator": {
-            "byte_end": 179974,
-            "byte_start": 175254,
-            "json_pointer": "#/paths/~1getPublicgarageQry/get/operationId",
-            "kind": "html_inline_json",
-            "source_id": "catalogue_detail_page",
-            "variable_name": "swaggerJson"
-          }
         }
       ],
-      "status": "registered_manifest",
+      "status": "documented",
       "value": "버스 차고지 현황 정보"
     }
   },
@@ -657,7 +638,7 @@
   "parse_status": "parsed_with_unknowns",
   "parser": {
     "id": "registered-operation-document-parser",
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "response_assertion": {
     "empty_result_semantics": {
@@ -3461,8 +3442,11 @@
           "value_type": null
         },
         "root_shape": {
-          "kind": "unknown",
-          "qname": null,
+          "kind": "xml_element",
+          "qname": {
+            "local_name": "response",
+            "namespace": null
+          },
           "source_refs": [
             {
               "evidence_kind": "response_schema_variant_root",
@@ -3470,6 +3454,17 @@
                 "byte_end": 179974,
                 "byte_start": 175254,
                 "json_pointer": "#/paths/~1getPublicgarageQry/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_xml_namespace_not_established",
+              "locator": {
+                "byte_end": 179974,
+                "byte_start": 175254,
+                "json_pointer": "#/paths/~1getPublicgarageQry/get/responses/200/schema/xml",
                 "kind": "html_inline_json",
                 "source_id": "catalogue_detail_page",
                 "variable_name": "swaggerJson"
@@ -3569,7 +3564,7 @@
       },
       "parser": {
         "id": "registered-operation-document-parser",
-        "version": "2.0.0"
+        "version": "2.1.0"
       },
       "retrieved_at": "2026-10-07T04:52:52Z",
       "sha256": "62f535a5fa98f8a13c5096966ff912234039140c9c7259f250622190f8b53188",

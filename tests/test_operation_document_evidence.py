@@ -333,6 +333,33 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         self.assertIn("#/paths/~1health/get/parameters/0/in", pointers)
         self.assertIn("#/paths/~1health/get/parameters/0/required", pointers)
 
+    def test_openapi_operation_title_and_plain_purpose_are_source_bound_and_sensitive_text_is_omitted(self) -> None:
+        document = _swagger_document()
+        operation_spec = document["paths"]["/health"]["get"]
+        operation_spec["description"] = "공공 헬스체크 상태를 조회합니다."
+        evidence = DOCS.parse_openapi_evidence(
+            _operation(), page_raw=_swagger_page(document), page_retrieved_at="2026-10-07T03:00:00Z",
+        )
+        operation_document = evidence["operation_document"]
+        self.assertEqual(operation_document["title"]["value"], "헬스체크 조회")
+        self.assertEqual(operation_document["title"]["status"], "documented")
+        self.assertEqual(operation_document["purpose"]["value"], "공공 헬스체크 상태를 조회합니다.")
+        self.assertEqual(operation_document["purpose"]["status"], "documented")
+        pointers = {ref["locator"]["json_pointer"] for fact in operation_document.values() for ref in fact["source_refs"]}
+        self.assertIn("#/paths/~1health/get/summary", pointers)
+        self.assertIn("#/paths/~1health/get/description", pointers)
+        self.assertEqual(evidence["effect"]["status"], "unknown")
+
+        operation_spec["description"] = "응답 예시: {\"serviceKey\":\"PRIVATE_SOURCE_VALUE\"}"
+        redacted = DOCS.parse_openapi_evidence(
+            _operation(), page_raw=_swagger_page(document), page_retrieved_at="2026-10-07T03:00:00Z",
+        )
+        encoded = json.dumps(redacted, ensure_ascii=False)
+        self.assertNotIn("PRIVATE_SOURCE_VALUE", encoded)
+        self.assertEqual(redacted["operation_document"]["purpose"]["value"], None)
+        self.assertEqual(redacted["operation_document"]["purpose"]["status"], "unknown")
+        self.assertEqual(redacted["operation_document"]["purpose"]["source_refs"][0]["locator"]["json_pointer"], "#/paths/~1health/get/description")
+
     def test_inline_swagger_response_contract_keeps_http_codes_and_provider_codes_separate(self) -> None:
         document = _swagger_document()
         document["paths"]["/health"]["get"]["responses"]["C10"] = {"description": "INVALID_REQUEST_PARAMETER_ERROR"}
@@ -436,6 +463,52 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         self.assertEqual(branches[2]["root_shape"]["kind"], "array")
         status_refs = [item["locator"]["json_pointer"] for branch in branches for item in branch["source_refs"] if item["evidence_kind"] == "documented_http_error_status"]
         self.assertEqual(status_refs, ["#/paths/~1health/get/responses/400", "#/paths/~1health/get/responses/400", "#/paths/~1health/get/responses/503"])
+        try:
+            from jsonschema import Draft202012Validator
+        except ImportError:
+            return
+        schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(evidence)), [])
+
+    def test_explicitly_unnamespaced_xml_response_qnames_are_preserved(self) -> None:
+        document = _swagger_document()
+        document["produces"] = ["application/xml"]
+        document["paths"]["/health"]["get"]["responses"]["200"]["schema"] = {
+            "type": "object",
+            "additionalProperties": False,
+            "xml": {"name": "Response", "namespace": ""},
+            "required": ["items"],
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "xml": {"name": "items", "namespace": "", "wrapped": True},
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "xml": {"name": "item", "namespace": ""},
+                        "properties": {"name": {"type": "string", "xml": {"name": "name", "namespace": ""}}},
+                    },
+                },
+            },
+        }
+        evidence = DOCS.parse_openapi_evidence(
+            _operation(), page_raw=_swagger_page(document), page_retrieved_at="2026-10-07T03:00:00Z",
+        )
+        branch = evidence["response_contract"]["success_branches"][0]
+        self.assertEqual(branch["root_shape"]["status"], "documented")
+        self.assertEqual(branch["root_shape"]["qname"], {"namespace": "", "local_name": "Response"})
+        self.assertEqual(branch["result_collection"]["status"], "documented")
+        self.assertEqual(branch["result_collection"]["container_path"]["segments"][0]["namespace"], "")
+        self.assertEqual(branch["result_collection"]["item_path"]["segments"][0]["namespace"], "")
+
+        document["paths"]["/health"]["get"]["responses"]["200"]["schema"]["xml"] = {"name": "Response"}
+        namespace_unknown = DOCS.parse_openapi_evidence(
+            _operation(), page_raw=_swagger_page(document), page_retrieved_at="2026-10-07T03:00:00Z",
+        )["response_contract"]["success_branches"][0]
+        self.assertEqual(namespace_unknown["root_shape"]["status"], "unknown")
+        self.assertEqual(namespace_unknown["root_shape"]["kind"], "xml_element")
+        self.assertEqual(namespace_unknown["root_shape"]["qname"], {"namespace": None, "local_name": "Response"})
+        self.assertEqual(namespace_unknown["result_collection"]["status"], "unknown")
         try:
             from jsonschema import Draft202012Validator
         except ImportError:

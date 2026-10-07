@@ -1,0 +1,37 @@
+{
+  "attempted_at": "2026-10-07T07:05:45Z",
+  "documents": [
+    {
+      "bytes": 200439,
+      "encoding": "utf-8",
+      "media_type": "text/html; charset=UTF-8",
+      "present": true,
+      "retrieved_at": "2026-10-07T07:02:38Z",
+      "role": "catalogue",
+      "sha256": "dba8f6ba1a7c1a2fc9722911271f82227ce523be56f922915096b6c8272b305e"
+    },
+    {
+      "bytes": 9249,
+      "encoding": "utf-8",
+      "media_type": "text/html; charset=UTF-8",
+      "present": true,
+      "retrieved_at": "2026-10-07T07:02:39Z",
+      "role": "operation_detail",
+      "sha256": "bea2ea28cbe6b4c9f446d4563a7f11993209059be703028aff5221ebbc668542"
+    },
+    {
+      "bytes": 352277,
+      "encoding": "utf-8",
+      "media_type": "application/octet-stream; charset=UTF-8",
+      "present": true,
+      "retrieved_at": "2026-10-07T07:02:40Z",
+      "role": "reference_guide",
+      "sha256": "c4140512d95e0277de8f11882dc0ba3731f19b09014ea427280a14c2962d480c"
+    }
+  ],
+  "evidence_sha256": "1f22b30bdc70be65f841d6ae4ae1835e359ea21ce7c2508646d2fec28b6c1ec2",
+  "operation_id": "030ebc8192982f3619a023654971ee5dbdbbb2a284e9b0180a47d66723d179f3",
+  "reason_code": null,
+  "schema_version": "datapan.operation-document-capture-receipt.v2",
+  "status": "acquired"
+}

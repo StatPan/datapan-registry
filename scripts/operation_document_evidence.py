@@ -41,7 +41,7 @@ EVIDENCE_DIR = ROOT / "reports/operation-document-evidence"
 EVIDENCE_V2_DIR = EVIDENCE_DIR / "v2"
 SCHEMA_VERSION = "datapan.operation-document-evidence.v2"
 PARSER_ID = "registered-operation-document-parser"
-PARSER_VERSION = "2.0.0"
+PARSER_VERSION = "2.1.0"
 HOST = "www.data.go.kr"
 DETAIL_ROUTE = "/tcs/dss/selectApiDetailFunction.do"
 DOWNLOAD_ROUTE = "/cmm/cmm/fileDownload.do"
@@ -342,6 +342,24 @@ def _safe_metadata_cell(value: str, *, field_name: str, parameter_name: str) -> 
     ):
         return None
     if any(ord(char) < 0x20 for char in text):
+        return None
+    return text
+
+
+def _safe_operation_document_text(value: Any) -> str | None:
+    """Keep only short plain operation prose, never examples or wire values."""
+    if not isinstance(value, str) or any(char in value for char in "\r\n\t"):
+        return None
+    text = " ".join(value.split()).strip()
+    if not text or text != value or len(text) > 256:
+        return None
+    if _safe_metadata_cell(text, field_name="operation_document", parameter_name="") is None:
+        return None
+    if re.search(r"(?i)(?:example|sample|request|response|servicekey|apikey|authorization|credential|token|password|https?://|\burl\b)", text):
+        return None
+    if re.search(r"(예시|샘플|요청|응답|인증키|토큰|비밀번호|쿼리|URL)", text):
+        return None
+    if any(char in text for char in "{}[]<>`=?|\\"):
         return None
     return text
 
@@ -720,6 +738,7 @@ def parse_openapi_evidence(
     byte_locator = lambda pointer: _json_pointer_locator("catalogue_detail_page", pointer, byte_range)
     ref = lambda pointer, kind: _source_ref(byte_locator(pointer), kind)
     summary_pointer = _json_pointer_child(operation_pointer, "summary")
+    description_pointer = _json_pointer_child(operation_pointer, "description")
     path_pointer = _json_pointer_child("#/paths", spec_path)
     identity["source_refs"] = [
         _source_ref({"source_id": "catalogue_detail_page", "kind": "html_hidden_input", "input_id": "publicDataPk", "value": identity["dataset_id"]}, "catalogue_dataset_identity"),
@@ -1178,21 +1197,29 @@ def parse_openapi_evidence(
                 root_namespace = root_xml.get("namespace")
                 root_kind = None
                 root_qname = None
+                root_status = "unknown"
                 if response_format == "xml":
-                    if isinstance(root_name, str) and root_name and isinstance(root_namespace, str) and root_namespace:
+                    if isinstance(root_name, str) and root_name:
                         root_kind = "xml_element"
-                        root_qname = {"namespace": root_namespace, "local_name": root_name}
-                        root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "xml"), "response_root_xml_qname"))
+                        root_qname = {"namespace": root_namespace if isinstance(root_namespace, str) else None, "local_name": root_name}
+                        if isinstance(root_namespace, str):
+                            root_status = "documented"
+                            root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "xml"), "response_root_xml_qname"))
+                        else:
+                            root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "xml"), "response_root_xml_namespace_not_established"))
                 elif root_type == "array":
                     root_kind = "array"
+                    root_status = "documented"
                     root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "type"), "response_root_array_type"))
                 elif root_type == "object" or isinstance(root_schema, dict) and isinstance(root_schema.get("properties"), dict):
                     root_kind = "object"
+                    root_status = "documented"
                     root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "type"), "response_root_object_type") if isinstance(root_type, str) else ref(_json_pointer_child(root_pointer, "properties"), "response_root_object_properties"))
                 elif root_type in {"string", "integer", "number", "boolean"}:
                     root_kind = "scalar"
+                    root_status = "documented"
                     root_shape["source_refs"].append(ref(_json_pointer_child(root_pointer, "type"), "response_root_scalar_type"))
-                root_shape.update(status="documented" if root_kind else "unknown", kind=root_kind or "unknown", qname=root_qname)
+                root_shape.update(status=root_status, kind=root_kind or "unknown", qname=root_qname)
                 root_shape["source_refs"].extend(ref(pointer, "response_root_schema_reference") for pointer in root_ref_pointers)
             branch_collection = response_contract["success_branches"] if is_http_success else response_contract["documented_http_error_branches"]
             branch_collection.append({
@@ -1335,6 +1362,7 @@ def parse_openapi_evidence(
     ]
     explicit_unknowns = [
         "operation_effect_not_established_by_openapi",
+        "operation_purpose_not_established" if not isinstance(operation_spec.get("description"), str) or _safe_operation_document_text(operation_spec.get("description")) is None else "",
         "authentication_security_requirement_not_established" if authentication["status"] == "unknown" else "",
         "parameter_requiredness_not_established" if any(parameter["requiredness"]["status"] != "documented" for parameter in parameters) else "",
         "request_data_types_not_established" if any(parameter["data_type"]["status"] != "documented" for parameter in parameters) else "",
@@ -1346,11 +1374,24 @@ def parse_openapi_evidence(
         "response_empty_result_semantics_not_declared",
         "response_error_contract_not_established",
     ]
+    title_value = _safe_operation_document_text(operation_spec.get("summary"))
+    title_fact = {
+        "value": title_value,
+        "status": "documented" if title_value is not None else "unknown",
+        "source_refs": [ref(summary_pointer, "official_operation_title")] if isinstance(operation_spec.get("summary"), str) else [],
+    }
+    description_value = operation_spec.get("description")
+    purpose_value = _safe_operation_document_text(description_value)
+    purpose_fact = {
+        "value": purpose_value,
+        "status": "documented" if purpose_value is not None else "unknown" if isinstance(description_value, str) else "not_found_in_parsed_operation_sources",
+        "source_refs": [ref(description_pointer, "official_operation_purpose" if purpose_value is not None else "operation_purpose_suppressed_untrusted_content")] if isinstance(description_value, str) else [],
+    }
     result = {
         "schema_version": SCHEMA_VERSION,
         "parser": {"id": PARSER_ID, "version": PARSER_VERSION},
         "identity": identity,
-        "operation_document": {"title": {"value": identity["operation_name"], "status": "registered_manifest", "source_refs": identity.get("source_refs", [])}, "purpose": {"value": None, "status": "unknown", "source_refs": []}},
+        "operation_document": {"title": title_fact, "purpose": purpose_fact},
         "source_bindings": [source_binding],
         "parse_status": "parsed_with_unknowns",
         "transport": {

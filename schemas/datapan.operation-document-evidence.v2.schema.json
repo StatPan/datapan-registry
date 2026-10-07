@@ -2276,8 +2276,10 @@
                   ],
                   "properties": {
                     "namespace": {
-                      "type": "string",
-                      "minLength": 1
+                      "type": [
+                        "string",
+                        "null"
+                      ]
                     },
                     "local_name": {
                       "type": "string",

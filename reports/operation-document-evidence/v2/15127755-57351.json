@@ -149,23 +149,26 @@
   },
   "operation_document": {
     "purpose": {
-      "source_refs": [],
-      "status": "unknown",
-      "value": null
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 182646,
+            "byte_start": 173557,
+            "json_pointer": "#/paths/~1getStatisticsData/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "통계표ID, 분류, 항목 코드 등을 통해 KOSIS 통계표 수치데이터를 조회하는 KOSIS 통계자료 서비스"
     },
     "title": {
       "source_refs": [
         {
-          "evidence_kind": "catalogue_dataset_identity",
-          "locator": {
-            "input_id": "publicDataPk",
-            "kind": "html_hidden_input",
-            "source_id": "catalogue_detail_page",
-            "value": "15127755"
-          }
-        },
-        {
-          "evidence_kind": "operation_name",
+          "evidence_kind": "official_operation_title",
           "locator": {
             "byte_end": 182646,
             "byte_start": 173557,
@@ -174,31 +177,9 @@
             "source_id": "catalogue_detail_page",
             "variable_name": "swaggerJson"
           }
-        },
-        {
-          "evidence_kind": "operation_endpoint_path",
-          "locator": {
-            "byte_end": 182646,
-            "byte_start": 173557,
-            "json_pointer": "#/paths/~1getStatisticsData",
-            "kind": "html_inline_json",
-            "source_id": "catalogue_detail_page",
-            "variable_name": "swaggerJson"
-          }
-        },
-        {
-          "evidence_kind": "operation_id",
-          "locator": {
-            "byte_end": 182646,
-            "byte_start": 173557,
-            "json_pointer": "#/paths/~1getStatisticsData/get/operationId",
-            "kind": "html_inline_json",
-            "source_id": "catalogue_detail_page",
-            "variable_name": "swaggerJson"
-          }
         }
       ],
-      "status": "registered_manifest",
+      "status": "documented",
       "value": "KOSIS 통계자료 서비스"
     }
   },
@@ -3207,7 +3188,7 @@
   "parse_status": "parsed_with_unknowns",
   "parser": {
     "id": "registered-operation-document-parser",
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "response_assertion": {
     "empty_result_semantics": {
@@ -9508,7 +9489,7 @@
       },
       "parser": {
         "id": "registered-operation-document-parser",
-        "version": "2.0.0"
+        "version": "2.1.0"
       },
       "retrieved_at": "2026-10-07T06:11:40Z",
       "sha256": "78b3ad2d7c521e3068796e0e82d89c0a9e45616cdc109539e9ae1d4daa3f964d",

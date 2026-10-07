@@ -48,14 +48,14 @@
     "registered_api_operations": 12662,
     "statuses": {
       "acquired": 0,
-      "ambiguous": 0,
+      "ambiguous": 45,
       "invalid": 0,
-      "missing": 0,
+      "missing": 4,
       "parsed_complete": 0,
-      "parsed_with_unknowns": 5,
-      "pending": 12657,
-      "retryable": 0,
-      "unsupported": 0
+      "parsed_with_unknowns": 102,
+      "pending": 12487,
+      "retryable": 11,
+      "unsupported": 13
     }
   }
 }

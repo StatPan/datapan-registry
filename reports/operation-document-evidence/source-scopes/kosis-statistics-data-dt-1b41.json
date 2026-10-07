@@ -3227,7 +3227,7 @@
   "parse_status": "parsed_with_unknowns",
   "parser": {
     "id": "registered-operation-document-parser",
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "registry_binding": {
     "candidate_artifact": "reports/kosis/runtime-candidates.json",
@@ -3954,6 +3954,7 @@
       "status": "documented"
     },
     "documented_fields": [],
+    "documented_http_error_branches": [],
     "payload": {
       "kind": "unknown",
       "media_types": [],
@@ -3996,8 +3997,7 @@
       "source_refs": [],
       "status": "unknown"
     },
-    "success_branches": [],
-    "documented_http_error_branches": []
+    "success_branches": []
   },
   "schema_version": "datapan.operation-document-evidence.v2",
   "source_bindings": [
@@ -4015,7 +4015,7 @@
       },
       "parser": {
         "id": "registered-operation-document-parser",
-        "version": "2.0.0"
+        "version": "2.1.0"
       },
       "retrieved_at": "2026-10-07T06:15:34Z",
       "sha256": "ffa38d0e4afaf09d54b8e3542fe815b5a4cc1237a4376b4812ce49fd15b07c52",
@@ -4035,7 +4035,7 @@
       },
       "parser": {
         "id": "registered-operation-document-parser",
-        "version": "2.0.0"
+        "version": "2.1.0"
       },
       "retrieved_at": "2026-10-07T06:16:32Z",
       "sha256": "0d2de8e58bebdeb1546b9accc805407c6c8fc0ece0eaba9af2ef6fcc578fb821",

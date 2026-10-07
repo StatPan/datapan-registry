@@ -149,23 +149,26 @@
   },
   "operation_document": {
     "purpose": {
-      "source_refs": [],
-      "status": "unknown",
-      "value": null
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 178108,
+            "byte_start": 174016,
+            "json_pointer": "#/paths/~1getrestrnt/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "문화시설 식당 상세 정보를 조회 하는 API"
     },
     "title": {
       "source_refs": [
         {
-          "evidence_kind": "catalogue_dataset_identity",
-          "locator": {
-            "input_id": "publicDataPk",
-            "kind": "html_hidden_input",
-            "source_id": "catalogue_detail_page",
-            "value": "15000863"
-          }
-        },
-        {
-          "evidence_kind": "operation_name",
+          "evidence_kind": "official_operation_title",
           "locator": {
             "byte_end": 178108,
             "byte_start": 174016,
@@ -174,31 +177,9 @@
             "source_id": "catalogue_detail_page",
             "variable_name": "swaggerJson"
           }
-        },
-        {
-          "evidence_kind": "operation_endpoint_path",
-          "locator": {
-            "byte_end": 178108,
-            "byte_start": 174016,
-            "json_pointer": "#/paths/~1getrestrnt",
-            "kind": "html_inline_json",
-            "source_id": "catalogue_detail_page",
-            "variable_name": "swaggerJson"
-          }
-        },
-        {
-          "evidence_kind": "operation_id",
-          "locator": {
-            "byte_end": 178108,
-            "byte_start": 174016,
-            "json_pointer": "#/paths/~1getrestrnt/get/operationId",
-            "kind": "html_inline_json",
-            "source_id": "catalogue_detail_page",
-            "variable_name": "swaggerJson"
-          }
         }
       ],
-      "status": "registered_manifest",
+      "status": "documented",
       "value": "문화시설 식당 상세 정보를 조회"
     }
   },
@@ -657,7 +638,7 @@
   "parse_status": "parsed_with_unknowns",
   "parser": {
     "id": "registered-operation-document-parser",
-    "version": "2.0.0"
+    "version": "2.1.0"
   },
   "response_assertion": {
     "empty_result_semantics": {
@@ -3664,7 +3645,7 @@
       },
       "parser": {
         "id": "registered-operation-document-parser",
-        "version": "2.0.0"
+        "version": "2.1.0"
       },
       "retrieved_at": "2026-10-07T04:52:50Z",
       "sha256": "110a5bd859f9c5b74b8caf264705e45b97fc4e2a9e2ba8d2504506b405f4b6a4",
