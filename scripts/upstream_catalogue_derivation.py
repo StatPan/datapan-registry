@@ -744,6 +744,23 @@ def authenticate_canonical_merge_ack(
     workflow_path = promotion.get("promotion_workflow_path") if isinstance(promotion, Mapping) else None
     if not isinstance(workflow_path, str) or not workflow_path:
         raise DerivationError("canonical_parent_promotion_workflow_missing")
+    clock = health_policy.get("clock") if isinstance(health_policy, Mapping) else None
+    maximum_future_skew = clock.get("maximum_future_skew_seconds", 300) if isinstance(clock, Mapping) else 300
+    try:
+        valid_now = isinstance(now, dt.datetime) and now.tzinfo is not None and now.utcoffset() is not None
+    except (OverflowError, TypeError, ValueError):
+        valid_now = False
+    if (
+        isinstance(maximum_future_skew, bool)
+        or not isinstance(maximum_future_skew, int)
+        or not 0 <= maximum_future_skew <= 3600
+        or not valid_now
+    ):
+        raise DerivationError("canonical_parent_merge_ack_clock_invalid")
+    try:
+        now_utc = now.astimezone(dt.timezone.utc)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise DerivationError("canonical_parent_merge_ack_clock_invalid") from exc
     ack = dict(merged[0])
     run_id = str(ack.get("run_id") or "")
     attempt = ack.get("run_attempt")
@@ -758,21 +775,31 @@ def authenticate_canonical_merge_ack(
     trusted = health.trusted_promotion_run(
         ack, {run_key: evidence}, repository,
         {"promotion_workflow_path": workflow_path}, {workflow_path: workflow_id},
-        now, int(health_policy.get("clock", {}).get("maximum_future_skew_seconds", 300)),
+        now_utc, maximum_future_skew,
     )
     if trusted is None:
         raise DerivationError("canonical_parent_merge_ack_run_untrusted")
     try:
-        observed = dt.datetime.fromisoformat(str(ack.get("observed_at", "")).replace("Z", "+00:00"))
-        completed = dt.datetime.fromisoformat(str(trusted["jobs_completed_at"]).replace("Z", "+00:00"))
-    except (KeyError, TypeError, ValueError) as exc:
+        observed = health.parse_time(ack.get("observed_at"), "canonical_parent_merge_ack.observed_at")
+        # `trusted_promotion_run` deliberately returns presentation timestamps
+        # rounded to seconds. Keep the temporal decision at native precision.
+        completed = max(
+            health.parse_time(job.get("completed_at"), "promotion_job.completed_at")
+            for job in evidence["jobs"]
+        )
+    except (KeyError, TypeError, ValueError, OverflowError) as exc:
         raise DerivationError("canonical_parent_merge_ack_clock_invalid") from exc
-    maximum_future = int(health_policy.get("clock", {}).get("maximum_future_skew_seconds", 300))
-    if (
-        observed.tzinfo is None or completed.tzinfo is None
-        or completed.astimezone(dt.timezone.utc) > observed.astimezone(dt.timezone.utc)
-        or observed.astimezone(dt.timezone.utc) > now.astimezone(dt.timezone.utc) + dt.timedelta(seconds=maximum_future)
-    ):
+    skew = dt.timedelta(seconds=maximum_future_skew)
+    emitted_during_successful_job = any(
+        _timestamp_in_successful_job_window(job, observed, skew, health)
+        for job in evidence.get("jobs", [])
+        if isinstance(job, Mapping)
+    )
+    # The ACK writer runs inside the reconcile job, before the workflow attempt
+    # can complete. Keep the old after-all-jobs case as a separate compatible
+    # branch; skipped/neutral jobs still count for finality but never establish
+    # an emission window.
+    if observed > now_utc + skew or not (observed >= completed or emitted_during_successful_job):
         raise DerivationError("canonical_parent_merge_ack_order_invalid")
     return {
         "run_id": run_id,
@@ -780,6 +807,25 @@ def authenticate_canonical_merge_ack(
         "jobs_completed_at": trusted["jobs_completed_at"],
         "observed_at": ack["observed_at"],
     }
+
+
+def _timestamp_in_successful_job_window(
+    job: Mapping[str, Any], observed: dt.datetime, skew: dt.timedelta, health: Any,
+) -> bool:
+    """Whether an ACK observation falls within one exact successful job interval plus clock skew."""
+    if job.get("status") != "completed" or job.get("conclusion") != "success":
+        return False
+    try:
+        started = health.parse_time(job.get("started_at"), "promotion_job.started_at")
+        completed = health.parse_time(job.get("completed_at"), "promotion_job.completed_at")
+    except (OverflowError, ValueError):
+        return False
+    if started > completed:
+        return False
+    try:
+        return started - skew <= observed <= completed + skew
+    except OverflowError:
+        return False
 
 
 def build_derivation_envelope(

@@ -359,16 +359,17 @@ class SameObservationNativeLineageTests(unittest.TestCase):
                 envelope, {"records": [mutated]}, journal_ref_sha="a" * 40,
             )
 
-    def test_exact_c_merge_ack_rejects_wrong_attempt_and_trusts_only_exact_main_job(self) -> None:
+    def test_exact_c_merge_ack_accepts_authenticated_in_job_emission_with_bounded_order(self) -> None:
         journal = native_c_journal()
         row = journal["records"][0]
         ack = next(item for item in row["acknowledgements"] if item["status"] == "merged")
         run_id, attempt = str(ack["run_id"]), int(ack["run_attempt"])
         workflow_path = ".github/workflows/canonical-update-promotion.yml"
         workflow_id = 912345
-        head = ack["source_sha"]
-        job_completed = "2026-10-03T14:52:40Z"
-        evidence = {
+        # These are the retained PR686 readback identities/times. The run head
+        # is the workflow_run source, while the ACK source_sha is the merge SHA.
+        head = "dc79e3931d6cfbbe5b19917487d356f88d0682f0"
+        evidence_template = {
             "attempt_number": attempt,
             "jobs_api_endpoint": f"repos/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}/jobs",
             "job_count": 1,
@@ -376,16 +377,17 @@ class SameObservationNativeLineageTests(unittest.TestCase):
                 "id": int(run_id), "run_attempt": attempt, "workflow_id": workflow_id,
                 "path": workflow_path, "event": "workflow_run", "head_branch": "main",
                 "head_sha": head, "status": "completed", "conclusion": "success",
-                "run_started_at": "2026-10-03T14:51:00Z", "completed_at": job_completed,
+                "run_started_at": "2026-10-03T14:52:04Z", "completed_at": "2026-10-03T14:53:12Z",
                 "repository": {"full_name": "StatPan/datapan-registry"},
                 "head_repository": {"full_name": "StatPan/datapan-registry"},
             },
             "jobs": [{
-                "id": 917001, "run_id": int(run_id), "run_attempt": attempt,
+                "id": 111226407734, "run_id": int(run_id), "run_attempt": attempt,
                 "head_sha": head, "status": "completed", "conclusion": "success",
-                "completed_at": job_completed,
+                "started_at": "2026-10-03T14:52:08Z", "completed_at": "2026-10-03T14:53:12Z",
             }],
         }
+        default_now = dt.datetime(2026, 10, 5, 0, 0, tzinfo=dt.timezone.utc)
         with tempfile.TemporaryDirectory(prefix="same-a-c-ack-") as temp:
             scripts = pathlib.Path(temp) / "scripts"
             scripts.mkdir()
@@ -395,32 +397,313 @@ class SameObservationNativeLineageTests(unittest.TestCase):
                 scripts / "canonical_update_terminal_evidence.py",
             )
             checker = scripts / "check-upstream-catalogue-health.py"
-            checker.write_text(
-                (ROOT / "scripts/check-upstream-catalogue-health.py").read_text(encoding="utf-8")
-                + "\n\n# Test-only exact-attempt API fixture; no network is used.\n"
-                + f"TEST_RUN_EVIDENCE = {pprint.pformat({f'{run_id}/{attempt}': evidence})}\n"
-                + "def collect_workflow_identity(repository, workflow_path):\n    return 912345\n"
-                + "def collect_run_attempt_evidence(repository, run_id, run_attempt):\n"
-                + "    return TEST_RUN_EVIDENCE.get(f'{run_id}/{run_attempt}', {'availability_error': True})\n",
-                encoding="utf-8",
-            )
-            policy = {"promotion_state": {"promotion_workflow_path": workflow_path}, "clock": {"maximum_future_skew_seconds": 300}}
-            trusted = DERIVATION.authenticate_canonical_merge_ack(
-                pathlib.Path(temp), "StatPan/datapan-registry", row, policy,
-                now=dt.datetime(2026, 10, 5, 0, 0, tzinfo=dt.timezone.utc),
-            )
+            health_source = (ROOT / "scripts/check-upstream-catalogue-health.py").read_text(encoding="utf-8")
+
+            def authenticate(
+                *, observed_at: str | None = None, jobs: list[dict[str, Any]] | None = None,
+                now: dt.datetime = default_now, skew: Any = 300,
+                row_override: dict[str, Any] | None = None,
+                run_changes: dict[str, Any] | None = None,
+                collectors_fail: bool = False,
+            ) -> dict[str, Any]:
+                selected_row = copy.deepcopy(row_override if row_override is not None else row)
+                selected_ack = next(item for item in selected_row["acknowledgements"] if item["status"] == "merged")
+                if observed_at is not None:
+                    selected_ack["observed_at"] = observed_at
+                evidence = copy.deepcopy(evidence_template)
+                if jobs is not None:
+                    evidence["jobs"] = copy.deepcopy(jobs)
+                    evidence["job_count"] = len(jobs)
+                if run_changes:
+                    evidence["run"].update(run_changes)
+                if collectors_fail:
+                    collector_definitions = (
+                        "def collect_workflow_identity(repository, workflow_path):\n"
+                        "    raise AssertionError('native workflow read must not run')\n"
+                        "def collect_run_attempt_evidence(repository, run_id, run_attempt):\n"
+                        "    raise AssertionError('native attempt read must not run')\n"
+                    )
+                else:
+                    collector_definitions = (
+                        "def collect_workflow_identity(repository, workflow_path):\n    return 912345\n"
+                        "def collect_run_attempt_evidence(repository, run_id, run_attempt):\n"
+                        "    return TEST_RUN_EVIDENCE.get(f'{run_id}/{run_attempt}', {'availability_error': True})\n"
+                    )
+                checker.write_text(
+                    health_source
+                    + "\n\n# Test-only exact-attempt API fixture; no network is used.\n"
+                    + f"TEST_RUN_EVIDENCE = {pprint.pformat({f'{run_id}/{attempt}': evidence})}\n"
+                    + collector_definitions,
+                    encoding="utf-8",
+                )
+                policy = {
+                    "promotion_state": {"promotion_workflow_path": workflow_path},
+                    "clock": {"maximum_future_skew_seconds": skew},
+                }
+                return DERIVATION.authenticate_canonical_merge_ack(
+                    pathlib.Path(temp), "StatPan/datapan-registry", selected_row, policy, now=now,
+                )
+
+            trusted = authenticate()
             self.assertEqual(trusted["run_id"], run_id)
             self.assertEqual(trusted["run_attempt"], attempt)
-            self.assertEqual(trusted["jobs_completed_at"], job_completed)
+            self.assertEqual(trusted["jobs_completed_at"], "2026-10-03T14:53:12Z")
+            self.assertEqual(trusted["observed_at"], "2026-10-03T14:52:44.916636+00:00")
+
+            # Exact equality at both ends of the successful emitting job is
+            # admissible, while policy skew applies inclusively around it.
+            self.assertEqual(authenticate(observed_at="2026-10-03T14:52:08Z", skew=0)["observed_at"], "2026-10-03T14:52:08Z")
+            self.assertEqual(authenticate(observed_at="2026-10-03T14:53:12Z", skew=0)["observed_at"], "2026-10-03T14:53:12Z")
+            self.assertEqual(authenticate(observed_at="2026-10-03T14:52:03Z", skew=5)["observed_at"], "2026-10-03T14:52:03Z")
+
+            # Keep a later successful job in the exact attempt so the upper
+            # in-job bound and an uncovered inter-job gap are both observable
+            # before the all-job finality timestamp.
+            later_job = {
+                "id": 111226407735, "run_id": int(run_id), "run_attempt": attempt,
+                "head_sha": head, "status": "completed", "conclusion": "success",
+                "started_at": "2026-10-03T14:53:30Z", "completed_at": "2026-10-03T14:54:00Z",
+            }
+            later_jobs = copy.deepcopy(evidence_template["jobs"]) + [later_job]
+            self.assertEqual(
+                authenticate(
+                    observed_at="2026-10-03T14:53:17Z", jobs=later_jobs, skew=5,
+                    now=dt.datetime(2026, 10, 3, 14, 54, tzinfo=dt.timezone.utc),
+                    run_changes={"completed_at": "2026-10-03T14:54:00Z"},
+                )["observed_at"],
+                "2026-10-03T14:53:17Z",
+            )
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(observed_at="2026-10-03T14:52:02.999999Z", skew=5)
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(
+                    observed_at="2026-10-03T14:53:17.000001Z", jobs=later_jobs, skew=5,
+                    now=dt.datetime(2026, 10, 3, 14, 54, tzinfo=dt.timezone.utc),
+                    run_changes={"completed_at": "2026-10-03T14:54:00Z"},
+                )
+
+            # The compatible old branch still accepts observations at/after
+            # the maximum completion of every job in the attempt.
+            self.assertEqual(
+                authenticate(
+                    observed_at="2026-10-03T14:54:00Z", jobs=later_jobs, skew=0,
+                    now=dt.datetime(2026, 10, 3, 14, 54, tzinfo=dt.timezone.utc),
+                    run_changes={"completed_at": "2026-10-03T14:54:00Z"},
+                )["jobs_completed_at"],
+                "2026-10-03T14:54:00Z",
+            )
+            self.assertEqual(
+                authenticate(
+                    observed_at="2026-10-03T14:54:05Z", jobs=later_jobs, skew=5,
+                    now=dt.datetime(2026, 10, 3, 14, 54, tzinfo=dt.timezone.utc),
+                    run_changes={"completed_at": "2026-10-03T14:54:00Z"},
+                )["observed_at"],
+                "2026-10-03T14:54:05Z",
+            )
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(
+                    observed_at="2026-10-03T14:54:05.000001Z", jobs=later_jobs, skew=5,
+                    now=dt.datetime(2026, 10, 3, 14, 54, tzinfo=dt.timezone.utc),
+                    run_changes={"completed_at": "2026-10-03T14:54:00Z"},
+                )
+
+            # Missing/reversed intervals and skipped jobs cannot establish an
+            # in-job emission window. They do not remove the old after-complete
+            # branch when its independent temporal condition is met.
+            missing_start = copy.deepcopy(evidence_template["jobs"])
+            missing_start[0].pop("started_at")
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(jobs=missing_start)
+            naive_start = copy.deepcopy(evidence_template["jobs"])
+            naive_start[0]["started_at"] = "2026-10-03T14:52:08"
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(jobs=naive_start)
+            reversed_interval = copy.deepcopy(evidence_template["jobs"])
+            reversed_interval[0]["started_at"] = "2026-10-03T14:53:13Z"
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(jobs=reversed_interval)
+            skipped_only = copy.deepcopy(evidence_template["jobs"])
+            skipped_only[0]["conclusion"] = "skipped"
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(jobs=skipped_only)
+            self.assertEqual(
+                authenticate(
+                    observed_at="2026-10-03T14:53:13Z", jobs=missing_start,
+                )["observed_at"],
+                "2026-10-03T14:53:13Z",
+            )
+            fractional_completion = copy.deepcopy(evidence_template["jobs"])
+            fractional_completion[0]["conclusion"] = "skipped"
+            fractional_completion[0]["completed_at"] = "2026-10-03T14:53:12.999999Z"
+            self.assertEqual(
+                authenticate(
+                    observed_at="2026-10-03T14:53:12.999999Z", jobs=fractional_completion,
+                    run_changes={"completed_at": "2026-10-03T14:53:12.999999Z"},
+                )["jobs_completed_at"],
+                "2026-10-03T14:53:12Z",
+            )
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                authenticate(
+                    observed_at="2026-10-03T14:53:12.500000Z", jobs=fractional_completion,
+                    run_changes={"completed_at": "2026-10-03T14:53:12.999999Z"},
+                )
+
+            for bad_skew in (True, -1, 3601, 1.5, float("inf"), float("-inf"), float("nan")):
+                with self.subTest(bad_skew=bad_skew), self.assertRaisesRegex(
+                    DERIVATION.DerivationError, "canonical_parent_merge_ack_clock_invalid",
+                ):
+                    authenticate(skew=bad_skew, collectors_fail=True)
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_clock_invalid"):
+                authenticate(now=dt.datetime(2026, 10, 5), collectors_fail=True)
+            with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_clock_invalid"):
+                authenticate(observed_at="2026-10-03T14:52:44.916636", collectors_fail=False)
+
+            for run_changes, job_changes in (
+                ({"repository": {"full_name": "Other/repository"}}, None),
+                ({"path": ".github/workflows/other.yml"}, None),
+                ({"event": "push"}, None),
+                ({"status": "in_progress", "conclusion": None}, None),
+                ({"status": "failure", "conclusion": "failure"}, None),
+                ({}, {"head_sha": "e" * 40}),
+                ({}, {"conclusion": "failure"}),
+            ):
+                bad_jobs = copy.deepcopy(evidence_template["jobs"])
+                if job_changes:
+                    bad_jobs[0].update(job_changes)
+                with self.subTest(run_changes=run_changes, job_changes=job_changes), self.assertRaisesRegex(
+                    DERIVATION.DerivationError, "canonical_parent_merge_ack_run_untrusted",
+                ):
+                    authenticate(jobs=bad_jobs, run_changes=run_changes)
 
             wrong_attempt = copy.deepcopy(row)
             selected = next(item for item in wrong_attempt["acknowledgements"] if item["status"] == "merged")
             selected["run_attempt"] = attempt + 1
             with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_run_untrusted"):
-                DERIVATION.authenticate_canonical_merge_ack(
-                    pathlib.Path(temp), "StatPan/datapan-registry", wrong_attempt, policy,
-                    now=dt.datetime(2026, 10, 5, 0, 0, tzinfo=dt.timezone.utc),
+                authenticate(row_override=wrong_attempt)
+
+    def test_live_canonical_parent_preparation_admits_in_job_ack_before_next_step(self) -> None:
+        journal = native_c_journal()
+        row = journal["records"][0]
+        readback = DERIVATION.canonical_parent_readback_reference(
+            journal, journal_ref_sha="a" * 40, record_index=0,
+        )
+        candidate = row["candidate"]
+        checkpoint = {
+            "generation_id": candidate["generation_id"],
+            "source_id": candidate["source_id"],
+            "source_scope": candidate["scope"],
+        }
+        canonical_context = {"identity": {
+            "registry_path": candidate["registry_path"],
+            "registry_bytes": candidate["registry_bytes"],
+            "registry_sha256": candidate["registry_sha256"],
+            "main_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+        }}
+        run_id, attempt = "37101245239", 12
+        workflow_path = ".github/workflows/canonical-update-promotion.yml"
+        head = "dc79e3931d6cfbbe5b19917487d356f88d0682f0"
+        evidence = {
+            "attempt_number": attempt,
+            "jobs_api_endpoint": f"repos/StatPan/datapan-registry/actions/runs/{run_id}/attempts/{attempt}/jobs",
+            "job_count": 1,
+            "run": {
+                "id": int(run_id), "run_attempt": attempt, "workflow_id": 912345,
+                "path": workflow_path, "event": "workflow_run", "head_branch": "main",
+                "head_sha": head, "status": "completed", "conclusion": "success",
+                "run_started_at": "2026-10-03T14:52:04Z", "completed_at": "2026-10-03T14:53:12Z",
+                "repository": {"full_name": "StatPan/datapan-registry"},
+                "head_repository": {"full_name": "StatPan/datapan-registry"},
+            },
+            "jobs": [{
+                "id": 111226407734, "run_id": int(run_id), "run_attempt": attempt,
+                "head_sha": head, "status": "completed", "conclusion": "success",
+                "started_at": "2026-10-03T14:52:08Z", "completed_at": "2026-10-03T14:53:12Z",
+            }],
+        }
+        policy = {
+            "promotion_state": {"promotion_workflow_path": workflow_path},
+            "clock": {"maximum_future_skew_seconds": 300},
+        }
+
+        class ReadOnlyRunner:
+            def __init__(self, selected_readback: Mapping[str, Any]) -> None:
+                self.selected_readback = selected_readback
+                self.calls: list[str] = []
+
+            def load_object(self, _path: pathlib.Path) -> dict[str, Any]:
+                return policy
+
+            def gh_pr_readback(self, _root: pathlib.Path, _repository: str, _number: int) -> dict[str, Any]:
+                self.calls.append("read_pr")
+                return {
+                    "number": self.selected_readback["pr_number"],
+                    "state": "MERGED",
+                    "repository": "StatPan/datapan-registry",
+                    "headRepository": "StatPan/datapan-registry",
+                    "headRefName": self.selected_readback["pr_branch"],
+                    "headRefOid": self.selected_readback["pr_head_sha"],
+                    "baseRefName": "main",
+                    "mergeCommit": {"oid": self.selected_readback["merge_sha"]},
+                    "merged": True,
+                    "body": row["ownership"]["body"],
+                }
+
+        with tempfile.TemporaryDirectory(prefix="same-a-c-preparation-ack-") as temp:
+            root = pathlib.Path(temp)
+            scripts = root / "scripts"
+            scripts.mkdir()
+            (root / ".git").symlink_to(ROOT / ".git", target_is_directory=True)
+            (scripts / "canonical_update_pr.py").write_bytes((ROOT / "scripts/canonical_update_pr.py").read_bytes())
+            shutil.copy2(
+                ROOT / "scripts/canonical_update_terminal_evidence.py",
+                scripts / "canonical_update_terminal_evidence.py",
+            )
+            checker = scripts / "check-upstream-catalogue-health.py"
+
+            def install_offline_native_reads(selected_evidence: dict[str, Any]) -> None:
+                checker.write_text(
+                    (ROOT / "scripts/check-upstream-catalogue-health.py").read_text(encoding="utf-8")
+                    + "\n\n# Test-only exact-attempt API fixture; no network is used.\n"
+                    + f"TEST_RUN_EVIDENCE = {pprint.pformat({f'{run_id}/{attempt}': selected_evidence})}\n"
+                    + "def collect_workflow_identity(repository, workflow_path):\n    return 912345\n"
+                    + "def collect_run_attempt_evidence(repository, run_id, run_attempt):\n"
+                    + "    return TEST_RUN_EVIDENCE.get(f'{run_id}/{run_attempt}', {'availability_error': True})\n",
+                    encoding="utf-8",
                 )
+
+            install_offline_native_reads(evidence)
+            runner = ReadOnlyRunner(readback)
+            authorized = PREPARATION.authenticate_live_canonical_parent(
+                root, "StatPan/datapan-registry", "main", checkpoint, row, readback,
+                canonical_context, runner, DERIVATION,
+                now=dt.datetime(2026, 10, 5, 0, 0, tzinfo=dt.timezone.utc),
+            )
+            self.assertEqual(authorized.generation_id, candidate["generation_id"])
+            self.assertEqual(authorized.readback["merge_ack_observed_at"], "2026-10-03T14:52:44.916636+00:00")
+            self.assertEqual(runner.calls, ["read_pr"])
+
+            # The same real preparation gate rejects an out-of-window ACK
+            # before it attempts the subsequent local ancestry step. The only
+            # preceding operation is the exact read-only PR identity check.
+            bad_journal = copy.deepcopy(journal)
+            bad_ack = next(item for item in bad_journal["records"][0]["acknowledgements"] if item["status"] == "merged")
+            bad_ack["observed_at"] = "2026-10-03T14:52:02.999999Z"
+            bad_readback = DERIVATION.canonical_parent_readback_reference(
+                bad_journal, journal_ref_sha="a" * 40, record_index=0,
+            )
+            policy["clock"]["maximum_future_skew_seconds"] = 5
+            install_offline_native_reads(evidence)
+            negative_runner = ReadOnlyRunner(bad_readback)
+            with mock.patch.object(subprocess, "run", return_value=mock.Mock(returncode=0)) as ancestry:
+                with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_merge_ack_order_invalid"):
+                    PREPARATION.authenticate_live_canonical_parent(
+                        root, "StatPan/datapan-registry", "main", checkpoint,
+                        bad_journal["records"][0], bad_readback, canonical_context,
+                        negative_runner, DERIVATION,
+                        now=dt.datetime(2026, 10, 5, 0, 0, tzinfo=dt.timezone.utc),
+                    )
+                ancestry.assert_not_called()
+            self.assertEqual(negative_runner.calls, ["read_pr"])
 
     def test_same_payload_from_a_different_original_observation_is_not_a_parent(self) -> None:
         summary = read_json(FIXTURES / "native-lineage-identities.json")
