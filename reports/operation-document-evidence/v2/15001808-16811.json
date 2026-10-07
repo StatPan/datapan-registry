@@ -1,0 +1,627 @@
+{
+  "authentication": {
+    "mechanism": "service_key",
+    "parameter_names": [
+      "ServiceKey"
+    ],
+    "placement": "query",
+    "requirement": null,
+    "source_refs": [
+      {
+        "evidence_kind": "example_request_query_key",
+        "locator": {
+          "cell_index": 0,
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 1,
+          "source_id": "reference_guide_docx",
+          "table_index": 25
+        }
+      }
+    ],
+    "status": "indicated_by_example"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": "read_only",
+    "source_refs": [
+      {
+        "evidence_kind": "operation_effect",
+        "locator": {
+          "cell_index": 2,
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 1,
+          "source_id": "reference_guide_docx",
+          "table_index": 22
+        }
+      }
+    ],
+    "status": "documented"
+  },
+  "explicit_unknowns": [
+    "operation_level_http_method_not_declared",
+    "request_data_types_not_established",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15001808",
+    "operation_id": "655adc96663128905bf0f778af0b4e00311abce240bb5d7d09f0a6a40ce81e03",
+    "operation_name": "거래 빈도 현황 조회",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "operation_selector_identity",
+        "locator": {
+          "kind": "html_select_option",
+          "option_index": 4,
+          "select_id": "open_api_detail_select",
+          "source_id": "catalogue_detail_page",
+          "text": "거래 빈도 현황 조회",
+          "value": "16811"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "cell_index": 4,
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 0,
+          "source_id": "reference_guide_docx",
+          "table_index": 22
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "16811"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_selector_identity",
+          "locator": {
+            "kind": "html_select_option",
+            "option_index": 4,
+            "select_id": "open_api_detail_select",
+            "source_id": "catalogue_detail_page",
+            "text": "거래 빈도 현황 조회",
+            "value": "16811"
+          }
+        },
+        {
+          "evidence_kind": "operation_name",
+          "locator": {
+            "cell_index": 4,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 0,
+            "source_id": "reference_guide_docx",
+            "table_index": 22
+          }
+        }
+      ],
+      "status": "registered_manifest",
+      "value": "거래 빈도 현황 조회"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 23
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "example_request_query_key",
+            "locator": {
+              "cell_index": 0,
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 25
+            }
+          }
+        ],
+        "status": "demonstrated_by_example",
+        "value": "query"
+      },
+      "name": "splyPrtnum",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 23
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 23
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "10"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 23
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "10"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 1,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 23
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.0"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "resultCode",
+      "resultMsg",
+      "year",
+      "averageFrequencyCount"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 1,
+          "source_id": "reference_guide_docx",
+          "table_index": 24
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 2,
+          "source_id": "reference_guide_docx",
+          "table_index": 24
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 3,
+          "source_id": "reference_guide_docx",
+          "table_index": 24
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 4,
+          "source_id": "reference_guide_docx",
+          "table_index": 24
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [],
+      "status": "unknown",
+      "values": []
+    },
+    "coded_result_field_inventory": {
+      "candidates": [],
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "unknown",
+      "media_types": [],
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": null
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "success_branches": []
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 201308,
+      "capture_role": "operation_selector_and_guide_index",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15001808/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.0"
+      },
+      "retrieved_at": "2026-10-07T03:33:03Z",
+      "sha256": "2204e5988564e614dd9a1a4e03145a427aabd55408c0f19174a5424e98d76fa1",
+      "source_id": "catalogue_detail_page"
+    },
+    {
+      "bytes": 6503,
+      "capture_role": "operation_detail",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "POST",
+        "path": "/tcs/dss/selectApiDetailFunction.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.0"
+      },
+      "retrieved_at": "2026-10-07T03:37:12Z",
+      "sha256": "287bb811584ff8c448df2c0d330b9f181b279a16fc824b2ad37f2b2235f5b870",
+      "source_id": "operation_detail_html"
+    },
+    {
+      "bytes": 1325986,
+      "capture_role": "service_and_operation_guide",
+      "media_type": "application/octet-stream; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/cmm/cmm/fileDownload.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.0"
+      },
+      "retrieved_at": "2026-10-07T03:45:23Z",
+      "sha256": "3286f26731a137c7810dc69e57e3e64540cec6e2c733a9d249202753113bb118",
+      "source_id": "reference_guide_docx"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_endpoint",
+          "locator": {
+            "cell_index": 0,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 25
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "service_level_only",
+      "source_refs": [
+        {
+          "evidence_kind": "service_level_interface_methods",
+          "locator": {
+            "cell_index": 2,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 7,
+            "source_id": "reference_guide_docx",
+            "table_index": 4
+          }
+        }
+      ],
+      "status": "unknown",
+      "value": null
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_endpoint",
+          "locator": {
+            "cell_index": 0,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 25
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/1450000/delngBsshInfoService/getDelngFreqncySttusInqire"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_endpoint",
+          "locator": {
+            "cell_index": 0,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 25
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "http"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

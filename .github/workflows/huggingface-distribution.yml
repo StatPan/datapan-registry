@@ -87,7 +87,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: StatPan/datapan-cli
-          ref: e3b2fa44cb0f68d7e58e003fbd71ecde505878de
+          ref: 52ebf528d6c1d0cb04ab78a80273d5b49c5b6dec
           path: datapan-cli
 
       - uses: actions/setup-go@v5
