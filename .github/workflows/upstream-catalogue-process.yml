@@ -1116,10 +1116,13 @@ jobs:
           RESUME_PARENT_BUNDLE: ${{ steps.derivation.outputs.resume_parent_bundle_dir }}
           DERIVATION_RESUME_EVIDENCE: ${{ steps.derivation.outputs.resume_enrichment_evidence_path }}
           CANONICAL_PARENT_BUNDLE: ${{ steps.derivation.outputs.canonical_parent_bundle_dir }}
+          EXPECTED_STATE_HEAD_SHA: ${{ steps.state.outputs.old_sha }}
         run: |
           set -euo pipefail
           mkdir -p .datapan/ci/upstream-catalogue-processing
-          rm -f .datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json
+          rm -f \
+            .datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json \
+            .datapan/ci/upstream-catalogue-processing/upstream-catalogue-replay-persistence-receipt.json
           if [ "${DERIVATION_ENABLED:-false}" = "true" ]; then RESUME_EVIDENCE="${DERIVATION_RESUME_EVIDENCE}"; fi
           args=(
             --baseline data/data-go-kr.registry.json
@@ -1135,6 +1138,7 @@ jobs:
             --processor-artifact-run-id "${PROCESSOR_ARTIFACT_RUN_ID}"
             --repository "${REPOSITORY}"
             --execution-mode live
+            --replay-state-head-sha "${EXPECTED_STATE_HEAD_SHA}"
             --artifact-name "${INPUT_ARTIFACT_NAME}"
             --artifact-expires-at "${INPUT_EXPIRES_AT}"
             --output-artifact-expires-at "${PROCESSOR_ARTIFACT_EXPIRES_AT}"
@@ -1196,16 +1200,111 @@ jobs:
           status="$?"
           set -e
           echo "exit_code=${status}" >> "${GITHUB_OUTPUT}"
-          checkpoint_persisted=false
-          receipt=.datapan/ci/upstream-catalogue-processing/upstream-catalogue-checkpoint-receipt.json
-          if [ "${status}" != "1" ] && [ -s "${receipt}" ] && jq -e '
-            .schema_version == "datapan.upstream-catalogue-checkpoint.v1" and
-            (.generation_id | type == "string") and
-            (.checkpoint_sha256 | type == "string" and test("^[a-f0-9]{64}$"))
-          ' "${receipt}" >/dev/null; then
-            checkpoint_persisted=true
-          fi
-          echo "checkpoint_persisted=${checkpoint_persisted}" >> "${GITHUB_OUTPUT}"
+          export PROCESS_EXIT_CODE="${status}"
+          python3 - <<'PY' >> "${GITHUB_OUTPUT}"
+          import importlib.util
+          import json
+          import os
+          import pathlib
+          import subprocess
+
+          root = pathlib.Path(".datapan/ci/upstream-catalogue-processing")
+          result_path = root / "upstream-catalogue-processing-result.json"
+          checkpoint_receipt_path = root / "upstream-catalogue-checkpoint-receipt.json"
+          replay_receipt_path = root / "upstream-catalogue-replay-persistence-receipt.json"
+          try:
+              result = json.loads(result_path.read_text(encoding="utf-8"))
+          except (OSError, json.JSONDecodeError):
+              result = {}
+          replay_candidate = bool(
+              isinstance(result, dict)
+              and result.get("status") == "idle"
+              and result.get("reason") == "exact_producer_delivery_replay"
+              and result.get("processing_replay") is True
+              and result.get("candidate_available") is False
+          )
+          checkpoint_persisted = False
+          replay_authenticated = False
+          if replay_candidate:
+              try:
+                  spec = importlib.util.spec_from_file_location(
+                      "replay_processor", "../bootstrap/scripts/process-upstream-catalogue-candidate.py",
+                  )
+                  if spec is None or spec.loader is None:
+                      raise ValueError("replay_validator_unavailable")
+                  processor = importlib.util.module_from_spec(spec)
+                  spec.loader.exec_module(processor)
+                  receipt = json.loads(replay_receipt_path.read_text(encoding="utf-8"))
+                  current_checkpoint = json.loads(checkpoint_receipt_path.read_text(encoding="utf-8"))
+                  generation_id = str(receipt.get("generation_id") or "")
+                  source_id = str(receipt.get("source_id") or "")
+                  old_sha = os.environ.get("EXPECTED_STATE_HEAD_SHA", "")
+                  state_repo = pathlib.Path("../state-repo")
+                  if subprocess.run(
+                      ["git", "-C", str(state_repo), "rev-parse", "HEAD"],
+                      check=True, text=True, capture_output=True,
+                  ).stdout.strip() != old_sha:
+                      raise ValueError("replay_selected_state_head_mismatch")
+                  checkpoint_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/generations/{generation_id}.json"
+                  index_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/index.json"
+                  def old_json(relative: str):
+                      completed = subprocess.run(
+                          ["git", "-C", str(state_repo), "show", f"{old_sha}:{relative}"],
+                          check=True, capture_output=True,
+                      )
+                      if len(completed.stdout) > processor.STATE_INDEX_FILE_LIMIT:
+                          raise ValueError("replay_selected_state_file_too_large")
+                      return json.loads(completed.stdout)
+                  current_state_checkpoint = json.loads((state_repo / checkpoint_rel).read_text(encoding="utf-8"))
+                  current_index = json.loads((state_repo / index_rel).read_text(encoding="utf-8"))
+                  if current_checkpoint != current_state_checkpoint:
+                      raise ValueError("replay_checkpoint_receipt_state_mismatch")
+                  schema = json.loads(pathlib.Path("../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"))
+                  verified_receipt = processor.verify_replay_persistence_receipt(
+                      receipt,
+                      prior_checkpoint=old_json(checkpoint_rel),
+                      current_checkpoint=current_state_checkpoint,
+                      prior_index=old_json(index_rel),
+                      current_index=current_index,
+                      result=result,
+                      state_head_sha=old_sha,
+                      checkpoint_schema=schema,
+                  )
+                  expected_changed_paths = set()
+                  for change in verified_receipt["state_changes"]:
+                      if change.startswith(f"sources/{source_id}/generations/{generation_id}.json#/"):
+                          expected_changed_paths.add(checkpoint_rel)
+                      elif change.startswith(f"sources/{source_id}/index.json#/"):
+                          expected_changed_paths.add(index_rel)
+                      else:
+                          raise ValueError("replay_state_change_path_invalid")
+                  status_output = subprocess.run(
+                      ["git", "-C", str(state_repo), "status", "--porcelain=v1", "-z", "--untracked-files=all"],
+                      check=True, capture_output=True,
+                  ).stdout.decode("utf-8", errors="strict")
+                  status_rows = [row for row in status_output.split("\0") if row]
+                  if any(len(row) < 4 or row[:2] != " M" for row in status_rows):
+                      raise ValueError("replay_state_worktree_status_invalid")
+                  if {row[3:] for row in status_rows} != expected_changed_paths:
+                      raise ValueError("replay_state_worktree_paths_mismatch")
+                  replay_authenticated = True
+                  checkpoint_persisted = True
+              except Exception as exc:  # fail closed; bundle_check preserves the diagnostic result
+                  print(f"FAIL replay persistence receipt: {type(exc).__name__}: {exc}", file=__import__("sys").stderr)
+          elif os.environ.get("PROCESS_EXIT_CODE") != "1" and checkpoint_receipt_path.is_file():
+              try:
+                  checkpoint = json.loads(checkpoint_receipt_path.read_text(encoding="utf-8"))
+                  checkpoint_persisted = bool(
+                      checkpoint.get("schema_version") == "datapan.upstream-catalogue-checkpoint.v1"
+                      and isinstance(checkpoint.get("generation_id"), str)
+                      and __import__("re").fullmatch(r"[a-f0-9]{64}", str(checkpoint.get("checkpoint_sha256") or ""))
+                  )
+              except (OSError, json.JSONDecodeError, AttributeError):
+                  checkpoint_persisted = False
+          print(f"checkpoint_persisted={str(checkpoint_persisted).lower()}")
+          print(f"replay_candidate={str(replay_candidate).lower()}")
+          print(f"replay_authenticated={str(replay_authenticated).lower()}")
+          PY
           if [ "${status}" = "1" ]; then
             echo "FAIL bounded claim made no committable checkpoint" >&2
             exit 1
@@ -1215,7 +1314,8 @@ jobs:
         if: >-
           steps.select.outputs.decision == 'process' &&
           steps.claim.outputs.checkpoint_persisted == 'true' &&
-          steps.claim.outputs.exit_code != '1'
+          steps.claim.outputs.exit_code != '1' &&
+          (steps.claim.outputs.replay_candidate != 'true' || steps.claim.outputs.replay_authenticated == 'true')
         id: claim_push
         working-directory: bootstrap
         env:
@@ -1231,7 +1331,7 @@ jobs:
           jq -r '"claim_sha=" + .new_sha, "changed=" + (.changed | tostring)' .datapan/ci/upstream-catalogue-claim-push.json >> "${GITHUB_OUTPUT}"
 
       - name: Process the durably reserved detail batch
-        if: steps.select.outputs.decision == 'process' && steps.claim_push.outputs.claim_sha != '' && steps.input_artifact.outputs.input_error == ''
+        if: steps.select.outputs.decision == 'process' && steps.claim_push.outputs.claim_sha != '' && steps.input_artifact.outputs.input_error == '' && steps.claim.outputs.replay_candidate != 'true'
         id: run_processor
         working-directory: datapan-registry
         env:
@@ -1422,6 +1522,10 @@ jobs:
           PROCESSOR_ARTIFACT_RUN_ID: ${{ github.run_id }}
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
           REPOSITORY: ${{ github.repository }}
+          STATE_HEAD_SHA: ${{ steps.state.outputs.old_sha }}
+          CLAIM_SHA: ${{ steps.claim_push.outputs.claim_sha }}
+          CLAIM_CHANGED: ${{ steps.claim_push.outputs.changed }}
+          CLAIM_OUTCOME: ${{ steps.claim_push.outcome }}
         run: |
           set -euo pipefail
           python3 - <<'PY' >> "${GITHUB_OUTPUT}"
@@ -1430,6 +1534,8 @@ jobs:
           import os
           import pathlib
           import re
+          import importlib.util
+          import subprocess
 
           root = pathlib.Path("datapan-registry/.datapan/ci/upstream-catalogue-processing")
           root.mkdir(parents=True, exist_ok=True)
@@ -1444,7 +1550,7 @@ jobs:
           allowed_statuses = {"ready", "no-change", "retry", "quarantined", "idle"}
           status = result.get("status") if isinstance(result, dict) else None
           generation_id = str(result.get("generation_id") or "") if isinstance(result, dict) else ""
-          exact_replay = bool(
+          replay_candidate = bool(
               status == "idle" and not generation_id
               and result.get("reason") == "exact_producer_delivery_replay"
               and result.get("processing_replay") is True
@@ -1454,6 +1560,82 @@ jobs:
               and result.get("processor_run_id") == os.environ["PROCESSOR_RUN_ID"]
               and str(result.get("processor_artifact_run_id") or "") == os.environ["PROCESSOR_ARTIFACT_RUN_ID"]
           )
+          exact_replay = False
+          if replay_candidate:
+              try:
+                  spec = importlib.util.spec_from_file_location(
+                      "replay_processor", "bootstrap/scripts/process-upstream-catalogue-candidate.py",
+                  )
+                  if spec is None or spec.loader is None:
+                      raise ValueError("replay_validator_unavailable")
+                  processor = importlib.util.module_from_spec(spec)
+                  spec.loader.exec_module(processor)
+                  receipt_path = root / processor.REPLAY_PERSISTENCE_RECEIPT
+                  receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+                  source_id = str(receipt.get("source_id") or "")
+                  replay_generation_id = str(receipt.get("generation_id") or "")
+                  old_sha = os.environ.get("STATE_HEAD_SHA", "")
+                  claim_sha = os.environ.get("CLAIM_SHA", "")
+                  claim_changed = os.environ.get("CLAIM_CHANGED", "")
+                  if (
+                      os.environ.get("CLAIM_OUTCOME") != "success"
+                      or not re.fullmatch(r"[a-f0-9]{40}", claim_sha)
+                      or claim_changed not in {"true", "false"}
+                  ):
+                      raise ValueError("replay_state_cas_missing")
+                  state_repo = pathlib.Path("state-repo")
+                  if subprocess.run(
+                      ["git", "-C", str(state_repo), "rev-parse", "HEAD"],
+                      check=True, text=True, capture_output=True,
+                  ).stdout.strip() != claim_sha:
+                      raise ValueError("replay_state_cas_head_mismatch")
+                  checkpoint_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/generations/{replay_generation_id}.json"
+                  index_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/index.json"
+                  def committed_json(commit: str, relative: str):
+                      completed = subprocess.run(
+                          ["git", "-C", str(state_repo), "show", f"{commit}:{relative}"],
+                          check=True, capture_output=True,
+                      )
+                      if len(completed.stdout) > processor.STATE_INDEX_FILE_LIMIT:
+                          raise ValueError("replay_state_file_too_large")
+                      return json.loads(completed.stdout)
+                  schema = json.loads(pathlib.Path("bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"))
+                  verified_receipt = processor.verify_replay_persistence_receipt(
+                      receipt,
+                      prior_checkpoint=committed_json(old_sha, checkpoint_rel),
+                      current_checkpoint=committed_json(claim_sha, checkpoint_rel),
+                      prior_index=committed_json(old_sha, index_rel),
+                      current_index=committed_json(claim_sha, index_rel),
+                      result=result,
+                      state_head_sha=old_sha,
+                      checkpoint_schema=schema,
+                  )
+                  changed_paths = verified_receipt["state_changes"]
+                  expected_changed_paths = set()
+                  for change in changed_paths:
+                      if change.startswith(f"sources/{source_id}/generations/{replay_generation_id}.json#/"):
+                          expected_changed_paths.add(checkpoint_rel)
+                      elif change.startswith(f"sources/{source_id}/index.json#/"):
+                          expected_changed_paths.add(index_rel)
+                      else:
+                          raise ValueError("replay_state_change_path_invalid")
+                  committed_changed_paths = set()
+                  if claim_sha != old_sha:
+                      completed = subprocess.run(
+                          ["git", "-C", str(state_repo), "diff", "--name-only", old_sha, claim_sha],
+                          check=True, text=True, capture_output=True,
+                      )
+                      committed_changed_paths = {path for path in completed.stdout.splitlines() if path}
+                  if committed_changed_paths != expected_changed_paths:
+                      raise ValueError("replay_state_commit_paths_mismatch")
+                  if (
+                      (claim_changed == "false" and (claim_sha != old_sha or changed_paths))
+                      or (claim_changed == "true" and (claim_sha == old_sha or not changed_paths))
+                  ):
+                      raise ValueError("replay_state_cas_change_mismatch")
+                  exact_replay = True
+              except Exception as exc:
+                  print(f"FAIL replay CAS verification: {type(exc).__name__}: {exc}", file=__import__("sys").stderr)
           replay = exact_replay
           verified = exact_replay or (
               status == "idle" and not generation_id
