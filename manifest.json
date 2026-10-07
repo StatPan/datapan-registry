@@ -76,8 +76,8 @@
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
-      "bytes": 5011,
-      "sha256": "ddf9723f58c3627ec271b4c86cbf70f600f618a3b45dc383f93beb470ea249a7"
+      "bytes": 5048,
+      "sha256": "40f4a418b80aca5885d5840a70c6e09cd0344b8d4d7313b3691c80af3f887f27"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -700,8 +700,8 @@
     {
       "path": "schemas/datapan.operation-document-evidence.v1.schema.json",
       "kind": "schema",
-      "bytes": 19189,
-      "sha256": "5dd5300171525010a9989fbd9981cd008bbd8b0faa694975c95fab59441991e6"
+      "bytes": 12380,
+      "sha256": "0b4a5a7ab10eeccb523d2af8a8e62e76f14a6243eea00558ac49e9959e7a3d1d"
     },
     {
       "path": "schemas/datapan.operation-document-capture-receipt.v1.schema.json",
@@ -750,7 +750,7 @@
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
       "bytes": 51050,
-      "sha256": "8d0a4f3099477b6b3bb2870dc71e44ae08a86bd18afa19143b0738da667b4037"
+      "sha256": "6a2c814cff9f7ebb0ff92fa94d8d9d73f75012b47c235c70cba9faf58254d7b7"
     },
     {
       "path": "data/data-go-kr.registry.json",

@@ -274,6 +274,35 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         broken["parameters"][0]["sample"]["value_stored"] = True
         self.assertTrue(list(validator.iter_errors(broken)))
 
+    def test_legacy_v1_sidecars_and_distinct_denominator_kind_remain_release_valid(self) -> None:
+        try:
+            from jsonschema import Draft202012Validator
+        except ImportError:
+            self.skipTest("jsonschema is an optional release-validation dependency")
+
+        legacy_schema_path = ROOT / "schemas/datapan.operation-document-evidence.v1.schema.json"
+        legacy_schema_bytes = legacy_schema_path.read_bytes()
+        self.assertEqual(
+            hashlib.sha256(legacy_schema_bytes).hexdigest(),
+            "0b4a5a7ab10eeccb523d2af8a8e62e76f14a6243eea00558ac49e9959e7a3d1d",
+        )
+        legacy_validator = Draft202012Validator(json.loads(legacy_schema_bytes))
+        for path in (
+            ROOT / "reports/operation-document-evidence/15001697-24807.json",
+            ROOT / "reports/operation-document-evidence/15001808-16811.json",
+        ):
+            self.assertEqual(list(legacy_validator.iter_errors(json.loads(path.read_text(encoding="utf-8")))), [])
+
+        manifest_schema = json.loads((ROOT / "schemas/datapan.release-manifest.v1.schema.json").read_text(encoding="utf-8"))
+        manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
+        Draft202012Validator(manifest_schema).validate(manifest)
+        allowed_kinds = manifest_schema["$defs"]["artifact"]["properties"]["kind"]["enum"]
+        self.assertIn("operation_denominator", allowed_kinds)
+        denominator = next(item for item in manifest["artifacts"] if item["path"] == "reports/kosis/operation-denominator.json")
+        expectation = next(item for item in manifest["artifacts"] if item["path"] == "policy/data-go-kr-operation-denominator-expectation.json")
+        self.assertEqual(denominator["kind"], "operation_denominator")
+        self.assertNotEqual(denominator["schema"], expectation["schema"])
+
     def test_kosis_current_operation_sidecar_binds_fixed_selector_without_inventing_http_method(self) -> None:
         try:
             from jsonschema import Draft202012Validator
