@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 119,
+  "count": 122,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -109,8 +109,8 @@
       "title": "Datapan Release Manifest v1",
       "contract": "release-manifest",
       "version": "v1",
-      "bytes": 5051,
-      "sha256": "a325facbf20c0d307e4d976349e57b535134fac4077e42582e921225c5d1e415"
+      "bytes": 5139,
+      "sha256": "1bb0bb7475b353cf1b0532c533a5db8e7065010c5067364b6a1a0201c4076983"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -1072,8 +1072,35 @@
       "title": "Datapan operation observation plan v1",
       "contract": "operation-observation-plan",
       "version": "v1",
-      "bytes": 31262,
-      "sha256": "d5b441d04c642a99c320eee8355d4aa6541c3699561b64bb2bf297e207a09533"
+      "bytes": 31280,
+      "sha256": "b0bb4254fa76c00de9ce20b7f8c32c84823362a0862be7cf7d2438cfb74c1e8e"
+    },
+    {
+      "path": "schemas/datapan.operation-observation-policy.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-observation-policy.v1.schema.json",
+      "title": "Datapan Operation Observation Reviewed Policy v1",
+      "contract": "operation-observation-policy",
+      "version": "v1",
+      "bytes": 25673,
+      "sha256": "0ae093cf1422fe819af539089d4e7ba00190d74a4c3358f347e561e149d8c3ba"
+    },
+    {
+      "path": "schemas/datapan.operation-response-assertion.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-response-assertion.v1.schema.json",
+      "title": "Datapan Operation Response Assertion v1",
+      "contract": "operation-response-assertion",
+      "version": "v1",
+      "bytes": 12883,
+      "sha256": "86600e7bc4f69c2eb5c4a39af0db50b252efb04aac6681766bf179da777ae0e9"
+    },
+    {
+      "path": "schemas/datapan.operation-response-assertion.v2.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-response-assertion.v2.schema.json",
+      "title": "Datapan Operation Response Assertion v2",
+      "contract": "operation-response-assertion",
+      "version": "v2",
+      "bytes": 24432,
+      "sha256": "0e30d07b2755ab4944773c08be2cd9e5dd50ab75338a607a2728d8d4353b12bd"
     }
   ]
 }

@@ -211,7 +211,7 @@
           "properties": {
             "kind": { "enum": ["http_status", "soap_fault_free", "json_contract", "xml_contract", "other"] },
             "expected_status_codes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 100, "maximum": 599 } },
-            "empty_result_semantics": { "enum": ["valid", "invalid"] },
+            "empty_result_semantics": { "enum": ["valid", "invalid", "not_applicable"] },
             "assertion_ref": { "type": "string", "minLength": 1 },
             "evidence_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/evidence_ref" } }
           },

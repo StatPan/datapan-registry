@@ -1,0 +1,983 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-response-assertion.v2.schema.json",
+  "title": "Datapan Operation Response Assertion v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "source_binding",
+    "operation_identity",
+    "document_evidence",
+    "review",
+    "assertion"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.operation-response-assertion.v2"
+    },
+    "artifact_kind": {
+      "const": "operation_response_assertion"
+    },
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "provider",
+        "protocol"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/slug"
+        },
+        "provider": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "protocol": {
+          "enum": [
+            "REST",
+            "SOAP",
+            "HTTP"
+          ]
+        }
+      }
+    },
+    "operation_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "dataset_id",
+        "operation_name",
+        "upstream_operation_key"
+      ],
+      "properties": {
+        "operation_id": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "dataset_id": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "operation_name": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "upstream_operation_key": {
+          "$ref": "#/$defs/non_empty"
+        }
+      }
+    },
+    "document_evidence": {
+      "$ref": "#/$defs/artifact_ref"
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "review_ref",
+        "reviewed_by",
+        "rationale"
+      ],
+      "properties": {
+        "review_ref": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "reviewed_by": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "rationale": {
+          "$ref": "#/$defs/non_empty"
+        }
+      }
+    },
+    "assertion": {
+      "$ref": "#/$defs/assertion"
+    }
+  },
+  "$defs": {
+    "non_empty": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 26214400
+        }
+      }
+    },
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_path",
+        "sha256",
+        "json_pointer",
+        "evidence_kind"
+      ],
+      "properties": {
+        "artifact_path": {
+          "type": "string",
+          "pattern": "^(?!/)[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "json_pointer": {
+          "$ref": "#/$defs/json_pointer"
+        },
+        "evidence_kind": {
+          "const": "operation_document"
+        }
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/source_ref"
+      }
+    },
+    "review_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_path",
+        "sha256",
+        "json_pointer",
+        "evidence_kind"
+      ],
+      "properties": {
+        "artifact_path": {
+          "type": "string",
+          "pattern": "^(?!/)[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "json_pointer": {
+          "$ref": "#/$defs/json_pointer"
+        },
+        "evidence_kind": {
+          "const": "reviewed_policy"
+        }
+      }
+    },
+    "review_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/review_ref"
+      }
+    },
+    "json_pointer": {
+      "type": "string",
+      "pattern": "^#(?:/(?:[^~/]|~[01])*)*$",
+      "maxLength": 2048
+    },
+    "path": {
+      "description": "A deliberately restricted response selector. JSON Pointer resolves exactly one node; XML QName segments select matching child elements in order. Arbitrary JSONPath, XPath, regular expressions, scripts, and sample-value predicates are not supported.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "json_pointer"
+            },
+            "value": {
+              "$ref": "#/$defs/json_pointer"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "segments"
+          ],
+          "properties": {
+            "kind": {
+              "const": "xml_qname_path"
+            },
+            "segments": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "items": {
+                "$ref": "#/$defs/qname"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "qname": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "namespace",
+        "local_name"
+      ],
+      "properties": {
+        "namespace": {
+          "anyOf": [
+            { "type": "string", "format": "uri", "maxLength": 2048 },
+            { "const": "" }
+          ]
+        },
+        "local_name": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9._-]*$",
+          "maxLength": 256
+        }
+      }
+    },
+    "cardinality": {
+      "description": "The required number of selected nodes. For a JSON Pointer this is presence (zero or one), not the length of an array at that pointer. For an XML QName path it is the number of matching elements.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "properties": {
+        "minimum": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50000
+        },
+        "maximum": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 50000
+        }
+      }
+    },
+    "required_field": {
+      "description": "A reviewed response predicate. The selected node occurrences must satisfy this cardinality and strict type; arrays are checked as arrays, with element count governed separately by result_collection semantics.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "value_type",
+        "cardinality",
+        "source_refs"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "value_type": {
+          "enum": [
+            "object",
+            "array",
+            "string",
+            "integer",
+            "number",
+            "boolean"
+          ]
+        },
+        "cardinality": {
+          "$ref": "#/$defs/cardinality"
+        },
+        "source_refs": {
+          "$ref": "#/$defs/source_refs"
+        }
+      }
+    },
+    "scalar_values": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      }
+    },
+    "provider_result_codes": {
+      "description": "Branch-local typed success and error code values. Unrecognized values remain indeterminate; exact error categories are optional and require source references.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "value_type", "basis", "source_refs"],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "value_type": {
+          "enum": [
+            "string",
+            "integer",
+            "number",
+            "boolean"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "documented_code_map",
+            "official_success_example"
+          ]
+        },
+        "success_values": {
+          "$ref": "#/$defs/scalar_values"
+        },
+        "error_values": {
+          "$ref": "#/$defs/scalar_values"
+        },
+        "source_refs": {
+          "$ref": "#/$defs/source_refs"
+        },
+        "error_classes": {
+          "type": "array",
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/error_class"
+          }
+        }
+      }
+    },
+    "result_collection": {
+      "description": "The exact typed response collection. JSON path resolves the required array node; XML/SOAP requires one container node plus a relative item selector. A missing array or container is shape drift. valid accepts zero array items / XML item matches; invalid rejects zero. Other required-field predicates remain independently enforced.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "container_path",
+        "item_path",
+        "value_type",
+        "semantics",
+        "source_refs"
+      ],
+      "properties": {
+        "path": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "container_path": {
+          "$ref": "#/$defs/path"
+        },
+        "item_path": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "container_cardinality": {
+          "$ref": "#/$defs/cardinality"
+        },
+        "value_type": {
+          "const": "array"
+        },
+        "semantics": {
+          "enum": [
+            "valid",
+            "invalid"
+          ]
+        },
+        "source_refs": {
+          "$ref": "#/$defs/source_refs"
+        }
+      }
+    },
+    "assertion": {
+      "description": "A reviewed response union with bounded, mutually exclusive branch selectors. The runtime selects exactly one branch from HTTP status and typed root/member shape, then evaluates only that branch; it never falls through based on validation success.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_kind",
+        "branches"
+      ],
+      "properties": {
+        "payload_kind": {
+          "enum": [
+            "json",
+            "xml",
+            "soap_xml"
+          ]
+        },
+        "branches": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/branch"
+          }
+        }
+      }
+    },
+    "error_class": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "category",
+        "source_refs"
+      ],
+      "properties": {
+        "value": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "category": {
+          "enum": [
+            "credential_rejected",
+            "rate_limited",
+            "parameter_blocked",
+            "provider_failure",
+            "semantic_failure",
+            "unsupported"
+          ]
+        },
+        "source_refs": {
+          "$ref": "#/$defs/source_refs"
+        }
+      }
+    },
+    "discriminator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "predicate",
+        "source_refs"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "predicate": {
+          "enum": [
+            "present",
+            "absent",
+            "node_type",
+            "equals_any"
+          ]
+        },
+        "value_type": {
+          "enum": [
+            "object",
+            "array",
+            "string",
+            "integer",
+            "number",
+            "boolean"
+          ]
+        },
+        "values": {
+          "$ref": "#/$defs/scalar_values"
+        },
+        "source_refs": {
+          "$ref": "#/$defs/source_refs"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "predicate": {
+                "const": "present"
+              }
+            },
+            "required": [
+              "predicate"
+            ]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "value_type"
+                  ]
+                },
+                {
+                  "required": [
+                    "values"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "predicate": {
+                "const": "absent"
+              }
+            },
+            "required": [
+              "predicate"
+            ]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "value_type"
+                  ]
+                },
+                {
+                  "required": [
+                    "values"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "predicate": {
+                "const": "node_type"
+              }
+            },
+            "required": [
+              "predicate"
+            ]
+          },
+          "then": {
+            "required": [
+              "value_type"
+            ],
+            "not": {
+              "required": [
+                "values"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "predicate": {
+                "const": "equals_any"
+              }
+            },
+            "required": [
+              "predicate"
+            ]
+          },
+          "then": {
+            "required": [
+              "value_type",
+              "values"
+            ]
+          }
+        }
+      ]
+    },
+    "branch_selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_http_status_codes",
+        "root_kind",
+        "discriminators"
+      ],
+      "properties": {
+        "accepted_http_status_codes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          }
+        },
+        "root_kind": {
+          "enum": [
+            "object",
+            "array",
+            "scalar",
+            "xml_element"
+          ]
+        },
+        "root_qname": {
+          "$ref": "#/$defs/qname"
+        },
+        "discriminators": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/discriminator"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "root_kind": {
+                "const": "xml_element"
+              }
+            },
+            "required": [
+              "root_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "root_qname"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "root_kind": {
+                "enum": [
+                  "object",
+                  "array",
+                  "scalar"
+                ]
+              }
+            },
+            "required": [
+              "root_kind"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "root_qname"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch_id",
+        "classification",
+        "selector",
+        "empty_result_semantics",
+        "http_status_source_refs",
+        "required_fields",
+        "provider_result_code_status",
+        "provider_result_code_evidence_refs",
+        "source_refs",
+        "review_refs"
+      ],
+      "properties": {
+        "branch_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+        },
+        "classification": {
+          "enum": [
+            "success",
+            "provider_error"
+          ]
+        },
+        "empty_result_semantics": {
+          "description": "Reviewed response-empty choice carried into plan v1. not_applicable means this branch has no collection and no empty-result predicate; root and required-field predicates still apply.",
+          "enum": ["valid", "invalid", "not_applicable"]
+        },
+        "selector": {
+          "$ref": "#/$defs/branch_selector"
+        },
+        "http_status_source_refs": {
+          "$ref": "#/$defs/source_refs"
+        },
+        "required_fields": {
+          "type": "array",
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/required_field"
+          }
+        },
+        "provider_result_code_status": {
+          "enum": [
+            "documented",
+            "expected_success_example",
+            "not_applicable",
+            "none_by_policy"
+          ]
+        },
+        "provider_result_code_evidence_refs": {
+          "$ref": "#/$defs/source_refs"
+        },
+        "provider_result_codes": {
+          "$ref": "#/$defs/provider_result_codes"
+        },
+        "result_collection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/result_collection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_refs": {
+          "$ref": "#/$defs/source_refs"
+        },
+        "review_refs": {
+          "$ref": "#/$defs/review_refs"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provider_result_code_status": {
+                "const": "documented"
+              }
+            },
+            "required": [
+              "provider_result_code_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "provider_result_codes"
+            ],
+            "properties": {
+              "provider_result_codes": {
+                "properties": {
+                  "basis": {
+                    "const": "documented_code_map"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider_result_code_status": {
+                "const": "expected_success_example"
+              },
+              "classification": { "const": "success" }
+            },
+            "required": [
+              "provider_result_code_status",
+              "classification"
+            ]
+          },
+          "then": {
+            "required": [
+              "provider_result_codes"
+            ],
+            "properties": {
+              "provider_result_codes": {
+                "required": ["success_values"],
+                "not": {
+                  "required": [
+                    "error_values"
+                  ]
+                },
+                "properties": {
+                  "basis": {
+                    "const": "official_success_example"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider_result_code_status": { "const": "documented" },
+              "classification": { "const": "success" }
+            },
+            "required": ["provider_result_code_status", "classification"]
+          },
+          "then": {
+            "properties": {
+              "provider_result_codes": {
+                "required": ["success_values"],
+                "not": { "required": ["error_values"] }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider_result_code_status": { "const": "documented" },
+              "classification": { "const": "provider_error" }
+            },
+            "required": ["provider_result_code_status", "classification"]
+          },
+          "then": {
+            "properties": {
+              "provider_result_codes": {
+                "required": ["error_values"],
+                "not": { "required": ["success_values"] }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider_result_code_status": { "const": "expected_success_example" },
+              "classification": { "const": "provider_error" }
+            },
+            "required": ["provider_result_code_status", "classification"]
+          },
+          "then": { "not": { "required": ["provider_result_codes"] } }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider_result_code_status": {
+                "enum": [
+                  "not_applicable",
+                  "none_by_policy"
+                ]
+              }
+            },
+            "required": [
+              "provider_result_code_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "provider_result_codes": false
+            }
+          }
+        },
+        { "if": { "properties": { "result_collection": { "type": "object" } }, "required": ["result_collection"] },
+          "then": {
+            "properties": {
+              "empty_result_semantics": { "enum": ["valid", "invalid"] },
+              "result_collection": { "required": ["semantics"] }
+            }
+          }
+        },
+        { "if": {
+            "anyOf": [
+              { "not": { "required": ["result_collection"] } },
+              { "properties": { "result_collection": { "type": "null" } }, "required": ["result_collection"] }
+            ]
+          },
+          "then": { "properties": { "empty_result_semantics": { "const": "not_applicable" } } }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "assertion": { "properties": { "payload_kind": { "enum": ["xml", "soap_xml"] } }, "required": ["payload_kind"] } }, "required": ["assertion"] },
+      "then": {
+        "properties": {
+          "assertion": {
+            "properties": {
+              "branches": {
+                "items": {
+                  "properties": {
+                    "required_fields": { "items": { "properties": { "value_type": { "not": { "const": "array" } } } } },
+                    "selector": { "properties": { "discriminators": { "items": { "properties": { "value_type": { "not": { "const": "array" } } } } } } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "assertion": {
+          "properties": {
+            "branches": {
+              "contains": { "properties": { "classification": { "const": "success" } }, "required": ["classification"] },
+              "minContains": 1
+            }
+          }
+        }
+      }
+    }
+  ]
+}

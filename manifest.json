@@ -5,7 +5,7 @@
   "provider": "data.go.kr",
   "source_registry": "data/data-go-kr.registry.json",
   "output_dir": ".",
-  "artifact_count": 264,
+  "artifact_count": 267,
   "artifacts": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -76,8 +76,8 @@
     {
       "path": "schemas/datapan.release-manifest.v1.schema.json",
       "kind": "schema",
-      "bytes": 5051,
-      "sha256": "a325facbf20c0d307e4d976349e57b535134fac4077e42582e921225c5d1e415"
+      "bytes": 5139,
+      "sha256": "1bb0bb7475b353cf1b0532c533a5db8e7065010c5067364b6a1a0201c4076983"
     },
     {
       "path": "schemas/datapan.release-readiness.v1.schema.json",
@@ -718,15 +718,33 @@
     {
       "path": "schemas/datapan.operation-observation-plan.v1.schema.json",
       "kind": "schema",
-      "bytes": 31262,
-      "sha256": "d5b441d04c642a99c320eee8355d4aa6541c3699561b64bb2bf297e207a09533"
+      "bytes": 31280,
+      "sha256": "b0bb4254fa76c00de9ce20b7f8c32c84823362a0862be7cf7d2438cfb74c1e8e"
+    },
+    {
+      "path": "schemas/datapan.operation-observation-policy.v1.schema.json",
+      "kind": "schema",
+      "bytes": 25673,
+      "sha256": "0ae093cf1422fe819af539089d4e7ba00190d74a4c3358f347e561e149d8c3ba"
+    },
+    {
+      "path": "schemas/datapan.operation-response-assertion.v1.schema.json",
+      "kind": "schema",
+      "bytes": 12883,
+      "sha256": "86600e7bc4f69c2eb5c4a39af0db50b252efb04aac6681766bf179da777ae0e9"
+    },
+    {
+      "path": "schemas/datapan.operation-response-assertion.v2.schema.json",
+      "kind": "schema",
+      "bytes": 24432,
+      "sha256": "0e30d07b2755ab4944773c08be2cd9e5dd50ab75338a607a2728d8d4353b12bd"
     },
     {
       "path": "schemas/index.json",
       "kind": "schema_index",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json",
-      "bytes": 49269,
-      "sha256": "d52608fe8adbe4914b1dc26644e65c2552d018007e3580380b72dc70b56361c4"
+      "bytes": 50541,
+      "sha256": "36f12273d7d930bf26e8bbcab4ab29a44901bd0121c8f64619e153222a19bb07"
     },
     {
       "path": "data/data-go-kr.registry.json",

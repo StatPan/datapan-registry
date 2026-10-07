@@ -4,6 +4,8 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
+import tempfile
 import unittest
 
 import jsonschema
@@ -127,12 +129,65 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         evidence_schema = ROOT / "schemas/datapan.operation-document-evidence.v1.schema.json"
         self.assertEqual(
             self.compiler.sha256(SCHEMA_PATH.read_bytes()),
-            "d5b441d04c642a99c320eee8355d4aa6541c3699561b64bb2bf297e207a09533",
+            "b0bb4254fa76c00de9ce20b7f8c32c84823362a0862be7cf7d2438cfb74c1e8e",
         )
         self.assertEqual(
             self.compiler.sha256(evidence_schema.read_bytes()),
             "0b4a5a7ab10eeccb523d2af8a8e62e76f14a6243eea00558ac49e9959e7a3d1d",
         )
+
+    def test_source_revision_rejects_changed_legacy_and_provider_index_inputs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            paths = [
+                "scripts/generate-operation-observation-plan.py",
+                "scripts/operation_document_evidence.py",
+                "schemas/datapan.operation-observation-plan.v1.schema.json",
+                "schemas/datapan.operation-document-evidence.v1.schema.json",
+                "schemas/datapan.operation-observation-policy.v1.schema.json",
+                "schemas/datapan.operation-response-assertion.v2.schema.json",
+                "reports/data-go-kr/operation-manifest.json",
+                "reports/data-go-kr/operation-document.json",
+                "reports/ecos/operation-denominator.json",
+                "policy/health-probe-canaries.json",
+                "policy/operation-observation-policies.v1.json",
+                "data/provider-index.json",
+            ]
+            for index, relative in enumerate(paths):
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(f"pinned input {index}\n", encoding="utf-8")
+            subprocess.run(["git", "-C", str(root), "init", "-q"], check=True)
+            subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.invalid"], check=True)
+            subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(root), "commit", "-qm", "pinned source fixture"], check=True)
+            revision = subprocess.run(
+                ["git", "-C", str(root), "rev-parse", "HEAD"], check=True, capture_output=True, text=True
+            ).stdout.strip()
+            refs = [{"path": relative} for relative in paths]
+            by_path = {ref["path"]: ref for ref in refs}
+            index = {
+                "registry_revision": revision,
+                "generation_inputs": {
+                    "generator_path": paths[0],
+                    "operation_manifest": by_path["reports/data-go-kr/operation-manifest.json"],
+                    "operation_denominators": [by_path["reports/ecos/operation-denominator.json"]],
+                    "legacy_policy": by_path["policy/health-probe-canaries.json"],
+                    "provider_index": by_path["data/provider-index.json"],
+                    "document_evidence": [by_path["reports/data-go-kr/operation-document.json"]],
+                },
+                "source_scopes": [{"source_artifacts": refs}],
+            }
+            self.compiler.verify_source_revision(index, root)
+            for relative in ("policy/health-probe-canaries.json", "data/provider-index.json"):
+                current = root / relative
+                current.write_text("changed after pinned source revision\n", encoding="utf-8")
+                with self.assertRaisesRegex(self.compiler.PlanError, "release tree differs from pinned source commit input"):
+                    self.compiler.verify_source_revision(index, root)
+                current.write_text(subprocess.run(
+                    ["git", "-C", str(root), "show", f"{revision}:{relative}"], check=True, capture_output=True
+                ).stdout.decode("utf-8"), encoding="utf-8")
 
     def test_partial_source_denominator_must_match_profile_and_candidate_ids(self):
         profile = {"source_id": "ecos", "provider": "ECOS", "adapter": {"name": "ecos", "status": "registered"}}
@@ -140,19 +195,66 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         with self.assertRaisesRegex(self.compiler.PlanError, "source profile provider mismatch"):
             self.compiler.checked_adapter_id("ecos", "OTHER", profile)
 
-        denominator = {"operations": [{"operation_id": "ecos-statistic-search-102y004"}]}
+        denominator = {"operations": [{"operation_id": "ecos-statistic-search-102y004", "method": "GET", "endpoint_template": "https://ecos.example.test/StatisticSearch"}]}
         catalog = {
             "source_id": "ecos",
             "provider": "ECOS",
             "source_profile": "sources/ecos.json",
             "summary": {"candidates": 1},
-            "candidates": [{"candidate_id": "ecos-statistic-search-102y004"}],
+            "candidates": [{"candidate_id": "ecos-statistic-search-102y004", "method": "GET", "endpoint_template": "https://ecos.example.test/StatisticSearch"}],
         }
         self.compiler.check_partial_catalog_identity_set("ecos", "ECOS", "sources/ecos.json", denominator, catalog)
         mismatched = copy.deepcopy(denominator)
         mismatched["operations"][0]["operation_id"] = "different-id"
         with self.assertRaisesRegex(self.compiler.PlanError, "identity set"):
             self.compiler.check_partial_catalog_identity_set("ecos", "ECOS", "sources/ecos.json", mismatched, catalog)
+        endpoint_mismatch = copy.deepcopy(denominator)
+        endpoint_mismatch["operations"][0]["endpoint_template"] = "https://ecos.example.test/other"
+        with self.assertRaisesRegex(self.compiler.PlanError, "endpoint differs"):
+            self.compiler.check_partial_catalog_identity_set("ecos", "ECOS", "sources/ecos.json", endpoint_mismatch, catalog)
+
+    def test_kosis_known_operation_uses_the_official_table_selection_endpoint(self):
+        denominator = json.loads((ROOT / "reports/kosis/operation-denominator.json").read_text(encoding="utf-8"))
+        profile = json.loads((ROOT / "sources/kosis.json").read_text(encoding="utf-8"))
+        catalog = json.loads((ROOT / "reports/kosis/runtime-candidates.json").read_text(encoding="utf-8"))
+        operation = denominator["operations"][0]
+        candidate = catalog["candidates"][0]
+        official_endpoint = "https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList"
+
+        self.assertEqual(denominator["summary"]["operations"], 1)
+        self.assertEqual(operation["operation_id"], "kosis-statistics-data-dt-1b41")
+        self.assertEqual(operation["endpoint_template"], official_endpoint)
+        self.assertEqual(candidate["candidate_id"], operation["operation_id"])
+        self.assertEqual(candidate["endpoint_template"], official_endpoint)
+        self.assertEqual(profile["catalogue"]["detail_endpoint"], official_endpoint)
+        self.assertEqual(profile["references"]["api_docs_url"], "https://kosis.kr/openapi/devGuide/devGuide_0201List.do")
+
+        denominator_ref = self.compiler.artifact_ref(ROOT / "reports/kosis/operation-denominator.json")
+        scope = {
+            "source_id": "kosis",
+            "provider": "KOSIS",
+            "adapter_id": "kosis",
+            "inventory_status": "partial",
+            "inventory_unknown": True,
+            "test_only": False,
+            "source_artifacts": [denominator_ref],
+        }
+        plan = self.compiler.make_incomplete_plan(
+            scope=scope,
+            operation_id=operation["operation_id"],
+            protocol="HTTP",
+            identity={"registered_endpoint": self.compiler.registered_endpoint(operation["endpoint_template"])},
+            evidence={
+                "artifact_path": denominator_ref["path"],
+                "sha256": denominator_ref["sha256"],
+                "json_pointer": "#/operations/0",
+                "evidence_kind": "operation_denominator",
+            },
+        )
+        self.assertTrue(plan["source_binding"]["inventory_unknown"])
+        self.assertEqual(plan["operation_identity"]["operation_id"], operation["operation_id"])
+        self.assertEqual(plan["request_plan"]["status"], "incomplete")
+        self.validator.validate(plan)
 
     def test_documented_read_only_effect_closes_only_that_request_plan_gap(self):
         scope = {
