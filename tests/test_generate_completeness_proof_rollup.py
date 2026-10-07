@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import copy
+import errno
 import hashlib
 import importlib.util
 import io
@@ -9,6 +10,7 @@ import json
 import os
 import pathlib
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -26,7 +28,185 @@ SPEC.loader.exec_module(MODULE)
 _PRESERVE_REPLAY_PR_NUMBER = object()
 
 
+def _fixture_file_snapshot(path: pathlib.Path) -> tuple[int, ...]:
+    value = pathlib.Path(path).lstat()
+    if not stat.S_ISREG(value.st_mode):
+        raise AssertionError(f"fixture payload is not a regular file: {path}")
+    return (
+        value.st_dev, value.st_ino, value.st_mode, value.st_size,
+        value.st_mtime_ns, value.st_ctime_ns,
+    )
+
+
+def _stream_fixture_file_identity(path: pathlib.Path) -> tuple[dict[str, object], tuple[int, ...]]:
+    """Hash one stable regular fixture file without retaining its payload."""
+    path = pathlib.Path(path)
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+    except OSError as exc:
+        raise AssertionError(f"fixture payload cannot be opened safely: {path}") from exc
+    digest = hashlib.sha256()
+    total = 0
+    try:
+        stream = os.fdopen(descriptor, "rb", closefd=True)
+    except BaseException:
+        os.close(descriptor)
+        raise
+    with stream:
+        before = os.fstat(stream.fileno())
+        if not stat.S_ISREG(before.st_mode):
+            raise AssertionError(f"fixture payload is not a regular file: {path}")
+        while chunk := stream.read(1024 * 1024):
+            total += len(chunk)
+            digest.update(chunk)
+        after = os.fstat(stream.fileno())
+    before_snapshot = (
+        before.st_dev, before.st_ino, before.st_mode, before.st_size,
+        before.st_mtime_ns, before.st_ctime_ns,
+    )
+    after_snapshot = (
+        after.st_dev, after.st_ino, after.st_mode, after.st_size,
+        after.st_mtime_ns, after.st_ctime_ns,
+    )
+    if before_snapshot != after_snapshot or total != before.st_size:
+        raise AssertionError(f"fixture payload changed while it was hashed: {path}")
+    return {"bytes": total, "sha256": digest.hexdigest()}, after_snapshot
+
+
+def _materialize_exact_fixture_file(
+    source: pathlib.Path, destination: pathlib.Path,
+) -> dict[str, object]:
+    """Hardlink one fixture payload, copying only across filesystems."""
+    source = pathlib.Path(source)
+    destination = pathlib.Path(destination)
+    try:
+        os.link(source, destination)
+    except OSError as exc:
+        if exc.errno != errno.EXDEV:
+            raise
+        shutil.copy2(source, destination)
+        source_identity, source_snapshot = _stream_fixture_file_identity(source)
+        destination_identity, destination_snapshot = _stream_fixture_file_identity(destination)
+        if source_identity != destination_identity:
+            raise AssertionError("cross-filesystem fixture copy differs from its source payload")
+        # Re-read metadata after both streams so a source or destination change
+        # between the two hashes cannot be accepted as an exact copy.
+        if (
+            source_snapshot != _fixture_file_snapshot(source)
+            or destination_snapshot != _fixture_file_snapshot(destination)
+        ):
+            raise AssertionError("cross-filesystem fixture copy changed after verification")
+        return {
+            "method": "copy2",
+            "source": source_identity,
+            "destination": destination_identity,
+        }
+
+    source_snapshot = _fixture_file_snapshot(source)
+    destination_snapshot = _fixture_file_snapshot(destination)
+    if (
+        source_snapshot[:2] != destination_snapshot[:2]
+    ):
+        raise AssertionError("fixture hardlink does not share its source inode")
+    identity, snapshot = _stream_fixture_file_identity(source)
+    final_source_snapshot = _fixture_file_snapshot(source)
+    final_destination_snapshot = _fixture_file_snapshot(destination)
+    if (
+        snapshot != final_source_snapshot
+        or final_source_snapshot != final_destination_snapshot
+    ):
+        raise AssertionError("fixture hardlink changed during verification")
+    return {"method": "hardlink", "source": identity, "destination": dict(identity)}
+
+
 class CompletenessProofRollupTest(unittest.TestCase):
+    def test_exact_fixture_file_keeps_same_filesystem_hardlink(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            source = root / "source"
+            destination = root / "destination"
+            source.write_bytes(b"same-filesystem fixture payload\n")
+            with mock.patch.object(shutil, "copy2") as copy_file:
+                result = _materialize_exact_fixture_file(source, destination)
+            copy_file.assert_not_called()
+            self.assertEqual(result["method"], "hardlink")
+            self.assertEqual(result["source"], result["destination"])
+            self.assertEqual(source.stat().st_ino, destination.stat().st_ino)
+
+    def test_exact_fixture_file_copies_only_after_exdev(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            source = root / "source"
+            destination = root / "destination"
+            source.write_bytes(b"cross-filesystem fixture payload\n")
+            with (
+                mock.patch.object(os, "link", side_effect=OSError(errno.EXDEV, "cross-device")),
+                mock.patch.object(shutil, "copy2", wraps=shutil.copy2) as copy_file,
+            ):
+                result = _materialize_exact_fixture_file(source, destination)
+            copy_file.assert_called_once_with(source, destination)
+            self.assertEqual(result["method"], "copy2")
+            self.assertEqual(result["source"], result["destination"])
+            self.assertNotEqual(source.stat().st_ino, destination.stat().st_ino)
+
+    def test_exact_fixture_file_propagates_non_exdev_link_failures(self) -> None:
+        for error_number in (errno.ENOSPC, errno.EIO, errno.EACCES):
+            with self.subTest(error_number=error_number), tempfile.TemporaryDirectory() as directory:
+                root = pathlib.Path(directory)
+                source = root / "source"
+                destination = root / "destination"
+                source.write_bytes(b"fixture payload\n")
+                expected = OSError(error_number, os.strerror(error_number))
+                with (
+                    mock.patch.object(os, "link", side_effect=expected),
+                    mock.patch.object(shutil, "copy2") as copy_file,
+                    self.assertRaises(OSError) as raised,
+                ):
+                    _materialize_exact_fixture_file(source, destination)
+                self.assertEqual(raised.exception.errno, error_number)
+                copy_file.assert_not_called()
+                self.assertFalse(destination.exists())
+
+    def test_exact_fixture_file_does_not_accept_failed_partial_copy(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            source = root / "source"
+            destination = root / "destination"
+            source.write_bytes(b"complete fixture payload\n")
+
+            def partial_copy(_source: pathlib.Path, target: pathlib.Path) -> None:
+                target.write_bytes(b"partial")
+                raise OSError(errno.ENOSPC, "copy ran out of space")
+
+            with (
+                mock.patch.object(os, "link", side_effect=OSError(errno.EXDEV, "cross-device")),
+                mock.patch.object(shutil, "copy2", side_effect=partial_copy),
+                self.assertRaises(OSError) as raised,
+            ):
+                _materialize_exact_fixture_file(source, destination)
+            self.assertEqual(raised.exception.errno, errno.ENOSPC)
+            self.assertEqual(destination.read_bytes(), b"partial")
+
+    def test_exact_fixture_file_rejects_size_or_digest_mismatch(self) -> None:
+        corruptions = (b"short", b"complete fixture payloae\n")
+        for corrupted in corruptions:
+            with self.subTest(corrupted=corrupted), tempfile.TemporaryDirectory() as directory:
+                root = pathlib.Path(directory)
+                source = root / "source"
+                destination = root / "destination"
+                source.write_bytes(b"complete fixture payload\n")
+
+                def corrupt_copy(_source: pathlib.Path, target: pathlib.Path) -> None:
+                    target.write_bytes(corrupted)
+
+                with (
+                    mock.patch.object(os, "link", side_effect=OSError(errno.EXDEV, "cross-device")),
+                    mock.patch.object(shutil, "copy2", side_effect=corrupt_copy),
+                    self.assertRaisesRegex(AssertionError, "differs from its source payload"),
+                ):
+                    _materialize_exact_fixture_file(source, destination)
+
     @staticmethod
     def _hardlink_worktree(source: pathlib.Path, destination: pathlib.Path) -> None:
         skipped = {".git", ".datapan", "__pycache__", ".pytest_cache"}
@@ -1802,7 +1982,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
         )
         local_registry = repository / "data/data-go-kr.registry.json"
         local_registry.unlink()
-        os.link(ROOT / "data/data-go-kr.registry.json", local_registry)
+        _materialize_exact_fixture_file(
+            ROOT / "data/data-go-kr.registry.json", local_registry,
+        )
         current_artifact, candidate_manifest_sha = MODULE.source_lfs_binding(repository, candidate_head)
 
         by_role = {
