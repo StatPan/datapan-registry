@@ -38,13 +38,14 @@ RECONCILIATION = ROOT / "reports/operation-document-evidence/reconciliation.v1.j
 EVIDENCE_DIR = ROOT / "reports/operation-document-evidence"
 SCHEMA_VERSION = "datapan.operation-document-evidence.v1"
 PARSER_ID = "data-go-kr-operation-document-parser"
-PARSER_VERSION = "1.0.0"
+PARSER_VERSION = "1.3.0"
 HOST = "www.data.go.kr"
 DETAIL_ROUTE = "/tcs/dss/selectApiDetailFunction.do"
 DOWNLOAD_ROUTE = "/cmm/cmm/fileDownload.do"
 MAX_PAGE_BYTES = 3 * 1024 * 1024
 MAX_DETAIL_BYTES = 1024 * 1024
 MAX_GUIDE_BYTES = 8 * 1024 * 1024
+MAX_OPENAPI_BYTES = 8 * 1024 * 1024
 MAX_DOCX_ENTRIES = 256
 MAX_DOCX_EXPANDED_BYTES = 16 * 1024 * 1024
 MAX_DOCX_MEMBER_BYTES = 8 * 1024 * 1024
@@ -123,8 +124,7 @@ def _safe_operation_identity(operation: dict[str, Any]) -> dict[str, Any]:
         or not isinstance(identity["dataset_id"], str)
         or not re.fullmatch(r"[0-9]+", identity["dataset_id"])
         or not isinstance(identity["upstream_operation_key"], str)
-        or not identity["upstream_operation_key"]
-        or len(identity["upstream_operation_key"]) > 128
+        or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9:._-]{0,127}", identity["upstream_operation_key"])
         or not isinstance(identity["operation_name"], str)
         or not identity["operation_name"]
     ):
@@ -156,9 +156,18 @@ def build_queue(manifest: dict[str, Any]) -> list[dict[str, Any]]:
             "operation_identity": identity,
             "status": "pending",
             "source_profile_id": source_profile_id,
+            "next_action": "implement_safetydata_document_profile" if source_profile_id == "safetydata_v1" else "acquire_official_catalogue_detail_and_guide",
         })
     queue.sort(key=lambda item: item["operation_identity"]["operation_id"])
     return queue
+
+
+def select_queue_batch(queue: list[dict[str, Any]], *, offset: int, limit: int) -> list[dict[str, Any]]:
+    if isinstance(offset, bool) or not isinstance(offset, int) or offset < 0 or offset >= max(1, len(queue)):
+        raise EvidenceError("queue_offset_out_of_range")
+    if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= MAX_BATCH_OPERATIONS:
+        raise EvidenceError("queue_batch_limit_invalid")
+    return queue[offset : offset + limit]
 
 
 class _DocumentHtml(HTMLParser):
@@ -281,6 +290,9 @@ def _find_param_tables(tables: list[list[list[str]]]) -> list[tuple[int, dict[st
                 "requiredness": {"항목구분", "필수여부", "required"},
                 "sample": {"샘플데이터", "sampledata", "example"},
                 "description": {"항목설명", "description"},
+                "data_type": {"자료형", "데이터형", "자료타입", "데이터유형", "datatype", "data_type", "type"},
+                "enum": {"허용값", "가능값", "유효값", "열거값", "enum", "allowedvalues"},
+                "default": {"기본값", "초기값", "default"},
             }.items():
                 hits = [i for i, value in enumerate(normalized) if value in aliases]
                 if len(hits) == 1:
@@ -300,6 +312,107 @@ def _requiredness(value: str) -> tuple[str | None, str]:
     return None, "unknown"
 
 
+def _safe_metadata_cell(value: str, *, field_name: str, parameter_name: str) -> str | None:
+    """Keep explicit contract literals only when they cannot be examples/secrets."""
+    text = " ".join(value.split()).strip()
+    if field_name == "default" and text in {'""', "''"}:
+        return ""
+    if not text or text in {"-", "없음", "N/A", "해당없음"}:
+        return None
+    if field_name == "default" and parameter_name.casefold().replace("_", "") in {"servicekey", "apikey", "authorization", "authkey", "token", "accesskey"}:
+        return None
+    if (
+        len(text) > 128
+        or re.search(r"(?i)(bearer\s|token|secret|api[-_ ]?key|password|https?://|[?&][^\s=]+=)", text)
+        or re.search(r"(?i)\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", text)
+        or re.search(r"(?<!\d)\d{8,}(?!\d)", text)
+        or re.search(r"\b[A-Za-z0-9_-]{32,}\b", text)
+    ):
+        return None
+    if any(ord(char) < 0x20 for char in text):
+        return None
+    return text
+
+
+def _split_explicit_enum(value: str, *, parameter_name: str) -> list[str] | None:
+    text = " ".join(value.split()).strip()
+    if not text or text in {"-", "없음", "N/A", "해당없음"}:
+        return None
+    pieces = [piece.strip().strip("\"'") for piece in re.split(r"[,;|\n]", text)]
+    if not 1 <= len(pieces) <= 64:
+        return None
+    values = [_safe_metadata_cell(piece, field_name="enum", parameter_name=parameter_name) for piece in pieces]
+    if any(item is None for item in values):
+        return None
+    return [str(item) for item in values]
+
+
+def _provider_quota_facts(
+    tables: list[list[list[str]]],
+    *,
+    source_id: str,
+    kind: str,
+    part: str | None = None,
+) -> dict[str, Any]:
+    observations: list[tuple[int | None, str | None, dict[str, Any]]] = []
+    label_pattern = re.compile(r"(?i)(호출\s*(?:횟수|제한|한도)|일일\s*트래픽|트래픽\s*(?:제한|한도)|rate\s*limit|quota)")
+    count_pattern = re.compile(r"(?i)(?<![A-Za-z0-9])([0-9][0-9,]*)(?:\s*)(회|건|requests?|calls?)?")
+    for table_index, rows in enumerate(tables):
+        for row_index, row in enumerate(rows):
+            row_text = " ".join(row)
+            if not label_pattern.search(row_text):
+                continue
+            amounts = [int(match.group(1).replace(",", "")) for match in count_pattern.finditer(row_text)]
+            if not amounts:
+                locator = _cell_locator(source_id, kind, table_index, row_index, 0, part=part)
+                observations.append((None, None, locator))
+                continue
+            period = None
+            if re.search(r"(?i)(초당|매초|/\s*초|per\s+second|/sec)", row_text):
+                period = "second"
+            elif re.search(r"(?i)(일일|하루|/\s*일|per\s+day|daily)", row_text):
+                period = "day"
+            elif re.search(r"(?i)(분당|매분|/\s*분|per\s+minute)", row_text):
+                period = "minute"
+            elif re.search(r"(?i)(월간|매월|/\s*월|per\s+month|monthly)", row_text):
+                period = "month"
+            unit_name = "requests" if re.search(r"(?i)(회|건|requests?|calls?)", row_text) else None
+            unit = f"{unit_name}/{period}" if unit_name and period else (unit_name or (f"/{period}" if period else None))
+            if len(set(amounts)) != 1:
+                observations.append((None, "conflict", _cell_locator(source_id, kind, table_index, row_index, 0, part=part)))
+            else:
+                amount_column = next((idx for idx, cell in enumerate(row) if re.search(r"[0-9]", cell)), 0)
+                observations.append((amounts[0], unit, _cell_locator(source_id, kind, table_index, row_index, amount_column, part=part)))
+    if not observations:
+        return {"value": None, "unit": None, "status": "not_parsed", "source_refs": []}
+    refs = [_source_ref(locator, "provider_quota") for _, _, locator in observations]
+    if any(unit == "conflict" for _, unit, _ in observations):
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+    if any(amount is None for amount, _, _ in observations):
+        return {"value": None, "unit": None, "status": "unknown", "source_refs": refs}
+    distinct = {(amount, unit) for amount, unit, _ in observations}
+    if len(distinct) != 1:
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+    amount, unit = next(iter(distinct))
+    return {"value": amount, "unit": unit, "status": "documented", "source_refs": refs}
+
+
+def _combine_quota_facts(facts: list[dict[str, Any]]) -> dict[str, Any]:
+    parsed = [fact for fact in facts if fact["status"] != "not_parsed"]
+    refs = [ref for fact in parsed for ref in fact["source_refs"]]
+    if not parsed:
+        return {"value": None, "unit": None, "status": "not_parsed", "source_refs": []}
+    if any(fact["status"] == "conflict" for fact in parsed):
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+    if any(fact["status"] == "unknown" for fact in parsed):
+        return {"value": None, "unit": None, "status": "unknown", "source_refs": refs}
+    values = {(fact["value"], fact["unit"]) for fact in parsed}
+    if len(values) != 1:
+        return {"value": None, "unit": None, "status": "conflict", "source_refs": refs}
+    value, unit = next(iter(values))
+    return {"value": value, "unit": unit, "status": "documented", "source_refs": refs}
+
+
 def _safe_url_parts(value: str) -> dict[str, str] | None:
     value = html.unescape(value.strip())
     try:
@@ -316,6 +429,12 @@ def _safe_url_parts(value: str) -> dict[str, str] | None:
 def _docx_tables(raw: bytes) -> list[list[list[str]]]:
     if not isinstance(raw, bytes) or not raw or len(raw) > MAX_GUIDE_BYTES:
         raise EvidenceError("docx_source_size_invalid")
+    if raw.startswith(b"%PDF-"):
+        raise EvidenceError("guide_format_unsupported_pdf")
+    if raw.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        raise EvidenceError("guide_format_unsupported_legacy_ole_document")
+    if not raw.startswith(b"PK\x03\x04"):
+        raise EvidenceError("guide_format_unsupported")
     try:
         with zipfile.ZipFile(__import__("io").BytesIO(raw)) as archive:
             infos = archive.infolist()
@@ -373,6 +492,732 @@ def _source_ref(locator: dict[str, Any], evidence_kind: str = "document_cell") -
     return {"locator": locator, "evidence_kind": evidence_kind}
 
 
+def _unknown_response_contract() -> dict[str, Any]:
+    unknown_codes = {"status": "unknown", "values": [], "source_refs": []}
+    return {
+        "accepted_http_status_codes": {"status": "unknown", "values": [], "source_refs": []},
+        "documented_fields": [],
+        "required_fields": [],
+        "provider_result_codes": {"status": "unknown", "evidence_strength": "unknown", "path": None, "value_type": None, "success_values": dict(unknown_codes), "error_values": dict(unknown_codes), "source_refs": []},
+        "result_collection": {"status": "unknown", "path": None, "container_path": None, "item_path": None, "container_cardinality": {"status": "unknown", "minimum": None, "maximum": None, "source_refs": []}, "value_type": None, "source_refs": []},
+    }
+
+
+def _json_pointer_child(pointer: str, token: str | int) -> str:
+    escaped = str(token).replace("~", "~0").replace("/", "~1")
+    return f"{pointer}/{escaped}"
+
+
+def _json_pointer_locator(source_id: str, pointer: str, byte_range: tuple[int, int]) -> dict[str, Any]:
+    return {
+        "source_id": source_id,
+        "kind": "html_inline_json",
+        "variable_name": "swaggerJson",
+        "byte_start": byte_range[0],
+        "byte_end": byte_range[1],
+        "json_pointer": pointer,
+    }
+
+
+def _json_load_no_duplicates(raw: str) -> Any:
+    def pairs_no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise EvidenceError("openapi_json_duplicate_key")
+            result[key] = value
+        return result
+
+    try:
+        return json.loads(raw, object_pairs_hook=pairs_no_duplicates)
+    except (json.JSONDecodeError, TypeError) as exc:
+        raise EvidenceError("openapi_json_invalid") from exc
+
+
+def _successful_response_label(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) > 512:
+        return False
+    normalized = value.casefold()
+    if any(marker in normalized for marker in ("실패", "오류", "error", "failure", "unsuccessful", "invalid", "not successful", "not success")):
+        return False
+    compact = re.sub(r"\s+", "", normalized)
+    return any(marker in compact for marker in ("성공", "정상응답", "정상처리")) or compact == "정상" or re.search(r"\bsuccess(?:ful)?(?:response)?\b", compact) is not None
+
+
+def _json_pointer_tokens(pointer: str) -> list[str] | None:
+    if not isinstance(pointer, str) or not pointer.startswith("#/"):
+        return None
+    try:
+        return [token.replace("~1", "/").replace("~0", "~") for token in pointer[2:].split("/")]
+    except (TypeError, ValueError):
+        return None
+
+
+def _example_scalar_type_matches(value: Any, type_name: str | None) -> bool:
+    if type_name == "string":
+        return isinstance(value, str)
+    if type_name == "integer":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if type_name == "number":
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
+    if type_name == "boolean":
+        return isinstance(value, bool)
+    return False
+
+
+def _example_code_is_safe(value: Any) -> bool:
+    if isinstance(value, str):
+        return _safe_metadata_cell(value, field_name="provider_result_code", parameter_name="") is not None
+    if isinstance(value, int) and not isinstance(value, bool):
+        return 0 <= value <= 9999999
+    if isinstance(value, float):
+        return value == value and abs(value) <= 9999999
+    return isinstance(value, bool)
+
+
+def _inline_swagger(page_raw: bytes) -> tuple[dict[str, Any], tuple[int, int]]:
+    try:
+        text = page_raw.decode("utf-8", errors="strict")
+    except UnicodeError as exc:
+        raise EvidenceError("catalogue_utf8_invalid") from exc
+    matches = list(re.finditer(r"\bconst\s+swaggerJson\s*=\s*\x60([^\x60]*)\x60\s*;", text, re.S))
+    if len(matches) != 1 or not matches[0].group(1):
+        raise EvidenceError("inline_swagger_document_missing_or_ambiguous")
+    match = matches[0]
+    spec_text = html.unescape(match.group(1))
+    if len(spec_text.encode("utf-8")) > MAX_OPENAPI_BYTES:
+        raise EvidenceError("openapi_document_size_invalid")
+    document = _json_load_no_duplicates(spec_text)
+    if not isinstance(document, dict) or document.get("swagger") != "2.0":
+        raise EvidenceError("openapi_version_unsupported")
+    prefix = len(text[: match.start(1)].encode("utf-8"))
+    end = len(text[: match.end(1)].encode("utf-8"))
+    return document, (prefix, end)
+
+
+def _openapi_resolve(document: dict[str, Any], schema: Any, pointer: str) -> tuple[Any, str, list[str]]:
+    seen: set[str] = set()
+    refs: list[str] = []
+    while isinstance(schema, dict) and isinstance(schema.get("$ref"), str):
+        ref = schema["$ref"]
+        if not ref.startswith("#/") or ref in seen:
+            raise EvidenceError("openapi_ref_external_or_cyclic")
+        seen.add(ref)
+        refs.append(ref)
+        current: Any = document
+        for token in ref[2:].split("/"):
+            token = token.replace("~1", "/").replace("~0", "~")
+            if not isinstance(current, dict) or token not in current:
+                raise EvidenceError("openapi_ref_target_missing")
+            current = current[token]
+        schema = current
+        pointer = ref
+    return schema, pointer, refs
+
+
+def _openapi_source_binding(page_raw: bytes, retrieved_at: str, media_type: str | None, dataset_id: str) -> dict[str, Any]:
+    return _make_source_binding(
+        "catalogue_detail_page",
+        page_raw,
+        _normalize_content_type(media_type, "text/html; charset=utf-8") or "text/html; charset=utf-8",
+        f"/data/{dataset_id}/openapi.do",
+        "GET",
+        retrieved_at,
+        "catalogue_identity_and_inline_openapi_operation",
+    )
+
+
+def parse_openapi_evidence(
+    operation: dict[str, Any],
+    *,
+    page_raw: bytes,
+    page_retrieved_at: str,
+    page_media_type: str | None = None,
+) -> dict[str, Any]:
+    """Parse one exact inline Swagger 2 operation without following references."""
+    identity = _safe_operation_identity(operation)
+    page = _parse_html(page_raw)
+    if page.hidden.get("publicDataPk") != [identity["dataset_id"]]:
+        raise EvidenceError("catalogue_dataset_identity_mismatch")
+    document, byte_range = _inline_swagger(page_raw)
+    try:
+        registered = urllib.parse.urlsplit(str(operation.get("transport", {}).get("endpoint") or ""))
+        registered_port = registered.port
+    except ValueError as exc:
+        raise EvidenceError("registered_endpoint_invalid") from exc
+    if registered.scheme != "https" or not registered.hostname or registered.query or registered.fragment or registered.username or registered.password:
+        raise EvidenceError("registered_endpoint_invalid")
+    host_value = document.get("host")
+    if not isinstance(host_value, str) or not host_value or "@" in host_value or "?" in host_value or "#" in host_value:
+        raise EvidenceError("openapi_host_invalid")
+    host_parts = urllib.parse.urlsplit("//" + host_value)
+    if not host_parts.hostname or host_parts.username or host_parts.password:
+        raise EvidenceError("openapi_host_invalid")
+    try:
+        spec_port = host_parts.port
+    except ValueError as exc:
+        raise EvidenceError("openapi_host_invalid") from exc
+    if host_parts.hostname.lower() != registered.hostname.lower() or spec_port != registered_port:
+        raise EvidenceError("openapi_registered_host_mismatch")
+    host_prefix = host_parts.path.rstrip("/")
+    base_path = document.get("basePath", "")
+    if not isinstance(base_path, str) or (base_path and (not base_path.startswith("/") or "?" in base_path or "#" in base_path)):
+        raise EvidenceError("openapi_base_path_invalid")
+    schemes = document.get("schemes")
+    if not isinstance(schemes, list) or not schemes or any(value not in {"http", "https"} for value in schemes):
+        raise EvidenceError("openapi_schemes_invalid")
+    if registered.scheme not in schemes:
+        raise EvidenceError("openapi_registered_scheme_mismatch")
+    paths = document.get("paths")
+    if not isinstance(paths, dict) or not paths:
+        raise EvidenceError("openapi_paths_invalid")
+    method_names = {"get", "head", "post", "put", "patch", "delete", "options"}
+    matched: list[tuple[str, str, dict[str, Any]]] = []
+    for spec_path, path_item in paths.items():
+        if not isinstance(spec_path, str) or not spec_path.startswith("/") or "?" in spec_path or "#" in spec_path or not isinstance(path_item, dict):
+            raise EvidenceError("openapi_path_invalid")
+        full_path = host_prefix + base_path.rstrip("/") + spec_path
+        if not full_path:
+            full_path = "/"
+        for method_name, operation_spec in path_item.items():
+            if method_name.lower() not in method_names or not isinstance(operation_spec, dict):
+                continue
+            summary = operation_spec.get("summary")
+            operation_id = operation_spec.get("operationId")
+            if (
+                registered.path == full_path
+                and isinstance(summary, str)
+                and summary == identity["operation_name"]
+                and isinstance(operation_id, str)
+                and operation_id
+            ):
+                matched.append((spec_path, method_name.lower(), operation_spec))
+    if len(matched) != 1:
+        raise EvidenceError("openapi_operation_identity_ambiguous" if matched else "openapi_operation_identity_mismatch")
+    spec_path, method_name, operation_spec = matched[0]
+    operation_pointer = _json_pointer_child(_json_pointer_child("#/paths", spec_path), method_name)
+    byte_locator = lambda pointer: _json_pointer_locator("catalogue_detail_page", pointer, byte_range)
+    ref = lambda pointer, kind: _source_ref(byte_locator(pointer), kind)
+    summary_pointer = _json_pointer_child(operation_pointer, "summary")
+    path_pointer = _json_pointer_child("#/paths", spec_path)
+    identity["source_refs"] = [
+        _source_ref({"source_id": "catalogue_detail_page", "kind": "html_hidden_input", "input_id": "publicDataPk", "value": identity["dataset_id"]}, "catalogue_dataset_identity"),
+        ref(summary_pointer, "operation_name"),
+        ref(path_pointer, "operation_endpoint_path"),
+        ref(_json_pointer_child(operation_pointer, "operationId"), "operation_id"),
+    ]
+    source_binding = _openapi_source_binding(page_raw, page_retrieved_at, page_media_type, identity["dataset_id"])
+
+    # Swagger 2 path-level parameters are inherited unless replaced by the
+    # operation-level parameter with the same (name, in) pair.
+    path_item = paths[spec_path]
+    parameter_sets: list[tuple[list[Any], str, bool]] = []
+    if isinstance(path_item.get("parameters"), list):
+        parameter_sets.append((path_item["parameters"], _json_pointer_child(path_pointer, "parameters"), False))
+    raw_operation_parameters = operation_spec.get("parameters", [])
+    if not isinstance(raw_operation_parameters, list):
+        raise EvidenceError("openapi_parameters_invalid")
+    parameter_sets.append((raw_operation_parameters, _json_pointer_child(operation_pointer, "parameters"), True))
+    parameter_map: dict[tuple[str, str], tuple[dict[str, Any], str, list[str]]] = {}
+    for parameter_list, parameter_base, operation_level in parameter_sets:
+        for index, raw_parameter in enumerate(parameter_list):
+            pointer = _json_pointer_child(parameter_base, index)
+            resolved, resolved_pointer, deref_refs = _openapi_resolve(document, raw_parameter, pointer)
+            if not isinstance(resolved, dict):
+                raise EvidenceError("openapi_parameter_invalid")
+            name = resolved.get("name")
+            location = resolved.get("in")
+            if not isinstance(name, str) or not name or len(name) > 256 or any(ord(ch) < 0x20 for ch in name):
+                raise EvidenceError("openapi_parameter_name_invalid")
+            if location not in {"query", "path", "header", "body", "formData"}:
+                raise EvidenceError("openapi_parameter_location_unsupported")
+            key = (name.casefold(), location)
+            if key in parameter_map and operation_level:
+                parameter_map[key] = (resolved, resolved_pointer, deref_refs + ([pointer] if deref_refs else []))
+            elif key in parameter_map:
+                raise EvidenceError("openapi_parameter_duplicate")
+            else:
+                parameter_map[key] = (resolved, resolved_pointer, deref_refs + ([pointer] if deref_refs else []))
+    parameters: list[dict[str, Any]] = []
+    for (name_folded, location), (parameter, pointer, ref_pointers) in sorted(parameter_map.items()):
+        name = parameter["name"]
+        required_raw = parameter.get("required")
+        required_value = "required" if required_raw is True or location == "path" else "optional" if required_raw is False else None
+        required_status = "documented" if required_value else "unknown"
+        location_value = "body" if location == "formData" else location
+        type_value = parameter.get("type")
+        schema_pointer = pointer
+        schema = parameter.get("schema")
+        if type_value is None and isinstance(schema, dict):
+            schema_pointer = _json_pointer_child(pointer, "schema")
+            type_value = schema.get("type")
+        if not isinstance(type_value, str) or type_value not in {"string", "integer", "number", "boolean", "array", "file"}:
+            type_value = None
+        type_pointer = _json_pointer_child(schema_pointer, "type")
+        required_refs = [ref(_json_pointer_child(pointer, "required"), "parameter_requiredness")] if required_value and required_raw is not None else []
+        if location == "path" and required_raw is not True:
+            required_refs = [ref(_json_pointer_child(pointer, "in"), "path_parameter_required_by_openapi")]
+        location_refs = [ref(_json_pointer_child(pointer, "in"), "parameter_location")]
+        name_refs = [ref(_json_pointer_child(pointer, "name"), "parameter_name")]
+        type_refs = [ref(type_pointer, "parameter_data_type")] if type_value else []
+        schema_for_values = schema if isinstance(schema, dict) else parameter
+        enum_value = schema_for_values.get("enum")
+        default_present = "default" in schema_for_values
+        default_value = schema_for_values.get("default")
+        enum_pointer = _json_pointer_child(schema_pointer, "enum")
+        default_pointer = _json_pointer_child(schema_pointer, "default")
+        enum_refs = [ref(enum_pointer, "parameter_enum")] if isinstance(enum_value, list) else []
+        default_refs = [ref(default_pointer, "parameter_default")] if default_present else []
+        enum_values: list[str] = []
+        enum_status = "not_established"
+        if isinstance(enum_value, list):
+            safe_values = [
+                _safe_metadata_cell(value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, separators=(",", ":")), field_name="enum", parameter_name=name)
+                if isinstance(value, (str, int, float, bool)) or value is None else None
+                for value in enum_value
+            ]
+            if 1 <= len(safe_values) <= 64 and all(value is not None for value in safe_values):
+                enum_values = [str(value) for value in safe_values]
+                enum_status = "documented"
+            else:
+                enum_status = "unknown"
+        default_text: str | None = None
+        default_status = "not_established"
+        if default_present:
+            default_text = _safe_metadata_cell(default_value if isinstance(default_value, str) else json.dumps(default_value, ensure_ascii=False, separators=(",", ":")), field_name="default", parameter_name=name)
+            default_status = "documented" if default_text is not None else "unknown"
+        max_length = schema_for_values.get("maxLength")
+        size_value = str(max_length) if isinstance(max_length, int) and not isinstance(max_length, bool) and max_length >= 0 else None
+        size_refs = [ref(_json_pointer_child(schema_pointer, "maxLength"), "parameter_maximum_length")] if size_value is not None else []
+        array_type = type_value == "array"
+        min_items = schema_for_values.get("minItems")
+        max_items = schema_for_values.get("maxItems")
+        if array_type:
+            if min_items is None and required_value == "required":
+                min_items = 1
+            elif min_items is None:
+                min_items = 0
+        elif type_value:
+            min_items, max_items = (1 if required_value == "required" else 0), 1
+        else:
+            min_items = 1 if required_value == "required" else 0 if required_value == "optional" else None
+        cardinality_refs = required_refs + (
+            [ref(_json_pointer_child(schema_pointer, "minItems"), "parameter_minimum_cardinality")] if isinstance(schema_for_values.get("minItems"), int) else []
+        ) + (
+            [ref(_json_pointer_child(schema_pointer, "maxItems"), "parameter_maximum_cardinality")] if isinstance(schema_for_values.get("maxItems"), int) else []
+        )
+        if not array_type and type_value:
+            cardinality_status = "documented"
+        elif array_type and isinstance(min_items, int) and not isinstance(min_items, bool) and (max_items is None or isinstance(max_items, int) and not isinstance(max_items, bool)):
+            cardinality_status = "documented"
+        else:
+            cardinality_status = "unknown"
+        example_present = any(key in parameter or isinstance(schema, dict) and key in schema for key in ("example", "examples"))
+        ref_source_refs = [ref(ref_pointer, "parameter_reference") for ref_pointer in ref_pointers]
+        parameters.append({
+            "name": name,
+            "location": {"value": location_value, "status": "documented", "source_refs": location_refs},
+            "cardinality": {
+                "minimum": min_items if isinstance(min_items, int) and not isinstance(min_items, bool) and min_items >= 0 else None,
+                "maximum": max_items if isinstance(max_items, int) and not isinstance(max_items, bool) and max_items >= 0 else (None if array_type else 1 if type_value else None),
+                "status": cardinality_status if required_status == "documented" else "unknown",
+                "source_refs": cardinality_refs,
+            },
+            "requiredness": {"value": required_value, "status": required_status, "source_refs": required_refs},
+            "size": {"value": size_value, "observed_values": [size_value] if size_value is not None else [], "status": "documented" if size_value is not None else "unknown", "source_refs": size_refs},
+            "data_type": {"value": type_value, "status": "documented" if type_value else "not_established", "source_refs": type_refs},
+            "enum": {"values": enum_values, "status": enum_status, "source_refs": enum_refs},
+            "default": {"value": default_text, "status": default_status, "source_refs": default_refs},
+            "sample": {"present": example_present, "value_stored": False, "source_refs": [ref(_json_pointer_child(pointer, "example"), "parameter_example_presence")] if example_present else []},
+            "source_refs": [*name_refs, *location_refs, *required_refs, *type_refs, *enum_refs, *default_refs, *size_refs, *cardinality_refs, *ref_source_refs],
+        })
+
+    authentication: dict[str, Any] = {"requirement": None, "status": "unknown", "mechanism": None, "parameter_names": [], "placement": None, "source_refs": []}
+    security_definitions = document.get("securityDefinitions")
+    if "security" in operation_spec:
+        security_value, security_pointer = operation_spec.get("security"), _json_pointer_child(operation_pointer, "security")
+    elif "security" in document:
+        security_value, security_pointer = document.get("security"), "#/security"
+    else:
+        security_value, security_pointer = None, None
+    if security_value == [] and security_pointer:
+        authentication.update(requirement="none", status="documented", source_refs=[ref(security_pointer, "operation_authentication_absent")])
+    elif isinstance(security_value, list) and isinstance(security_definitions, dict):
+        observed_schemes: list[tuple[str, str, str, str]] = []
+        for requirement in security_value:
+            if not isinstance(requirement, dict):
+                continue
+            for scheme_name in requirement:
+                definition = security_definitions.get(scheme_name)
+                if not isinstance(definition, dict) or definition.get("type") != "apiKey":
+                    continue
+                placement = definition.get("in")
+                parameter_name = definition.get("name")
+                if placement in {"query", "header"} and isinstance(parameter_name, str):
+                    mechanism = "service_key" if parameter_name.casefold().replace("_", "") == "servicekey" else "api_key"
+                    observed_schemes.append((mechanism, placement, parameter_name, _json_pointer_child(_json_pointer_child("#/securityDefinitions", scheme_name), "name")))
+        if len(observed_schemes) == 1:
+            mechanism, placement, parameter_name, auth_pointer = observed_schemes[0]
+            authentication.update(requirement="required", status="documented", mechanism=mechanism, parameter_names=[parameter_name], placement=placement, source_refs=[ref(security_pointer, "operation_security_requirement"), ref(auth_pointer, "authentication_security_scheme"), ref(_json_pointer_child(_json_pointer_child("#/securityDefinitions", scheme_name), "in"), "authentication_placement")])
+
+    # Some official Swagger pages describe an issued credential directly on a
+    # parameter instead of declaring securityDefinitions. A parameter name by
+    # itself is never enough to classify authentication.
+    explicit_auth: list[tuple[str, str, str | None, list[dict[str, Any]]]] = []
+    credential_description = re.compile(r"(?i)(인증\s*키|공공데이터포털.{0,40}(?:받|발급)|\bapi\s*key\b|\baccess\s*token\b)")
+    for (name_folded, location), (parameter, pointer, ref_pointers) in parameter_map.items():
+        description = parameter.get("description")
+        if not isinstance(description, str) or not credential_description.search(description):
+            continue
+        if location not in {"query", "header"}:
+            continue
+        name = parameter.get("name")
+        if not isinstance(name, str):
+            continue
+        normalized_name = name.casefold().replace("_", "")
+        mechanism = "service_key" if "공공데이터포털" in description or normalized_name == "servicekey" else "api_key"
+        required_value = parameter.get("required") is True
+        auth_refs = [
+            ref(_json_pointer_child(pointer, "description"), "authentication_credential_description"),
+            ref(_json_pointer_child(pointer, "name"), "authentication_parameter_name"),
+            ref(_json_pointer_child(pointer, "in"), "authentication_parameter_placement"),
+        ]
+        if isinstance(parameter.get("required"), bool):
+            auth_refs.append(ref(_json_pointer_child(pointer, "required"), "authentication_parameter_requiredness"))
+        auth_refs.extend(ref(ref_pointer, "authentication_parameter_reference") for ref_pointer in ref_pointers)
+        explicit_auth.append((name, location, mechanism if required_value else None, auth_refs))
+    if explicit_auth:
+        names = sorted({name for name, _, _, _ in explicit_auth})
+        placements = {placement for _, placement, _, _ in explicit_auth}
+        mechanisms = {mechanism for _, _, mechanism, _ in explicit_auth if mechanism is not None}
+        required = any(mechanism is not None for _, _, mechanism, _ in explicit_auth)
+        refs = [source_ref for _, _, _, auth_refs in explicit_auth for source_ref in auth_refs]
+        if authentication["status"] == "documented" and authentication["requirement"] == "none":
+            authentication.update(requirement=None, status="conflict", mechanism=None, parameter_names=names, placement=None, source_refs=[*authentication["source_refs"], *refs])
+        elif len(placements) == 1 and len(mechanisms) <= 1:
+            authentication.update(
+                requirement="required" if required else None,
+                status="documented",
+                mechanism=next(iter(mechanisms)) if mechanisms else None,
+                parameter_names=names,
+                placement=next(iter(placements)),
+                source_refs=[*authentication["source_refs"], *refs],
+            )
+        else:
+            authentication.update(requirement=None, status="conflict", mechanism=None, parameter_names=names, placement=None, source_refs=[*authentication["source_refs"], *refs])
+
+    response_fields: list[str] = []
+    response_refs: list[dict[str, Any]] = []
+    responses = operation_spec.get("responses")
+    if not isinstance(responses, dict):
+        raise EvidenceError("openapi_responses_invalid")
+    success_responses = [(code, response) for code, response in responses.items() if re.fullmatch(r"2[0-9][0-9]", str(code)) and isinstance(response, dict)]
+    produces = operation_spec.get("produces", document.get("produces", []))
+    if not isinstance(produces, list):
+        produces = []
+    normalized_produces = {str(value).split(";", 1)[0].strip().casefold() for value in produces if isinstance(value, str)}
+    response_format = "json" if normalized_produces and any(value == "application/json" or value.endswith("+json") for value in normalized_produces) and not any("xml" in value for value in normalized_produces) else "xml" if normalized_produces and any("xml" in value for value in normalized_produces) and not any(value == "application/json" or value.endswith("+json") for value in normalized_produces) else None
+    accepted_status_refs = [
+        ref(_json_pointer_child(_json_pointer_child(operation_pointer, "responses"), code), "accepted_http_success_status")
+        for code, _ in success_responses
+    ]
+    accepted_status_codes = sorted({int(code) for code, _ in success_responses})
+    response_contract = {
+        "accepted_http_status_codes": {"status": "documented" if accepted_status_codes else "unknown", "values": accepted_status_codes, "source_refs": accepted_status_refs},
+        "documented_fields": [],
+        "required_fields": [],
+        "provider_result_codes": {"status": "unknown", "evidence_strength": "unknown", "path": None, "value_type": None, "success_values": {"status": "unknown", "values": [], "source_refs": []}, "error_values": {"status": "unknown", "values": [], "source_refs": []}, "source_refs": []},
+        "result_collection": {"status": "unknown", "path": None, "container_path": None, "item_path": None, "container_cardinality": {"status": "unknown", "minimum": None, "maximum": None, "source_refs": []}, "value_type": None, "source_refs": []},
+    }
+    array_facts: list[tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None, dict[str, Any], list[dict[str, Any]]]] = []
+    result_code_facts: list[tuple[dict[str, Any] | None, str | None, list[dict[str, Any]]]] = []
+
+    def response_path(tokens: list[str], xml_segments: list[dict[str, Any] | None], path_known: bool) -> dict[str, Any] | None:
+        if response_format == "json" and path_known:
+            pointer = "#" + "".join("/" + token.replace("~", "~0").replace("/", "~1") for token in tokens)
+            return {"kind": "json_pointer", "value": pointer}
+        if response_format == "xml" and xml_segments and all(segment is not None and segment["namespace"] is not None for segment in xml_segments):
+            return {"kind": "xml_qname_path", "segments": xml_segments}
+        return None
+
+    def collect_schema(schema_value: Any, schema_pointer: str, data_tokens: list[str], xml_segments: list[dict[str, Any] | None], inherited_namespace: str | None, path_known: bool, visited: set[tuple[str, tuple[str, ...]]]) -> None:
+        resolved, resolved_pointer, ref_pointers = _openapi_resolve(document, schema_value, schema_pointer)
+        if not isinstance(resolved, dict):
+            return
+        visit_key = (resolved_pointer, tuple(data_tokens))
+        if visit_key in visited:
+            return
+        visited.add(visit_key)
+        for ref_pointer in ref_pointers:
+            response_refs.append(ref(ref_pointer, "response_schema_reference"))
+        properties = resolved.get("properties")
+        if isinstance(properties, dict):
+            declared_required = resolved.get("required")
+            required_set = set(declared_required) if isinstance(declared_required, list) and all(isinstance(value, str) for value in declared_required) else set() if "required" not in resolved else None
+            if isinstance(declared_required, list) and (not all(isinstance(value, str) for value in declared_required) or len(set(declared_required)) != len(declared_required)):
+                raise EvidenceError("openapi_response_required_invalid")
+            for field_name, child_schema in properties.items():
+                if not isinstance(field_name, str) or not field_name or not isinstance(child_schema, (dict, bool)):
+                    continue
+                property_pointer = _json_pointer_child(_json_pointer_child(resolved_pointer, "properties"), field_name)
+                child_resolved, child_resolved_pointer, child_ref_pointers = _openapi_resolve(document, child_schema, property_pointer)
+                if not isinstance(child_resolved, dict):
+                    continue
+                field_type = child_resolved.get("type")
+                if not isinstance(field_type, str) or field_type not in {"object", "array", "string", "integer", "number", "boolean"}:
+                    field_type = "object" if isinstance(child_resolved.get("properties"), dict) else None
+                xml_value = child_resolved.get("xml") if isinstance(child_resolved.get("xml"), dict) else {}
+                namespace = xml_value.get("namespace", inherited_namespace)
+                local_name = xml_value.get("name", field_name)
+                child_xml = [*xml_segments, {"namespace": namespace if isinstance(namespace, str) else None, "local_name": local_name}]
+                child_tokens = [*data_tokens, field_name]
+                path_value = response_path(child_tokens, child_xml, path_known)
+                required = required_set is not None and field_name in required_set
+                cardinality_refs: list[dict[str, Any]] = []
+                if required_set is not None:
+                    if "required" in resolved:
+                        cardinality_refs.append(ref(_json_pointer_child(resolved_pointer, "required"), "response_field_requiredness"))
+                    else:
+                        # OpenAPI/JSON Schema object properties are optional
+                        # unless named in the parent's required array.
+                        cardinality_refs.append(ref(resolved_pointer, "response_field_optional_by_schema_default"))
+                    minimum, cardinality_status = (1 if required else 0), "documented"
+                else:
+                    minimum, cardinality_status = None, "unknown"
+                field_refs = [ref(property_pointer, "response_field_schema"), *[ref(ref_pointer, "response_field_schema_reference") for ref_pointer in child_ref_pointers]]
+                type_pointer = _json_pointer_child(child_resolved_pointer, "type")
+                if field_type and "type" in child_resolved:
+                    field_refs.append(ref(type_pointer, "response_field_type"))
+                if path_value is None:
+                    field_status = "unknown"
+                else:
+                    field_status = "documented" if field_type else "unknown"
+                cardinality = {"status": cardinality_status, "minimum": minimum, "maximum": 1 if cardinality_status == "documented" else None, "source_refs": cardinality_refs}
+                field_fact = {"status": field_status, "path": path_value, "value_type": field_type, "cardinality": cardinality, "source_refs": field_refs}
+                response_contract["documented_fields"].append(field_fact)
+                response_fields.append(field_name)
+                response_refs.extend(field_refs)
+                if required:
+                    response_contract["required_fields"].append({**field_fact, "source_refs": [*field_refs, *cardinality_refs]})
+                normalized_field_name = re.sub(r"[^a-z0-9]", "", field_name.casefold())
+                if normalized_field_name in {"resultcode", "responsecode", "returncode"}:
+                    result_code_facts.append((path_value, field_type, [*field_refs, *cardinality_refs]))
+                if field_type == "array":
+                    container_path = None
+                    item_path = None
+                    if response_format == "json" and path_value is not None:
+                        pointer = path_value["value"]
+                        container_pointer = pointer.rsplit("/", 1)[0] or "#"
+                        container_path = {"kind": "json_pointer", "value": container_pointer}
+                    elif response_format == "xml" and path_value is not None:
+                        xml_wrapper = child_resolved.get("xml") if isinstance(child_resolved.get("xml"), dict) else {}
+                        items_schema = child_resolved.get("items")
+                        item_xml = items_schema.get("xml") if isinstance(items_schema, dict) and isinstance(items_schema.get("xml"), dict) else {}
+                        item_name = item_xml.get("name")
+                        item_namespace = item_xml.get("namespace", namespace)
+                        if xml_wrapper.get("wrapped") is True and isinstance(item_name, str) and item_name and isinstance(item_namespace, str):
+                            container_path = path_value
+                            # The container selector is absolute from the
+                            # response root; the repeated QName is relative to
+                            # that selected container so consumers can tell an
+                            # absent container from an empty present one.
+                            item_path = {"kind": "xml_qname_path", "segments": [{"namespace": item_namespace, "local_name": item_name}]}
+                    array_facts.append((path_value, container_path, item_path, cardinality, [*field_refs, *cardinality_refs]))
+                    items = child_resolved.get("items")
+                    if isinstance(items, dict):
+                        # JSON Pointer has no wildcard token, so nested array
+                        # item properties are not assigned invented paths.
+                        if response_format == "xml":
+                            item_xml_value = items.get("xml") if isinstance(items.get("xml"), dict) else {}
+                            item_namespace = item_xml_value.get("namespace", namespace)
+                            item_name = item_xml_value.get("name", field_name)
+                            item_segments = [*child_xml, {"namespace": item_namespace if isinstance(item_namespace, str) else None, "local_name": item_name}]
+                            collect_schema(items, _json_pointer_child(child_resolved_pointer, "items"), child_tokens, item_segments, item_namespace if isinstance(item_namespace, str) else None, path_known, visited)
+                        else:
+                            collect_schema(items, _json_pointer_child(child_resolved_pointer, "items"), child_tokens, child_xml, namespace if isinstance(namespace, str) else inherited_namespace, False, visited)
+                    continue
+                if field_type == "object" or isinstance(child_resolved.get("properties"), dict):
+                    collect_schema(child_resolved, child_resolved_pointer, child_tokens, child_xml, namespace if isinstance(namespace, str) else inherited_namespace, path_known, visited)
+        items = resolved.get("items")
+        if isinstance(items, dict) and resolved.get("type") == "array":
+            collect_schema(items, _json_pointer_child(resolved_pointer, "items"), data_tokens, xml_segments, inherited_namespace, path_known, visited)
+
+    for status_code, response in success_responses:
+        schema_value = response.get("schema")
+        if schema_value is not None:
+            response_pointer = _json_pointer_child(_json_pointer_child(operation_pointer, "responses"), status_code)
+            root_schema, root_pointer, _ = _openapi_resolve(document, schema_value, _json_pointer_child(response_pointer, "schema"))
+            root_xml = root_schema.get("xml") if isinstance(root_schema, dict) and isinstance(root_schema.get("xml"), dict) else {}
+            root_name = root_xml.get("name")
+            root_namespace = root_xml.get("namespace")
+            root_xml_segments = [{"namespace": root_namespace if isinstance(root_namespace, str) else None, "local_name": root_name}] if isinstance(root_name, str) and root_name else [None]
+            collect_schema(schema_value, _json_pointer_child(response_pointer, "schema"), [], root_xml_segments, root_namespace if isinstance(root_namespace, str) else None, True, set())
+    # Preserve order while de-duplicating field labels for the compatibility
+    # assertion; the structured facts above retain their distinct paths.
+    response_fields = list(dict.fromkeys(response_fields))
+    if len(result_code_facts) == 1:
+        result_path, result_type, result_refs = result_code_facts[0]
+        response_contract["provider_result_codes"].update(path=result_path, value_type=result_type, source_refs=result_refs)
+        for target, label in (("success_values", "provider_result_code_success_values_not_declared"), ("error_values", "provider_result_code_error_values_not_declared")):
+            response_contract["provider_result_codes"][target]["source_refs"] = [
+                ref(result_refs[0]["locator"]["json_pointer"], label)
+            ] if result_refs and result_refs[0]["locator"].get("kind") == "html_inline_json" else result_refs
+        # A labeled official successful response example can establish only
+        # the shown success literal. It never establishes an exhaustive error
+        # map, nor does it store the example body or any response rows.
+        if response_format == "json" and result_path and result_path.get("kind") == "json_pointer":
+            field_tokens = _json_pointer_tokens(result_path["value"])
+            example_values: dict[tuple[type, Any], list[dict[str, Any]]] = {}
+            if field_tokens:
+                for status_code, response in success_responses:
+                    description = response.get("description")
+                    examples = response.get("examples")
+                    if not _successful_response_label(description) or not isinstance(examples, dict):
+                        continue
+                    for media_type, raw_example in examples.items():
+                        if not isinstance(media_type, str) or not (media_type.casefold() == "application/json" or media_type.casefold().endswith("+json")):
+                            continue
+                        example = raw_example
+                        if isinstance(example, str) and len(example.encode("utf-8")) <= 1024 * 1024:
+                            try:
+                                example = _json_load_no_duplicates(example)
+                            except EvidenceError:
+                                continue
+                        selected: Any = example
+                        for token in field_tokens:
+                            if not isinstance(selected, dict) or token not in selected:
+                                selected = None
+                                break
+                            selected = selected[token]
+                        if selected is None or not _example_scalar_type_matches(selected, result_type) or not _example_code_is_safe(selected):
+                            continue
+                        responses_pointer = _json_pointer_child(operation_pointer, "responses")
+                        response_pointer = _json_pointer_child(responses_pointer, status_code)
+                        description_pointer = _json_pointer_child(response_pointer, "description")
+                        example_pointer = _json_pointer_child(_json_pointer_child(response_pointer, "examples"), media_type)
+                        for token in field_tokens:
+                            example_pointer = _json_pointer_child(example_pointer, token)
+                        example_refs = [
+                            ref(description_pointer, "official_success_response_example_label"),
+                            ref(example_pointer, "provider_result_code_success_official_example_value"),
+                        ]
+                        example_values.setdefault((type(selected), selected), []).extend(example_refs)
+            if example_values:
+                value_refs = [source_ref for refs in example_values.values() for source_ref in refs]
+                success_values = [value for _, value in example_values]
+                response_contract["provider_result_codes"].update(
+                    status="example_only",
+                    evidence_strength="official_success_example",
+                    source_refs=[*result_refs, *value_refs],
+                )
+                response_contract["provider_result_codes"]["success_values"].update(
+                    status="example_only", values=success_values, source_refs=value_refs,
+                )
+    elif len(result_code_facts) > 1:
+        response_contract["provider_result_codes"]["status"] = "unknown"
+        response_contract["provider_result_codes"]["evidence_strength"] = "unknown"
+        response_contract["provider_result_codes"]["source_refs"] = [source_ref for _, _, refs in result_code_facts for source_ref in refs]
+    elif success_responses:
+        def schema_excludes_code(schema_value: Any, schema_pointer: str, visited: set[str]) -> bool:
+            resolved, resolved_pointer, _ = _openapi_resolve(document, schema_value, schema_pointer)
+            if not isinstance(resolved, dict) or resolved_pointer in visited:
+                return False
+            visited.add(resolved_pointer)
+            schema_type = resolved.get("type")
+            if schema_type in {"string", "integer", "number", "boolean"}:
+                return True
+            if schema_type == "array":
+                items_schema = resolved.get("items")
+                return items_schema is not None and schema_excludes_code(items_schema, _json_pointer_child(resolved_pointer, "items"), visited)
+            if schema_type == "object" or isinstance(resolved.get("properties"), dict):
+                properties = resolved.get("properties")
+                if not isinstance(properties, dict) or resolved.get("additionalProperties") is not False:
+                    return False
+                return all(
+                    schema_excludes_code(
+                        child_schema,
+                        _json_pointer_child(_json_pointer_child(resolved_pointer, "properties"), property_name),
+                        visited.copy(),
+                    )
+                    for property_name, child_schema in properties.items()
+                )
+            return False
+
+        exclusion_refs: list[dict[str, Any]] = []
+        all_responses_exclude_codes = True
+        for status_code, response in success_responses:
+            response_pointer = _json_pointer_child(_json_pointer_child(operation_pointer, "responses"), status_code)
+            schema_pointer = _json_pointer_child(response_pointer, "schema")
+            schema_value = response.get("schema")
+            if schema_value is None or not schema_excludes_code(schema_value, schema_pointer, set()):
+                all_responses_exclude_codes = False
+                break
+            exclusion_refs.append(ref(schema_pointer, "provider_result_codes_not_applicable_by_complete_response_schema"))
+        if all_responses_exclude_codes and exclusion_refs:
+            response_contract["provider_result_codes"].update(
+                status="not_applicable",
+                evidence_strength="complete_response_schema",
+                success_values={"status": "not_applicable", "values": [], "source_refs": exclusion_refs},
+                error_values={"status": "not_applicable", "values": [], "source_refs": exclusion_refs},
+                source_refs=exclusion_refs,
+            )
+    if len(array_facts) == 1:
+        array_path, container_path, item_path, container_cardinality, array_refs = array_facts[0]
+        collection_status = "documented" if array_path is not None and (response_format == "json" or container_path is not None and item_path is not None and container_cardinality["status"] == "documented") else "unknown"
+        if response_format == "json":
+            container_cardinality = {"status": "not_applicable", "minimum": None, "maximum": None, "source_refs": []}
+        response_contract["result_collection"].update(status=collection_status, path=array_path if response_format == "json" else None, container_path=container_path, item_path=item_path, container_cardinality=container_cardinality, value_type="array", source_refs=array_refs)
+    elif array_facts:
+        response_contract["result_collection"]["source_refs"] = [source_ref for _, _, _, _, refs in array_facts for source_ref in refs]
+
+    scheme_refs = [
+        ref(_json_pointer_child("#/schemes", index), "transport_scheme")
+        for index, scheme in enumerate(schemes)
+        if scheme == registered.scheme
+    ]
+    explicit_unknowns = [
+        "operation_effect_not_established_by_openapi",
+        "authentication_security_requirement_not_established" if authentication["status"] == "unknown" else "",
+        "parameter_requiredness_not_established" if any(parameter["requiredness"]["status"] != "documented" for parameter in parameters) else "",
+        "request_data_types_not_established" if any(parameter["data_type"]["status"] != "documented" for parameter in parameters) else "",
+        "enum_values_not_established" if any(parameter["enum"]["status"] != "documented" for parameter in parameters) else "",
+        "defaults_not_established" if any(parameter["default"]["status"] != "documented" for parameter in parameters) else "",
+        "provider_quota_not_declared_or_parseable",
+        "provider_quota_scope_not_established",
+        "provider_quota_account_tier_not_established",
+        "response_empty_result_semantics_not_declared",
+        "response_error_contract_not_established",
+    ]
+    result = {
+        "schema_version": SCHEMA_VERSION,
+        "parser": {"id": PARSER_ID, "version": PARSER_VERSION},
+        "identity": identity,
+        "source_bindings": [source_binding],
+        "parse_status": "parsed_with_unknowns",
+        "transport": {
+            "protocol": {"value": identity["protocol"], "status": "registered_manifest", "source_refs": []},
+            "scheme": {"value": registered.scheme, "status": "documented", "source_refs": scheme_refs},
+            "host": {"value": registered.hostname.lower(), "status": "documented", "source_refs": [ref("#/host", "transport_host")]},
+            "path": {"value": registered.path, "status": "documented", "source_refs": [ref(path_pointer, "transport_path")]},
+            "http_method": {"value": method_name.upper(), "status": "documented", "authority_scope": "operation_specific", "source_refs": [ref(operation_pointer, "operation_http_method")]},
+            "soap_action": {"value": None, "status": "not_applicable", "source_refs": []},
+            "soap_version": {"value": None, "status": "not_applicable", "source_refs": []},
+            "envelope_namespace": {"value": None, "status": "not_applicable", "source_refs": []},
+            "operation_qname": {"value": None, "status": "not_applicable", "source_refs": []},
+            "body_encoding": {"value": None, "status": "not_applicable", "source_refs": []},
+        },
+        "effect": {"classification": None, "status": "unknown", "authority": "operation_document", "source_refs": []},
+        "parameters": parameters,
+        "authentication": authentication,
+        "limits": {"provider_quota": {"value": None, "unit": None, "status": "not_parsed", "source_refs": []}, "request_budget": {"value": None, "status": "not_a_provider_fact", "source_refs": []}},
+        "response_assertion": {"kind": "documented_response_fields" if response_fields else "unknown", "fields": response_fields, "empty_result_semantics": {"value": None, "status": "unknown", "source_refs": []}, "source_refs": response_refs},
+        "response_contract": response_contract,
+        "explicit_unknowns": [value for value in explicit_unknowns if value],
+    }
+    _validate_evidence(result)
+    return result
+
+
 def parse_evidence(
     operation: dict[str, Any],
     *,
@@ -382,6 +1227,7 @@ def parse_evidence(
     page_retrieved_at: str,
     detail_retrieved_at: str,
     guide_retrieved_at: str,
+    source_media_types: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Parse a selected official operation and emit no samples or response rows."""
     identity = _safe_operation_identity(operation)
@@ -395,9 +1241,13 @@ def parse_evidence(
     if public_ids != [identity["dataset_id"]] or len(detail_ids) != 1 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9:._-]{0,255}", detail_ids[0]):
         raise EvidenceError("page_identity_binding_invalid")
 
-    detail_binding = _make_source_binding("operation_detail_html", detail_raw, "text/html", DETAIL_ROUTE, "POST", detail_retrieved_at, "operation_detail")
-    page_binding = _make_source_binding("catalogue_detail_page", page_raw, "text/html", f"/data/{identity['dataset_id']}/openapi.do", "GET", page_retrieved_at, "operation_selector_and_guide_index")
-    guide_binding = _make_source_binding("reference_guide_docx", guide_raw, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", DOWNLOAD_ROUTE, "GET", guide_retrieved_at, "service_and_operation_guide")
+    source_media_types = source_media_types or {}
+    page_type = _normalize_content_type(source_media_types.get("catalogue"), "text/html; charset=utf-8")
+    detail_type = _normalize_content_type(source_media_types.get("operation_detail"), "text/html; charset=utf-8")
+    guide_type = _normalize_content_type(source_media_types.get("reference_guide"), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+    detail_binding = _make_source_binding("operation_detail_html", detail_raw, detail_type or "text/html", DETAIL_ROUTE, "POST", detail_retrieved_at, "operation_detail")
+    page_binding = _make_source_binding("catalogue_detail_page", page_raw, page_type or "text/html", f"/data/{identity['dataset_id']}/openapi.do", "GET", page_retrieved_at, "operation_selector_and_guide_index")
+    guide_binding = _make_source_binding("reference_guide_docx", guide_raw, guide_type or "application/octet-stream", DOWNLOAD_ROUTE, "GET", guide_retrieved_at, "service_and_operation_guide")
 
     guide_tables = _docx_tables(guide_raw)
     operation_table_matches: list[int] = []
@@ -474,19 +1324,28 @@ def parse_evidence(
                 continue
             if len(name) > 256 or any(ord(c) < 0x20 for c in name):
                 raise EvidenceError("parameter_name_invalid")
-            if name in found:
+            if name.casefold() in {item.casefold() for item in found}:
                 raise EvidenceError("parameter_name_duplicate_in_source")
             required, required_status = _requiredness(get("requiredness"))
             sample_cell = get("sample")
             size_text = get("size")
+            raw_type = get("data_type")
+            raw_enum = get("enum")
+            raw_default = get("default")
+            type_text = _safe_metadata_cell(raw_type, field_name="data_type", parameter_name=name)
+            enum_values = _split_explicit_enum(get("enum"), parameter_name=name)
+            default_text = _safe_metadata_cell(raw_default, field_name="default", parameter_name=name)
+            type_status = "documented" if type_text is not None else ("unknown" if raw_type else "not_established")
+            enum_status = "documented" if enum_values is not None else ("unknown" if raw_enum else "not_established")
+            default_status = "documented" if default_text is not None else ("unknown" if raw_default else "not_established")
             entry: dict[str, Any] = {
                 "name": name,
                 "requiredness": {"value": required, "status": required_status, "source_refs": [_source_ref(_cell_locator(source_id, kind, table_idx, row_offset, columns["requiredness"], "항목구분", part))]},
                 "size": {"value": size_text or None, "status": "documented" if size_text else "unknown", "source_refs": [_source_ref(_cell_locator(source_id, kind, table_idx, row_offset, columns.get("size", 0), "항목크기", part))]},
                 "sample": {"present": bool(sample_cell and sample_cell not in {"-", "없음", "N/A"}), "value_stored": False, "source_refs": [_source_ref(_cell_locator(source_id, kind, table_idx, row_offset, columns["sample"], "샘플데이터", part))]},
-                "type": {"value": None, "status": "unknown", "source_refs": []},
-                "enum": {"values": [], "status": "not_established", "source_refs": []},
-                "default": {"value": None, "status": "not_established", "source_refs": []},
+                "type": {"value": type_text, "status": type_status, "source_refs": [_source_ref(_cell_locator(source_id, kind, table_idx, row_offset, columns["data_type"], part=part), "parameter_data_type")] if "data_type" in columns else []},
+                "enum": {"values": enum_values or [], "status": enum_status, "source_refs": [_source_ref(_cell_locator(source_id, kind, table_idx, row_offset, columns["enum"], part=part), "parameter_enum")] if "enum" in columns else []},
+                "default": {"value": default_text, "status": default_status, "source_refs": [_source_ref(_cell_locator(source_id, kind, table_idx, row_offset, columns["default"], part=part), "parameter_default")] if "default" in columns else []},
                 "description": {"value": None, "status": "not_parsed", "source_refs": []},
             }
             for key, col_name in (("name", "english_name"), ("location", "english_name")):
@@ -510,10 +1369,11 @@ def parse_evidence(
     endpoint_observations: list[tuple[dict[str, str], dict[str, Any], list[str]]] = []
     guide_service_method_refs: list[dict[str, Any]] = []
     first_operation_index = min(operation_indexes) if operation_indexes else operation_table_index
+    service_tables = guide_tables[:first_operation_index]
     # The shared service interface declaration is only accepted from the
     # pre-operation service section; a method mentioned under another
     # operation cannot authorize the selected operation.
-    for table_index, rows in enumerate(guide_tables[:first_operation_index]):
+    for table_index, rows in enumerate(service_tables):
         for row_index, row in enumerate(rows):
             for cell_index, value in enumerate(row):
                 if re.search(r"\bREST\s*\(\s*GET\s*,\s*POST\s*,\s*PUT\s*,\s*DELETE\s*\)", value, re.I):
@@ -599,15 +1459,40 @@ def parse_evidence(
         location_refs: list[dict[str, Any]] = []
         if location_in_sample:
             location_refs = [_source_ref(loc, "example_request_query_key") for loc in query_key_observations[name]]
+        type_facts = [x["type"] for x in (d, g) if x]
+        type_values = {x["value"] for x in type_facts if x["status"] == "documented"}
+        type_unknown = any(x["status"] == "unknown" for x in type_facts)
+        data_type = {
+            "value": next(iter(type_values)) if len(type_values) == 1 and not type_unknown else None,
+            "status": "conflict" if len(type_values) > 1 else ("unknown" if type_unknown else ("documented" if len(type_values) == 1 else "not_established")),
+            "source_refs": [ref for x in type_facts for ref in x["source_refs"]],
+        }
+        enum_facts = [x["enum"] for x in (d, g) if x]
+        explicit_enums = [x["values"] for x in enum_facts if x["status"] == "documented"]
+        unique_enums = {tuple(values) for values in explicit_enums}
+        enum_unknown = any(x["status"] == "unknown" for x in enum_facts)
+        enum_fact = {
+            "values": list(next(iter(unique_enums))) if len(unique_enums) == 1 else sorted({value for values in explicit_enums for value in values}),
+            "status": "conflict" if len(unique_enums) > 1 else ("unknown" if enum_unknown else ("documented" if explicit_enums else "not_established")),
+            "source_refs": [ref for x in enum_facts for ref in x["source_refs"]],
+        }
+        default_facts = [x["default"] for x in (d, g) if x]
+        default_values = {x["value"] for x in default_facts if x["status"] == "documented"}
+        default_unknown = any(x["status"] == "unknown" for x in default_facts)
+        default_fact = {
+            "value": next(iter(default_values)) if len(default_values) == 1 and not default_unknown else None,
+            "status": "conflict" if len(default_values) > 1 else ("unknown" if default_unknown else ("documented" if len(default_values) == 1 else "not_established")),
+            "source_refs": [ref for x in default_facts for ref in x["source_refs"]],
+        }
         parameters.append({
             "name": name,
             "location": {"value": "query" if location_in_sample else None, "status": "demonstrated_by_example" if location_in_sample else "unknown", "source_refs": location_refs},
             "cardinality": {"minimum": 1 if requiredness["value"] == "required" else (0 if requiredness["value"] == "optional" else None), "maximum": None, "status": "unknown", "source_refs": requiredness["source_refs"]},
             "requiredness": requiredness,
             "size": size,
-            "data_type": {"value": None, "status": "unknown", "source_refs": []},
-            "enum": {"values": [], "status": "not_established", "source_refs": []},
-            "default": {"value": None, "status": "not_established", "source_refs": []},
+            "data_type": data_type,
+            "enum": enum_fact,
+            "default": default_fact,
             "sample": {"present": any(sample_presence), "value_stored": False, "source_refs": [ref for x in (d, g) if x for ref in x["sample"]["source_refs"]]},
             "source_refs": [ref for x in (d, g) if x for ref in x["source_refs"]],
         })
@@ -632,13 +1517,22 @@ def parse_evidence(
         "placement": "query" if service_key_in_example else None,
         "source_refs": [ref for p in parameters if p["name"] == "ServiceKey" for ref in p["requiredness"]["source_refs"]] + ([_source_ref(loc, "example_request_query_key") for loc in query_key_observations["ServiceKey"]] if service_key_in_example else []),
     }
+    quota_facts = _combine_quota_facts([
+        _provider_quota_facts(page.tables, source_id="catalogue_detail_page", kind="html_table_cell"),
+        _provider_quota_facts(detail.tables, source_id="operation_detail_html", kind="html_table_cell"),
+        _provider_quota_facts(service_tables, source_id="reference_guide_docx", kind="docx_table_cell", part="word/document.xml"),
+    ])
     explicit_unknowns = [
         "operation_level_http_method_not_declared" if method["value"] is None else "",
-        "request_data_types_not_established" if any(p["data_type"]["value"] is None for p in parameters) else "",
-        "enum_values_not_established" if any(p["enum"]["status"] == "not_established" for p in parameters) else "",
-        "defaults_not_established" if any(p["default"]["status"] == "not_established" for p in parameters) else "",
-        "provider_quota_not_parsed" ,
+        "request_data_types_not_established" if any(p["data_type"]["status"] != "documented" for p in parameters) else "",
+        "enum_values_not_established" if any(p["enum"]["status"] != "documented" for p in parameters) else "",
+        "defaults_not_established" if any(p["default"]["status"] != "documented" for p in parameters) else "",
+        "provider_quota_not_declared_or_parseable" if quota_facts["status"] == "not_parsed" else "",
+        "provider_quota_scope_not_established",
+        "provider_quota_account_tier_not_established",
+        "unsafe_declared_metadata_value_withheld" if any(p["default"]["status"] == "unknown" or p["enum"]["status"] == "unknown" or p["data_type"]["status"] == "unknown" for p in parameters) else "",
         "response_empty_result_semantics_not_declared",
+        "response_error_contract_not_established",
     ]
     result = {
         "schema_version": SCHEMA_VERSION,
@@ -661,8 +1555,9 @@ def parse_evidence(
         "effect": effect,
         "parameters": parameters,
         "authentication": authentication,
-        "limits": {"provider_quota": {"value": None, "unit": None, "status": "not_parsed", "source_refs": []}, "request_budget": {"value": None, "status": "not_a_provider_fact", "source_refs": []}},
+        "limits": {"provider_quota": quota_facts, "request_budget": {"value": None, "status": "not_a_provider_fact", "source_refs": []}},
         "response_assertion": {"kind": "documented_response_fields" if response_fields else "unknown", "fields": response_fields, "empty_result_semantics": {"value": None, "status": "unknown", "source_refs": []}, "source_refs": response_refs},
+        "response_contract": _unknown_response_contract(),
         "explicit_unknowns": [item for item in explicit_unknowns if item],
     }
     _validate_evidence(result)
@@ -714,6 +1609,105 @@ def write_capture(path: pathlib.Path, raw: bytes) -> None:
     temp.replace(path)
 
 
+def prepare_private_capture_root(path: pathlib.Path) -> pathlib.Path:
+    if path.is_symlink():
+        raise EvidenceError("capture_root_symlink_rejected")
+    resolved = path.resolve()
+    protected = {pathlib.Path("/"), pathlib.Path("/tmp"), pathlib.Path("/var/tmp"), pathlib.Path.home(), ROOT.resolve()}
+    if resolved in {item.resolve() for item in protected} or ROOT.resolve() in resolved.parents:
+        raise EvidenceError("capture_root_not_private_dedicated_path")
+    if len(resolved.parts) < 3:
+        raise EvidenceError("capture_root_not_private_dedicated_path")
+    try:
+        resolved.mkdir(parents=True, exist_ok=True, mode=0o700)
+        if not resolved.is_dir():
+            raise EvidenceError("capture_root_not_directory")
+        resolved.chmod(0o700)
+    except OSError as exc:
+        raise EvidenceError("capture_root_not_writable") from exc
+    if resolved.stat().st_mode & 0o077:
+        raise EvidenceError("capture_root_permissions_invalid")
+    return resolved
+
+
+def _capture_document_status(reason_code: str | None) -> tuple[str, str]:
+    if reason_code is None:
+        return "acquired", "run_offline_document_parser"
+    if reason_code == "guide_format_unsupported_legacy_ole_document":
+        return "unsupported", "implement_legacy_ole_or_hwp_guide_adapter"
+    if reason_code == "safetydata_parser_not_yet_available":
+        return "unsupported", "implement_safetydata_document_profile"
+    if any(token in reason_code for token in ("ambiguous", "duplicate", "conflict", "changed")):
+        return "ambiguous", "resolve_operation_document_match"
+    if any(token in reason_code for token in ("not_yet_available", "unsupported", "format_unavailable")):
+        return "unsupported", "implement_or_register_document_adapter"
+    return "missing", "retry_or_locate_official_document"
+
+
+def _write_capture_receipt(
+    folder: pathlib.Path,
+    identity: dict[str, Any],
+    *,
+    status: str,
+    reason_code: str | None,
+    content_types: dict[str, str] | None = None,
+    retrieved_at: dict[str, str] | None = None,
+) -> None:
+    documents = []
+    for role, filename in (("catalogue", "catalogue.html"), ("operation_detail", "operation-detail.html"), ("reference_guide", "reference-guide.bin")):
+        path = folder / filename
+        present = path.is_file()
+        raw = path.read_bytes() if present else b""
+        detected_type, detected_encoding = _document_media_type(role, raw) if present else (None, None)
+        media_type = _normalize_content_type((content_types or {}).get(role), detected_type) if present else None
+        encoding = _content_type_encoding(media_type) if present else None
+        if present and encoding is None:
+            encoding = detected_encoding
+        documents.append({"role": role, "present": present, "bytes": len(raw), "sha256": _sha256(raw) if present else None, "media_type": media_type, "encoding": encoding, "retrieved_at": (retrieved_at or {}).get(role) if present else None})
+    evidence_path = folder / "evidence.json"
+    receipt = {
+        "schema_version": "datapan.operation-document-capture-receipt.v1",
+        "operation_id": identity["operation_id"],
+        "status": status,
+        "reason_code": reason_code,
+        "attempted_at": _utc_now(),
+        "documents": documents,
+        "evidence_sha256": _sha256(evidence_path.read_bytes()) if evidence_path.is_file() else None,
+    }
+    write_capture(folder / "capture-receipt.json", _json_bytes(receipt))
+
+
+def _document_media_type(role: str, raw: bytes) -> tuple[str, str]:
+    if role in {"catalogue", "operation_detail"}:
+        return "text/html", "utf-8"
+    if raw.startswith(b"PK\x03\x04"):
+        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "word/document.xml UTF-8"
+    if raw.startswith(b"%PDF-"):
+        return "application/pdf", "binary"
+    if raw.startswith(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"):
+        return "application/x-ole-storage", "binary"
+    if raw.lstrip().startswith((b"<html", b"<!DOCTYPE html")):
+        return "text/html", "utf-8"
+    return "application/octet-stream", "binary"
+
+
+def _normalize_content_type(value: str | None, fallback: str | None) -> str | None:
+    if isinstance(value, str) and len(value) <= 256 and re.fullmatch(
+        r"[A-Za-z0-9!#$&^_.+-]+/[A-Za-z0-9!#$&^_.+-]+(?:\s*;\s*charset\s*=\s*[A-Za-z0-9._-]{1,64})?",
+        value.strip(),
+        flags=re.I,
+    ):
+        return re.sub(r"\s*;\s*", "; ", value.strip())
+    return fallback
+
+
+def _content_type_encoding(media_type: str | None) -> str | None:
+    if not media_type:
+        return None
+    match = re.search(r"(?i);\s*charset\s*=\s*([A-Za-z0-9._-]+)", media_type)
+    return match.group(1).lower() if match else None
+
+
 def _validate_official_url(url: str, *, purpose: str) -> urllib.parse.SplitResult:
     try:
         parsed = urllib.parse.urlsplit(url)
@@ -724,6 +1718,7 @@ def _validate_official_url(url: str, *, purpose: str) -> urllib.parse.SplitResul
         raise EvidenceError("source_url_outside_official_allowlist")
     allowed_paths = {
         "catalogue": re.fullmatch(r"/data/[0-9]+/openapi\.do", parsed.path) is not None,
+        "openapi_document": re.fullmatch(r"/catalog/[0-9]+/openapi\.json", parsed.path) is not None,
         "operation_detail": parsed.path == DETAIL_ROUTE,
         "reference_guide": parsed.path == DOWNLOAD_ROUTE,
     }
@@ -731,6 +1726,8 @@ def _validate_official_url(url: str, *, purpose: str) -> urllib.parse.SplitResul
         raise EvidenceError("source_path_outside_allowlist")
     if purpose == "catalogue" and parsed.query:
         raise EvidenceError("catalogue_query_not_allowed")
+    if purpose == "openapi_document" and parsed.query:
+        raise EvidenceError("openapi_query_not_allowed")
     if purpose == "operation_detail" and parsed.query:
         raise EvidenceError("detail_query_not_allowed")
     if purpose == "reference_guide":
@@ -833,8 +1830,10 @@ def _fetch_official(
             daemon=True,
         )
         started = time.monotonic()
+        process_started = False
         try:
             process.start()
+            process_started = True
             remaining = deadline_seconds - (time.monotonic() - started)
             process.join(max(0.0, remaining))
             if process.is_alive():
@@ -855,15 +1854,16 @@ def _fetch_official(
                 raise EvidenceError("source_capture_failed")
             return body_path.read_bytes(), result["headers"], result["cookies"]
         except EvidenceError:
-            if process.is_alive():
+            if process_started and process.is_alive():
                 process.kill()
                 process.join(1.0)
             raise
-        except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
-            if process.is_alive():
+        except (OSError, RuntimeError, ValueError, TypeError, json.JSONDecodeError) as exc:
+            if process_started and process.is_alive():
                 process.kill()
                 process.join(1.0)
-            raise EvidenceError("source_capture_failed") from exc
+            code = "source_capture_failed" if process_started else "source_deadline_process_unavailable"
+            raise EvidenceError(code) from exc
 
 
 def _fetch_official_unbounded(
@@ -917,7 +1917,14 @@ def _fetch_official_unbounded(
         content_encoding = response.getheader("Content-Encoding", "identity").lower()
         if content_encoding not in {"", "identity"}:
             raise EvidenceError("source_compression_rejected")
-        content_length = response.getheader("Content-Length")
+        content_length_headers = response.headers.get_all("Content-Length") or []
+        transfer_encoding_headers = response.headers.get_all("Transfer-Encoding") or []
+        if len(content_length_headers) > 1 or len(transfer_encoding_headers) > 1 or (content_length_headers and transfer_encoding_headers):
+            raise EvidenceError("source_framing_invalid")
+        transfer_encoding = transfer_encoding_headers[0].strip().lower() if transfer_encoding_headers else ""
+        if transfer_encoding not in {"", "chunked"}:
+            raise EvidenceError("source_framing_invalid")
+        content_length = content_length_headers[0].strip() if content_length_headers else response.getheader("Content-Length")
         if content_length and (not content_length.isdigit() or int(content_length) > max_bytes):
             raise EvidenceError("source_content_length_limit")
         raw = bytearray()
@@ -957,43 +1964,71 @@ def _fetch_official_unbounded(
 def _capture_one(operation: dict[str, Any], capture_root: pathlib.Path) -> dict[str, Any]:
     identity = _safe_operation_identity(operation)
     dataset_id, key = identity["dataset_id"], identity["upstream_operation_key"]
-    if identity["source_system"] == "safetydata.go.kr":
-        raise EvidenceError("safetydata_parser_not_yet_available")
-    if not re.fullmatch(r"[0-9]+", key):
-        raise EvidenceError("upstream_operation_key_unsupported")
     folder = capture_root / dataset_id / key
     folder.mkdir(parents=True, exist_ok=True, mode=0o700)
     try:
         folder.chmod(0o700)
     except OSError:
         pass
+    if identity["source_system"] == "safetydata.go.kr":
+        raise EvidenceError("safetydata_parser_not_yet_available")
+    if not re.fullmatch(r"[0-9]+", key):
+        raise EvidenceError("upstream_operation_key_unsupported")
     page_path = folder / "catalogue.html"
     detail_path = folder / "operation-detail.html"
-    guide_path = folder / "reference-guide.docx"
+    guide_path = folder / "reference-guide.bin"
     cookies: dict[str, str] = {}
+    source_media_types = _capture_content_types(folder)
+    source_retrieved_at = _capture_retrieval_times(folder)
     if page_path.exists():
         page_raw = page_path.read_bytes()
-        page_at = dt.datetime.fromtimestamp(page_path.stat().st_mtime, dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        page_at = source_retrieved_at.get("catalogue") or _capture_file_time(page_path)
+        if not detail_path.exists() or not guide_path.exists():
+            refreshed_page, _headers, new_cookies = _fetch_official(f"https://{HOST}/data/{dataset_id}/openapi.do", purpose="catalogue", max_bytes=MAX_PAGE_BYTES, cookies=cookies)
+            cookies.update(new_cookies)
+            if _sha256(refreshed_page) != _sha256(page_raw):
+                raise EvidenceError("catalogue_document_changed_during_resume")
+            source_media_types["catalogue"] = _headers.get("content-type", "")
     else:
         page_raw, page_headers, new_cookies = _fetch_official(f"https://{HOST}/data/{dataset_id}/openapi.do", purpose="catalogue", max_bytes=MAX_PAGE_BYTES, cookies=cookies)
         cookies.update(new_cookies)
         page_at = page_headers.get("date") or _utc_now()
+        source_retrieved_at["catalogue"] = page_at
+        source_media_types["catalogue"] = page_headers.get("content-type", "")
         write_capture(page_path, page_raw)
     page = _parse_html(page_raw)
     page_matches = [item for item in page.options if item.get("value") == key and item.get("name") == identity["operation_name"]]
-    if len(page_matches) != 1 or page.hidden.get("publicDataPk") != [dataset_id] or len(page.hidden.get("publicDataDetailPk", [])) != 1:
+    if page.hidden.get("publicDataPk") != [dataset_id]:
+        raise EvidenceError("operation_selector_identity_ambiguous")
+    if not page_matches:
+        try:
+            evidence = parse_openapi_evidence(
+                operation,
+                page_raw=page_raw,
+                page_retrieved_at=page_at,
+                page_media_type=source_media_types.get("catalogue"),
+            )
+        except EvidenceError as exc:
+            raise EvidenceError("operation_selector_identity_ambiguous") from exc
+        evidence_raw = _json_bytes(evidence)
+        write_capture(folder / "evidence.json", evidence_raw)
+        _write_capture_receipt(folder, identity, status="acquired", reason_code=None, content_types=source_media_types, retrieved_at=source_retrieved_at)
+        return {"operation_id": identity["operation_id"], "dataset_id": dataset_id, "upstream_operation_key": key, "status": evidence["parse_status"], "evidence_sha256": _sha256(evidence_raw), "evidence_bytes": len(evidence_raw)}
+    if len(page_matches) != 1 or len(page.hidden.get("publicDataDetailPk", [])) != 1:
         raise EvidenceError("operation_selector_identity_ambiguous")
     detail_pk = page.hidden["publicDataDetailPk"][0]
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9:._-]{0,255}", detail_pk):
         raise EvidenceError("page_detail_key_invalid")
     if detail_path.exists():
         detail_raw = detail_path.read_bytes()
-        detail_at = dt.datetime.fromtimestamp(detail_path.stat().st_mtime, dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        detail_at = source_retrieved_at.get("operation_detail") or _capture_file_time(detail_path)
     else:
         body = urllib.parse.urlencode({"oprtinSeqNo": key, "publicDataDetailPk": detail_pk, "publicDataPk": dataset_id}).encode("ascii")
         detail_raw, detail_headers, new_cookies = _fetch_official(f"https://{HOST}{DETAIL_ROUTE}", purpose="operation_detail", method="POST", body=body, max_bytes=MAX_DETAIL_BYTES, cookies=cookies)
         cookies.update(new_cookies)
         detail_at = detail_headers.get("date") or _utc_now()
+        source_retrieved_at["operation_detail"] = detail_at
+        source_media_types["operation_detail"] = detail_headers.get("content-type", "")
         write_capture(detail_path, detail_raw)
     attachments = page.attachments
     if len(attachments) != 1:
@@ -1001,44 +2036,276 @@ def _capture_one(operation: dict[str, Any], capture_root: pathlib.Path) -> dict[
     file_id, file_sn = attachments[0]
     if guide_path.exists():
         guide_raw = guide_path.read_bytes()
-        guide_at = dt.datetime.fromtimestamp(guide_path.stat().st_mtime, dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        guide_at = source_retrieved_at.get("reference_guide") or _capture_file_time(guide_path)
     else:
         query = urllib.parse.urlencode({"atchFileId": file_id, "fileDetailSn": file_sn})
         guide_raw, guide_headers, new_cookies = _fetch_official(f"https://{HOST}{DOWNLOAD_ROUTE}?{query}", purpose="reference_guide", max_bytes=MAX_GUIDE_BYTES, cookies=cookies)
         cookies.update(new_cookies)
         guide_at = guide_headers.get("date") or _utc_now()
+        source_retrieved_at["reference_guide"] = guide_at
+        source_media_types["reference_guide"] = guide_headers.get("content-type", "")
         write_capture(guide_path, guide_raw)
-    evidence = parse_evidence(operation, page_raw=page_raw, detail_raw=detail_raw, guide_raw=guide_raw, page_retrieved_at=page_at, detail_retrieved_at=detail_at, guide_retrieved_at=guide_at)
+    try:
+        evidence = parse_evidence(operation, page_raw=page_raw, detail_raw=detail_raw, guide_raw=guide_raw, page_retrieved_at=page_at, detail_retrieved_at=detail_at, guide_retrieved_at=guide_at, source_media_types=source_media_types)
+    except EvidenceError as exc:
+        status, _ = _capture_document_status(str(exc))
+        _write_capture_receipt(folder, identity, status=status, reason_code=str(exc), content_types=source_media_types, retrieved_at=source_retrieved_at)
+        raise
     evidence_raw = _json_bytes(evidence)
     write_capture(folder / "evidence.json", evidence_raw)
+    _write_capture_receipt(folder, identity, status="acquired", reason_code=None, content_types=source_media_types, retrieved_at=source_retrieved_at)
     return {"operation_id": identity["operation_id"], "dataset_id": dataset_id, "upstream_operation_key": key, "status": evidence["parse_status"], "evidence_sha256": _sha256(evidence_raw), "evidence_bytes": len(evidence_raw)}
 
 
-def reconcile(queue: list[dict[str, Any]], evidence_dir: pathlib.Path) -> dict[str, Any]:
-    counts = {"pending": 0, "parsed_with_unknowns": 0, "parsed_complete": 0, "ambiguous": 0, "unsupported": 0, "invalid": 0}
+def reconcile(
+    queue: list[dict[str, Any]],
+    evidence_dir: pathlib.Path,
+    capture_root: pathlib.Path | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    statuses = ("pending", "acquired", "parsed_with_unknowns", "parsed_complete", "missing", "ambiguous", "unsupported", "invalid")
+    counts = {status: 0 for status in statuses}
     by_operation = {item["operation_identity"]["operation_id"]: item for item in queue}
-    processed: set[str] = set()
-    for path in sorted(evidence_dir.glob("[0-9]*-[0-9]*.json")):
+    by_source_identity = {
+        (item["operation_identity"]["dataset_id"], item["operation_identity"]["upstream_operation_key"]): item["operation_identity"]["operation_id"]
+        for item in queue
+    }
+    evidence_by_id: dict[str, tuple[dict[str, Any], pathlib.Path, bytes]] = {}
+    invalid_ids: set[str] = set()
+    unmatched_invalid = 0
+    for path in sorted(evidence_dir.glob("*.json")):
+        if path.name == "reconciliation.v1.json":
+            continue
+        path_match = re.fullmatch(r"([0-9]+)-([A-Za-z0-9:._-]+)\.json", path.name)
+        matched_id = by_source_identity.get((path_match.group(1), path_match.group(2))) if path_match else None
         try:
             value = _strict_read_json(path)
             _validate_evidence(value)
             operation_id = value["identity"]["operation_id"]
-            if operation_id not in by_operation or operation_id in processed:
-                counts["invalid"] += 1
+            if operation_id not in by_operation or operation_id in evidence_by_id or operation_id in invalid_ids:
+                if operation_id in by_operation:
+                    invalid_ids.add(operation_id)
+                    evidence_by_id.pop(operation_id, None)
+                else:
+                    unmatched_invalid += 1
                 continue
-            processed.add(operation_id)
+            evidence_by_id[operation_id] = (value, path, path.read_bytes())
+        except (EvidenceError, KeyError, TypeError, OSError):
+            if matched_id:
+                invalid_ids.add(matched_id)
+            else:
+                unmatched_invalid += 1
+    work_items: list[dict[str, Any]] = []
+    for original in queue:
+        item = dict(original)
+        identity = item["operation_identity"]
+        operation_id = identity["operation_id"]
+        evidence = evidence_by_id.get(operation_id)
+        if operation_id in invalid_ids:
+            item.update(status="invalid", next_action="repair_invalid_evidence_binding", reason_code="evidence_invalid_or_duplicate")
+        elif evidence:
+            value, path, raw = evidence
             status = value["parse_status"]
-            counts[status] = counts.get(status, 0) + 1
-        except (EvidenceError, KeyError, TypeError):
-            counts["invalid"] += 1
-    counts["pending"] = len(queue) - len(processed) - counts["invalid"]
-    return {
+            item.update(status=status, next_action=("compile_request_contract" if status == "parsed_complete" else "compile_request_contract_and_resolve_unknowns"))
+            try:
+                relative = path.resolve().relative_to(ROOT.resolve()).as_posix()
+            except ValueError:
+                relative = ""
+            if relative.startswith("reports/operation-document-evidence/"):
+                item["evidence_ref"] = {"path": relative, "sha256": _sha256(raw), "bytes": len(raw)}
+        else:
+            capture = _capture_work_status(identity, capture_root) if capture_root else None
+            if capture:
+                item.update(capture)
+            elif item["source_profile_id"] == "safetydata_v1":
+                item.update(status="pending", next_action="implement_safetydata_document_profile")
+            else:
+                item.update(status="pending", next_action="acquire_official_catalogue_detail_and_guide")
+        status = item["status"]
+        if status not in counts:
+            item.update(status="invalid", next_action="repair_invalid_evidence_binding", reason_code="work_item_status_invalid")
+            status = "invalid"
+        counts[status] += 1
+        work_items.append(item)
+    report = {
         "schema_version": "datapan.operation-document-reconciliation.v1",
         "manifest_binding": {"path": "reports/data-go-kr/operation-manifest.json", "sha256": _sha256(MANIFEST.read_bytes()) if MANIFEST.exists() else None, "source_snapshot_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"},
-        "summary": {"registered_api_operations": len(queue), "statuses": counts, "coverage_complete": counts["pending"] == 0 and counts["invalid"] == 0},
+        "summary": {"registered_api_operations": len(queue), "statuses": counts, "invalid_artifacts_not_bound_to_registered_identity": unmatched_invalid, "coverage_complete": counts["parsed_complete"] == len(queue) and unmatched_invalid == 0},
         "scope": {"provider": "data.go.kr", "inventory": "registered_rest_and_soap_operations_only", "registered_protocols": {"REST": 12627, "SOAP": 35}, "link_operations_excluded": 8871, "operationless_catalog_entries_excluded": 473, "worldwide_provider_apis_included": False},
-        "source_policy": {"official_document_hosts": [HOST, "www.safetydata.go.kr"], "provider_operation_calls": 0, "external_openapi_refs_followed": False, "soap_wsdl_imports_followed": False, "raw_capture_directory_private": True},
+        "source_policy": {
+            "official_document_hosts": [HOST, "www.safetydata.go.kr"],
+            "provider_operation_calls": 0,
+            "external_openapi_refs_followed": False,
+            "soap_wsdl_imports_followed": False,
+            "raw_capture_directory_private": True,
+            "transport_bounds": {
+                "max_document_requests_per_operation": 3,
+                "request_deadline_seconds": REQUEST_TIMEOUT_SECONDS,
+                "max_concurrent_requests_per_host": 1,
+                "max_batch_operations": MAX_BATCH_OPERATIONS,
+                "max_response_bytes": {"catalogue": MAX_PAGE_BYTES, "operation_detail": MAX_DETAIL_BYTES, "reference_guide": MAX_GUIDE_BYTES},
+                "redirects_followed": False,
+                "compressed_responses_accepted": False,
+            },
+        },
     }
+    return report, work_items
+
+
+def _capture_work_status(identity: dict[str, Any], capture_root: pathlib.Path | None) -> dict[str, Any] | None:
+    if capture_root is None:
+        return None
+    folder = capture_root / identity["dataset_id"] / identity["upstream_operation_key"]
+    receipt_path = folder / "capture-receipt.json"
+    if receipt_path.is_file():
+        try:
+            receipt = _strict_read_json(receipt_path)
+        except EvidenceError:
+            return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_invalid"}
+        if receipt.get("schema_version") != "datapan.operation-document-capture-receipt.v1" or receipt.get("operation_id") != identity["operation_id"]:
+            return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_identity_mismatch"}
+        status = receipt.get("status")
+        reason_code = receipt.get("reason_code")
+        allowed = {"acquired", "missing", "ambiguous", "unsupported"}
+        if status not in allowed or (reason_code is not None and not re.fullmatch(r"[a-z][a-z0-9_]{0,127}", reason_code)):
+            return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_status_invalid"}
+        expected_files = {"catalogue": "catalogue.html", "operation_detail": "operation-detail.html", "reference_guide": "reference-guide.bin"}
+        raw_documents = receipt.get("documents")
+        if not isinstance(raw_documents, list) or len(raw_documents) != len(expected_files):
+            return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_documents_invalid"}
+        seen_roles: set[str] = set()
+        all_present = True
+        for document in raw_documents:
+            if not isinstance(document, dict):
+                return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_document_invalid"}
+            role = document.get("role")
+            filename = expected_files.get(role)
+            if filename is None or role in seen_roles or not isinstance(document.get("present"), bool):
+                return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_document_invalid"}
+            if document.get("present") and (not isinstance(document.get("media_type"), str) or not isinstance(document.get("encoding"), str)):
+                return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_document_media_invalid"}
+            if not document.get("present") and (document.get("media_type") is not None or document.get("encoding") is not None):
+                return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_document_absence_invalid"}
+            seen_roles.add(role)
+            all_present = all_present and document["present"]
+            raw_path = folder / filename
+            if document["present"]:
+                if not raw_path.is_file() or isinstance(document.get("bytes"), bool) or document.get("bytes") != raw_path.stat().st_size or not re.fullmatch(r"[a-f0-9]{64}", str(document.get("sha256", ""))) or _sha256(raw_path.read_bytes()) != document["sha256"]:
+                    return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_document_binding_invalid"}
+            elif raw_path.exists() or document.get("bytes") != 0 or document.get("sha256") is not None:
+                return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_document_absence_invalid"}
+        any_present = any(document["present"] for document in raw_documents)
+        if status == "acquired" and (not any_present or (not all_present and receipt.get("evidence_sha256") is None)):
+            return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_acquired_incomplete"}
+        evidence_sha256 = receipt.get("evidence_sha256")
+        evidence_path = folder / "evidence.json"
+        if evidence_sha256 is not None and (not re.fullmatch(r"[a-f0-9]{64}", str(evidence_sha256)) or not evidence_path.is_file() or _sha256(evidence_path.read_bytes()) != evidence_sha256):
+            return {"status": "invalid", "next_action": "repair_invalid_evidence_binding", "reason_code": "capture_receipt_evidence_binding_invalid"}
+        next_action = {
+            "acquired": "run_offline_document_parser",
+            "missing": "retry_or_locate_official_document",
+            "ambiguous": "resolve_operation_document_match",
+            "unsupported": "implement_legacy_ole_or_hwp_guide_adapter" if reason_code == "guide_format_unsupported_legacy_ole_document" else ("implement_safetydata_document_profile" if reason_code == "safetydata_parser_not_yet_available" else "implement_or_register_document_adapter"),
+        }[status]
+        result: dict[str, Any] = {"status": status, "next_action": next_action}
+        if reason_code:
+            result["reason_code"] = reason_code
+        return result
+    filenames = ("catalogue.html", "operation-detail.html", "reference-guide.bin")
+    present = [ (folder / name).is_file() for name in filenames ]
+    if all(present):
+        return {"status": "acquired", "next_action": "run_offline_document_parser"}
+    if any(present):
+        return {"status": "missing", "next_action": "retry_or_locate_official_document", "reason_code": "capture_incomplete"}
+    return None
+
+
+def _capture_content_types(folder: pathlib.Path) -> dict[str, str]:
+    receipt_path = folder / "capture-receipt.json"
+    if not receipt_path.is_file():
+        return {}
+    try:
+        receipt = _strict_read_json(receipt_path)
+    except EvidenceError:
+        return {}
+    if receipt.get("schema_version") != "datapan.operation-document-capture-receipt.v1":
+        return {}
+    result: dict[str, str] = {}
+    for document in receipt.get("documents", []):
+        if not isinstance(document, dict) or not document.get("present"):
+            continue
+        role = document.get("role")
+        value = document.get("media_type")
+        if role in {"catalogue", "operation_detail", "reference_guide"} and isinstance(value, str):
+            normalized = _normalize_content_type(value, None)
+            if normalized:
+                result[role] = normalized
+    return result
+
+
+def _capture_retrieval_times(folder: pathlib.Path) -> dict[str, str]:
+    """Recover source HTTP Date values when resuming a private capture.
+
+    Prefer the public receipt's timestamp only when it is bound to the current
+    raw bytes. Older receipts do not contain timestamps, so fall back to the
+    source bindings in evidence.json, which also bind each timestamp to a
+    digest. File mtimes are a last-resort parser input and are never written as
+    source acquisition timestamps into a receipt.
+    """
+    role_files = {
+        "catalogue": ("catalogue.html", "catalogue_detail_page"),
+        "operation_detail": ("operation-detail.html", "operation_detail_html"),
+        "reference_guide": ("reference-guide.bin", "reference_guide_docx"),
+    }
+    result: dict[str, str] = {}
+
+    def valid_timestamp(value: Any) -> bool:
+        if not isinstance(value, str):
+            return False
+        try:
+            dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+            return True
+        except ValueError:
+            return False
+
+    receipt_path = folder / "capture-receipt.json"
+    try:
+        receipt = _strict_read_json(receipt_path) if receipt_path.is_file() else {}
+    except EvidenceError:
+        receipt = {}
+    if receipt.get("schema_version") == "datapan.operation-document-capture-receipt.v1":
+        for document in receipt.get("documents", []):
+            if not isinstance(document, dict) or not document.get("present"):
+                continue
+            role = document.get("role")
+            entry = role_files.get(role)
+            if entry is None or not valid_timestamp(document.get("retrieved_at")):
+                continue
+            raw_path = folder / entry[0]
+            if raw_path.is_file() and _sha256(raw_path.read_bytes()) == document.get("sha256"):
+                result[role] = document["retrieved_at"]
+
+    evidence_path = folder / "evidence.json"
+    try:
+        evidence = _strict_read_json(evidence_path) if evidence_path.is_file() else {}
+    except EvidenceError:
+        evidence = {}
+    bindings = evidence.get("source_bindings", []) if isinstance(evidence, dict) else []
+    source_to_role = {source_id: role for role, (_, source_id) in role_files.items()}
+    for binding in bindings if isinstance(bindings, list) else []:
+        if not isinstance(binding, dict) or not valid_timestamp(binding.get("retrieved_at")):
+            continue
+        role = source_to_role.get(binding.get("source_id"))
+        entry = role_files.get(role)
+        if role is None or entry is None or role in result:
+            continue
+        raw_path = folder / entry[0]
+        if raw_path.is_file() and _sha256(raw_path.read_bytes()) == binding.get("sha256"):
+            result[role] = binding["retrieved_at"]
+    return result
+
+
+def _capture_file_time(path: pathlib.Path) -> str:
+    return dt.datetime.fromtimestamp(path.stat().st_mtime, dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def _parse_existing_captures(manifest: dict[str, Any], capture_root: pathlib.Path, output_dir: pathlib.Path, wanted_ids: set[str] | None = None) -> int:
@@ -1049,15 +2316,40 @@ def _parse_existing_captures(manifest: dict[str, Any], capture_root: pathlib.Pat
         if wanted_ids is not None and identity["operation_id"] not in wanted_ids:
             continue
         folder = capture_root / identity["dataset_id"] / identity["upstream_operation_key"]
-        paths = [folder / "catalogue.html", folder / "operation-detail.html", folder / "reference-guide.docx"]
-        if not all(path.is_file() for path in paths):
+        paths = [folder / "catalogue.html", folder / "operation-detail.html", folder / "reference-guide.bin"]
+        if not paths[0].is_file():
             continue
-        page_raw, detail_raw, guide_raw = (path.read_bytes() for path in paths)
-        get_at = lambda p: dt.datetime.fromtimestamp(p.stat().st_mtime, dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
-        value = parse_evidence(operation, page_raw=page_raw, detail_raw=detail_raw, guide_raw=guide_raw, page_retrieved_at=get_at(paths[0]), detail_retrieved_at=get_at(paths[1]), guide_retrieved_at=get_at(paths[2]))
+        page_raw = paths[0].read_bytes()
+        has_detail_and_guide = paths[1].is_file() and paths[2].is_file()
+        detail_raw = paths[1].read_bytes() if has_detail_and_guide else b""
+        guide_raw = paths[2].read_bytes() if has_detail_and_guide else b""
+        source_retrieved_at = _capture_retrieval_times(folder)
+        get_at = lambda role, p: source_retrieved_at.get(role) or _capture_file_time(p)
+        content_types = _capture_content_types(folder)
+        try:
+            if has_detail_and_guide:
+                value = parse_evidence(operation, page_raw=page_raw, detail_raw=detail_raw, guide_raw=guide_raw, page_retrieved_at=get_at("catalogue", paths[0]), detail_retrieved_at=get_at("operation_detail", paths[1]), guide_retrieved_at=get_at("reference_guide", paths[2]), source_media_types=content_types)
+            else:
+                value = parse_openapi_evidence(
+                    operation,
+                    page_raw=page_raw,
+                    page_retrieved_at=get_at("catalogue", paths[0]),
+                    page_media_type=content_types.get("catalogue"),
+                )
+        except EvidenceError as exc:
+            status, _ = _capture_document_status(str(exc))
+            _write_capture_receipt(folder, identity, status=status, reason_code=str(exc), content_types=content_types, retrieved_at=source_retrieved_at)
+            continue
         destination = output_dir / f"{identity['dataset_id']}-{identity['upstream_operation_key']}.json"
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(_json_bytes(value))
+        evidence_raw = _json_bytes(value)
+        destination.write_bytes(evidence_raw)
+        write_capture(folder / "evidence.json", evidence_raw)
+        _write_capture_receipt(folder, identity, status="acquired", reason_code=None, content_types=content_types, retrieved_at=source_retrieved_at)
+        receipt_path = folder / "capture-receipt.json"
+        public_receipt_dir = output_dir / "receipts"
+        public_receipt_dir.mkdir(parents=True, exist_ok=True)
+        write_capture(public_receipt_dir / f"{identity['dataset_id']}-{identity['upstream_operation_key']}.json", receipt_path.read_bytes())
         count += 1
     return count
 
@@ -1070,6 +2362,8 @@ def _main() -> int:
     parser.add_argument("--capture", action="store_true", help="Fetch official documentation only; never calls provider operation endpoints")
     parser.add_argument("--capture-root", type=pathlib.Path, help="Private raw capture directory; created mode 0700")
     parser.add_argument("--limit", type=int, default=1, help=f"Bounded operation count (maximum {MAX_BATCH_OPERATIONS})")
+    parser.add_argument("--offset", type=int, default=0, help="Stable zero-based work-queue offset for bounded resumable batches")
+    parser.add_argument("--operation-id", action="append", default=[], help="Select an exact registered operation identity; repeat up to the bounded batch limit")
     parser.add_argument("--parse-captures", action="store_true")
     parser.add_argument("--evidence-dir", type=pathlib.Path, default=EVIDENCE_DIR)
     parser.add_argument("--queue", type=pathlib.Path, default=QUEUE)
@@ -1078,33 +2372,48 @@ def _main() -> int:
     try:
         manifest = _strict_read_json(args.manifest)
         queue = build_queue(manifest)
-        if args.build_queue:
-            args.queue.parent.mkdir(parents=True, exist_ok=True)
-            args.queue.write_bytes(b"".join(_json_line(item) for item in queue))
         if args.capture:
-            if args.capture_root is None or args.limit < 1 or args.limit > MAX_BATCH_OPERATIONS:
+            if args.capture_root is None:
                 raise EvidenceError("capture_bounds_or_private_root_missing")
-            args.capture_root.mkdir(parents=True, exist_ok=True, mode=0o700)
-            try:
-                args.capture_root.chmod(0o700)
-            except OSError:
-                pass
-            selected = queue[: args.limit]
+            if args.operation_id:
+                if not 1 <= args.limit <= MAX_BATCH_OPERATIONS or len(args.operation_id) > args.limit or len(set(args.operation_id)) != len(args.operation_id):
+                    raise EvidenceError("operation_id_selection_invalid")
+                by_id = {item["operation_identity"]["operation_id"]: item for item in queue}
+                if any(operation_id not in by_id for operation_id in args.operation_id):
+                    raise EvidenceError("operation_id_not_in_registered_inventory")
+                selected = [by_id[operation_id] for operation_id in args.operation_id]
+            else:
+                selected = select_queue_batch(queue, offset=args.offset, limit=args.limit)
+            args.capture_root = prepare_private_capture_root(args.capture_root)
             operations = {op["operation_id"]: op for op in manifest["operations"]}
             receipts = []
             for item in selected:
                 try:
                     receipts.append(_capture_one(operations[item["operation_identity"]["operation_id"]], args.capture_root))
                 except EvidenceError as exc:
-                    receipts.append({"operation_id": item["operation_identity"]["operation_id"], "status": "unsupported", "reason_code": str(exc)})
+                    operation = operations[item["operation_identity"]["operation_id"]]
+                    identity = _safe_operation_identity(operation)
+                    folder = args.capture_root / identity["dataset_id"] / identity["upstream_operation_key"]
+                    folder.mkdir(parents=True, exist_ok=True, mode=0o700)
+                    try:
+                        folder.chmod(0o700)
+                    except OSError:
+                        pass
+                    status, _ = _capture_document_status(str(exc))
+                    if not (folder / "capture-receipt.json").is_file():
+                        _write_capture_receipt(folder, identity, status=status, reason_code=str(exc))
+                    receipts.append({"operation_id": item["operation_identity"]["operation_id"], "status": status, "reason_code": str(exc)})
             print(json.dumps({"attempted": len(receipts), "statuses": {s: sum(1 for r in receipts if r["status"] == s) for s in sorted({r["status"] for r in receipts})}, "private_capture_root": True}, sort_keys=True))
         if args.parse_captures:
             if args.capture_root is None:
                 raise EvidenceError("capture_root_required")
             count = _parse_existing_captures(manifest, args.capture_root, args.evidence_dir)
             print(f"parsed evidence artifacts: {count}")
+        if args.build_queue or args.reconcile:
+            value, work_items = reconcile(queue, args.evidence_dir, args.capture_root)
+            args.queue.parent.mkdir(parents=True, exist_ok=True)
+            args.queue.write_bytes(b"".join(_json_line(item) for item in work_items))
         if args.reconcile:
-            value = reconcile(queue, args.evidence_dir)
             args.reconciliation.parent.mkdir(parents=True, exist_ok=True)
             args.reconciliation.write_bytes(_json_bytes(value))
             print(json.dumps(value["summary"], sort_keys=True))
