@@ -30,6 +30,7 @@
         ],
         "missing_fields": [
           "transport_and_method_authority",
+          "secure_transport_required",
           "operation_effect_read_only_authority",
           "parameter_inventory_and_location",
           "parameter_cardinality",
@@ -55,23 +56,6 @@
         "inventory_status": "partial",
         "inventory_unknown": true,
         "provider": "ECOS",
-        "source_artifacts": [
-          {
-            "bytes": 961,
-            "path": "reports/ecos/operation-denominator.json",
-            "sha256": "d8619c61c2a718547ad5867b0125b74c21cf46d8cc3b74f369062e087387c62b"
-          },
-          {
-            "bytes": 3292,
-            "path": "sources/ecos.json",
-            "sha256": "2f4202ee24201e821666cdc7c55b724e979d94024b3f8289120e6c39c6584750"
-          },
-          {
-            "bytes": 1874,
-            "path": "reports/ecos/runtime-candidates.json",
-            "sha256": "0b77325d9f715047765f0fe2a546529165cc59e9008347ea6befb46c5af9198a"
-          }
-        ],
         "source_id": "ecos",
         "test_only": false
       }

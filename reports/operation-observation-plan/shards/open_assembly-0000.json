@@ -30,6 +30,7 @@
         ],
         "missing_fields": [
           "transport_and_method_authority",
+          "secure_transport_required",
           "operation_effect_read_only_authority",
           "parameter_inventory_and_location",
           "parameter_cardinality",
@@ -55,23 +56,6 @@
         "inventory_status": "partial",
         "inventory_unknown": true,
         "provider": "open.assembly.go.kr",
-        "source_artifacts": [
-          {
-            "bytes": 930,
-            "path": "reports/open-assembly/operation-denominator.json",
-            "sha256": "d14aab4e423b66f5bb7539c87d1ec34634ac85a06d10c2dcbc9369dba4df7e52"
-          },
-          {
-            "bytes": 2923,
-            "path": "sources/open_assembly.json",
-            "sha256": "f8459b47e6642d5350377ca8f3e6608021808614602de48e2cb6090525e1aaae"
-          },
-          {
-            "bytes": 1909,
-            "path": "reports/open-assembly/runtime-candidates.json",
-            "sha256": "4f2c2d7633d03f6a084ad63c32946c8842066420353e5e64f4e70d5111a0e407"
-          }
-        ],
         "source_id": "open_assembly",
         "test_only": false
       }

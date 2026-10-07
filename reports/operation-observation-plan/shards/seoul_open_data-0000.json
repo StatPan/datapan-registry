@@ -13,10 +13,12 @@
       "artifact_kind": "operation_plan",
       "operation_identity": {
         "operation_id": "seoul-open-data-subway-station-list",
-        "protocol": "HTTP",
+        "operation_name": "SearchSTNBySubwayLineInfo",
+        "protocol": "REST",
         "registered_endpoint": {
           "host": "openapi.seoul.go.kr",
-          "path": "/{KEY}/{format}/{service}/{start_index}/{end_index}"
+          "path": "/{KEY}/{format}/{service}/{start_index}/{end_index}",
+          "port": 8088
         }
       },
       "request_plan": {
@@ -26,17 +28,681 @@
             "evidence_kind": "operation_denominator",
             "json_pointer": "#/operations/0",
             "sha256": "7c44a8357903f223df195e6e48165b5fe058e4372bdcfe7c3022af80b5266b54"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/authentication",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/identity",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/operation_document/purpose",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/operation_document/service_status",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/operation_document/title",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/sample",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/sample",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/sample",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/sample",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/sample",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/cardinality",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/data_type",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/default",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/enum",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/location",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/requiredness",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/size",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_assertion",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_assertion/empty_result_semantics",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/coded_result_field_inventory",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/0",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/1",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/2",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/3",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/4",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/5",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/6",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/7",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/8",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/9",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/0",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/1",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/10",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/11",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/12",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/13",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/2",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/3",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/4",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/5",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/6",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/7",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/8",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/9",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/provider_result_codes",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/provider_result_codes/error_values",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/provider_result_codes/success_values",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/source_bindings/0",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/source_bindings/1",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/host",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/path",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/seoul-open-data-subway-station-list.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/scheme",
+            "sha256": "266ac77926f76a95299ce07954c7166cb6ac3e9117fc0fb0e281ede53c54c271"
           }
         ],
         "missing_fields": [
-          "transport_and_method_authority",
-          "operation_effect_read_only_authority",
-          "parameter_inventory_and_location",
-          "parameter_cardinality",
-          "safe_value_strategy_for_required_inputs",
           "authentication_placement",
+          "operation_effect_read_only_authority",
+          "operation_method_authority",
+          "parameter_location",
           "request_resource_limits",
-          "response_assertion_and_empty_result_semantics"
+          "response_assertion_and_empty_result_semantics",
+          "response_collection_semantics_unknown",
+          "response_empty_result_policy_unknown",
+          "response_payload_kind",
+          "response_success_schema_shape",
+          "safe_value_strategy_for_required_inputs",
+          "secure_transport_required"
         ],
         "status": "incomplete"
       },
@@ -55,23 +721,6 @@
         "inventory_status": "partial",
         "inventory_unknown": true,
         "provider": "data.seoul.go.kr",
-        "source_artifacts": [
-          {
-            "bytes": 970,
-            "path": "reports/seoul-open-data/operation-denominator.json",
-            "sha256": "7c44a8357903f223df195e6e48165b5fe058e4372bdcfe7c3022af80b5266b54"
-          },
-          {
-            "bytes": 3432,
-            "path": "sources/seoul_open_data.json",
-            "sha256": "9ae73b337e2fd44e667087f50f538d123fe00e90afd03ab221e6b90fc9aef7a8"
-          },
-          {
-            "bytes": 1934,
-            "path": "reports/seoul-open-data/runtime-candidates.json",
-            "sha256": "0f4eef8c36ca85b230a3963d9f46da201a60278ce838a26872187d2734531eba"
-          }
-        ],
         "source_id": "seoul_open_data",
         "test_only": false
       }
