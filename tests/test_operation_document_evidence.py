@@ -192,6 +192,41 @@ def _swagger_document(name: str = "헬스체크 조회", *, security: bool = Fal
     return document
 
 
+def _seoul_openapi_pages(*, sample_url: str | None = None) -> tuple[bytes, bytes]:
+    sample_url = sample_url or "http://openapi.seoul.go.kr:8088/PRIVATE_KEY/json/SearchSTNBySubwayLineInfo/1/5/"
+    request = _table([
+        ["변수명", "타입", "변수설명", "값설명"],
+        ["KEY", "STRING(필수)", "인증키", ""],
+        ["TYPE", "STRING(필수)", "응답 형식", "xml, xmlf, xls, json"],
+        ["SERVICE", "STRING(필수)", "서비스명", "SearchSTNBySubwayLineInfo"],
+        ["START_INDEX", "INTEGER(필수)", "시작 위치", ""],
+        ["END_INDEX", "INTEGER(필수)", "종료 위치", ""],
+        ["STATION_CD", "STRING(선택)", "역 코드", ""],
+        ["STATION_NM", "STRING(선택)", "역 이름", ""],
+        ["LINE_NUM", "STRING(선택)", "호선", ""],
+    ])
+    sample = _table([["샘플 URL"], ["예시", sample_url]])
+    output = _table([
+        ["No", "출력명", "출력설명"],
+        ["1", "list_total_count", "전체 건수"],
+        ["2", "RESULT.CODE", "처리 결과 코드"],
+        ["3", "RESULT.MESSAGE", "처리 결과 메시지"],
+        ["4", "STATION_CD", "역 코드"],
+    ])
+    codes = _table([
+        ["INFO-000", "정상 처리되었습니다."],
+        ["INFO-200", "해당하는 데이터가 없습니다."],
+        ["ERROR-336", "요청 데이터가 최대 크기를 초과했습니다."],
+    ])
+    openapi_raw = (request + sample + output + codes).encode("utf-8")
+    dataset_raw = (
+        "<h1>서울교통공사_노선별 지하철역 정보</h1>"
+        "<p>서울교통공사에서 제공하는 1~8호선, 9호선 2~3단계(언주~중앙보훈병원) 노선별 지하철역을 제공하는 서비스 입니다.</p>"
+        "<p>해당 데이터는 종료된 서비스입니다.</p>"
+    ).encode("utf-8")
+    return openapi_raw, dataset_raw
+
+
 class OperationDocumentEvidenceTest(unittest.TestCase):
     def test_parsed_facts_bind_exact_identity_and_leave_method_incomplete(self) -> None:
         evidence = DOCS.parse_evidence(
@@ -272,6 +307,80 @@ class OperationDocumentEvidenceTest(unittest.TestCase):
         visit(evidence)
         self.assertTrue(all(ref["locator"]["source_id"] in source_ids for ref in refs))
         self.assertNotIn("https://kosis.kr/openapi/Param/", artifact.read_text(encoding="utf-8"))
+
+    def test_seoul_registered_operation_preserves_official_port_and_termination_without_inventing_method(self) -> None:
+        try:
+            from jsonschema import Draft202012Validator
+        except ImportError:
+            self.skipTest("jsonschema is an optional release-validation dependency")
+        openapi_raw, dataset_raw = _seoul_openapi_pages()
+        operation = {
+            "candidate_id": "seoul-open-data-subway-station-list",
+            "endpoint_template": "http://openapi.seoul.go.kr:8088/{KEY}/{format}/{service}/{start_index}/{end_index}",
+        }
+        evidence = DOCS.parse_seoul_openapi_evidence(
+            operation,
+            openapi_raw=openapi_raw,
+            dataset_raw=dataset_raw,
+            openapi_retrieved_at="2026-10-07T06:23:10Z",
+            dataset_retrieved_at="2026-10-07T06:18:44Z",
+        )
+        schema = json.loads((ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json").read_text(encoding="utf-8"))
+        validator = Draft202012Validator(schema)
+        self.assertEqual(list(validator.iter_errors(evidence)), [])
+        self.assertEqual(evidence["identity"]["source_id"], "seoul_open_data")
+        self.assertEqual(evidence["identity"]["operation_id"], "seoul-open-data-subway-station-list")
+        self.assertEqual(evidence["operation_document"]["title"]["value"], "서울교통공사_노선별 지하철역 정보")
+        self.assertTrue(evidence["operation_document"]["purpose"]["value"].startswith("서울교통공사에서 제공하는 "))
+        status = evidence["operation_document"]["service_status"]
+        self.assertEqual((status["classification"], status["status"]), ("terminated", "documented"))
+        self.assertEqual(evidence["transport"]["scheme"]["value"], "http")
+        self.assertEqual(evidence["transport"]["host"]["value"], "openapi.seoul.go.kr")
+        self.assertEqual(evidence["transport"]["port"], 8088)
+        self.assertTrue(evidence["transport"]["port_source_refs"])
+        self.assertIsNone(evidence["transport"]["http_method"]["value"])
+        self.assertEqual(evidence["transport"]["http_method"]["status"], "unknown")
+        params = {row["name"]: row for row in evidence["parameters"]}
+        self.assertEqual(params["KEY"]["requiredness"]["value"], "required")
+        self.assertEqual(params["KEY"]["location"]["value"], "path")
+        self.assertEqual(params["STATION_CD"]["requiredness"]["value"], "optional")
+        self.assertEqual(evidence["response_assertion"]["empty_result_semantics"]["status"], "unknown")
+        result_codes = evidence["response_contract"]["documented_error_contract"]["codes"]
+        self.assertEqual(next(code["classification"] for code in result_codes if code["value"] == "INFO-200"), "empty_result")
+        self.assertNotIn("INFO-200", evidence["response_contract"]["provider_result_codes"]["error_values"]["values"])
+        encoded = json.dumps(evidence, ensure_ascii=False)
+        for private in ("PRIVATE_KEY", "http://openapi.seoul.go.kr", "list_total_count\":\"", "sample_url"):
+            self.assertNotIn(private, encoded)
+
+        for invalid_port in (0, 65536):
+            broken = copy.deepcopy(evidence)
+            broken["transport"]["port"] = invalid_port
+            self.assertTrue(list(validator.iter_errors(broken)))
+        broken = copy.deepcopy(evidence)
+        broken["transport"].pop("port_source_refs")
+        self.assertTrue(list(validator.iter_errors(broken)))
+
+    def test_seoul_path_sample_rejects_userinfo_fragment_and_query(self) -> None:
+        operation = {
+            "candidate_id": "seoul-open-data-subway-station-list",
+            "endpoint_template": "http://openapi.seoul.go.kr:8088/{KEY}/{format}/{service}/{start_index}/{end_index}",
+        }
+        invalid_urls = (
+            "http://credential@openapi.seoul.go.kr:8088/KEY/json/SearchSTNBySubwayLineInfo/1/5/",
+            "http://openapi.seoul.go.kr:8088/KEY/json/SearchSTNBySubwayLineInfo/1/5/#fragment",
+            "http://openapi.seoul.go.kr:8088/KEY/json/SearchSTNBySubwayLineInfo/1/5/?sample=value",
+        )
+        for sample_url in invalid_urls:
+            with self.subTest(sample_url_kind=sample_url.split(":", 1)[0]):
+                openapi_raw, dataset_raw = _seoul_openapi_pages(sample_url=sample_url)
+                with self.assertRaisesRegex(DOCS.EvidenceError, "seoul_operation_path_example_endpoint_mismatch"):
+                    DOCS.parse_seoul_openapi_evidence(
+                        operation,
+                        openapi_raw=openapi_raw,
+                        dataset_raw=dataset_raw,
+                        openapi_retrieved_at="2026-10-07T06:23:10Z",
+                        dataset_retrieved_at="2026-10-07T06:18:44Z",
+                    )
 
     def test_inline_swagger_resolves_exact_registered_contract_without_storing_examples(self) -> None:
         raw = _swagger_page(_swagger_document())

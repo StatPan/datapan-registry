@@ -41,7 +41,7 @@ EVIDENCE_DIR = ROOT / "reports/operation-document-evidence"
 EVIDENCE_V2_DIR = EVIDENCE_DIR / "v2"
 SCHEMA_VERSION = "datapan.operation-document-evidence.v2"
 PARSER_ID = "registered-operation-document-parser"
-PARSER_VERSION = "2.1.0"
+PARSER_VERSION = "2.1.1"
 HOST = "www.data.go.kr"
 DETAIL_ROUTE = "/tcs/dss/selectApiDetailFunction.do"
 DOWNLOAD_ROUTE = "/cmm/cmm/fileDownload.do"
@@ -1783,6 +1783,439 @@ def _url_has_query_key_from_cell(tables: list[list[list[str]]], locator: dict[st
     return False
 
 
+def _seoul_html_text_blocks(raw: bytes) -> list[tuple[str, str, int, int]]:
+    """Return short h1/p text blocks without retaining script or table data."""
+
+    class TextBlocks(HTMLParser):
+        def __init__(self) -> None:
+            super().__init__(convert_charrefs=True)
+            self.active: str | None = None
+            self.parts: list[str] = []
+            self.blocks: list[tuple[str, str, int, int]] = []
+            self.source_text = ""
+            self.line_starts: list[int] = [0]
+            self.content_start: int | None = None
+
+        def source_offset(self) -> int:
+            line, column = self.getpos()
+            return self.line_starts[line - 1] + column
+
+        def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+            if tag in {"h1", "p"} and self.active is None:
+                self.active = tag
+                self.parts = []
+                start = self.source_offset()
+                opening_tag = self.get_starttag_text() or ""
+                if not opening_tag.lower().startswith(f"<{tag}") or not opening_tag.endswith(">"):
+                    self.active = None
+                    raise ValueError("seoul_text_block_open_tag_invalid")
+                self.content_start = start + len(opening_tag)
+
+        def handle_data(self, data: str) -> None:
+            if self.active is not None:
+                self.parts.append(data)
+
+        def handle_endtag(self, tag: str) -> None:
+            if self.active == tag:
+                text = " ".join("".join(self.parts).split())
+                if text and len(text) <= 512 and not re.search(r"https?://|[?&][A-Za-z0-9_]+=", text, re.I):
+                    content_end = self.source_offset()
+                    content_start = self.content_start if self.content_start is not None else content_end
+                    start_byte = len(self.source_text[:content_start].encode("utf-8"))
+                    end_byte = len(self.source_text[:content_end].encode("utf-8"))
+                    self.blocks.append((tag, text, start_byte, end_byte))
+                self.active = None
+                self.parts = []
+                self.content_start = None
+
+    if not isinstance(raw, bytes) or not raw or len(raw) > MAX_PAGE_BYTES:
+        raise EvidenceError("seoul_html_source_size_invalid")
+    parser = TextBlocks()
+    try:
+        parser.source_text = raw.decode("utf-8", errors="strict")
+        parser.line_starts.extend(match.end() for match in re.finditer("\n", parser.source_text))
+        parser.feed(parser.source_text)
+        parser.close()
+    except (UnicodeError, ValueError) as exc:
+        raise EvidenceError("seoul_html_source_invalid") from exc
+    return parser.blocks
+
+
+def parse_seoul_openapi_evidence(
+    operation: dict[str, Any],
+    *,
+    openapi_raw: bytes,
+    dataset_raw: bytes,
+    openapi_retrieved_at: str,
+    dataset_retrieved_at: str,
+) -> dict[str, Any]:
+    """Parse source-bound facts for the registered Seoul subway station API.
+
+    The official page provides operation-specific parameter, output-field,
+    and provider-code tables. Its sample URL demonstrates path placement but
+    does not name the HTTP method, so the registered-candidate GET is not
+    promoted to method authority. Sample URL values and response rows are
+    never emitted.
+    """
+    if (
+        operation.get("candidate_id") != "seoul-open-data-subway-station-list"
+        or operation.get("endpoint_template") != "http://openapi.seoul.go.kr:8088/{KEY}/{format}/{service}/{start_index}/{end_index}"
+    ):
+        raise EvidenceError("seoul_operation_identity_mismatch")
+    if len(openapi_raw) > MAX_PAGE_BYTES or len(dataset_raw) > MAX_PAGE_BYTES:
+        raise EvidenceError("seoul_document_size_limit")
+    api_page = _parse_html(openapi_raw)
+    dataset_page = _parse_html(dataset_raw)
+    api_page_source = "seoul_official_openapi_view"
+    dataset_source = "seoul_official_dataset_view"
+
+    def table_index_for_header(tables: list[list[list[str]]], header: list[str], code: str) -> int:
+        matches = [index for index, rows in enumerate(tables) if rows and rows[0][: len(header)] == header]
+        if len(matches) != 1:
+            raise EvidenceError(code)
+        return matches[0]
+
+    request_table_index = table_index_for_header(api_page.tables, ["변수명", "타입", "변수설명", "값설명"], "seoul_request_table_missing_or_ambiguous")
+    output_table_index = table_index_for_header(api_page.tables, ["No", "출력명", "출력설명"], "seoul_output_table_missing_or_ambiguous")
+    request_rows = api_page.tables[request_table_index]
+    output_rows = api_page.tables[output_table_index]
+    sample_tables = [
+        (index, rows)
+        for index, rows in enumerate(api_page.tables)
+        if rows
+        and rows[0]
+        and rows[0][0].strip() == "샘플 URL"
+        and any(re.search(r"https?://", cell, re.I) for row in rows for cell in row)
+    ]
+    if len(sample_tables) != 1:
+        raise EvidenceError("seoul_operation_path_example_missing_or_ambiguous")
+    sample_table_index, sample_rows = sample_tables[0]
+    sample_cells = [
+        (row_index, cell_index, cell)
+        for row_index, row in enumerate(sample_rows)
+        for cell_index, cell in enumerate(row)
+        if re.search(r"https?://", cell, re.I)
+    ]
+    if not sample_cells:
+        raise EvidenceError("seoul_operation_path_example_url_ambiguous")
+    sample_urls: list[tuple[int, int, str]] = []
+    for row_index, cell_index, cell in sample_cells:
+        urls_in_cell = re.findall(r"https?://[^\s<>\"']+", cell)
+        if len(urls_in_cell) != 1:
+            raise EvidenceError("seoul_operation_path_example_url_ambiguous")
+        sample_urls.append((row_index, cell_index, urls_in_cell[0].rstrip("/")))
+    sample_row_index, sample_cell_index, sample_url_text = sample_urls[0]
+    sample_locator = _cell_locator(
+        api_page_source,
+        "html_table_cell",
+        sample_table_index,
+        sample_row_index,
+        sample_cell_index,
+        "샘플 URL",
+    )
+    try:
+        parsed_sample_urls = [
+            (row_index, cell_index, urllib.parse.urlsplit(url))
+            for row_index, cell_index, url in sample_urls
+        ]
+        sample_authorities = [
+            (parsed.scheme, parsed.hostname, parsed.port)
+            for _row_index, _cell_index, parsed in parsed_sample_urls
+        ]
+    except ValueError as exc:
+        raise EvidenceError("seoul_operation_path_example_invalid") from exc
+    if len(set(sample_authorities)) != 1 or sample_authorities[0] != ("http", "openapi.seoul.go.kr", 8088):
+        raise EvidenceError("seoul_operation_path_example_endpoint_mismatch")
+    if any(
+        parsed.username is not None or parsed.password is not None or parsed.query or parsed.fragment
+        for _row_index, _cell_index, parsed in parsed_sample_urls
+    ):
+        raise EvidenceError("seoul_operation_path_example_endpoint_mismatch")
+    sample_url = parsed_sample_urls[0][2]
+    sample_port = sample_authorities[0][2]
+
+    blocks = _seoul_html_text_blocks(dataset_raw)
+    titles = [block for block in blocks if block[0] == "h1" and block[1] == "서울교통공사_노선별 지하철역 정보"]
+    purposes = [block for block in blocks if block[0] == "p" and block[1].startswith("서울교통공사에서 제공하는 ") and block[1].endswith("서비스 입니다.")]
+    if len(titles) != 1 or len(purposes) != 1:
+        raise EvidenceError("seoul_official_title_or_purpose_ambiguous")
+    title_value, purpose_value = titles[0][1], purposes[0][1]
+    if _safe_operation_document_text(title_value) is None or _safe_operation_document_text(purpose_value) is None:
+        raise EvidenceError("seoul_official_title_or_purpose_unsafe")
+
+    def block_ref(block: tuple[str, str, int, int], source_id: str, evidence_kind: str) -> dict[str, Any]:
+        return _source_ref(
+            {"source_id": source_id, "kind": "html_byte_range", "byte_start": block[2], "byte_end": block[3]},
+            evidence_kind,
+        )
+
+    title_ref = block_ref(titles[0], dataset_source, "official_operation_title")
+    purpose_ref = block_ref(purposes[0], dataset_source, "official_operation_purpose")
+    termination_notice = "해당 데이터는 종료된 서비스입니다."
+    termination_blocks = [block for block in blocks if block[0] == "p" and termination_notice in block[1]]
+    if len(termination_blocks) != 1:
+        raise EvidenceError("seoul_service_termination_status_ambiguous")
+    service_status_ref = block_ref(termination_blocks[0], dataset_source, "official_service_termination_notice")
+    openapi_binding = _make_source_binding(
+        api_page_source,
+        openapi_raw,
+        "text/html",
+        "/dataList/openApiView.do",
+        "GET",
+        openapi_retrieved_at,
+        "operation_parameter_output_and_result_code_tables",
+        host="data.seoul.go.kr",
+    )
+    dataset_binding = _make_source_binding(
+        dataset_source,
+        dataset_raw,
+        "text/html",
+        "/dataList/OA-15442/S/1/datasetView.do",
+        "GET",
+        dataset_retrieved_at,
+        "official_dataset_title_and_purpose",
+        host="data.seoul.go.kr",
+    )
+
+    def cell_ref(table: int, row: int, cell: int, kind: str) -> dict[str, Any]:
+        return _source_ref(_cell_locator(api_page_source, "html_table_cell", table, row, cell), kind)
+
+    input_rows: dict[str, tuple[int, list[str]]] = {}
+    for row_index, row in enumerate(request_rows[1:], 1):
+        if len(row) < 4 or not row[0].strip():
+            raise EvidenceError("seoul_parameter_row_invalid")
+        name = row[0].strip()
+        if name in input_rows:
+            raise EvidenceError("seoul_parameter_name_duplicate")
+        input_rows[name] = (row_index, row)
+    required_names = {"KEY", "TYPE", "SERVICE", "START_INDEX", "END_INDEX"}
+    if not required_names.issubset(input_rows):
+        raise EvidenceError("seoul_required_parameter_inventory_incomplete")
+    service_row_index, service_row = input_rows["SERVICE"]
+    operation_name = service_row[3].strip()
+    if operation_name != "SearchSTNBySubwayLineInfo":
+        raise EvidenceError("seoul_operation_service_identity_mismatch")
+
+    sample_paths = [parsed.path.split("/") for _row_index, _cell_index, parsed in parsed_sample_urls]
+    if any(len(path) != 6 or path[0] != "" or path[-1] != "5" for path in sample_paths):
+        raise EvidenceError("seoul_operation_path_shape_unsupported")
+    # The operation name appears in every source sample path and in the
+    # explicit SERVICE request-parameter row. Sample values are never retained.
+    if any(path[3] != operation_name for path in sample_paths):
+        raise EvidenceError("seoul_operation_path_service_mismatch")
+    path_parameter_names = {"KEY", "TYPE", "SERVICE", "START_INDEX", "END_INDEX"}
+    param_location_ref = _source_ref(sample_locator, "operation_path_parameters_demonstrated_by_example")
+    parameters: list[dict[str, Any]] = []
+    auth_refs: list[dict[str, Any]] = []
+    for name, (row_index, row) in input_rows.items():
+        type_cell = row[1].strip()
+        match = re.fullmatch(r"\s*(STRING|String|INTEGER|Integer)\s*(?:\((필수|선택)\))?\s*", type_cell)
+        if not match:
+            raise EvidenceError("seoul_parameter_type_or_requiredness_ambiguous")
+        type_text = "string" if match.group(1).casefold() == "string" else "integer"
+        required_text = match.group(2)
+        if required_text not in {"필수", "선택"}:
+            raise EvidenceError("seoul_parameter_requiredness_unknown")
+        requiredness = "required" if required_text == "필수" else "optional"
+        name_ref = cell_ref(request_table_index, row_index, 0, "parameter_name")
+        type_ref = cell_ref(request_table_index, row_index, 1, "parameter_data_type_and_requiredness")
+        description_ref = cell_ref(request_table_index, row_index, 2, "parameter_description")
+        value_ref = cell_ref(request_table_index, row_index, 3, "parameter_values")
+        location_status = "demonstrated_by_example" if name in path_parameter_names else "unknown"
+        location = {"value": "path" if name in path_parameter_names else None, "status": location_status, "source_refs": [param_location_ref] if name in path_parameter_names else [name_ref]}
+        enum_values: list[str] = []
+        enum_status = "not_established"
+        if name == "TYPE":
+            enum_values = re.findall(r"\b(?:xmlf|xml|xls|json)\b", row[3], re.I)
+            enum_values = list(dict.fromkeys(value.lower() for value in enum_values))
+            if set(enum_values) != {"xml", "xmlf", "xls", "json"}:
+                raise EvidenceError("seoul_format_enum_ambiguous")
+            enum_status = "documented"
+        elif name == "SERVICE":
+            enum_values = [operation_name]
+            enum_status = "documented"
+        req_refs = [type_ref]
+        parameter = {
+            "name": name,
+            "location": location,
+            "cardinality": {"minimum": 1 if requiredness == "required" else 0, "maximum": None, "status": "documented", "source_refs": [type_ref]},
+            "requiredness": {"value": requiredness, "status": "documented", "source_refs": req_refs},
+            "size": {"value": None, "observed_values": [], "status": "unknown", "source_refs": [description_ref]},
+            "data_type": {"value": type_text, "status": "documented", "source_refs": [type_ref]},
+            "enum": {"values": enum_values, "status": enum_status, "source_refs": [value_ref] if enum_status == "documented" else [name_ref]},
+            "default": {"value": None, "status": "unknown", "source_refs": [name_ref]},
+            "sample": {"present": name in path_parameter_names, "value_stored": False, "source_refs": [param_location_ref] if name in path_parameter_names else []},
+            "source_refs": [name_ref, type_ref, description_ref, value_ref],
+        }
+        parameters.append(parameter)
+        if name == "KEY":
+            if "인증" not in row[2] or requiredness != "required":
+                raise EvidenceError("seoul_credential_requirement_not_established")
+            auth_refs.extend([name_ref, type_ref, description_ref, param_location_ref])
+
+    output_refs: list[dict[str, Any]] = []
+    declared_output_fields: list[dict[str, Any]] = []
+    response_names: list[str] = []
+    for row_index, row in enumerate(output_rows[1:], 1):
+        if len(row) < 3 or not row[1].strip():
+            raise EvidenceError("seoul_output_field_row_invalid")
+        name = row[1].strip()
+        name_ref = cell_ref(output_table_index, row_index, 1, "declared_output_field_name")
+        description_ref = cell_ref(output_table_index, row_index, 2, "declared_output_field_description")
+        output_refs.extend([name_ref, description_ref])
+        response_names.append(name)
+        declared_output_fields.append({"name": name, "data_type": "not_declared_in_output_table", "size": None, "source_refs": [name_ref, description_ref]})
+    if not response_names or "RESULT.CODE" not in response_names:
+        raise EvidenceError("seoul_result_code_field_not_declared")
+
+    code_tables: list[tuple[int, list[list[str]]]] = []
+    for table_index, rows in enumerate(api_page.tables):
+        if rows and len(rows[0]) >= 2 and rows[0][0].strip() == "INFO-000" and "정상 처리되었습니다" in rows[0][1]:
+            code_tables.append((table_index, rows))
+    if len(code_tables) != 1:
+        raise EvidenceError("seoul_result_code_table_missing_or_ambiguous")
+    code_table_index, code_rows = code_tables[0]
+    codes: list[dict[str, Any]] = []
+    success_values: list[str] = []
+    error_values: list[str] = []
+    success_code_refs: list[dict[str, Any]] = []
+    error_code_refs: list[dict[str, Any]] = []
+    info_empty_ref: dict[str, Any] | None = None
+    code_refs: list[dict[str, Any]] = []
+    seen_codes: set[str] = set()
+    for row_index, row in enumerate(code_rows):
+        if len(row) < 2:
+            raise EvidenceError("seoul_result_code_row_invalid")
+        code = row[0].strip()
+        if not re.fullmatch(r"(?:INFO|ERROR)-[0-9]{3}", code) or code in seen_codes:
+            raise EvidenceError("seoul_result_code_name_or_duplicate_invalid")
+        seen_codes.add(code)
+        code_ref = cell_ref(code_table_index, row_index, 0, "provider_result_code")
+        message_ref = cell_ref(code_table_index, row_index, 1, "provider_result_code_semantics")
+        code_refs.extend([code_ref, message_ref])
+        if code == "INFO-000":
+            success_values.append(code)
+            success_code_refs.extend([code_ref, message_ref])
+            continue
+        if code == "INFO-200":
+            classification = "empty_result"
+            info_empty_ref = _source_ref(
+                _cell_locator(api_page_source, "html_table_cell", code_table_index, row_index, 1),
+                "provider_no_matching_data_code_semantics",
+            )
+        elif code == "ERROR-336":
+            classification = "size_limit"
+        elif code.startswith("ERROR-5") or code.startswith("ERROR-6"):
+            classification = "server"
+        elif code.startswith("ERROR-"):
+            classification = "bad_request"
+            error_values.append(code)
+            error_code_refs.extend([code_ref, message_ref])
+        else:
+            classification = "unknown"
+        codes.append({"value": code, "classification": classification, "source_refs": [code_ref, message_ref]})
+    if not success_values or not info_empty_ref:
+        raise EvidenceError("seoul_result_success_or_empty_semantics_missing")
+
+    identity_refs = [
+        _source_ref(_cell_locator(api_page_source, "html_table_cell", request_table_index, service_row_index, 0), "operation_service_parameter_name"),
+        _source_ref(_cell_locator(api_page_source, "html_table_cell", request_table_index, service_row_index, 3), "operation_service_name"),
+        title_ref,
+    ]
+    identity = {
+        "source_id": "seoul_open_data",
+        "operation_id": "seoul-open-data-subway-station-list",
+        "provider": "data.seoul.go.kr",
+        "protocol": "REST",
+        "operation_name": operation_name,
+        "source_refs": identity_refs,
+    }
+    response_contract = _unknown_response_contract()
+    response_contract["coded_result_field_inventory"] = {"status": "unknown", "candidates": [], "source_refs": [*output_refs]}
+    response_contract["provider_result_codes"] = {
+        "status": "documented",
+        "evidence_strength": "explicit_documentation",
+        "path": None,
+        "value_type": "string",
+        "success_values": {"status": "documented", "values": success_values, "source_refs": success_code_refs},
+        "error_values": {"status": "documented", "values": error_values, "source_refs": error_code_refs},
+        "source_refs": [*code_refs, *output_refs],
+    }
+    response_contract["declared_output_fields"] = declared_output_fields
+    response_contract["documented_error_contract"] = {
+        "status": "documented",
+        "format": "unknown",
+        "code_path": None,
+        "message_path": None,
+        "codes": codes,
+        "source_refs": code_refs,
+    }
+    result = {
+        "schema_version": SCHEMA_VERSION,
+        "parser": {"id": PARSER_ID, "version": PARSER_VERSION},
+        "identity": identity,
+        "operation_document": {
+            "title": {"value": title_value, "status": "documented", "source_refs": [title_ref]},
+            "purpose": {"value": purpose_value, "status": "documented", "source_refs": [purpose_ref]},
+            "service_status": {
+                "classification": "terminated",
+                "status": "documented",
+                "source_refs": [service_status_ref],
+            },
+        },
+        "source_bindings": [openapi_binding, dataset_binding],
+        "parse_status": "parsed_with_unknowns",
+        "transport": {
+            "protocol": {"value": "REST", "status": "registered_manifest", "source_refs": []},
+            "scheme": {"value": "http", "status": "documented", "source_refs": [param_location_ref]},
+            "host": {"value": "openapi.seoul.go.kr", "status": "documented", "source_refs": [param_location_ref]},
+            "port": sample_port,
+            "port_source_refs": [param_location_ref],
+            "path": {"value": "/{KEY}/{TYPE}/{SERVICE}/{START_INDEX}/{END_INDEX}", "status": "documented", "source_refs": [param_location_ref]},
+            "http_method": {"value": None, "status": "unknown", "authority_scope": "not_found_in_parsed_operation_sources", "source_refs": []},
+            "soap_action": {"value": None, "status": "not_applicable", "source_refs": []},
+            "soap_version": {"value": None, "status": "not_applicable", "source_refs": []},
+            "envelope_namespace": {"value": None, "status": "not_applicable", "source_refs": []},
+            "operation_qname": {"value": None, "status": "not_applicable", "source_refs": []},
+            "body_encoding": {"value": None, "status": "not_applicable", "source_refs": []},
+            "fixed_query_selectors": [],
+        },
+        "effect": {"classification": None, "status": "unknown", "authority": "operation_document", "source_refs": []},
+        "parameters": parameters,
+        "authentication": {
+            "requirement": "required",
+            "status": "documented",
+            "mechanism": "service_key",
+            "parameter_names": ["KEY"],
+            "placement": "path",
+            "source_refs": auth_refs,
+        },
+        "limits": {
+            "provider_quota": {"value": None, "unit": None, "status": "not_parsed", "source_refs": [], "scope": {"value": None, "status": "unknown", "source_refs": []}, "account_tier": {"value": None, "status": "unknown", "source_refs": []}},
+            "request_budget": {"value": None, "status": "not_a_provider_fact", "source_refs": []},
+        },
+        "response_assertion": {
+            "kind": "documented_response_fields",
+            "fields": response_names,
+            "empty_result_semantics": {"value": None, "status": "unknown", "source_refs": [info_empty_ref]},
+            "source_refs": [*output_refs, *code_refs],
+        },
+        "response_contract": response_contract,
+        "explicit_unknowns": [
+            "operation_http_method_not_established",
+            "provider_quota_scope_not_established",
+            "provider_quota_account_tier_not_established",
+            "provider_max_rows_per_request_is_described_by_error_code_336_but_not_normalized_as_a_limit_fact",
+            "response_http_status_not_established",
+            "response_format_is_selected_by_TYPE_but_exact_success_payload_shape_is_not_declared",
+            "response_result_code_path_depends_on_selected_format_and_is_not_normalized",
+            "success_result_collection_and_empty_collection_shape_not_established",
+        ],
+    }
+    _validate_evidence(result)
+    return result
+
+
 def parse_kosis_evidence(
     operation: dict[str, Any],
     *,
@@ -2006,6 +2439,13 @@ def _validate_evidence(value: dict[str, Any]) -> None:
         locator_source = source_ref.get("locator", {}).get("source_id")
         if locator_source not in bindings_by_id:
             raise EvidenceError("evidence_source_reference_unbound")
+    transport = value.get("transport", {})
+    if "port" in transport and transport["port"] is not None:
+        port = transport["port"]
+        if type(port) is not int or not 1 <= port <= 65535:
+            raise EvidenceError("evidence_transport_port_invalid")
+        if not transport.get("port_source_refs"):
+            raise EvidenceError("evidence_transport_port_source_missing")
     if source_id == "kosis":
         identity = value["identity"]
         selectors = value.get("transport", {}).get("fixed_query_selectors", [])
