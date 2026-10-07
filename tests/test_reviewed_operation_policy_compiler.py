@@ -556,7 +556,11 @@ class ReviewedOperationPolicyCompilerTests(unittest.TestCase):
                 }
                 row["documented_fields"] = [field]
                 row["required_fields"] = [field]
-                row["member_shape_selectors"] = [{"status": "required", "path": member_path, "value_type": value_type, "source_refs": [source_ref]}]
+                row["member_shape_selectors"] = [
+                    {"status": "required", "path": member_path, "value_type": value_type, "source_refs": [source_ref]},
+                    {"status": "required", "path": {"kind": "json_pointer", "value": "#/meta"}, "value_type": "object", "source_refs": [source_ref]},
+                    {"status": "required", "path": {"kind": "json_pointer", "value": "#/kind"}, "value_type": "string", "enum_values": ["success" if member == "service" else "error"], "source_refs": [source_ref]},
+                ]
                 row["coded_result_field_inventory"] = {"status": "documented", "candidates": [], "source_refs": [source_ref]}
                 row["provider_result_codes"] = {"status": "not_applicable", "source_refs": [source_ref]}
                 if with_collection:
@@ -575,6 +579,11 @@ class ReviewedOperationPolicyCompilerTests(unittest.TestCase):
 
             success = branch("service", "array", with_collection=True)
             provider_error = branch("RESULT", "object", with_collection=False)
+            provider_error["member_shape_selectors"].append({
+                "status": "not_present",
+                "path": {"kind": "json_pointer", "value": "#/service"},
+                "source_refs": [source_ref],
+            })
             document["response_contract"]["success_branches"] = [success, provider_error]
             document_ref = self._write_json(root, "reports/operation-document-evidence/response-union.json", document)
             profile = {
@@ -592,8 +601,8 @@ class ReviewedOperationPolicyCompilerTests(unittest.TestCase):
                     "response": {
                         "payload_kind": "json",
                         "branches": [
-                            {"branch_id": "service-array-success", "classification": "success", "selector": {"accepted_http_status_codes": [200], "root_kind": "object", "discriminators": [{"path": {"kind": "json_pointer", "value": "#/service"}, "predicate": "present"}]}, "empty_result_semantics": "valid", "code_mode": "none", "code_mode_rationale": "The complete synthetic branch has no result-code candidate.", "required_fields": [{"path": {"kind": "json_pointer", "value": "#/service"}, "value_type": "array", "minimum": 1, "maximum": 1}], "result_collection": {"path": {"kind": "json_pointer", "value": "#/service"}, "container_path": {"kind": "json_pointer", "value": "#"}, "item_path": None}},
-                            {"branch_id": "result-object-error", "classification": "provider_error", "selector": {"accepted_http_status_codes": [200], "root_kind": "object", "discriminators": [{"path": {"kind": "json_pointer", "value": "#/RESULT"}, "predicate": "present"}]}, "empty_result_semantics": "not_applicable", "code_mode": "none", "code_mode_rationale": "The complete synthetic error branch has no separate result-code field.", "required_fields": [], "result_collection": None},
+                            {"branch_id": "service-array-success", "classification": "success", "selector": {"accepted_http_status_codes": [200], "root_kind": "object", "discriminators": [{"path": {"kind": "json_pointer", "value": "#/meta"}, "predicate": "present"}, {"path": {"kind": "json_pointer", "value": "#/kind"}, "predicate": "equals_any", "value_type": "string", "values": ["success"]}, {"path": {"kind": "json_pointer", "value": "#/service"}, "predicate": "present"}]}, "empty_result_semantics": "valid", "code_mode": "none", "code_mode_rationale": "The complete synthetic branch has no result-code candidate.", "required_fields": [{"path": {"kind": "json_pointer", "value": "#/service"}, "value_type": "array", "minimum": 1, "maximum": 1}], "result_collection": {"path": {"kind": "json_pointer", "value": "#/service"}, "container_path": {"kind": "json_pointer", "value": "#"}, "item_path": None}},
+                            {"branch_id": "result-object-error", "classification": "provider_error", "selector": {"accepted_http_status_codes": [200], "root_kind": "object", "discriminators": [{"path": {"kind": "json_pointer", "value": "#/meta"}, "predicate": "present"}, {"path": {"kind": "json_pointer", "value": "#/kind"}, "predicate": "equals_any", "value_type": "string", "values": ["error"]}, {"path": {"kind": "json_pointer", "value": "#/service"}, "predicate": "absent"}, {"path": {"kind": "json_pointer", "value": "#/RESULT"}, "predicate": "present"}]}, "empty_result_semantics": "not_applicable", "code_mode": "none", "code_mode_rationale": "The complete synthetic error branch has no separate result-code field.", "required_fields": [], "result_collection": None},
                         ],
                     },
                 },
@@ -611,6 +620,15 @@ class ReviewedOperationPolicyCompilerTests(unittest.TestCase):
             self.assertTrue(all(row["selector"]["discriminators"] for row in assertion["assertion"]["branches"]))
             jsonschema.Draft202012Validator(self.assertion_schema, format_checker=jsonschema.FormatChecker()).validate(assertion)
             self.compiler._validate_assertion_v2_fact_binding(assertion, document, document_ref)
+
+    def test_integer_and_number_discriminators_overlap(self):
+        path = {"kind": "json_pointer", "value": "#/code"}
+        integer_type = {"path": path, "predicate": "node_type", "value_type": "integer"}
+        number_type = {"path": path, "predicate": "node_type", "value_type": "number"}
+        integer_value = {"path": path, "predicate": "equals_any", "value_type": "integer", "values": [1]}
+        numeric_value = {"path": path, "predicate": "equals_any", "value_type": "number", "values": [1.0]}
+        self.assertFalse(self.compiler._same_path_discriminators_are_disjoint(integer_type, number_type))
+        self.assertFalse(self.compiler._same_path_discriminators_are_disjoint(integer_value, numeric_value))
 
     def test_documented_object_success_without_collection_compiles_under_unknown_inventory_scope(self):
         with tempfile.TemporaryDirectory() as directory:

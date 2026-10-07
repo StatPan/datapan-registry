@@ -60,6 +60,17 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         self.validator.validate(index)
         self.assertEqual(index["registry_revision"], self.compiler.current_revision(ROOT))
         self.assertTrue(all(item["bytes"] > 0 and len(item["sha256"]) == 64 for item in index["generation_inputs"]["document_evidence"]))
+        data_go_artifacts = {ref["path"] for scope in index["source_scopes"] if scope["source_id"] == "data_go_kr" for ref in scope["source_artifacts"]}
+        self.assertTrue({
+            "policy/health-probe-canaries.json",
+            "policy/operation-observation-policies.v1.json",
+            "data/provider-index.json",
+            "schemas/datapan.operation-observation-policy.v1.schema.json",
+            "schemas/datapan.operation-response-assertion.v2.schema.json",
+            "schemas/datapan.operation-document-evidence.v1.schema.json",
+            "scripts/operation_document_evidence.py",
+            "scripts/generate-operation-observation-plan.py",
+        }.issubset(data_go_artifacts))
         shard_paths = [path for path in outputs if "/shards/" in path]
         self.assertTrue(shard_paths)
         for path in shard_paths:
@@ -180,7 +191,13 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
                 "source_scopes": [{"source_artifacts": refs}],
             }
             self.compiler.verify_source_revision(index, root)
-            for relative in ("policy/health-probe-canaries.json", "data/provider-index.json"):
+            for relative in (
+                "policy/health-probe-canaries.json",
+                "data/provider-index.json",
+                "policy/operation-observation-policies.v1.json",
+                "schemas/datapan.operation-observation-policy.v1.schema.json",
+                "schemas/datapan.operation-response-assertion.v2.schema.json",
+            ):
                 current = root / relative
                 current.write_text("changed after pinned source revision\n", encoding="utf-8")
                 with self.assertRaisesRegex(self.compiler.PlanError, "release tree differs from pinned source commit input"):

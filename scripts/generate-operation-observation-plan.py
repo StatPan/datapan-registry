@@ -798,7 +798,9 @@ def _validate_assertion_v2_fact_binding(
 
         branch_status_maps.append((set(status_values), selector["root_kind"], selector))
 
-    # Reject selectors that are provably identical or overlap on the same typed path.
+    # Reject same-path selector overlaps unless another shared-path predicate proves
+    # the full branch conjunctions disjoint. Distinct member paths remain runtime
+    # exact-one decisions because both members can occur in the same object.
     for index, (left_statuses, left_root, left) in enumerate(branch_status_maps):
         for right_statuses, right_root, right in branch_status_maps[index + 1:]:
             if not left_statuses.intersection(right_statuses) or left_root != right_root:
@@ -811,33 +813,59 @@ def _validate_assertion_v2_fact_binding(
                 fail(False, "response branches have identical status/root selectors")
             if not left_discriminators or not right_discriminators:
                 fail(False, "unqualified response branch overlaps a branch with the same status/root selector")
-            for ldisc in left_discriminators:
-                for rdisc in right_discriminators:
-                    if ldisc["path"] != rdisc["path"]:
-                        continue
-                    lp, rp = ldisc["predicate"], rdisc["predicate"]
-                    if "absent" in {lp, rp} and ({lp, rp} != {"absent"}):
-                        continue
-                    if lp == rp == "node_type" and ldisc["value_type"] != rdisc["value_type"]:
-                        continue
-                    if lp == rp == "equals_any" and ldisc["value_type"] != rdisc["value_type"]:
-                        continue
-                    if lp == rp == "equals_any":
-                        if not any(type(a) is type(b) and a == b for a in ldisc["values"] for b in rdisc["values"]):
-                            continue
-                        fail(False, "response branch selectors have overlapping typed values at one path")
-                    if lp == rp == "node_type":
-                        fail(False, "response branch selectors repeat the same node-type predicate")
-                    if lp == rp == "absent":
-                        fail(False, "response branch selectors repeat the same absent-member predicate")
-                    if {lp, rp} & {"present", "node_type", "equals_any"}:
-                        if lp == "node_type" and rp == "equals_any" and ldisc["value_type"] != rdisc["value_type"]:
-                            continue
-                        if lp == "equals_any" and rp == "node_type" and ldisc["value_type"] != rdisc["value_type"]:
-                            continue
-                        fail(False, "response branch selectors overlap on the same positive member path")
+            shared_path_pairs = [
+                (ldisc, rdisc)
+                for ldisc in left_discriminators
+                for rdisc in right_discriminators
+                if ldisc["path"] == rdisc["path"]
+            ]
+            if not shared_path_pairs:
+                continue
+            if any(_same_path_discriminators_are_disjoint(ldisc, rdisc) for ldisc, rdisc in shared_path_pairs):
+                continue
+            fail(False, "response branch selectors have overlapping predicates at one path")
 
 
+def _selector_value_matches_type(value: Any, value_type: str) -> bool:
+    if value_type == "string":
+        return type(value) is str
+    if value_type == "integer":
+        return type(value) is int
+    if value_type == "number":
+        return type(value) in {int, float}
+    if value_type == "boolean":
+        return type(value) is bool
+    return False
+
+
+def _same_path_discriminators_are_disjoint(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    """Return true only when two exact predicates on one path cannot both match."""
+    left_predicate, right_predicate = left["predicate"], right["predicate"]
+    if left_predicate == "absent" or right_predicate == "absent":
+        return left_predicate != right_predicate
+    if left_predicate == "present" or right_predicate == "present":
+        return False
+
+    left_type = left.get("value_type")
+    right_type = right.get("value_type")
+    numeric_types = {"integer", "number"}
+    if left_predicate == right_predicate == "node_type":
+        if left_type == right_type:
+            return False
+        return not (left_type in numeric_types and right_type in numeric_types)
+
+    if left_predicate == right_predicate == "equals_any":
+        for left_value in left["values"]:
+            for right_value in right["values"]:
+                both_numeric = type(left_value) in {int, float} and type(left_value) is not bool and type(right_value) in {int, float} and type(right_value) is not bool
+                if (both_numeric and left_value == right_value) or (type(left_value) is type(right_value) and left_value == right_value):
+                    return False
+        return True
+
+    node_type, exact = (left, right) if left_predicate == "node_type" else (right, left)
+    if node_type["predicate"] == "node_type" and exact["predicate"] == "equals_any":
+        return not any(_selector_value_matches_type(value, node_type["value_type"]) for value in exact["values"])
+    return False
 def load_reviewed_operation_policies(
     root: Path,
     operations: list[dict[str, Any]],
@@ -1043,13 +1071,20 @@ def profile_matches_response(response: dict[str, Any], response_contract: dict[s
             candidates = documented_fields + source_required + source_branch.get("member_shape_selectors", [])
             discriminator_match = True
             for discriminator in selector["discriminators"]:
-                facts = [field for field in candidates if field.get("path") == discriminator["path"]]
+                path_facts = [field for field in candidates if field.get("path") == discriminator["path"]]
                 if discriminator["predicate"] == "absent":
-                    absent_facts = [field for field in source_branch.get("member_shape_selectors", []) if field.get("path") == discriminator["path"] and field.get("status") == "not_present" and field.get("source_refs")]
-                    if facts or not absent_facts:
+                    positive_facts = [field for field in path_facts if field.get("status") in {"documented", "required"}]
+                    absent_facts = [
+                        field for field in source_branch.get("member_shape_selectors", [])
+                        if field.get("path") == discriminator["path"]
+                        and field.get("status") == "not_present"
+                        and field.get("source_refs")
+                    ]
+                    if positive_facts or len(absent_facts) != 1:
                         discriminator_match = False
                         break
                     continue
+                facts = [field for field in path_facts if field.get("status") in {"documented", "required"}]
                 if not facts:
                     discriminator_match = False
                     break
