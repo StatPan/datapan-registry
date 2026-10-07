@@ -92,6 +92,8 @@
         "health_probe_catalog",
         "data_go_kr_operation_manifest",
         "operation_document_evidence",
+        "operation_document_work_queue",
+        "operation_document_reconciliation",
         "operation_observation_plan",
         "operation_observation_plan_shard",
         "current_runtime_evidence_projection",
@@ -127,7 +129,9 @@
       "generated_by": [
         "policy/health-probe-canaries.json plus python scripts/generate-health-probe-catalog.py",
         "python scripts/generate-data-go-kr-operation-manifest.py",
+        "python scripts/operation_document_evidence.py --build-queue",
         "python scripts/operation_document_evidence.py --parse-captures --capture-root <private-capture-directory> --evidence-dir reports/operation-document-evidence",
+        "python scripts/operation_document_evidence.py --reconcile",
         "python scripts/generate-operation-observation-plan.py --source-revision <compiler-source-commit-sha>",
         "python scripts/register-operation-observation-plan-artifacts.py --write",
         "python scripts/sync-release-schema-artifacts.py --write",
@@ -205,8 +209,8 @@
     "python scripts/validate-source-refresh-policy.py",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
-      "manifest_relationship": "Source rollups, current runtime evidence projection, sustainable coverage, completeness-proof registry, input index and rollup, and source refresh policies, source-bound operation denominator expectations, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for registered public-data scopes, authoritative denominators, immutable operation-bound evidence, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
-      "schema_relationship": "Schema-backed source, denominator expectation, current runtime projection, sustainable coverage, completeness-proof registry, input index and rollup, and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
+      "manifest_relationship": "Source rollups, current runtime evidence projection, sustainable coverage, completeness-proof registry, input index and rollup, source refresh policies, source-bound operation denominators, credential runtime evidence, operation-document evidence, its work queue and reconciliation, and observation-plan index/shards are top-level manifest evidence for registered public-data scopes, authoritative denominators, immutable operation-bound evidence, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundaries. Document acquisition work counts do not establish complete request plans or runtime admission.",
+      "schema_relationship": "Schema-backed source, denominator expectation, current runtime projection, sustainable coverage, completeness-proof registry, input index and rollup, credential reports, operation-document evidence/reconciliation/work items, and observation plans are indexed through schemas/index.json and source-report-inventory.json where applicable.",
       "package_relationship": "Included in release packages through manifest.json.",
       "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."
     },
