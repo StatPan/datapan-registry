@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-07-04T06:39:24Z",
   "datapan_version": "0.1.0-dev",
-  "count": 115,
+  "count": 116,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -1038,6 +1038,15 @@
       "version": "v1",
       "bytes": 8811,
       "sha256": "da60e5b93d7befffea9e6bd2844f2c95748f647f8f5faa4813c7219ab01313c4"
+    },
+    {
+      "path": "schemas/datapan.operation-document-evidence.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.operation-document-evidence.v1.schema.json",
+      "title": "Datapan registered operation document evidence v1",
+      "contract": "operation-document-evidence",
+      "version": "v1",
+      "bytes": 12380,
+      "sha256": "0b4a5a7ab10eeccb523d2af8a8e62e76f14a6243eea00558ac49e9959e7a3d1d"
     }
   ]
 }
