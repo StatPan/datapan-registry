@@ -1114,10 +1114,27 @@
             "evidence_kind": "operation_document",
             "json_pointer": "#/transport/scheme",
             "sha256": "227c6818ed6db7ae7f1d99a325dfa3651f51ba5d1cb0e5dfe73814c46277b1b6"
+          },
+          {
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/effect_profiles/0",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+          },
+          {
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/effect_profiles/0/effect_review",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+          },
+          {
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/effect_profiles/0/review",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
           }
         ],
         "missing_fields": [
-          "operation_effect_read_only_authority",
           "request_resource_limits",
           "response_assertion_and_empty_result_semantics",
           "response_code_inventory_incomplete_or_ambiguous",
@@ -2354,19 +2371,19 @@
             "artifact_path": "policy/operation-observation-policies.v1.json",
             "evidence_kind": "reviewed_policy",
             "json_pointer": "#/effect_profiles/0",
-            "sha256": "fc2d78ffa4fea30764f59b0ee0b1c555211d222d5874c2c5496d609b550081f6"
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
           },
           {
             "artifact_path": "policy/operation-observation-policies.v1.json",
             "evidence_kind": "reviewed_policy",
             "json_pointer": "#/effect_profiles/0/effect_review",
-            "sha256": "fc2d78ffa4fea30764f59b0ee0b1c555211d222d5874c2c5496d609b550081f6"
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
           },
           {
             "artifact_path": "policy/operation-observation-policies.v1.json",
             "evidence_kind": "reviewed_policy",
             "json_pointer": "#/effect_profiles/0/review",
-            "sha256": "fc2d78ffa4fea30764f59b0ee0b1c555211d222d5874c2c5496d609b550081f6"
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
           }
         ],
         "missing_fields": [
@@ -3942,10 +3959,27 @@
             "evidence_kind": "operation_document",
             "json_pointer": "#/transport/scheme",
             "sha256": "aaa313c270754672066935380adee631c791ca4f24414481cf86029ec8719511"
+          },
+          {
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/effect_profiles/0",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+          },
+          {
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/effect_profiles/0/effect_review",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+          },
+          {
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/effect_profiles/0/review",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
           }
         ],
         "missing_fields": [
-          "operation_effect_read_only_authority",
           "request_resource_limits",
           "response_assertion_and_empty_result_semantics",
           "response_code_inventory_incomplete_or_ambiguous",
@@ -4990,8 +5024,8 @@
       "admission": {
         "evidence_refs": [],
         "reasons": [
-          "request_plan_incomplete",
-          "runtime_binding_unbound"
+          "runtime_binding_unbound",
+          "admission_not_authorized_by_registry_plan"
         ],
         "status": "not_admitted"
       },
@@ -5010,10 +5044,28 @@
       "request_plan": {
         "evidence_refs": [
           {
-            "artifact_path": "reports/data-go-kr/operation-manifest.json",
-            "evidence_kind": "operation_manifest",
-            "json_pointer": "#/operations/268",
-            "sha256": "b68601aee31acdb90b0a655dcb079c185af2c7fdd107333712c9b84e6a2700be"
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/profiles/0",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/effect",
+            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport",
+            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters",
+            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
           },
           {
             "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
@@ -5022,614 +5074,322 @@
             "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
           },
           {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/identity",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/operation_document/purpose",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/operation_document/title",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/0",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/0/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/0/data_type",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/0/location",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/0/requiredness",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/1",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/1/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/1/data_type",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/1/location",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/1/requiredness",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/2",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/2/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/2/data_type",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/2/location",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/2/requiredness",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/3",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/3/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/3/data_type",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/3/location",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/parameters/3/requiredness",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_assertion",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/accepted_http_status_codes",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/coded_result_field_inventory",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/coded_result_field_inventory/candidates/0",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/0",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/0/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/1",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/1/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/10",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/10/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/11",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/11/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/12",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/12/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/2",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/2/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/3",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/3/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/4",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/4/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/5",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/5/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/6",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/6/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/7",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/7/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/8",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/8/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/9",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/documented_fields/9/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/payload",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/provider_result_codes",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/provider_result_codes/error_values",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/provider_result_codes/success_values",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/schema_shape",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/coded_result_field_inventory",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/coded_result_field_inventory/candidates/0",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/0",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/0/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/1",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/1/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/10",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/10/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/11",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/11/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/12",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/12/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/2",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/2/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/3",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/3/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/4",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/4/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/5",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/5/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/6",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/6/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/7",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/7/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/8",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/8/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/9",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/documented_fields/9/cardinality",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/payload",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/provider_result_codes",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/provider_result_codes/error_values",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/provider_result_codes/success_values",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/root_shape",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/schema_shape",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/response_contract/success_branches/0/schema_source",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/source_bindings/0",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/transport/host",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/transport/http_method",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/transport/path",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
-          },
-          {
-            "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
-            "evidence_kind": "operation_document",
-            "json_pointer": "#/transport/scheme",
-            "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+            "artifact_path": "reports/operation-response-assertions/057bc3dfac1acf01bee81a0d410f63e7d1cac42d691c4f6f33471bcae46a0854.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/assertion",
+            "sha256": "5c8d0ff7e3fab321979b21390b42dcd97838276fa9d9434bf35c18fc61a394eb"
           }
         ],
-        "missing_fields": [
-          "operation_effect_read_only_authority",
-          "request_resource_limits",
-          "response_assertion_and_empty_result_semantics",
-          "response_code_inventory_incomplete_or_ambiguous",
-          "response_collection_semantics_unknown",
-          "response_empty_result_policy_unknown",
-          "response_success_schema_shape",
-          "safe_value_strategy_for_required_inputs"
-        ],
-        "status": "incomplete"
+        "request_contract": {
+          "authentication": {
+            "cardinality": "required_single",
+            "credential_reference_required": true,
+            "evidence_refs": [
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/authentication",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              }
+            ],
+            "mechanism": "service_key",
+            "parameter_name": "serviceKey",
+            "placement": "query",
+            "requirement": "required"
+          },
+          "limits": {
+            "evidence_refs": [
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/request/limits",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              }
+            ],
+            "max_request_bytes": 4096,
+            "max_response_bytes": 1048576,
+            "request_budget": 1,
+            "timeout_ms": 10000
+          },
+          "operation_effect": {
+            "authority": "reviewed_policy",
+            "classification": "read_only",
+            "evidence_refs": [
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/http_method",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/operation_document/title",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/operation_document/purpose",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/request/effect_review",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/review",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/selector",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              }
+            ]
+          },
+          "parameter_inventory_evidence_refs": [
+            {
+              "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+              "evidence_kind": "operation_document",
+              "json_pointer": "#/parameters",
+              "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+            }
+          ],
+          "parameters": [
+            {
+              "cardinality": "required_single",
+              "evidence_refs": [
+                {
+                  "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                  "evidence_kind": "operation_document",
+                  "json_pointer": "#/parameters/3/name",
+                  "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+                },
+                {
+                  "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                  "evidence_kind": "operation_document",
+                  "json_pointer": "#/parameters/3/location",
+                  "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+                },
+                {
+                  "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                  "evidence_kind": "operation_document",
+                  "json_pointer": "#/parameters/3/requiredness",
+                  "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+                },
+                {
+                  "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                  "evidence_kind": "operation_document",
+                  "json_pointer": "#/parameters/3/cardinality",
+                  "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+                },
+                {
+                  "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                  "evidence_kind": "operation_document",
+                  "json_pointer": "#/parameters/3/data_type",
+                  "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+                },
+                {
+                  "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                  "evidence_kind": "operation_document",
+                  "json_pointer": "#/authentication",
+                  "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+                }
+              ],
+              "location": "query",
+              "name": "serviceKey",
+              "value_strategy": {
+                "authority": "runtime_binding",
+                "binding_field": "credential_reference",
+                "kind": "credential_reference"
+              }
+            }
+          ],
+          "response_assertion": {
+            "assertion_ref": "reports/operation-response-assertions/057bc3dfac1acf01bee81a0d410f63e7d1cac42d691c4f6f33471bcae46a0854.json#/assertion",
+            "empty_result_semantics": "not_applicable",
+            "evidence_refs": [
+              {
+                "artifact_path": "reports/operation-response-assertions/057bc3dfac1acf01bee81a0d410f63e7d1cac42d691c4f6f33471bcae46a0854.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/assertion",
+                "sha256": "5c8d0ff7e3fab321979b21390b42dcd97838276fa9d9434bf35c18fc61a394eb"
+              },
+              {
+                "artifact_path": "reports/operation-response-assertions/057bc3dfac1acf01bee81a0d410f63e7d1cac42d691c4f6f33471bcae46a0854.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/review",
+                "sha256": "5c8d0ff7e3fab321979b21390b42dcd97838276fa9d9434bf35c18fc61a394eb"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/response_contract",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/parameters",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/scheme",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/host",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/path",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/http_method",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/operation_document/title",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/operation_document/purpose",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/request/effect_review",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/review",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/selector",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/authentication",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/parameters/3/name",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/parameters/3/location",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/parameters/3/requiredness",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/parameters/3/cardinality",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/parameters/3/data_type",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/request/limits",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              },
+              {
+                "artifact_path": "policy/operation-observation-policies.v1.json",
+                "evidence_kind": "reviewed_policy",
+                "json_pointer": "#/profiles/0/request/response",
+                "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+              }
+            ],
+            "kind": "observation_only"
+          },
+          "transport": {
+            "authority": "operation_document",
+            "evidence_refs": [
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/scheme",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/host",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/path",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              },
+              {
+                "artifact_path": "reports/operation-document-evidence/v2/15158776-69663.json",
+                "evidence_kind": "operation_document",
+                "json_pointer": "#/transport/http_method",
+                "sha256": "7efd47c90bd01d1f0e6648f6061a1073e611ca7673e2279350629c03570f6e99"
+              }
+            ],
+            "host": "apis.data.go.kr",
+            "http_method": "GET",
+            "path": "/B553774/WorldCupMainStadiumInfo/getWorldCupMainStadiumInfoQry",
+            "protocol": "REST",
+            "scheme": "https"
+          }
+        },
+        "status": "complete"
       },
       "runtime_binding": {
-        "evidence_refs": [],
+        "evidence_refs": [
+          {
+            "artifact_path": "policy/operation-observation-policies.v1.json",
+            "evidence_kind": "reviewed_policy",
+            "json_pointer": "#/profiles/0",
+            "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
+          }
+        ],
         "missing_fields": [
           "credential_entitlement_reference",
           "shared_quota_scopes_and_limits",

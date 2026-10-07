@@ -859,7 +859,7 @@
       }
     ],
     "generator_path": "scripts/generate-operation-observation-plan.py",
-    "generator_sha256": "80723083a58a317f9c7b6a1027fbef0b50fb633d7a147254af7d44493a7961c2",
+    "generator_sha256": "87a499ddc8a600906630e52719fa340a8bdc8d099a36d4505dfd83e754fd554d",
     "legacy_policy": {
       "bytes": 5384,
       "path": "policy/health-probe-canaries.json",
@@ -903,26 +903,26 @@
     "provider_index_entries_counted_as_operations": false,
     "separate_link_operations": 8871
   },
-  "registry_revision": "778e56c9c04a4330d87d2e5093bdc29187d84a6e",
+  "registry_revision": "d6fffa9f1bd778d64a52de1d1612ed93afec7a70",
   "schema_version": "datapan.operation-observation-plan.v1",
   "shards": [
     {
-      "bytes": 7525917,
+      "bytes": 7488140,
       "first_operation_id": "00004a9f03e1bb109137e444e9b58ffe105d5d5c49254abf5e3094b2e3574749",
       "last_operation_id": "054557b7827a3ed9a5447ce960bc501a637b981606bfca63816cce2724267c42",
       "path": "reports/operation-observation-plan/shards/data_go_kr-0000.json",
       "record_count": 256,
-      "sha256": "8ab2d6c195ed0777b94299c58c57eac9b0a58515e522fbe37fc0b7ab4119fecd",
+      "sha256": "3f973c4ee5beda7935e57d638cfae29beac2d1384d64a26eaba44ecfe565f875",
       "shard_index": 0,
       "source_id": "data_go_kr"
     },
     {
-      "bytes": 800735,
+      "bytes": 785894,
       "first_operation_id": "05466604a39dba06d4ec9899ac7aae12bbb04e7e221e8542e89f6ba9a16260be",
       "last_operation_id": "0ab3aff951987760a0af97f344781200e640b7c0ae280d270fc0a5da7f14bf4c",
       "path": "reports/operation-observation-plan/shards/data_go_kr-0001.json",
       "record_count": 256,
-      "sha256": "ac35d6fe957edf57bc7394e320622d368607a0b4421c948217e185e2f9a9d97a",
+      "sha256": "f9cd3c89a79ce8867c97838fea57f2d0b61f5a7cee4a1accf3849a8ad887c46f",
       "shard_index": 1,
       "source_id": "data_go_kr"
     },
@@ -1032,7 +1032,7 @@
       "last_operation_id": "448d464bcacadd96e6a15575d62af1bb1d2f66d9e67558b4811c1355b644c299",
       "path": "reports/operation-observation-plan/shards/data_go_kr-0012.json",
       "record_count": 256,
-      "sha256": "9e2a5bf36986cdb3ad6fbbd63307858a05bc4a13b6493b840a8c4524e451de4f",
+      "sha256": "c8dc0c64713997910f4b1e76f5300893819f80ab2aa2496a559a1f4ab75aaa35",
       "shard_index": 12,
       "source_id": "data_go_kr"
     },
@@ -1112,7 +1112,7 @@
       "last_operation_id": "6def88cb5448430dca1639ef57e56befab2c86e5fc182fa33c2de5c23b899d5a",
       "path": "reports/operation-observation-plan/shards/data_go_kr-0020.json",
       "record_count": 256,
-      "sha256": "86fcdae238ea01b02d925e1c6385f751dd4090372efcf6407bb06cf4cbb2efbe",
+      "sha256": "f23018903de9fabaf6dc03552abb4151109098b2db09f39b938f62ffaea792e8",
       "shard_index": 20,
       "source_id": "data_go_kr"
     },
@@ -1402,7 +1402,7 @@
       "last_operation_id": "fffd87040d940f2e05b6d4ea9fd7be5b8347893618bdf52394009bb7199611e1",
       "path": "reports/operation-observation-plan/shards/data_go_kr-0049.json",
       "record_count": 118,
-      "sha256": "15ed06adda71df121d14af417034522059c3860d04559d4a8652661c17defe63",
+      "sha256": "b8224f5c12e57736501bbac13f6f8e28b761fbda3005ac47fc5ac839b5e65a98",
       "shard_index": 49,
       "source_id": "data_go_kr"
     },
@@ -1472,9 +1472,9 @@
           "sha256": "ed8d115074cf7f465a2eb45ed62868dd3b7e6ec41d062aacb248adcffa68c50c"
         },
         {
-          "bytes": 6287,
+          "bytes": 6513,
           "path": "policy/operation-observation-policies.v1.json",
-          "sha256": "fc2d78ffa4fea30764f59b0ee0b1c555211d222d5874c2c5496d609b550081f6"
+          "sha256": "158d960285844cf3c745658d60ca23981cd0cc84d0c68afe287bba749d3ac8e5"
         },
         {
           "bytes": 24366827,
@@ -3257,9 +3257,9 @@
           "sha256": "78878ab22183e419e58d2a15b0a6a32bc585a3822cfa5a3a4bfd9f23d893055b"
         },
         {
-          "bytes": 221844,
+          "bytes": 222928,
           "path": "scripts/generate-operation-observation-plan.py",
-          "sha256": "80723083a58a317f9c7b6a1027fbef0b50fb633d7a147254af7d44493a7961c2"
+          "sha256": "87a499ddc8a600906630e52719fa340a8bdc8d099a36d4505dfd83e754fd554d"
         },
         {
           "bytes": 208723,
@@ -3439,8 +3439,8 @@
     "inventory_unknown_scopes": 4,
     "known_operations": 12666,
     "not_admitted": 12666,
-    "request_plans_complete": 15,
-    "request_plans_incomplete": 12651,
+    "request_plans_complete": 19,
+    "request_plans_incomplete": 12647,
     "runtime_bindings_bound": 0,
     "runtime_bindings_unbound": 12666
   }
