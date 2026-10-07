@@ -2367,7 +2367,12 @@ def compile_reviewed_operation_plan(
             *auth_refs,
             *[ref for parameter in output_parameters for ref in parameter["evidence_refs"]],
             *limits["evidence_refs"],
-            _policy_evidence(policy_ref, policy_index, "/request/response_assertion_artifact", pointer_base=policy_pointer_base),
+            _policy_evidence(
+                policy_ref,
+                policy_index,
+                "/request/response" if policy_pointer_base is not None else "/request/response_assertion_artifact",
+                pointer_base=policy_pointer_base,
+            ),
             _policy_evidence(policy_ref, policy_index, "/review", pointer_base=policy_pointer_base),
         ]
         observation_evidence = list({
@@ -3218,7 +3223,12 @@ def _validate_complete_contract_evidence(
             fail(response_plan["empty_result_semantics"] == "not_applicable", "observation-only mode must not claim empty-result semantics")
             fail("expected_status_codes" not in response_plan, "observation-only mode must not claim accepted HTTP statuses")
             exact_target(response_plan["evidence_refs"], "#/response_contract", "operation_document")
-            exact_target(response_plan["evidence_refs"], policy_root_ref["json_pointer"] + "/request/response_assertion_artifact", "reviewed_policy")
+            policy_assertion_pointer = (
+                policy_root_ref["json_pointer"] + "/request/response"
+                if is_profile_policy
+                else policy_root_ref["json_pointer"] + "/request/response_assertion_artifact"
+            )
+            exact_target(response_plan["evidence_refs"], policy_assertion_pointer, "reviewed_policy")
             for pointer in ("#/transport/http_method", "#/operation_document/title", "#/operation_document/purpose", "#/authentication", "#/parameters"):
                 exact_target(response_plan["evidence_refs"], pointer, "operation_document")
         else:
@@ -3325,28 +3335,31 @@ def _validate_complete_contract_evidence(
             raise PlanError("unsupported production operation-effect authority")
         if is_profile_policy:
             profile_response = request_policy["response"]
-            fail(profile_response["payload_kind"] == assertion["payload_kind"], "profile response payload kind differs from its assertion")
-            fail(len(profile_response["branches"]) == len(assertion["branches"]), "compiled response branch count differs from the reusable profile")
-            for profile_branch, assertion_branch in zip(profile_response["branches"], assertion["branches"]):
-                fail(profile_branch["branch_id"] == assertion_branch["branch_id"], "compiled branch ID differs from the reusable profile")
-                fail(profile_branch["classification"] == assertion_branch["classification"], "compiled branch classification differs from the reusable profile")
-                selector = assertion_branch["selector"]
-                profile_selector = profile_branch["selector"]
-                fail(selector["root_kind"] == profile_selector["root_kind"], "compiled branch root kind differs from the reusable profile")
-                fail(selector["accepted_http_status_codes"] == profile_selector["accepted_http_status_codes"], "compiled branch statuses differ from the reusable profile")
-                if "root_qname" in profile_selector:
-                    fail(selector.get("root_qname") == profile_selector["root_qname"], "compiled branch root QName differs from the reusable profile")
-                expected_fields = [
-                    {"path": field["path"], "value_type": field["value_type"], "cardinality": {"minimum": field["minimum"], "maximum": field["maximum"]}}
-                    for field in profile_branch["required_fields"]
-                ]
-                actual_fields = [{key: field[key] for key in ("path", "value_type", "cardinality")} for field in assertion_branch["required_fields"]]
-                fail(actual_fields == expected_fields, "compiled response fields differ from the reviewed reusable profile")
-                if profile_branch["code_mode"] == "none":
-                    fail(assertion_branch["provider_result_code_status"] == "none_by_policy", "profile code_mode=none is not represented by the typed assertion")
-                    fail(bool(profile_branch["code_mode_rationale"]), "profile code_mode=none lacks reviewed rationale")
-                else:
-                    fail(assertion_branch["provider_result_code_status"] in {"documented", "expected_success_example", "not_applicable"}, "profile source code mode lacks an exact typed source predicate")
+            if observation_only:
+                fail(profile_response == {"mode": "observation_only"}, "observation-only assertion differs from the reusable profile")
+            else:
+                fail(profile_response["payload_kind"] == assertion["payload_kind"], "profile response payload kind differs from its assertion")
+                fail(len(profile_response["branches"]) == len(assertion["branches"]), "compiled response branch count differs from the reusable profile")
+                for profile_branch, assertion_branch in zip(profile_response["branches"], assertion["branches"]):
+                    fail(profile_branch["branch_id"] == assertion_branch["branch_id"], "compiled branch ID differs from the reusable profile")
+                    fail(profile_branch["classification"] == assertion_branch["classification"], "compiled branch classification differs from the reusable profile")
+                    selector = assertion_branch["selector"]
+                    profile_selector = profile_branch["selector"]
+                    fail(selector["root_kind"] == profile_selector["root_kind"], "compiled branch root kind differs from the reusable profile")
+                    fail(selector["accepted_http_status_codes"] == profile_selector["accepted_http_status_codes"], "compiled branch statuses differ from the reusable profile")
+                    if "root_qname" in profile_selector:
+                        fail(selector.get("root_qname") == profile_selector["root_qname"], "compiled branch root QName differs from the reusable profile")
+                    expected_fields = [
+                        {"path": field["path"], "value_type": field["value_type"], "cardinality": {"minimum": field["minimum"], "maximum": field["maximum"]}}
+                        for field in profile_branch["required_fields"]
+                    ]
+                    actual_fields = [{key: field[key] for key in ("path", "value_type", "cardinality")} for field in assertion_branch["required_fields"]]
+                    fail(actual_fields == expected_fields, "compiled response fields differ from the reviewed reusable profile")
+                    if profile_branch["code_mode"] == "none":
+                        fail(assertion_branch["provider_result_code_status"] == "none_by_policy", "profile code_mode=none is not represented by the typed assertion")
+                        fail(bool(profile_branch["code_mode_rationale"]), "profile code_mode=none lacks reviewed rationale")
+                    else:
+                        fail(assertion_branch["provider_result_code_status"] in {"documented", "expected_success_example", "not_applicable"}, "profile source code mode lacks an exact typed source predicate")
             fail(assertion_document["review"] == policy_row["review"], "generated response assertion review differs from the reusable profile")
             fail(assertion_path == f"reports/operation-response-assertions/{expected_identity['operation_id']}.json", "generated profile assertion path is not operation-scoped")
             fail(len(assertion_artifact_refs) == 1, "generated profile assertion is not uniquely digest-bound")
