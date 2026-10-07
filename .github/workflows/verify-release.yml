@@ -151,6 +151,10 @@ jobs:
           python scripts/generate-data-go-kr-operation-manifest.py --check
           python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
+          python scripts/generate-operation-observation-plan.py --check
+          python scripts/register-operation-observation-plan-artifacts.py --check
+          python -m unittest tests/test_operation_document_evidence.py
+          python -m unittest tests/test_operation_observation_plan_fixtures.py tests/test_generate_operation_observation_plan.py
           python -m unittest tests/test_materialize_canonical_registry.py
           python -m unittest tests/test_canonical_update_pr.py
           python -m unittest tests/test_canonical_update_ci.py
@@ -336,6 +340,7 @@ jobs:
           python -m py_compile scripts/sync-release-manifest-artifacts.py
           python -m py_compile scripts/generate-data-go-kr-operation-manifest.py
           python -m py_compile scripts/validate-data-go-kr-operation-manifest.py
+          python -m py_compile scripts/generate-operation-observation-plan.py scripts/register-operation-observation-plan-artifacts.py scripts/generate-operation-observation-plan-fixtures.py scripts/operation_document_evidence.py
           python -m py_compile scripts/generate-release-distribution-footprint.py
           python -m py_compile scripts/generate-release-version-decision.py
           python -m py_compile scripts/generate-release-shard-consumer-proof.py

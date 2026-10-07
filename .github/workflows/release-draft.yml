@@ -96,6 +96,10 @@ jobs:
             scripts/generate-error-action-routing-rollup.py \
             scripts/generate-failure-recovery-rollup.py \
             scripts/generate-operation-denominator-rollup.py \
+            scripts/generate-operation-observation-plan.py \
+            scripts/register-operation-observation-plan-artifacts.py \
+            scripts/generate-operation-observation-plan-fixtures.py \
+            scripts/operation_document_evidence.py \
             scripts/generate-runtime-freshness-queue.py \
             scripts/generate-source-runtime-evidence-rollup.py \
             scripts/generate-runtime-freshness-batch.py \
@@ -169,6 +173,10 @@ jobs:
           python scripts/generate-data-go-kr-operation-manifest.py --check
           python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
+          python scripts/generate-operation-observation-plan.py --check
+          python scripts/register-operation-observation-plan-artifacts.py --check
+          python -m unittest tests/test_operation_document_evidence.py
+          python -m unittest tests/test_operation_observation_plan_fixtures.py tests/test_generate_operation_observation_plan.py
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py
