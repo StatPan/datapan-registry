@@ -2,12 +2,12 @@
   "schema_version": "datapan.external-checkout-refs.v1",
   "repository": "StatPan/datapan-cli",
   "ref_kind": "commit_sha",
-  "ref": "52ebf528d6c1d0cb04ab78a80273d5b49c5b6dec",
+  "ref": "c1806c8d3b1a8f1cd9674cc73ff57d1ceec38cb2",
   "selection": {
     "basis": "reviewed_immutable_pull_request_checkpoint",
     "source_issue": "StatPan/datapan-cli#184",
     "source_pull_request": "StatPan/datapan-cli#185",
-    "notes": "This immutable CLI PR head was reviewed for the Registry operation-plan schemas and artifact kinds. It is pinned as a compatibility checkpoint while PR #185 remains under CI/review; this does not claim the CLI change is merged."
+    "notes": "This immutable CLI PR #185 head was reviewed for the Registry operation-plan schemas, artifact kinds, and observation-only profile decoding; its CI and Registry journey checks pass. It is pinned as a compatibility checkpoint while PR #185 remains under review; this does not claim the CLI change is merged."
   },
   "inventory_expectations": {
     "checkout_count": 10,

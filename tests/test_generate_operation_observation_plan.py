@@ -38,8 +38,8 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         summary = index["summary"]
         self.assertEqual(summary["known_operations"], 12666)
         self.assertEqual(summary["known_operations"], sum(scope["registered_operations"] for scope in index["source_scopes"]))
-        self.assertEqual(summary["request_plans_complete"], 15)
-        self.assertEqual(summary["request_plans_incomplete"], 12651)
+        self.assertEqual(summary["request_plans_complete"], 19)
+        self.assertEqual(summary["request_plans_incomplete"], 12647)
         self.assertEqual(summary["runtime_bindings_bound"], 0)
         self.assertEqual(summary["runtime_bindings_unbound"], 12666)
         self.assertEqual(summary["admitted"], 0)
@@ -314,6 +314,12 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             "04d1170f65e3e7f6f36ba0e84490f9825ba8ee51f543fb48734142d6f0c858dc",
             "05192c4ae28526fa5472ae7326785dfbd0c2ad49b77e951607562c9fa9af6e33",
             "0527dbed99c86d1a86ab5707a2f90706408841ac854e16ece3067236df4ebb3f",
+            # These four source records establish retrieval in a documented
+            # title/summary; their purpose facts are either neutral or absent.
+            "046a332e30bf77079f1b24e5bee21f8a4c81d08ed0891fc743a44c78a66e3e23",
+            "047e4ec527acda40be0506de92a5b6a2ef80b1033ab3702d7ba2dc96a7aab610",
+            "05399b545b946ecd4ed43a729e6316b1a0070feceee9928c34e04824008ac77e",
+            "057bc3dfac1acf01bee81a0d410f63e7d1cac42d691c4f6f33471bcae46a0854",
         }
         profile_records = {
             row["operation_identity"]["operation_id"]: row
@@ -636,6 +642,101 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         self.assertIn("safe_value_strategy_for_required_inputs", missing)
         self.assertEqual(plan["request_plan"]["status"], "incomplete")
         self.assertNotIn("request_contract", plan["request_plan"])
+
+    def test_reviewed_effect_uses_either_grounded_operation_text_and_screens_all_text(self):
+        selector = {
+            "source_id": "data_go_kr",
+            "provider": "data.go.kr",
+            "protocol": "REST",
+            "method": "GET",
+        }
+        effect_review = {
+            "classification": "read_only",
+            "basis": "rfc9110_safe_method_and_retrieval_purpose",
+            "rfc_reference": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1",
+            "purpose_terms": ["조회", "목록"],
+        }
+
+        def source_fact(value, evidence_kind, status="documented"):
+            return {
+                "status": status,
+                "value": value,
+                "source_refs": [{"evidence_kind": evidence_kind}] if status == "documented" else [],
+            }
+
+        def document(title, purpose):
+            return {
+                "identity": {
+                    "source_id": "data_go_kr",
+                    "provider": "data.go.kr",
+                    "protocol": "REST",
+                    "operation_id": "operation-example",
+                },
+                "effect": {"status": "unknown", "classification": None, "source_refs": []},
+                "transport": {
+                    "http_method": {
+                        "status": "documented",
+                        "authority_scope": "operation_specific",
+                        "value": "GET",
+                        "source_refs": [{"evidence_kind": "operation_http_method"}],
+                    },
+                    "fixed_query_selectors": [],
+                },
+                "operation_document": {"title": title, "purpose": purpose},
+                "parameters": [],
+            }
+
+        title_only = document(
+            source_fact("시설 목록 조회", "official_operation_title"),
+            source_fact(None, "official_operation_purpose", status="not_found_in_parsed_operation_sources"),
+        )
+        self.assertTrue(
+            self.compiler.reviewed_read_only_effect_matches(
+                selector, effect_review, "data_go_kr", "data.go.kr",
+                {"operation_id": "operation-example", "protocol": "REST"}, title_only,
+            )
+        )
+        title_refs = self.compiler.reviewed_operation_text_refs(
+            {"path": "reports/example.json", "sha256": "a" * 64}, title_only,
+        )
+        self.assertEqual([ref["json_pointer"] for ref in title_refs], ["#/operation_document/title"])
+
+        purpose_only = document(
+            source_fact("시설 정보", "official_operation_title", status="registered_manifest"),
+            source_fact("시설의 목록을 조회", "official_operation_purpose"),
+        )
+        self.assertTrue(
+            self.compiler.reviewed_read_only_effect_matches(
+                selector, effect_review, "data_go_kr", "data.go.kr",
+                {"operation_id": "operation-example", "protocol": "REST"}, purpose_only,
+            )
+        )
+        purpose_refs = self.compiler.reviewed_operation_text_refs(
+            {"path": "reports/example.json", "sha256": "a" * 64}, purpose_only,
+        )
+        self.assertEqual([ref["json_pointer"] for ref in purpose_refs], ["#/operation_document/purpose"])
+
+        conflicting_text = document(
+            source_fact("시설 정보 조회", "official_operation_title"),
+            source_fact("시설 정보를 삭제", "official_operation_purpose"),
+        )
+        self.assertFalse(
+            self.compiler.reviewed_read_only_effect_matches(
+                selector, effect_review, "data_go_kr", "data.go.kr",
+                {"operation_id": "operation-example", "protocol": "REST"}, conflicting_text,
+            )
+        )
+
+        ungrounded_text = document(
+            source_fact("시설 목록 조회", "official_operation_title", status="unknown"),
+            source_fact(None, "official_operation_purpose", status="not_found_in_parsed_operation_sources"),
+        )
+        self.assertFalse(
+            self.compiler.reviewed_read_only_effect_matches(
+                selector, effect_review, "data_go_kr", "data.go.kr",
+                {"operation_id": "operation-example", "protocol": "REST"}, ungrounded_text,
+            )
+        )
 
     def test_manifest_arithmetic_rejects_negative_counts_duplicate_ids_and_unknown_protocol(self):
         manifest = json.loads((ROOT / "reports/data-go-kr/operation-manifest.json").read_text(encoding="utf-8"))

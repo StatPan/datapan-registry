@@ -26,7 +26,7 @@ redistributing, contributing, or reporting a vulnerability.
 - Specs: `12282`
 - Operations: `21533`
 - Legacy catalog non-excluded count: `21391` (`99.3%`); this is not probe admission or a provider-call budget.
-- Operation observation plans: `12666` currently known registered API-operation IDs (`12662` source-complete; `4` across `4` partial source inventories with upstream coverage unknown; `15` request-construction complete in observation-only mode, `0` runtime-bound, `0` admitted).
+- Operation observation plans: `12666` currently known registered API-operation IDs (`12662` source-complete; `4` across `4` partial source inventories with upstream coverage unknown; `19` request-construction complete in observation-only mode, `0` runtime-bound, `0` admitted).
 - Operation inventory context: `8871` link operations are separate; `138` provider-index entries are adapters, not API operations.
 - Sustainable coverage decision: `coverage_gaps` (`6` of `9` layers meet
   policy targets). Routable coverage is not treated as total usability.

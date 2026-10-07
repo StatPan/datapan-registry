@@ -1499,29 +1499,29 @@ def reviewed_read_only_effect_matches(
     elif source_effect.get("status") != "unknown":
         return False
 
-    operation_document = document.get("operation_document", {})
-    title = operation_document.get("title", {})
-    purpose = operation_document.get("purpose", {})
-    if not (
-        title.get("status") == "documented"
-        and purpose.get("status") == "documented"
-        and any(ref.get("evidence_kind") == "official_operation_title" for ref in title.get("source_refs", []))
-        and any(ref.get("evidence_kind") == "official_operation_purpose" for ref in purpose.get("source_refs", []))
-        and isinstance(title.get("value"), str)
-        and isinstance(purpose.get("value"), str)
-    ):
+    documented_text_facts = reviewed_operation_text_facts(document)
+    if not documented_text_facts:
         return False
-    title_text = title["value"].casefold()
-    purpose_text = purpose["value"].casefold()
-    combined = f"{title_text} {purpose_text}"
-    if any(marker.casefold() in combined for marker in _MUTATION_MARKERS):
+
+    # Screen every available title/summary and purpose/description string for
+    # conflicts, while allowing either exact, source-bound fact to establish
+    # retrieval purpose on its own.
+    operation_document = document.get("operation_document", {})
+    available_text = " ".join(
+        fact["value"].casefold()
+        for field in ("title", "purpose")
+        if isinstance((fact := operation_document.get(field)), dict)
+        and isinstance(fact.get("value"), str)
+    )
+    if any(marker.casefold() in available_text for marker in _MUTATION_MARKERS):
         return False
     terms = effect_review.get("purpose_terms", [])
     if not isinstance(terms, list) or not terms:
         return False
     if not all(term in _READ_PURPOSE_MARKERS for term in terms):
         return False
-    if not any(_READ_PURPOSE_MARKERS[term][0].casefold() in purpose_text for term in terms):
+    documented_text = " ".join(fact["value"].casefold() for _pointer, fact in documented_text_facts)
+    if not any(_READ_PURPOSE_MARKERS[term][0].casefold() in documented_text for term in terms):
         return False
 
     # Do not let an operator policy turn a caller-controlled action selector
@@ -1541,6 +1541,33 @@ def reviewed_read_only_effect_matches(
     ):
         return False
     return True
+
+
+def reviewed_operation_text_facts(document: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
+    """Return source-bound official title/summary or purpose/description facts."""
+    expected_kinds = {
+        "title": "official_operation_title",
+        "purpose": "official_operation_purpose",
+    }
+    operation_document = document.get("operation_document", {})
+    facts: list[tuple[str, dict[str, Any]]] = []
+    for field, evidence_kind in expected_kinds.items():
+        fact = operation_document.get(field, {})
+        if not (
+            isinstance(fact, dict)
+            and fact.get("status") == "documented"
+            and isinstance(fact.get("value"), str)
+            and fact["value"].strip()
+            and any(ref.get("evidence_kind") == evidence_kind for ref in fact.get("source_refs", []))
+        ):
+            continue
+        facts.append((f"#/operation_document/{field}", fact))
+    return facts
+
+
+def reviewed_operation_text_refs(document_ref: dict[str, Any], document: dict[str, Any]) -> list[dict[str, Any]]:
+    """Bind every documented official operation text fact considered by effect review."""
+    return [_contract_fact_ref(document_ref, pointer) for pointer, _fact in reviewed_operation_text_facts(document)]
 
 
 def effect_profile_matches_operation(
@@ -1578,8 +1605,7 @@ def apply_effect_profile_review(
     """Record exact source and review refs for an independently resolved effect gate."""
     refs = [
         _contract_fact_ref(document_ref, "#/transport/http_method"),
-        _contract_fact_ref(document_ref, "#/operation_document/title"),
-        _contract_fact_ref(document_ref, "#/operation_document/purpose"),
+        *reviewed_operation_text_refs(document_ref, document),
         evidence_ref(policy_ref, f"#/effect_profiles/{profile_index}", "reviewed_policy"),
         evidence_ref(policy_ref, f"#/effect_profiles/{profile_index}/effect_review", "reviewed_policy"),
         evidence_ref(policy_ref, f"#/effect_profiles/{profile_index}/review", "reviewed_policy"),
@@ -2205,8 +2231,7 @@ def compile_reviewed_operation_plan(
             "authority": "reviewed_policy",
             "evidence_refs": [
                 _contract_fact_ref(document_ref, "#/transport/http_method"),
-                _contract_fact_ref(document_ref, "#/operation_document/title"),
-                _contract_fact_ref(document_ref, "#/operation_document/purpose"),
+                *reviewed_operation_text_refs(document_ref, document),
                 evidence_ref(policy_ref, base + "/request/effect_review", "reviewed_policy"),
                 evidence_ref(policy_ref, base + "/review", "reviewed_policy"),
             ],
@@ -3229,7 +3254,7 @@ def _validate_complete_contract_evidence(
                 else policy_root_ref["json_pointer"] + "/request/response_assertion_artifact"
             )
             exact_target(response_plan["evidence_refs"], policy_assertion_pointer, "reviewed_policy")
-            for pointer in ("#/transport/http_method", "#/operation_document/title", "#/operation_document/purpose", "#/authentication", "#/parameters"):
+            for pointer in ("#/transport/http_method", "#/authentication", "#/parameters"):
                 exact_target(response_plan["evidence_refs"], pointer, "operation_document")
         else:
             # The target is the assertion subobject; the surrounding artifact identity is checked while loading it.
@@ -3289,6 +3314,8 @@ def _validate_complete_contract_evidence(
         _validate_assertion_v2_fact_binding(assertion_document, source_document, source_document_ref)
         if observation_only:
             fail(assertion_document.get("review") == policy_row["review"], "observation-only assertion review differs from its selected policy")
+            for pointer, _fact in reviewed_operation_text_facts(source_document):
+                exact_target(response_plan["evidence_refs"], pointer, "operation_document")
         if contract["operation_effect"]["authority"] == "operation_document":
             effect_fact = exact_target(contract["operation_effect"]["evidence_refs"], "#/effect", "operation_document")
             fail(effect_fact.get("classification") == "read_only" and effect_fact.get("status") == "documented", "read-only effect evidence mismatch")
@@ -3318,8 +3345,8 @@ def _validate_complete_contract_evidence(
                     "method": transport["http_method"],
                 }
             exact_target(contract["operation_effect"]["evidence_refs"], "#/transport/http_method", "operation_document")
-            exact_target(contract["operation_effect"]["evidence_refs"], "#/operation_document/title", "operation_document")
-            exact_target(contract["operation_effect"]["evidence_refs"], "#/operation_document/purpose", "operation_document")
+            for pointer, _fact in reviewed_operation_text_facts(source_document):
+                exact_target(contract["operation_effect"]["evidence_refs"], pointer, "operation_document")
             fail(
                 reviewed_read_only_effect_matches(
                     selector,

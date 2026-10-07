@@ -32,7 +32,7 @@
             "현황",
             "조회"
           ],
-          "rationale": "The exact operation-specific GET and official title/purpose describe retrieval of current bus-depot status. No mutation, action, or caller-controlled operation selector is present. This classification authorizes only request construction and grants no execution or response-health authority."
+          "rationale": "The exact operation-specific GET and official operation summary/title or purpose/description establish retrieval of current bus-depot status. All available operation text is screened for mutation conflicts. No action or caller-controlled operation selector is present. This classification authorizes only request construction and grants no execution or response-health authority."
         },
         "parameter_strategies": [],
         "omit_unmapped_optional_parameters": true,
@@ -87,7 +87,7 @@
             "read",
             "lookup"
           ],
-          "rationale": "Apply only when the exact operation-specific GET and official title/purpose establish retrieval, listing, searching, or reading, and no mutation, action, or caller-controlled operation selector is present. This is request-effect classification only; it grants no provider-call, credential, quota, entitlement, or response-health authority."
+          "rationale": "Apply only when the exact operation-specific GET and at least one official operation summary/title or purpose/description establish retrieval, listing, searching, or reading; screen all available operation text for mutation conflicts. No action or caller-controlled operation selector may be present. This is request-effect classification only; it grants no provider-call, credential, quota, entitlement, or response-health authority."
         },
         "parameter_strategies": [],
         "omit_unmapped_optional_parameters": true,
@@ -127,7 +127,7 @@
           "read",
           "lookup"
         ],
-        "rationale": "Apply only when an operation-specific GET is documented and the exact official operation purpose explicitly describes retrieval, listing, searching, or reading; reject purpose text indicating mutation and any caller-controlled action selector. This review classifies request effect only and grants no credential, quota, entitlement, or probe authority."
+        "rationale": "Apply only when an operation-specific GET is documented and at least one exact official operation summary/title or purpose/description describes retrieval, listing, searching, or reading; reject any available operation text indicating mutation and any caller-controlled action selector. This review classifies request effect only and grants no credential, quota, entitlement, or probe authority."
       },
       "review": {
         "review_ref": "https://github.com/StatPan/datapan-registry/issues/759",
