@@ -1,0 +1,1123 @@
+{
+  "evaluated_at": "2026-10-09T17:18:43Z",
+  "execution_mode": "live",
+  "faults": [
+    {
+      "execution_identity": {
+        "head_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+        "run_attempt": 1,
+        "run_id": "37498547935",
+        "run_started_at": "2026-10-06T16:48:04Z"
+      },
+      "fault_key": "014ee9134c1007db5d29fdbb8a8b43f7475ad048b688219d0657d7d13058cd0c",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+        "run_attempt": 1,
+        "run_id": "37383510680",
+        "run_started_at": "2026-10-05T22:36:07Z"
+      },
+      "fault_key": "11ffda719f0916056b7b33d1bb78eb044d9f40feb648ef21fff660ddd8464144",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+        "run_attempt": 1,
+        "run_id": "37549093719",
+        "run_started_at": "2026-10-06T23:54:20Z"
+      },
+      "fault_key": "159267b5e5d88f2c83eec692e04c3028176bbfcda885f6e4e741e321769b5e7d",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37908363462",
+        "run_started_at": "2026-10-09T08:59:12Z"
+      },
+      "fault_key": "1ddf5dfc207a1717416df5ae20ddf262e1121aa6318c6ada014183324e5d77bf",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37808824659",
+        "run_started_at": "2026-10-08T16:26:40Z"
+      },
+      "fault_key": "1fb4fb9102cb462fd62a28c9ed688f419b98c76f091f8987dae5ac430051054b",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37850966685",
+        "run_started_at": "2026-10-08T22:03:09Z"
+      },
+      "fault_key": "2195847cd115462261e60164bcec2e9e95e0da8e4e784aab4e508da35fe774b8",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "c2a73621d11a32f84af047471adb5acf217ba8b4",
+        "run_attempt": 1,
+        "run_id": "37651926031",
+        "run_started_at": "2026-10-07T16:25:35Z"
+      },
+      "fault_key": "27627b3f376748eaff4d208e40f01f0d6edb15f7311dd09c8879141214562e23",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37957075434",
+        "run_started_at": "2026-10-09T16:09:41Z"
+      },
+      "fault_key": "2bb07d98ef46b7de3a291dd53ac3dfd1aa4d272f5a901e3cb31303011436ee4a",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+        "run_attempt": 1,
+        "run_id": "37557473227",
+        "run_started_at": "2026-10-07T01:30:49Z"
+      },
+      "fault_key": "37e607bd22728faa53331cf0c9e64150606df41fe99f1603dcefe91426e5a591",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37693017059",
+        "run_started_at": "2026-10-07T21:57:45Z"
+      },
+      "fault_key": "3aa74901f5ce5f72f8c71356f6ce38649c0853106bb7dc9e09672efe66f46d92",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37753048615",
+        "run_started_at": "2026-10-08T08:55:08Z"
+      },
+      "fault_key": "4d45a6f694a4ea741b0be3f339a69995955eeaf483d7ea33165d06d33b43ecd3",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37873016949",
+        "run_started_at": "2026-10-09T02:06:54Z"
+      },
+      "fault_key": "748e9b2e64b369f5bf8a32dfe7c2223e03566fdb0bedbd324fede25603c3064c",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+        "run_attempt": 1,
+        "run_id": "37535103021",
+        "run_started_at": "2026-10-06T21:36:42Z"
+      },
+      "fault_key": "764a1adfbee86d82614517e6dbc4aa99d0bcbb63d46f2b041903d0c425461ca9",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "1edb71e3422a1e4186a94290b24f321bb39aa363",
+        "run_attempt": 1,
+        "run_id": "37594897406",
+        "run_started_at": "2026-10-07T08:36:31Z"
+      },
+      "fault_key": "b0f1c4c68d15f6d4cbf24db1543831976711af0f84cd74d78130054a93d96dff",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "0a97b3540c4b72f4e4a1cd487266af192e3b9fbc",
+        "run_attempt": 1,
+        "run_id": "37448302819",
+        "run_started_at": "2026-10-06T10:13:06Z"
+      },
+      "fault_key": "b4021740984ee00974b3d88a9ec9c8032d415f11ec43fd0e7f900b96b14baac3",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+        "run_attempt": 1,
+        "run_id": "37337128325",
+        "run_started_at": "2026-10-05T15:58:21Z"
+      },
+      "fault_key": "bea9771887d0ff86628005286019cb0a0036ac9fcdb69f7d8e72888ce864a136",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "fault_key": "c73e09872f5c9b6e3f9e5526c8d163567a10cc78c7700797bc04e72afb380ddf",
+      "owner_ticket": 659,
+      "reason": "generation_quarantined",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "6e871b6a7fbd9ae466d87792c6813d26f44e2eea",
+        "run_attempt": 1,
+        "run_id": "37406600388",
+        "run_started_at": "2026-10-06T02:56:39Z"
+      },
+      "fault_key": "c91e3b910dc2cbc6b8f5ea1b3a9292f42d0b5662126cccd16dbd05e4cd0170bd",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    },
+    {
+      "execution_identity": {
+        "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+        "run_attempt": 1,
+        "run_id": "37715227546",
+        "run_started_at": "2026-10-08T01:54:23Z"
+      },
+      "fault_key": "ff20ad40997d16f04f0748b37725810dd19fa84256d45b387d9bf062d3cb1f18",
+      "owner_ticket": 659,
+      "reason": "processor_run_failed",
+      "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+      "severity": "error",
+      "source_id": "data_go_kr",
+      "stage": "processor-execution"
+    }
+  ],
+  "health_workflow": {
+    "revision": "feaa43860986bca5da942cde9880c7db58e0aa37",
+    "run_attempt": 1,
+    "run_id": "37965325914"
+  },
+  "policy_sha256": "084ebb5730bc6e3d2c34e88683a490c0c976dd595e98e0a1aae6e163f1887b30",
+  "receipt_sha256": "eefcaceb4dca17525e187c2ae06fe16e88c8ccf7380ac0d5d238fb862523afba",
+  "repository": "StatPan/datapan-registry",
+  "schema_version": "datapan.upstream-catalogue-health.v1",
+  "source_policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc",
+  "sources": [
+    {
+      "canonical": {
+        "already_canonical_candidate": null,
+        "current_candidate_evaluation": {
+          "evaluated_main": {
+            "manifest_sha256": "eef514c397b1e432cafd5ba5316c708336b061da25301a9e4b2a33cf48457c32",
+            "registry_bytes": 139155499,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+            "revision": "feaa43860986bca5da942cde9880c7db58e0aa37"
+          },
+          "evaluation_mode": "live",
+          "evaluator_source_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+          "producer": {
+            "artifact_id": null,
+            "bundle_manifest_sha256": null,
+            "checkpoint_sha256": "d03e3e6209f83ec8d27b3eb448c115baa448f9bad1a353880e622fcddefb4a83",
+            "generation_id": "9e570063489f1273462e45f2a091d643beaa8daa0c66237805293c6bed36285c",
+            "head_sha": null,
+            "run_attempt": 1,
+            "run_id": "37651926031"
+          },
+          "reason_code": "candidate_not_screenable",
+          "revalidation_required": false,
+          "stage": "eligibility",
+          "status": "not_applicable"
+        },
+        "last_good": {
+          "artifact_identity": {
+            "bytes": 139155499,
+            "path": "data/data-go-kr.registry.json",
+            "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+          },
+          "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+          "manifest_sha256": "71a5ad4716ef5847210e2aeb8513ec136619e9521e757af106fdb3d048c33e50",
+          "observed_at": "2026-10-04T12:35:04.198997+00:00",
+          "publication_pointer_revision": "d53085285e1eaa5ab894a45514e4220eb8725be9",
+          "publication_revision": "5028b46f19b1730b0b9b56fa968825f7a7dcb90c",
+          "publication_run_attempt": 2,
+          "publication_run_completion_basis": "max_completed_at_all_jobs_exact_run_attempt",
+          "publication_run_id": 37199709258,
+          "publication_run_jobs_completed_at": "2026-10-04T12:35:16Z",
+          "publisher_run_verified": true,
+          "source_id": "data_go_kr",
+          "source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+          "status": "read-back-confirmed",
+          "verified": true
+        },
+        "main": {
+          "manifest_sha256": "eef514c397b1e432cafd5ba5316c708336b061da25301a9e4b2a33cf48457c32",
+          "registry_bytes": 139155499,
+          "registry_path": "data/data-go-kr.registry.json",
+          "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+          "revision": "feaa43860986bca5da942cde9880c7db58e0aa37"
+        },
+        "promotion_execution": {
+          "execution_failure": null,
+          "latest_execution_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-09T16:35:14Z",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37960185174",
+            "run_started_at": "2026-10-09T16:35:14Z",
+            "status": "completed",
+            "updated_at": "2026-10-09T16:37:00Z",
+            "workflow_id": 373708872
+          },
+          "latest_successful_execution_run": {
+            "conclusion": "success",
+            "created_at": "2026-10-09T16:35:14Z",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "path": ".github/workflows/canonical-update-promotion.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37960185174",
+            "run_started_at": "2026-10-09T16:35:14Z",
+            "status": "completed",
+            "updated_at": "2026-10-09T16:37:01Z",
+            "workflow_id": 373708872
+          }
+        },
+        "promotion_stage": null,
+        "promotion_status": "unavailable",
+        "promotion_terminal_evidence": {
+          "attempts_considered": 1,
+          "reason_code": null,
+          "records": [
+            {
+              "mode": "reconcile-prs",
+              "result": {
+                "artifact": {
+                  "artifact_id": "11630413630",
+                  "bytes": 835,
+                  "expires_at": "2026-11-08T16:36:05Z",
+                  "name": "canonical-update-promotion-terminal-37960185174-1-reconcile-prs",
+                  "sha256": "6d870687883869de60e653a90152e794e4e1167c403738f6b4f7e26e89ff0d7f"
+                },
+                "completed_at": "2026-10-09T16:36:05Z",
+                "current_applicability": {
+                  "matching_generations": [],
+                  "reason_code": "no_recovery_outcome",
+                  "status": "not_applicable"
+                },
+                "execution_status": "completed",
+                "failure_code": null,
+                "invocation": {
+                  "event": "schedule",
+                  "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+                  "mode": "reconcile-prs",
+                  "repository": "StatPan/datapan-registry",
+                  "run_attempt": 1,
+                  "run_id": "37960185174",
+                  "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+                },
+                "mode_step_conclusion": "success",
+                "outcome": {
+                  "candidate_available": false,
+                  "evaluated_main": null,
+                  "generation_count": 0,
+                  "generation_results_truncated": false,
+                  "generations": [],
+                  "kind": "reconcile-prs",
+                  "preparation_returned": false,
+                  "selected_generation_id": null,
+                  "status": "mode_completed_without_recovery_outcome"
+                },
+                "reason_code": null,
+                "run_conclusion": "success",
+                "run_status": "completed",
+                "started_at": "2026-10-09T16:36:00Z",
+                "status": "verified"
+              },
+              "run_attempt": 1,
+              "run_id": "37960185174"
+            },
+            {
+              "mode": "recover-ready",
+              "result": {
+                "artifact": {
+                  "artifact_id": "11630303496",
+                  "bytes": 2200,
+                  "expires_at": "2026-11-08T16:36:54Z",
+                  "name": "canonical-update-promotion-terminal-37960185174-1-recover-ready",
+                  "sha256": "dd5aac29648e77a64e1ac842ff672e0cdb79d79d89ae3245ad046ca8942327ff"
+                },
+                "completed_at": "2026-10-09T16:36:54Z",
+                "current_applicability": {
+                  "matching_generations": [],
+                  "reason_code": "current_subject_not_supplied",
+                  "status": "not_checked"
+                },
+                "execution_status": "completed",
+                "failure_code": null,
+                "invocation": {
+                  "event": "schedule",
+                  "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+                  "mode": "recover-ready",
+                  "repository": "StatPan/datapan-registry",
+                  "run_attempt": 1,
+                  "run_id": "37960185174",
+                  "workflow_path": ".github/workflows/canonical-update-promotion.yml"
+                },
+                "mode_step_conclusion": "success",
+                "outcome": {
+                  "candidate_available": false,
+                  "evaluated_main": {
+                    "manifest_sha256": "eef514c397b1e432cafd5ba5316c708336b061da25301a9e4b2a33cf48457c32",
+                    "registry_bytes": 139155499,
+                    "registry_path": "data/data-go-kr.registry.json",
+                    "registry_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+                    "revision": "feaa43860986bca5da942cde9880c7db58e0aa37"
+                  },
+                  "generation_count": 5,
+                  "generation_results_truncated": false,
+                  "generations": [
+                    {
+                      "checkpoint_derivation_sha256": null,
+                      "checkpoint_observation": {
+                        "claim": "checkpoint_reported_last_observation",
+                        "collection_status": "success",
+                        "execution_mode": "live",
+                        "observed_at": "2026-09-29T23:44:39Z",
+                        "producer_run_id": "36646768289",
+                        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+                      },
+                      "checkpoint_observation_count": 1,
+                      "checkpoint_sha256": "fd1c339e85a04b894a66ac1686f0308b71a75a923814c015dbd7f5d8c3ade2bf",
+                      "composition": null,
+                      "detail_retry_count": 884,
+                      "detail_unattempted_count": null,
+                      "generation_baseline_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+                      "generation_id": "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4",
+                      "pending_count": 4382,
+                      "producer": {
+                        "artifact_expires_at": "2026-11-02T11:38:27Z",
+                        "artifact_id": "11272837837",
+                        "artifact_name": "upstream-catalogue-processing-37120180628-1",
+                        "bundle_manifest_sha256": "18f19f6c29b236d430f64a4c20981d8d07b94a3839b540f9009eba03e5defc9d",
+                        "head_sha": null,
+                        "run_attempt": 1,
+                        "run_id": "37120180628"
+                      },
+                      "reason_code": "processor_bundle_or_input_contract_incompatible",
+                      "source_id": "data_go_kr",
+                      "source_scope": "aggregate_supported_catalog",
+                      "status": "blocked"
+                    },
+                    {
+                      "checkpoint_derivation_sha256": null,
+                      "checkpoint_observation": {
+                        "claim": "checkpoint_reported_last_observation",
+                        "collection_status": "success",
+                        "execution_mode": "live",
+                        "observed_at": "2026-09-29T23:44:39Z",
+                        "producer_run_id": "36646768289",
+                        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+                      },
+                      "checkpoint_observation_count": 1,
+                      "checkpoint_sha256": "284838e009dd4bbbca988ab4b97c39c4a94952b13e2e47afc367a506a54a6c72",
+                      "composition": null,
+                      "detail_retry_count": 884,
+                      "detail_unattempted_count": 884,
+                      "generation_baseline_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+                      "generation_id": "694cf97f842ef4beab214a8dbfb66bec061f2f153e2f8bb26ca2578e6f2ec5c7",
+                      "pending_count": 4382,
+                      "producer": {
+                        "artifact_expires_at": "2026-11-03T17:36:03Z",
+                        "artifact_id": "11310147501",
+                        "artifact_name": "upstream-catalogue-processing-37220973604-1",
+                        "bundle_manifest_sha256": "2304adb6b01c2bc67c4728b7854748a706b80039b72087696bd3356ec6b016fb",
+                        "head_sha": null,
+                        "run_attempt": 1,
+                        "run_id": "37220973604"
+                      },
+                      "reason_code": "processor_bundle_or_input_contract_incompatible",
+                      "source_id": "data_go_kr",
+                      "source_scope": "aggregate_supported_catalog",
+                      "status": "blocked"
+                    },
+                    {
+                      "checkpoint_derivation_sha256": null,
+                      "checkpoint_observation": {
+                        "claim": "checkpoint_reported_last_observation",
+                        "collection_status": "success",
+                        "execution_mode": "live",
+                        "observed_at": "2026-09-29T23:44:39Z",
+                        "producer_run_id": "36646768289",
+                        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+                      },
+                      "checkpoint_observation_count": 1,
+                      "checkpoint_sha256": "654fb2cba3ac1f70e044cde99ff3d920fec30e01090d1d3f4273469cccae4333",
+                      "composition": null,
+                      "detail_retry_count": 884,
+                      "detail_unattempted_count": 900,
+                      "generation_baseline_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+                      "generation_id": "7a4e4777d8ba86141e5d0a8f3f06184da94178aa0bcdfc170ec15e583ef0d0f5",
+                      "pending_count": 4382,
+                      "producer": {
+                        "artifact_expires_at": "2026-11-04T07:02:45Z",
+                        "artifact_id": "11330590151",
+                        "artifact_name": "upstream-catalogue-processing-37275335526-1",
+                        "bundle_manifest_sha256": "63c712a4f7556c8a00713607cab5e2d403d380bd66f240204ddc8d6addc7cf2a",
+                        "head_sha": null,
+                        "run_attempt": 1,
+                        "run_id": "37275335526"
+                      },
+                      "reason_code": "processor_bundle_or_input_contract_incompatible",
+                      "source_id": "data_go_kr",
+                      "source_scope": "aggregate_supported_catalog",
+                      "status": "blocked"
+                    },
+                    {
+                      "checkpoint_derivation_sha256": null,
+                      "checkpoint_observation": {
+                        "claim": "checkpoint_reported_last_observation",
+                        "collection_status": "success",
+                        "execution_mode": "live",
+                        "observed_at": "2026-09-29T23:44:39Z",
+                        "producer_run_id": "36646768289",
+                        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+                      },
+                      "checkpoint_observation_count": 1,
+                      "checkpoint_sha256": "7e068dee3dd30f68c53d152b0bec53b7eea88bf342935def9ae4528313495466",
+                      "composition": null,
+                      "detail_retry_count": 908,
+                      "detail_unattempted_count": 884,
+                      "generation_baseline_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+                      "generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+                      "pending_count": 4382,
+                      "producer": {
+                        "artifact_expires_at": "2026-11-03T13:20:16Z",
+                        "artifact_id": "11303768934",
+                        "artifact_name": "upstream-catalogue-processing-37204681028-1",
+                        "bundle_manifest_sha256": "61a143218a2722eaa2bf0eb5055eb15f11db4722a07f845a0eea1b3139a3f1eb",
+                        "head_sha": null,
+                        "run_attempt": 1,
+                        "run_id": "37204681028"
+                      },
+                      "reason_code": "processor_bundle_or_input_contract_incompatible",
+                      "source_id": "data_go_kr",
+                      "source_scope": "aggregate_supported_catalog",
+                      "status": "blocked"
+                    },
+                    {
+                      "checkpoint_derivation_sha256": null,
+                      "checkpoint_observation": {
+                        "claim": "checkpoint_reported_last_observation",
+                        "collection_status": "success",
+                        "execution_mode": "live",
+                        "observed_at": "2026-09-29T23:44:39Z",
+                        "producer_run_id": "36646768289",
+                        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197"
+                      },
+                      "checkpoint_observation_count": 1,
+                      "checkpoint_sha256": "1dd9dcfc6ab0e1c7a9661bb9e3d20fc64dd1a69275403a00c3d689300ed68fd2",
+                      "composition": null,
+                      "detail_retry_count": 908,
+                      "detail_unattempted_count": 900,
+                      "generation_baseline_sha256": "eeda72ee8590f458de8d75703662578e80edf3e61282f0e5e67547c4f6e5f644",
+                      "generation_id": "9938e29ef963f799af3a15adf472e7a1fca119d5b075c578dfadbef2e11c7ead",
+                      "pending_count": 4382,
+                      "producer": {
+                        "artifact_expires_at": "2026-11-03T21:31:27Z",
+                        "artifact_id": "11315424055",
+                        "artifact_name": "upstream-catalogue-processing-37235734113-1",
+                        "bundle_manifest_sha256": "de4087ea990b5681c692ac6ec6ca1a7f69b7a7094c2f045efee49b83e938e8d9",
+                        "head_sha": null,
+                        "run_attempt": 1,
+                        "run_id": "37235734113"
+                      },
+                      "reason_code": "processor_bundle_or_input_contract_incompatible",
+                      "source_id": "data_go_kr",
+                      "source_scope": "aggregate_supported_catalog",
+                      "status": "blocked"
+                    }
+                  ],
+                  "kind": "recover-ready",
+                  "preparation_returned": false,
+                  "selected_generation_id": null,
+                  "status": "no-eligible-ready-processor-bundle"
+                },
+                "reason_code": null,
+                "run_conclusion": "success",
+                "run_status": "completed",
+                "started_at": "2026-10-09T16:36:07Z",
+                "status": "verified"
+              },
+              "run_attempt": 1,
+              "run_id": "37960185174"
+            }
+          ],
+          "status": "verified"
+        },
+        "publication": null
+      },
+      "collector": {
+        "age_seconds": 235730,
+        "expected_interval_seconds": 604800,
+        "grace_seconds": 86400,
+        "latest_execution_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11452106799",
+              "expired": false,
+              "expires_at": "2026-11-05T23:54:10Z",
+              "name": "upstream-catalog-refresh-37548691738"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-10-06T23:49:53Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+          "latest_successful_execution_run": {
+            "attempt_evidence": {
+              "job_count": 1,
+              "jobs_api_endpoint": "repos/StatPan/datapan-registry/actions/runs/37548691738/attempts/1/jobs",
+              "jobs_sha256": "9837f5e0fc57cbc952c2be699930dac3f3f60ef809c5bf83a8a3b991cbb39382"
+            },
+            "conclusion": "success",
+            "disposition": "success",
+            "event": "schedule",
+            "head_branch": "main",
+            "head_repository": "StatPan/datapan-registry",
+            "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+            "path": ".github/workflows/upstream-catalog-refresh.yml",
+            "repository": "StatPan/datapan-registry",
+            "run_attempt": 1,
+            "run_id": "37548691738",
+            "run_started_at": "2026-10-06T23:49:53Z",
+            "status": "completed",
+            "workflow_id": 311036678
+          },
+          "run_attempt": 1,
+          "run_id": "37548691738",
+          "status": "completed",
+          "updated_at": "2026-10-06T23:54:18Z"
+        },
+        "latest_scheduled_run": {
+          "artifacts": [
+            {
+              "artifact_id": "11452106799",
+              "expired": false,
+              "expires_at": "2026-11-05T23:54:10Z",
+              "name": "upstream-catalog-refresh-37548691738"
+            }
+          ],
+          "conclusion": "success",
+          "created_at": "2026-10-06T23:49:53Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+          "run_attempt": 1,
+          "run_id": "37548691738",
+          "status": "completed",
+          "updated_at": "2026-10-06T23:54:18Z"
+        }
+      },
+      "faults": [
+        {
+          "execution_identity": {
+            "head_sha": "9fa015c2b3075ff50c003c14f682ae9560c3247d",
+            "run_attempt": 1,
+            "run_id": "37498547935",
+            "run_started_at": "2026-10-06T16:48:04Z"
+          },
+          "fault_key": "014ee9134c1007db5d29fdbb8a8b43f7475ad048b688219d0657d7d13058cd0c",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+            "run_attempt": 1,
+            "run_id": "37383510680",
+            "run_started_at": "2026-10-05T22:36:07Z"
+          },
+          "fault_key": "11ffda719f0916056b7b33d1bb78eb044d9f40feb648ef21fff660ddd8464144",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+            "run_attempt": 1,
+            "run_id": "37549093719",
+            "run_started_at": "2026-10-06T23:54:20Z"
+          },
+          "fault_key": "159267b5e5d88f2c83eec692e04c3028176bbfcda885f6e4e741e321769b5e7d",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37908363462",
+            "run_started_at": "2026-10-09T08:59:12Z"
+          },
+          "fault_key": "1ddf5dfc207a1717416df5ae20ddf262e1121aa6318c6ada014183324e5d77bf",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37808824659",
+            "run_started_at": "2026-10-08T16:26:40Z"
+          },
+          "fault_key": "1fb4fb9102cb462fd62a28c9ed688f419b98c76f091f8987dae5ac430051054b",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37850966685",
+            "run_started_at": "2026-10-08T22:03:09Z"
+          },
+          "fault_key": "2195847cd115462261e60164bcec2e9e95e0da8e4e784aab4e508da35fe774b8",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "c2a73621d11a32f84af047471adb5acf217ba8b4",
+            "run_attempt": 1,
+            "run_id": "37651926031",
+            "run_started_at": "2026-10-07T16:25:35Z"
+          },
+          "fault_key": "27627b3f376748eaff4d208e40f01f0d6edb15f7311dd09c8879141214562e23",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37957075434",
+            "run_started_at": "2026-10-09T16:09:41Z"
+          },
+          "fault_key": "2bb07d98ef46b7de3a291dd53ac3dfd1aa4d272f5a901e3cb31303011436ee4a",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+            "run_attempt": 1,
+            "run_id": "37557473227",
+            "run_started_at": "2026-10-07T01:30:49Z"
+          },
+          "fault_key": "37e607bd22728faa53331cf0c9e64150606df41fe99f1603dcefe91426e5a591",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37693017059",
+            "run_started_at": "2026-10-07T21:57:45Z"
+          },
+          "fault_key": "3aa74901f5ce5f72f8c71356f6ce38649c0853106bb7dc9e09672efe66f46d92",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37753048615",
+            "run_started_at": "2026-10-08T08:55:08Z"
+          },
+          "fault_key": "4d45a6f694a4ea741b0be3f339a69995955eeaf483d7ea33165d06d33b43ecd3",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37873016949",
+            "run_started_at": "2026-10-09T02:06:54Z"
+          },
+          "fault_key": "748e9b2e64b369f5bf8a32dfe7c2223e03566fdb0bedbd324fede25603c3064c",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "968a76d04e73016db7433018ddc4e27e9f3b2dcb",
+            "run_attempt": 1,
+            "run_id": "37535103021",
+            "run_started_at": "2026-10-06T21:36:42Z"
+          },
+          "fault_key": "764a1adfbee86d82614517e6dbc4aa99d0bcbb63d46f2b041903d0c425461ca9",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "1edb71e3422a1e4186a94290b24f321bb39aa363",
+            "run_attempt": 1,
+            "run_id": "37594897406",
+            "run_started_at": "2026-10-07T08:36:31Z"
+          },
+          "fault_key": "b0f1c4c68d15f6d4cbf24db1543831976711af0f84cd74d78130054a93d96dff",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "0a97b3540c4b72f4e4a1cd487266af192e3b9fbc",
+            "run_attempt": 1,
+            "run_id": "37448302819",
+            "run_started_at": "2026-10-06T10:13:06Z"
+          },
+          "fault_key": "b4021740984ee00974b3d88a9ec9c8032d415f11ec43fd0e7f900b96b14baac3",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "fc96da30db8773d1e0b91394ca931436694c1503",
+            "run_attempt": 1,
+            "run_id": "37337128325",
+            "run_started_at": "2026-10-05T15:58:21Z"
+          },
+          "fault_key": "bea9771887d0ff86628005286019cb0a0036ac9fcdb69f7d8e72888ce864a136",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "fault_key": "c73e09872f5c9b6e3f9e5526c8d163567a10cc78c7700797bc04e72afb380ddf",
+          "owner_ticket": 659,
+          "reason": "generation_quarantined",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "6e871b6a7fbd9ae466d87792c6813d26f44e2eea",
+            "run_attempt": 1,
+            "run_id": "37406600388",
+            "run_started_at": "2026-10-06T02:56:39Z"
+          },
+          "fault_key": "c91e3b910dc2cbc6b8f5ea1b3a9292f42d0b5662126cccd16dbd05e4cd0170bd",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        },
+        {
+          "execution_identity": {
+            "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+            "run_attempt": 1,
+            "run_id": "37715227546",
+            "run_started_at": "2026-10-08T01:54:23Z"
+          },
+          "fault_key": "ff20ad40997d16f04f0748b37725810dd19fa84256d45b387d9bf062d3cb1f18",
+          "owner_ticket": 659,
+          "reason": "processor_run_failed",
+          "recommended_action": "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs.",
+          "severity": "error",
+          "source_id": "data_go_kr",
+          "stage": "processor-execution"
+        }
+      ],
+      "observation": {
+        "age_seconds": 235689,
+        "collection_status": "success",
+        "execution_mode": "live",
+        "max_age_seconds": 691200,
+        "observed_at": "2026-10-06T23:50:34Z",
+        "producer_run_id": "37548691738",
+        "refresh_evidence_sha256": "073ad359d966ee32b72af268af8e1fba4d723911a446c2e37f6594ea3816e5a0",
+        "state": "fresh"
+      },
+      "overall": "blocked",
+      "processor": {
+        "attempts_by_id": {},
+        "attempts_consumed": 0,
+        "candidate_sha256": "20c8348aa598163e41f3e41e3a718b3da002ccb05f6b569683a53ed7db7fd4d0",
+        "checkpoint_observed_at": "2026-10-06T23:50:34Z",
+        "checkpoint_sha256": "d03e3e6209f83ec8d27b3eb448c115baa448f9bad1a353880e622fcddefb4a83",
+        "detail_queue_cursor": 264,
+        "detail_records": [],
+        "execution_failure": {
+          "conclusion": "failure",
+          "created_at": "2026-10-09T16:09:41Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37957075434",
+          "run_started_at": "2026-10-09T16:09:41Z",
+          "status": "completed",
+          "updated_at": "2026-10-09T16:11:02Z",
+          "workflow_id": 373610259
+        },
+        "generation_id": "9e570063489f1273462e45f2a091d643beaa8daa0c66237805293c6bed36285c",
+        "last_heartbeat_at": "2026-10-07T16:26:41Z",
+        "last_observation": {
+          "collection_status": "success",
+          "execution_mode": "live",
+          "observed_at": "2026-10-06T23:50:34Z",
+          "producer_run_id": "37548691738",
+          "refresh_evidence_sha256": "073ad359d966ee32b72af268af8e1fba4d723911a446c2e37f6594ea3816e5a0"
+        },
+        "last_progress_at": "2026-10-07T16:26:41Z",
+        "latest_execution_run": {
+          "conclusion": "failure",
+          "created_at": "2026-10-09T16:09:41Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "feaa43860986bca5da942cde9880c7db58e0aa37",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37957075434",
+          "run_started_at": "2026-10-09T16:09:41Z",
+          "status": "completed",
+          "updated_at": "2026-10-09T16:11:02Z",
+          "workflow_id": 373610259
+        },
+        "latest_successful_execution_run": {
+          "conclusion": "success",
+          "created_at": "2026-10-05T07:00:26Z",
+          "event": "schedule",
+          "head_branch": "main",
+          "head_repository": "StatPan/datapan-registry",
+          "head_sha": "0085b357289755d6b3fb60a7259bd85da42d2962",
+          "path": ".github/workflows/upstream-catalogue-process.yml",
+          "repository": "StatPan/datapan-registry",
+          "run_attempt": 1,
+          "run_id": "37275335526",
+          "run_started_at": "2026-10-05T07:00:26Z",
+          "status": "completed",
+          "updated_at": "2026-10-05T07:02:55Z",
+          "workflow_id": 373610259
+        },
+        "lease": null,
+        "link_contract_diagnostics": {
+          "applicability": "not_applicable",
+          "checkpoint_sha256": null,
+          "generation_id": null,
+          "producer": null,
+          "reason_code": "candidate_not_screenable",
+          "records": [],
+          "schema_version": "datapan.upstream-catalogue-link-contract-diagnostics.v1",
+          "status": "not_applicable"
+        },
+        "outcome": {
+          "reason": "valueerror"
+        },
+        "output_artifact": {
+          "artifact_id": null,
+          "bundle_manifest_sha256": null,
+          "expires_at": "2026-11-06T16:26:38Z",
+          "name": "upstream-catalogue-processing-37651926031-1",
+          "repository": "StatPan/datapan-registry",
+          "run_id": "37651926031"
+        },
+        "output_digests": [],
+        "request_reservation": null,
+        "state": "quarantined"
+      },
+      "recommended_recovery": [
+        "Inspect the fenced checkpoint and lease, then rerun only the recorded generation with the same digest-bound inputs."
+      ],
+      "source_id": "data_go_kr"
+    }
+  ],
+  "summary": {
+    "blocked": 1,
+    "degraded": 0,
+    "fault_count": 19,
+    "fixture": 0,
+    "healthy": 0,
+    "last_good_count": 1,
+    "live_fresh_observation_count": 1,
+    "source_count": 1
+  }
+}
