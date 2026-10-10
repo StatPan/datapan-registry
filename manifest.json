@@ -1059,21 +1059,21 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "bytes": 26719,
-      "sha256": "96635e11dbd9908cf8a2414154e95230655970c87c3391f78c6bbf5a3cf65530",
+      "sha256": "0af090e3c638d4e708cf0fab90a3b9da39cb1d534b8b0f54d596cf1e697c32f4",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
     },
     {
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "bytes": 1811,
-      "sha256": "cdb77237dffd355acdfb6cbbd7b121e6f5d506b679ac34d5997dbf3a5d55c421",
+      "sha256": "f447b1af35458ea6e586239ceb2bbc0e225e1a589cc6c9bdb4eaac2bd666d37e",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "bytes": 2216,
-      "sha256": "15f7f9c979ea5c426e8a9a14f16e0f111c86ad2499444a30910ec2b2ea32a9de",
+      "sha256": "3b490c860f7f36140d881fac4437a743b9d9ebf69b376e2519cc80a1cf02413a",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
     },
     {
@@ -1122,7 +1122,7 @@
       "path": "reports/release-assembly-receipt.json",
       "kind": "release_assembly_receipt",
       "bytes": 37095,
-      "sha256": "e6e902689c7c2c2059dc1660c42c304b7f48824b188b8c19a2a76601a278fb29",
+      "sha256": "e55824c0a2277771a60ec1d8478278b91819f3b25ef4a5b1711873a24122466c",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json"
     },
     {
@@ -1292,7 +1292,7 @@
       "path": "reports/health-runtime-observation-plan.v1.json",
       "kind": "verification_plan",
       "bytes": 11290,
-      "sha256": "03ec2e8e6ca0ff272217cb38203f21d0f7014f48eab324086f97cf464cdca7a3",
+      "sha256": "e7a2c1cae520023936684eaadec9a1c197ab6513f6927385bf71a00e8a71c52f",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json"
     },
     {
@@ -3789,8 +3789,8 @@
     {
       "path": "reports/operation-observation-plan/index.json",
       "kind": "operation_observation_plan",
-      "bytes": 147700,
-      "sha256": "0c9d1455da83d1f5b4df1a6d971ed7f1bcf39fe1b09ed1216a545a7fd67c59ab",
+      "bytes": 147733,
+      "sha256": "9840c68141d3492d5695a8bccd74ec49fc4483992c66380e0eaf8defa8d32843",
       "schema": "https://schemas.datapan.dev/datapan.operation-observation-plan.v1.schema.json"
     },
     {
