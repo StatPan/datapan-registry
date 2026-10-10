@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+import contextlib
 import copy
+import errno
+import hashlib
 import importlib.util
 import io
 import json
 import os
 import pathlib
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -84,7 +88,185 @@ COMPLETENESS_VALIDATOR_SOURCE_DEPENDENCIES = (
 )
 
 
+def _fixture_file_snapshot(path: pathlib.Path) -> tuple[int, ...]:
+    value = pathlib.Path(path).lstat()
+    if not stat.S_ISREG(value.st_mode):
+        raise AssertionError(f"fixture payload is not a regular file: {path}")
+    return (
+        value.st_dev, value.st_ino, value.st_mode, value.st_size,
+        value.st_mtime_ns, value.st_ctime_ns,
+    )
+
+
+def _stream_fixture_file_identity(path: pathlib.Path) -> tuple[dict[str, object], tuple[int, ...]]:
+    """Hash one stable regular fixture file without retaining its payload."""
+    path = pathlib.Path(path)
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(path, flags)
+    except OSError as exc:
+        raise AssertionError(f"fixture payload cannot be opened safely: {path}") from exc
+    digest = hashlib.sha256()
+    total = 0
+    try:
+        stream = os.fdopen(descriptor, "rb", closefd=True)
+    except BaseException:
+        os.close(descriptor)
+        raise
+    with stream:
+        before = os.fstat(stream.fileno())
+        if not stat.S_ISREG(before.st_mode):
+            raise AssertionError(f"fixture payload is not a regular file: {path}")
+        while chunk := stream.read(1024 * 1024):
+            total += len(chunk)
+            digest.update(chunk)
+        after = os.fstat(stream.fileno())
+    before_snapshot = (
+        before.st_dev, before.st_ino, before.st_mode, before.st_size,
+        before.st_mtime_ns, before.st_ctime_ns,
+    )
+    after_snapshot = (
+        after.st_dev, after.st_ino, after.st_mode, after.st_size,
+        after.st_mtime_ns, after.st_ctime_ns,
+    )
+    if before_snapshot != after_snapshot or total != before.st_size:
+        raise AssertionError(f"fixture payload changed while it was hashed: {path}")
+    return {"bytes": total, "sha256": digest.hexdigest()}, after_snapshot
+
+
+def _materialize_exact_fixture_file(
+    source: pathlib.Path, destination: pathlib.Path,
+) -> dict[str, object]:
+    """Hardlink one fixture payload, copying only across filesystems."""
+    source = pathlib.Path(source)
+    destination = pathlib.Path(destination)
+    try:
+        os.link(source, destination)
+    except OSError as exc:
+        if exc.errno != errno.EXDEV:
+            raise
+        shutil.copy2(source, destination)
+        source_identity, source_snapshot = _stream_fixture_file_identity(source)
+        destination_identity, destination_snapshot = _stream_fixture_file_identity(destination)
+        if source_identity != destination_identity:
+            raise AssertionError("cross-filesystem fixture copy differs from its source payload")
+        # Re-read metadata after both streams so a source or destination change
+        # between the two hashes cannot be accepted as an exact copy.
+        if (
+            source_snapshot != _fixture_file_snapshot(source)
+            or destination_snapshot != _fixture_file_snapshot(destination)
+        ):
+            raise AssertionError("cross-filesystem fixture copy changed after verification")
+        return {
+            "method": "copy2",
+            "source": source_identity,
+            "destination": destination_identity,
+        }
+
+    source_snapshot = _fixture_file_snapshot(source)
+    destination_snapshot = _fixture_file_snapshot(destination)
+    if (
+        source_snapshot[:2] != destination_snapshot[:2]
+    ):
+        raise AssertionError("fixture hardlink does not share its source inode")
+    identity, snapshot = _stream_fixture_file_identity(source)
+    final_source_snapshot = _fixture_file_snapshot(source)
+    final_destination_snapshot = _fixture_file_snapshot(destination)
+    if (
+        snapshot != final_source_snapshot
+        or final_source_snapshot != final_destination_snapshot
+    ):
+        raise AssertionError("fixture hardlink changed during verification")
+    return {"method": "hardlink", "source": identity, "destination": dict(identity)}
+
+
 class CompletenessProofRollupTest(unittest.TestCase):
+    def test_exact_fixture_file_keeps_same_filesystem_hardlink(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            source = root / "source"
+            destination = root / "destination"
+            source.write_bytes(b"same-filesystem fixture payload\n")
+            with mock.patch.object(shutil, "copy2") as copy_file:
+                result = _materialize_exact_fixture_file(source, destination)
+            copy_file.assert_not_called()
+            self.assertEqual(result["method"], "hardlink")
+            self.assertEqual(result["source"], result["destination"])
+            self.assertEqual(source.stat().st_ino, destination.stat().st_ino)
+
+    def test_exact_fixture_file_copies_only_after_exdev(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            source = root / "source"
+            destination = root / "destination"
+            source.write_bytes(b"cross-filesystem fixture payload\n")
+            with (
+                mock.patch.object(os, "link", side_effect=OSError(errno.EXDEV, "cross-device")),
+                mock.patch.object(shutil, "copy2", wraps=shutil.copy2) as copy_file,
+            ):
+                result = _materialize_exact_fixture_file(source, destination)
+            copy_file.assert_called_once_with(source, destination)
+            self.assertEqual(result["method"], "copy2")
+            self.assertEqual(result["source"], result["destination"])
+            self.assertNotEqual(source.stat().st_ino, destination.stat().st_ino)
+
+    def test_exact_fixture_file_propagates_non_exdev_link_failures(self) -> None:
+        for error_number in (errno.ENOSPC, errno.EIO, errno.EACCES):
+            with self.subTest(error_number=error_number), tempfile.TemporaryDirectory() as directory:
+                root = pathlib.Path(directory)
+                source = root / "source"
+                destination = root / "destination"
+                source.write_bytes(b"fixture payload\n")
+                expected = OSError(error_number, os.strerror(error_number))
+                with (
+                    mock.patch.object(os, "link", side_effect=expected),
+                    mock.patch.object(shutil, "copy2") as copy_file,
+                    self.assertRaises(OSError) as raised,
+                ):
+                    _materialize_exact_fixture_file(source, destination)
+                self.assertEqual(raised.exception.errno, error_number)
+                copy_file.assert_not_called()
+                self.assertFalse(destination.exists())
+
+    def test_exact_fixture_file_does_not_accept_failed_partial_copy(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            source = root / "source"
+            destination = root / "destination"
+            source.write_bytes(b"complete fixture payload\n")
+
+            def partial_copy(_source: pathlib.Path, target: pathlib.Path) -> None:
+                target.write_bytes(b"partial")
+                raise OSError(errno.ENOSPC, "copy ran out of space")
+
+            with (
+                mock.patch.object(os, "link", side_effect=OSError(errno.EXDEV, "cross-device")),
+                mock.patch.object(shutil, "copy2", side_effect=partial_copy),
+                self.assertRaises(OSError) as raised,
+            ):
+                _materialize_exact_fixture_file(source, destination)
+            self.assertEqual(raised.exception.errno, errno.ENOSPC)
+            self.assertEqual(destination.read_bytes(), b"partial")
+
+    def test_exact_fixture_file_rejects_size_or_digest_mismatch(self) -> None:
+        corruptions = (b"short", b"complete fixture payloae\n")
+        for corrupted in corruptions:
+            with self.subTest(corrupted=corrupted), tempfile.TemporaryDirectory() as directory:
+                root = pathlib.Path(directory)
+                source = root / "source"
+                destination = root / "destination"
+                source.write_bytes(b"complete fixture payload\n")
+
+                def corrupt_copy(_source: pathlib.Path, target: pathlib.Path) -> None:
+                    target.write_bytes(corrupted)
+
+                with (
+                    mock.patch.object(os, "link", side_effect=OSError(errno.EXDEV, "cross-device")),
+                    mock.patch.object(shutil, "copy2", side_effect=corrupt_copy),
+                    self.assertRaisesRegex(AssertionError, "differs from its source payload"),
+                ):
+                    _materialize_exact_fixture_file(source, destination)
+
     @staticmethod
     def _hardlink_worktree(source: pathlib.Path, destination: pathlib.Path) -> None:
         skipped = {".git", ".datapan", "__pycache__", ".pytest_cache"}
@@ -1643,6 +1825,146 @@ class CompletenessProofRollupTest(unittest.TestCase):
         ):
             self._write_rebound_evidence(input_root, roles[role], filename, raw)
 
+    @contextlib.contextmanager
+    def _candidate_processor_execution_control(
+        self,
+        repository: pathlib.Path,
+        *,
+        exercise_wrong_producer: bool = False,
+    ):
+        """Execute the candidate C validator against immutable historical fixture data."""
+        execution_root = SCRIPT.parents[1].resolve()
+        execution_contract_path = execution_root / "scripts/run-canonical-update-promotion.py"
+        execution_checkpoint_schema_path = (
+            execution_root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+        )
+        execution_helper_path = execution_root / "scripts/canonical_update_pr.py"
+        execution_composition_schema_path = (
+            execution_root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json"
+        )
+        execution_source_identity = {
+            "contract": hashlib.sha256(execution_contract_path.read_bytes()).hexdigest(),
+            "checkpoint_schema": hashlib.sha256(
+                execution_checkpoint_schema_path.read_bytes(),
+            ).hexdigest(),
+            "helper": hashlib.sha256(execution_helper_path.read_bytes()).hexdigest(),
+            "composition_schema": hashlib.sha256(
+                execution_composition_schema_path.read_bytes(),
+            ).hexdigest(),
+        }
+        execution_head = subprocess.check_output(
+            ["git", "rev-parse", "HEAD^{commit}"], cwd=execution_root, text=True,
+        ).strip()
+        requested_contract_path = (repository / "scripts/run-canonical-update-promotion.py").resolve()
+        requested_checkpoint_schema_path = (
+            repository / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+        ).resolve()
+        requested_helper_path = (repository / "scripts/canonical_update_pr.py").resolve()
+        expected_composition_schema = json.loads(execution_composition_schema_path.read_bytes())
+        original_import_module = MODULE.import_module
+        observations: dict[str, list[object]] = {
+            "bundle_validation_heads": [],
+            "execution_contract_identities": [],
+            "execution_schema_requests": [],
+            "execution_helper_requests": [],
+            "wrong_head_rejections": [],
+        }
+
+        def import_with_candidate_processor_control(name: str, path: pathlib.Path):
+            requested_path = path.resolve()
+            execution_path = execution_contract_path if name == "completeness_processor_contract" else path
+            loaded = original_import_module(name, execution_path)
+            if name != "completeness_processor_contract":
+                return loaded
+
+            self.assertEqual(requested_path, requested_contract_path)
+            loaded_path = pathlib.Path(loaded.__file__).resolve()
+            loaded_sha256 = hashlib.sha256(loaded_path.read_bytes()).hexdigest()
+            observations["execution_contract_identities"].append((loaded_path, loaded_sha256))
+            self.assertEqual(loaded_path, execution_contract_path)
+            self.assertEqual(loaded_sha256, execution_source_identity["contract"])
+
+            original_verify_checkpoint = loaded.verify_processor_checkpoint
+
+            def verify_with_execution_schema(value: dict[str, object], schema_path: pathlib.Path):
+                observations["execution_schema_requests"].append(schema_path.resolve())
+                return original_verify_checkpoint(value, execution_checkpoint_schema_path)
+
+            loaded.verify_processor_checkpoint = verify_with_execution_schema
+            original_validate = loaded.validate_processor_bundle
+
+            def validate_with_candidate_control(*args: object, **kwargs: object):
+                actual_head = kwargs.get("producer_head_sha")
+                observations["bundle_validation_heads"].append(actual_head)
+                self.assertEqual(kwargs.get("root"), repository)
+                self.assertEqual(args[2], expected_composition_schema)
+                helper_path = pathlib.Path(args[3].__file__).resolve()
+                observations["execution_helper_requests"].append(helper_path)
+                self.assertEqual(helper_path, requested_helper_path)
+                self.assertEqual(
+                    hashlib.sha256(helper_path.read_bytes()).hexdigest(),
+                    execution_source_identity["helper"],
+                )
+                result = original_validate(*args, **kwargs)
+                producer_composer = loaded.processor_composer_source_identity(
+                    repository, str(actual_head),
+                )
+                self.assertEqual(
+                    loaded.authenticate_contract_diagnostic_encoding(
+                        result["composition_receipt"], producer_composer,
+                    ),
+                    "projected",
+                )
+                if exercise_wrong_producer:
+                    self.assertNotEqual(execution_head, actual_head)
+                    wrong_composer = loaded.processor_composer_source_identity(
+                        repository, execution_head,
+                    )
+                    self.assertIsNotNone(wrong_composer)
+                    with self.assertRaises(loaded.PromotionError) as rejected:
+                        loaded.authenticate_contract_diagnostic_encoding(
+                            result["composition_receipt"], wrong_composer,
+                        )
+                    observations["wrong_head_rejections"].append(str(rejected.exception))
+                return result
+
+            loaded.validate_processor_bundle = validate_with_candidate_control
+            return loaded
+
+        with mock.patch.object(
+            MODULE, "import_module", side_effect=import_with_candidate_processor_control,
+        ):
+            yield observations
+
+        self.assertTrue(observations["execution_contract_identities"])
+        self.assertEqual(
+            set(observations["execution_schema_requests"]),
+            {requested_checkpoint_schema_path},
+        )
+        if observations["bundle_validation_heads"]:
+            self.assertEqual(
+                set(observations["execution_helper_requests"]),
+                {requested_helper_path},
+            )
+        else:
+            self.assertEqual(observations["execution_helper_requests"], [])
+        self.assertEqual(
+            hashlib.sha256(execution_checkpoint_schema_path.read_bytes()).hexdigest(),
+            execution_source_identity["checkpoint_schema"],
+        )
+        self.assertEqual(
+            hashlib.sha256(execution_composition_schema_path.read_bytes()).hexdigest(),
+            execution_source_identity["composition_schema"],
+        )
+        if exercise_wrong_producer:
+            self.assertEqual(
+                len(observations["wrong_head_rejections"]),
+                len(observations["bundle_validation_heads"]),
+            )
+            self.assertTrue(observations["wrong_head_rejections"])
+            for rejection in observations["wrong_head_rejections"]:
+                self.assertIn("authenticated producer source", rejection)
+
     def _build_synthetic_matching_b_c_packet(
         self, input_root: pathlib.Path, *, candidate_generation_override: str | None = None,
         candidate_source_id_override: str | None = None,
@@ -1772,7 +2094,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
         )
         local_registry = repository / "data/data-go-kr.registry.json"
         local_registry.unlink()
-        os.link(ROOT / "data/data-go-kr.registry.json", local_registry)
+        _materialize_exact_fixture_file(
+            ROOT / "data/data-go-kr.registry.json", local_registry,
+        )
         current_artifact, candidate_manifest_sha = MODULE.source_lfs_binding(repository, candidate_head)
 
         by_role = {
@@ -3866,11 +4190,33 @@ class CompletenessProofRollupTest(unittest.TestCase):
             scope for scope in registry["scopes"]
             if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
         )
+        def git_state(repository: pathlib.Path) -> tuple[str, str, str, str, bytes | None]:
+            head = subprocess.check_output(
+                ["git", "rev-parse", "HEAD^{commit}"], cwd=repository, text=True,
+            ).strip()
+            origin_main = subprocess.check_output(
+                ["git", "rev-parse", "refs/remotes/origin/main^{commit}"],
+                cwd=repository, text=True,
+            ).strip()
+            head_tree = subprocess.check_output(
+                ["git", "rev-parse", f"{head}^{{tree}}"], cwd=repository, text=True,
+            ).strip()
+            origin_tree = subprocess.check_output(
+                ["git", "rev-parse", f"{origin_main}^{{tree}}"], cwd=repository, text=True,
+            ).strip()
+            shallow_path = pathlib.Path(subprocess.check_output(
+                ["git", "rev-parse", "--path-format=absolute", "--git-path", "shallow"],
+                cwd=repository, text=True,
+            ).strip())
+            shallow = shallow_path.read_bytes() if shallow_path.exists() else None
+            return head, origin_main, head_tree, origin_tree, shallow
+
         with tempfile.TemporaryDirectory(
             prefix="completeness-synthetic-matching-b-c-shallow-", dir=ROOT.parent,
         ) as name:
             base = pathlib.Path(name)
             shallow_root, pr_head, trusted_main, _trusted_tree = self._make_genuine_shallow_local_source(base)
+            shallow_state_before = git_state(shallow_root)
             self.assertEqual(
                 subprocess.check_output(
                     ["git", "rev-parse", "--is-shallow-repository"], cwd=shallow_root, text=True,
@@ -3878,13 +4224,57 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 "true",
             )
             self.assertNotEqual(pr_head, trusted_main)
+            self.assertEqual(shallow_state_before[0], pr_head)
+            self.assertEqual(shallow_state_before[1], trusted_main)
+            self.assertEqual(shallow_state_before[3], _trusted_tree)
             input_root = base / "evidence"
             input_root.mkdir()
             with mock.patch(__name__ + ".ROOT", shallow_root), mock.patch.object(MODULE, "ROOT", shallow_root):
                 repository, index_path, expected_generation = self._build_synthetic_matching_b_c_packet(input_root)
-                report = MODULE.build_report(
-                    root=repository, input_root=input_root, input_index_path=index_path,
+                packet_index = json.loads(index_path.read_bytes())
+                processor_run_input = next(
+                    item for item in packet_index["inputs"]
+                    if item.get("scope_id") == operation_scope["scope_id"]
+                    and item.get("subject", {}).get("stage") == "processor"
+                    and item.get("role") == "pipeline_run"
                 )
+                processor_run_root = repository if processor_run_input["root"] == "repository" else input_root
+                expected_processor_head = json.loads(
+                    (processor_run_root / processor_run_input["path"]).read_bytes(),
+                )["head_sha"]
+                processor_archive_input = next(
+                    item for item in packet_index["inputs"]
+                    if item.get("scope_id") == operation_scope["scope_id"]
+                    and item.get("subject", {}).get("stage") == "processor"
+                    and item.get("role") == "pipeline_artifact_archive"
+                )
+                processor_archive_root = (
+                    repository if processor_archive_input["root"] == "repository" else input_root
+                )
+                processor_archive_path = processor_archive_root / processor_archive_input["path"]
+                processor_archive_before = processor_archive_path.read_bytes()
+                archive_identity = (
+                    len(processor_archive_before),
+                    hashlib.sha256(processor_archive_before).hexdigest(),
+                )
+                fixture_state_before = git_state(repository)
+                with self._candidate_processor_execution_control(
+                    repository, exercise_wrong_producer=True,
+                ) as control:
+                    report = MODULE.build_report(
+                        root=repository, input_root=input_root, input_index_path=index_path,
+                    )
+                self.assertEqual(control["bundle_validation_heads"], [expected_processor_head])
+                self.assertEqual(git_state(repository), fixture_state_before)
+                self.assertEqual(processor_archive_path.read_bytes(), processor_archive_before)
+                self.assertEqual(
+                    (
+                        processor_archive_path.stat().st_size,
+                        hashlib.sha256(processor_archive_path.read_bytes()).hexdigest(),
+                    ),
+                    archive_identity,
+                )
+            self.assertEqual(git_state(shallow_root), shallow_state_before)
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
         delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")
@@ -3946,9 +4336,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 repository, index_path, expected_generation = self._build_synthetic_matching_b_c_packet(
                     input_root, candidate_status=final_status, include_legacy_publication=False,
                 )
-                report = MODULE.build_report(
-                    root=repository, input_root=input_root, input_index_path=index_path,
-                )
+                with self._candidate_processor_execution_control(repository):
+                    report = MODULE.build_report(
+                        root=repository, input_root=input_root, input_index_path=index_path,
+                    )
                 row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
                 facets = {facet["facet_id"]: facet for facet in row["facets"]}
                 pipeline = facets["specification_pipeline"]
@@ -3987,9 +4378,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 repository, index_path, expected_generation = self._build_synthetic_matching_b_c_packet(
                     input_root, include_legacy_publication=False, **override,
                 )
-                report = MODULE.build_report(
-                    root=repository, input_root=input_root, input_index_path=index_path,
-                )
+                with self._candidate_processor_execution_control(repository):
+                    report = MODULE.build_report(
+                        root=repository, input_root=input_root, input_index_path=index_path,
+                    )
                 row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
                 pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
                 self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
@@ -4005,28 +4397,30 @@ class CompletenessProofRollupTest(unittest.TestCase):
             repository, index_path, _generation = self._build_synthetic_matching_b_c_packet(
                 input_root, candidate_manifest_override="f" * 64, include_legacy_publication=False,
             )
-            with self.assertRaisesRegex(ValueError, "does not bind its exact release manifest"):
-                MODULE.build_report(
-                    root=repository, input_root=input_root, input_index_path=index_path,
-                )
+            with self._candidate_processor_execution_control(repository):
+                with self.assertRaisesRegex(ValueError, "does not bind its exact release manifest"):
+                    MODULE.build_report(
+                        root=repository, input_root=input_root, input_index_path=index_path,
+                    )
 
             json_output = input_root / "existing-rollup.json"
             markdown_output = input_root / "existing-rollup.md"
             json_output.write_bytes(b"prior-json-report\n")
             markdown_output.write_bytes(b"prior-markdown-report\n")
             output_paths = {"rollup.json": json_output, "rollup.md": markdown_output}
-            with mock.patch.object(
-                MODULE, "output_path",
-                side_effect=lambda _root, value, _label: output_paths[value],
-            ):
-                result = MODULE.main([
-                    "--repo-root", str(repository),
-                    "--input-root", str(input_root),
-                    "--input-index", str(index_path),
-                    "--output-json", "rollup.json",
-                    "--output-markdown", "rollup.md",
-                    "--write",
-                ])
+            with self._candidate_processor_execution_control(repository):
+                with mock.patch.object(
+                    MODULE, "output_path",
+                    side_effect=lambda _root, value, _label: output_paths[value],
+                ):
+                    result = MODULE.main([
+                        "--repo-root", str(repository),
+                        "--input-root", str(input_root),
+                        "--input-index", str(index_path),
+                        "--output-json", "rollup.json",
+                        "--output-markdown", "rollup.md",
+                        "--write",
+                    ])
             self.assertEqual(result, 1)
             self.assertEqual(json_output.read_bytes(), b"prior-json-report\n")
             self.assertEqual(markdown_output.read_bytes(), b"prior-markdown-report\n")
@@ -4046,9 +4440,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 processor_history_variant="distinct-second-observation",
                 only_source_processor=True,
             )
-            report = MODULE.build_report(
-                root=repository, input_root=input_root, input_index_path=index_path,
-            )
+            with self._candidate_processor_execution_control(repository):
+                report = MODULE.build_report(
+                    root=repository, input_root=input_root, input_index_path=index_path,
+                )
             index = json.loads(index_path.read_bytes())
             generation_item = next(
                 item for item in index["inputs"]
@@ -4084,10 +4479,11 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 processor_history_variant="duplicate-replay",
                 only_source_processor=True,
             )
-            with self.assertRaisesRegex(ValueError, "repeats an exact run/evidence locator"):
-                MODULE.build_report(
-                    root=repository, input_root=input_root, input_index_path=index_path,
-                )
+            with self._candidate_processor_execution_control(repository):
+                with self.assertRaisesRegex(ValueError, "repeats an exact run/evidence locator"):
+                    MODULE.build_report(
+                        root=repository, input_root=input_root, input_index_path=index_path,
+                    )
 
     def test_health_stage_preserves_bounded_history_and_nullable_last_good(self) -> None:
         """A validated Health snapshot may carry multiple observations and no publication."""

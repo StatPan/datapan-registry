@@ -20,6 +20,7 @@
   },
   "$defs": {
     "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "nullable_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
     "nullable_string": {"type": ["string", "null"]},
     "workflow": {
       "type": "object", "additionalProperties": false,
@@ -99,6 +100,7 @@
         "attempts_by_id": {"type": ["object", "null"], "maxProperties": 4096, "additionalProperties": {"type": "integer", "minimum": 0}},
         "request_reservation": {"type": ["object", "null"]},
         "detail_records": {"type": ["array", "null"], "maxItems": 128, "items": {"type": "object"}},
+        "link_contract_diagnostics": {"$ref": "#/$defs/link_contract_diagnostics"},
         "detail_queue_cursor": {"type": ["integer", "null"], "minimum": 0},
         "lease": {"type": ["object", "null"]},
         "output_artifact": {"type": ["object", "null"]},
@@ -108,6 +110,158 @@
         "latest_successful_execution_run": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]},
         "execution_failure": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/processor_run"}]}
       }
+    },
+    "link_contract_diagnostics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "status", "applicability", "reason_code", "generation_id", "checkpoint_sha256", "producer", "records"],
+      "properties": {
+        "schema_version": {"const": "datapan.upstream-catalogue-link-contract-diagnostics.v1"},
+        "status": {"enum": ["verified", "rejected", "unavailable", "not_applicable"]},
+        "applicability": {"enum": ["current", "historical", "unavailable", "not_applicable"]},
+        "reason_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "generation_id": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "checkpoint_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "producer": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/link_contract_diagnostic_producer"}]},
+        "records": {"type": "array", "maxItems": 128, "items": {"$ref": "#/$defs/link_contract_diagnostic_record"}}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "verified"}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "applicability": {"enum": ["current", "historical"]},
+              "generation_id": {"$ref": "#/$defs/digest"},
+              "checkpoint_sha256": {"$ref": "#/$defs/digest"},
+              "producer": {"$ref": "#/$defs/link_contract_diagnostic_producer"}
+            }
+          },
+          "else": {
+            "properties": {
+              "generation_id": {"const": null},
+              "checkpoint_sha256": {"const": null},
+              "producer": {"const": null},
+              "records": {"maxItems": 0}
+            },
+            "oneOf": [
+              {"properties": {"status": {"const": "rejected"}, "applicability": {"const": "unavailable"}}},
+              {"properties": {"status": {"const": "unavailable"}, "applicability": {"const": "unavailable"}}},
+              {"properties": {"status": {"const": "not_applicable"}, "applicability": {"const": "not_applicable"}}}
+            ]
+          }
+        }
+      ]
+    },
+    "link_contract_diagnostic_producer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["generation_id", "checkpoint_sha256", "run_id", "run_attempt", "head_sha", "artifact_id", "bundle_manifest_sha256"],
+      "properties": {
+        "generation_id": {"$ref": "#/$defs/digest"},
+        "checkpoint_sha256": {"$ref": "#/$defs/digest"},
+        "run_id": {"type": "string", "pattern": "^[0-9]{1,20}$"},
+        "run_attempt": {"type": "integer", "minimum": 1},
+        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40,64}$"},
+        "artifact_id": {"type": "string", "pattern": "^[0-9]{1,20}$"},
+        "bundle_manifest_sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "link_contract_diagnostic_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["api_key", "worker_status", "source_sha256", "guide_sha256", "worker_outcome_sha256", "detail_status", "next_action"],
+      "properties": {
+        "api_key": {
+          "type": "object", "additionalProperties": false,
+          "required": ["provider", "id"],
+          "properties": {
+            "provider": {"const": "data.go.kr"},
+            "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[^\u0000-\u001f\u007f]+$"}
+          }
+        },
+        "worker_status": {"enum": ["retry", "quarantined"]},
+        "source_sha256": {"$ref": "#/$defs/digest"},
+        "guide_sha256": {"$ref": "#/$defs/nullable_digest"},
+        "worker_outcome_sha256": {"$ref": "#/$defs/digest"},
+        "detail_status": {"enum": ["verified", "legacy_detail_unknown"]},
+        "next_action": {"enum": ["review_authoritative_declaration", "verify_subject_binding", "review_declaration_evidence", "inspect_bound_validation_evidence"]},
+        "contract_failure": {"$ref": "#/$defs/link_contract_failure"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"detail_status": {"const": "verified"}}, "required": ["detail_status"]},
+          "then": {
+            "required": ["contract_failure"],
+            "oneOf": [
+              {
+                "properties": {
+                  "next_action": {"const": "review_authoritative_declaration"},
+                  "contract_failure": {"properties": {"reason": {"const": "no_reviewed_declaration"}}, "required": ["reason"]}
+                }
+              },
+              {
+                "properties": {
+                  "next_action": {"const": "verify_subject_binding"},
+                  "contract_failure": {"properties": {"reason": {"const": "subject_binding_unproven"}}, "required": ["reason"]}
+                }
+              },
+              {
+                "properties": {
+                  "next_action": {"const": "review_declaration_evidence"},
+                  "contract_failure": {"properties": {"reason": {"const": "declaration_evidence_rejected"}}, "required": ["reason"]}
+                }
+              },
+              {
+                "properties": {
+                  "next_action": {"const": "inspect_bound_validation_evidence"},
+                  "contract_failure": {"properties": {"reason": {"const": "validation_detail_unknown"}}, "required": ["reason"]}
+                }
+              }
+            ]
+          },
+          "else": {
+            "properties": {"next_action": {"const": "inspect_bound_validation_evidence"}},
+            "not": {"required": ["contract_failure"]}
+          }
+        }
+      ]
+    },
+    "link_contract_failure": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "no_reviewed_declaration"},
+            "unresolved_requirements": {"const": ["reviewed_operation_declaration"]},
+            "next_action": {"const": "review_authoritative_declaration"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "subject_binding_unproven"},
+            "unresolved_requirements": {"const": ["subject_binding"]},
+            "next_action": {"const": "verify_subject_binding"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "declaration_evidence_rejected"},
+            "unresolved_requirements": {"const": ["declaration_source_binding", "operation_contract_validation"]},
+            "next_action": {"const": "review_declaration_evidence"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "validation_detail_unknown"},
+            "unresolved_requirements": {"const": []},
+            "next_action": {"const": "inspect_bound_validation_evidence"}
+          }
+        }
+      ]
     },
     "processor_run": {
       "type": "object", "additionalProperties": false,

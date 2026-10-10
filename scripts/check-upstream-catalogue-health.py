@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import copy
 import contextlib
 import datetime as dt
 import hashlib
@@ -106,6 +107,24 @@ HEALTH_EVALUATOR_SOURCE_PATHS = (
     "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
     *C_TERMINAL_EVALUATOR_SOURCE_PATHS,
 )
+LINK_CONTRACT_FAILURES = {
+    "no_reviewed_declaration": {
+        "unresolved_requirements": ["reviewed_operation_declaration"],
+        "next_action": "review_authoritative_declaration",
+    },
+    "subject_binding_unproven": {
+        "unresolved_requirements": ["subject_binding"],
+        "next_action": "verify_subject_binding",
+    },
+    "declaration_evidence_rejected": {
+        "unresolved_requirements": ["declaration_source_binding", "operation_contract_validation"],
+        "next_action": "review_declaration_evidence",
+    },
+    "validation_detail_unknown": {
+        "unresolved_requirements": [],
+        "next_action": "inspect_bound_validation_evidence",
+    },
+}
 C_TERMINAL_MODE_STEPS = {
     "reconcile-prs": {
         "invocation_step": "Reconcile owned PRs and exact-head CI",
@@ -558,6 +577,183 @@ def current_candidate_evaluation_record(
         "evaluated_main": evaluated_main,
         "producer": producer if producer["generation_id"] is not None else None,
         "evaluation_mode": mode,
+    }
+
+
+def link_contract_diagnostic_projection(
+    checkpoint: dict[str, Any] | None,
+    screen_result: Any,
+    current_evaluation: dict[str, Any],
+    mode: str,
+) -> dict[str, Any]:
+    """Project only C-admitted, privacy-bounded LINK diagnostics into Health."""
+    schema_version = "datapan.upstream-catalogue-link-contract-diagnostics.v1"
+
+    def unavailable(status: str, applicability: str, reason_code: str) -> dict[str, Any]:
+        return {
+            "schema_version": schema_version,
+            "status": status,
+            "applicability": applicability,
+            "reason_code": reason_code,
+            "generation_id": None,
+            "checkpoint_sha256": None,
+            "producer": None,
+            "records": [],
+        }
+
+    if (
+        mode != "live"
+        or not isinstance(checkpoint, dict)
+        or checkpoint.get("status") not in {"ready", "no-change"}
+    ):
+        return unavailable("not_applicable", "not_applicable", "candidate_not_screenable")
+
+    envelope = screen_result if isinstance(screen_result, dict) else {}
+    if "status" in envelope and "screened" in envelope:
+        screen_status = envelope.get("status")
+        screened = envelope.get("screened")
+        reason_code = envelope.get("reason_code")
+    else:
+        # Preserve compatibility with the original read-only test seam while
+        # requiring the same complete screened mapping below.
+        screen_status = "verified" if isinstance(screen_result, dict) else "unavailable"
+        screened = screen_result
+        reason_code = None
+    if screen_status != "verified":
+        safe_status = screen_status if screen_status in {"rejected", "unavailable"} else "unavailable"
+        safe_reason = (
+            reason_code
+            if isinstance(reason_code, str) and re.fullmatch(r"[a-z0-9_]{1,96}", reason_code)
+            else "processor_screen_unavailable"
+        )
+        return unavailable(safe_status, "unavailable", safe_reason)
+
+    if not isinstance(screened, dict):
+        return unavailable("rejected", "unavailable", "contract_diagnostic_projection_invalid")
+    bundle = screened.get("bundle")
+    records = bundle.get("contract_diagnostics") if isinstance(bundle, dict) else None
+    producer = current_evaluation.get("producer") if isinstance(current_evaluation, dict) else None
+    locator = checkpoint.get("output_artifact")
+    screened_run = screened.get("run")
+    generation_id = checkpoint.get("generation_id")
+    checkpoint_sha256 = checkpoint.get("checkpoint_sha256")
+    name_match = re.fullmatch(
+        r"upstream-catalogue-processing-([0-9]{1,20})-([1-9][0-9]*)",
+        str(locator.get("name", "")) if isinstance(locator, dict) else "",
+    )
+    if (
+        not isinstance(bundle, dict)
+        or not isinstance(records, list)
+        or len(records) > 128
+        or not isinstance(producer, dict)
+        or not isinstance(locator, dict)
+        or not isinstance(screened_run, dict)
+        or not name_match
+        or not isinstance(generation_id, str) or not DIGEST.fullmatch(generation_id)
+        or not isinstance(checkpoint_sha256, str) or not DIGEST.fullmatch(checkpoint_sha256)
+        or producer.get("generation_id") != generation_id
+        or producer.get("checkpoint_sha256") != checkpoint_sha256
+        or producer.get("bundle_manifest_sha256") != locator.get("bundle_manifest_sha256")
+        or producer.get("artifact_id") != str(locator.get("artifact_id"))
+        or producer.get("run_id") != str(locator.get("run_id"))
+        or producer.get("run_id") != name_match.group(1)
+        or producer.get("run_attempt") != int(name_match.group(2))
+        or not isinstance(producer.get("head_sha"), str)
+        or not REVISION.fullmatch(producer["head_sha"])
+        or str(screened_run.get("id", "")) != producer.get("run_id")
+        or screened_run.get("run_attempt") != producer.get("run_attempt")
+        or screened_run.get("head_sha") != producer.get("head_sha")
+        or screened.get("generation_id") != generation_id
+        or screened.get("artifact_id") != str(locator.get("artifact_id"))
+    ):
+        return unavailable("rejected", "unavailable", "contract_diagnostic_projection_invalid")
+
+    evaluation_status = current_evaluation.get("status")
+    evaluation_reason = current_evaluation.get("reason_code")
+    if evaluation_status == "verified":
+        applicability = "current"
+        projection_reason = None
+    elif evaluation_status == "rejected" and evaluation_reason == "candidate_payload_requires_promotion":
+        applicability = "current"
+        projection_reason = evaluation_reason
+    elif evaluation_status == "rejected" and evaluation_reason == "candidate_baseline_stale_for_current_main":
+        applicability = "historical"
+        projection_reason = evaluation_reason
+    else:
+        return unavailable("rejected", "unavailable", "contract_diagnostic_projection_context_invalid")
+
+    normalized: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    try:
+        for row in records:
+            allowed = {
+                "api_key", "worker_status", "source_sha256", "guide_sha256",
+                "worker_outcome_sha256", "detail_status", "next_action",
+            }
+            if not isinstance(row, dict):
+                raise ValueError("record_not_object")
+            if "contract_failure" in row:
+                allowed.add("contract_failure")
+            if set(row) != allowed:
+                raise ValueError("record_shape")
+            api_key = row.get("api_key")
+            provider = api_key.get("provider") if isinstance(api_key, dict) else None
+            identity = api_key.get("id") if isinstance(api_key, dict) else None
+            key = (str(provider), str(identity))
+            if (
+                provider != "data.go.kr"
+                or not isinstance(identity, str) or not identity or len(identity) > 128
+                or any(ord(character) < 32 or ord(character) == 127 for character in identity)
+                or key in seen
+                or row.get("worker_status") not in {"retry", "quarantined"}
+                or any(
+                    not isinstance(row.get(field), str) or not DIGEST.fullmatch(row[field])
+                    for field in ("source_sha256", "worker_outcome_sha256")
+                )
+                or (
+                    row.get("guide_sha256") is not None
+                    and (
+                        not isinstance(row.get("guide_sha256"), str)
+                        or not DIGEST.fullmatch(row["guide_sha256"])
+                    )
+                )
+            ):
+                raise ValueError("record_identity_or_digest")
+            detail_status = row.get("detail_status")
+            if detail_status == "verified":
+                contract_failure = row.get("contract_failure")
+                reason = contract_failure.get("reason") if isinstance(contract_failure, dict) else None
+                mapping = LINK_CONTRACT_FAILURES.get(reason)
+                expected = {
+                    "version": 1,
+                    "reason": reason,
+                    "unresolved_requirements": list(mapping["unresolved_requirements"]) if mapping else None,
+                    "next_action": mapping["next_action"] if mapping else None,
+                }
+                if not mapping or contract_failure != expected or row.get("next_action") != mapping["next_action"]:
+                    raise ValueError("record_contract_failure")
+            elif detail_status == "legacy_detail_unknown":
+                if "contract_failure" in row or row.get("next_action") != "inspect_bound_validation_evidence":
+                    raise ValueError("record_legacy_detail")
+            else:
+                raise ValueError("record_detail_status")
+            seen.add(key)
+            normalized.append(copy.deepcopy(row))
+    except (AttributeError, TypeError, ValueError):
+        return unavailable("rejected", "unavailable", "contract_diagnostic_projection_invalid")
+
+    ordered = sorted(normalized, key=lambda row: (row["api_key"]["provider"], row["api_key"]["id"]))
+    if normalized != ordered:
+        return unavailable("rejected", "unavailable", "contract_diagnostic_projection_unsorted")
+    return {
+        "schema_version": schema_version,
+        "status": "verified",
+        "applicability": applicability,
+        "reason_code": projection_reason,
+        "generation_id": generation_id,
+        "checkpoint_sha256": checkpoint_sha256,
+        "producer": copy.deepcopy(producer),
+        "records": ordered,
     }
 
 
@@ -2998,6 +3194,9 @@ def evaluate_source(
         checkpoint, main_identity, main_revision, mode, candidate_diagnostic, screen_result,
         evaluator_source_sha,
     )
+    link_contract_diagnostics = link_contract_diagnostic_projection(
+        checkpoint, screen_result, current_candidate_evaluation, mode,
+    )
     terminal_current_subject = _terminal_current_subject(
         checkpoint, screen_result, main_identity, already_canonical_candidate, mode,
     )
@@ -3472,6 +3671,7 @@ def evaluate_source(
             "attempts_by_id": checkpoint.get("attempts_by_id") if checkpoint else None,
             "request_reservation": checkpoint.get("request_reservation") if checkpoint else None,
             "detail_records": checkpoint.get("detail_records") if checkpoint else None,
+            "link_contract_diagnostics": link_contract_diagnostics,
             "detail_queue_cursor": checkpoint.get("detail_queue_cursor") if checkpoint else None,
             "lease": checkpoint.get("lease") if checkpoint else None,
             "output_artifact": checkpoint.get("output_artifact") if checkpoint else None,

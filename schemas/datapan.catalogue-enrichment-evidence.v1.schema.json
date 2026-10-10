@@ -262,9 +262,53 @@
       "properties": {
         "code": {"enum": ["timeout", "transport_error", "provider_http_error", "response_bytes_cap", "unsafe_redirect", "contract_or_parse_error", "missing_link_detail_operations", "unsafe_or_unregistered_operation_host", "observation_mismatch", "unexpected_error", "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven"]},
         "http_status": {"type": "integer", "minimum": 400, "maximum": 599},
-        "phase": {"enum": ["page", "resolver"]}
+        "phase": {"enum": ["page", "resolver"]},
+        "contract_failure": {"$ref": "#/$defs/contract_failure"}
       },
-      "allOf": [{"if": {"properties": {"code": {"const": "provider_http_error"}}, "required": ["code"]}, "then": {}, "else": {"not": {"required": ["http_status"]}}}]
+      "allOf": [
+        {"if": {"properties": {"code": {"const": "provider_http_error"}}, "required": ["code"]}, "then": {}, "else": {"not": {"required": ["http_status"]}}},
+        {"if": {"required": ["contract_failure"]}, "then": {"required": ["code", "phase"], "properties": {"code": {"const": "resolved_link_operation_contract_unproven"}, "phase": {"const": "resolver"}}}}
+      ]
+    },
+    "contract_failure": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "no_reviewed_declaration"},
+            "unresolved_requirements": {"const": ["reviewed_operation_declaration"]},
+            "next_action": {"const": "review_authoritative_declaration"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "subject_binding_unproven"},
+            "unresolved_requirements": {"const": ["subject_binding"]},
+            "next_action": {"const": "verify_subject_binding"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "declaration_evidence_rejected"},
+            "unresolved_requirements": {"const": ["declaration_source_binding", "operation_contract_validation"]},
+            "next_action": {"const": "review_declaration_evidence"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["version", "reason", "unresolved_requirements", "next_action"],
+          "properties": {
+            "version": {"const": 1}, "reason": {"const": "validation_detail_unknown"},
+            "unresolved_requirements": {"const": []},
+            "next_action": {"const": "inspect_bound_validation_evidence"}
+          }
+        }
+      ]
     }
   }
 }
