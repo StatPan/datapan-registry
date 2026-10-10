@@ -859,7 +859,7 @@
       }
     ],
     "generator_path": "scripts/generate-operation-observation-plan.py",
-    "generator_sha256": "87a499ddc8a600906630e52719fa340a8bdc8d099a36d4505dfd83e754fd554d",
+    "generator_sha256": "220ba7802e05f75cdd5b92e40ebc8aff57bc83cfc6bcc4cf3b73570f04dfc1ab",
     "legacy_policy": {
       "bytes": 5384,
       "path": "policy/health-probe-canaries.json",
@@ -903,7 +903,7 @@
     "provider_index_entries_counted_as_operations": false,
     "separate_link_operations": 8871
   },
-  "registry_revision": "d6fffa9f1bd778d64a52de1d1612ed93afec7a70",
+  "registry_revision": "446b8dcd86ceeb0a540baabcef479aec47820e9b",
   "schema_version": "datapan.operation-observation-plan.v1",
   "shards": [
     {
@@ -3252,14 +3252,14 @@
           "sha256": "acd9e80d3f41e4a0f16b010975fc716bf1ead5c5a3b128c12d03dd51b025f31d"
         },
         {
-          "bytes": 27286,
+          "bytes": 28980,
           "path": "schemas/datapan.operation-response-assertion.v2.schema.json",
-          "sha256": "78878ab22183e419e58d2a15b0a6a32bc585a3822cfa5a3a4bfd9f23d893055b"
+          "sha256": "bba64ddd581b41b77f1b3ae2de36f66261d25d7606e1c13c8146e5030787172d"
         },
         {
-          "bytes": 222928,
+          "bytes": 225960,
           "path": "scripts/generate-operation-observation-plan.py",
-          "sha256": "87a499ddc8a600906630e52719fa340a8bdc8d099a36d4505dfd83e754fd554d"
+          "sha256": "220ba7802e05f75cdd5b92e40ebc8aff57bc83cfc6bcc4cf3b73570f04dfc1ab"
         },
         {
           "bytes": 208723,

@@ -16,12 +16,72 @@ from unittest import mock
 
 
 ROOT = pathlib.Path(__file__).parents[1]
+CHECKED_OUT_ROOT = ROOT
 SCRIPT = ROOT / "scripts" / "generate-completeness-proof-rollup.py"
 SPEC = importlib.util.spec_from_file_location("generate_completeness_proof_rollup", SCRIPT)
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 _PRESERVE_REPLAY_PR_NUMBER = object()
+
+# The completeness packet validators are dynamically imported into an old-main
+# fixture. Keep their source closure explicit so that the fixture executes the
+# tested branch's code and schemas while preserving the fixture's authenticated
+# origin/main ref. Repository-input files and published artifacts retain their
+# own byte/SHA pins; unmanifested validator sources are pinned to this test
+# process's exact Git commit and checked-out bytes.
+COMPLETENESS_VALIDATOR_CODE_DEPENDENCIES = frozenset({
+    "scripts/validate-completeness-proof.py",
+    "scripts/validate-data-go-kr-operation-manifest.py",
+    "scripts/generate-data-go-kr-operation-manifest.py",
+    "scripts/seoul_oa109_operation_declaration.py",
+    "scripts/attest-runtime-freshness-import.py",
+    "scripts/run-canonical-update-promotion.py",
+    "scripts/canonical_update_pr.py",
+    "scripts/canonical_update_ci.py",
+    "scripts/compose-upstream-catalogue-candidate.py",
+    "scripts/upstream_catalogue_derivation.py",
+    "scripts/upstream_catalogue_handoff.py",
+    "scripts/materialize-canonical-registry.py",
+    "scripts/refresh-canonical-snapshot-evidence.py",
+    "scripts/persist-upstream-catalogue-health.py",
+    "scripts/recover-canonical-publication-ack.py",
+    "scripts/completeness_publication_evidence.py",
+})
+COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES = frozenset({
+    "schemas/datapan.operation-denominator.v1.schema.json",
+    "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+    "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+    "schemas/datapan.runtime-freshness-import-admission.v1.schema.json",
+    "schemas/datapan.runtime-freshness-import-receipt.v1.schema.json",
+    "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+    "schemas/datapan.catalog-diff.v1.schema.json",
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "schemas/datapan.completeness-proof.v1.schema.json",
+    "schemas/datapan.completeness-proof-policy.v1.schema.json",
+    "schemas/datapan.completeness-proof-rollup.v1.schema.json",
+    "schemas/datapan.completeness-proof-scopes.v1.schema.json",
+    "schemas/datapan.completeness-proof-inputs.v1.schema.json",
+    "schemas/datapan.completeness-proof-identities.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-state-owner.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
+    "schemas/datapan.diagnostic-envelope.v1.schema.json",
+    "schemas/datapan.provider-index.v1.schema.json",
+    "schemas/datapan.specs.v1.schema.json",
+    "schemas/index.json",
+})
+COMPLETENESS_VALIDATOR_SOURCE_DEPENDENCIES = (
+    COMPLETENESS_VALIDATOR_CODE_DEPENDENCIES | COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES
+)
 
 
 class CompletenessProofRollupTest(unittest.TestCase):
@@ -1593,13 +1653,13 @@ class CompletenessProofRollupTest(unittest.TestCase):
         only_source_processor: bool = False,
     ) -> tuple[pathlib.Path, pathlib.Path, str]:
         """Rebind a local, producer-shaped B→merged-C→Health packet without external writes."""
-        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(CHECKED_OUT_ROOT)
         operation_scope = next(
             scope for scope in registry["scopes"]
             if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
         )
         operation_id = operation_scope["scope_id"]
-        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        index = json.loads((CHECKED_OUT_ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
 
         repository = input_root / "repository"
         trusted_main, trusted_tree = self._clone_disposable_at_verified_main(ROOT, repository)
@@ -1608,26 +1668,78 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 index=index, input_root=input_root, repository=repository,
                 variant=processor_history_variant,
             )
+        pinned_repository_inputs: dict[str, tuple[int, str]] = {}
+        for item in index["inputs"]:
+            if item.get("root") != "repository":
+                continue
+            relative = item["path"]
+            pin = (item["bytes"], item["sha256"])
+            previous = pinned_repository_inputs.setdefault(relative, pin)
+            if previous != pin:
+                raise AssertionError(f"input index gives conflicting repository pins for {relative}")
         needed_paths = {
             MODULE.SCOPE_REGISTRY_PATH, MODULE.POLICY_PATH,
             MODULE.ROLLUP_SCHEMA_PATH,
-            "scripts/completeness_publication_evidence.py",
             "schemas/datapan.completeness-proof-scopes.v1.schema.json",
             "schemas/datapan.completeness-proof-identities.v1.schema.json",
             "schemas/datapan.completeness-proof-inputs.v1.schema.json",
             "schemas/datapan.completeness-proof-policy.v1.schema.json",
+            *COMPLETENESS_VALIDATOR_CODE_DEPENDENCIES,
+            *COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES,
             *(item["path"] for item in index["inputs"] if item.get("root") == "repository"),
         }
-        for relative in sorted(needed_paths):
-            source_path = ROOT / relative
-            destination_path = repository / relative
-            if not source_path.is_file() or destination_path.exists():
+        current_manifest = json.loads((CHECKED_OUT_ROOT / "manifest.json").read_bytes())
+        manifest_pins: dict[str, tuple[int, str]] = {}
+        for artifact in current_manifest.get("artifacts", []):
+            relative = artifact.get("path")
+            pin = (artifact.get("bytes"), artifact.get("sha256"))
+            if not isinstance(relative, str) or not isinstance(pin[0], int) or not isinstance(pin[1], str):
                 continue
+            if relative in manifest_pins:
+                raise AssertionError(f"current release manifest repeats an artifact path: {relative}")
+            manifest_pins[relative] = pin
+        fixture_source_revision = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "HEAD^{commit}"], cwd=CHECKED_OUT_ROOT, text=True,
+        ).strip()
+        for relative in sorted(needed_paths):
+            source_path = CHECKED_OUT_ROOT / relative
+            destination_path = repository / relative
+            if not source_path.is_file():
+                raise AssertionError(f"required source for pinned completeness fixture is missing: {relative}")
+            source_bytes = source_path.read_bytes()
+            source_digest = MODULE.sha256_bytes(source_bytes)
+            pin = pinned_repository_inputs.get(relative)
+            manifest_pin = manifest_pins.get(relative)
+            if pin is not None and manifest_pin is not None and pin != manifest_pin:
+                raise AssertionError(f"input-index and release-manifest pins conflict for {relative}")
+            if pin is None:
+                pin = manifest_pin
+            if pin is None and relative in COMPLETENESS_VALIDATOR_SOURCE_DEPENDENCIES:
+                tracked_bytes = subprocess.check_output(
+                    ["git", "show", f"{fixture_source_revision}:{relative}"], cwd=CHECKED_OUT_ROOT,
+                )
+                pin = (len(tracked_bytes), MODULE.sha256_bytes(tracked_bytes))
+                if source_bytes != tracked_bytes:
+                    raise AssertionError(
+                        f"checked-out validator source differs from its pinned Git commit {fixture_source_revision}: {relative}"
+                    )
+            if pin is not None and (len(source_bytes), source_digest) != pin:
+                raise AssertionError(
+                    f"checked-out source does not match its authoritative byte/SHA pin for {relative}"
+                )
+            if destination_path.is_file():
+                destination_bytes = destination_path.read_bytes()
+                if pin is not None and (len(destination_bytes), MODULE.sha256_bytes(destination_bytes)) == pin:
+                    continue
+                destination_path.unlink()
+            elif destination_path.exists():
+                raise AssertionError(f"temporary repository input path is not a file: {relative}")
             destination_path.parent.mkdir(parents=True, exist_ok=True)
-            try:
-                os.link(source_path, destination_path)
-            except OSError:
-                shutil.copy2(source_path, destination_path)
+            shutil.copy2(source_path, destination_path)
+            if pin is not None:
+                destination_bytes = destination_path.read_bytes()
+                if (len(destination_bytes), MODULE.sha256_bytes(destination_bytes)) != pin:
+                    raise AssertionError(f"materialized fixture dependency differs from its pinned bytes: {relative}")
         c_run_head = "01148419bef5d7f212e92ab96d0ba1c3da6c298c"
         self.assertEqual(
             subprocess.run(
@@ -2649,6 +2761,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                             materialize_registry=True,
                             source_revision=prepared_source_revision,
                             source_root=prepared_source_root,
+                            authenticated_main_root=integration.ROOT,
                         )
                         expected_representation = "materialized"
                     self.assertEqual(fixture.registry_representation, expected_representation)
@@ -3789,6 +3902,28 @@ class CompletenessProofRollupTest(unittest.TestCase):
             delivery["details"]["subject"]["source_sha"],
             "6a5138c792f4b7402da0c5ab439646bd752a307f",
         )
+
+    def test_build_report_rejects_tampered_materialized_repository_input(self) -> None:
+        """Current candidate bytes are copied into old-main fixtures but retain exact input pins."""
+        with tempfile.TemporaryDirectory(prefix="completeness-materialized-input-tamper-") as name:
+            input_root = pathlib.Path(name) / "evidence"
+            input_root.mkdir()
+            repository, index_path, _generation = self._build_synthetic_matching_b_c_packet(input_root)
+            index = json.loads(index_path.read_bytes())
+            kosis_input = next(
+                item for item in index["inputs"]
+                if item.get("root") == "repository"
+                and item["path"] == "reports/kosis/operation-denominator.json"
+            )
+            self.assertGreater(kosis_input["bytes"], 0)
+            destination = repository / kosis_input["path"]
+            self.assertEqual(
+                (len(destination.read_bytes()), MODULE.sha256_file(destination)),
+                (kosis_input["bytes"], kosis_input["sha256"]),
+            )
+            destination.write_bytes(destination.read_bytes() + b" ")
+            with self.assertRaisesRegex(ValueError, "byte count or SHA-256 differs"):
+                MODULE.build_report(root=repository, input_root=input_root, input_index_path=index_path)
 
     def test_build_report_keeps_synthetic_c_lifecycle_separate_from_native_publication(self) -> None:
         """C journal transitions remain visible but cannot stand in for publisher/ACK runs."""

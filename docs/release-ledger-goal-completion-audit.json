@@ -2,7 +2,7 @@
   "schema_version": "datapan.release-ledger-goal-completion-audit.v1",
   "goal_issue": 344,
   "audit_ticket": 357,
-  "audited_at": "2026-07-11T10:28:35Z",
+  "audited_at": "2026-10-07T00:00:00Z",
   "goal_status": "complete",
   "completion_guardrail": "Child tickets and merged PRs are progress evidence, not goal completion evidence by themselves.",
   "summary": {
@@ -153,9 +153,9 @@
     },
     "release_distribution_footprint": {
       "path": "reports/release-distribution-footprint.json",
-      "artifact_count": 201,
-      "schema_artifacts": 115,
-      "manifest_bound_bytes_excluding_self": 236957210,
+      "artifact_count": 646,
+      "schema_artifacts": 127,
+      "manifest_bound_bytes_excluding_self": 309669561,
       "canonical_registry_path": "data/data-go-kr.registry.json",
       "canonical_registry_bytes": 139155499,
       "large_monolith_threshold_bytes": 100000000,

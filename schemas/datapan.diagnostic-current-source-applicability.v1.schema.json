@@ -11,6 +11,7 @@
     "historical_inputs",
     "historical_registry_identity",
     "archived_health_catalog",
+    "archived_authoritative_inputs",
     "current_inputs",
     "checked_facts",
     "mismatches",
@@ -39,6 +40,30 @@
             "path": {"const": "reports/health-probe-catalog.json"},
             "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
             "blob": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+          }
+        }
+      }
+    },
+    "archived_authoritative_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mapping_path", "artifact", "source_git"],
+        "properties": {
+          "mapping_path": {"const": "reports/error-action-routing-rollup.json"},
+          "artifact": {"$ref": "#/$defs/artifact_identity"},
+          "source_git": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "commit", "blob"],
+            "properties": {
+              "path": {"const": "reports/error-action-routing-rollup.json"},
+              "commit": {"const": "b49d66b97d8155c34649f4dd2040b884c4212d64"},
+              "blob": {"const": "12f49f827dfd9fe11ff905f516ff079eb5be3b17"}
+            }
           }
         }
       }

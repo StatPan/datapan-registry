@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.release-distribution-footprint.v1",
-  "generated_at": "2026-07-11T10:28:35Z",
+  "generated_at": "2026-10-07T00:00:00Z",
   "goal_issue": 344,
   "footprint_ticket": 393,
   "provider": "datapan-registry",
@@ -9,9 +9,9 @@
     "self_artifact_excluded": true
   },
   "summary": {
-    "artifact_count": 201,
-    "schema_artifacts": 115,
-    "manifest_bound_bytes_excluding_self": 236957210,
+    "artifact_count": 646,
+    "schema_artifacts": 127,
+    "manifest_bound_bytes_excluding_self": 309669561,
     "canonical_registry_path": "data/data-go-kr.registry.json",
     "canonical_registry_bytes": 139155499,
     "large_monolith_threshold_bytes": 100000000,
