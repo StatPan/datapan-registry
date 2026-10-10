@@ -4,9 +4,9 @@
   },
   "evaluation_epoch": "2026-10-04T13:23:00Z",
   "input_index": {
-    "bytes": 59842,
+    "bytes": 59940,
     "path": "canonical-semantic-json:reports/completeness-proof-inputs.json",
-    "sha256": "8c4dba7fd137ce6fd71e78d0a0efb580f5cc5365a68f6f0f65cce57fff41614e"
+    "sha256": "e0d5e413a4fe3e40856eec25e19703b11f27b6811152195802f93c3f2cf7ada0"
   },
   "policy": {
     "bytes": 4114,
@@ -332,6 +332,11 @@
           "details": {
             "candidate_bytes": 139155499,
             "candidate_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+            "catalog_binding_witness": {
+              "main_ancestry_verified": true,
+              "release_manifest_sha256": "8b2a4ec07d102b268a7e2b76a1c9a94a743d8d7022124913641ad01e3f57bb81",
+              "source_revision": "2693e4de28e601555b998a457816f2ad18321699"
+            },
             "current_input_contract_changed_paths": [
               ".github/workflows/upstream-catalog-refresh.yml",
               ".github/workflows/upstream-catalogue-process.yml",
@@ -349,6 +354,7 @@
               "scripts/upstream_catalogue_handoff.py"
             ],
             "current_input_contract_compatible": false,
+            "current_release_applicable": false,
             "detail_retry_count": 908,
             "detail_unattempted_count": 884,
             "full_scope_fresh": null,
@@ -616,9 +622,15 @@
             "acknowledgement_log_sha256": "11d9495f1a01e41a62145e0b2f90ab9396b377365c82b0be6a4535a2fcb70780",
             "anonymous_readback_observed_at": "2026-10-04T11:48:04.144691Z",
             "candidate_release_publication_unproven": false,
+            "catalog_binding_witness": {
+              "main_ancestry_verified": true,
+              "release_manifest_sha256": "8b2a4ec07d102b268a7e2b76a1c9a94a743d8d7022124913641ad01e3f57bb81",
+              "source_revision": "2693e4de28e601555b998a457816f2ad18321699"
+            },
             "classification": "historical_delivery_only",
             "consumer_read_back_required_for_updated": true,
-            "current_release_manifest_sha256": "8b2a4ec07d102b268a7e2b76a1c9a94a743d8d7022124913641ad01e3f57bb81",
+            "current_release_applicable": false,
+            "current_release_manifest_sha256": null,
             "current_release_subject_applicable": false,
             "currentness_established": false,
             "cutover_established": false,
