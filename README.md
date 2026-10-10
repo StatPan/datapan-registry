@@ -139,6 +139,8 @@ that must remain in trusted `origin/main` history and whose committed LFS pointe
 must match the indexed catalog bytes. Its `catalog_binding_witness` establishes
 catalog identity only; it does not establish current-release applicability or
 renew publication, review, or runtime authority.
+Candidate evaluation rows are bound to their separately pinned baseline and exact
+candidate bytes; they do not claim a trusted source revision for uncommitted candidate data.
 
 Review the generated [scope report](reports/completeness-proof-rollup.md),
 [machine-readable rollup](reports/completeness-proof-rollup.json), and

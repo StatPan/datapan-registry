@@ -296,6 +296,25 @@ class CompletenessProofRollupTest(unittest.TestCase):
         other["subject"] = {"source_revision": "a" * 64}
         MODULE.validate_schema_value(other_role, schema, "input index")
 
+        candidate_index = copy.deepcopy(index)
+        candidate_index["evaluation_context"] = {
+            "mode": "candidate",
+            "baseline_main_sha": "a" * 40,
+            **{
+                key: {"path": f"fixture:{key}", "bytes": 0, "sha256": "0" * 64}
+                for key in (
+                    "baseline_input_index", "baseline_registry", "baseline_operation_manifest",
+                    "baseline_release_manifest", "baseline_policy", "baseline_scope_registry",
+                    "candidate_registry", "candidate_operation_manifest",
+                )
+            },
+        }
+        candidate_catalog = next(
+            item for item in candidate_index["inputs"] if item["role"] == "source_catalog_snapshot"
+        )
+        candidate_catalog.pop("subject")
+        MODULE.validate_schema_value(candidate_index, schema, "candidate input index")
+
     def test_catalog_binding_witness_is_stable_across_main_tip_and_requires_updated_pin_for_new_bytes(self) -> None:
         with tempfile.TemporaryDirectory(prefix="completeness-catalog-binding-") as name:
             repository = pathlib.Path(name) / "repository"
@@ -1292,7 +1311,17 @@ class CompletenessProofRollupTest(unittest.TestCase):
     ) -> tuple[str, str]:
         """Clone test files, then locally fetch and verify the exact trusted-main tree."""
         source_root = source_root.resolve()
-        environment = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"}
+        environment = {
+            **os.environ,
+            "GIT_LFS_SKIP_SMUDGE": "1",
+            "GIT_CONFIG_COUNT": "3",
+            "GIT_CONFIG_KEY_0": "gc.auto",
+            "GIT_CONFIG_VALUE_0": "0",
+            "GIT_CONFIG_KEY_1": "maintenance.auto",
+            "GIT_CONFIG_VALUE_1": "false",
+            "GIT_CONFIG_KEY_2": "gc.autoDetach",
+            "GIT_CONFIG_VALUE_2": "false",
+        }
         trusted_main = subprocess.check_output(
             ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
             cwd=source_root,
@@ -2338,6 +2367,15 @@ class CompletenessProofRollupTest(unittest.TestCase):
             ROOT / "data/data-go-kr.registry.json", local_registry,
         )
         current_artifact, candidate_manifest_sha = MODULE.source_lfs_binding(repository, candidate_head)
+        catalog_item = next(item for item in index["inputs"] if item.get("role") == "source_catalog_snapshot")
+        catalog_path = repository / catalog_item["path"]
+        local_catalog_identity = (catalog_path.stat().st_size, MODULE.sha256_file(catalog_path))
+        manifest_catalog_identity = (current_artifact["bytes"], current_artifact["sha256"])
+        if local_catalog_identity != manifest_catalog_identity or local_catalog_identity != (
+            catalog_item["bytes"], catalog_item["sha256"],
+        ):
+            raise AssertionError("synthetic trusted main does not bind the exact current catalog input")
+        catalog_item.setdefault("subject", {})["source_revision"] = candidate_head
 
         by_role = {
             item["role"]: item for item in index["inputs"]
@@ -3290,6 +3328,17 @@ class CompletenessProofRollupTest(unittest.TestCase):
 
     def test_nested_linked_worktree_fetch_preserves_authenticated_main(self) -> None:
         """The reader preserves exact main from pointer and materialized shallow sources."""
+        maintenance_guard = mock.patch.dict(os.environ, {
+            "GIT_CONFIG_COUNT": "3",
+            "GIT_CONFIG_KEY_0": "gc.auto",
+            "GIT_CONFIG_VALUE_0": "0",
+            "GIT_CONFIG_KEY_1": "maintenance.auto",
+            "GIT_CONFIG_VALUE_1": "false",
+            "GIT_CONFIG_KEY_2": "gc.autoDetach",
+            "GIT_CONFIG_VALUE_2": "false",
+        })
+        maintenance_guard.start()
+        self.addCleanup(maintenance_guard.stop)
         integration = importlib.import_module("tests.test_apply_runtime_freshness_import_integration")
         fixture = integration.ApplyRuntimeFreshnessImportIntegrationTest
         pointer_source_revision = subprocess.check_output(
@@ -3898,7 +3947,13 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_proof_validated"])
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_claims_suppressed"])
             self.assertEqual(candidate_facets["specification_pipeline"]["state"], "historical")
+            self.assertFalse(candidate_facets["specification_pipeline"]["details"]["current_release_applicable"])
             self.assertEqual(candidate_facets["immutable_publication_read_back"]["state"], "historical")
+            candidate_publication = candidate_facets["immutable_publication_read_back"]["details"]
+            self.assertIsNone(candidate_publication["current_release_manifest_sha256"])
+            self.assertFalse(candidate_publication["current_release_subject_applicable"])
+            self.assertFalse(candidate_publication["current_release_applicable"])
+            self.assertTrue(candidate_publication["candidate_release_publication_unproven"])
             rebuilt_candidate_index = json.loads(canonical_index_path.read_bytes())
             _candidate_context, changed_scopes = MODULE.validate_candidate_input_index(
                 root=temp_root, index=rebuilt_candidate_index,

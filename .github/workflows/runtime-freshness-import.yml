@@ -70,7 +70,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
-          ref: c1806c8d3b1a8f1cd9674cc73ff57d1ceec38cb2
+          ref: 89d1164ac8c910e18e50fc1c3a3961977c4d4f2e
           path: .datapan/ci/datapan-cli
 
       - name: Setup Go
