@@ -974,8 +974,8 @@
     {
       "path": "reports/source-reference-drift.json",
       "kind": "source_reference_drift",
-      "bytes": 8915,
-      "sha256": "974cf944245517478c438c6bfe0d7e79409ca23d0c6fc3f8ffc0e1b913662ff0",
+      "bytes": 9145,
+      "sha256": "8ec318c504487d229a225b69506b1cb3dbddfc83d9948135bcfd2c416258e173",
       "schema": "https://schemas.datapan.dev/datapan.source-reference-drift.v1.schema.json"
     },
     {
@@ -1059,21 +1059,21 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "bytes": 26719,
-      "sha256": "c6ea3a66f7fee29c719f97b1fbe9277a7505de18602d0cdd9b07a0aa28a8ce6e",
+      "sha256": "7cb90e07416d7e40bcfb08edae2f20d8cd52534e7f4168a04f12a1fe8829492d",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
     },
     {
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "bytes": 1811,
-      "sha256": "4491be099e023cbff36870313b1c4c4d720cae4bbbcd6e8bb6880b4a0e7bc40f",
+      "sha256": "b65855d559cf5eb10bc661bc3334a8120bc8189a2979376e133798821a2c5535",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "bytes": 2216,
-      "sha256": "4aabb1a1d19d12ccc5d18e63bb6fcc7827db1034b57a4e36a5bdd76d2299120f",
+      "sha256": "03e830b6710b90209d0614c89048f38037b1c76fe9a932b4fb7ccb230255f688",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
     },
     {
@@ -1122,7 +1122,7 @@
       "path": "reports/release-assembly-receipt.json",
       "kind": "release_assembly_receipt",
       "bytes": 37095,
-      "sha256": "7d4da9a0602638d1ff732fcae0053a5fdfd115be7459684e9970d00db80d2f9e",
+      "sha256": "3116f0f5a1713f9161f870bb5d2af958222da3731ee30e15089fe14f325def40",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json"
     },
     {
@@ -1292,7 +1292,7 @@
       "path": "reports/health-runtime-observation-plan.v1.json",
       "kind": "verification_plan",
       "bytes": 11290,
-      "sha256": "e17985ce8525fe2ad4d846baf26f92019a2b9989fcf7fb8dc47525641201a9ad",
+      "sha256": "2c7577dda7b2a83f013de6f2190407a072074a89457206d7285723282ffd7b7e",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json"
     },
     {

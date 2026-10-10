@@ -165,6 +165,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install jsonschema
           python -m pip install --disable-pip-version-check 'PyYAML==6.0.2'
+          python scripts/validate-source-reference-drift.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-data-go-kr-operation-manifest.py --check
@@ -281,7 +282,6 @@ jobs:
           python scripts/validate-external-coverage.py
           python scripts/generate-impact-plan-rollup.py --check
           python scripts/validate-impact-plans.py
-          python scripts/validate-source-reference-drift.py
           python scripts/validate-source-report-inventory.py
           python scripts/validate-release-report-artifacts.py
           python scripts/validate-release-receipt-boundary.py
