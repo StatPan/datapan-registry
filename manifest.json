@@ -850,14 +850,14 @@
       "path": "reports/completeness-proof-rollup.json",
       "kind": "completeness_proof_rollup",
       "bytes": 57134,
-      "sha256": "3b65d9cf37bcc315284bbc62490d89ee450886ae513ea4ba947c39e695719be9",
+      "sha256": "f1829f6825fa0a4c7aabf8f1afee2c1a1e7d650666b232fecb0df8c7efe9155b",
       "schema": "https://schemas.datapan.dev/datapan.completeness-proof-rollup.v1.schema.json"
     },
     {
       "path": "reports/completeness-proof-rollup.md",
       "kind": "completeness_proof_rollup_markdown",
       "bytes": 23075,
-      "sha256": "64927e52ca55298e183e0c9cccc89985a3760c1234739dfd7409be80e2b6162e"
+      "sha256": "52a41a47a2f8e9490aec281015babef2bf31ed8ee068c0c25b34d8139675bdcd"
     },
     {
       "path": "reports/runtime-freshness-queue.json",
@@ -1066,7 +1066,7 @@
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "bytes": 1811,
-      "sha256": "f447b1af35458ea6e586239ceb2bbc0e225e1a589cc6c9bdb4eaac2bd666d37e",
+      "sha256": "2407c3cda1017b09cdd6ded47f58ba469f8cae1d7974e45383c53f92159018db",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json"
     },
     {
@@ -1292,7 +1292,7 @@
       "path": "reports/health-runtime-observation-plan.v1.json",
       "kind": "verification_plan",
       "bytes": 11290,
-      "sha256": "e7a2c1cae520023936684eaadec9a1c197ab6513f6927385bf71a00e8a71c52f",
+      "sha256": "1e5311d61df0472676eb4e92b3da716f5569d66c466442d89a05617e9464e95d",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json"
     },
     {

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import argparse
 import hashlib
 import importlib.util
 import json
@@ -10,6 +11,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+import sys
 import urllib.error
 import urllib.request
 import jsonschema
@@ -241,6 +243,92 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             if value is not None:
                 argv.append(str(value))
         return MODULE.build_parser().parse_args(argv)
+
+    def authenticated_live_args(
+        self, *, processor_run_id: str, processor_artifact_run_id: str,
+        state_dir: pathlib.Path, output_dir: pathlib.Path, state_head_sha: str | None = None,
+    ):
+        producer_run_id = "37548691738"
+        evidence = json.loads(self.evidence_path.read_text(encoding="utf-8"))
+        snapshot = evidence.setdefault("snapshot", {})
+        diff = evidence.setdefault("diff", {})
+        snapshot["sha256"] = MODULE.file_sha256(self.candidate_path)
+        diff["sha256"] = MODULE.file_sha256(self.diff_path)
+        self.evidence_path.write_text(json.dumps(evidence), encoding="utf-8")
+        archive = self.root / "authenticated-producer-archive.zip"
+        archive.write_bytes(b"authenticated fixture archive bytes")
+        archive_sha = MODULE.file_sha256(archive)
+        envelope = {
+            "schema_version": "datapan.upstream-catalogue-admission-envelope.v1",
+            "repository": "StatPan/datapan-registry",
+            "producer_run_id": producer_run_id,
+            "run_attempt": 1,
+            "head_sha": "a" * 40,
+            "run_started_at": "2026-10-01T09:55:00Z",
+            "run_completed_at": "2026-10-01T10:00:00Z",
+            "observe_job_started_at": "2026-10-01T09:56:00Z",
+            "observe_job_completed_at": "2026-10-01T09:59:00Z",
+            "artifact_id": "654321",
+            "artifact_name": f"upstream-catalog-refresh-{producer_run_id}",
+            "artifact_expires_at": "2026-11-01T00:00:00Z",
+            "artifact_created_at": "2026-10-01T09:58:00Z",
+            "artifact_digest_sha256": archive_sha,
+            "artifact_size_bytes": archive.stat().st_size,
+            "archive_sha256": archive_sha,
+            "archive_size_bytes": archive.stat().st_size,
+            "observed_at": evidence["observed_at"],
+            "refresh_evidence_sha256": MODULE.file_sha256(self.evidence_path),
+            "event": "schedule",
+        }
+        admission = self.root / "authenticated-producer-admission.json"
+        admission.write_text(json.dumps(envelope), encoding="utf-8")
+        overrides = {
+            "--producer-run-id": producer_run_id,
+            "--producer-run-url": f"https://github.com/StatPan/datapan-registry/actions/runs/{producer_run_id}",
+            "--processor-run-id": processor_run_id,
+            "--processor-artifact-run-id": processor_artifact_run_id,
+            "--state-dir": state_dir,
+            "--output-dir": output_dir,
+            "--execution-mode": "live",
+            "--artifact-name": envelope["artifact_name"],
+            "--input-artifact-id": envelope["artifact_id"],
+            "--artifact-expires-at": envelope["artifact_expires_at"],
+            "--output-artifact-expires-at": "2026-11-01T00:00:00Z",
+            "--producer-head-sha": envelope["head_sha"],
+            "--producer-run-attempt": envelope["run_attempt"],
+            "--producer-run-started-at": envelope["run_started_at"],
+            "--producer-run-completed-at": envelope["run_completed_at"],
+            "--producer-observe-job-started-at": envelope["observe_job_started_at"],
+            "--producer-observe-job-completed-at": envelope["observe_job_completed_at"],
+            "--producer-artifact-created-at": envelope["artifact_created_at"],
+            "--producer-artifact-digest-sha256": envelope["artifact_digest_sha256"],
+            "--producer-artifact-size-bytes": envelope["artifact_size_bytes"],
+            "--producer-event": envelope["event"],
+            "--collector-admission-file": admission,
+            "--collector-archive": archive,
+        }
+        if state_head_sha is not None:
+            overrides["--replay-state-head-sha"] = state_head_sha
+        args = self.args(**overrides)
+        args.composer = ACTUAL_COMPOSER
+        args.fixture_composer = None
+        args.allow_fixture_composer = False
+        args.now = None
+        return args
+
+    @staticmethod
+    def namespace_argv(namespace: Any) -> list[str]:
+        argv: list[str] = []
+        for action in MODULE.build_parser()._actions:
+            if action.dest == "help" or not action.option_strings:
+                continue
+            value = getattr(namespace, action.dest)
+            if isinstance(action, argparse._StoreTrueAction):
+                if value:
+                    argv.append(action.option_strings[0])
+            elif value is not None:
+                argv.extend((action.option_strings[0], str(value)))
+        return argv
 
     def assert_c_processor_bundle_accepts(
         self, checkpoint: dict[str, Any], baseline: list[dict[str, Any]], candidate: list[dict[str, Any]],
@@ -1592,6 +1680,295 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(replay["output_artifact"], prior_locator)
         self.assertFalse((self.output_dir / "upstream-catalogue-checkpoint-receipt.json").exists())
         self.assertFalse((self.output_dir / "composed-candidate.registry.json").exists())
+
+    def test_authenticated_exact_replay_cli_emits_closed_durable_transition_receipt(self) -> None:
+        enriched_row = self.real_link_row()
+        unresolved_row = copy.deepcopy(enriched_row)
+        unresolved_row["id"] = "3"
+        unresolved_row["title"] = "Resolver-only LINK"
+        unresolved_row["source"]["url"] = "https://www.data.go.kr/data/3/openapi.do"
+        unresolved_row["source"]["raw"].update({
+            "title": "Resolver-only LINK",
+            "meta_url": "https://www.data.go.kr/data/3/openapi.do",
+            "api_id": "3",
+        })
+        self.write_real_composer_inputs([], [enriched_row, unresolved_row], self.now)
+        state_repo = self.root / "state-repo"
+        state_dir = state_repo / ".datapan/upstream-catalogue-state"
+        output_dir = self.root / "live-output"
+        first_args = self.authenticated_live_args(
+            processor_run_id="777-1", processor_artifact_run_id="777",
+            state_dir=state_dir, output_dir=output_dir,
+        )
+        first_args.claim_only = True
+        claim_code, claimed = MODULE.process(
+            first_args, fetcher=lambda *_args: self.fail("claim must not call provider"),
+            sleeper=lambda _delay: None, clock=lambda: MODULE.parse_timestamp(self.now),
+        )
+        self.assertEqual(claim_code, 0, claimed)
+        enriched_page_bytes = (
+            b'<a href="https://www.data.go.kr/guide/2.pdf">API Guide</a>'
+            b'<a href="https://openapi.airport.co.kr/detail" onclick="fn_LinkApiRequest()">API</a>'
+        )
+        unresolved_page_bytes = (
+            b'<button type="button" onclick="fn_goUrlLink(\'3\')">Open</button>'
+            b'<input type="hidden" id="publicDataPk" value="3">'
+            b'<input type="hidden" id="publicDataDetailPk" value="uddi:fixture-3">'
+        )
+        page_calls: list[str] = []
+
+        def page_fetch(url: str, _timeout: float) -> Any:
+            page_calls.append(url)
+            page_bytes = enriched_page_bytes if "/2/" in url else unresolved_page_bytes
+            return MODULE.DetailPageObservation(
+                body=page_bytes.decode("utf-8"), page_bytes=page_bytes,
+                page_url=url, effective_url=url,
+                page_sha256=MODULE.sha256_bytes(page_bytes), observed_at=self.now,
+            )
+
+        resolver_bytes = json.dumps({
+            "publicDataDetailPk": "uddi:fixture-3",
+            "linkUrl": "https://openapi.airport.co.kr/catalogue/landing",
+            "status": True,
+        }, separators=(",", ":")).encode("utf-8")
+
+        def resolver_fetch(url: str, _timeout: float) -> Any:
+            return MODULE.LinkResolverObservation(
+                body=resolver_bytes, request_url=url, effective_url=url, observed_at=self.now,
+            )
+
+        worker_args = copy.deepcopy(first_args)
+        worker_args.claim_only = False
+        worker_args.require_durable_reservation = True
+        code, first = MODULE.process(
+            worker_args, fetcher=page_fetch, resolver_fetcher=resolver_fetch,
+            sleeper=lambda _delay: None,
+            clock=lambda: MODULE.parse_timestamp(self.now),
+        )
+        self.assertEqual(code, 0, first)
+        self.assertEqual(first["status"], "ready")
+        self.assertEqual(first["outcome"]["composer_status"], "ready_scoped")
+        self.assertEqual(first["outcome"]["detail_retry_count"], 0)
+        unresolved_detail = next(row for row in first["detail_records"] if row["id"] == "3")
+        self.assertEqual(unresolved_detail["status"], "quarantined")
+        self.assertEqual(
+            unresolved_detail["failure_diagnostic"]["contract_failure"],
+            MODULE.contract_failure_value("no_reviewed_declaration"),
+        )
+        self.assertEqual(unresolved_detail["link_metadata"]["dataset_id"], "3")
+        subprocess.run(["git", "init", "-b", "automation/upstream-catalogue-state", str(state_repo)], check=True, capture_output=True)
+        subprocess.run(["git", "-C", str(state_repo), "config", "user.name", "fixture"], check=True)
+        subprocess.run(["git", "-C", str(state_repo), "config", "user.email", "fixture@example.test"], check=True)
+        subprocess.run(["git", "-C", str(state_repo), "add", ".datapan/upstream-catalogue-state"], check=True)
+        subprocess.run(["git", "-C", str(state_repo), "commit", "-m", "seed terminal state"], check=True, capture_output=True)
+        old_sha = subprocess.run(
+            ["git", "-C", str(state_repo), "rev-parse", "HEAD"], check=True, text=True, capture_output=True,
+        ).stdout.strip()
+        prior = copy.deepcopy(first)
+        prior_index = json.loads((state_dir / "sources/data_go_kr/index.json").read_text(encoding="utf-8"))
+        prior_retry_state = copy.deepcopy(prior_index["detail_retry_state"])
+        self.assertEqual(set(prior_retry_state), {"3"})
+        self.assertEqual(
+            prior_retry_state["3"]["failure_diagnostic"]["contract_failure"],
+            MODULE.contract_failure_value("no_reviewed_declaration"),
+        )
+
+        # A ready generation with explicit detail work is not an exact replay.
+        # Preserve this #746 distinction while the terminal ready/no-change
+        # path below proves that retained quarantined diagnostics are replayed.
+        ready_with_retry_dir = self.root / "ready-with-detail-retry"
+        retry_generation_dir = ready_with_retry_dir / "sources/data_go_kr/generations"
+        retry_generation_dir.mkdir(parents=True)
+        ready_with_retry = copy.deepcopy(prior)
+        ready_with_retry["outcome"]["detail_retry_count"] = 1
+        MODULE.atomic_write_json(
+            retry_generation_dir / f"{ready_with_retry['generation_id']}.json",
+            MODULE.seal_checkpoint(ready_with_retry),
+        )
+        MODULE.atomic_write_json(ready_with_retry_dir / "sources/data_go_kr/index.json", prior_index)
+        retry_output_dir = self.root / "ready-with-detail-retry-output"
+        retry_args = self.authenticated_live_args(
+            processor_run_id="787-1", processor_artifact_run_id="787",
+            state_dir=ready_with_retry_dir, output_dir=retry_output_dir,
+        )
+        pages_before_retry = len(page_calls)
+        retry_code, retried = MODULE.process(
+            retry_args, fetcher=page_fetch, resolver_fetcher=resolver_fetch,
+            sleeper=lambda _delay: None, clock=lambda: MODULE.parse_timestamp(self.now),
+        )
+        self.assertEqual(retry_code, 0, retried)
+        self.assertGreater(len(page_calls), pages_before_retry)
+        self.assertFalse(getattr(retry_args, "exact_delivery_replay", False))
+        self.assertFalse((retry_output_dir / MODULE.REPLAY_PERSISTENCE_RECEIPT).exists())
+
+        shutil.rmtree(output_dir)
+        self.now = "2026-10-01T10:00:01Z"
+        replay_args = self.authenticated_live_args(
+            processor_run_id="888-2", processor_artifact_run_id="888",
+            state_dir=state_dir, output_dir=output_dir, state_head_sha=old_sha,
+        )
+        (self.root / "sitecustomize.py").write_text(
+            "import urllib.request\n"
+            "def forbidden(*_args, **_kwargs): raise AssertionError('provider transport invoked during exact replay')\n"
+            "urllib.request.build_opener = forbidden\n",
+            encoding="utf-8",
+        )
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT), *self.namespace_argv(replay_args)],
+            cwd=ROOT, text=True, capture_output=True,
+            env={
+                **os.environ,
+                "PYTHONDONTWRITEBYTECODE": "1",
+                "PYTHONPATH": str(self.root) + os.pathsep + os.environ.get("PYTHONPATH", ""),
+            },
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
+        result = json.loads((output_dir / "upstream-catalogue-processing-result.json").read_text(encoding="utf-8"))
+        checkpoint = json.loads((output_dir / "upstream-catalogue-checkpoint-receipt.json").read_text(encoding="utf-8"))
+        receipt = json.loads((output_dir / MODULE.REPLAY_PERSISTENCE_RECEIPT).read_text(encoding="utf-8"))
+        current_index = json.loads((state_dir / "sources/data_go_kr/index.json").read_text(encoding="utf-8"))
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"))
+        self.assertIs(
+            MODULE.verify_replay_persistence_receipt(
+                receipt,
+                prior_checkpoint=prior,
+                current_checkpoint=checkpoint,
+                prior_index=prior_index,
+                current_index=current_index,
+                result=result,
+                state_head_sha=old_sha,
+                checkpoint_schema=schema,
+            ),
+            receipt,
+        )
+        for field in (
+            "observation_count", "observed_at", "last_observation", "generation_inputs",
+            "attempts_consumed", "attempts_by_id", "detail_queue_cursor", "detail_records",
+            "request_reservation", "lease", "fencing_token", "output_artifact", "output_digests",
+        ):
+            self.assertEqual(checkpoint[field], prior[field], field)
+        self.assertEqual(current_index["detail_retry_state"], prior_retry_state)
+        self.assertEqual(result["processor_run_id"], "888-2")
+        self.assertEqual(result["processor_artifact_run_id"], "888")
+        self.assertEqual(
+            receipt["state_changes"],
+            sorted([
+                f"sources/data_go_kr/generations/{first['generation_id']}.json#/checkpoint_sha256",
+                f"sources/data_go_kr/generations/{first['generation_id']}.json#/last_heartbeat_at",
+                f"sources/data_go_kr/index.json#/generations/{first['generation_id']}/updated_at",
+            ]),
+        )
+        self.assertFalse((output_dir / "composed-candidate.registry.json").exists())
+
+        changed_budget = copy.deepcopy(checkpoint)
+        changed_budget["attempts_consumed"] += 1
+        MODULE.seal_checkpoint(changed_budget)
+        with self.assertRaisesRegex(ValueError, "replay_checkpoint_immutable_field_changed"):
+            MODULE.build_replay_persistence_receipt(
+                prior_checkpoint=prior,
+                current_checkpoint=changed_budget,
+                prior_index=prior_index,
+                current_index=current_index,
+                result=result,
+                state_head_sha=old_sha,
+                checkpoint_schema=schema,
+            )
+        changed_index = copy.deepcopy(current_index)
+        changed_index["detail_queue_cursor"] += 1
+        with self.assertRaisesRegex(ValueError, "replay_generation_index_nonadmission_change"):
+            MODULE.build_replay_persistence_receipt(
+                prior_checkpoint=prior,
+                current_checkpoint=checkpoint,
+                prior_index=prior_index,
+                current_index=changed_index,
+                result=result,
+                state_head_sha=old_sha,
+                checkpoint_schema=schema,
+            )
+        changed_retry_index = copy.deepcopy(current_index)
+        changed_retry_index["detail_retry_state"]["3"]["attempts"] += 1
+        with self.assertRaisesRegex(ValueError, "replay_generation_index_nonadmission_change"):
+            MODULE.build_replay_persistence_receipt(
+                prior_checkpoint=prior,
+                current_checkpoint=checkpoint,
+                prior_index=prior_index,
+                current_index=changed_retry_index,
+                result=result,
+                state_head_sha=old_sha,
+                checkpoint_schema=schema,
+            )
+        changed_link_metadata = copy.deepcopy(checkpoint)
+        changed_url = "https://openapi.airport.co.kr/changed"
+        changed_detail = next(row for row in changed_link_metadata["detail_records"] if row["id"] == "3")
+        changed_detail["link_metadata"]["resolver"]["resolved_url"] = changed_url
+        changed_detail["link_metadata"]["resolver"]["resolved_url_sha256"] = MODULE.sha256_bytes(
+            changed_url.encode("utf-8")
+        )
+        MODULE.seal_checkpoint(changed_link_metadata)
+        with self.assertRaisesRegex(ValueError, "replay_checkpoint_immutable_field_changed"):
+            MODULE.build_replay_persistence_receipt(
+                prior_checkpoint=prior,
+                current_checkpoint=changed_link_metadata,
+                prior_index=prior_index,
+                current_index=current_index,
+                result=result,
+                state_head_sha=old_sha,
+                checkpoint_schema=schema,
+            )
+        malformed_subject_index = copy.deepcopy(prior_index)
+        malformed_retry = malformed_subject_index["detail_retry_state"].pop("3")
+        malformed_subject_index["detail_retry_state"]["15056854"] = malformed_retry
+        malformed_subject_path = self.root / "malformed-subject-index.json"
+        malformed_subject_path.write_text(json.dumps(malformed_subject_index), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "corrupt_detail_retry_state"):
+            MODULE.source_retry_state(malformed_subject_path)
+        wrong_attempt = copy.deepcopy(result)
+        wrong_attempt["processor_run_id"] = "889-1"
+        with self.assertRaisesRegex(ValueError, "replay_persistence_receipt_binding_mismatch"):
+            MODULE.verify_replay_persistence_receipt(
+                receipt,
+                prior_checkpoint=prior,
+                current_checkpoint=checkpoint,
+                prior_index=prior_index,
+                current_index=current_index,
+                result=wrong_attempt,
+                state_head_sha=old_sha,
+                checkpoint_schema=schema,
+            )
+        forged_receipt = copy.deepcopy(receipt)
+        forged_receipt["last_heartbeat_at"] = prior["last_heartbeat_at"]
+        with self.assertRaisesRegex(ValueError, "replay_persistence_receipt_digest_invalid"):
+            MODULE.verify_replay_persistence_receipt(
+                forged_receipt,
+                prior_checkpoint=prior,
+                current_checkpoint=checkpoint,
+                prior_index=prior_index,
+                current_index=current_index,
+                result=result,
+                state_head_sha=old_sha,
+                checkpoint_schema=schema,
+            )
+        prior_no_change = copy.deepcopy(prior)
+        prior_no_change["status"] = "no-change"
+        MODULE.seal_checkpoint(prior_no_change)
+        current_no_change = copy.deepcopy(checkpoint)
+        current_no_change["status"] = "no-change"
+        MODULE.seal_checkpoint(current_no_change)
+        prior_no_change_index = copy.deepcopy(prior_index)
+        current_no_change_index = copy.deepcopy(current_index)
+        for value in (prior_no_change_index, current_no_change_index):
+            row = next(item for item in value["generations"] if item["generation_id"] == first["generation_id"])
+            row["status"] = "no-change"
+        no_change_receipt = MODULE.build_replay_persistence_receipt(
+            prior_checkpoint=prior_no_change,
+            current_checkpoint=current_no_change,
+            prior_index=prior_no_change_index,
+            current_index=current_no_change_index,
+            result=result,
+            state_head_sha=old_sha,
+            checkpoint_schema=schema,
+        )
+        self.assertEqual(no_change_receipt["terminal_status"], "no-change")
 
     def test_successful_observation_replay_requires_real_valid_producer_timestamp(self) -> None:
         code, checkpoint = self.invoke()
