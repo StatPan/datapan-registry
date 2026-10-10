@@ -15,7 +15,10 @@
       "role": "source_catalog_snapshot",
       "root": "repository",
       "scope_id": "data-go-kr.api-catalog",
-      "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+      "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+      "subject": {
+        "source_revision": "2693e4de28e601555b998a457816f2ad18321699"
+      }
     },
     {
       "artifact_type": "source_profile",

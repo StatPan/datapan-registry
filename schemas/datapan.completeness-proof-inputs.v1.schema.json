@@ -86,7 +86,26 @@
             "stage": {"enum": ["source", "processor", "promotion", "health", "publisher", "acknowledgement"]}
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "role": {"const": "source_catalog_snapshot"},
+              "root": {"const": "repository"}
+            }
+          },
+          "then": {
+            "required": ["subject"],
+            "properties": {
+              "subject": {
+                "required": ["source_revision"],
+                "properties": {"source_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"}}
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

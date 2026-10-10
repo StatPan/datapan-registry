@@ -2143,10 +2143,16 @@ def validate_current_catalog_subject(
         current_sha = sha256_file(path)
         if (current_bytes, current_sha) != (item["bytes"], item["sha256"]):
             raise ValueError("current materialized registry differs from its registered inventory input")
-        main_sha = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode("ascii").strip()
-        main_artifact, manifest_sha = source_lfs_binding(root, main_sha)
+        source_revision = item.get("subject", {}).get("source_revision")
+        main_sha = assert_main_ancestor(root, source_revision, "pinned current catalog source revision")
+        main_artifact, manifest_sha = source_lfs_binding(root, source_revision)
         if (main_artifact.get("sha256"), main_artifact.get("bytes")) != (current_sha, current_bytes):
-            raise ValueError("current registry inventory differs from trusted origin/main manifest and LFS pointer")
+            raise ValueError("current registry inventory differs from its pinned main manifest and LFS pointer")
+        catalog_binding_witness = {
+            "source_revision": source_revision,
+            "release_manifest_sha256": manifest_sha,
+            "main_ancestry_verified": True,
+        }
         evidence = [artifact(input_path(item), path.read_bytes())]
     else:
         main_sha = candidate_context["baseline_main_sha"]
@@ -2163,7 +2169,9 @@ def validate_current_catalog_subject(
         evidence = [artifact(f"git-lfs-pointer:{main_sha}:{inventory['path']}", pointer_raw)]
     return {
         "path": item["path"], "bytes": current_bytes, "sha256": current_sha,
-        "release_manifest_sha256": manifest_sha, "main_ancestry_checked_tip": main_sha,
+        "release_manifest_sha256": None if candidate_context is None else manifest_sha,
+        "catalog_binding_witness": catalog_binding_witness if candidate_context is None else None,
+        "current_release_applicable": False,
         "evidence": evidence,
     }
 
@@ -5823,6 +5831,8 @@ def scope_facets(
                             "missing_stages": publication_missing,
                             "current_release_manifest_sha256": release_manifest_sha,
                             "current_release_subject_applicable": same_release,
+                            "catalog_binding_witness": current_registry.get("catalog_binding_witness") if current_registry else None,
+                            "current_release_applicable": current_registry.get("current_release_applicable", False) if current_registry else False,
                             "payload_equivalent_to_current_registry": (
                                 bool(current_registry)
                                 and subject["registry_sha256"] == current_registry["sha256"]
@@ -5856,6 +5866,8 @@ def scope_facets(
             processor = pipeline_evidence["processor"]
             promotion = pipeline_evidence["promotion"]
             health = pipeline_evidence["health"]
+            catalog_binding_witness = pipeline_evidence["current_registry"].get("catalog_binding_witness")
+            current_release_applicable = pipeline_evidence["current_registry"].get("current_release_applicable", False)
             facets.append({
                 "facet_id": "source_observation",
                 "state": "historical",
@@ -5909,6 +5921,8 @@ def scope_facets(
                     "health_main_payload_matches_current": health["health_main_payload_matches_current"],
                     "health_main_release_manifest_matches_current": health["health_main_release_manifest_matches_current"],
                     "health_main_matches_current_subject": health["health_main_matches_current_subject"],
+                    "catalog_binding_witness": catalog_binding_witness,
+                    "current_release_applicable": current_release_applicable,
                     "full_scope_fresh": processor["full_scope_fresh"],
                     "publication_allowed": processor["publication_allowed"],
                 },
@@ -5987,6 +6001,8 @@ def scope_facets(
                                     "missing_stages": pipeline_evidence.get("publication_missing_stages", []),
                                     "current_release_manifest_sha256": None if candidate_context is not None else current_release_manifest_sha,
                                 "current_release_subject_applicable": same_release,
+                                "catalog_binding_witness": catalog_binding_witness,
+                                "current_release_applicable": current_release_applicable,
                                 "payload_equivalent_to_current_registry": (
                                     readback_subject["registry_sha256"] == compared_registry["sha256"]
                                     and readback_subject["registry_bytes"] == compared_registry["bytes"]
@@ -6011,6 +6027,8 @@ def scope_facets(
                             "subject": publication_subject,
                             "current_release_manifest_sha256": None if candidate_context is not None else current_release_manifest_sha,
                             "current_release_subject_applicable": same_release,
+                            "catalog_binding_witness": catalog_binding_witness,
+                            "current_release_applicable": current_release_applicable,
                             "payload_equivalent_to_current_registry": (
                                 publication_subject["registry_sha256"] == compared_registry["sha256"]
                                 and publication_subject["registry_bytes"] == compared_registry["bytes"]

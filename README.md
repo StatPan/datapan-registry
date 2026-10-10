@@ -134,6 +134,11 @@ identities, denominator/import evidence, and any independently validated
 pipeline or publication evidence. A local candidate inventory is context only;
 missing authority or stale evidence stays unknown or blocked, and historical
 publication does not imply that the current release was published or read back.
+The repository catalog snapshot pins an exact 40-character `subject.source_revision`
+that must remain in trusted `origin/main` history and whose committed LFS pointer
+must match the indexed catalog bytes. Its `catalog_binding_witness` establishes
+catalog identity only; it does not establish current-release applicability or
+renew publication, review, or runtime authority.
 
 Review the generated [scope report](reports/completeness-proof-rollup.md),
 [machine-readable rollup](reports/completeness-proof-rollup.json), and
