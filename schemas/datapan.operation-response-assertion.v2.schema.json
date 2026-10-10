@@ -42,16 +42,36 @@
             "HTTP"
           ]
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"source_id": {"const": "data_go_kr"}}},
+          "then": {"properties": {"provider": {"const": "data.go.kr"}}}
+        },
+        {
+          "if": {"properties": {"source_id": {"const": "ecos"}}},
+          "then": {"properties": {"provider": {"const": "ECOS"}}}
+        },
+        {
+          "if": {"properties": {"source_id": {"const": "kosis"}}},
+          "then": {"properties": {"provider": {"const": "KOSIS"}}}
+        },
+        {
+          "if": {"properties": {"source_id": {"const": "open_assembly"}}},
+          "then": {"properties": {"provider": {"const": "open.assembly.go.kr"}}}
+        },
+        {
+          "if": {"properties": {"source_id": {"const": "seoul_open_data"}}},
+          "then": {"properties": {"provider": {"const": "data.seoul.go.kr"}}}
+        }
+      ]
     },
     "operation_identity": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "operation_id",
-        "dataset_id",
-        "operation_name",
-        "upstream_operation_key"
+        "operation_name"
       ],
       "properties": {
         "operation_id": {
@@ -1142,6 +1162,45 @@
               },
               "minContains": 1
             }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source_binding": {
+            "properties": {
+              "source_id": {
+                "enum": [
+                  "ecos",
+                  "kosis",
+                  "open_assembly",
+                  "seoul_open_data"
+                ]
+              }
+            },
+            "required": ["source_id"]
+          }
+        },
+        "required": ["source_binding"]
+      },
+      "then": {
+        "properties": {
+          "operation_identity": {
+            "not": {
+              "anyOf": [
+                {"required": ["dataset_id"]},
+                {"required": ["upstream_operation_key"]}
+              ]
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "operation_identity": {
+            "required": ["dataset_id", "upstream_operation_key"]
           }
         }
       }

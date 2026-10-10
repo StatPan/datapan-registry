@@ -44,6 +44,16 @@ DENOMINATOR_PATHS = {
     "open_assembly": ROOT / "reports/open-assembly/operation-denominator.json",
     "seoul_open_data": ROOT / "reports/seoul-open-data/operation-denominator.json",
 }
+PARTIAL_RESPONSE_ASSERTION_SOURCES = {
+    "ecos": "ECOS",
+    "kosis": "KOSIS",
+    "open_assembly": "open.assembly.go.kr",
+    "seoul_open_data": "data.seoul.go.kr",
+}
+COMMON_RESPONSE_ASSERTION_IDENTITY_FIELDS = ("operation_id", "operation_name")
+FULL_RESPONSE_ASSERTION_IDENTITY_FIELDS = (
+    "operation_id", "dataset_id", "operation_name", "upstream_operation_key",
+)
 SHARD_SIZE = 256
 QUOTA_SCOPE_PREFIX = b"datapan.quota-scope.v1\0"
 _EVIDENCE_CACHE: dict[Path, tuple[bytes, Any, str]] = {}
@@ -758,6 +768,57 @@ def operation_policy_identity(source_id: str, provider: str, operation: dict[str
     }
     fail(all(isinstance(value, str) and value for value in identity.values()), "reviewed policy operation identity is incomplete")
     return identity
+
+
+def response_assertion_identity_projection(
+    source_binding: dict[str, Any], operation_identity: dict[str, Any],
+) -> dict[str, str]:
+    """Project an assertion identity using only the selected source's known identifiers."""
+    source_id = source_binding.get("source_id")
+    provider = source_binding.get("provider")
+    if source_id in PARTIAL_RESPONSE_ASSERTION_SOURCES:
+        fail(
+            provider == PARTIAL_RESPONSE_ASSERTION_SOURCES[source_id],
+            "partial response assertion source/provider binding is unsupported",
+        )
+        fields = COMMON_RESPONSE_ASSERTION_IDENTITY_FIELDS
+        fail(
+            not any(field in operation_identity for field in ("dataset_id", "upstream_operation_key")),
+            "partial response assertion identity must not invent dataset or upstream operation IDs",
+        )
+    else:
+        fields = FULL_RESPONSE_ASSERTION_IDENTITY_FIELDS
+    fail(
+        all(isinstance(operation_identity.get(field), str) and operation_identity[field] for field in fields),
+        "response assertion operation identity is incomplete for its source scope",
+    )
+    return {field: operation_identity[field] for field in fields}
+
+
+def validate_response_assertion_identity_binding(
+    assertion_artifact: dict[str, Any],
+    source_binding: dict[str, Any],
+    operation_identity: dict[str, Any],
+) -> dict[str, str]:
+    expected_source_binding = {
+        "source_id": source_binding.get("source_id"),
+        "provider": source_binding.get("provider"),
+        "protocol": operation_identity.get("protocol"),
+    }
+    fail(
+        all(isinstance(value, str) and value for value in expected_source_binding.values()),
+        "selected operation source binding is incomplete",
+    )
+    fail(
+        assertion_artifact.get("source_binding") == expected_source_binding,
+        "response assertion source binding differs from its selected operation",
+    )
+    expected_identity = response_assertion_identity_projection(source_binding, operation_identity)
+    fail(
+        assertion_artifact.get("operation_identity") == expected_identity,
+        "response assertion operation identity differs from its selected operation",
+    )
+    return expected_identity
 
 
 def _operation_policy_source_refs(value: Any, document_ref: dict[str, Any]) -> list[dict[str, Any]]:
@@ -3292,13 +3353,14 @@ def _validate_complete_contract_evidence(
         assertion_schema = load_json(root / RESPONSE_ASSERTION_SCHEMA_PATH.relative_to(ROOT))
         jsonschema.Draft202012Validator(assertion_schema, format_checker=jsonschema.FormatChecker()).validate(assertion_document)
         expected_identity = record["operation_identity"]
-        fail(
-            assertion_document.get("operation_identity") == {
-                key: expected_identity[key]
-                for key in ("operation_id", "dataset_id", "operation_name", "upstream_operation_key")
-            },
-            "response assertion operation identity differs from its selected operation",
+        expected_assertion_identity = validate_response_assertion_identity_binding(
+            assertion_document, record["source_binding"], expected_identity,
         )
+        expected_source_binding = {
+            "source_id": record["source_binding"]["source_id"],
+            "provider": record["source_binding"]["provider"],
+            "protocol": expected_identity["protocol"],
+        }
         source_document_refs = {
             (ref["artifact_path"], ref["sha256"])
             for ref, _target in ref_targets
@@ -3309,7 +3371,17 @@ def _validate_complete_contract_evidence(
         source_document = load_json(root / source_document_path)
         source_document_ref = artifact_ref(root / source_document_path, root)
         fail(source_document_ref["sha256"] == source_document_sha, "operation-document artifact digest changed after plan binding")
-        fail(source_document.get("identity", {}).get("operation_id") == expected_identity["operation_id"], "operation-document identity differs from its selected operation")
+        source_document_identity = source_document.get("identity", {})
+        fail(
+            {key: source_document_identity.get(key) for key in expected_source_binding}
+            == expected_source_binding,
+            "operation-document source binding differs from its selected operation",
+        )
+        fail(
+            {key: source_document_identity.get(key) for key in expected_assertion_identity}
+            == expected_assertion_identity,
+            "operation-document identity differs from its selected operation",
+        )
         fail(assertion_document.get("document_evidence") == source_document_ref, "response assertion document binding differs from the selected operation")
         _validate_assertion_v2_fact_binding(assertion_document, source_document, source_document_ref)
         if observation_only:

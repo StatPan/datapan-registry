@@ -106,6 +106,172 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
             self.assertEqual(ids, sorted(ids))
             self.assertTrue(all("source_artifacts" not in record["source_binding"] for record in shard["records"]))
 
+    def test_response_assertion_identity_is_source_scoped_and_exact(self):
+        assertion_schema = json.loads(
+            (ROOT / "schemas/datapan.operation-response-assertion.v2.schema.json").read_text(encoding="utf-8")
+        )
+        assertion_validator = jsonschema.Draft202012Validator(
+            assertion_schema, format_checker=jsonschema.FormatChecker(),
+        )
+        providers = {
+            "ecos": "ECOS",
+            "kosis": "KOSIS",
+            "open_assembly": "open.assembly.go.kr",
+            "seoul_open_data": "data.seoul.go.kr",
+        }
+
+        def assertion(source_id, provider, operation_identity):
+            return {
+                "schema_version": "datapan.operation-response-assertion.v2",
+                "artifact_kind": "operation_response_assertion",
+                "source_binding": {"source_id": source_id, "provider": provider, "protocol": "REST"},
+                "operation_identity": operation_identity,
+                "document_evidence": {
+                    "path": "reports/operation-document-evidence/source-scopes/fixture.json",
+                    "sha256": "a" * 64,
+                    "bytes": 1,
+                },
+                "review": {
+                    "review_ref": "https://example.invalid/review/partial-identity",
+                    "reviewed_by": "Registry source fixture",
+                    "rationale": "Binds only identifiers present in this source scope.",
+                },
+                "assertion": {"mode": "observation_only"},
+            }
+
+        for source_id, provider in providers.items():
+            with self.subTest(source_id=source_id):
+                source_binding = {"source_id": source_id, "provider": provider}
+                selected_identity = {
+                    "operation_id": f"{source_id}-registered-operation",
+                    "operation_name": f"{provider} reviewed operation",
+                    "protocol": "REST",
+                }
+                value = assertion(
+                    source_id,
+                    provider,
+                    {
+                        "operation_id": selected_identity["operation_id"],
+                        "operation_name": selected_identity["operation_name"],
+                    },
+                )
+                assertion_validator.validate(value)
+                self.assertEqual(
+                    self.compiler.validate_response_assertion_identity_binding(
+                        value, source_binding, selected_identity,
+                    ),
+                    value["operation_identity"],
+                )
+
+                for unsupported_field in ("dataset_id", "upstream_operation_key"):
+                    malformed = copy.deepcopy(value)
+                    malformed["operation_identity"][unsupported_field] = "invented-value"
+                    with self.subTest(source_id=source_id, unsupported_field=unsupported_field):
+                        with self.assertRaises(jsonschema.ValidationError):
+                            assertion_validator.validate(malformed)
+                        with self.assertRaisesRegex(self.compiler.PlanError, "must not invent"):
+                            self.compiler.validate_response_assertion_identity_binding(
+                                malformed,
+                                source_binding,
+                                {**selected_identity, unsupported_field: "invented-value"},
+                            )
+
+                wrong_provider = copy.deepcopy(value)
+                wrong_provider["source_binding"]["provider"] = "different-provider"
+                with self.assertRaises(jsonschema.ValidationError):
+                    assertion_validator.validate(wrong_provider)
+                with self.assertRaisesRegex(self.compiler.PlanError, "source binding differs"):
+                    self.compiler.validate_response_assertion_identity_binding(
+                        wrong_provider, source_binding, selected_identity,
+                    )
+
+                other_source_id, other_provider = next(
+                    (other_id, other_provider)
+                    for other_id, other_provider in providers.items()
+                    if other_id != source_id
+                )
+                wrong_source = copy.deepcopy(value)
+                wrong_source["source_binding"]["source_id"] = other_source_id
+                wrong_source["source_binding"]["provider"] = other_provider
+                with self.assertRaisesRegex(self.compiler.PlanError, "source binding differs"):
+                    self.compiler.validate_response_assertion_identity_binding(
+                        wrong_source, source_binding, selected_identity,
+                    )
+
+                case_mismatched_source = copy.deepcopy(value)
+                case_mismatched_source["source_binding"]["source_id"] = source_id.upper()
+                with self.assertRaisesRegex(self.compiler.PlanError, "source binding differs"):
+                    self.compiler.validate_response_assertion_identity_binding(
+                        case_mismatched_source, source_binding, selected_identity,
+                    )
+
+                wrong_operation = copy.deepcopy(value)
+                with self.assertRaisesRegex(self.compiler.PlanError, "operation identity differs"):
+                    self.compiler.validate_response_assertion_identity_binding(
+                        wrong_operation,
+                        source_binding,
+                        {**selected_identity, "operation_id": selected_identity["operation_id"] + "-other"},
+                    )
+
+        data_go_identity = {
+            "operation_id": "data-go-registered-operation",
+            "dataset_id": "dataset-123",
+            "operation_name": "Reviewed data.go.kr operation",
+            "upstream_operation_key": "operation-456",
+            "protocol": "REST",
+        }
+        data_go_binding = {"source_id": "data_go_kr", "provider": "data.go.kr"}
+        data_go_assertion = assertion(
+            "data_go_kr",
+            "data.go.kr",
+            {key: data_go_identity[key] for key in (
+                "operation_id", "dataset_id", "operation_name", "upstream_operation_key",
+            )},
+        )
+        assertion_validator.validate(data_go_assertion)
+        self.assertEqual(
+            self.compiler.validate_response_assertion_identity_binding(
+                data_go_assertion, data_go_binding, data_go_identity,
+            ),
+            data_go_assertion["operation_identity"],
+        )
+
+        invalid_data_go = copy.deepcopy(data_go_assertion)
+        for unsupported_required_field in ("dataset_id", "upstream_operation_key"):
+            malformed_data_go = copy.deepcopy(invalid_data_go)
+            malformed_data_go["operation_identity"].pop(unsupported_required_field)
+            with self.subTest(unsupported_required_field=unsupported_required_field):
+                with self.assertRaises(jsonschema.ValidationError):
+                    assertion_validator.validate(malformed_data_go)
+
+        wrong_data_go_provider = copy.deepcopy(data_go_assertion)
+        wrong_data_go_provider["source_binding"]["provider"] = "different-provider"
+        with self.assertRaises(jsonschema.ValidationError):
+            assertion_validator.validate(wrong_data_go_provider)
+
+        wrong_protocol = copy.deepcopy(value)
+        wrong_protocol["source_binding"]["protocol"] = "SOAP"
+        with self.assertRaisesRegex(self.compiler.PlanError, "source binding differs"):
+            self.compiler.validate_response_assertion_identity_binding(
+                wrong_protocol,
+                source_binding,
+                selected_identity,
+            )
+
+        unknown_partial = assertion(
+            "new_source",
+            "New Provider",
+            {"operation_id": "new-source-operation", "operation_name": "Unknown source operation"},
+        )
+        with self.assertRaises(jsonschema.ValidationError):
+            assertion_validator.validate(unknown_partial)
+        with self.assertRaisesRegex(self.compiler.PlanError, "incomplete for its source scope"):
+            self.compiler.validate_response_assertion_identity_binding(
+                unknown_partial,
+                {"source_id": "new_source", "provider": "New Provider"},
+                {"operation_id": "new-source-operation", "operation_name": "Unknown source operation", "protocol": "REST"},
+            )
+
     def test_all_owned_schema_local_references_resolve(self):
         schema_paths = sorted((ROOT / "schemas").glob("datapan.*.schema.json"))
         self.assertGreater(len(schema_paths), 0)
@@ -388,7 +554,7 @@ class GenerateOperationObservationPlanTests(unittest.TestCase):
         assertion_schema = ROOT / "schemas/datapan.operation-response-assertion.v2.schema.json"
         self.assertEqual(
             self.compiler.sha256(assertion_schema.read_bytes()),
-            "78878ab22183e419e58d2a15b0a6a32bc585a3822cfa5a3a4bfd9f23d893055b",
+            "bba64ddd581b41b77f1b3ae2de36f66261d25d7606e1c13c8146e5030787172d",
         )
         evidence_v2_schema = ROOT / "schemas/datapan.operation-document-evidence.v2.schema.json"
         self.assertEqual(
