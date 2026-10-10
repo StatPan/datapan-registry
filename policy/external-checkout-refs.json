@@ -2,11 +2,11 @@
   "schema_version": "datapan.external-checkout-refs.v1",
   "repository": "StatPan/datapan-cli",
   "ref_kind": "commit_sha",
-  "ref": "acf060e71e2329b6a04ad4ab0abf669fbbfe9dac",
+  "ref": "d4226321c1a4c6c7aa091753dc6f03f4ab04cddd",
   "selection": {
     "basis": "reviewed_merged_pull_request_commit",
-    "source_pull_request": "StatPan/datapan-cli#193",
-    "notes": "This immutable CLI commit is the merge commit for merged PR #193 and is an ancestor of CLI main. Its operation-response assertion v2 schema matches the Registry schema byte-for-byte, and its observation-only wire validation preserves exact plan identity binding, including optional source value types. All Registry CLI checkout sites move together; older receipts remain bound to their recorded CLI source and are not reinterpreted."
+    "source_pull_request": "StatPan/datapan-cli#195",
+    "notes": "This immutable CLI commit is the merge commit for merged PR #195 and is an ancestor of CLI main. It adds a source-qualified selector for Registry observation-plan shard ranges that overlap across source scopes. All Registry CLI checkout sites move together; older receipts remain bound to their recorded CLI source and are not reinterpreted."
   },
   "inventory_expectations": {
     "checkout_count": 10,
