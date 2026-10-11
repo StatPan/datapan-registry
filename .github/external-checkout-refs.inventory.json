@@ -123,7 +123,7 @@
       "checkouts": [
         {
           "job": "verify",
-          "step": 9,
+          "step": 10,
           "action": "actions/checkout@v7",
           "repository": "StatPan/datapan-cli",
           "ref": "acf060e71e2329b6a04ad4ab0abf669fbbfe9dac",
