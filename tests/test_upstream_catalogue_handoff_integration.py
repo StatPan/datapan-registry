@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+import copy
 import hashlib
 import importlib.util
 import io
@@ -501,6 +502,8 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         index_path = fixture.state_dir / "sources/data_go_kr/index.json"
         before_index = json.loads(index_path.read_text(encoding="utf-8"))
         old_retry_state = json.loads(json.dumps(before_index["detail_retry_state"]))
+        old_admitted_rows = copy.deepcopy(before_index["collector_handoff"]["admitted_observations"])
+        self.assertEqual([row["producer_run_id"] for row in old_admitted_rows], ["601001"])
         self.assertTrue(old_retry_state)
 
         # A later scheduled observation has a distinct candidate generation but
@@ -532,8 +535,10 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         self.assertEqual(old_indexed["status"], "ready")
         self.assertEqual(new_indexed["status"], "enriching")
         admitted = final_index["collector_handoff"]["admitted_observations"]
-        self.assertEqual([item["producer_run_id"] for item in admitted], ["601002"])
-        self.assertEqual(admitted[0]["generation_id"], current["generation_id"])
+        self.assertEqual([item["producer_run_id"] for item in admitted], ["601001", "601002"])
+        self.assertEqual(admitted[0], old_admitted_rows[0])
+        self.assertEqual(admitted[1]["generation_id"], current["generation_id"])
+        self.assertEqual(current["last_observation"]["producer_run_id"], "601002")
 
     def test_legacy_floor_rerun_does_not_hide_an_unseen_producer_run(self):
         handoff = load_module(ROOT / "scripts/upstream_catalogue_handoff.py", f"handoff_floor_rerun_{id(self)}")
@@ -643,15 +648,36 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         })
         legacy_args.fixture_composer = None
         legacy_args.allow_fixture_composer = False
-        with mock.patch.object(processor, "generator_revision", return_value="a" * 64):
-            code, legacy = processor.process(
-                legacy_args,
-                fetcher=lambda *_: (_ for _ in ()).throw(TimeoutError("fixture retry")),
-                sleeper=lambda _delay: None,
-            )
+        legacy_source = subprocess.run(
+            ("git", "show", "e01af4e:scripts/process-upstream-catalogue-candidate.py"),
+            cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        )
+        self.assertEqual(legacy_source.returncode, 0, legacy_source.stderr.decode("utf-8", "replace"))
+        self.assertEqual(
+            hashlib.sha256(legacy_source.stdout).hexdigest(),
+            "418be4c660fc59beae4ad8fa3c04cab5385a6c174103ea2af268cb65c35915b2",
+        )
+        legacy_helper = subprocess.run(
+            ("git", "show", "e01af4e:scripts/generate-batch-link-detail-registry-patches.py"),
+            cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        )
+        self.assertEqual(legacy_helper.returncode, 0, legacy_helper.stderr.decode("utf-8", "replace"))
+        legacy_scripts = pathlib.Path(fixture.temp.name) / "pre-handoff-source" / "scripts"
+        legacy_scripts.mkdir(parents=True)
+        legacy_processor_path = legacy_scripts / "process-upstream-catalogue-candidate.py"
+        legacy_processor_path.write_bytes(legacy_source.stdout)
+        (legacy_scripts / "generate-batch-link-detail-registry-patches.py").write_bytes(legacy_helper.stdout)
+        legacy_processor = load_module(legacy_processor_path, f"pre_handoff_processor_{id(self)}")
+        code, legacy = legacy_processor.process(
+            legacy_args,
+            fetcher=lambda *_: (_ for _ in ()).throw(TimeoutError("fixture retry")),
+            sleeper=lambda _delay: None,
+            clock=lambda: legacy_processor.parse_timestamp(fixture.now),
+        )
         self.assertEqual(code, 0, legacy.get("outcome"))
         self.assertEqual(legacy["status"], "ready")
         self.assertEqual(legacy["outcome"]["detail_retry_count"], 1)
+        self.assertNotIn("cache_source_profile", legacy["generation_inputs"])
         legacy_generation = legacy["generation_id"]
         legacy_checkpoint = fixture.checkpoint_path(legacy).read_bytes()
         index_path = fixture.state_dir / "sources/data_go_kr/index.json"
@@ -1028,6 +1054,7 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
     def test_helper_bytes_change_generation_revision_and_identity(self):
         original_processor = ROOT / "scripts/process-upstream-catalogue-candidate.py"
         original_handoff = ROOT / "scripts/upstream_catalogue_handoff.py"
+        original_cache_source = ROOT / "scripts/upstream_catalogue_cache_source.py"
         original_snapshot_generator = ROOT / "scripts/generate-seoul-oa109-subject-snapshot.py"
         original_detail = ROOT / "scripts/generate-batch-link-detail-registry-patches.py"
         original_declaration_helper = ROOT / "scripts/seoul_oa109_operation_declaration.py"
@@ -1039,6 +1066,7 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             scripts.mkdir()
             copied_processor = scripts / original_processor.name
             copied_handoff = scripts / original_handoff.name
+            copied_cache_source = scripts / original_cache_source.name
             copied_snapshot_generator = scripts / original_snapshot_generator.name
             copied_declaration_helper = scripts / original_declaration_helper.name
             copied_declaration = temporary_root / "contracts/provider-operation-declarations" / original_declaration.name
@@ -1046,14 +1074,15 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             copied_declaration.parent.mkdir(parents=True)
             shutil.copyfile(original_processor, copied_processor)
             shutil.copyfile(original_handoff, copied_handoff)
+            shutil.copyfile(original_cache_source, copied_cache_source)
             shutil.copyfile(original_snapshot_generator, copied_snapshot_generator)
             shutil.copyfile(original_declaration_helper, copied_declaration_helper)
             shutil.copyfile(original_declaration, copied_declaration)
             shutil.copyfile(original_snapshot, copied_snapshot)
             shutil.copyfile(original_detail, scripts / original_detail.name)
-            module_name = "upstream_catalogue_handoff"
+            module_names = ("upstream_catalogue_handoff", "upstream_catalogue_cache_source")
             missing = object()
-            previous_helper = sys.modules.get(module_name, missing)
+            previous_modules = {name: sys.modules.get(name, missing) for name in module_names}
             module = load_module(copied_processor, f"processor_revision_{id(self)}")
             # Importing the copied processor temporarily places its directory
             # on sys.path and may load the copied helper under its production
@@ -1062,15 +1091,17 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             copied_path = str(scripts.resolve())
             while copied_path in sys.path:
                 sys.path.remove(copied_path)
-            if previous_helper is missing:
-                sys.modules.pop(module_name, None)
-            else:
-                sys.modules[module_name] = previous_helper
+            for module_name, previous_module in previous_modules.items():
+                if previous_module is missing:
+                    sys.modules.pop(module_name, None)
+                else:
+                    sys.modules[module_name] = previous_module
 
             def expected_revision() -> str:
                 payload = module.canonical_json({
                     "processor_script_sha256": hashlib.sha256(copied_processor.read_bytes()).hexdigest(),
                     "collector_handoff_helper_sha256": hashlib.sha256(copied_handoff.read_bytes()).hexdigest(),
+                    "cache_source_helper_sha256": hashlib.sha256(copied_cache_source.read_bytes()).hexdigest(),
                     "seoul_operation_declaration_helper_sha256": hashlib.sha256(copied_declaration_helper.read_bytes()).hexdigest(),
                     "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256(copied_snapshot_generator.read_bytes()).hexdigest(),
                     "seoul_operation_declaration_sha256": hashlib.sha256(copied_declaration.read_bytes()).hexdigest(),
@@ -1095,6 +1126,16 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             self.assertNotEqual(first_revision, second_revision)
             self.assertNotEqual(first_generation, second_generation)
             self.assertEqual(second_inputs["generator_revision"], expected_revision())
+
+            copied_cache_source.write_bytes(copied_cache_source.read_bytes() + b"\n# cache source epoch fixture\n")
+            third_revision = module.generator_revision()
+            third_generation, third_inputs = module.generation_identity(
+                "data_go_kr", "fixture:data_go_kr", "b" * 64, "c" * 64,
+                None, "d" * 64, "e" * 64,
+            )
+            self.assertNotEqual(second_revision, third_revision)
+            self.assertNotEqual(second_generation, third_generation)
+            self.assertEqual(third_inputs["generator_revision"], expected_revision())
 
 
 def _support_link(support):

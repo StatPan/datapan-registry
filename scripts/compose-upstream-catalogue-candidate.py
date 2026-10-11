@@ -353,6 +353,14 @@ def operations_digest(operations: Any) -> str:
     return digest_json(operations)
 
 
+def _require_authenticated_seoul_documents(
+    historical_subject_snapshot: Mapping[str, Any] | None,
+    seoul_declaration_document: Mapping[str, Any] | None,
+) -> None:
+    if historical_subject_snapshot is not None and seoul_declaration_document is None:
+        raise CompositionError("authenticated_replay_declaration_document_missing")
+
+
 def validate_enrichment_evidence(
     evidence: Any,
     *,
@@ -362,6 +370,8 @@ def validate_enrichment_evidence(
     provider_index_sha256: str,
     hosts: set[str],
     registry_schema: dict[str, Any],
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+    historical_subject_snapshot: Mapping[str, Any] | None = None,
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Validate the envelope globally and bind each row to original inputs.
 
@@ -370,6 +380,9 @@ def validate_enrichment_evidence(
     """
     if evidence is None:
         return {}
+    _require_authenticated_seoul_documents(
+        historical_subject_snapshot, seoul_declaration_document,
+    )
     if not isinstance(evidence, dict) or evidence.get("schema_version") != "datapan.catalogue-enrichment-evidence.v1":
         raise CompositionError("enrichment evidence must use datapan.catalogue-enrichment-evidence.v1")
     if evidence.get("original_candidate_sha256") != candidate_sha256:
@@ -385,6 +398,11 @@ def validate_enrichment_evidence(
     records = evidence.get("records")
     if not isinstance(records, list):
         raise CompositionError("enrichment evidence records must be an array")
+    declaration = (
+        SEOUL_OPERATION_DECLARATION.validate_declaration_document(seoul_declaration_document)
+        if seoul_declaration_document is not None
+        else SEOUL_OPERATION_DECLARATION.DECLARATION
+    )
     by_key: dict[tuple[str, str], dict[str, Any]] = {}
     for index, record in enumerate(records):
         if not isinstance(record, dict) or not isinstance(record.get("api_key"), dict):
@@ -454,26 +472,41 @@ def validate_enrichment_evidence(
         ]
         declaration_subject = (
             str(candidate_row.get("id"))
-            == SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]
+            == declaration["subject"]["portal_dataset_id"]
         )
         if declaration_subject or declared_operations or declaration_provenance is not None:
             try:
                 if not declaration_subject or len(declared_operations) != 1 or declaration_provenance is None:
                     raise SEOUL_OPERATION_DECLARATION.DeclarationError("declaration_subject_or_operation_mismatch")
-                SEOUL_OPERATION_DECLARATION.validate_enriched_record(candidate_row, record)
-                SEOUL_OPERATION_DECLARATION.validate_declared_operation(candidate_row, declared_operations[0])
+                SEOUL_OPERATION_DECLARATION.validate_enriched_record(
+                    candidate_row, record,
+                    authenticated_snapshot=historical_subject_snapshot,
+                    declaration_document=declaration,
+                )
+                SEOUL_OPERATION_DECLARATION.validate_declared_operation(
+                    candidate_row, declared_operations[0],
+                    authenticated_snapshot=historical_subject_snapshot,
+                    declaration_document=declaration,
+                )
                 LINK_DETAIL_HELPERS.validate_link_metadata(
                     declaration_provenance.get("page_resolver"), key[1], hosts,
                 )
             except (AttributeError, KeyError, TypeError, ValueError):
                 binding_errors.append("enrichment_pinned_declaration_binding_mismatch")
-        errors = [*api_provenance_errors(evidence_row, allow_missing_link_guide=True)]
+        errors = [*api_provenance_errors(
+            evidence_row,
+            allow_missing_link_guide=True,
+            seoul_declaration_document=declaration,
+            historical_subject_snapshot=historical_subject_snapshot,
+        )]
         op_errors, _ = _validate_operation_set(
             evidence_row,
             hosts,
             source_page_url=expected_detail,
             observed_guide_url_sha256=observed_guide_digest,
             observed_guide_url=observed_guide,
+            seoul_declaration_document=declaration,
+            historical_subject_snapshot=historical_subject_snapshot,
         )
         errors.extend(op_errors)
         try:
@@ -493,8 +526,13 @@ def validate_worker_outcomes(
     candidate_by_key: dict[tuple[str, str], dict[str, Any]],
     successful_keys: set[tuple[str, str]],
     registered_adapter_hosts: set[str],
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+    historical_subject_snapshot: Mapping[str, Any] | None = None,
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Validate unresolved worker rows against the immutable candidate rows."""
+    _require_authenticated_seoul_documents(
+        historical_subject_snapshot, seoul_declaration_document,
+    )
     if evidence is None or "worker_outcomes" not in evidence:
         return {}
     outcomes = evidence.get("worker_outcomes")
@@ -546,6 +584,7 @@ def validate_worker_outcomes(
             diagnostic = dict(diagnostic)
             diagnostic["contract_failure"] = validate_contract_failure(
                 diagnostic["contract_failure"], identity=key[1],
+                seoul_declaration_document=seoul_declaration_document,
             )
         if key in by_key:
             raise CompositionError(f"duplicate API identity {key[0]}:{key[1]} in worker outcomes")
@@ -587,7 +626,12 @@ def validate_worker_outcomes(
     return by_key
 
 
-def validate_contract_failure(value: Any, *, identity: str | None = None) -> dict[str, Any]:
+def validate_contract_failure(
+    value: Any,
+    *,
+    identity: str | None = None,
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     if (
         not isinstance(value, dict)
         or set(value) != {"version", "reason", "unresolved_requirements", "next_action"}
@@ -607,7 +651,12 @@ def validate_contract_failure(value: Any, *, identity: str | None = None) -> dic
     }
     if value != expected:
         raise CompositionError("worker outcome contract_failure is invalid")
-    subject_id = str(SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"])
+    declaration = (
+        SEOUL_OPERATION_DECLARATION.validate_declaration_document(seoul_declaration_document)
+        if seoul_declaration_document is not None
+        else SEOUL_OPERATION_DECLARATION.DECLARATION
+    )
+    subject_id = str(declaration["subject"]["portal_dataset_id"])
     if identity is not None and (
         value["reason"] == "no_reviewed_declaration" and identity == subject_id
         or value["reason"] in {"subject_binding_unproven", "declaration_evidence_rejected"}
@@ -617,7 +666,11 @@ def validate_contract_failure(value: Any, *, identity: str | None = None) -> dic
     return expected
 
 
-def worker_contract_projection(outcome: dict[str, Any]) -> dict[str, Any]:
+def worker_contract_projection(
+    outcome: dict[str, Any],
+    *,
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     diagnostic = outcome.get("failure_diagnostic")
     if (
         not isinstance(diagnostic, dict)
@@ -635,6 +688,7 @@ def worker_contract_projection(outcome: dict[str, Any]) -> dict[str, Any]:
         return result
     validated = validate_contract_failure(
         contract_failure, identity=str(outcome.get("api_key", {}).get("id") or ""),
+        seoul_declaration_document=seoul_declaration_document,
     )
     result.update({
         "contract_failure": validated,
@@ -683,12 +737,22 @@ def operation_provenance_errors(
     source_page_url: str | None = None,
     observed_guide_url_sha256: str | None = None,
     observed_guide_url: str | None = None,
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+    historical_subject_snapshot: Mapping[str, Any] | None = None,
 ) -> list[str]:
+    _require_authenticated_seoul_documents(
+        historical_subject_snapshot, seoul_declaration_document,
+    )
     errors: list[str] = []
     source, raw = operation_source(operation)
     system = source.get("system")
     endpoint = operation.get("endpoint")
     declared_operation = raw.get("operation_declaration_id") is not None
+    declaration = (
+        SEOUL_OPERATION_DECLARATION.validate_declaration_document(seoul_declaration_document)
+        if seoul_declaration_document is not None
+        else SEOUL_OPERATION_DECLARATION.DECLARATION
+    )
     if not isinstance(operation.get("name"), str) or not operation["name"].strip():
         errors.append("operation_name_missing")
     if not valid_http_url(endpoint):
@@ -701,7 +765,11 @@ def operation_provenance_errors(
         errors.append("operation_source_raw_missing")
     if raw.get("operation_declaration_id") is not None:
         try:
-            SEOUL_OPERATION_DECLARATION.validate_declared_operation(row, operation)
+            SEOUL_OPERATION_DECLARATION.validate_declared_operation(
+                row, operation,
+                authenticated_snapshot=historical_subject_snapshot,
+                declaration_document=declaration,
+            )
         except (AttributeError, KeyError, TypeError, ValueError):
             errors.append("operation_pinned_declaration_mismatch")
     try:
@@ -717,6 +785,8 @@ def operation_provenance_errors(
             SEOUL_OPERATION_DECLARATION.validate_historical_operation(
                 row, operation,
                 observed_guide_url=api_raw.get("guide_url") if isinstance(api_raw.get("guide_url"), str) else None,
+                authenticated_snapshot=historical_subject_snapshot,
+                declaration_document=declaration,
             )
             exact_historical_stored_operation = True
         except (AttributeError, KeyError, TypeError, ValueError):
@@ -770,7 +840,16 @@ def operation_provenance_errors(
     return sorted(set(errors))
 
 
-def api_provenance_errors(row: dict[str, Any], *, allow_missing_link_guide: bool = False) -> list[str]:
+def api_provenance_errors(
+    row: dict[str, Any],
+    *,
+    allow_missing_link_guide: bool = False,
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+    historical_subject_snapshot: Mapping[str, Any] | None = None,
+) -> list[str]:
+    _require_authenticated_seoul_documents(
+        historical_subject_snapshot, seoul_declaration_document,
+    )
     errors: list[str] = []
     try:
         provider, _ = api_key(row)
@@ -793,12 +872,21 @@ def api_provenance_errors(row: dict[str, Any], *, allow_missing_link_guide: bool
             errors.append("link_meta_url_missing")
         if not allow_missing_link_guide and not valid_http_url(raw.get("guide_url")):
             exact_stored_declaration = False
+            declaration = (
+                SEOUL_OPERATION_DECLARATION.validate_declaration_document(seoul_declaration_document)
+                if seoul_declaration_document is not None
+                else SEOUL_OPERATION_DECLARATION.DECLARATION
+            )
             if (
                 provider == PROVIDER
-                and str(row.get("id") or "") == SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]
+                and str(row.get("id") or "") == declaration["subject"]["portal_dataset_id"]
             ):
                 try:
-                    SEOUL_OPERATION_DECLARATION.validate_stored_subject_row(row)
+                    SEOUL_OPERATION_DECLARATION.validate_stored_subject_row(
+                        row,
+                        authenticated_snapshot=historical_subject_snapshot,
+                        declaration_document=declaration,
+                    )
                     exact_stored_declaration = True
                 except (AttributeError, KeyError, TypeError, ValueError):
                     pass
@@ -948,6 +1036,8 @@ def _validate_operation_set(
     source_page_url: str | None = None,
     observed_guide_url_sha256: str | None = None,
     observed_guide_url: str | None = None,
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+    historical_subject_snapshot: Mapping[str, Any] | None = None,
 ) -> tuple[list[str], dict[str, dict[str, Any]]]:
     operations = row.get("operations") or []
     if not isinstance(operations, list):
@@ -978,6 +1068,8 @@ def _validate_operation_set(
             source_page_url=source_page_url,
             observed_guide_url_sha256=observed_guide_url_sha256,
             observed_guide_url=observed_guide_url,
+            seoul_declaration_document=seoul_declaration_document,
+            historical_subject_snapshot=historical_subject_snapshot,
         ))
     return sorted(set(errors)), indexed
 
@@ -992,6 +1084,8 @@ def compose_registries(
     provider_index_sha256: str = "",
     enrichment_evidence: Any = None,
     registry_schema: dict[str, Any] | None = None,
+    seoul_declaration_document: Mapping[str, Any] | None = None,
+    historical_subject_snapshot: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Return a deterministic, non-publishing composition result."""
     baseline_rows, baseline_by_key = index_registry(baseline, "baseline")
@@ -1006,12 +1100,16 @@ def compose_registries(
         provider_index_sha256=provider_index_sha256,
         hosts=hosts,
         registry_schema=registry_schema,
+        seoul_declaration_document=seoul_declaration_document,
+        historical_subject_snapshot=historical_subject_snapshot,
     )
     worker_outcomes_by_key = validate_worker_outcomes(
         enrichment_evidence,
         candidate_by_key=candidate_by_key,
         successful_keys=set(enrichment_by_key),
         registered_adapter_hosts=hosts,
+        seoul_declaration_document=seoul_declaration_document,
+        historical_subject_snapshot=historical_subject_snapshot,
     )
     composed_by_key = dict(baseline_by_key)
     decisions: list[dict[str, Any]] = []
@@ -1042,7 +1140,10 @@ def compose_registries(
                     tags.add("worker_outcome_contract_unresolved")
             status = worker_outcome["status"]
             reason_code = "worker_detail_retry" if status == "retry" else "worker_detail_quarantined"
-            worker_projection = worker_contract_projection(worker_outcome)
+            worker_projection = worker_contract_projection(
+                worker_outcome,
+                seoul_declaration_document=seoul_declaration_document,
+            )
             required_worker_evidence = (
                 list(worker_projection["contract_failure"]["unresolved_requirements"])
                 if "contract_failure" in worker_projection
@@ -1593,6 +1694,7 @@ def main() -> int:
             baseline_sha256=composition_baseline_digest["sha256"], candidate_sha256=candidate_digest["sha256"],
             provider_index_sha256=provider_index_digest["sha256"], enrichment_evidence=enrichment_evidence,
             registry_schema=schema,
+            seoul_declaration_document=SEOUL_OPERATION_DECLARATION.DECLARATION,
         )
         validate_registry_schema(result["composed_registry"], schema, "composed candidate")
         validate_registry_schema(result["ready_scope_registry"], schema, "ready scope")

@@ -116,12 +116,59 @@ class TerminalOutcomeHealthIntakeTests(unittest.TestCase):
         git("commit", "--quiet", "--allow-empty", "-m", "source closure fixture")
         return root, git("rev-parse", "HEAD")
 
+    def _validate_contract(
+        self, contract: dict, source_sha: str, *, schema_version: str,
+        outcome: dict | None = None,
+    ) -> dict:
+        context = FIXTURES._context("recover-ready")
+        context["head_sha"] = source_sha
+        document = FIXTURES._document("recover-ready")
+        document["schema_version"] = schema_version
+        document["evaluator"].update({
+            "source_sha": source_sha,
+            "workflow_checkout_sha": source_sha,
+        })
+        if outcome is not None:
+            document["outcome"] = copy.deepcopy(outcome)
+        archive_bytes = FIXTURES._zip_document(document)
+        return HEALTH.TERMINAL_EVIDENCE.validate_terminal_evidence(
+            archive_bytes=archive_bytes,
+            run=FIXTURES._run(context),
+            exact_attempt=context["run_attempt"],
+            jobs=FIXTURES._jobs(context),
+            artifact_inventory=FIXTURES._artifact_inventory(context, archive_bytes),
+            expected_context=context,
+            source_contract=contract,
+            as_of=FIXTURES.AS_OF,
+        )
+
     def test_actual_git_tree_closure_and_literal_producer_declaration_are_bound(self) -> None:
         expected = HEALTH.C_TERMINAL_EVALUATOR_SOURCE_PATHS
-        self.assertEqual(len(expected), 25)
-        self.assertEqual(len(set(expected)), 25)
-        self.assertEqual(set(HEALTH.TERMINAL_EVIDENCE.EVALUATOR_SOURCE_PATHS), set(expected))
-        self.assertEqual(set(HEALTH.HEALTH_EVALUATOR_SOURCE_PATHS) - set(expected), {
+        self.assertEqual(len(expected), 34)
+        self.assertEqual(len(set(expected)), 34)
+        self.assertIn("scripts/upstream_catalogue_cache_source.py", expected)
+        self.assertTrue({
+            "scripts/canonical_stale_queue_recovery.py",
+            "scripts/canonical_stale_queue_recovery_gate.py",
+            "scripts/canonical_stale_queue_state.py",
+            "scripts/canonical_publication_state.py",
+            "policy/canonical-stale-queue-recovery.v1.json",
+            "schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
+            "schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
+            "schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
+        }.issubset(expected))
+        self.assertEqual(
+            set(HEALTH.TERMINAL_EVIDENCE.CURRENT_V1_EVALUATOR_SOURCE_PATHS),
+            set(expected),
+        )
+        terminal_union = set(HEALTH.C_TERMINAL_EVALUATOR_SOURCE_PATHS_ALL)
+        self.assertEqual(
+            terminal_union,
+            set(HEALTH.TERMINAL_EVIDENCE.HISTORICAL_V1_EVALUATOR_SOURCE_PATHS)
+            | set(HEALTH.TERMINAL_EVIDENCE.CURRENT_V1_EVALUATOR_SOURCE_PATHS)
+            | set(HEALTH.TERMINAL_EVIDENCE.V2_EVALUATOR_SOURCE_PATHS),
+        )
+        self.assertEqual(set(HEALTH.HEALTH_EVALUATOR_SOURCE_PATHS) - terminal_union, {
             ".github/workflows/upstream-catalogue-health.yml",
             "schemas/datapan.upstream-catalogue-health.v1.schema.json",
             "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
@@ -137,6 +184,8 @@ class TerminalOutcomeHealthIntakeTests(unittest.TestCase):
             )
             self.assertEqual(set(contract["source_files"]), set(expected))
             self.assertEqual(contract["source_sha"], commit)
+            self.assertEqual(contract["closure_version"], "terminal-evaluator/v1-legacy")
+            self.assertEqual(set(contract["schemas"]), {HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION})
             for relative in expected:
                 blob = subprocess.run(
                     ["git", "show", f"{commit}:{relative}"], cwd=root,
@@ -147,6 +196,11 @@ class TerminalOutcomeHealthIntakeTests(unittest.TestCase):
                 contract["schema_sha256"],
                 contract["source_files"]["schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json"],
             )
+            result = self._validate_contract(
+                contract, commit, schema_version=HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION,
+            )
+            self.assertEqual(result["status"], "verified")
+            self.assertEqual(result["outcome"]["kind"], "recover-ready")
             self.assertEqual(HEALTH.verified_health_evaluator_source(root, commit), commit)
 
             transitive = root / "scripts/compose-upstream-catalogue-candidate.py"
@@ -155,6 +209,220 @@ class TerminalOutcomeHealthIntakeTests(unittest.TestCase):
         finally:
             import shutil
             shutil.rmtree(root)
+
+    def test_actual_historical_2693_v1_closure_keeps_its_original_25_blobs(self) -> None:
+        historical = "2693e4de28e601555b998a457816f2ad18321699"
+        current_main = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
+            capture_output=True, check=True, timeout=10,
+        ).stdout.strip()
+        contract = HEALTH.terminal_source_contract(
+            ROOT, REPOSITORY, WORKFLOW_ID, historical, current_main,
+        )
+        expected = HEALTH.TERMINAL_EVIDENCE.HISTORICAL_V1_EVALUATOR_SOURCE_PATHS
+        self.assertEqual(set(contract["source_files"]), set(expected))
+        self.assertEqual(len(contract["source_files"]), 25)
+        self.assertEqual(contract["closure_version"], "terminal-evaluator/v1-historical")
+        self.assertEqual(set(contract["schemas"]), {HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION})
+        for relative in expected:
+            raw = subprocess.run(
+                ["git", "show", f"{historical}:{relative}"], cwd=ROOT,
+                check=True, capture_output=True, timeout=10,
+            ).stdout
+            self.assertEqual(contract["source_files"][relative], HEALTH.sha256_bytes(raw))
+        result = self._validate_contract(
+            contract, historical, schema_version=HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION,
+        )
+        self.assertEqual(result["status"], "verified")
+        self.assertEqual(result["outcome"]["kind"], "recover-ready")
+
+    def test_v2_source_target_contract_dispatches_only_its_exact_40_paths_and_both_schemas(self) -> None:
+        # This committed local fixture models a later producer's explicit v2
+        # schema declaration. The genuine 8fc producer is separately exercised
+        # above and remains a 34-path v1 writer.
+        runner_path = "scripts/run-canonical-update-promotion.py"
+        runner_bytes = (ROOT / runner_path).read_text(encoding="utf-8")
+        runner_bytes = runner_bytes.replace(
+            'TERMINAL_OUTCOME_SCHEMA_VERSION = "datapan.canonical-update-promotion-terminal-outcome.v1"',
+            'TERMINAL_OUTCOME_SCHEMA_VERSION = "datapan.canonical-update-promotion-terminal-outcome.v2"',
+            1,
+        ).replace(
+            'TERMINAL_OUTCOME_SCHEMA_PATH = "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json"',
+            'TERMINAL_OUTCOME_SCHEMA_PATH = "schemas/datapan.canonical-update-promotion-terminal-outcome.v2.schema.json"',
+            1,
+        )
+        addition = (
+            '    "scripts/canonical_source_target_disposition.py",\n'
+            '    "scripts/prepare-upstream-catalogue-derivation.py",\n'
+            '    "scripts/process-upstream-catalogue-candidate.py",\n'
+            '    "scripts/upstream_catalogue_source_eligibility.py",\n'
+            '    "schemas/datapan.canonical-update-promotion-terminal-outcome.v2.schema.json",\n'
+            '    "schemas/datapan.upstream-catalogue-source-eligibility.v1.schema.json",\n'
+        )
+        marker = '    "policy/canonical-stale-queue-recovery.v1.json",\n)\n\n\ndef terminal_generation_record'
+        self.assertEqual(runner_bytes.count(marker), 1)
+        runner_bytes = runner_bytes.replace(
+            marker,
+            '    "policy/canonical-stale-queue-recovery.v1.json",\n'
+            + addition + ')\n\n\ndef terminal_generation_record',
+            1,
+        )
+        with tempfile.TemporaryDirectory(prefix="terminal-source-target-v2-") as temporary:
+            root = pathlib.Path(temporary)
+            for relative in HEALTH.C_TERMINAL_EVALUATOR_SOURCE_PATHS_SOURCE_TARGET_V2:
+                source = ROOT / relative
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(
+                    runner_bytes.encode("utf-8") if relative == runner_path else source.read_bytes(),
+                )
+                target.chmod(0o755 if source.stat().st_mode & 0o111 else 0o644)
+            subprocess.run(["git", "init", "--quiet"], cwd=root, check=True, capture_output=True, timeout=10)
+            subprocess.run(["git", "config", "user.name", "Terminal v2 fixture"], cwd=root, check=True, capture_output=True)
+            subprocess.run(["git", "config", "user.email", "terminal-v2@example.invalid"], cwd=root, check=True, capture_output=True)
+            subprocess.run(["git", "add", "--all"], cwd=root, check=True, capture_output=True, timeout=15)
+            subprocess.run(["git", "commit", "--quiet", "-m", "explicit v2 terminal fixture"], cwd=root, check=True, capture_output=True, timeout=15)
+            source_sha = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=root, text=True,
+                capture_output=True, check=True, timeout=10,
+            ).stdout.strip()
+            contract = HEALTH.terminal_source_contract(
+                root, REPOSITORY, WORKFLOW_ID, source_sha, source_sha,
+            )
+            self.assertEqual(len(contract["source_files"]), 40)
+            self.assertEqual(contract["closure_version"], "terminal-evaluator/v2-source-target")
+            self.assertEqual(
+                set(contract["schemas"]),
+                {HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION, HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION_V2},
+            )
+            disposition = {
+                "schema_version": "datapan.canonical-update-source-target-disposition.v1",
+                "selection_key": "1" * 64,
+                "original_observation_sha256": "2" * 64,
+                "target_contract_sha256": "3" * 64,
+                "disposition": "pending",
+                "reason": "exact_prepared_or_open_target_revision",
+                "journal_commit": None,
+                "evidence_refs": [],
+                "revision_ref": {
+                    "repository": REPOSITORY,
+                    "source_id": "data_go_kr",
+                    "scope": "aggregate_supported_catalog",
+                    "generation_id": "4" * 64,
+                    "registry_sha256": "5" * 64,
+                    "head_sha": source_sha,
+                    "pr_number": 123,
+                    "owner_id": "fixture-owner",
+                    "branch": "fixture/source-target",
+                    "body_sha256": "6" * 64,
+                },
+                "purpose_ref": None,
+            }
+            outcome = {
+                "kind": "source_target_disposition",
+                "status": "source-target-pending",
+                "target_disposition": disposition,
+                "generation_count": 0,
+                "generation_results_truncated": False,
+                "generations": [],
+                "selected_generation_id": None,
+                "candidate_available": False,
+            }
+            result = self._validate_contract(
+                contract, source_sha,
+                schema_version=HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION_V2,
+                outcome=outcome,
+            )
+            self.assertEqual(result["status"], "verified")
+            self.assertEqual(result["outcome"]["kind"], "source_target_disposition")
+
+            missing_declaration = copy.deepcopy(contract)
+            missing_declaration.pop("producer_schema_path")
+            missing_result = self._validate_contract(
+                missing_declaration, source_sha,
+                schema_version=HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION_V2,
+                outcome=outcome,
+            )
+            self.assertEqual(missing_result["status"], "unavailable")
+            self.assertEqual(
+                missing_result["reason_code"],
+                "source_contract_producer_schema_declaration_unavailable",
+            )
+
+    def test_source_contract_tampering_and_v1_schema_mixing_fail_closed(self) -> None:
+        source = "8fc35f396913aaf40bd6ef5cce9127a0cf9e8a06"
+        contract = HEALTH.terminal_source_contract(ROOT, REPOSITORY, WORKFLOW_ID, source, source)
+        tampered_digest = copy.deepcopy(contract)
+        tampered_digest["schemas"][HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION]["sha256"] = "0" * 64
+        digest_result = self._validate_contract(
+            tampered_digest, source, schema_version=HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION,
+        )
+        self.assertEqual(digest_result["status"], "rejected")
+        self.assertEqual(digest_result["reason_code"], "source_contract_schema_digest_mismatch")
+
+        mixed_schema = copy.deepcopy(contract)
+        v2_bytes = (ROOT / HEALTH.TERMINAL_EVIDENCE.SCHEMA_PATH_V2).read_bytes()
+        mixed_schema["schemas"][HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION_V2] = {
+            "path": HEALTH.TERMINAL_EVIDENCE.SCHEMA_PATH_V2,
+            "bytes": v2_bytes,
+            "sha256": HEALTH.sha256_bytes(v2_bytes),
+        }
+        mixed_result = self._validate_contract(
+            mixed_schema, source, schema_version=HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION,
+        )
+        self.assertEqual(mixed_result["status"], "unavailable")
+        self.assertEqual(mixed_result["reason_code"], "source_contract_schema_version_set_mismatch")
+
+        wrong_declaration = copy.deepcopy(contract)
+        wrong_declaration["producer_schema_version"] = HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION_V2
+        wrong_result = self._validate_contract(
+            wrong_declaration, source, schema_version=HEALTH.TERMINAL_EVIDENCE.SCHEMA_VERSION,
+        )
+        self.assertEqual(wrong_result["status"], "rejected")
+        self.assertEqual(wrong_result["reason_code"], "source_contract_producer_schema_declaration_mismatch")
+
+    def test_health_builder_rejects_unknown_pathsets_and_v1_v2_declaration_confusion(self) -> None:
+        runner_path = "scripts/run-canonical-update-promotion.py"
+        original = (ROOT / runner_path).read_bytes()
+        cache_member = b'    "scripts/upstream_catalogue_cache_source.py",\n'
+        cache_member_position = original.rfind(cache_member)
+        self.assertGreaterEqual(cache_member_position, 0)
+        runner_without_cache_member = (
+            original[:cache_member_position]
+            + original[cache_member_position + len(cache_member):]
+        )
+        cases = (
+            (
+                "unknown_member_set",
+                runner_without_cache_member,
+                "terminal_source_runner_dependency_set_unsupported",
+            ),
+            (
+                "v1_set_claims_v2",
+                original.replace(
+                    b'TERMINAL_OUTCOME_SCHEMA_VERSION = "datapan.canonical-update-promotion-terminal-outcome.v1"',
+                    b'TERMINAL_OUTCOME_SCHEMA_VERSION = "datapan.canonical-update-promotion-terminal-outcome.v2"',
+                    1,
+                ).replace(
+                    b'TERMINAL_OUTCOME_SCHEMA_PATH = "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json"',
+                    b'TERMINAL_OUTCOME_SCHEMA_PATH = "schemas/datapan.canonical-update-promotion-terminal-outcome.v2.schema.json"',
+                    1,
+                ),
+                "terminal_source_runner_schema_contract_mismatch",
+            ),
+        )
+        for name, runner_bytes, expected_reason in cases:
+            with self.subTest(case=name):
+                self.assertNotEqual(runner_bytes, original)
+                root, commit = self._temporary_source_tree(replacement=(runner_path, runner_bytes))
+                try:
+                    with self.assertRaisesRegex(RuntimeError, expected_reason):
+                        HEALTH.terminal_source_contract(
+                            root, REPOSITORY, WORKFLOW_ID, commit, commit,
+                        )
+                finally:
+                    import shutil
+                    shutil.rmtree(root)
 
     def test_real_git_source_contract_rejects_missing_symlink_and_nonliteral_dependencies(self) -> None:
         with self.subTest(kind="missing"):

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://statpan.com/schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
+  "title": "Canonical stale C queue recovery receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "repository", "workflow_path", "outcome", "blocked_reason",
+    "controller", "target", "reservation_state", "request_disposition",
+    "policy_sha256", "controller_workflow_sha256", "target_workflow_sha256",
+    "observations", "excluded_targets", "api_requests", "elapsed_ms", "started_at", "finished_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "datapan.canonical-stale-c-queue-recovery-receipt.v1" },
+    "repository": { "const": "StatPan/datapan-registry" },
+    "workflow_path": { "const": ".github/workflows/canonical-update-promotion.yml" },
+    "outcome": {
+      "enum": [
+        "no_op_not_schedule", "no_eligible_target", "reservation_created",
+        "reserved_reconcile_only", "native_cancel_confirmed", "blocked"
+      ]
+    },
+    "blocked_reason": { "type": ["string", "null"], "maxLength": 96 },
+    "controller": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_id", "workflow_id", "run_id", "run_attempt", "event", "branch", "head_sha", "job_name"],
+      "properties": {
+        "repository_id": { "type": ["integer", "null"], "minimum": 1 },
+        "workflow_id": { "type": ["integer", "null"], "minimum": 1 },
+        "run_id": { "type": ["integer", "null"], "minimum": 1 },
+        "run_attempt": { "type": ["integer", "null"], "minimum": 1 },
+        "event": { "type": ["string", "null"], "maxLength": 40 },
+        "branch": { "type": ["string", "null"], "maxLength": 120 },
+        "head_sha": { "type": ["string", "null"], "pattern": "^[a-f0-9]{40}$" },
+        "job_name": { "type": ["string", "null"], "maxLength": 120 }
+      }
+    },
+    "target": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository_id", "workflow_id", "run_id", "run_attempt", "event", "branch", "head_sha", "created_at", "updated_at"],
+          "properties": {
+            "repository_id": { "type": "integer", "minimum": 1 },
+            "workflow_id": { "type": "integer", "minimum": 1 },
+            "run_id": { "type": "integer", "minimum": 1 },
+            "run_attempt": { "const": 1 },
+            "event": { "const": "schedule" },
+            "branch": { "const": "main" },
+            "head_sha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "updated_at": { "type": "string", "format": "date-time" }
+          }
+        }
+      ]
+    },
+    "reservation_state": { "enum": ["not_created", "created", "existing", "confirmed", "uncertain"] },
+    "request_disposition": {
+      "enum": ["not_attempted", "accepted_202", "accepted_204", "denied", "transport_ambiguous", "unknown_after_restart"]
+    },
+    "policy_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+    "controller_workflow_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+    "target_workflow_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+    "observations": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["observed_at", "run_id", "run_attempt", "status", "conclusion", "head_sha", "job_count"],
+        "properties": {
+          "observed_at": { "type": "string", "format": "date-time" },
+          "run_id": { "type": "integer", "minimum": 1 },
+          "run_attempt": { "type": "integer", "minimum": 1 },
+          "status": { "enum": ["queued", "in_progress", "completed", "waiting", "requested", "pending", "unknown"] },
+          "conclusion": { "type": ["string", "null"], "maxLength": 80 },
+          "head_sha": { "type": ["string", "null"], "pattern": "^[a-f0-9]{40}$" },
+          "job_count": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000 }
+        }
+      }
+    },
+    "excluded_targets": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["run_id", "run_attempt", "reason"],
+        "properties": {
+          "run_id": { "type": "integer", "minimum": 1 },
+          "run_attempt": { "type": "integer", "minimum": 1 },
+          "reason": { "enum": ["recent", "not_older_than_controller", "current_sha", "non_ancestor", "has_jobs", "rerun", "workflow_group_mismatch"] }
+        }
+      }
+    },
+    "api_requests": { "type": "integer", "minimum": 0, "maximum": 96 },
+    "elapsed_ms": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": "string", "format": "date-time" }
+  }
+}

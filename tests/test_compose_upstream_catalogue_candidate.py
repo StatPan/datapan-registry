@@ -149,6 +149,24 @@ def enrichment_evidence(candidate_row: dict, operations: list[dict], *, candidat
 
 
 class CatalogueCompositionTests(unittest.TestCase):
+    def test_authenticated_historical_snapshot_never_falls_back_to_local_declaration(self):
+        with self.assertRaisesRegex(
+            composer.CompositionError,
+            "authenticated_replay_declaration_document_missing",
+        ):
+            composer.validate_enrichment_evidence(
+                {}, candidate_by_key={}, baseline_by_key={},
+                candidate_sha256="a" * 64, provider_index_sha256="b" * 64,
+                hosts=set(), registry_schema={},
+                historical_subject_snapshot={},
+            )
+        declaration = composer.SEOUL_OPERATION_DECLARATION
+        with self.assertRaisesRegex(
+            declaration.DeclarationError,
+            "authenticated_replay_declaration_document_missing",
+        ):
+            declaration.validate_subject_row({}, authenticated_snapshot={})
+
     def test_current_template_link_metadata_is_quarantined_and_never_promoted_as_operation(self):
         candidate = link_api("2", operations=False)
         baseline = link_api("2", endpoint="https://link.example.gov/v1/old")
@@ -181,7 +199,10 @@ class CatalogueCompositionTests(unittest.TestCase):
             "link_metadata": metadata,
         })
         outcome_digest = composer.digest_json(outcome)
-        result = compose([baseline], [candidate], enrichment_evidence=worker_enrichment([outcome]))
+        result = compose(
+            [baseline], [candidate], enrichment_evidence=worker_enrichment([outcome]),
+            seoul_declaration_document=composer.SEOUL_OPERATION_DECLARATION.DECLARATION,
+        )
         self.assertEqual(result["composed_registry"][0]["operations"], baseline["operations"])
         self.assertEqual(result["semantic_diff"]["quarantined_api_keys"], [
             {"provider": "data.go.kr", "id": "2"},
@@ -383,6 +404,13 @@ class CatalogueCompositionTests(unittest.TestCase):
         forged_subject["failure_diagnostic"]["contract_failure"] = contract_failure("subject_binding_unproven")
         with self.assertRaisesRegex(composer.CompositionError, "subject binding"):
             compose([], [candidate], enrichment_evidence=worker_enrichment([forged_subject]))
+
+    def test_historical_snapshot_never_uses_the_host_declaration_fallback(self):
+        with self.assertRaisesRegex(
+            composer.CompositionError,
+            "authenticated_replay_declaration_document_missing",
+        ):
+            compose([], [], historical_subject_snapshot={})
 
     def test_real_link_empty_import_retains_baseline_contract_operations(self):
         fixture_path = ROOT / "tests/fixtures/catalogue-composition-real-link-cases.json"

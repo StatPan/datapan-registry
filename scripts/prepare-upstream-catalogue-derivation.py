@@ -93,6 +93,7 @@ def authenticate_parent_bundle(
     checkpoint: Mapping[str, Any], bundle_dir: pathlib.Path, runner: Any,
     *, canonical_context: Mapping[str, Any] | None = None,
     canonical_parent_authorization: "CanonicalParentAuthorization | None" = None,
+    archive_path: pathlib.Path | None = None,
 ) -> dict[str, Any]:
     """Bind one terminal checkpoint to its exact B attempt and archived outputs.
 
@@ -153,6 +154,9 @@ def authenticate_parent_bundle(
         producer_head_sha=str(run["head_sha"]),
         canonical_context=canonical_context,
         allow_terminal_noop=allow_terminal_noop,
+        repository=repository,
+        default_branch=default_branch,
+        cache_source_archive_path=archive_path,
     )
     if validated.get("status") not in {"ready", "no-change"}:
         raise ValueError("derivation_parent_is_not_reviewable")
@@ -193,22 +197,23 @@ class CanonicalParentAuthorization:
         self.readback = readback
 
 
-def authenticate_live_canonical_parent(
-    root: pathlib.Path,
+def validate_canonical_parent_row_identity(
     repository: str,
-    default_branch: str,
     checkpoint: Mapping[str, Any],
     row: Mapping[str, Any],
     readback: Mapping[str, Any],
     canonical_context: Mapping[str, Any],
-    runner: Any,
-    derivation: Any,
-    *,
-    now: dt.datetime,
-) -> CanonicalParentAuthorization:
-    """Authenticate the selected C row before using it to validate parent B."""
+) -> tuple[str, dict[str, Any]]:
+    """Validate the selected journal row against an already-authenticated identity.
+
+    This is a structural check only. The caller must establish that the row,
+    PR, ACK attempt, and source ancestry came from the exact Native facts
+    capability before treating the returned candidate as a parent.
+    """
     candidate = row.get("candidate") if isinstance(row.get("candidate"), Mapping) else None
     identity = canonical_context.get("identity") if isinstance(canonical_context, Mapping) else None
+    pr = row.get("pr") if isinstance(row.get("pr"), Mapping) else None
+    ownership = row.get("ownership") if isinstance(row.get("ownership"), Mapping) else None
     if not isinstance(candidate, Mapping) or not isinstance(identity, Mapping):
         raise ValueError("canonical_parent_selected_row_or_context_invalid")
     generation_id = candidate.get("generation_id")
@@ -234,19 +239,42 @@ def authenticate_live_canonical_parent(
         or readback.get("registry_bytes") != candidate.get("registry_bytes")
         or readback.get("registry_sha256") != candidate.get("registry_sha256")
         or readback.get("manifest_sha256") != candidate.get("manifest_sha256")
-        or readback.get("pr_number") != row.get("pr", {}).get("number")
-        or readback.get("pr_branch") != row.get("ownership", {}).get("branch")
-        or readback.get("pr_head_sha") != row.get("ownership", {}).get("expected_head_sha")
-        or readback.get("pr_body_sha256") != row.get("ownership", {}).get("body_sha256")
-        or readback.get("merge_sha") != row.get("pr", {}).get("merge_commit_sha")
+        or not isinstance(pr, Mapping)
+        or readback.get("pr_number") != pr.get("number")
+        or not isinstance(ownership, Mapping)
+        or readback.get("pr_branch") != ownership.get("branch")
+        or readback.get("pr_head_sha") != ownership.get("expected_head_sha")
+        or readback.get("pr_body_sha256") != ownership.get("body_sha256")
+        or readback.get("merge_sha") != pr.get("merge_commit_sha")
         or not isinstance(candidate.get("composition_receipt_sha256"), str)
         or not re.fullmatch(r"[a-f0-9]{64}", candidate["composition_receipt_sha256"])
     ):
         raise ValueError("canonical_parent_selected_row_identity_mismatch")
-
     number = readback.get("pr_number")
     if isinstance(number, bool) or not isinstance(number, int) or number < 1:
         raise ValueError("canonical_parent_PR_identity_invalid")
+    return generation_id, copy.deepcopy(dict(candidate))
+
+
+def authenticate_live_canonical_parent(
+    root: pathlib.Path,
+    repository: str,
+    default_branch: str,
+    checkpoint: Mapping[str, Any],
+    row: Mapping[str, Any],
+    readback: Mapping[str, Any],
+    canonical_context: Mapping[str, Any],
+    runner: Any,
+    derivation: Any,
+    *,
+    now: dt.datetime,
+) -> CanonicalParentAuthorization:
+    """Authenticate the selected C row before using it to validate parent B."""
+    generation_id, candidate = validate_canonical_parent_row_identity(
+        repository, checkpoint, row, readback, canonical_context,
+    )
+    identity = canonical_context["identity"]
+    number = readback["pr_number"]
     live = runner.gh_pr_readback(root, repository, number)
     if not isinstance(live, Mapping):
         raise ValueError("canonical_parent_PR_live_readback_mismatch")
@@ -282,8 +310,123 @@ def authenticate_live_canonical_parent(
         raise ValueError("canonical_parent_merge_is_not_in_authenticated_current_main")
     return CanonicalParentAuthorization(
         generation_id=generation_id,
-        candidate=copy.deepcopy(dict(candidate)),
+        candidate=candidate,
         readback=copy.deepcopy(dict(readback)),
+    )
+
+
+def _validate_original_native_parent_identity(
+    repository: str,
+    checkpoint: Mapping[str, Any],
+    canonical_context: Mapping[str, Any],
+    *,
+    base: Mapping[str, Any],
+    checkpoint_identity: Mapping[str, Any],
+    candidate: Mapping[str, Any],
+    native_pr: Mapping[str, Any],
+    row: Mapping[str, Any],
+    readback: Mapping[str, Any],
+    verified_repository: str,
+    merge_is_ancestor: bool,
+) -> None:
+    """Check the closed P/M relation using already authenticated inputs.
+
+    This helper performs no acquisition and grants no Native capability.  The
+    caller must first require the exact Native facts object.  P's base remains
+    bound to P's own live PR; M is the distinct original replay base.  The
+    ancestry fact binds P.merge into M.
+    """
+    identity = canonical_context.get("identity") if isinstance(canonical_context, Mapping) else None
+    native_base = native_pr.get("base") if isinstance(native_pr, Mapping) else None
+    row_pr = row.get("pr") if isinstance(row, Mapping) else None
+    candidate_base_sha = candidate.get("base_sha") if isinstance(candidate, Mapping) else None
+    base_commit = base.get("commit_sha") if isinstance(base, Mapping) else None
+    base_tree = base.get("tree_sha") if isinstance(base, Mapping) else None
+    if (
+        not isinstance(repository, str) or not repository
+        or not isinstance(base, Mapping) or set(base) != {"commit_sha", "tree_sha"}
+        or not isinstance(base_commit, str) or not re.fullmatch(r"[a-f0-9]{40}", base_commit)
+        or not isinstance(base_tree, str) or not re.fullmatch(r"[a-f0-9]{40}", base_tree)
+        or not isinstance(checkpoint_identity, Mapping)
+        or set(checkpoint_identity) != {"generation_id", "checkpoint_sha256"}
+        or checkpoint_identity.get("generation_id") != checkpoint.get("generation_id")
+        or checkpoint_identity.get("checkpoint_sha256") != checkpoint.get("checkpoint_sha256")
+        or not isinstance(identity, Mapping)
+        or identity.get("main_sha") != base_commit
+        or not isinstance(candidate_base_sha, str)
+        or not re.fullmatch(r"[a-f0-9]{40}", candidate_base_sha)
+        or not isinstance(native_base, Mapping)
+        or native_base.get("sha") != candidate_base_sha
+        or not isinstance(row, Mapping)
+        or not isinstance(row.get("candidate"), Mapping)
+        or dict(row["candidate"]) != dict(candidate)
+        or not isinstance(row_pr, Mapping)
+        or readback.get("merge_sha") != row_pr.get("merge_commit_sha")
+        or not isinstance(verified_repository, str)
+        or verified_repository.casefold() != repository.casefold()
+        or merge_is_ancestor is not True
+    ):
+        raise ValueError("canonical_parent_native_facts_identity_mismatch")
+
+
+def authenticate_original_native_canonical_parent(
+    repository: str,
+    checkpoint: Mapping[str, Any],
+    canonical_context: Mapping[str, Any],
+    health_policy: Mapping[str, Any],
+    *,
+    parent_facts: Any,
+    native_module: Any,
+    derivation: Any,
+    health: Any,
+    now: dt.datetime,
+) -> CanonicalParentAuthorization:
+    """Validate original C parent facts without reacquiring native evidence.
+
+    ``canonical_context`` must already be authenticated by the current
+    CONTROL runner against the exact original preparation base carried by
+    ``parent_facts``. The parent's PR base remains bound to its own Native PR
+    readback; it may precede M. This function performs local identity and ACK
+    checks only; it has no GitHub, Health acquisition, or subprocess fallback.
+    """
+    require_facts = getattr(native_module, "require_verified_original_canonical_parent_facts", None)
+    if not callable(require_facts):
+        raise ValueError("canonical_parent_native_facts_validator_unavailable")
+    try:
+        verified = require_facts(parent_facts)
+    except Exception as exc:
+        raise ValueError("canonical_parent_native_facts_invalid") from exc
+    if verified is not parent_facts:
+        raise ValueError("canonical_parent_native_facts_invalid")
+
+    base = verified.preparation_base
+    checkpoint_identity = verified.checkpoint_identity
+    snapshot = verified.journal_snapshot
+    row = snapshot.selected_row
+    readback = derivation.validate_parent_readback(verified.parent_readback)
+    candidate = verified.parent_candidate
+    native_pr = verified.native_pr.as_dict()
+    _validate_original_native_parent_identity(
+        repository, checkpoint, canonical_context,
+        base=base, checkpoint_identity=checkpoint_identity,
+        candidate=candidate, native_pr=native_pr, row=row,
+        readback=readback,
+        verified_repository=verified.repository,
+        merge_is_ancestor=verified.merge_is_ancestor,
+    )
+    generation_id, checked_candidate = validate_canonical_parent_row_identity(
+        repository, checkpoint, row, readback, canonical_context,
+    )
+    if checked_candidate != dict(candidate):
+        raise ValueError("canonical_parent_native_facts_identity_mismatch")
+    derivation.validate_canonical_merge_ack_native_facts(
+        repository, health_policy, parent_facts=verified,
+        native_module=native_module, health=health, now=now,
+    )
+    return CanonicalParentAuthorization(
+        generation_id=generation_id,
+        candidate=checked_candidate,
+        readback=copy.deepcopy(readback),
     )
 
 
@@ -337,6 +480,97 @@ def exact_ack_run(
     derivation.authenticate_canonical_merge_ack(root, repository, row, health_policy, now=now)
 
 
+def validate_source_work_request(
+    value: Any,
+    *,
+    main_root: pathlib.Path,
+    repository: str,
+    target_generation_id: str,
+    eligibility: Any,
+) -> dict[str, Any]:
+    required = {
+        "schema_version", "repository", "source_id", "source_scope", "evaluation",
+        "target_contract", "target_inventory", "source_subject", "action", "reason_code",
+        "selected_generation_id", "producer_run_id", "artifact_id", "artifact_name",
+        "selection_state_sha",
+    }
+    if not isinstance(value, Mapping) or set(value) != required:
+        raise ValueError("source_work_request_shape_invalid")
+    if (
+        value.get("schema_version") != "datapan.upstream-catalogue-source-work-request.v1"
+        or value.get("repository") != repository
+        or value.get("source_id") != "data_go_kr"
+        or value.get("action") not in {"rebuild", "resume"}
+        or value.get("selected_generation_id") != target_generation_id
+        or not str(value.get("producer_run_id") or "").isdigit()
+        or not str(value.get("artifact_id") or "").isdigit()
+        or value.get("artifact_name") != f"upstream-catalog-refresh-{value.get('producer_run_id')}"
+        or not re.fullmatch(r"[a-f0-9]{40}", str(value.get("selection_state_sha") or ""))
+    ):
+        raise ValueError("source_work_request_identity_invalid")
+    validate_request = getattr(eligibility, "validate_source_work_request", None)
+    if not callable(validate_request):
+        raise ValueError("source_work_request_current_validator_unavailable")
+    validated = validate_request(value, root=main_root)
+    evaluation = validated["evaluation"]
+    contract = validated["target_contract"]
+    inventory = validated["target_inventory"]
+    current_main = run_git(main_root, "rev-parse", "HEAD")
+    if evaluation["source_sha"] != current_main or contract["source_sha"] != current_main:
+        raise ValueError("source_work_request_main_identity_mismatch")
+    if eligibility.object_sha256(inventory) != contract["inventory_sha256"]:
+        raise ValueError("source_work_request_inventory_digest_mismatch")
+    recomputed, recomputed_inventory = eligibility.build_target_contract(main_root, current_main)
+    for field in (
+        "schema_version", "source_sha", "source_tree_sha", "inventory_sha256", "contract_sha256",
+    ):
+        if recomputed[field] != contract[field]:
+            raise ValueError("source_work_request_git_contract_mismatch")
+    if recomputed_inventory != inventory:
+        raise ValueError("source_work_request_git_inventory_mismatch")
+    if evaluation["source_tree_sha"] != contract["source_tree_sha"]:
+        raise ValueError("source_work_request_evaluation_tree_mismatch")
+    return validated
+
+
+def validate_source_work_request_target(
+    value: Mapping[str, Any],
+    *,
+    main_root: pathlib.Path,
+    predecessor: Mapping[str, Any],
+    original_observation: Mapping[str, Any],
+    admitted_parent: Mapping[str, Any],
+    eligibility: Any,
+) -> None:
+    """Bind the request's mutable classification to Git and its predecessor."""
+    expected_contract, expected_inventory = eligibility.target_contract_from_predecessor(
+        main_root,
+        value["evaluation"]["source_sha"],
+        predecessor,
+        original_observation,
+    )
+    if value["target_contract"] != expected_contract:
+        raise ValueError("source_work_request_classification_mismatch")
+    if value["target_inventory"] != expected_inventory:
+        raise ValueError("source_work_request_inventory_mismatch")
+    predecessor_inputs = predecessor.get("generation_inputs")
+    if not isinstance(predecessor_inputs, Mapping):
+        raise ValueError("source_work_request_predecessor_inputs_invalid")
+    prior_contract_value = predecessor_inputs.get("source_target_contract")
+    prior_contract = (
+        eligibility.validate_target_contract(prior_contract_value)
+        if prior_contract_value is not None else None
+    )
+    source_subject = getattr(eligibility, "source_work_subject", None)
+    if not callable(source_subject):
+        raise ValueError("source_work_request_subject_validator_unavailable")
+    expected_subject = source_subject(
+        admitted_parent, original_observation, predecessor, prior_contract, expected_contract,
+    )
+    if value.get("source_subject") != expected_subject:
+        raise ValueError("source_work_request_subject_mismatch")
+
+
 def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     main_root = args.main_root.resolve()
     source_root = args.source_root.resolve()
@@ -352,14 +586,23 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     handoff = load_module(main_root / "scripts/upstream_catalogue_handoff.py", "derivation_handoff")
     health = load_module(main_root / "scripts/check-upstream-catalogue-health.py", "derivation_health_trust")
     derivation = load_module(main_root / "scripts/upstream_catalogue_derivation.py", "derivation_schema")
+    eligibility = None
     checkpoint_schema = main_root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
     source_state = state_root / "sources/data_go_kr"
     index = load_json(source_state / "index.json", 2 * 1024 * 1024)
     if index.get("schema_version") != "datapan.upstream-catalogue-checkpoint.v1" or not isinstance(index.get("generations"), list):
         raise ValueError("derivation_state_index_invalid")
-    indexed_ids = {
-        row.get("generation_id") for row in index["generations"] if isinstance(row, Mapping)
-    }
+    indexed_id_rows = [
+        row.get("generation_id") if isinstance(row, Mapping) else None
+        for row in index["generations"]
+    ]
+    if (
+        any(not isinstance(generation_id, str) or not re.fullmatch(r"[a-f0-9]{64}", generation_id)
+            for generation_id in indexed_id_rows)
+        or len(indexed_id_rows) != len(set(indexed_id_rows))
+    ):
+        raise ValueError("derivation_state_index_generation_invalid_or_duplicate")
+    indexed_ids = set(indexed_id_rows)
     target_id = args.target_generation_id
     if target_id not in indexed_ids:
         # A target ID is supplied by the authenticated processor selector. A
@@ -376,6 +619,19 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         derivation.validate_derivation_envelope(stored_envelope_value)
         if stored_envelope_value is not None else None
     )
+    source_request = None
+    if args.source_work_request is not None:
+        eligibility = load_module(
+            main_root / "scripts/upstream_catalogue_source_eligibility.py",
+            "derivation_source_eligibility",
+        )
+        source_request = validate_source_work_request(
+            load_json(args.source_work_request, 256 * 1024),
+            main_root=main_root,
+            repository=repository,
+            target_generation_id=target_id,
+            eligibility=eligibility,
+        )
 
     def unavailable(reason: str) -> dict[str, Any]:
         if stored_envelope is not None:
@@ -487,6 +743,16 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     target_original = derivation.original_observation_from_checkpoint(target, target_admission)
     if target_original != original:
         return unavailable("selected_parent_is_different_source_observation")
+    if source_request is not None:
+        assert eligibility is not None
+        validate_source_work_request_target(
+            source_request,
+            main_root=main_root,
+            predecessor=target,
+            original_observation=original,
+            admitted_parent=target_admission,
+            eligibility=eligibility,
+        )
     active_statuses = {"queued", "validating", "enriching", "composing", "retry"}
     active_resume = stored_envelope is not None and target.get("status") in active_statuses
     outcome = target.get("outcome") if isinstance(target.get("outcome"), Mapping) else {}
@@ -502,7 +768,11 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         return {"eligible": False, "reason": "selected_parent_not_reviewable"}
     selected_target = target
     prior_outcome = target.get("outcome") if isinstance(target.get("outcome"), Mapping) else {}
-    has_work = active_resume or int(prior_outcome.get("detail_retry_count", 0) or 0) > 0
+    has_work = (
+        active_resume
+        or int(prior_outcome.get("detail_retry_count", 0) or 0) > 0
+        or source_request is not None
+    )
 
     journal, journal_ref_sha = runner.load_promotion_journal_snapshot(main_root)
     if not isinstance(journal, Mapping) or not isinstance(journal_ref_sha, str):
@@ -631,6 +901,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
 
         parent_checkpoints: dict[str, dict[str, Any]] = {}
         parent_bundles: dict[str, pathlib.Path] = {}
+        parent_archives: dict[str, pathlib.Path] = {}
         for role in ("resume_parent_processor", "canonical_parent_processor"):
             reference = stored_envelope[role]
             parent_id = str(reference["generation_id"])
@@ -692,6 +963,8 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
             original["source_id"], original["source_scope"], original["original_baseline_sha256"],
             original["candidate_sha256"], None, original["source_policy_sha256"],
             original["provider_index_sha256"], same_observation_derivation=stored_envelope,
+            source_epoch=target_inputs.get("source_epoch"),
+            source_target_contract=target_inputs.get("source_target_contract"),
         )
         if generation_id != target_id or inputs != target_inputs:
             raise ValueError("active_derivation_generation_identity_changed")
@@ -706,12 +979,15 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
             parent = parent_checkpoints[parent_id]
             destination = output_root / f"{role}-bundle"
             download_parent_bundle(main_root, repository, args.default_branch, state_root, parent, destination, runner)
+            archive_path = destination.with_suffix(".zip")
             authenticate_parent_bundle(
                 main_root, repository, args.default_branch, state_root, parent, destination, runner,
                 canonical_context=canonical_context,
                 canonical_parent_authorization=canonical_parent_authorization,
+                archive_path=archive_path,
             )
             parent_bundles[parent_id] = destination
+            parent_archives[parent_id] = archive_path
 
         # The envelope and generation ID stay byte-for-byte stable across an
         # interrupted derived run. Current main is independently checked
@@ -726,7 +1002,7 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         journal_path.write_bytes(runner.canonical_json(journal) + b"\n")
         resume_id = stored_envelope["resume_parent_processor"]["generation_id"]
         canonical_id = stored_envelope["canonical_parent_processor"]["generation_id"]
-        return {
+        result = {
             "eligible": True,
             "reason": "active_same_observation_generation_rehydrated",
             "generation_id": target_id,
@@ -736,14 +1012,44 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
             "journal_path": str(journal_path),
             "journal_ref_sha": journal_ref_sha,
             "resume_parent_bundle_dir": str(parent_bundles[resume_id]),
+            "resume_parent_archive_path": str(parent_archives[resume_id]),
             "resume_enrichment_evidence_path": str(parent_bundles[resume_id] / "upstream-catalogue-enrichment-evidence.json"),
             "canonical_parent_bundle_dir": str(parent_bundles[canonical_id]),
+            "canonical_parent_archive_path": str(parent_archives[canonical_id]),
             "current_main_sha": current_main,
             "current_manifest_sha256": current_identity["manifest_sha256"],
             "resume_parent_generation_id": resume_id,
             "canonical_parent_generation_id": canonical_id,
             "canonical_parent_journal_record_index": canonical_index,
         }
+        source_epoch = target_inputs.get("source_epoch")
+        source_target_contract = target_inputs.get("source_target_contract")
+        if (source_epoch is None) != (source_target_contract is None):
+            raise ValueError("active_derivation_source_epoch_contract_incomplete")
+        if source_epoch is not None and source_target_contract is not None:
+            active_eligibility = load_module(
+                main_root / "scripts/upstream_catalogue_source_eligibility.py",
+                "active_derivation_source_eligibility",
+            )
+            try:
+                bound_epoch = active_eligibility.validate_source_epoch(source_epoch)
+                bound_contract = active_eligibility.validate_target_contract(source_target_contract)
+            except active_eligibility.SourceEligibilityError as exc:
+                raise ValueError(str(exc)) from exc
+            if (
+                bound_epoch["target_generation_id"] != target_id
+                or bound_epoch["target_contract_sha256"] != bound_contract["contract_sha256"]
+            ):
+                raise ValueError("active_derivation_source_epoch_binding_mismatch")
+            source_epoch_path = output_root / "source-epoch.json"
+            source_contract_path = output_root / "source-target-contract.json"
+            source_epoch_path.write_bytes(active_eligibility.canonical_json(bound_epoch) + b"\n")
+            source_contract_path.write_bytes(active_eligibility.canonical_json(bound_contract) + b"\n")
+            result.update({
+                "source_epoch_path": str(source_epoch_path),
+                "source_target_contract_path": str(source_contract_path),
+            })
+        return result
     if canonical_checkpoint["generation_id"] == selected_target["generation_id"]:
         # The selected C producer already contains its authenticated
         # same-A contributions, so it can fill both parent roles. Do not
@@ -781,16 +1087,21 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         target, args.resume_bundle.resolve(),
     ):
         target_bundle_dir = args.resume_bundle.resolve()
+        if args.resume_bundle_archive is None:
+            raise ValueError("derivation_reused_resume_parent_archive_missing")
+        target_archive_path = args.resume_bundle_archive.resolve()
     else:
         target_bundle_dir = output_root / "resume-parent-bundle"
         download_parent_bundle(
             main_root, repository, args.default_branch, state_root, target,
             target_bundle_dir, runner,
         )
+        target_archive_path = target_bundle_dir.with_suffix(".zip")
     target_bundle = authenticate_parent_bundle(
         main_root, repository, args.default_branch, state_root, target,
         target_bundle_dir, runner, canonical_context=canonical_context,
         canonical_parent_authorization=canonical_parent_authorization,
+        archive_path=target_archive_path,
     )
     target_evidence = load_json(target_bundle_dir / "upstream-catalogue-enrichment-evidence.json", 256 * 1024 * 1024)
     target_reference = derivation.processor_parent_reference(
@@ -801,20 +1112,26 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
 
     if canonical_checkpoint["generation_id"] == target["generation_id"]:
         canonical_dir = target_bundle_dir
+        canonical_archive_path = target_archive_path
     elif canonical_checkpoint["generation_id"] == selected_target["generation_id"] and local_bundle_matches_checkpoint(
         canonical_checkpoint, args.resume_bundle.resolve(),
     ):
         canonical_dir = args.resume_bundle.resolve()
+        if args.resume_bundle_archive is None:
+            raise ValueError("derivation_reused_canonical_parent_archive_missing")
+        canonical_archive_path = args.resume_bundle_archive.resolve()
     else:
         canonical_dir = output_root / "canonical-parent-bundle"
         download_parent_bundle(
             main_root, repository, args.default_branch, state_root, canonical_checkpoint,
             canonical_dir, runner,
         )
+        canonical_archive_path = canonical_dir.with_suffix(".zip")
     canonical_bundle = authenticate_parent_bundle(
         main_root, repository, args.default_branch, state_root, canonical_checkpoint,
         canonical_dir, runner, canonical_context=canonical_context,
         canonical_parent_authorization=canonical_parent_authorization,
+        archive_path=canonical_archive_path,
     )
     canonical_evidence = load_json(canonical_dir / "upstream-catalogue-enrichment-evidence.json", 256 * 1024 * 1024)
     canonical_reference = derivation.processor_parent_reference(
@@ -890,28 +1207,173 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     (output_root / "canonical-update-promotion-journal.json").write_bytes(
         runner.canonical_json(journal) + b"\n",
     )
-    generation_id, _generation_inputs = processor.generation_identity(
+    source_epoch = None
+    source_target_contract = None
+    if source_request is not None:
+        assert eligibility is not None
+        if source_request["action"] != "rebuild":
+            raise ValueError("source_work_request_action_not_b_rebuild")
+        original_generation = eligibility.normalize_original_generation(target)
+        source_target_contract = source_request["target_contract"]
+        source_epoch = eligibility.build_source_epoch(
+            original_observation_sha256=eligibility.object_sha256(original),
+            target_contract_sha256=source_target_contract["contract_sha256"],
+            predecessor_generation_id=str(target["generation_id"]),
+            target_generation_id=None,
+            ordinal=int(original_generation["epoch"]) + 1,
+        )
+    generation_id, generation_inputs = processor.generation_identity(
         original["source_id"], original["source_scope"], original["original_baseline_sha256"],
         original["candidate_sha256"], None, original["source_policy_sha256"],
         original["provider_index_sha256"], same_observation_derivation=envelope,
+        source_epoch=source_epoch, source_target_contract=source_target_contract,
     )
-    return {
+    result = {
         "eligible": True,
-        "reason": "same_observation_canonical_derivation_authenticated",
+        "reason": (
+            "same_a_source_contract_rebuild_authenticated"
+            if source_request is not None
+            else "same_observation_canonical_derivation_authenticated"
+        ),
         "generation_id": generation_id,
         "composition_baseline_path": str(composition_output),
         "derivation_path": str(envelope_path),
         "journal_path": str(output_root / "canonical-update-promotion-journal.json"),
         "journal_ref_sha": journal_ref_sha,
         "resume_parent_bundle_dir": str(target_bundle_dir),
+        "resume_parent_archive_path": str(target_archive_path),
         "resume_enrichment_evidence_path": str(target_bundle_dir / "upstream-catalogue-enrichment-evidence.json"),
         "canonical_parent_bundle_dir": str(canonical_dir),
+        "canonical_parent_archive_path": str(canonical_archive_path),
         "current_main_sha": current_identity["main_sha"],
         "current_manifest_sha256": current_identity["manifest_sha256"],
         "resume_parent_generation_id": target["generation_id"],
         "canonical_parent_generation_id": canonical_checkpoint["generation_id"],
         "canonical_parent_journal_record_index": canonical_index,
     }
+    if source_request is not None:
+        bound_epoch = generation_inputs.get("source_epoch")
+        if not isinstance(bound_epoch, Mapping) or bound_epoch.get("target_generation_id") != generation_id:
+            raise ValueError("source_epoch_generation_binding_failed")
+        state_snapshot = runner._source_eligibility_state_snapshot(
+            state_root, repository, target_id, checkpoint_schema,
+        )
+        if state_snapshot["state_commit"] != source_request["selection_state_sha"]:
+            raise ValueError("source_work_request_selection_state_revision_mismatch")
+        if state_snapshot["index"] != index or state_snapshot["checkpoint"] != target:
+            raise ValueError("source_work_request_state_snapshot_mismatch")
+        index_bytes = state_snapshot["index_bytes"]
+        checkpoint_bytes = state_snapshot["checkpoint_bytes"]
+        state_commit = state_snapshot["state_commit"]
+        index_locator = {
+            "repository": repository,
+            "commit_sha": state_commit,
+            "path": state_snapshot["index_relative"],
+            "bytes": len(index_bytes),
+            "sha256": sha256_bytes(index_bytes),
+        }
+        admission_evidence = {**target_admission, "index_locator": index_locator}
+        accounting = {
+            "checkpoint_ref": target["checkpoint_sha256"],
+            "attempts_consumed": int(target.get("attempts_consumed", 0)),
+            "attempts_by_id_sha256": eligibility.object_sha256(target.get("attempts_by_id", {})),
+            "detail_queue_cursor": int(target.get("detail_queue_cursor", 0)),
+            "detail_retry_reset_ids_sha256": eligibility.object_sha256(target.get("detail_retry_reset_ids", [])),
+            "request_reservation_sha256": (
+                eligibility.object_sha256(target["request_reservation"])
+                if target.get("request_reservation") is not None else None
+            ),
+            "lease_sha256": (
+                eligibility.object_sha256(target["lease"])
+                if target.get("lease") is not None else None
+            ),
+            "fencing_token": int(target.get("fencing_token", 0)),
+        }
+        locator = target.get("output_artifact") if isinstance(target.get("output_artifact"), Mapping) else {}
+        evidence_refs = [
+            {"role": "admission_index", "repository": repository, "kind": "git", **{
+                key: index_locator[key] for key in ("commit_sha", "path", "bytes", "sha256")
+            }},
+            {
+                "role": "processor_checkpoint", "repository": repository, "kind": "git",
+                "commit_sha": state_commit,
+                "path": state_snapshot["checkpoint_relative"],
+                "bytes": len(checkpoint_bytes), "sha256": sha256_bytes(checkpoint_bytes),
+            },
+            {
+                "role": "processor_bundle", "repository": repository, "kind": "actions",
+                "run_id": str(locator.get("run_id") or ""),
+                "run_attempt": int(str(locator.get("name") or "").rsplit("-", 1)[-1]),
+                "artifact_id": str(locator.get("artifact_id") or ""),
+                "artifact_name": str(locator.get("name") or ""),
+                "bundle_manifest_sha256": str(locator.get("bundle_manifest_sha256") or ""),
+                "output_bytes": sum(int(row.get("bytes", 0)) for row in target.get("output_digests", []) if isinstance(row, Mapping)),
+            },
+        ]
+        evidence = {
+            "original_observation": original,
+            "admission": admission_evidence,
+            "original_generation": eligibility.normalize_original_generation(target),
+            "processor_parent": target_reference,
+            "target_contract": source_target_contract,
+            "source_epoch": bound_epoch,
+            "accounting": accounting,
+            "canonical_parent_readback": readback,
+            "evidence_refs": evidence_refs,
+        }
+        candidate = {
+            "source_id": original["source_id"],
+            "source_scope": original["source_scope"],
+            "generation_id": target_id,
+            "status": target.get("status"),
+            "artifact_expires_at": target_admission["artifact_expires_at"],
+            "accounting_exhausted": (
+                int(target.get("attempts_consumed", 0)) >= processor.DEFAULT_MAX_ATTEMPTS
+            ),
+            # B cannot establish target-wide C completion. The C-owned native
+            # disposition gate resolves pending/completed work before parent
+            # selection; this read-only producer must remain false.
+            "canonical_completed": False,
+            "lease": target.get("lease"),
+            "target_contract": target_inputs.get("source_target_contract"),
+            "original_observation": original,
+            "evidence": evidence,
+        }
+        selection = eligibility.select_source_work(
+            repository=repository,
+            source_id=original["source_id"],
+            source_scope=original["source_scope"],
+            evaluation=source_request["evaluation"],
+            target_contract=source_target_contract,
+            candidates=[candidate],
+        )
+        if (
+            selection["action"] != source_request["action"]
+            or selection["reason_code"] != source_request["reason_code"]
+        ):
+            raise ValueError("source_work_request_native_selection_mismatch")
+        import jsonschema
+
+        selection_schema = load_json(
+            main_root / "schemas/datapan.upstream-catalogue-source-eligibility.v1.schema.json",
+            1024 * 1024,
+        )
+        jsonschema.Draft202012Validator(
+            selection_schema, format_checker=jsonschema.FormatChecker(),
+        ).validate(selection)
+        source_epoch_path = output_root / "source-epoch.json"
+        source_contract_path = output_root / "source-target-contract.json"
+        source_eligibility_path = output_root / "source-eligibility.json"
+        source_epoch_path.write_bytes(eligibility.canonical_json(bound_epoch) + b"\n")
+        source_contract_path.write_bytes(eligibility.canonical_json(source_target_contract) + b"\n")
+        source_eligibility_path.write_bytes(eligibility.canonical_json(selection) + b"\n")
+        result.update({
+            "source_epoch_path": str(source_epoch_path),
+            "source_target_contract_path": str(source_contract_path),
+            "source_eligibility_path": str(source_eligibility_path),
+            "source_selection_key": selection["selection_key"],
+        })
+    return result
 
 
 def main() -> int:
@@ -920,6 +1382,7 @@ def main() -> int:
     parser.add_argument("--source-root", type=pathlib.Path, required=True)
     parser.add_argument("--state-dir", type=pathlib.Path, required=True)
     parser.add_argument("--target-generation-id", default="")
+    parser.add_argument("--source-work-request", type=pathlib.Path)
     parser.add_argument("--repository", required=True)
     parser.add_argument("--default-branch", default="main")
     parser.add_argument("--collector-admission", type=pathlib.Path, required=True)
@@ -943,6 +1406,7 @@ def main() -> int:
     parser.add_argument("--refresh-evidence", type=pathlib.Path, required=True)
     parser.add_argument("--diff", type=pathlib.Path, required=True)
     parser.add_argument("--resume-bundle", type=pathlib.Path, required=True)
+    parser.add_argument("--resume-bundle-archive", type=pathlib.Path)
     parser.add_argument("--output-dir", type=pathlib.Path, required=True)
     parser.add_argument("--github-output", type=pathlib.Path)
     args = parser.parse_args()
@@ -957,7 +1421,9 @@ def main() -> int:
                 for field in (
                     "generation_id", "composition_baseline_path", "derivation_path", "journal_path",
                     "journal_ref_sha", "resume_parent_bundle_dir", "resume_enrichment_evidence_path",
-                    "canonical_parent_bundle_dir",
+                    "resume_parent_archive_path", "canonical_parent_bundle_dir",
+                    "canonical_parent_archive_path", "source_epoch_path",
+                    "source_target_contract_path", "source_eligibility_path", "source_selection_key",
                 ):
                     handle.write(f"{field}={result.get(field, '')}\n")
         print(json.dumps({key: value for key, value in result.items() if key != "envelope"}, sort_keys=True))

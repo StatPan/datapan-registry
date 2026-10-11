@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://statpan.com/schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
+  "title": "Canonical stale C queue recovery state v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "repository", "records"],
+  "properties": {
+    "schema_version": { "const": "datapan.canonical-stale-c-queue-recovery.v1" },
+    "repository": { "const": "StatPan/datapan-registry" },
+    "records": {
+      "type": "array",
+      "maxItems": 64,
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "$defs": {
+    "positiveInteger": { "type": "integer", "minimum": 1 },
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_id", "repository", "workflow_id", "workflow_path", "run_id", "run_attempt", "event", "branch", "head_sha", "created_at", "updated_at"],
+      "properties": {
+        "repository_id": { "$ref": "#/$defs/positiveInteger" },
+        "repository": { "const": "StatPan/datapan-registry" },
+        "workflow_id": { "$ref": "#/$defs/positiveInteger" },
+        "workflow_path": { "const": ".github/workflows/canonical-update-promotion.yml" },
+        "run_id": { "$ref": "#/$defs/positiveInteger" },
+        "run_attempt": { "const": 1 },
+        "event": { "const": "schedule" },
+        "branch": { "const": "main" },
+        "head_sha": { "$ref": "#/$defs/sha1" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "target", "phase", "reserved_at", "controller", "evidence", "outcome"],
+      "properties": {
+        "schema_version": { "const": "datapan.canonical-stale-c-queue-reservation.v1" },
+        "target": { "$ref": "#/$defs/identity" },
+        "phase": { "enum": ["reserved", "native_cancel_confirmed", "unresolved"] },
+        "reserved_at": { "type": "string", "format": "date-time" },
+        "controller": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository_id", "repository", "workflow_id", "workflow_path", "run_id", "run_attempt", "event", "branch", "head_sha"],
+          "properties": {
+            "repository_id": { "$ref": "#/$defs/positiveInteger" },
+            "repository": { "const": "StatPan/datapan-registry" },
+            "workflow_id": { "$ref": "#/$defs/positiveInteger" },
+            "workflow_path": { "const": ".github/workflows/canonical-update-promotion.yml" },
+            "run_id": { "$ref": "#/$defs/positiveInteger" },
+            "run_attempt": { "$ref": "#/$defs/positiveInteger" },
+            "event": { "const": "schedule" },
+            "branch": { "const": "main" },
+            "head_sha": { "$ref": "#/$defs/sha1" }
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["default_branch_sha", "concurrency_group", "policy_sha256", "controller_workflow_sha256", "target_workflow_sha256"],
+          "properties": {
+            "default_branch_sha": { "$ref": "#/$defs/sha1" },
+            "concurrency_group": { "const": "canonical-update-promotion" },
+            "policy_sha256": { "$ref": "#/$defs/sha256" },
+            "controller_workflow_sha256": { "$ref": "#/$defs/sha256" },
+            "target_workflow_sha256": { "$ref": "#/$defs/sha256" }
+          }
+        },
+        "outcome": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["request_disposition", "observed_at", "run_status", "conclusion", "job_count", "observation_count"],
+              "properties": {
+                "request_disposition": { "enum": ["accepted_202", "accepted_204", "denied", "transport_ambiguous", "not_attempted", "unknown_after_restart"] },
+                "observed_at": { "type": "string", "format": "date-time" },
+                "run_status": { "enum": ["queued", "in_progress", "completed", "waiting", "requested", "pending", "unknown"] },
+                "conclusion": { "type": ["string", "null"], "maxLength": 80 },
+                "job_count": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000 },
+                "observation_count": { "type": "integer", "minimum": 1, "maximum": 3 }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

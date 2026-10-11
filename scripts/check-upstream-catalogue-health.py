@@ -70,6 +70,8 @@ PROCESSOR_OUTPUT_PATHS = (
     "regeneration-queue.json",
     "quarantine.json",
     "composition-receipt.json",
+    "upstream-catalogue-original-candidate.registry.json",
+    "upstream-catalogue-cache-source-context.json",
     "upstream-catalogue-enrichment-evidence.json",
     "upstream-catalogue-processing-result.json",
 )
@@ -81,6 +83,7 @@ C_TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "scripts/refresh-canonical-snapshot-evidence.py",
     "scripts/upstream-catalogue-state-branch.py",
     "scripts/upstream_catalogue_handoff.py",
+    "scripts/upstream_catalogue_cache_source.py",
     "scripts/compose-upstream-catalogue-candidate.py",
     "scripts/generate-batch-link-detail-registry-patches.py",
     "scripts/seoul_oa109_operation_declaration.py",
@@ -88,6 +91,10 @@ C_TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "scripts/materialize-canonical-registry.py",
     "scripts/check-upstream-catalogue-health.py",
     "scripts/canonical_update_terminal_evidence.py",
+    "scripts/canonical_stale_queue_recovery.py",
+    "scripts/canonical_stale_queue_recovery_gate.py",
+    "scripts/canonical_stale_queue_state.py",
+    "scripts/canonical_publication_state.py",
     "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
     "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
@@ -98,14 +105,29 @@ C_TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
+    "schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
     "policy/upstream-catalogue-health.json",
+    "policy/canonical-stale-queue-recovery.v1.json",
 )
+C_TERMINAL_EVALUATOR_SOURCE_PATHS_HISTORICAL_V1 = tuple(sorted(
+    TERMINAL_EVIDENCE.HISTORICAL_V1_EVALUATOR_SOURCE_PATHS,
+))
+C_TERMINAL_EVALUATOR_SOURCE_PATHS_SOURCE_TARGET_V2 = tuple(sorted(
+    TERMINAL_EVIDENCE.V2_EVALUATOR_SOURCE_PATHS,
+))
+C_TERMINAL_EVALUATOR_SOURCE_PATHS_ALL = tuple(sorted(
+    set(C_TERMINAL_EVALUATOR_SOURCE_PATHS_HISTORICAL_V1)
+    | set(C_TERMINAL_EVALUATOR_SOURCE_PATHS)
+    | set(C_TERMINAL_EVALUATOR_SOURCE_PATHS_SOURCE_TARGET_V2)
+))
 HEALTH_EVALUATOR_SOURCE_PATHS = (
     ".github/workflows/upstream-catalogue-health.yml",
     "schemas/datapan.upstream-catalogue-health.v1.schema.json",
     "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
     "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
-    *C_TERMINAL_EVALUATOR_SOURCE_PATHS,
+    *C_TERMINAL_EVALUATOR_SOURCE_PATHS_ALL,
 )
 LINK_CONTRACT_FAILURES = {
     "no_reviewed_declaration": {
@@ -1190,6 +1212,41 @@ def _terminal_runner_declared_paths(runner_bytes: bytes) -> tuple[str, ...]:
     return tuple(paths)
 
 
+def _terminal_runner_schema_declaration(runner_bytes: bytes) -> tuple[str, str]:
+    """Read the producer's literal schema version/path without executing it."""
+    try:
+        tree = ast.parse(runner_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, SyntaxError) as exc:
+        raise RuntimeError("terminal_source_runner_invalid") from exc
+
+    def literal_assignment(name: str) -> str:
+        def binds(node: ast.AST) -> bool:
+            targets: list[ast.AST] = []
+            if isinstance(node, ast.Assign):
+                targets = list(node.targets)
+            elif isinstance(node, ast.AnnAssign):
+                targets = [node.target]
+            return any(
+                isinstance(target, ast.Name) and target.id == name
+                for target in targets
+            )
+
+        declarations = [node for node in ast.walk(tree) if binds(node)]
+        top_level = [node for node in tree.body if binds(node)]
+        if len(declarations) != 1 or len(top_level) != 1 or declarations[0] is not top_level[0]:
+            raise RuntimeError("terminal_source_runner_schema_declaration_invalid")
+        node = top_level[0]
+        value = node.value if isinstance(node, (ast.Assign, ast.AnnAssign)) else None
+        if not isinstance(value, ast.Constant) or not isinstance(value.value, str):
+            raise RuntimeError("terminal_source_runner_schema_declaration_invalid")
+        return value.value
+
+    return (
+        literal_assignment("TERMINAL_OUTCOME_SCHEMA_VERSION"),
+        literal_assignment("TERMINAL_OUTCOME_SCHEMA_PATH"),
+    )
+
+
 def _terminal_workflow_contract(workflow_bytes: bytes) -> dict[str, dict[str, str]]:
     """Check the pinned C workflow's exact mode, output and always-upload steps."""
     try:
@@ -1265,33 +1322,89 @@ def terminal_source_contract(
         raise RuntimeError("terminal_source_history_unavailable") from exc
     if commit.returncode != 0 or ancestor.returncode != 0:
         raise RuntimeError("terminal_source_not_in_trusted_main_history")
-    helper_paths = set(TERMINAL_EVIDENCE.EVALUATOR_SOURCE_PATHS)
-    if helper_paths != set(C_TERMINAL_EVALUATOR_SOURCE_PATHS):
+    health_profiles = {
+        frozenset(C_TERMINAL_EVALUATOR_SOURCE_PATHS_HISTORICAL_V1),
+        frozenset(C_TERMINAL_EVALUATOR_SOURCE_PATHS),
+        frozenset(C_TERMINAL_EVALUATOR_SOURCE_PATHS_SOURCE_TARGET_V2),
+    }
+    helper_profiles = {
+        frozenset(TERMINAL_EVIDENCE.HISTORICAL_V1_EVALUATOR_SOURCE_PATHS),
+        frozenset(TERMINAL_EVIDENCE.CURRENT_V1_EVALUATOR_SOURCE_PATHS),
+        frozenset(TERMINAL_EVIDENCE.V2_EVALUATOR_SOURCE_PATHS),
+    }
+    if (
+        health_profiles != helper_profiles
+        or frozenset(C_TERMINAL_EVALUATOR_SOURCE_PATHS)
+        != frozenset(TERMINAL_EVIDENCE.CURRENT_V1_EVALUATOR_SOURCE_PATHS)
+    ):
         raise RuntimeError("terminal_health_helper_source_set_mismatch")
-    source_files: dict[str, bytes] = {}
-    total_bytes = 0
-    for relative in sorted(helper_paths):
+    runner_bytes = _terminal_git_blob(root, source_sha, TERMINAL_EVIDENCE.RUNNER_PATH)
+    declared_paths = _terminal_runner_declared_paths(runner_bytes)
+    declared_set = frozenset(declared_paths)
+    producer_profiles = {
+        frozenset(TERMINAL_EVIDENCE.HISTORICAL_V1_EVALUATOR_SOURCE_PATHS): (
+            "terminal-evaluator/v1-historical", TERMINAL_EVIDENCE.SCHEMA_VERSION,
+            TERMINAL_EVIDENCE.SCHEMA_PATH,
+        ),
+        frozenset(TERMINAL_EVIDENCE.CURRENT_V1_EVALUATOR_SOURCE_PATHS): (
+            "terminal-evaluator/v1-legacy", TERMINAL_EVIDENCE.SCHEMA_VERSION,
+            TERMINAL_EVIDENCE.SCHEMA_PATH,
+        ),
+        frozenset(TERMINAL_EVIDENCE.V2_EVALUATOR_SOURCE_PATHS): (
+            "terminal-evaluator/v2-source-target", TERMINAL_EVIDENCE.SCHEMA_VERSION_V2,
+            TERMINAL_EVIDENCE.SCHEMA_PATH_V2,
+        ),
+    }
+    producer_profile = producer_profiles.get(declared_set)
+    if producer_profile is None:
+        raise RuntimeError("terminal_source_runner_dependency_set_unsupported")
+    closure_version, expected_schema_version, expected_schema_path = producer_profile
+    if _terminal_runner_schema_declaration(runner_bytes) != (
+        expected_schema_version, expected_schema_path,
+    ):
+        raise RuntimeError("terminal_source_runner_schema_contract_mismatch")
+
+    source_files: dict[str, bytes] = {TERMINAL_EVIDENCE.RUNNER_PATH: runner_bytes}
+    total_bytes = len(runner_bytes)
+    if total_bytes > 32 * 1024 * 1024:
+        raise RuntimeError("terminal_source_closure_size_limit")
+    for relative in sorted(declared_set - {TERMINAL_EVIDENCE.RUNNER_PATH}):
         raw = _terminal_git_blob(root, source_sha, relative)
         total_bytes += len(raw)
         if total_bytes > 32 * 1024 * 1024:
             raise RuntimeError("terminal_source_closure_size_limit")
         source_files[relative] = raw
-    declared_paths = _terminal_runner_declared_paths(source_files["scripts/run-canonical-update-promotion.py"])
-    if declared_paths != C_TERMINAL_EVALUATOR_SOURCE_PATHS:
-        raise RuntimeError("terminal_source_runner_dependency_set_mismatch")
     mode_steps = _terminal_workflow_contract(source_files[".github/workflows/canonical-update-promotion.yml"])
     if any(mode_steps.get(mode) != contract for mode, contract in C_TERMINAL_MODE_STEPS.items()):
         raise RuntimeError("terminal_source_mode_contract_mismatch")
+    required_schema_paths = {
+        TERMINAL_EVIDENCE.SCHEMA_VERSION: TERMINAL_EVIDENCE.SCHEMA_PATH,
+    }
+    if closure_version == "terminal-evaluator/v2-source-target":
+        required_schema_paths[TERMINAL_EVIDENCE.SCHEMA_VERSION_V2] = TERMINAL_EVIDENCE.SCHEMA_PATH_V2
+    schemas = {
+        version: {
+            "path": path,
+            "bytes": source_files[path],
+            "sha256": sha256_bytes(source_files[path]),
+        }
+        for version, path in required_schema_paths.items()
+    }
     schema_path = TERMINAL_EVIDENCE.SCHEMA_PATH
     schema_bytes = source_files[schema_path]
+    schema_sha256 = sha256_bytes(schema_bytes)
     return {
         "repository": repository,
         "workflow_id": workflow_id,
         "workflow_path": TERMINAL_EVIDENCE.WORKFLOW_PATH,
         "source_sha": source_sha,
+        "closure_version": closure_version,
+        "producer_schema_version": expected_schema_version,
+        "producer_schema_path": expected_schema_path,
         "schema_path": schema_path,
         "schema_bytes": schema_bytes,
-        "schema_sha256": sha256_bytes(schema_bytes),
+        "schema_sha256": schema_sha256,
+        "schemas": schemas,
         "source_files": {path: sha256_bytes(raw) for path, raw in source_files.items()},
         "mode_steps": mode_steps,
     }

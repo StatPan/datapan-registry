@@ -8,6 +8,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import os
 import pathlib
 import pprint
 import sys
@@ -42,6 +43,7 @@ DERIVATION = load_script("same_observation_derivation_tests", ROOT / "scripts/up
 PROCESSOR = load_script("same_observation_processor_tests", ROOT / "scripts/process-upstream-catalogue-candidate.py")
 PREPARATION = load_script("same_observation_preparation_tests", ROOT / "scripts/prepare-upstream-catalogue-derivation.py")
 PROMOTION = load_script("same_observation_promotion_tests", ROOT / "scripts/run-canonical-update-promotion.py")
+import upstream_catalogue_source_eligibility as ELIGIBILITY
 COMPOSER = load_script("same_observation_composer_tests", ROOT / "scripts/compose-upstream-catalogue-candidate.py")
 FIXTURES = ROOT / "tests/fixtures/same-observation-derivation"
 PROCESSOR_TESTS = load_script(
@@ -357,6 +359,106 @@ class SameObservationNativeLineageTests(unittest.TestCase):
         with self.assertRaisesRegex(DERIVATION.DerivationError, "canonical_parent_journal_snapshot_changed"):
             DERIVATION.validate_readback_against_journal(
                 envelope, {"records": [mutated]}, journal_ref_sha="a" * 40,
+            )
+
+    def test_preparer_parent_identity_core_rejects_row_or_source_substitution(self) -> None:
+        journal = native_c_journal()
+        row = journal["records"][0]
+        candidate = row["candidate"]
+        readback = DERIVATION.canonical_parent_readback_reference(
+            journal, journal_ref_sha="a" * 40, record_index=0,
+        )
+        checkpoint = {
+            "generation_id": candidate["generation_id"],
+            "source_id": candidate["source_id"],
+            "source_scope": candidate["scope"],
+        }
+        context = {"identity": {
+            "registry_path": candidate["registry_path"],
+            "registry_bytes": candidate["registry_bytes"],
+            "registry_sha256": candidate["registry_sha256"],
+        }}
+        generation_id, validated = PREPARATION.validate_canonical_parent_row_identity(
+            "StatPan/datapan-registry", checkpoint, row, readback, context,
+        )
+        self.assertEqual(generation_id, candidate["generation_id"])
+        self.assertEqual(validated, candidate)
+
+        wrong_source = copy.deepcopy(context)
+        wrong_source["identity"]["registry_sha256"] = "f" * 64
+        with self.assertRaisesRegex(ValueError, "canonical_parent_selected_row_identity_mismatch"):
+            PREPARATION.validate_canonical_parent_row_identity(
+                "StatPan/datapan-registry", checkpoint, row, readback, wrong_source,
+            )
+        wrong_row = copy.deepcopy(row)
+        wrong_row["ownership"]["expected_head_sha"] = "e" * 40
+        with self.assertRaisesRegex(ValueError, "canonical_parent_selected_row_identity_mismatch"):
+            PREPARATION.validate_canonical_parent_row_identity(
+                "StatPan/datapan-registry", checkpoint, wrong_row, readback, context,
+            )
+
+    def test_original_parent_relation_keeps_p_base_merge_and_replay_m_distinct(self) -> None:
+        # Pure relation regression only: native capability authenticity and
+        # actual ancestry are established by the Native resolver, not by this
+        # fixture. A historical PR may have been based on an earlier commit;
+        # its own PR base, exact merge SHA, and replay M are three bindings.
+        p_base = "1" * 40
+        p_merge = "2" * 40
+        replay_m = "3" * 40
+        generation_id = "4" * 64
+        checkpoint_sha = "5" * 64
+        candidate = {"base_sha": p_base, "generation_id": generation_id}
+        row = {"candidate": copy.deepcopy(candidate), "pr": {"merge_commit_sha": p_merge}}
+        checkpoint = {"generation_id": generation_id, "checkpoint_sha256": checkpoint_sha}
+        base = {"commit_sha": replay_m, "tree_sha": "6" * 40}
+        checkpoint_identity = {
+            "generation_id": generation_id, "checkpoint_sha256": checkpoint_sha,
+        }
+        context = {"identity": {"main_sha": replay_m}}
+        readback = {"merge_sha": p_merge}
+        native_pr = {"base": {"sha": p_base}}
+
+        PREPARATION._validate_original_native_parent_identity(
+            "StatPan/datapan-registry", checkpoint, context,
+            base=base, checkpoint_identity=checkpoint_identity,
+            candidate=candidate, native_pr=native_pr, row=row, readback=readback,
+            verified_repository="StatPan/datapan-registry", merge_is_ancestor=True,
+        )
+        self.assertNotEqual(p_base, replay_m)
+        self.assertNotEqual(p_merge, replay_m)
+
+        wrong_pr_base = {"base": {"sha": replay_m}}
+        with self.assertRaisesRegex(ValueError, "canonical_parent_native_facts_identity_mismatch"):
+            PREPARATION._validate_original_native_parent_identity(
+                "StatPan/datapan-registry", checkpoint, context,
+                base=base, checkpoint_identity=checkpoint_identity,
+                candidate=candidate, native_pr=wrong_pr_base, row=row, readback=readback,
+                verified_repository="StatPan/datapan-registry", merge_is_ancestor=True,
+            )
+
+        wrong_replay_m = {"identity": {"main_sha": p_merge}}
+        with self.assertRaisesRegex(ValueError, "canonical_parent_native_facts_identity_mismatch"):
+            PREPARATION._validate_original_native_parent_identity(
+                "StatPan/datapan-registry", checkpoint, wrong_replay_m,
+                base=base, checkpoint_identity=checkpoint_identity,
+                candidate=candidate, native_pr=native_pr, row=row, readback=readback,
+                verified_repository="StatPan/datapan-registry", merge_is_ancestor=True,
+            )
+
+        with self.assertRaisesRegex(ValueError, "canonical_parent_native_facts_identity_mismatch"):
+            PREPARATION._validate_original_native_parent_identity(
+                "StatPan/datapan-registry", checkpoint, context,
+                base=base, checkpoint_identity=checkpoint_identity,
+                candidate=candidate, native_pr=native_pr, row=row, readback=readback,
+                verified_repository="StatPan/datapan-registry", merge_is_ancestor=False,
+            )
+
+    def test_original_native_parent_adapter_rejects_unsealed_input_before_local_validation(self) -> None:
+        with self.assertRaisesRegex(ValueError, "canonical_parent_native_facts_validator_unavailable"):
+            PREPARATION.authenticate_original_native_canonical_parent(
+                "StatPan/datapan-registry", {}, {}, {}, parent_facts={},
+                native_module=object(), derivation=object(), health=object(),
+                now=dt.datetime(2026, 10, 5, tzinfo=dt.timezone.utc),
             )
 
     def test_exact_c_merge_ack_accepts_authenticated_in_job_emission_with_bounded_order(self) -> None:
@@ -933,15 +1035,162 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.claim_runs: list[str] = []
         self.detail_calls: list[str] = []
         self.operation_endpoint_overrides: dict[str, str] = {}
+        self.cache_source_archives: dict[str, bytes] = {}
+        self.cache_source_snapshots: dict[str, dict[str, bytes]] = {}
+        self.generator_sources_by_revision: dict[str, dict[str, bytes]] = {}
+        self.extractor_sources_by_revision: dict[str, bytes] = {}
         (self.helper.root / "scripts").symlink_to(ROOT / "scripts", target_is_directory=True)
         (self.helper.root / "schemas").symlink_to(ROOT / "schemas", target_is_directory=True)
         (self.helper.root / "policy").mkdir(exist_ok=True)
         shutil.copy2(ROOT / "policy/upstream-catalogue-health.json", self.helper.root / "policy/upstream-catalogue-health.json")
         self._write_synthetic_observation()
         self.admission_path, self.archive_path = self._write_admission()
+        current_sources = self._generator_source_files()
+        current_revision = self._register_generator_sources(current_sources)
+        self.assertEqual(current_revision, PROCESSOR.generator_revision())
+        alternate_sources = dict(current_sources)
+        alternate_sources["scripts/process-upstream-catalogue-candidate.py"] += (
+            b"\n# Test-only source-epoch marker; behavior is unchanged.\n"
+        )
+        self.alternate_generator_revision = self._register_generator_sources(alternate_sources)
+        current_extractor = (ROOT / "scripts/generate-batch-link-detail-registry-patches.py").read_bytes()
+        self.extractor_sources_by_revision[hashlib.sha256(current_extractor).hexdigest()] = current_extractor
+        alternate_extractor = current_extractor + b"\n# Test-only extractor-epoch marker.\n"
+        self.alternate_extractor_revision = hashlib.sha256(alternate_extractor).hexdigest()
+        self.extractor_sources_by_revision[self.alternate_extractor_revision] = alternate_extractor
 
     def tearDown(self) -> None:
         self.helper.tearDown()
+
+    def test_source_work_rebuild_uses_committed_state_snapshot_in_the_real_preparer(self) -> None:
+        self.observation_head = "2693e4de28e601555b998a457816f2ad18321699"
+        self.admission_path, self.archive_path = self._write_admission()
+        target = self._run_claim_and_worker(1)
+        journal, canonical = self._synthetic_c_journal(target, 1)
+
+        state_repository = self.helper.root / "source-state-repository"
+        state_repository.mkdir()
+        state_root = state_repository / ".datapan/upstream-catalogue-state"
+        shutil.copytree(self.helper.state_dir, state_root)
+
+        def git_state(*argv: str) -> str:
+            result = subprocess.run(
+                ("git", *argv), cwd=state_repository, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return result.stdout.strip()
+
+        git_state("init", "-q")
+        git_state("config", "user.name", "fixture")
+        git_state("config", "user.email", "fixture@example.test")
+        git_state("remote", "add", "origin", "https://github.com/StatPan/datapan-registry.git")
+        git_state("add", ".datapan/upstream-catalogue-state")
+        git_state("commit", "-q", "-m", "test-only committed processor state")
+        selection_state_sha = git_state("rev-parse", "HEAD")
+        current_source_sha = subprocess.run(
+            ("git", "rev-parse", "HEAD"), cwd=ROOT, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+        ).stdout.strip()
+        current_source_tree = subprocess.run(
+            ("git", "rev-parse", f"{current_source_sha}^{{tree}}"), cwd=ROOT,
+            text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+        ).stdout.strip()
+        # These three inputs are known outstanding C/#767 joins in the current
+        # candidate. Synthetic bytes let the offline fixture exercise B's
+        # caller and identity bindings without claiming their implementation.
+        source_contract_git_overrides = {
+            "schemas/datapan.canonical-update-promotion-terminal-outcome.v2.schema.json": (
+                b'{"$schema":"https://json-schema.org/draft/2020-12/schema",'
+                b'"type":"object","test_only":true}\n'
+            ),
+            "scripts/canonical_current_target_evidence.py": (
+                b"# test-only placeholder for a pending joined C source input\n"
+            ),
+            "scripts/canonical_source_target_disposition.py": (
+                b"# test-only placeholder for a pending joined C source input\n"
+            ),
+        }
+        original_eligibility_git = ELIGIBILITY._git
+
+        def source_contract_git(
+            root: pathlib.Path, *git_args: str, binary: bool = False,
+        ) -> bytes | str:
+            if len(git_args) >= 2 and git_args[0] == "show" and ":" in git_args[1]:
+                revision, path = git_args[1].split(":", 1)
+                payload = source_contract_git_overrides.get(path)
+                if revision == current_source_sha and payload is not None:
+                    return payload if binary else payload.decode("utf-8").strip()
+            return original_eligibility_git(root, *git_args, binary=binary)
+
+        evaluation = {
+            "source_sha": current_source_sha,
+            "source_tree_sha": current_source_tree,
+            "event": "schedule", "run_id": "99500000001", "run_attempt": 1,
+            "as_of": self.now_text,
+        }
+        with mock.patch.object(ELIGIBILITY, "_git", side_effect=source_contract_git):
+            request = ELIGIBILITY.source_work_request_from_state(
+                root=ROOT, state_dir=state_root, repository="StatPan/datapan-registry",
+                source_id="data_go_kr", source_scope="aggregate_supported_catalog",
+                evaluation=evaluation, selection_state_sha=selection_state_sha,
+            )
+        self.assertEqual(request["action"], "rebuild")
+        self.assertEqual(request["selected_generation_id"], target["generation_id"])
+        self.assertEqual(request["selection_state_sha"], selection_state_sha)
+        self.assertEqual(request["target_contract"]["changed_classes"], [ELIGIBILITY.SAME_A_PROCESSING])
+
+        committed_index = (state_root / "sources/data_go_kr/index.json").read_bytes()
+        committed_checkpoint = (
+            state_root / "sources/data_go_kr/generations" / f"{target['generation_id']}.json"
+        ).read_bytes()
+        plan = self._prepare_authenticated_plan(
+            target, journal, canonical, label="source-work-real-preparer",
+            current_main_sha=current_source_sha,
+            source_work_request=request, source_state_dir=state_root,
+            source_contract_git_overrides=source_contract_git_overrides,
+        )
+        self.assertTrue(plan["eligible"], plan)
+        self.assertEqual(plan["reason"], "same_a_source_contract_rebuild_authenticated")
+        epoch = read_json(pathlib.Path(plan["source_epoch_path"]))
+        contract = read_json(pathlib.Path(plan["source_target_contract_path"]))
+        eligibility = read_json(pathlib.Path(plan["source_eligibility_path"]))
+        self.assertEqual(epoch["predecessor_generation_id"], target["generation_id"])
+        self.assertEqual(epoch["target_generation_id"], plan["generation_id"])
+        self.assertEqual(contract, request["target_contract"])
+        self.assertEqual(eligibility["action"], "rebuild")
+        self.assertEqual(eligibility["reason_code"], request["reason_code"])
+        self.assertEqual((state_root / "sources/data_go_kr/index.json").read_bytes(), committed_index)
+        self.assertEqual(
+            (state_root / "sources/data_go_kr/generations" / f"{target['generation_id']}.json").read_bytes(),
+            committed_checkpoint,
+        )
+        self.assertEqual(git_state("rev-parse", "HEAD"), selection_state_sha)
+        self.assertEqual(git_state("status", "--porcelain=v1", "--untracked-files=all"), "")
+
+        forged_selection = copy.deepcopy(request)
+        forged_selection["selection_state_sha"] = "1" * 40
+        with self.assertRaisesRegex(ValueError, "source_work_request_selection_state_revision_mismatch"):
+            self._prepare_authenticated_plan(
+                target, journal, canonical, label="source-work-selection-revision-mismatch",
+                current_main_sha=current_source_sha,
+                source_work_request=forged_selection, source_state_dir=state_root,
+                source_contract_git_overrides=source_contract_git_overrides,
+            )
+
+        index_path = state_root / "sources/data_go_kr/index.json"
+        index_path.write_bytes(committed_index + b" ")
+        try:
+            with self.assertRaisesRegex(ValueError, "source eligibility state checkout is dirty"):
+                self._prepare_authenticated_plan(
+                    target, journal, canonical, label="source-work-dirty-state-rejected",
+                    current_main_sha=current_source_sha,
+                    source_work_request=request, source_state_dir=state_root,
+                    source_contract_git_overrides=source_contract_git_overrides,
+                )
+        finally:
+            index_path.write_bytes(committed_index)
+        self.assertEqual(git_state("status", "--porcelain=v1", "--untracked-files=all"), "")
 
     def _write_synthetic_observation(self, identities: list[str] | None = None) -> None:
         rows = []
@@ -1011,6 +1260,193 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         path = self.helper.root / "collector-admission.json"
         path.write_text(json.dumps(value, sort_keys=True), encoding="utf-8")
         return path, archive_path
+
+    @staticmethod
+    def _generator_source_files() -> dict[str, bytes]:
+        paths = (
+            "scripts/process-upstream-catalogue-candidate.py",
+            "scripts/upstream_catalogue_handoff.py",
+            "scripts/upstream_catalogue_cache_source.py",
+            "scripts/seoul_oa109_operation_declaration.py",
+            "scripts/generate-seoul-oa109-subject-snapshot.py",
+            "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
+            "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+        )
+        return {path: (ROOT / path).read_bytes() for path in paths}
+
+    def _register_generator_sources(self, sources: dict[str, bytes]) -> str:
+        fields = (
+            "processor_script_sha256", "collector_handoff_helper_sha256",
+            "cache_source_helper_sha256", "seoul_operation_declaration_helper_sha256",
+            "seoul_historical_subject_snapshot_generator_sha256",
+            "seoul_operation_declaration_sha256", "seoul_historical_subject_snapshot_sha256",
+        )
+        revision = PROCESSOR.sha256_bytes(PROCESSOR.canonical_json({
+            field: hashlib.sha256(raw).hexdigest()
+            for field, raw in zip(fields, sources.values(), strict=True)
+        }))
+        self.generator_sources_by_revision[revision] = dict(sources)
+        return revision
+
+    def _cache_source_snapshot(self, checkpoint: Mapping[str, Any]) -> tuple[str, dict[str, bytes]]:
+        inputs = checkpoint["generation_inputs"]
+        generator_revision = str(inputs["generator_revision"])
+        extractor_revision = str(inputs["extractor_revision"])
+        if generator_revision not in self.generator_sources_by_revision:
+            raise AssertionError(f"unregistered fixture generator revision: {generator_revision}")
+        if extractor_revision not in self.extractor_sources_by_revision:
+            raise AssertionError(f"unregistered fixture extractor revision: {extractor_revision}")
+        head_sha = hashlib.sha1(PROCESSOR.canonical_json(inputs)).hexdigest()
+        snapshot = self.cache_source_snapshots.get(head_sha)
+        if snapshot is None:
+            snapshot = {
+                path: (ROOT / path).read_bytes()
+                for path in dict.fromkeys(PROMOTION.PROCESSOR_COMPATIBILITY_FILES)
+            }
+            snapshot.update(self.generator_sources_by_revision[generator_revision])
+            snapshot["scripts/generate-batch-link-detail-registry-patches.py"] = (
+                self.extractor_sources_by_revision[extractor_revision]
+            )
+            self.cache_source_snapshots[head_sha] = snapshot
+        return head_sha, snapshot
+
+    def _cache_source_archive(self, checkpoint: Mapping[str, Any]) -> bytes:
+        artifact_id = str(checkpoint["output_artifact"]["artifact_id"])
+        cached = self.cache_source_archives.get(artifact_id)
+        if cached is not None:
+            return cached
+        bundle = self.output_by_generation[str(checkpoint["generation_id"])]
+        output = io.BytesIO()
+        names = [row["path"] for row in checkpoint["output_digests"]]
+        names.append("upstream-catalogue-checkpoint-receipt.json")
+        with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for name in names:
+                info = zipfile.ZipInfo(name, date_time=(2026, 10, 7, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                archive.writestr(info, (bundle / name).read_bytes())
+        raw = output.getvalue()
+        self.cache_source_archives[artifact_id] = raw
+        return raw
+
+    def _cache_source_archive_path(self, checkpoint: Mapping[str, Any]) -> pathlib.Path:
+        bundle = self.output_by_generation[str(checkpoint["generation_id"])]
+        archive_path = bundle.with_suffix(".zip")
+        raw = self._cache_source_archive(checkpoint)
+        if archive_path.exists():
+            self.assertEqual(archive_path.read_bytes(), raw)
+        else:
+            archive_path.write_bytes(raw)
+        return archive_path
+
+    def _checkpoint_for_bundle(self, bundle: pathlib.Path) -> dict[str, Any]:
+        matches = [
+            self.checkpoints[generation_id]
+            for generation_id, candidate in self.output_by_generation.items()
+            if candidate == bundle
+        ]
+        self.assertEqual(len(matches), 1, str(bundle))
+        return matches[0]
+
+    def _cache_source_reader(self):
+        owner = self
+
+        class Reader:
+            def __init__(self) -> None:
+                self.calls: list[tuple[str, str]] = []
+
+            def checkpoint_for(self, *, run_id: str | None = None, artifact_id: str | None = None):
+                matches = []
+                for checkpoint in owner.checkpoints.values():
+                    locator = checkpoint.get("output_artifact", {})
+                    if run_id is not None and str(locator.get("run_id")) != run_id:
+                        continue
+                    if artifact_id is not None and str(locator.get("artifact_id")) != artifact_id:
+                        continue
+                    matches.append(checkpoint)
+                if len(matches) != 1:
+                    raise AssertionError(
+                        f"fixture cache owner lookup is not unique: run={run_id}, artifact={artifact_id}"
+                    )
+                return matches[0]
+
+            def metadata(self, checkpoint: Mapping[str, Any]) -> dict[str, Any]:
+                locator = checkpoint["output_artifact"]
+                raw = owner._cache_source_archive(checkpoint)
+                head_sha, _snapshot = owner._cache_source_snapshot(checkpoint)
+                return {
+                    "id": int(locator["artifact_id"]), "name": locator["name"],
+                    "size_in_bytes": len(raw),
+                    "digest": "sha256:" + hashlib.sha256(raw).hexdigest(),
+                    "expired": False,
+                    "created_at": "2026-10-07T00:00:00Z",
+                    "updated_at": "2026-10-07T00:00:01Z",
+                    "expires_at": locator["expires_at"],
+                    "workflow_run": {
+                        "id": int(locator["run_id"]), "head_sha": head_sha,
+                        "head_branch": "main", "repository_id": 1,
+                        "head_repository_id": 1,
+                    },
+                }
+
+            def json(self, endpoint: str):
+                self.calls.append(("json", endpoint))
+                if "/actions/runs/" in endpoint and endpoint.endswith("/artifacts?per_page=100"):
+                    run_id = endpoint.split("/actions/runs/", 1)[1].split("/", 1)[0]
+                    checkpoint = self.checkpoint_for(run_id=run_id)
+                    return {"total_count": 1, "artifacts": [self.metadata(checkpoint)]}
+                if "/actions/artifacts/" in endpoint:
+                    artifact_id = endpoint.rsplit("/", 1)[1]
+                    return self.metadata(self.checkpoint_for(artifact_id=artifact_id))
+                if "/actions/runs/" in endpoint and "/attempts/" in endpoint:
+                    run_id = endpoint.split("/actions/runs/", 1)[1].split("/", 1)[0]
+                    attempt = int(endpoint.rsplit("/", 1)[1])
+                    checkpoint = self.checkpoint_for(run_id=run_id)
+                    locator = checkpoint["output_artifact"]
+                    expected_attempt = int(str(locator["name"]).rsplit("-", 1)[1])
+                    if attempt != expected_attempt:
+                        raise AssertionError("fixture cache owner attempt differs")
+                    head_sha, _snapshot = owner._cache_source_snapshot(checkpoint)
+                    return {
+                        "id": int(run_id), "run_attempt": attempt,
+                        "path": ".github/workflows/upstream-catalogue-process.yml",
+                        "head_branch": "main", "head_sha": head_sha,
+                        "status": "completed", "conclusion": "success", "event": "schedule",
+                        "repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+                        "head_repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+                    }
+                raise AssertionError(f"unexpected cache-source fixture endpoint: {endpoint}")
+
+            def archive(self, repository: str, artifact_id: str, *, expected_bytes: int) -> bytes:
+                self.calls.append(("archive", artifact_id))
+                if repository != "StatPan/datapan-registry":
+                    raise AssertionError("unexpected cache-source fixture repository")
+                raw = owner._cache_source_archive(self.checkpoint_for(artifact_id=artifact_id))
+                if len(raw) != expected_bytes:
+                    raise AssertionError("fixture cache archive size differs")
+                return raw
+
+            def source_file(
+                self, repository: str, head_sha: str, path: str, *, maximum_bytes: int,
+            ) -> bytes:
+                self.calls.append(("source_file", path))
+                if repository != "StatPan/datapan-registry":
+                    raise AssertionError("unexpected cache-source fixture repository")
+                raw = owner.cache_source_snapshots[head_sha][path]
+                if not 0 < len(raw) <= maximum_bytes:
+                    raise AssertionError("fixture cache source size differs")
+                return raw
+
+        return Reader()
+
+    def _authenticated_cache_source_contract(
+        self, checkpoint: Mapping[str, Any],
+    ) -> tuple[Any, Any]:
+        helper = PROCESSOR.CACHE_SOURCE
+        contract = helper.authenticate_owner_contract(
+            checkpoint, repository="StatPan/datapan-registry", default_branch="main",
+            reader=self._cache_source_reader(),
+        )
+        return helper, contract
 
     def _args(
         self, processor_attempt: int, *, generator_revision: str | None = None,
@@ -1097,6 +1533,9 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         args.expected_generation_id = expected_generation_id
         if resume is not None:
             args.resume_enrichment_evidence = resume
+            resume_owner = self._checkpoint_for_bundle(resume.parent)
+            args.resume_source_context = resume.parent / PROCESSOR.CACHE_SOURCE.CONTEXT_MEMBER
+            args.resume_owner_archive = self._cache_source_archive_path(resume_owner)
         if derivation is not None:
             envelope_path = self.helper.root / f"derivation-{attempt}.json"
             envelope_path.write_bytes(DERIVATION.canonical_json(derivation) + b"\n")
@@ -1111,13 +1550,22 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             args.derivation_journal_ref_sha = journal_ref_sha
             args.resume_parent_bundle_dir = resume_parent_bundle
             args.canonical_parent_bundle_dir = canonical_parent_bundle
+            args.resume_parent_archive = self._cache_source_archive_path(
+                self._checkpoint_for_bundle(resume_parent_bundle),
+            )
+            args.canonical_parent_archive = self._cache_source_archive_path(
+                self._checkpoint_for_bundle(canonical_parent_bundle),
+            )
             args.resume_enrichment_evidence = resume_parent_bundle / "upstream-catalogue-enrichment-evidence.json"
+            args.resume_source_context = resume_parent_bundle / PROCESSOR.CACHE_SOURCE.CONTEXT_MEMBER
+            args.resume_owner_archive = args.resume_parent_archive
             args.canonical_update_pr_helper = ROOT / "scripts/canonical_update_pr.py"
             args.canonical_update_journal_schema = ROOT / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
 
         processor_run = str(args.processor_run_id)
         self.claim_runs.append(processor_run)
         worker_fetcher = fetcher or self._fetch
+        cache_source_reader = self._cache_source_reader()
         fixed_clock = lambda: self.now
         revision_patch = (
             mock.patch.object(PROCESSOR, "generator_revision", return_value=args.test_generator_revision)
@@ -1139,11 +1587,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                     PROCESSOR.process(
                         args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
                         sleeper=lambda _delay: None, clock=fixed_clock,
+                        cache_source_reader=cache_source_reader,
                     )
                 return {}
             claim_code, claim = PROCESSOR.process(
                 args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
                 sleeper=lambda _delay: None, clock=fixed_clock,
+                cache_source_reader=cache_source_reader,
             )
             self.assertEqual(claim_code, expected_claim_code, json.dumps(claim, sort_keys=True))
             self.assertEqual(claim["status"], expected_claim_status)
@@ -1157,11 +1607,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                 worker_code, worker = PROCESSOR.process(
                     args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
                     sleeper=lambda _delay: None, clock=fixed_clock,
+                    cache_source_reader=cache_source_reader,
                 )
             else:
                 worker_code, worker = PROCESSOR.process(
                     args, fetcher=worker_fetcher, resolver_fetcher=resolver_fetcher,
                     sleeper=lambda _delay: None, clock=fixed_clock,
+                    cache_source_reader=cache_source_reader,
                 )
         self.assertEqual(worker_code, expected_worker_code, worker.get("outcome"))
         self.assertEqual(worker["status"], expected_worker_status)
@@ -1373,15 +1825,23 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         pr_cli_state: str = "MERGED",
         pr_rest_merged: Any = True,
         include_pr_rest_merged: bool = True,
+        source_work_request: dict[str, Any] | None = None,
+        source_state_dir: pathlib.Path | None = None,
+        source_contract_git_overrides: dict[str, bytes] | None = None,
     ) -> dict[str, Any]:
         """Run the actual prepare CLI coordinator with remote boundaries stubbed."""
         main_root = self.helper.root / f"prepared-main-{label}"
         source_root = self.helper.root / f"prepared-source-{label}"
         output_root = self.helper.root / f"prepared-output-{label}"
+        source_state_repository = (
+            source_state_dir.parent.parent.resolve() if source_state_dir is not None else None
+        )
+        source_contract_git_overrides = source_contract_git_overrides or {}
+        original_subprocess_run = subprocess.run
         main_root.mkdir(parents=True, exist_ok=True)
         source_root.mkdir(parents=True, exist_ok=True)
         for name in ("scripts", "schemas", "policy"):
-            (main_root / name).symlink_to(ROOT / name, target_is_directory=True)
+            shutil.copytree(ROOT / name, main_root / name)
         # The production snapshot loader rejects paths escaping a checkout via
         # symlinked parents, so this test checkout needs the pinned source files
         # as ordinary local files rather than a contracts symlink.
@@ -1391,6 +1851,11 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
 
         baseline = c["baseline"]
         prepared_main_sha = current_main_sha or baseline["main_sha"]
+        processor_head_sha, processor_source_snapshot = self._cache_source_snapshot(target)
+        for relative, raw in processor_source_snapshot.items():
+            path = main_root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(raw)
         payload = c["payload"]
         manifest_bytes = current_manifest_bytes or self.current_manifests[baseline["main_sha"]]
         self.current_manifests[prepared_main_sha] = manifest_bytes
@@ -1420,11 +1885,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             bundle_dir = self.output_by_generation.get(generation_id)
             if bundle_dir is None:
                 continue
-            archive_path = self.helper.root / f"{label}-{generation_id}.zip"
-            with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-                for relative in (*DERIVATION.PROCESSOR_BUNDLE_FILES, DERIVATION.CHECKPOINT_RECEIPT):
-                    archive.write(bundle_dir / relative, relative)
-            archives[str(checkpoint["output_artifact"]["artifact_id"])] = archive_path.read_bytes()
+            archives[str(checkpoint["output_artifact"]["artifact_id"])] = self._cache_source_archive(checkpoint)
 
         metadata_by_id: dict[str, dict[str, Any]] = {}
         run_by_id: dict[str, dict[str, Any]] = {}
@@ -1433,7 +1894,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             if str(locator.get("artifact_id")) not in archives:
                 continue
             run_id, attempt, _name = PROMOTION.processor_attempt_from_locator(checkpoint)
-            head_sha = self.observation_head
+            head_sha, _snapshot = self._cache_source_snapshot(checkpoint)
             run_by_id[run_id] = {
                 "id": int(run_id), "run_attempt": int(attempt),
                 "name": PROMOTION.PROCESSOR_WORKFLOW_NAME,
@@ -1476,6 +1937,17 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
 
         def fake_health_subprocess(argv, *args, **kwargs):
             command = tuple(str(part) for part in argv)
+            if (
+                source_work_request is not None
+                and command[:1] == ("git",)
+                and pathlib.Path(kwargs.get("cwd", ".")).resolve() == ROOT.resolve()
+            ):
+                return original_subprocess_run(argv, *args, **kwargs)
+            if (
+                source_state_repository is not None
+                and pathlib.Path(kwargs.get("cwd", ".")).resolve() == source_state_repository
+            ):
+                return original_subprocess_run(argv, *args, **kwargs)
             if command[:3] == ("git", "merge-base", "--is-ancestor"):
                 return subprocess.CompletedProcess(argv, 0, stdout="", stderr="")
             if command == ("git", "ls-remote", "--heads", "origin", "refs/heads/main"):
@@ -1500,17 +1972,46 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
 
         def fake_runner_command(argv, cwd, **_kwargs):
             command = tuple(str(part) for part in argv)
+            if source_state_repository is not None and pathlib.Path(cwd).resolve() == source_state_repository:
+                return original_subprocess_run(
+                    argv, cwd=cwd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                    check=False,
+                )
             if command == ("git", "rev-parse", "HEAD"):
                 stdout = prepared_main_sha
             elif command == ("git", "ls-remote", "--heads", "origin", "refs/heads/main"):
                 stdout = f"{prepared_main_sha}\trefs/heads/main\n"
+            elif command[:3] == ("git", "merge-base", "--is-ancestor"):
+                return subprocess.CompletedProcess(argv, 0, stdout="", stderr="")
             elif command == ("git", "show", f"{prepared_main_sha}:manifest.json"):
                 stdout = manifest_bytes.decode("utf-8")
             elif command == ("git", "show", f"{prepared_main_sha}:{DERIVATION.SAFE_PATH}"):
                 stdout = pointer.decode("ascii")
+            elif command[:2] == ("git", "show") and command[2].startswith(f"{processor_head_sha}:"):
+                relative = command[2].split(":", 1)[1]
+                stdout = processor_source_snapshot[relative].decode("utf-8")
             else:
                 raise AssertionError(f"unexpected runner Git command in preparation fixture: {command!r}")
             return subprocess.CompletedProcess(argv, 0, stdout=stdout, stderr="")
+
+        def authenticate_cache_source_fixture(
+            _root: pathlib.Path, checkpoint: Mapping[str, Any], *,
+            repository: str, default_branch: str, native_reader: Any | None = None,
+            archive_path: pathlib.Path | None = None,
+        ) -> tuple[Any, Any]:
+            helper = PROCESSOR.CACHE_SOURCE
+            reader = native_reader or self._cache_source_reader()
+            contract = (
+                helper.authenticate_owner_contract_from_archive_path(
+                    checkpoint, repository=repository, default_branch=default_branch,
+                    reader=reader, archive_path=archive_path,
+                )
+                if archive_path is not None
+                else helper.authenticate_owner_contract(
+                    checkpoint, repository=repository, default_branch=default_branch, reader=reader,
+                )
+            )
+            return helper, contract
 
         def fake_preparation_git(root: pathlib.Path, *argv: str) -> str:
             if tuple(argv) == ("rev-parse", "HEAD") and root == source_root:
@@ -1533,6 +2034,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         module_by_filename = {
             "run-canonical-update-promotion.py": PROMOTION,
             "upstream_catalogue_handoff.py": HANDOFF,
+            "upstream_catalogue_source_eligibility.py": ELIGIBILITY,
             "check-upstream-catalogue-health.py": load_script(
                 "same_observation_health_for_plan", ROOT / "scripts/check-upstream-catalogue-health.py",
             ),
@@ -1556,8 +2058,15 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             if row["producer_run_id"] == self.observation_run
             and row["run_attempt"] == self.admission_metadata["run_attempt"]
         )
+        reusable_bundle = self.output_by_generation.get(target["generation_id"], self.helper.root)
+        reusable_archive = (
+            self._cache_source_archive_path(target)
+            if target["generation_id"] in self.output_by_generation
+            else None
+        )
         args = argparse.Namespace(
-            main_root=main_root, source_root=source_root, state_dir=self.helper.state_dir,
+            main_root=main_root, source_root=source_root,
+            state_dir=source_state_dir or self.helper.state_dir,
             target_generation_id=target["generation_id"], repository="StatPan/datapan-registry",
             default_branch="main", collector_admission=self.helper.root / f"admitted-a-{label}.json",
             collector_archive=self.archive_path,
@@ -1578,7 +2087,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             producer_event=self.admission_metadata["event"],
             candidate=self.helper.candidate_path, refresh_evidence=self.helper.evidence_path,
             diff=self.helper.diff_path,
-            resume_bundle=self.output_by_generation.get(target["generation_id"], self.helper.root),
+            resume_bundle=reusable_bundle,
+            resume_bundle_archive=reusable_archive,
             output_dir=output_root,
         )
         for field, value in (authenticated_overrides or {}).items():
@@ -1612,6 +2122,15 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "--diff", str(args.diff), "--resume-bundle", str(args.resume_bundle),
             "--output-dir", str(args.output_dir), "--github-output", str(args.github_output),
         ]
+        source_request_path = None
+        if source_work_request is not None:
+            source_request_path = self.helper.root / f"source-work-request-{label}.json"
+            source_request_path.write_text(
+                json.dumps(source_work_request, sort_keys=True), encoding="utf-8",
+            )
+            preparation_argv.extend(("--source-work-request", str(source_request_path)))
+        if args.resume_bundle_archive is not None:
+            preparation_argv.extend(("--resume-bundle-archive", str(args.resume_bundle_archive)))
         for field in omitted_authenticated_fields or set():
             position = preparation_argv.index(field)
             del preparation_argv[position:position + 2]
@@ -1675,6 +2194,27 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             processor_bundle_head_calls.append((run_id, supplied_head))
             return original_validate_processor_bundle(*bundle_args, **bundle_kwargs)
 
+        original_eligibility_git = ELIGIBILITY._git
+
+        def source_request_git(root: pathlib.Path, *git_args: str, binary: bool = False) -> bytes | str:
+            if source_work_request is not None and root.resolve() == main_root.resolve():
+                root = ROOT
+            if (
+                source_work_request is not None
+                and len(git_args) >= 2 and git_args[0] == "show"
+                and ":" in git_args[1]
+            ):
+                revision, path = git_args[1].split(":", 1)
+                payload = source_contract_git_overrides.get(path)
+                if revision == source_work_request["evaluation"]["source_sha"] and payload is not None:
+                    return payload if binary else payload.decode("utf-8").strip()
+            return original_eligibility_git(root, *git_args, binary=binary)
+
+        source_request_git_patch = (
+            mock.patch.object(ELIGIBILITY, "_git", side_effect=source_request_git)
+            if source_work_request is not None else contextlib.nullcontext()
+        )
+
         with (
             mock.patch.object(PREPARATION, "load_module", side_effect=lambda path, _name: module_by_filename[path.name]),
             mock.patch.object(PREPARATION, "run_git", side_effect=fake_preparation_git),
@@ -1688,6 +2228,10 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             mock.patch.object(PROMOTION, "authenticated_current_canonical_context", side_effect=record_canonical_context),
             mock.patch.object(PROMOTION, "validate_processor_bundle", side_effect=record_processor_bundle_head),
             mock.patch.object(PROMOTION, "command", side_effect=fake_runner_command),
+            mock.patch.object(
+                PROMOTION, "authenticate_processor_cache_source_contract",
+                side_effect=authenticate_cache_source_fixture,
+            ),
             mock.patch.object(PROMOTION, "processor_run_api", side_effect=lambda _root, _repo, run_id, _attempt: run_by_id[run_id]),
             mock.patch.object(PROMOTION, "processor_artifact_api", side_effect=lambda _root, _repo, _run_id, artifact_id: metadata_by_id.get(artifact_id)),
             mock.patch.object(
@@ -1697,6 +2241,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             mock.patch.object(PROMOTION, "gh_json", side_effect=pr_cli_transport),
             mock.patch.object(PROMOTION, "gh_rest_json", side_effect=pr_rest_transport),
             mock.patch("subprocess.run", side_effect=fake_health_subprocess),
+            source_request_git_patch,
         ):
             stdout, stderr = io.StringIO(), io.StringIO()
             with (
@@ -1732,7 +2277,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                     and row["run_attempt"] == self.admission_metadata["run_attempt"]
                 )
                 self.assertEqual(current_admission, original_admission)
-                self.assertFalse(output_root.exists())
+                self.assertFalse((output_root / "preparation-result.json").exists())
                 self.assertFalse(args.github_output.exists())
                 raise ValueError(str(detail.get("reason") or "derivation_cli_failed"))
             plan = read_json(output_root / "preparation-result.json")
@@ -1776,10 +2321,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
     ) -> None:
         """Exercise the production C-side lineage validator with local API/Git adapters."""
         bundle_dir = self.output_by_generation[checkpoint["generation_id"]]
+        cache_source_helper, cache_source_contract = self._authenticated_cache_source_contract(checkpoint)
         bundle = PROMOTION.validate_processor_bundle(
             checkpoint, bundle_dir,
             read_json(ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json"),
             PROMOTION.load_canonical_update_pr(ROOT), root=ROOT,
+            cache_source_helper=cache_source_helper,
+            cache_source_contract=cache_source_contract,
         )
         envelope = checkpoint["generation_inputs"]["same_observation_derivation"]
         baseline = envelope["composition_baseline"]
@@ -1898,13 +2446,14 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         """Run the actual C candidate selector with only external GETs stubbed."""
         locator = checkpoint["output_artifact"]
         run_id, attempt, artifact_name = PROMOTION.processor_attempt_from_locator(checkpoint)
+        processor_head_sha, _processor_snapshot = self._cache_source_snapshot(checkpoint)
         run = {
             "id": int(run_id), "run_attempt": int(attempt),
             "name": PROMOTION.PROCESSOR_WORKFLOW_NAME,
             "path": PROMOTION.PROCESSOR_WORKFLOW_PATH,
             "repository": {"full_name": "StatPan/datapan-registry"},
             "head_repository": {"full_name": "StatPan/datapan-registry"},
-            "head_branch": "main", "head_sha": self.observation_head,
+            "head_branch": "main", "head_sha": processor_head_sha,
             "event": "schedule", "status": "completed", "conclusion": "success",
         }
         artifact = {
@@ -1912,7 +2461,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "expired": False, "expires_at": locator["expires_at"],
             "size_in_bytes": 101,
             "workflow_run": {
-                "id": int(run_id), "head_sha": self.observation_head, "head_branch": "main",
+                "id": int(run_id), "head_sha": processor_head_sha, "head_branch": "main",
             },
         }
         row = journal["records"][0]
@@ -1945,6 +2494,28 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         composition_schema = read_json(ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
         composition_helper = PROMOTION.load_canonical_update_pr(ROOT)
         already_canonical: list[dict[str, Any]] = []
+        selected_bundle = self.output_by_generation[checkpoint["generation_id"]]
+        self._cache_source_archive_path(checkpoint)
+
+        def authenticate_cache_source_fixture(
+            _root: pathlib.Path, value: Mapping[str, Any], *,
+            repository: str, default_branch: str, native_reader: Any | None = None,
+            archive_path: pathlib.Path | None = None,
+        ) -> tuple[Any, Any]:
+            helper = PROCESSOR.CACHE_SOURCE
+            reader = native_reader or self._cache_source_reader()
+            contract = (
+                helper.authenticate_owner_contract_from_archive_path(
+                    value, repository=repository, default_branch=default_branch,
+                    reader=reader, archive_path=archive_path,
+                )
+                if archive_path is not None
+                else helper.authenticate_owner_contract(
+                    value, repository=repository, default_branch=default_branch, reader=reader,
+                )
+            )
+            return helper, contract
+
         with (
             self._derivation_git(
                 snapshot=journal, journal_ref_sha=c["readback"]["journal_ref_sha"],
@@ -1953,7 +2524,11 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             ),
             mock.patch.object(PROMOTION, "processor_run_api", return_value=run),
             mock.patch.object(PROMOTION, "processor_artifact_api", return_value=artifact),
-            mock.patch.object(PROMOTION, "download_processor_artifact", return_value=self.output_by_generation[checkpoint["generation_id"]]),
+            mock.patch.object(PROMOTION, "download_processor_artifact", return_value=selected_bundle),
+            mock.patch.object(
+                PROMOTION, "authenticate_processor_cache_source_contract",
+                side_effect=authenticate_cache_source_fixture,
+            ),
             mock.patch.object(PROMOTION, "verify_processor_input_compatibility", return_value=None),
             mock.patch.object(PROMOTION, "authenticated_current_canonical_registry", return_value=c["baseline"]),
             mock.patch.object(PROMOTION, "authenticated_current_canonical_context", return_value={
@@ -2057,14 +2632,129 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         health.validate_schema(report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "derived Health receipt")
         return report
 
+    def _run_fresh_replay_verifier(
+        self,
+        *,
+        state_repository: pathlib.Path,
+        prior_state_commit: str,
+        expected_current_state_commit: str,
+        phase: str,
+        receipt: Mapping[str, Any],
+        result: Mapping[str, Any],
+        checkpoint_receipt: Mapping[str, Any] | None = None,
+        expect_rejection: bool = False,
+        expire_after_receipt_validation: bool = False,
+        expire_after_parent_graph: bool = False,
+        expire_after_worktree_reads: bool = False,
+        extra_environment: Mapping[str, str] | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        request_path = self.helper.root / "fresh-process-replay-verifier-input.json"
+        request_path.write_text(json.dumps({
+            "receipt": dict(receipt),
+            "result": dict(result),
+            "checkpoint_receipt": dict(checkpoint_receipt) if checkpoint_receipt is not None else None,
+            "expire_after_receipt_validation": expire_after_receipt_validation,
+            "expire_after_parent_graph": expire_after_parent_graph,
+            "expire_after_worktree_reads": expire_after_worktree_reads,
+        }, sort_keys=True), encoding="utf-8")
+        driver = r"""
+import importlib.util
+import json
+import pathlib
+import sys
+import types
+
+processor_path = pathlib.Path(sys.argv[1])
+sys.path.insert(0, str(processor_path.parent))
+spec = importlib.util.spec_from_file_location("fresh_replay_verifier_processor", processor_path)
+if spec is None or spec.loader is None:
+    raise SystemExit("fresh processor import unavailable")
+processor = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(processor)
+request = json.loads(pathlib.Path(sys.argv[6]).read_text(encoding="utf-8"))
+if (
+    request.get("expire_after_receipt_validation")
+    or request.get("expire_after_parent_graph")
+    or request.get("expire_after_worktree_reads")
+):
+    class _VerifierClock:
+        expired = False
+        def monotonic(self):
+            return 61.0 if self.expired else 0.0
+    _clock = _VerifierClock()
+    processor.time = types.SimpleNamespace(monotonic=_clock.monotonic)
+    if request.get("expire_after_receipt_validation"):
+        _verify_receipt = processor.verify_replay_persistence_receipt
+        def _verify_then_expire(*args, **kwargs):
+            value = _verify_receipt(*args, **kwargs)
+            _clock.expired = True
+            return value
+        processor.verify_replay_persistence_receipt = _verify_then_expire
+    if request.get("expire_after_parent_graph"):
+        _validate_graph = processor.DERIVATION.validate_processor_parent_graph
+        def _validate_then_expire(*args, **kwargs):
+            value = _validate_graph(*args, **kwargs)
+            _clock.expired = True
+            return value
+        processor.DERIVATION.validate_processor_parent_graph = _validate_then_expire
+    if request.get("expire_after_worktree_reads"):
+        _read_worktree_json = processor._replay_worktree_json
+        _worktree_reads = [0]
+        def _read_then_expire(*args, **kwargs):
+            value = _read_worktree_json(*args, **kwargs)
+            _worktree_reads[0] += 1
+            if _worktree_reads[0] == 2:
+                _clock.expired = True
+            return value
+        processor._replay_worktree_json = _read_then_expire
+try:
+    verified = processor.verify_replay_persistence_receipt_from_committed_state(
+        request["receipt"],
+        state_repository=pathlib.Path(sys.argv[2]),
+        prior_state_commit=sys.argv[3],
+        expected_current_state_commit=sys.argv[4],
+        phase=sys.argv[5],
+        result=request["result"],
+        checkpoint_receipt=request["checkpoint_receipt"],
+    )
+except Exception as exc:
+    if sys.argv[7] == "reject":
+        print(f"REJECTED:{type(exc).__name__}:{exc}")
+        raise SystemExit(0)
+    raise
+if sys.argv[7] == "reject":
+    raise SystemExit("unexpected verifier acceptance")
+print("VERIFIED:" + str(verified["generation_id"]))
+"""
+        environment = os.environ.copy()
+        if extra_environment is not None:
+            environment.update(extra_environment)
+        return subprocess.run(
+            (
+                sys.executable, "-I", "-B", "-c", driver,
+                str(ROOT / "scripts/process-upstream-catalogue-candidate.py"),
+                str(state_repository), prior_state_commit, expected_current_state_commit,
+                phase, str(request_path), "reject" if expect_rejection else "accept",
+            ),
+            cwd=ROOT,
+            env=environment,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+
     def test_two_claim_process_cycles_union_same_a_parents_without_refreshing_a_or_retry_state(self) -> None:
         # Two ordinary B executions model separate processor revisions on the
         # same admitted A. Each consumes one physical request and preserves the
         # same observation clock. C0 records B0 as the canonical producer.
         b0 = self._run_claim_and_worker(1)
         first_revision = PROCESSOR.generator_revision()
-        with mock.patch.object(PROCESSOR, "generator_revision", return_value="b" * 64):
-            b1 = self._run_claim_and_worker(2, resume=self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json")
+        b1 = self._run_claim_and_worker(
+            2,
+            resume=self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json",
+            generator_revision=self.alternate_generator_revision,
+        )
         self.assertNotEqual(first_revision, b1["generation_inputs"]["generator_revision"])
         journal1, c1 = self._synthetic_c_journal(b0, 1)
         stale_selected, stale_blocked, stale_existing, stale_pr_reads = self._select_actual_derived_candidate(
@@ -2161,7 +2851,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         noop_args = type("CandidatePreparationArgs", (), {
             "workflow_run_id": processor_run_id,
             "workflow_run_attempt": processor_attempt,
-            "workflow_run_head_sha": self.observation_head,
+            "workflow_run_head_sha": self._cache_source_snapshot(b2)[0],
             "bundle_dir": self.output_by_generation[b2["generation_id"]],
             "state_root": self.helper.state_dir,
             "processor_artifact_id": b2["output_artifact"]["artifact_id"],
@@ -2179,12 +2869,17 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             raise AssertionError(f"already-canonical derived replay attempted preparation command: {command!r}")
 
         candidate_output = io.StringIO()
+        noop_cache_helper, noop_cache_contract = self._authenticated_cache_source_contract(b2)
         with (
             mock.patch.dict(PROMOTION.os.environ, {"GITHUB_REPOSITORY": "StatPan/datapan-registry"}),
             mock.patch.object(PROMOTION, "locate_processor_checkpoint", return_value=(
                 self.helper.state_dir / "sources/data_go_kr/generations" / f"{b2['generation_id']}.json", b2,
             )),
             mock.patch.object(PROMOTION, "verify_processor_input_compatibility"),
+            mock.patch.object(
+                PROMOTION, "authenticate_processor_cache_source_contract",
+                return_value=(noop_cache_helper, noop_cache_contract),
+            ),
             mock.patch.object(PROMOTION, "authenticated_current_canonical_registry", return_value=c2["baseline"]),
             mock.patch.object(PROMOTION, "command", side_effect=no_extra_candidate_git_command),
             mock.patch.object(PROMOTION, "load_promotion_journal_snapshot") as journal_read,
@@ -2291,14 +2986,17 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertCountEqual(attempted_ids, ["1", "2", "3", "4"])
         self.assertEqual(index["detail_retry_state"], {})
         # Every generated artifact is verified by the same bundle validator C
-        # consumes, including exact eight-file inventory and checkpoint copy.
+        # consumes, including the exact modern ten-file inventory and checkpoint copy.
         runner = load_script("same_observation_bundle_validator", ROOT / "scripts/run-canonical-update-promotion.py")
         composition_schema = read_json(ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json")
         composition_helper = load_script("same_observation_composition_helper", ROOT / "scripts/canonical_update_pr.py")
         for checkpoint in (b0, b1, b2, b3):
+            cache_source_helper, cache_source_contract = self._authenticated_cache_source_contract(checkpoint)
             verified = runner.validate_processor_bundle(
                 checkpoint, self.output_by_generation[checkpoint["generation_id"]], composition_schema, composition_helper,
                 root=ROOT,
+                cache_source_helper=cache_source_helper,
+                cache_source_contract=cache_source_contract,
             )
             self.assertEqual(verified["status"], "ready")
             self.assertEqual(
@@ -2311,8 +3009,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         missing_bundle = self.helper.root / "missing-parent-member"
         shutil.copytree(self.output_by_generation[b0["generation_id"]], missing_bundle)
         (missing_bundle / "semantic-diff.json").unlink()
+        cache_source_helper, cache_source_contract = self._authenticated_cache_source_contract(b0)
         with self.assertRaisesRegex(DERIVATION.DerivationError, "parent_bundle_member_set_invalid"):
-            DERIVATION.validate_processor_parent_bundle(self._parent_ref(b0), b0, missing_bundle)
+            DERIVATION.validate_processor_parent_bundle(
+                self._parent_ref(b0), b0, missing_bundle,
+                cache_source_helper=cache_source_helper,
+                owner_contract=cache_source_contract,
+            )
 
         # Every direct and recursive B ancestor remains protected from the
         # generation-file GC. A similarly sealed but unrelated old checkpoint
@@ -2353,17 +3056,95 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         replay_args.derivation_journal_ref_sha = c2["readback"]["journal_ref_sha"]
         replay_args.resume_parent_bundle_dir = self.output_by_generation[env2["resume_parent_processor"]["generation_id"]]
         replay_args.canonical_parent_bundle_dir = self.output_by_generation[b2["generation_id"]]
+        replay_args.resume_parent_archive = self._cache_source_archive_path(
+            self.checkpoints[env2["resume_parent_processor"]["generation_id"]],
+        )
+        replay_args.canonical_parent_archive = self._cache_source_archive_path(b2)
         replay_args.resume_enrichment_evidence = replay_args.resume_parent_bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+        replay_args.resume_source_context = replay_args.resume_parent_bundle_dir / PROCESSOR.CACHE_SOURCE.CONTEXT_MEMBER
+        replay_args.resume_owner_archive = replay_args.resume_parent_archive
         replay_args.canonical_update_pr_helper = ROOT / "scripts/canonical_update_pr.py"
         replay_args.canonical_update_journal_schema = ROOT / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
         replay_checkpoint_path = generation_dir / f"{b3['generation_id']}.json"
         before_checkpoint = PROCESSOR.load_json(replay_checkpoint_path)
         before_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
-        before_calls = len(self.detail_calls)
-        with self._derivation_git(snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2):
-            replay_code, replayed = PROCESSOR.process(
-                replay_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
+        schema = PROCESSOR.load_json(ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json")
+        before_index_bytes = (self.helper.state_dir / "sources/data_go_kr/index.json").read_bytes()
+        before_checkpoint_bytes = replay_checkpoint_path.read_bytes()
+        replay_state_repository = self.helper.root / "exact-replay-state-repository"
+        replay_state_repository.mkdir()
+        committed_state_root = replay_state_repository / ".datapan/upstream-catalogue-state"
+        shutil.copytree(self.helper.state_dir, committed_state_root)
+
+        def git_replay_state(*argv: str) -> str:
+            result = subprocess.run(
+                ("git", *argv), cwd=replay_state_repository, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
             )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            return result.stdout.strip()
+
+        git_replay_state("init", "-q")
+        git_replay_state("config", "user.name", "fixture")
+        git_replay_state("config", "user.email", "fixture@example.test")
+        git_replay_state("remote", "add", "origin", "https://github.com/StatPan/datapan-registry.git")
+        git_replay_state("add", ".datapan/upstream-catalogue-state")
+        git_replay_state("commit", "-q", "-m", "exact ready-state replay fixture")
+        replay_state_head_sha = git_replay_state("rev-parse", "HEAD")
+        self.assertEqual(
+            subprocess.run(
+                ("git", "show", f"{replay_state_head_sha}:.datapan/upstream-catalogue-state/sources/data_go_kr/index.json"),
+                cwd=replay_state_repository, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                check=True,
+            ).stdout,
+            before_index_bytes,
+        )
+        self.assertEqual(
+            subprocess.run(
+                ("git", "show", f"{replay_state_head_sha}:.datapan/upstream-catalogue-state/sources/data_go_kr/generations/{b3['generation_id']}.json"),
+                cwd=replay_state_repository, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                check=True,
+            ).stdout,
+            before_checkpoint_bytes,
+        )
+        replay_args.replay_state_head_sha = replay_state_head_sha
+        before_calls = len(self.detail_calls)
+        missing_state_head_args = copy.copy(replay_args)
+        missing_state_head_args.replay_state_head_sha = None
+        with self._derivation_git(
+            snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2,
+        ):
+            with self.assertRaisesRegex(ValueError, "replay_state_head_sha_invalid"):
+                PROCESSOR.process(
+                    missing_state_head_args, fetcher=self._fetch,
+                    sleeper=lambda _delay: None, clock=lambda: self.now,
+                    cache_source_reader=self._cache_source_reader(),
+                )
+        self.assertEqual((self.helper.state_dir / "sources/data_go_kr/index.json").read_bytes(), before_index_bytes)
+        self.assertEqual(replay_checkpoint_path.read_bytes(), before_checkpoint_bytes)
+        self.assertEqual(len(self.detail_calls), before_calls)
+        real_process = PROCESSOR.process
+
+        def process_with_local_fixture_io(parsed_args: argparse.Namespace) -> tuple[int, dict[str, Any]]:
+            self.assertIs(parsed_args, replay_args)
+            return real_process(
+                parsed_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
+                cache_source_reader=self._cache_source_reader(),
+            )
+
+        parser = mock.Mock()
+        parser.parse_args.return_value = replay_args
+        with self._derivation_git(
+            snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2,
+        ):
+            # Exercise the real CLI terminal-replay branch and its durable
+            # receipt writes.  Only parsing and the external I/O dependencies
+            # are fixture-bound; the production process and main bodies run.
+            with mock.patch.object(PROCESSOR, "build_parser", return_value=parser):
+                with mock.patch.object(PROCESSOR, "process", side_effect=process_with_local_fixture_io):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        replay_code = PROCESSOR.main([])
+        replayed = PROCESSOR.load_json(replay_checkpoint_path)
         after_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
         self.assertEqual(replay_code, 0)
         self.assertEqual(replayed["generation_id"], b3["generation_id"])
@@ -2372,7 +3153,504 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertEqual(replayed["attempts_consumed"], before_checkpoint["attempts_consumed"])
         self.assertEqual(after_index["detail_queue_cursor"], before_index["detail_queue_cursor"])
         self.assertEqual(after_index["detail_retry_state"], before_index["detail_retry_state"])
+        self.assertEqual(after_index["collector_handoff"], before_index["collector_handoff"])
         self.assertEqual(len(self.detail_calls), before_calls)
+
+        lineage_proof = replay_args.exact_delivery_replay_context["validated_derivation_lineage"]
+        origin_admission = next(
+            row for row in before_index["collector_handoff"]["admitted_observations"]
+            if row["producer_run_id"] == self.observation_run
+        )
+        self.assertNotEqual(origin_admission["generation_id"], b3["generation_id"])
+        self.assertIn(origin_admission["generation_id"], lineage_proof.ancestor_generation_ids)
+        self.assertEqual(
+            DERIVATION.original_observation_from_checkpoint(before_checkpoint, origin_admission),
+            env2["original_observation"],
+        )
+        replay_result = PROCESSOR.processing_result(
+            replayed,
+            exact_delivery_replay=True,
+            producer_run_id=self.observation_run,
+            processor_run_id=replay_args.processor_run_id,
+            processor_artifact_run_id=replay_args.processor_artifact_run_id,
+        )
+        replay_receipt_args = {
+            "prior_checkpoint": before_checkpoint,
+            "current_checkpoint": replayed,
+            "prior_index": before_index,
+            "current_index": after_index,
+            "result": replay_result,
+            "state_head_sha": replay_state_head_sha,
+            "checkpoint_schema": schema,
+            "validated_derivation_lineage": lineage_proof,
+        }
+        persisted_receipt_path = replay_args.output_dir / PROCESSOR.REPLAY_PERSISTENCE_RECEIPT
+        replay_receipt = PROCESSOR.load_json(persisted_receipt_path)
+        self.assertIs(
+            PROCESSOR.verify_replay_persistence_receipt(replay_receipt, **replay_receipt_args),
+            replay_receipt,
+        )
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR.build_replay_persistence_receipt(
+                **{key: value for key, value in replay_receipt_args.items() if key != "validated_derivation_lineage"},
+            )
+        unrelated_lineage = PROCESSOR._ValidatedReplayLineage(
+            token=PROCESSOR._REPLAY_LINEAGE_PROOF_TOKEN,
+            target_generation_id=lineage_proof.target_generation_id,
+            derivation_sha256=lineage_proof.derivation_sha256,
+            original_observation_sha256=lineage_proof.original_observation_sha256,
+            ancestor_generation_ids=frozenset(
+                lineage_proof.ancestor_generation_ids - {origin_admission["generation_id"]},
+            ),
+        )
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_binding_mismatch"):
+            PROCESSOR.build_replay_persistence_receipt(
+                **{**replay_receipt_args, "validated_derivation_lineage": unrelated_lineage},
+            )
+        wrong_target_lineage = PROCESSOR._ValidatedReplayLineage(
+            token=PROCESSOR._REPLAY_LINEAGE_PROOF_TOKEN,
+            target_generation_id="f" * 64,
+            derivation_sha256=lineage_proof.derivation_sha256,
+            original_observation_sha256=lineage_proof.original_observation_sha256,
+            ancestor_generation_ids=lineage_proof.ancestor_generation_ids,
+        )
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR.build_replay_persistence_receipt(
+                **{**replay_receipt_args, "validated_derivation_lineage": wrong_target_lineage},
+            )
+        tampered_candidate = copy.deepcopy(before_checkpoint)
+        tampered_candidate["generation_inputs"]["candidate_sha256"] = "f" * 64
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_binding_mismatch"):
+            PROCESSOR._replay_admission(
+                tampered_candidate, before_index,
+                validated_derivation_lineage=lineage_proof,
+            )
+        tampered_observation = copy.deepcopy(before_checkpoint)
+        tampered_observation["last_observation"]["observed_at"] = "2026-10-02T00:00:00Z"
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_binding_mismatch"):
+            PROCESSOR._replay_admission(
+                tampered_observation, before_index,
+                validated_derivation_lineage=lineage_proof,
+            )
+        duplicate_admission_index = copy.deepcopy(before_index)
+        duplicate_admission_index["collector_handoff"]["admitted_observations"].append(
+            copy.deepcopy(origin_admission),
+        )
+        with self.assertRaises(ValueError):
+            PROCESSOR._replay_admission(
+                before_checkpoint, duplicate_admission_index,
+                validated_derivation_lineage=lineage_proof,
+            )
+
+        # A second exact replay uses a newly committed snapshot of the state
+        # after the first replay and remains idempotent without provider work.
+        committed_state_root = replay_state_repository / ".datapan/upstream-catalogue-state"
+        shutil.rmtree(committed_state_root)
+        shutil.copytree(self.helper.state_dir, committed_state_root)
+        pre_cas_verification = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit=replay_state_head_sha,
+            expected_current_state_commit=replay_state_head_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_PRE_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            checkpoint_receipt=replayed,
+        )
+        self.assertEqual(pre_cas_verification.returncode, 0, pre_cas_verification.stderr)
+        self.assertIn(f"VERIFIED:{b3['generation_id']}", pre_cas_verification.stdout)
+        expired_after_worktree_reads = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit=replay_state_head_sha,
+            expected_current_state_commit=replay_state_head_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_PRE_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            checkpoint_receipt=replayed,
+            expect_rejection=True,
+            expire_after_worktree_reads=True,
+        )
+        self.assertEqual(expired_after_worktree_reads.returncode, 0, expired_after_worktree_reads.stderr)
+        self.assertIn(
+            "REJECTED:ValueError:replay_state_verification_deadline_exceeded",
+            expired_after_worktree_reads.stdout,
+        )
+        git_replay_state("add", ".datapan/upstream-catalogue-state")
+        git_replay_state("commit", "-q", "--allow-empty", "-m", "updated exact ready-state replay fixture")
+        replay_state_head_sha = git_replay_state("rev-parse", "HEAD")
+        post_cas_verification = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit=replay_receipt["state_head_sha"],
+            expected_current_state_commit=replay_state_head_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_POST_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            extra_environment={"GIT_DIR": str(ROOT / ".git")},
+        )
+        self.assertEqual(post_cas_verification.returncode, 0, post_cas_verification.stderr)
+        self.assertIn(f"VERIFIED:{b3['generation_id']}", post_cas_verification.stdout)
+        expired_after_receipt = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit=replay_receipt["state_head_sha"],
+            expected_current_state_commit=replay_state_head_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_POST_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            expect_rejection=True,
+            expire_after_receipt_validation=True,
+        )
+        self.assertEqual(expired_after_receipt.returncode, 0, expired_after_receipt.stderr)
+        self.assertIn(
+            "REJECTED:ValueError:replay_state_verification_deadline_exceeded",
+            expired_after_receipt.stdout,
+        )
+        expired_after_parent_graph = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit=replay_receipt["state_head_sha"],
+            expected_current_state_commit=replay_state_head_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_POST_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            expect_rejection=True,
+            expire_after_parent_graph=True,
+        )
+        self.assertEqual(expired_after_parent_graph.returncode, 0, expired_after_parent_graph.stderr)
+        self.assertIn(
+            "REJECTED:ValueError:replay_state_verification_deadline_exceeded",
+            expired_after_parent_graph.stdout,
+        )
+        wrong_head_verification = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit=replay_receipt["state_head_sha"],
+            expected_current_state_commit=replay_receipt["state_head_sha"],
+            phase=PROCESSOR._REPLAY_VERIFY_PRE_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            checkpoint_receipt=replayed,
+            expect_rejection=True,
+        )
+        self.assertEqual(wrong_head_verification.returncode, 0, wrong_head_verification.stderr)
+        self.assertIn("REJECTED:ValueError:replay_state_current_head_mismatch", wrong_head_verification.stdout)
+        wrong_prior_verification = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit="0" * 40,
+            expected_current_state_commit=replay_state_head_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_POST_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            expect_rejection=True,
+        )
+        self.assertEqual(wrong_prior_verification.returncode, 0, wrong_prior_verification.stderr)
+        self.assertIn("REJECTED:ValueError:replay_state_commit_binding_invalid", wrong_prior_verification.stdout)
+        tampered_receipt = copy.deepcopy(replay_receipt)
+        tampered_receipt["processor_run_id"] = "999999"
+        tampered_receipt_verification = self._run_fresh_replay_verifier(
+            state_repository=replay_state_repository,
+            prior_state_commit=replay_receipt["state_head_sha"],
+            expected_current_state_commit=replay_state_head_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_POST_CAS,
+            receipt=tampered_receipt,
+            result=replay_result,
+            expect_rejection=True,
+        )
+        self.assertEqual(tampered_receipt_verification.returncode, 0, tampered_receipt_verification.stderr)
+        self.assertIn("REJECTED:ValueError:replay_persistence_receipt_digest_invalid", tampered_receipt_verification.stdout)
+
+        lineage_variant_repository = self.helper.root / "replay-lineage-negative-state-repository"
+        clone_result = subprocess.run(
+            ("git", "clone", "--no-hardlinks", str(replay_state_repository), str(lineage_variant_repository)),
+            cwd=self.helper.root, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        )
+        self.assertEqual(clone_result.returncode, 0, clone_result.stderr)
+
+        def git_lineage_variant(*argv: str) -> str:
+            completed = subprocess.run(
+                ("git", *argv), cwd=lineage_variant_repository, text=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            return completed.stdout.strip()
+
+        def assert_committed_lineage_rejected(name: str, mutate_prior) -> None:
+            git_lineage_variant("checkout", "-q", "-B", f"bad-{name}", replay_receipt["state_head_sha"])
+            variant_state_root = lineage_variant_repository / ".datapan/upstream-catalogue-state"
+            variant_index_path = variant_state_root / "sources/data_go_kr/index.json"
+            mutate_prior(variant_state_root, variant_index_path)
+            git_lineage_variant("add", ".datapan/upstream-catalogue-state")
+            git_lineage_variant("commit", "-q", "-m", f"invalid committed replay lineage: {name}")
+            bad_prior_sha = git_lineage_variant("rev-parse", "HEAD")
+            if name == "tampered-parent":
+                committed_parent = subprocess.run(
+                    ("git", "show", f"{bad_prior_sha}:{parent_checkpoint_relative}"),
+                    cwd=lineage_variant_repository, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                    check=False,
+                )
+                self.assertEqual(committed_parent.returncode, 0, committed_parent.stderr)
+                self.assertEqual(committed_parent.stdout, tampered_parent_snapshot[0])
+
+            target_checkpoint_relative = (
+                f".datapan/upstream-catalogue-state/sources/data_go_kr/generations/{b3['generation_id']}.json"
+            )
+            current_index_relative = ".datapan/upstream-catalogue-state/sources/data_go_kr/index.json"
+            shutil.copy2(
+                replay_checkpoint_path,
+                lineage_variant_repository / target_checkpoint_relative,
+            )
+            current_index_for_variant = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+            if isinstance(current_index_for_variant.get("collector_handoff"), Mapping):
+                index_after_mutation = PROCESSOR.load_json(variant_index_path)
+                if name == "cross-a-admission":
+                    current_index_for_variant["collector_handoff"] = index_after_mutation["collector_handoff"]
+            (lineage_variant_repository / current_index_relative).write_text(
+                json.dumps(current_index_for_variant, sort_keys=True) + "\n", encoding="utf-8",
+            )
+            git_lineage_variant("add", target_checkpoint_relative, current_index_relative)
+            git_lineage_variant("commit", "-q", "--allow-empty", "-m", f"invalid replay lineage state transition: {name}")
+            bad_current_sha = git_lineage_variant("rev-parse", "HEAD")
+            bad_receipt = copy.deepcopy(replay_receipt)
+            bad_receipt["state_head_sha"] = bad_prior_sha
+            bad_receipt.pop("receipt_sha256", None)
+            bad_receipt["receipt_sha256"] = PROCESSOR._object_sha256(bad_receipt)
+            rejected = self._run_fresh_replay_verifier(
+                state_repository=lineage_variant_repository,
+                prior_state_commit=bad_prior_sha,
+                expected_current_state_commit=bad_current_sha,
+                phase=PROCESSOR._REPLAY_VERIFY_POST_CAS,
+                receipt=bad_receipt,
+                result=replay_result,
+                expect_rejection=True,
+            )
+            self.assertEqual(rejected.returncode, 0, f"{name}: {rejected.stderr}")
+            self.assertIn("REJECTED:ValueError:", rejected.stdout, f"{name}: {rejected.stdout}")
+            expected_errors = {
+                "tampered-parent": "replay_parent_graph_invalid",
+                "missing-parent": "replay_parent_graph_invalid",
+                "unindexed-parent": "replay_parent_graph_invalid",
+                "duplicate-index-entry": "replay_generation_index_duplicate",
+                "incomplete-ancestor-set": "replay_parent_graph_invalid",
+                "cross-a-admission": "replay_parent_graph_invalid",
+                "cyclic-lineage": "replay_parent_graph_invalid",
+            }
+            self.assertIn(
+                f"REJECTED:ValueError:{expected_errors[name]}", rejected.stdout,
+                f"{name}: {rejected.stdout}",
+            )
+
+        parent_generation_id = env2["resume_parent_processor"]["generation_id"]
+        parent_checkpoint_relative = (
+            f".datapan/upstream-catalogue-state/sources/data_go_kr/generations/{parent_generation_id}.json"
+        )
+        tampered_parent_snapshot: list[bytes] = []
+
+        def mutate_tampered_parent(state_root: pathlib.Path, _index_path: pathlib.Path) -> None:
+            parent_path = state_root / "sources/data_go_kr/generations" / f"{parent_generation_id}.json"
+            altered_checkpoint = PROCESSOR.load_json(parent_path)
+            altered_checkpoint["last_heartbeat_at"] = "2026-10-01T00:00:01Z"
+            altered = json.dumps(altered_checkpoint, sort_keys=True).encode("utf-8") + b"\n"
+            tampered_parent_snapshot[:] = [altered]
+            parent_path.write_bytes(altered)
+
+        def mutate_missing_parent(state_root: pathlib.Path, _index_path: pathlib.Path) -> None:
+            (state_root / "sources/data_go_kr/generations" / f"{parent_generation_id}.json").unlink()
+
+        def mutate_unindexed_parent(state_root: pathlib.Path, index_path: pathlib.Path) -> None:
+            del state_root
+            index_value = PROCESSOR.load_json(index_path)
+            index_value["generations"] = [
+                row for row in index_value["generations"]
+                if row.get("generation_id") != parent_generation_id
+            ]
+            index_path.write_text(json.dumps(index_value, sort_keys=True) + "\n", encoding="utf-8")
+
+        def mutate_duplicate_index_entry(state_root: pathlib.Path, index_path: pathlib.Path) -> None:
+            del state_root
+            index_value = PROCESSOR.load_json(index_path)
+            target = next(row for row in index_value["generations"] if row["generation_id"] == b3["generation_id"])
+            index_value["generations"].append(copy.deepcopy(target))
+            index_path.write_text(json.dumps(index_value, sort_keys=True) + "\n", encoding="utf-8")
+
+        def mutate_incomplete_ancestor_set(state_root: pathlib.Path, _index_path: pathlib.Path) -> None:
+            ancestor_id = env1["ancestor_generation_ids"][0]
+            ancestor_path = state_root / "sources/data_go_kr/generations" / f"{b2['generation_id']}.json"
+            ancestor_checkpoint = PROCESSOR.load_json(ancestor_path)
+            ancestor_inputs = dict(ancestor_checkpoint["generation_inputs"])
+            envelope = copy.deepcopy(ancestor_inputs["same_observation_derivation"])
+            envelope["ancestor_generation_ids"].remove(ancestor_id)
+            ancestor_inputs["same_observation_derivation"] = envelope
+            ancestor_checkpoint["generation_inputs"] = ancestor_inputs
+            PROCESSOR.seal_checkpoint(ancestor_checkpoint)
+            ancestor_path.write_text(json.dumps(ancestor_checkpoint, sort_keys=True) + "\n", encoding="utf-8")
+
+        def mutate_cross_a_admission(state_root: pathlib.Path, index_path: pathlib.Path) -> None:
+            index_value = PROCESSOR.load_json(index_path)
+            fake_admission = copy.deepcopy(origin_admission)
+            fake_run_id = str(int(fake_admission["producer_run_id"]) + 1000)
+            fake_artifact_id = str(int(fake_admission["artifact_id"]) + 1000)
+            fake_evidence_sha = "e" * 64
+            fake_admission.update({
+                "producer_run_id": fake_run_id,
+                "run_started_at": "2026-10-02T00:00:01Z",
+                "head_sha": "c" * 40,
+                "artifact_id": fake_artifact_id,
+                "artifact_name": f"upstream-catalog-refresh-{fake_run_id}",
+                "artifact_digest_sha256": "d" * 64,
+                "refresh_evidence_sha256": fake_evidence_sha,
+                "generation_id": "f" * 64,
+                "admission_id": HANDOFF.admission_id(
+                    fake_run_id, fake_admission["run_attempt"], fake_evidence_sha,
+                ),
+            })
+            ledger = HANDOFF.validate_ledger(index_value["collector_handoff"])
+            ledger["admitted_observations"].append(fake_admission)
+            ledger["admitted_observations"].sort(key=HANDOFF.admission_order_key)
+            try:
+                HANDOFF.validate_admission_row(fake_admission)
+                HANDOFF.validate_ledger(ledger)
+            except HANDOFF.HandoffError as exc:
+                raise AssertionError(f"cross-A test admission is malformed: {exc}") from exc
+            index_value["collector_handoff"] = ledger
+            index_path.write_text(json.dumps(index_value, sort_keys=True) + "\n", encoding="utf-8")
+
+            original_parent = PROCESSOR.load_json(
+                state_root / "sources/data_go_kr/generations" / f"{b0['generation_id']}.json",
+            )
+            original_parent["last_observation"]["producer_run_id"] = fake_run_id
+            original_parent["last_observation"]["refresh_evidence_sha256"] = fake_evidence_sha
+            for reference in original_parent["input_artifacts"]:
+                if reference.get("run_id") == origin_admission["producer_run_id"]:
+                    reference.update({
+                        "run_id": fake_run_id,
+                        "artifact_id": fake_artifact_id,
+                        "name": fake_admission["artifact_name"],
+                        "evidence_sha256": fake_evidence_sha,
+                    })
+            PROCESSOR.seal_checkpoint(original_parent)
+            (state_root / "sources/data_go_kr/generations" / f"{b0['generation_id']}.json").write_text(
+                json.dumps(original_parent, sort_keys=True) + "\n", encoding="utf-8",
+            )
+
+        def mutate_cyclic_lineage(state_root: pathlib.Path, _index_path: pathlib.Path) -> None:
+            cycle_envelope = copy.deepcopy(env2)
+            cycle_envelope["resume_parent_processor"] = self._parent_ref(b2)
+            cycle_envelope["canonical_parent_processor"] = self._parent_ref(b2)
+            cycle_envelope["ancestor_generation_ids"] = sorted(set(env2["ancestor_generation_ids"]))
+            DERIVATION.validate_derivation_envelope(cycle_envelope)
+            original_parent = PROCESSOR.load_json(
+                state_root / "sources/data_go_kr/generations" / f"{b0['generation_id']}.json",
+            )
+            original_parent["generation_inputs"] = dict(original_parent["generation_inputs"])
+            original_parent["generation_inputs"]["same_observation_derivation"] = cycle_envelope
+            PROCESSOR.seal_checkpoint(original_parent)
+            (state_root / "sources/data_go_kr/generations" / f"{b0['generation_id']}.json").write_text(
+                json.dumps(original_parent, sort_keys=True) + "\n", encoding="utf-8",
+            )
+
+        for variant_name, mutate in (
+            ("tampered-parent", mutate_tampered_parent),
+            ("missing-parent", mutate_missing_parent),
+            ("unindexed-parent", mutate_unindexed_parent),
+            ("duplicate-index-entry", mutate_duplicate_index_entry),
+            ("incomplete-ancestor-set", mutate_incomplete_ancestor_set),
+            ("cross-a-admission", mutate_cross_a_admission),
+            ("cyclic-lineage", mutate_cyclic_lineage),
+        ):
+            assert_committed_lineage_rejected(variant_name, mutate)
+
+        git_lineage_variant("checkout", "-q", "-B", "bad-terminal-current", replay_state_head_sha)
+        terminal_state_root = lineage_variant_repository / ".datapan/upstream-catalogue-state"
+        terminal_checkpoint_path = terminal_state_root / "sources/data_go_kr/generations" / f"{b3['generation_id']}.json"
+        terminal_checkpoint = PROCESSOR.load_json(terminal_checkpoint_path)
+        changed_time = dt.datetime.fromisoformat(terminal_checkpoint["last_heartbeat_at"].replace("Z", "+00:00"))
+        terminal_checkpoint["last_heartbeat_at"] = (changed_time + dt.timedelta(seconds=1)).isoformat().replace("+00:00", "Z")
+        PROCESSOR.seal_checkpoint(terminal_checkpoint)
+        terminal_checkpoint_path.write_text(json.dumps(terminal_checkpoint, sort_keys=True) + "\n", encoding="utf-8")
+        terminal_index_path = terminal_state_root / "sources/data_go_kr/index.json"
+        terminal_index = PROCESSOR.load_json(terminal_index_path)
+        terminal_index_row = next(row for row in terminal_index["generations"] if row["generation_id"] == b3["generation_id"])
+        terminal_index_row["updated_at"] = terminal_checkpoint["last_heartbeat_at"]
+        terminal_index_path.write_text(json.dumps(terminal_index, sort_keys=True) + "\n", encoding="utf-8")
+        git_lineage_variant("add", ".datapan/upstream-catalogue-state")
+        git_lineage_variant("commit", "-q", "-m", "changed terminal replay checkpoint state")
+        changed_terminal_sha = git_lineage_variant("rev-parse", "HEAD")
+        changed_terminal_verification = self._run_fresh_replay_verifier(
+            state_repository=lineage_variant_repository,
+            prior_state_commit=replay_receipt["state_head_sha"],
+            expected_current_state_commit=changed_terminal_sha,
+            phase=PROCESSOR._REPLAY_VERIFY_POST_CAS,
+            receipt=replay_receipt,
+            result=replay_result,
+            expect_rejection=True,
+        )
+        self.assertEqual(changed_terminal_verification.returncode, 0, changed_terminal_verification.stderr)
+        self.assertIn("REJECTED:ValueError:replay_persistence_receipt_binding_mismatch", changed_terminal_verification.stdout)
+
+        replay_args.replay_state_head_sha = replay_state_head_sha
+        second_before_checkpoint = PROCESSOR.load_json(replay_checkpoint_path)
+        second_before_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        second_before_index_bytes = (self.helper.state_dir / "sources/data_go_kr/index.json").read_bytes()
+        second_before_checkpoint_bytes = replay_checkpoint_path.read_bytes()
+        self.assertEqual(
+            subprocess.run(
+                ("git", "show", f"{replay_state_head_sha}:.datapan/upstream-catalogue-state/sources/data_go_kr/index.json"),
+                cwd=replay_state_repository, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+            ).stdout,
+            second_before_index_bytes,
+        )
+        self.assertEqual(
+            subprocess.run(
+                ("git", "show", f"{replay_state_head_sha}:.datapan/upstream-catalogue-state/sources/data_go_kr/generations/{b3['generation_id']}.json"),
+                cwd=replay_state_repository, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+            ).stdout,
+            second_before_checkpoint_bytes,
+        )
+        second_calls = len(self.detail_calls)
+        post_first_replay_now = self.now
+        post_first_replay_now_text = self.now_text
+        self.now += dt.timedelta(seconds=1)
+        self.now_text = self.now.isoformat().replace("+00:00", "Z")
+        with self._derivation_git(
+            snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2,
+        ):
+            second_code, second_replayed = PROCESSOR.process(
+                replay_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
+                cache_source_reader=self._cache_source_reader(),
+            )
+        self.now = post_first_replay_now
+        self.now_text = post_first_replay_now_text
+        second_after_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        self.assertEqual(second_code, 0)
+        self.assertEqual(second_replayed["generation_id"], b3["generation_id"])
+        self.assertEqual(second_replayed["output_artifact"], second_before_checkpoint["output_artifact"])
+        self.assertEqual(second_replayed["output_digests"], second_before_checkpoint["output_digests"])
+        self.assertEqual(second_replayed["attempts_consumed"], second_before_checkpoint["attempts_consumed"])
+        self.assertEqual(second_replayed["attempts_by_id"], second_before_checkpoint["attempts_by_id"])
+        self.assertEqual(second_replayed["request_reservation"], second_before_checkpoint["request_reservation"])
+        self.assertEqual(second_after_index["collector_handoff"], second_before_index["collector_handoff"])
+        self.assertEqual(second_after_index["detail_queue_cursor"], second_before_index["detail_queue_cursor"])
+        self.assertEqual(second_after_index["detail_retry_state"], second_before_index["detail_retry_state"])
+        self.assertEqual(len(self.detail_calls), second_calls)
+        second_replay_context = replay_args.exact_delivery_replay_context
+        second_replay_result = PROCESSOR.processing_result(
+            second_replayed,
+            exact_delivery_replay=True,
+            producer_run_id=self.observation_run,
+            processor_run_id=replay_args.processor_run_id,
+            processor_artifact_run_id=replay_args.processor_artifact_run_id,
+        )
+        second_receipt_args = {
+            "prior_checkpoint": second_before_checkpoint,
+            "current_checkpoint": second_replayed,
+            "prior_index": second_before_index,
+            "current_index": second_after_index,
+            "result": second_replay_result,
+            "state_head_sha": replay_state_head_sha,
+            "checkpoint_schema": schema,
+            "validated_derivation_lineage": second_replay_context["validated_derivation_lineage"],
+        }
+        second_receipt = PROCESSOR.build_replay_persistence_receipt(**second_receipt_args)
+        self.assertIs(
+            PROCESSOR.verify_replay_persistence_receipt(second_receipt, **second_receipt_args),
+            second_receipt,
+        )
 
         # A pure same-observation recomposition can have no newly eligible
         # detail requests. It must still compose accumulated parent evidence,
@@ -2546,7 +3824,12 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         args.derivation_journal_ref_sha = c["readback"]["journal_ref_sha"]
         args.resume_parent_bundle_dir = self.output_by_generation[b0["generation_id"]]
         args.canonical_parent_bundle_dir = self.output_by_generation[b0["generation_id"]]
+        parent_archive = self._cache_source_archive_path(b0)
+        args.resume_parent_archive = parent_archive
+        args.canonical_parent_archive = parent_archive
         args.resume_enrichment_evidence = args.resume_parent_bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+        args.resume_source_context = args.resume_parent_bundle_dir / PROCESSOR.CACHE_SOURCE.CONTEXT_MEMBER
+        args.resume_owner_archive = parent_archive
         args.canonical_update_pr_helper = ROOT / "scripts/canonical_update_pr.py"
         args.canonical_update_journal_schema = ROOT / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
         processor_run = str(args.processor_run_id)
@@ -2571,6 +3854,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             args.claim_only = True
             claim_code, claim = PROCESSOR.process(
                 args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=fixed_clock,
+                cache_source_reader=self._cache_source_reader(),
             )
             self.assertEqual(claim_code, 0, json.dumps(claim, sort_keys=True))
             self.assertEqual(claim["status"], "enriching")
@@ -2586,6 +3870,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             with self.assertRaises(WorkerInterrupted):
                 PROCESSOR.process(
                     args, fetcher=interrupt_after_page_slot, sleeper=lambda _delay: None, clock=fixed_clock,
+                    cache_source_reader=self._cache_source_reader(),
                 )
 
         self.assertEqual(len(fetched), 1)
@@ -2639,11 +3924,15 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             "now": self.now,
             "allow_parent_extractor_revision": True,
             "expected_owner_generation_id": parent["generation_id"],
+            "repository": "StatPan/datapan-registry",
+            "default_branch": "main",
+            "cache_source_reader": self._cache_source_reader(),
         }
-        # Normal refreshes retain the established cache-invalidation behavior;
-        # same-A parent union must fail closed instead of silently omitting a
-        # previously merged operation with a stale guide contract.
-        self.assertEqual(PROCESSOR.validated_resume_records(**validation_args), {})
+        # Changing the current row without changing the candidate identity is
+        # corruption, not an ordinary newer-A cache miss.  Both normal and
+        # same-A parent reads therefore fail closed.
+        with self.assertRaisesRegex(ValueError, "resume_enrichment_source_or_guide_identity_mismatch"):
+            PROCESSOR.validated_resume_records(**validation_args)
         with self.assertRaisesRegex(ValueError, "resume_enrichment_source_or_guide_identity_mismatch"):
             PROCESSOR.validated_resume_records(
                 **validation_args, reject_stale_source_or_guide_contract=True,
@@ -2690,8 +3979,8 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         b1 = self._run_claim_and_worker(
             2,
             resume=self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json",
-            generator_revision="b" * 64,
-            extractor_revision_value="e" * 64,
+            generator_revision=self.alternate_generator_revision,
+            extractor_revision_value=self.alternate_extractor_revision,
         )
         b0_evidence = read_json(self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json")
         b1_evidence = read_json(self.output_by_generation[b1["generation_id"]] / "upstream-catalogue-enrichment-evidence.json")
@@ -2835,10 +4124,13 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertEqual(
             b1_envelope["composition_baseline"]["registry_path"], current_identity["registry_path"],
         )
+        cache_source_helper, cache_source_contract = self._authenticated_cache_source_contract(b1)
         bundle = PROMOTION.validate_processor_bundle(
             b1, self.output_by_generation[b1["generation_id"]],
             read_json(ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json"),
             PROMOTION.load_canonical_update_pr(ROOT), root=ROOT,
+            cache_source_helper=cache_source_helper,
+            cache_source_contract=cache_source_contract,
         )
         original = b1_envelope["original_observation"]
         baseline = b1_envelope["composition_baseline"]
@@ -3398,7 +4690,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         b0 = self._run_claim_and_worker(1)
         b1 = self._run_claim_and_worker(
             2, resume=self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json",
-            generator_revision="b" * 64,
+            generator_revision=self.alternate_generator_revision,
         )
         journal, c = self._synthetic_c_journal(b0, 1)
         index_path = self.helper.state_dir / "sources/data_go_kr/index.json"

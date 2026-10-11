@@ -761,7 +761,7 @@ class FutureObservationChainTest(unittest.TestCase):
             self.assertEqual(details["pending_count"], 4382)
             self.assertEqual(details["detail_retry_count"], 908)
             self.assertEqual(details["detail_unattempted_count"], 884)
-            self.assertFalse(details["current_input_contract_compatible"])
+            self.assertFalse(details["producer_contract_matches_registered_inputs"])
             self.assertEqual(details["promotion_candidate_available"], False)
             self.assertEqual(details["promotion_processor_generation_matches"], True)
             self.assertEqual(details["health_source_observation_matches"], True)
@@ -772,7 +772,7 @@ class FutureObservationChainTest(unittest.TestCase):
             self.assertTrue(health_facet["details"]["health_is_not_new_source_observation"])
             self.assertEqual(delivery_facet["state"], "missing")
             self.assertEqual(set(delivery_facet["details"]["missing_stages"]), {"publisher", "acknowledgement"})
-            self.assertEqual(operation["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(operation["evaluated_claims"], {"complete": False, "current": False, "updated": False})
 
             # Verify the retained prior observation itself, not only the count.
             roles = self._stage_roles(index, "health")
@@ -831,7 +831,7 @@ class FutureObservationChainTest(unittest.TestCase):
             self.assertEqual(checkpoint["outcome"]["pending_count"], 4382)
             self.assertEqual(checkpoint["outcome"]["detail_retry_count"], 908)
             self.assertEqual(checkpoint["outcome"]["detail_unattempted_count"], 884)
-            self.assertFalse(any(operation.get("claims", {}).get(key) is True for key in ("complete", "current", "updated")))
+            self.assertFalse(any(operation.get("evaluated_claims", {}).get(key) is True for key in ("complete", "current", "updated")))
 
     def test_conflicting_same_run_evidence_cannot_replace_selected_observation(self) -> None:
         with tempfile.TemporaryDirectory(prefix="completeness-conflicting-observation-") as name:

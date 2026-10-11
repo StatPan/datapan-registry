@@ -417,6 +417,21 @@
       "schema_relationship": "The trusted declaration helper validates the snapshot's exact schema shape and source, identity, row, and ordered-operation digests.",
       "package_relationship": "Included in release packages through manifest.json.",
       "exemption_boundary": "The snapshot contains one historical subject row only; it does not replace the canonical registry, claim full A artifact membership, or authorize provider execution."
+    },
+    {
+      "id": "canonical_stale_queue_recovery_policy",
+      "artifact_kinds": ["canonical_stale_queue_recovery_policy"],
+      "owner": "canonical C queue recovery maintainers",
+      "generated_by": ["reviewed source update to policy/canonical-stale-queue-recovery.v1.json"],
+      "checked_by": [
+        "python scripts/sync-release-manifest-artifacts.py --check",
+        "python -m pytest -q tests/test_canonical_stale_queue_recovery.py",
+        "python scripts/validate-release-ledger-ownership.py"
+      ],
+      "manifest_relationship": "The fixed scheduled C recovery policy is manifest-bound by the registration contract in sync-release-manifest-artifacts.py; the synchronizer derives its bytes and sha256 from the checked-in policy file.",
+      "schema_relationship": "Validated against https://statpan.com/schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json and the fixed path/kind/schema manifest contract.",
+      "package_relationship": "Included in release packages through manifest.json.",
+      "exemption_boundary": "Manifest membership identifies the reviewed static policy bytes only. It does not prove a runtime cancellation, queue recovery, provider call, publication, or Health-state change."
     }
   ],
   "distribution_artifacts": [

@@ -1,0 +1,920 @@
+{
+  "$defs": {
+    "accounting": {
+      "additionalProperties": false,
+      "properties": {
+        "attempts_by_id_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "attempts_consumed": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "checkpoint_ref": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "detail_queue_cursor": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "detail_retry_reset_ids_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "fencing_token": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "lease_sha256": {
+          "oneOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_reservation_sha256": {
+          "oneOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "checkpoint_ref",
+        "attempts_consumed",
+        "attempts_by_id_sha256",
+        "detail_queue_cursor",
+        "detail_retry_reset_ids_sha256",
+        "request_reservation_sha256",
+        "lease_sha256",
+        "fencing_token"
+      ],
+      "type": "object"
+    },
+    "actions_evidence_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "output_bytes": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "artifact_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "artifact_name": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "bundle_manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "kind": {
+          "const": "actions"
+        },
+        "repository": {
+          "pattern": "^[^/\\s]+/[^/\\s]+$",
+          "type": "string"
+        },
+        "role": {
+          "pattern": "^[a-z0-9_]{1,64}$",
+          "type": "string"
+        },
+        "run_attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "run_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "repository",
+        "kind",
+        "run_id",
+        "run_attempt",
+        "artifact_id",
+        "artifact_name",
+        "bundle_manifest_sha256",
+        "output_bytes"
+      ],
+      "type": "object"
+    },
+    "admission": {
+      "additionalProperties": false,
+      "properties": {
+        "admission_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "admitted_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "artifact_digest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "artifact_expires_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "artifact_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "artifact_name": {
+          "pattern": "^upstream-catalog-refresh-[0-9]+$",
+          "type": "string"
+        },
+        "artifact_size_bytes": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "candidate_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "generation_id": {
+          "$ref": "#/$defs/original_observation/properties/original_baseline_sha256"
+        },
+        "head_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "index_locator": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "commit_sha": {
+              "pattern": "^[a-f0-9]{40}$",
+              "type": "string"
+            },
+            "path": {
+              "pattern": "^\\.datapan/upstream-catalogue-state/sources/[^/]+/index\\.json$",
+              "type": "string"
+            },
+            "repository": {
+              "pattern": "^[^/\\s]+/[^/\\s]+$",
+              "type": "string"
+            },
+            "sha256": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "repository",
+            "commit_sha",
+            "path",
+            "bytes",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "producer_run_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "refresh_evidence_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "run_attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "run_started_at": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "admission_id",
+        "producer_run_id",
+        "run_attempt",
+        "head_sha",
+        "run_started_at",
+        "artifact_id",
+        "artifact_name",
+        "artifact_expires_at",
+        "artifact_digest_sha256",
+        "artifact_size_bytes",
+        "refresh_evidence_sha256",
+        "observed_at",
+        "candidate_sha256",
+        "generation_id",
+        "admitted_at",
+        "index_locator"
+      ],
+      "type": "object"
+    },
+    "canonical_parent_readback": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_producer_generation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "journal_record_index": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "journal_record_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "journal_ref_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "journal_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "merge_ack_manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "merge_ack_observed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "merge_ack_run_attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "merge_ack_run_id": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "merge_ack_run_url": {
+          "format": "uri",
+          "type": "string"
+        },
+        "merge_ack_source_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "merge_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "pr_body_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "pr_branch": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "pr_head_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "pr_number": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "registry_bytes": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "registry_path": {
+          "const": "data/data-go-kr.registry.json"
+        },
+        "registry_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "repository": {
+          "pattern": "^[^/\\s]+/[^/\\s]+$",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_scope": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "repository",
+        "journal_ref_sha",
+        "journal_sha256",
+        "journal_record_index",
+        "journal_record_sha256",
+        "canonical_producer_generation_id",
+        "source_id",
+        "source_scope",
+        "registry_path",
+        "registry_bytes",
+        "registry_sha256",
+        "manifest_sha256",
+        "pr_number",
+        "pr_branch",
+        "pr_body_sha256",
+        "pr_head_sha",
+        "merge_sha",
+        "merge_ack_run_id",
+        "merge_ack_run_attempt",
+        "merge_ack_run_url",
+        "merge_ack_observed_at",
+        "merge_ack_manifest_sha256",
+        "merge_ack_source_sha"
+      ],
+      "type": "object"
+    },
+    "evaluation": {
+      "additionalProperties": false,
+      "properties": {
+        "as_of": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "event": {
+          "enum": [
+            "push",
+            "schedule"
+          ]
+        },
+        "run_attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "run_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "source_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "source_tree_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_sha",
+        "source_tree_sha",
+        "event",
+        "run_id",
+        "run_attempt",
+        "as_of"
+      ],
+      "type": "object"
+    },
+    "evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "accounting": {
+          "$ref": "#/$defs/accounting"
+        },
+        "admission": {
+          "$ref": "#/$defs/admission"
+        },
+        "canonical_parent_readback": {
+          "$ref": "#/$defs/canonical_parent_readback"
+        },
+        "evidence_refs": {
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/git_evidence_ref"
+              },
+              {
+                "$ref": "#/$defs/actions_evidence_ref"
+              }
+            ]
+          },
+          "maxItems": 32,
+          "minItems": 1,
+          "type": "array"
+        },
+        "original_generation": {
+          "$ref": "#/$defs/original_generation"
+        },
+        "original_observation": {
+          "$ref": "#/$defs/original_observation"
+        },
+        "processor_parent": {
+          "$ref": "#/$defs/processor_parent"
+        },
+        "source_epoch": {
+          "$ref": "#/$defs/source_epoch"
+        },
+        "target_contract": {
+          "$ref": "#/$defs/target_contract"
+        }
+      },
+      "required": [
+        "original_observation",
+        "admission",
+        "original_generation",
+        "processor_parent",
+        "target_contract",
+        "source_epoch",
+        "accounting",
+        "canonical_parent_readback",
+        "evidence_refs"
+      ],
+      "type": "object"
+    },
+    "git_evidence_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "commit_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "kind": {
+          "const": "git"
+        },
+        "path": {
+          "maxLength": 512,
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$",
+          "type": "string"
+        },
+        "repository": {
+          "pattern": "^[^/\\s]+/[^/\\s]+$",
+          "type": "string"
+        },
+        "role": {
+          "pattern": "^[a-z0-9_]{1,64}$",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "repository",
+        "kind",
+        "commit_sha",
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "original_generation": {
+      "additionalProperties": false,
+      "properties": {
+        "checkpoint_ref": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "epoch": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "epoch_origin": {
+          "enum": [
+            "legacy-checkpoint-v1",
+            "datapan.upstream-catalogue-source-epoch.v1"
+          ]
+        },
+        "generation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "generation_id",
+        "checkpoint_ref",
+        "epoch",
+        "epoch_origin"
+      ],
+      "type": "object"
+    },
+    "original_observation": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "diff_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "evidence_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "observation_count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "original_baseline_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "producer_artifact_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "producer_artifact_name": {
+          "pattern": "^upstream-catalog-refresh-[0-9]+$",
+          "type": "string"
+        },
+        "producer_artifact_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "producer_head_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "producer_run_attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "producer_run_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "provider_index_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "source_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_policy_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "source_scope": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_id",
+        "source_scope",
+        "producer_run_id",
+        "producer_run_attempt",
+        "producer_head_sha",
+        "producer_artifact_id",
+        "producer_artifact_name",
+        "producer_artifact_sha256",
+        "observed_at",
+        "original_baseline_sha256",
+        "candidate_sha256",
+        "evidence_sha256",
+        "diff_sha256",
+        "source_policy_sha256",
+        "provider_index_sha256",
+        "observation_count"
+      ],
+      "type": "object"
+    },
+    "processor_parent": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_expires_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "artifact_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "artifact_name": {
+          "pattern": "^upstream-catalogue-processing-[0-9]+-[1-9][0-9]*$",
+          "type": "string"
+        },
+        "artifact_run_id": {
+          "pattern": "^[0-9]+$",
+          "type": "string"
+        },
+        "bundle_manifest_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "candidate_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "checkpoint_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "composed_registry_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "composition_receipt_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "contribution_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "contribution_set_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "enrichment_evidence_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "generation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "generation_inputs_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "original_baseline_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "original_observation_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "processor_extractor_revision": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "processor_generator_revision": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "repository": {
+          "pattern": "^[^/\\s]+/[^/\\s]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "generation_id",
+        "checkpoint_sha256",
+        "generation_inputs_sha256",
+        "bundle_manifest_sha256",
+        "repository",
+        "artifact_run_id",
+        "artifact_id",
+        "artifact_name",
+        "artifact_expires_at",
+        "processor_generator_revision",
+        "processor_extractor_revision",
+        "original_baseline_sha256",
+        "candidate_sha256",
+        "enrichment_evidence_sha256",
+        "composition_receipt_sha256",
+        "composed_registry_sha256",
+        "original_observation_sha256",
+        "contribution_set_sha256",
+        "contribution_count"
+      ],
+      "type": "object"
+    },
+    "source_epoch": {
+      "additionalProperties": false,
+      "properties": {
+        "epoch_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "ordinal": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "original_observation_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "predecessor_generation_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "datapan.upstream-catalogue-source-epoch.v1"
+        },
+        "target_contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "target_generation_id": {
+          "oneOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "epoch_id",
+        "original_observation_sha256",
+        "target_contract_sha256",
+        "predecessor_generation_id",
+        "target_generation_id",
+        "ordinal"
+      ],
+      "type": "object"
+    },
+    "target_contract": {
+      "additionalProperties": false,
+      "properties": {
+        "changed_classes": {
+          "items": {
+            "enum": [
+              "same_a_processing",
+              "c_only_revalidation",
+              "requires_new_a"
+            ]
+          },
+          "maxItems": 3,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "contract_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "inventory_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "datapan.upstream-catalogue-target-contract.v1"
+        },
+        "source_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        "source_tree_sha": {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "source_sha",
+        "source_tree_sha",
+        "inventory_sha256",
+        "contract_sha256",
+        "changed_classes"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://registry.statpan.com/schemas/datapan.upstream-catalogue-source-eligibility.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "else": {
+        "properties": {
+          "evidence": {
+            "type": "null"
+          },
+          "selection_key": {
+            "type": "null"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "action": {
+            "enum": [
+              "rebuild",
+              "resume",
+              "revalidate_c"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "$ref": "#/$defs/evidence"
+          },
+          "selection_key": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "action": {
+      "enum": [
+        "rebuild",
+        "resume",
+        "revalidate_c",
+        "no_op",
+        "deferred",
+        "requires_new_a",
+        "blocked"
+      ]
+    },
+    "evaluation": {
+      "$ref": "#/$defs/evaluation"
+    },
+    "evidence": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/evidence"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reason_code": {
+      "pattern": "^[a-z0-9_]{1,96}$",
+      "type": "string"
+    },
+    "repository": {
+      "pattern": "^[^/\\s]+/[^/\\s]+$",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "datapan.upstream-catalogue-source-eligibility.v1"
+    },
+    "selection_key": {
+      "oneOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "source_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "source_scope": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "repository",
+    "source_id",
+    "source_scope",
+    "action",
+    "reason_code",
+    "evaluation",
+    "selection_key",
+    "evidence"
+  ],
+  "title": "Datapan upstream catalogue source eligibility v1",
+  "type": "object"
+}

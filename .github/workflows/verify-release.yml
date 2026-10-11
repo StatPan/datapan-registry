@@ -61,6 +61,9 @@ jobs:
           python -m unittest tests/test_diagnostic_publication.py
 
   verify:
+    permissions:
+      contents: read
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - name: Check dispatched candidate head
@@ -206,6 +209,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install jsonschema
           python -m pip install --disable-pip-version-check 'PyYAML==6.0.2'
+          python -m pip install --disable-pip-version-check 'pytest==9.1.1'
           python scripts/validate-source-reference-drift.py
           python scripts/validate-source-runtime-candidates.py
           python scripts/validate-source-runtime-evidence-plans.py
@@ -285,6 +289,8 @@ jobs:
           python -m unittest tests/test_compose_upstream_catalogue_candidate.py
           python -m unittest tests/test_manual_review_technical_rebinding.py
           python -m unittest tests/test_sync_release_manifest_artifacts.py
+          python -m pytest -q tests/test_canonical_stale_queue_recovery.py tests/test_canonical_stale_queue_state_local_git.py tests/test_state_raw_blob_owner.py
+          python3 -m py_compile scripts/canonical_publication_state.py scripts/canonical_stale_queue_recovery.py scripts/canonical_stale_queue_recovery_gate.py scripts/canonical_stale_queue_state.py
           python scripts/generate-source-contract-rollup.py --check
           python scripts/validate-source-contract-rollups.py
           python scripts/validate-error-action-catalogs.py
@@ -450,6 +456,23 @@ jobs:
           python -m py_compile scripts/generate-release-health-rollup.py
           python -m py_compile scripts/validate-release-health-rollups.py
           python -m py_compile scripts/canonical_update_ci.py
+
+      - name: Evaluate current release target applicability
+        timeout-minutes: 3
+        working-directory: datapan-registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The launcher owns Python startup and detached gh/git descendants;
+          # this process-group timeout is only the outer cancellation backstop.
+          timeout --signal=TERM --kill-after=15s 120s \
+            python scripts/current_target_cli_guardian.py \
+            --check \
+            --evaluate-current-release \
+            --collect-current-target-evidence \
+            --release-source-sha "$(git rev-parse HEAD)" \
+            --evaluation-as-of "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+            --evaluation-output .datapan/ci/completeness-current-release.json
 
       - name: Validate provider verification evidence
         working-directory: datapan-cli

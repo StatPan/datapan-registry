@@ -88,22 +88,42 @@
               "registry_sha256": {
                 "type": "string",
                 "pattern": "^[a-f0-9]{64}$"
+              },
+              "source_target": {
+                "$ref": "#/$defs/sourceTargetBinding"
               }
             }
           },
-          "refresh_from": {"$ref": "#/$defs/revisionReference"},
-          "refresh_target_main_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
-          "superseded_by": {"$ref": "#/$defs/revisionReference"},
+          "refresh_from": {
+            "$ref": "#/$defs/revisionReference"
+          },
+          "refresh_target_main_sha": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          },
+          "superseded_by": {
+            "$ref": "#/$defs/revisionReference"
+          },
           "acknowledgements": {
             "type": "array",
             "items": {
               "type": "object"
             }
           },
-          "ci": {"$ref": "#/$defs/ci"}
+          "ci": {
+            "$ref": "#/$defs/ci"
+          }
         }
       },
       "description": "Retain every active generation and only the latest read-back-confirmed last-good record per source and scope."
+    },
+    "source_target_dispositions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sourceTargetNoopRecord"
+      },
+      "maxItems": 10000,
+      "description": "C-owned terminal no-op evaluations for exact original-observation and classified-target selections."
     }
   },
   "$defs": {
@@ -111,50 +131,606 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "repository", "source_id", "scope", "generation_id", "registry_sha256",
-        "head_sha", "pr_number", "owner_id", "branch", "body_sha256"
+        "repository",
+        "source_id",
+        "scope",
+        "generation_id",
+        "registry_sha256",
+        "head_sha",
+        "pr_number",
+        "owner_id",
+        "branch",
+        "body_sha256"
       ],
       "properties": {
-        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
-        "source_id": {"type": "string", "minLength": 1},
-        "scope": {"type": "string", "minLength": 1},
-        "generation_id": {"type": "string", "minLength": 1},
-        "registry_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-        "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
-        "pr_number": {"type": "integer", "minimum": 1},
-        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
-        "branch": {"type": "string", "minLength": 1},
-        "body_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registry_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "manifest_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "head_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "pr_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "owner_id": {
+          "type": "string",
+          "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "body_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_target": {
+          "$ref": "#/$defs/sourceTargetBinding"
+        }
       }
     },
     "ci": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "repository", "workflow_path", "head_sha", "branch", "pr_number", "owner_id",
-        "body_sha256", "request_fingerprint", "state", "intent_at", "run_id", "run_attempt",
-        "run_url", "run_status", "conclusion", "observed_at", "dispatch_http_status", "blocker"
+        "repository",
+        "workflow_path",
+        "head_sha",
+        "branch",
+        "pr_number",
+        "owner_id",
+        "body_sha256",
+        "request_fingerprint",
+        "state",
+        "intent_at",
+        "run_id",
+        "run_attempt",
+        "run_url",
+        "run_status",
+        "conclusion",
+        "observed_at",
+        "dispatch_http_status",
+        "blocker"
       ],
       "properties": {
-        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
-        "workflow_path": {"const": ".github/workflows/verify-release.yml"},
-        "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
-        "branch": {"type": "string", "minLength": 1},
-        "pr_number": {"type": "integer", "minimum": 1},
-        "owner_id": {"type": "string", "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"},
-        "body_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-        "request_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-        "state": {"enum": ["intent", "uncertain", "queued", "in_progress", "success", "failure", "cancelled", "action_required"]},
-        "intent_at": {"type": "string", "format": "date-time"},
-        "run_id": {"type": ["integer", "null"], "minimum": 1},
-        "run_attempt": {"type": ["integer", "null"], "minimum": 1},
-        "run_url": {"type": ["string", "null"], "format": "uri"},
-        "run_status": {"type": ["string", "null"], "enum": ["requested", "waiting", "pending", "queued", "in_progress", "completed", null]},
-        "conclusion": {"type": ["string", "null"], "enum": ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required", "stale", "startup_failure", null]},
-        "observed_at": {"type": "string", "format": "date-time"},
-        "dispatch_http_status": {"type": ["integer", "null"], "minimum": 100, "maximum": 599},
-        "blocker": {"type": ["string", "null"]}
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "workflow_path": {
+          "const": ".github/workflows/verify-release.yml"
+        },
+        "head_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pr_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "owner_id": {
+          "type": "string",
+          "pattern": "^datapan-canonical-update:v1:[a-f0-9]{64}$"
+        },
+        "body_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "request_fingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "state": {
+          "enum": [
+            "intent",
+            "uncertain",
+            "queued",
+            "in_progress",
+            "success",
+            "failure",
+            "cancelled",
+            "action_required"
+          ]
+        },
+        "intent_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "run_id": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "run_attempt": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "run_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "run_status": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "requested",
+            "waiting",
+            "pending",
+            "queued",
+            "in_progress",
+            "completed",
+            null
+          ]
+        },
+        "conclusion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "success",
+            "failure",
+            "neutral",
+            "cancelled",
+            "skipped",
+            "timed_out",
+            "action_required",
+            "stale",
+            "startup_failure",
+            null
+          ]
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "dispatch_http_status": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 100,
+          "maximum": 599
+        },
+        "blocker": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "sourceTargetBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "selection_key",
+        "original_observation_sha256",
+        "target_contract_sha256",
+        "original_admission_ref"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "datapan.canonical-update-source-target-binding.v1"
+        },
+        "selection_key": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "original_observation_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "target_contract_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "original_admission_ref": {
+          "$ref": "#/$defs/sourceTargetAdmissionReference"
+        }
+      }
+    },
+    "sourceTargetAdmissionReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "generation_id",
+        "producer_run_id",
+        "run_attempt",
+        "head_sha",
+        "artifact_id",
+        "artifact_digest_sha256",
+        "refresh_evidence_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "datapan.upstream-catalogue-admission-reference.v1"
+        },
+        "generation_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "producer_run_id": {
+          "type": "string",
+          "pattern": "^[0-9]{6,20}$"
+        },
+        "run_attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "head_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "artifact_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "artifact_digest_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "refresh_evidence_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "sourceTargetNoopRecord": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/sourceTargetNoopRecordV1"
+        },
+        {
+          "$ref": "#/$defs/sourceTargetNoopRecordV2"
+        }
+      ]
+    },
+    "sourceTargetNoopRecordV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "source_target",
+        "evaluated_base_sha",
+        "evaluator_source_sha",
+        "evaluator_run_id",
+        "evaluator_run_attempt",
+        "terminal_evaluator_sha256",
+        "terminal_projection_sha256",
+        "reason_code",
+        "evidence_refs",
+        "evidence_sha256",
+        "recorded_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "datapan.canonical-update-source-target-noop.v1"
+        },
+        "record_type": {
+          "const": "source-target-noop"
+        },
+        "source_target": {
+          "$ref": "#/$defs/sourceTargetBinding"
+        },
+        "evaluated_base_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "evaluator_source_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "evaluator_run_id": {
+          "type": "string",
+          "pattern": "^[0-9]{6,20}$"
+        },
+        "evaluator_run_attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "terminal_evaluator_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "terminal_projection_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "reason_code": {
+          "const": "validated_target_has_no_semantic_delta"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "bytes",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        },
+        "evidence_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "sourceTargetNoopRecordV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "source_target",
+        "evaluated_base_sha",
+        "evaluator_source_sha",
+        "evaluator_run_id",
+        "evaluator_run_attempt",
+        "terminal_evaluator_sha256",
+        "terminal_projection_sha256",
+        "reason_code",
+        "evidence_refs",
+        "evidence_sha256",
+        "recorded_at",
+        "evaluator_repository",
+        "evaluator_workflow_path",
+        "evaluator_event",
+        "retained_evaluation"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "datapan.canonical-update-source-target-noop.v2"
+        },
+        "record_type": {
+          "const": "source-target-noop"
+        },
+        "source_target": {
+          "$ref": "#/$defs/sourceTargetBinding"
+        },
+        "evaluated_base_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "evaluator_source_sha": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "evaluator_run_id": {
+          "type": "string",
+          "pattern": "^[0-9]{6,20}$"
+        },
+        "evaluator_run_attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "terminal_evaluator_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "terminal_projection_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "reason_code": {
+          "const": "validated_target_has_no_semantic_delta"
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "$ref": "#/$defs/sourceTargetNoopMemberReferenceTerminal"
+            },
+            {
+              "$ref": "#/$defs/sourceTargetNoopMemberReferenceProjection"
+            },
+            {
+              "$ref": "#/$defs/sourceTargetNoopMemberReferenceInventory"
+            }
+          ],
+          "items": false
+        },
+        "evidence_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evaluator_repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "evaluator_workflow_path": {
+          "const": ".github/workflows/canonical-update-promotion.yml"
+        },
+        "evaluator_event": {
+          "enum": [
+            "schedule",
+            "workflow_run",
+            "workflow_dispatch"
+          ]
+        },
+        "retained_evaluation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "terminal_outcome",
+            "projection",
+            "target_inventory"
+          ],
+          "properties": {
+            "terminal_outcome": {
+              "$ref": "#/$defs/sourceTargetNoopMember"
+            },
+            "projection": {
+              "$ref": "#/$defs/sourceTargetNoopMember"
+            },
+            "target_inventory": {
+              "$ref": "#/$defs/sourceTargetNoopMember"
+            }
+          }
+        }
+      }
+    },
+    "sourceTargetNoopMember": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "document": {
+          "type": [
+            "object",
+            "array"
+          ]
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 786432
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "sourceTargetNoopMemberReferenceTerminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "retained_evaluation/terminal_outcome"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 786432
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "sourceTargetNoopMemberReferenceProjection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "retained_evaluation/projection"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 786432
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "sourceTargetNoopMemberReferenceInventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "retained_evaluation/target_inventory"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 786432
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
       }
     }
   }

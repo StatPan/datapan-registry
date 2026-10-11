@@ -11,14 +11,19 @@ import hashlib
 import importlib.util
 import io
 import json
+import math
 import os
 import pathlib
 import re
 import shutil
+import socket
+import struct
 import subprocess
 import sys
 import tempfile
+import time
 import zipfile
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from typing import Any, Callable
 
@@ -30,6 +35,8 @@ SCOPE_REGISTRY_PATH = "policy/completeness-proof-scopes.json"
 INPUT_INDEX_PATH = "reports/completeness-proof-inputs.json"
 POLICY_PATH = "policy/completeness-proof.json"
 ROLLUP_SCHEMA_PATH = "schemas/datapan.completeness-proof-rollup.v1.schema.json"
+ROLLUP_V2_SCHEMA_PATH = "schemas/datapan.completeness-proof-rollup.v2.schema.json"
+CURRENT_EVALUATION_SCHEMA_PATH = "schemas/datapan.completeness-current-release-evaluation.v1.schema.json"
 SCOPE_SCHEMA_PATH = "schemas/datapan.completeness-proof-scopes.v1.schema.json"
 INPUT_SCHEMA_PATH = "schemas/datapan.completeness-proof-inputs.v1.schema.json"
 OUTPUT_JSON_PATH = "reports/completeness-proof-rollup.json"
@@ -709,6 +716,7 @@ def validate_input_index(
     index_path: pathlib.Path,
     scope_by_id: dict[str, dict[str, Any]],
     index_value: dict[str, Any] | None = None,
+    input_roots: dict[str, pathlib.Path] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, pathlib.Path]]:
     index = index_value if index_value is not None else object_at(index_path, "input index")
     validate_schema(index, root / INPUT_SCHEMA_PATH, "input index")
@@ -819,7 +827,7 @@ def validate_input_index(
         if role_key in scope_roles and item["role"] not in {"evidence_snapshot"}:
             raise ValueError(f"duplicate evidence role {item['role']} for scope {scope_id} at stage {stage}")
         scope_roles.add(role_key)
-        path_root = root if item["root"] == "repository" else input_root
+        path_root = root if item["root"] == "repository" else (input_roots or {}).get(input_id, input_root)
         path = resolve_under(path_root, item["path"], f"input {input_id} path")
         if not path.is_file():
             raise ValueError(f"evidence input {input_id} is missing: {item['root']}:{item['path']}")
@@ -2118,6 +2126,7 @@ def assert_main_ancestor(root: pathlib.Path, revision: str, label: str) -> str:
 def validate_current_catalog_subject(
     *, root: pathlib.Path, inputs: list[dict[str, Any]], resolved: dict[str, pathlib.Path],
     scope_registry: dict[str, Any], candidate_context: dict[str, Any] | None = None,
+    repository_subject_sha: str | None = None,
 ) -> dict[str, Any]:
     matches = [item for item in inputs if item["role"] == "source_catalog_snapshot"]
     registered_catalogs = [
@@ -2144,13 +2153,24 @@ def validate_current_catalog_subject(
         if (current_bytes, current_sha) != (item["bytes"], item["sha256"]):
             raise ValueError("current materialized registry differs from its registered inventory input")
         source_revision = item.get("subject", {}).get("source_revision")
-        main_sha = assert_main_ancestor(root, source_revision, "pinned current catalog source revision")
-        main_artifact, manifest_sha = source_lfs_binding(root, source_revision)
-        if (main_artifact.get("sha256"), main_artifact.get("bytes")) != (current_sha, current_bytes):
-            raise ValueError("current registry inventory differs from its pinned main manifest and LFS pointer")
+        assert_main_ancestor(root, source_revision, "pinned current catalog source revision")
+        main_sha = repository_subject_sha or source_revision
+        if repository_subject_sha is not None:
+            assert_main_ancestor(root, repository_subject_sha, "repository evidence snapshot subject")
+        # The registered source revision is an immutable catalog identity. The
+        # selected repository snapshot is checked independently, while neither
+        # manifest digest becomes current-publication authority in the snapshot.
+        source_artifact, source_manifest_sha = source_lfs_binding(root, source_revision)
+        if (source_artifact.get("sha256"), source_artifact.get("bytes")) != (current_sha, current_bytes):
+            raise ValueError("current registry inventory differs from its pinned source revision manifest and LFS pointer")
+        if main_sha != source_revision:
+            snapshot_artifact, _snapshot_manifest_sha = source_lfs_binding(root, main_sha)
+            if (snapshot_artifact.get("sha256"), snapshot_artifact.get("bytes")) != (current_sha, current_bytes):
+                raise ValueError("current registry inventory differs from its selected repository snapshot manifest and LFS pointer")
+        manifest_sha = source_manifest_sha
         catalog_binding_witness = {
             "source_revision": source_revision,
-            "release_manifest_sha256": manifest_sha,
+            "release_manifest_sha256": source_manifest_sha,
             "main_ancestry_verified": True,
         }
         evidence = [artifact(input_path(item), path.read_bytes())]
@@ -2218,8 +2238,9 @@ def extract_bounded_processor_bundle(
 def validate_processor_generation_inputs(
     *, root: pathlib.Path, promotion: Any, checkpoint: dict[str, Any],
     processor_head_sha: str, composition_receipt: dict[str, Any] | None,
+    cache_source_helper: Any, cache_source_contract: Any, source_reader: Any,
 ) -> tuple[bool, list[str]]:
-    """Bind a historical processor output to the code and schemas it actually ran.
+    """Bind a modern processor output to the exact source closure it actually ran.
 
     Current-main promotion eligibility is a separate decision. A retained B
     execution remains historical evidence when its source contract later
@@ -2229,42 +2250,37 @@ def validate_processor_generation_inputs(
     provenance = checkpoint.get("generation_inputs")
     if not isinstance(provenance, dict):
         raise ValueError("processor checkpoint lacks generation input provenance")
+    if (
+        type(cache_source_contract) is not cache_source_helper.AuthenticatedCacheContract
+        or cache_source_contract.profile != cache_source_helper.CACHE_SOURCE_PROFILE
+        or cache_source_contract.producer_head_sha != processor_head_sha
+        or cache_source_contract.owner_generation_id != checkpoint.get("generation_id")
+        or cache_source_contract.owner_checkpoint_sha256 != checkpoint.get("checkpoint_sha256")
+        or type(source_reader) is not cache_source_helper.LocalGitSourceReader
+    ):
+        raise ValueError("processor generation inputs lack their authenticated modern producer contract")
+    source_reader.check_deadline()
     tracked = {
         "policy_sha256": "policy/source-refresh.json",
         "adapter_revision": "data/provider-index.json",
         "extractor_revision": "scripts/generate-batch-link-detail-registry-patches.py",
-        "generator_revision": "scripts/process-upstream-catalogue-candidate.py",
     }
     source_bytes: dict[str, bytes] = {}
     for field, path in tracked.items():
         try:
-            source_bytes[path] = git_read_only(root, ["show", f"{processor_head_sha}:{path}"])
-        except ValueError as exc:
+            source_bytes[path] = source_reader.source_file(
+                "StatPan/datapan-registry", processor_head_sha, path,
+                maximum_bytes=cache_source_helper.MAX_SOURCE_FILE_BYTES,
+            )
+        except Exception as exc:
             raise ValueError(f"processor source commit lacks required generation input {path}") from exc
-        if field == "generator_revision":
-            # The producer evolved from hashing its own file to hashing the
-            # script plus its handoff helper. Accept only those two recorded
-            # implementations and bind either to bytes at the exact run head.
-            direct = sha256_bytes(source_bytes[path])
-            expected = direct
-            try:
-                handoff = git_read_only(root, [
-                    "show", f"{processor_head_sha}:scripts/upstream_catalogue_handoff.py"
-                ])
-            except ValueError:
-                handoff = None
-            if handoff is not None:
-                combined = {
-                    "processor_script_sha256": direct,
-                    "collector_handoff_helper_sha256": sha256_bytes(handoff),
-                }
-                expected = sha256_bytes(json.dumps(
-                    combined, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-                ).encode("utf-8"))
-            if provenance.get(field) != expected:
-                raise ValueError("processor generator revision does not match its exact producer-head implementation")
-        elif provenance.get(field) != sha256_bytes(source_bytes[path]):
+        if provenance.get(field) != sha256_bytes(source_bytes[path]):
             raise ValueError(f"processor checkpoint provenance does not match its source commit: {path}")
+    if provenance.get("generator_revision") != cache_source_helper.modern_generator_revision(
+        repository="StatPan/datapan-registry", head_sha=processor_head_sha,
+        reader=source_reader,
+    ):
+        raise ValueError("processor generator revision does not match its exact modern producer-head implementation")
 
     if composition_receipt is not None:
         input_digests = composition_receipt.get("input_digests")
@@ -2272,23 +2288,60 @@ def validate_processor_generation_inputs(
             raise ValueError("processor composition receipt lacks input digests")
         for input_name, path in promotion.PROCESSOR_COMPOSITION_INPUTS.items():
             try:
-                raw = git_read_only(root, ["show", f"{processor_head_sha}:{path}"])
-            except ValueError as exc:
+                raw = source_reader.source_file(
+                    "StatPan/datapan-registry", processor_head_sha, path,
+                    maximum_bytes=cache_source_helper.MAX_SOURCE_FILE_BYTES,
+                )
+            except Exception as exc:
                 raise ValueError(f"processor source commit lacks composition input {path}") from exc
             observed = input_digests.get(input_name)
             if not isinstance(observed, dict) or observed.get("bytes") != len(raw) or observed.get("sha256") != sha256_bytes(raw):
                 raise ValueError(f"processor composition receipt {input_name} differs from its exact producer-head bytes")
 
-    changed: list[str] = []
-    for path in dict.fromkeys(promotion.PROCESSOR_COMPATIBILITY_FILES):
+    producer_source: dict[str, bytes] = dict(source_bytes)
+
+    def producer_file(path: str) -> bytes:
+        cached = producer_source.get(path)
+        if cached is not None:
+            return cached
         try:
-            historical = git_read_only(root, ["show", f"{processor_head_sha}:{path}"])
-            current = (root / path).read_bytes()
-        except (OSError, ValueError):
+            raw = source_reader.source_file(
+                "StatPan/datapan-registry", processor_head_sha, path,
+                maximum_bytes=cache_source_helper.MAX_SOURCE_FILE_BYTES,
+            )
+        except Exception as exc:
+            raise ValueError(f"processor source commit lacks compatibility input {path}") from exc
+        producer_source[path] = raw
+        return raw
+
+    try:
+        compatibility_paths = promotion.authenticated_processor_compatibility_paths(
+            provenance, root=root, producer_file=producer_file,
+        )
+    except Exception as exc:
+        raise ValueError("processor compatibility projection is not authenticated") from exc
+
+    changed: list[str] = []
+    for path in compatibility_paths:
+        try:
+            historical = producer_file(path)
+            current_path = root / path
+            current_size = current_path.stat().st_size
+            if (
+                current_path.is_symlink() or not current_path.is_file()
+                or current_size < 1 or current_size > cache_source_helper.MAX_SOURCE_FILE_BYTES
+            ):
+                raise ValueError("current compatibility input is not a bounded regular file")
+            current = current_path.read_bytes()
+            if len(current) != current_size:
+                raise ValueError("current compatibility input changed while reading")
+            source_reader.check_deadline()
+        except Exception:
             changed.append(path)
             continue
         if historical != current:
             changed.append(path)
+    source_reader.check_deadline()
     return not changed, sorted(set(changed))
 
 
@@ -2462,31 +2515,63 @@ def validate_processor_stage(
     with tempfile.TemporaryDirectory(prefix="completeness-processor-bundle-") as temporary:
         output_dir = pathlib.Path(temporary) / "bundle"
         status = checkpoint.get("status")
-        output_names = {
-            row.get("path") for row in checkpoint.get("output_digests", [])
-            if isinstance(row, dict) and isinstance(row.get("path"), str)
-        }
-        required = output_names | {"upstream-catalogue-checkpoint-receipt.json"}
-        if status in {"ready", "no-change"}:
-            required = set(promotion.REQUIRED_PROCESSOR_FILES) | {"upstream-catalogue-checkpoint-receipt.json"}
-        elif status not in {"retry", "quarantined"}:
+        if status not in {"ready", "no-change", "retry", "quarantined"}:
             raise ValueError("processor checkpoint status is not a supported bounded outcome")
-        extract_bounded_processor_bundle(
-            archive, output_dir, expected_members=required,
-            max_archive_bytes=promotion.MAX_PROCESSOR_ARCHIVE_BYTES,
-            max_expanded_bytes=promotion.MAX_PROCESSOR_BUNDLE_BYTES,
-        )
         composition_helper = promotion.load_canonical_update_pr(root)
+        cache_source_helper = import_module(
+            "completeness_cache_source_contract",
+            root / "scripts/upstream_catalogue_cache_source.py",
+        )
+        cache_deadline = time.monotonic() + cache_source_helper.MAX_WHOLE_ATTEMPT_SECONDS
+        cache_source_reader = cache_source_helper.LocalGitSourceReader(
+            cwd=root, deadline_monotonic=cache_deadline,
+        )
         composition_schema = object_at(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json", "composition schema")
         try:
-            bundle = promotion.validate_processor_bundle(
-                checkpoint, output_dir, composition_schema, composition_helper,
-                root=root, producer_head_sha=str(run["head_sha"]), defer_seoul_declaration=True,
+            report_contract = promotion.classify_retained_processor_bundle_for_report(
+                checkpoint,
+                run,
+                artifacts_response,
+                archive,
+                repository="StatPan/datapan-registry",
+                default_branch="main",
+                cache_source_helper=cache_source_helper,
+                source_reader=cache_source_reader,
+                deadline_monotonic=cache_deadline,
             )
-            current_input_contract_compatible, changed_input_paths = validate_processor_generation_inputs(
-                root=root, promotion=promotion, checkpoint=checkpoint,
-                processor_head_sha=run["head_sha"], composition_receipt=bundle.get("composition_receipt"),
+            extract_bounded_processor_bundle(
+                archive, output_dir, expected_members=set(report_contract.expected_members),
+                max_archive_bytes=promotion.MAX_PROCESSOR_ARCHIVE_BYTES,
+                max_expanded_bytes=promotion.MAX_PROCESSOR_BUNDLE_BYTES,
             )
+            report_bundle = promotion.validate_retained_processor_bundle_for_report(
+                report_contract,
+                checkpoint,
+                output_dir,
+                composition_schema,
+                composition_helper,
+                root=root,
+                producer_head_sha=str(run["head_sha"]),
+                source_reader=cache_source_reader,
+            )
+            bundle = report_bundle.as_report_facts()
+            current_input_contract_compatible = bundle["current_input_contract_compatible"]
+            changed_input_paths = bundle["current_input_contract_changed_paths"]
+            current_input_contract_reason = bundle["current_input_contract_reason_code"]
+            if report_contract.protocol == promotion.MODERN_RETAINED_PROCESSOR_PROTOCOL:
+                checked_compatible, checked_changed = validate_processor_generation_inputs(
+                    root=root, promotion=promotion, checkpoint=checkpoint,
+                    processor_head_sha=run["head_sha"],
+                    composition_receipt=bundle.get("composition_receipt"),
+                    cache_source_helper=cache_source_helper,
+                    cache_source_contract=report_contract.cache_source_contract,
+                    source_reader=cache_source_reader,
+                )
+                if (
+                    checked_compatible != current_input_contract_compatible
+                    or checked_changed != changed_input_paths
+                ):
+                    raise ValueError("modern processor report source facts differ from the existing validator")
         except Exception as exc:
             raise ValueError("processor archive or producer-head input provenance does not pass validation") from exc
         result = bundle
@@ -2503,6 +2588,12 @@ def validate_processor_stage(
             candidate_row = [row for row in checkpoint_output if isinstance(row, dict) and row.get("path") == "composed-candidate.registry.json"]
             if len(candidate_row) != 1 or candidate_sha is None or candidate_bytes is None:
                 raise ValueError("reviewable processor checkpoint does not inventory its exact composed candidate")
+        terminal_report_only = status in {"retry", "quarantined"}
+        if terminal_report_only and (
+            candidate_sha is not None or candidate_bytes is not None
+            or composition_receipt is not None or composition_sha is not None
+        ):
+            raise ValueError("terminal processor report unexpectedly carries candidate or composition evidence")
         current_is_composition = (
             candidate_sha == current_registry.get("sha256")
             and candidate_bytes == current_registry.get("bytes")
@@ -2517,7 +2608,13 @@ def validate_processor_stage(
             "execution_head_registry_bytes": head_registry_artifact.get("bytes"),
             "status": result["status"], "candidate_sha256": candidate_sha,
             "candidate_bytes": candidate_bytes, "baseline_sha256": result.get("baseline_sha256"),
-            "candidate_path": result.get("registry_path", "data/data-go-kr.registry.json"),
+            "candidate_available": candidate_sha is not None and candidate_bytes is not None,
+            "current_eligible": False if terminal_report_only else None,
+            "report_only_terminal": terminal_report_only,
+            "candidate_path": (
+                result.get("registry_path", "data/data-go-kr.registry.json")
+                if not terminal_report_only else None
+            ),
             "current_subject_sha256": current_registry.get("sha256"),
             "current_subject_bytes": current_registry.get("bytes"),
             "current_subject_matches_composition": current_is_composition,
@@ -2528,9 +2625,12 @@ def validate_processor_stage(
             "outcome": copy.deepcopy(outcome),
             "pending_count": outcome.get("pending_count"), "detail_retry_count": outcome.get("detail_retry_count"),
             "detail_unattempted_count": outcome.get("detail_unattempted_count"),
-            "full_scope_fresh": outcome.get("full_scope_fresh"), "publication_allowed": outcome.get("publication_allowed"),
+            "full_scope_fresh": False if terminal_report_only else outcome.get("full_scope_fresh"),
+            "publication_allowed": False if terminal_report_only else outcome.get("publication_allowed"),
             "current_input_contract_compatible": current_input_contract_compatible,
             "current_input_contract_changed_paths": changed_input_paths,
+            "current_input_contract_reason_code": current_input_contract_reason,
+            "processor_protocol": report_bundle.protocol,
             "composition_sha256": composition_sha, "state_commit": state_ref["object"]["sha"],
             "state_tree_sha": indexed_json(roles, resolved, "processor_state_tree")["sha"],
             "artifact_id": str(artifact_meta["id"]),
@@ -3608,6 +3708,7 @@ def validate_native_publisher_attempt(
         "pointer_revision": receipt_ids["pointer_revision"],
         "artifact_id": artifact_meta["id"], "artifact_sha256": sha256_bytes(archive),
         "artifact_expired_at_evaluation": artifact_meta["expired"],
+        "artifact_expires_at": expires_at.isoformat().replace("+00:00", "Z"),
         "job_started_at": job_started.isoformat().replace("+00:00", "Z"),
         "job_completed_at": job_completed.isoformat().replace("+00:00", "Z"),
         "native_verification_started_at": verification_started.isoformat().replace("+00:00", "Z"),
@@ -3671,6 +3772,7 @@ def native_publication_delivery_facet(
         "anonymous_readback_observed_at": readback.get("consumer_readback_observed_at"),
         "publisher_artifact_sha256": publisher.get("artifact_sha256"),
         "publisher_artifact_expired_at_evaluation": publisher.get("artifact_expired_at_evaluation"),
+        "publisher_artifact_expires_at": publisher.get("artifact_expires_at"),
     }
     if acknowledgement is None:
         details["acknowledgement_missing"] = True
@@ -5276,6 +5378,116 @@ def dedupe_missing(values: list[dict[str, str]]) -> list[dict[str, str]]:
     return [unique[key] for key in sorted(unique)]
 
 
+RETAINED_EVIDENCE_RELATION = {
+    "mode": "retained_evidence_subject",
+    "current_release_evaluation_required": True,
+}
+
+
+def snapshot_inventory_subject(
+    *, scope_by_id: dict[str, dict[str, Any]], checked_inputs: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Bind the two evaluated inventory subjects without binding a release manifest."""
+    selected: dict[str, dict[str, Any]] = {}
+    for source_id, resource_kind, role, label in (
+        ("data_go_kr", "api_catalog_metadata", "source_catalog_snapshot", "catalog"),
+        ("data_go_kr", "api_operation_manifest", "local_operation_manifest", "operation_manifest"),
+    ):
+        scopes = [
+            scope for scope in scope_by_id.values()
+            if scope.get("source_id") == source_id and scope.get("resource_kind") == resource_kind
+        ]
+        if len(scopes) != 1:
+            raise ValueError(f"snapshot requires exactly one registered {label} scope")
+        matches = [
+            item for item in checked_inputs
+            if item.get("scope_id") == scopes[0]["scope_id"] and item.get("role") == role
+        ]
+        if len(matches) != 1:
+            raise ValueError(f"snapshot requires exactly one registered {label} inventory input")
+        item = matches[0]
+        selected[label] = {
+            "path": item["path"], "bytes": item["bytes"], "sha256": item["sha256"],
+        }
+    return selected
+
+
+def _snapshot_facet_details(details: dict[str, Any]) -> dict[str, Any]:
+    """Remove comparisons against moving release state, retaining subject facts."""
+    result: dict[str, Any] = {}
+    for key, value in details.items():
+        if key.startswith("health_main_") or key in {
+            "current_release_manifest_sha256",
+            "current_release_applicable",
+            "current_release_subject_applicable",
+            "retained_publication_current_release_applicable",
+            "currentness_established",
+        }:
+            continue
+        if key == "current_subject_applicable":
+            result["evidence_subject_applicable"] = value
+        elif key == "payload_equivalent_to_current_registry":
+            result["payload_equivalent_to_registered_catalog_inventory"] = value
+        elif key == "current_input_contract_compatible":
+            result["producer_contract_matches_registered_inputs"] = value
+        elif key == "current_input_contract_changed_paths":
+            result["producer_contract_changed_paths"] = value
+        elif key == "current_input_contract_reason_code":
+            result["producer_contract_reason_code"] = value
+        elif isinstance(value, dict):
+            result[key] = _snapshot_facet_details(value)
+        elif isinstance(value, list):
+            result[key] = [
+                _snapshot_facet_details(item) if isinstance(item, dict) else item
+                for item in value
+            ]
+        else:
+            result[key] = value
+    return result
+
+
+def make_evidence_snapshot(
+    *, report: dict[str, Any], scope_by_id: dict[str, dict[str, Any]],
+    checked_inputs: list[dict[str, Any]], candidate_context: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Project a validated legacy calculation onto its immutable evidence subject."""
+    inventory_subject = snapshot_inventory_subject(
+        scope_by_id=scope_by_id, checked_inputs=checked_inputs,
+    )
+    if candidate_context is None:
+        context: dict[str, Any] = {
+            "mode": "repository_evidence_snapshot",
+            "claim_scope": "evaluated_inputs_only",
+            "inventory_subject": inventory_subject,
+        }
+    else:
+        context = copy.deepcopy(candidate_context)
+        context["mode"] = "candidate_evidence_snapshot"
+        context["claim_scope"] = "evaluated_inputs_only"
+        context["inventory_subject"] = inventory_subject
+
+    report["schema_version"] = "datapan.completeness-proof-rollup.v2"
+    report["evaluation_context"] = context
+    report["summary"]["evaluated_claims"] = report["summary"].pop("claims")
+    for row in report["scopes"]:
+        row["evaluated_claims"] = row.pop("claims")
+        row["release_relation"] = copy.deepcopy(RETAINED_EVIDENCE_RELATION)
+        for facet in row["facets"]:
+            facet["details"] = _snapshot_facet_details(facet["details"])
+            if facet["facet_id"] == "immutable_publication_read_back" and facet.get("details", {}).get("subject"):
+                # This facet describes a retained native receipt. Its relation
+                # to the release being evaluated is computed only by the live
+                # evaluator after the raw manifest is frozen.
+                facet["state"] = "historical"
+                facet["missing_evidence"] = dedupe_missing([
+                    item for item in facet["missing_evidence"]
+                    if item.get("code") != "current_release_publication_read_back_missing"
+                ] + [missing_entry(
+                    "current_release_evaluation_required", "StatPan/datapan-registry", "#754",
+                )])
+    return report
+
+
 def proof_for_scope(
     *,
     root: pathlib.Path,
@@ -5377,6 +5589,7 @@ def validate_pipeline_evidence(
     evaluation_epoch: str,
     scope_registry: dict[str, Any],
     candidate_context: dict[str, Any] | None = None,
+    repository_subject_sha: str | None = None,
 ) -> dict[str, Any] | None:
     """Admit the retained source→processor→promotion→Health chain and publication.
 
@@ -5410,7 +5623,7 @@ def validate_pipeline_evidence(
 
     current_registry = validate_current_catalog_subject(
         root=root, inputs=all_inputs, resolved=resolved, scope_registry=scope_registry,
-        candidate_context=candidate_context,
+        candidate_context=candidate_context, repository_subject_sha=repository_subject_sha,
     )
 
     def raw_role(role: str) -> bytes:
@@ -5901,6 +6114,11 @@ def scope_facets(
                     "detail_unattempted_count": processor["detail_unattempted_count"],
                     "current_input_contract_compatible": processor["current_input_contract_compatible"],
                     "current_input_contract_changed_paths": processor["current_input_contract_changed_paths"],
+                    "current_input_contract_reason_code": processor["current_input_contract_reason_code"],
+                    "processor_protocol": processor["processor_protocol"],
+                    "processor_candidate_available": processor["candidate_available"],
+                    "processor_current_eligible": processor["current_eligible"],
+                    "processor_report_only_terminal": processor["report_only_terminal"],
                     "promotion_run_id": promotion["run_id"],
                     "promotion_candidate_available": promotion["candidate_available"],
                     "promotion_candidate_lifecycle_status": promotion["candidate_lifecycle_status"],
@@ -6093,6 +6311,7 @@ def build_scope_row(
     candidate_context: dict[str, Any] | None = None,
     candidate_changed_scopes: set[str] | None = None,
     candidate_baseline_registry_bytes: bytes | None = None,
+    repository_subject_sha: str | None = None,
 ) -> dict[str, Any]:
     candidate_changed = scope["scope_id"] in (candidate_changed_scopes or set())
     inventory_context, evidence = local_inventory_context(
@@ -6112,7 +6331,7 @@ def build_scope_row(
         pipeline_evidence = validate_pipeline_evidence(
             root=root, operation_inputs=scoped_inputs, all_inputs=all_inputs,
             resolved=resolved, evaluation_epoch=evaluation_epoch, scope_registry=scope_registry,
-            candidate_context=candidate_context,
+            candidate_context=candidate_context, repository_subject_sha=repository_subject_sha,
         )
     proof, updated_delivery = proof_for_scope(
         root=root,
@@ -6212,6 +6431,7 @@ def build_report(
     as_of: str | None = None,
     input_index_override: dict[str, Any] | None = None,
     candidate_baseline_registry_bytes: bytes | None = None,
+    repository_subject_sha: str | None = None,
 ) -> dict[str, Any]:
     root = root.resolve()
     scope_registry, policy, scope_by_id = load_and_validate_registry(root)
@@ -6244,6 +6464,7 @@ def build_report(
             candidate_context=candidate_context or None,
             candidate_changed_scopes=candidate_changed_scopes,
             candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
+            repository_subject_sha=repository_subject_sha,
         )
         for scope_id in sorted(scope_by_id)
     ]
@@ -6275,12 +6496,667 @@ def build_report(
         },
         "scopes": rows,
     }
-    validate_schema(report, root / ROLLUP_SCHEMA_PATH, "completeness proof rollup")
+    report = make_evidence_snapshot(
+        report=report, scope_by_id=scope_by_id, checked_inputs=checked_inputs,
+        candidate_context=candidate_context or None,
+    )
+    validate_schema(report, root / ROLLUP_V2_SCHEMA_PATH, "completeness proof rollup v2")
     return report
 
 
 def render_json(report: dict[str, Any]) -> bytes:
     return (json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+LIVE_EVIDENCE_ROLES = frozenset({
+    *PIPELINE_STAGE_ROLES["publisher"], *PIPELINE_STAGE_OPTIONAL_ROLES["publisher"],
+    *NATIVE_PUBLICATION_READBACK_ROLES,
+    "publication_receipt", "publication_source_binding",
+    *PIPELINE_STAGE_ROLES["acknowledgement"], *PIPELINE_STAGE_OPTIONAL_ROLES["acknowledgement"],
+    "acknowledgement_journal_before", "acknowledgement_journal_after",
+    "acknowledgement_health_receipt",
+})
+LIVE_PUBLISHER_EVIDENCE_ROLES = frozenset({
+    *PIPELINE_STAGE_ROLES["publisher"], *PIPELINE_STAGE_OPTIONAL_ROLES["publisher"],
+    *NATIVE_PUBLICATION_READBACK_ROLES,
+    "publication_receipt", "publication_source_binding",
+})
+LIVE_EVIDENCE_REPLACEMENT_ROLES = LIVE_EVIDENCE_ROLES
+MAX_LIVE_EVIDENCE_BYTES = 512 * 1024 * 1024
+
+
+def _without_snapshot_live_evidence(base_index: dict[str, Any]) -> dict[str, Any]:
+    """Do not reuse manifest-bound publisher/ACK rows as current evidence."""
+    merged = copy.deepcopy(base_index)
+    merged["inputs"] = [
+        item for item in base_index.get("inputs", [])
+        if item.get("role") not in LIVE_EVIDENCE_REPLACEMENT_ROLES
+        and item.get("subject", {}).get("stage") not in {"publisher", "acknowledgement"}
+    ]
+    return merged
+
+
+def _release_manifest_rows(
+    *, root: pathlib.Path, source_sha: str,
+) -> tuple[bytes, dict[str, dict[str, Any]]]:
+    manifest_raw = git_read_only(root, ["show", f"{source_sha}:manifest.json"])
+    manifest = json.loads(manifest_raw)
+    validate_schema_value(
+        manifest, object_at(root / "schemas/datapan.release-manifest.v1.schema.json", "release manifest schema"),
+        "target release manifest",
+    )
+    rows = manifest.get("artifacts")
+    if not isinstance(rows, list) or manifest.get("artifact_count") != len(rows):
+        raise ValueError("target release manifest artifact count is inconsistent")
+    by_path: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        path = normalize_relative_path(row.get("path"), "target release artifact path").as_posix()
+        size = row.get("bytes")
+        digest = row.get("sha256")
+        if (
+            path != row.get("path") or path in by_path
+            or isinstance(size, bool) or not isinstance(size, int) or size < 0
+            or not isinstance(digest, str) or not SHA256_RE.fullmatch(digest)
+            or not isinstance(row.get("kind"), str) or not row["kind"]
+        ):
+            raise ValueError("target release manifest contains a duplicate or malformed artifact identity")
+        by_path[path] = row
+    return manifest_raw, by_path
+
+
+def _verify_target_artifact(
+    *, root: pathlib.Path, source_sha: str, rows: dict[str, dict[str, Any]],
+    expected: dict[str, Any], label: str,
+) -> dict[str, Any]:
+    path = normalize_relative_path(expected.get("path"), f"{label} path").as_posix()
+    row = rows.get(path)
+    if row is None or (row.get("bytes"), row.get("sha256")) != (expected.get("bytes"), expected.get("sha256")):
+        raise ValueError(f"target release manifest does not bind the exact {label} identity")
+    committed = git_read_only(root, ["show", f"{source_sha}:{path}"])
+    if committed.startswith(b"version https://git-lfs.github.com/spec/v1\n"):
+        match = re.fullmatch(
+            rb"version https://git-lfs.github.com/spec/v1\n"
+            rb"oid sha256:([a-f0-9]{64})\nsize ([0-9]+)\n?", committed,
+        )
+        if match is None or (match.group(1).decode("ascii"), int(match.group(2))) != (
+            expected["sha256"], expected["bytes"],
+        ):
+            raise ValueError(f"target commit LFS pointer differs from the {label} identity")
+    elif (len(committed), sha256_bytes(committed)) != (expected["bytes"], expected["sha256"]):
+        raise ValueError(f"target commit bytes differ from the {label} identity")
+    return {"path": path, "bytes": expected["bytes"], "sha256": expected["sha256"]}
+
+
+def _merge_live_evidence_inputs(
+    *, root: pathlib.Path, base_index: dict[str, Any], live_index: dict[str, Any],
+    input_root_by_id: dict[str, pathlib.Path], live_root: pathlib.Path,
+) -> dict[str, Any]:
+    validate_schema(live_index, root / INPUT_SCHEMA_PATH, "live current-release evidence index")
+    live_rows = live_index.get("inputs")
+    if not isinstance(live_rows, list) or not live_rows:
+        raise ValueError("live current-release evidence index has no inputs")
+    base_ids = {item.get("input_id") for item in base_index.get("inputs", [])}
+    registry_scopes = load_and_validate_registry(root)[2]
+    operation_scope_ids = {
+        scope["scope_id"] for scope in registry_scopes.values()
+        if scope.get("source_id") == "data_go_kr" and scope.get("resource_kind") == "api_operation_manifest"
+    }
+    for item in live_rows:
+        role = item.get("role")
+        if role not in LIVE_EVIDENCE_ROLES:
+            raise ValueError("live current-release bundle contains a role outside publisher/read-back/ACK")
+        if item.get("scope_id") not in operation_scope_ids:
+            raise ValueError("live current-release evidence is not bound to the registered data.go.kr operation scope")
+        if item.get("root") != "evidence" or item.get("namespace") != "live_operational":
+            raise ValueError("live current-release evidence must be outside the release tree and marked live operational")
+        if item.get("input_id") in base_ids:
+            raise ValueError("live current-release evidence reuses a snapshot input identity")
+        if item.get("subject", {}).get("stage") not in {None, "publisher", "acknowledgement"}:
+            raise ValueError("live current-release evidence declares an unrelated pipeline stage")
+        retained_path = resolve_under(live_root, item["path"], "live current-release evidence input")
+        try:
+            retained_path.relative_to(root.resolve())
+        except ValueError:
+            pass
+        else:
+            raise ValueError("live current-release evidence must be physically outside the release repository")
+        input_root_by_id[item["input_id"]] = live_root
+    if sum(item["bytes"] for item in live_rows) > MAX_LIVE_EVIDENCE_BYTES:
+        raise ValueError("live current-release evidence exceeds its bounded byte limit")
+    merged = _without_snapshot_live_evidence(base_index)
+    merged["inputs"].extend(copy.deepcopy(live_rows))
+    return merged
+
+
+CURRENT_TARGET_EVIDENCE_MODULE_PATH = "scripts/canonical_current_target_evidence.py"
+CURRENT_TARGET_APPLICABILITY_SCHEMA_VERSION = "datapan.completeness-current-target-applicability.v1"
+_CURRENT_TARGET_EVIDENCE_MODULES: dict[str, Any] = {}
+
+
+def current_target_evidence_module(root: pathlib.Path) -> Any:
+    """Load the shared collector once so its opaque type identity is stable."""
+    path = (root / CURRENT_TARGET_EVIDENCE_MODULE_PATH).resolve()
+    key = str(path)
+    if key in _CURRENT_TARGET_EVIDENCE_MODULES:
+        return _CURRENT_TARGET_EVIDENCE_MODULES[key]
+    if not path.is_file():
+        raise ValueError("shared current-target evidence collector is unavailable at this source revision")
+    module = import_module("canonical_current_target_evidence", path)
+    _CURRENT_TARGET_EVIDENCE_MODULES[key] = module
+    return module
+
+
+CURRENT_TARGET_COLLECTION_BUDGET_SECONDS = 120.0
+
+
+def collect_current_target_evidence_for_cli(
+    *, root: pathlib.Path, release_source_sha: str, trusted_main_sha: str,
+    evaluation_as_of: str, deadline_monotonic: float | None = None,
+) -> Any | None:
+    """Collect only from an exact current-main GitHub Actions execution."""
+    if (
+        re.fullmatch(r"[a-f0-9]{40}", release_source_sha) is None
+        or re.fullmatch(r"[a-f0-9]{40}", trusted_main_sha) is None
+    ):
+        raise ValueError("current-target collection requires full lowercase source and main commit identities")
+    if release_source_sha != trusted_main_sha:
+        return None
+    if (
+        isinstance(deadline_monotonic, bool)
+        or not isinstance(deadline_monotonic, (int, float))
+        or not math.isfinite(float(deadline_monotonic))
+    ):
+        raise ValueError("current-target collection requires the absolute checked-CLI deadline")
+    remaining = deadline_monotonic - time.monotonic()
+    if not math.isfinite(deadline_monotonic) or remaining <= 0 or remaining > CURRENT_TARGET_COLLECTION_BUDGET_SECONDS:
+        raise ValueError("current-target evaluation exceeded its absolute CLI deadline")
+    checked_out_head = git_read_only(root, ["rev-parse", "HEAD"]).decode("ascii").strip()
+    selected_main = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode("ascii").strip()
+    if checked_out_head != release_source_sha or selected_main != trusted_main_sha:
+        raise ValueError("current-target collection source differs from the checked-out release and trusted main")
+    normalized_as_of = parse_time(
+        evaluation_as_of, "current-target evaluation as-of",
+    ).isoformat().replace("+00:00", "Z")
+    repository = os.environ.get("GITHUB_REPOSITORY")
+    event = os.environ.get("GITHUB_EVENT_NAME")
+    run_id = os.environ.get("GITHUB_RUN_ID")
+    run_attempt_raw = os.environ.get("GITHUB_RUN_ATTEMPT")
+    workflow_source_sha = os.environ.get("GITHUB_SHA")
+    adapter = current_target_evidence_module(root)
+    if not os.environ.get("GH_TOKEN"):
+        return adapter.unavailable_current_target_evidence(
+            reason_code="actions_token_unavailable",
+            repository="StatPan/datapan-registry",
+            release_source_sha=release_source_sha,
+            trusted_main_sha=trusted_main_sha,
+            evaluation_as_of=normalized_as_of,
+        )
+    if (
+        repository != "StatPan/datapan-registry"
+        or event not in {"push", "pull_request", "schedule", "workflow_dispatch"}
+        or not isinstance(run_id, str) or re.fullmatch(r"[0-9]{1,20}", run_id) is None
+        or not isinstance(run_attempt_raw, str) or re.fullmatch(r"[1-9][0-9]{0,5}", run_attempt_raw) is None
+        or workflow_source_sha != release_source_sha
+    ):
+        return adapter.unavailable_current_target_evidence(
+            reason_code="current_evaluation_identity_unavailable",
+            repository="StatPan/datapan-registry",
+            release_source_sha=release_source_sha,
+            trusted_main_sha=trusted_main_sha,
+            evaluation_as_of=normalized_as_of,
+        )
+    native_reader = adapter.GitHubCurrentTargetNativeReader(
+        root=root,
+        repository=repository,
+        workflow_path=".github/workflows/verify-release.yml",
+        event=event,
+        run_id=run_id,
+        run_attempt=int(run_attempt_raw),
+        source_sha=workflow_source_sha,
+        deadline_monotonic=deadline_monotonic,
+    )
+    return adapter.collect_current_target_evidence(
+        repository=repository,
+        release_source_sha=release_source_sha,
+        trusted_main_sha=trusted_main_sha,
+        evaluation_as_of=normalized_as_of,
+        native_reader=native_reader,
+        evidence_root=root / ".datapan/ci/current-target-evidence",
+        deadline_monotonic=deadline_monotonic,
+    )
+
+
+def _target_evidence_index(value: Any) -> dict[str, Any] | None:
+    if value is None:
+        return None
+    if not isinstance(value, Mapping) or set(value) != {"path", "bytes", "sha256"}:
+        raise ValueError("current-target evidence index has an unexpected field set")
+    if (
+        value.get("path") != "current-target-evidence-index.json"
+        or type(value.get("bytes")) is not int or value["bytes"] < 1
+        or not isinstance(value.get("sha256"), str)
+        or re.fullmatch(r"[a-f0-9]{64}", value["sha256"]) is None
+    ):
+        raise ValueError("current-target evidence index identity is malformed")
+    return copy.deepcopy(dict(value))
+
+
+def current_target_applicability_projection(
+    *, root: pathlib.Path, release_source_sha: str, trusted_main_sha: str,
+    evaluation_as_of: str, target_tree_sha: str, target_kind: str,
+    evidence: Any | None,
+) -> dict[str, Any]:
+    """Project the shared typed target result without granting a release claim."""
+    context = {
+        "repository": "StatPan/datapan-registry",
+        "release_source_sha": release_source_sha,
+        "trusted_main_sha": trusted_main_sha,
+        "evaluation_as_of": evaluation_as_of,
+    }
+    result: dict[str, Any] = {
+        "schema_version": CURRENT_TARGET_APPLICABILITY_SCHEMA_VERSION,
+        "status": "unavailable",
+        "reason_code": "current_target_evidence_not_collected",
+        "disposition": None,
+        "context": context,
+        "source_target": None,
+        "target_contract": None,
+        "evidence_index": None,
+    }
+    if target_kind != "current_main":
+        if evidence is not None:
+            raise ValueError("current-target evidence cannot classify a non-main release target")
+        result["status"] = "historical" if target_kind == "historical" else "not_applicable"
+        result["reason_code"] = "release_target_is_historical" if target_kind == "historical" else "release_target_is_candidate"
+        return result
+    if evidence is None:
+        return result
+
+    adapter = current_target_evidence_module(root)
+    expected_context = context
+    if type(evidence) is adapter.UnavailableCurrentTargetEvidence:
+        if getattr(evidence, "context", None) != expected_context:
+            raise ValueError("unavailable current-target evidence belongs to another evaluation context")
+        reason_code = getattr(evidence, "reason_code", None)
+        if not isinstance(reason_code, str) or re.fullmatch(r"[a-z0-9_]{1,96}", reason_code) is None:
+            raise ValueError("unavailable current-target evidence reason is malformed")
+        result["reason_code"] = reason_code
+        result["evidence_index"] = _target_evidence_index(getattr(evidence, "evidence_index", None))
+        return result
+    if type(evidence) is not adapter.VerifiedCurrentTargetEvidence:
+        raise ValueError("current-target evidence must be an opaque result from the shared collector")
+    if getattr(evidence, "context", None) != expected_context:
+        raise ValueError("verified current-target evidence belongs to another evaluation context")
+
+    projection = adapter.project_current_target_evidence(
+        evidence, release_source_sha=release_source_sha,
+        trusted_main_sha=trusted_main_sha, evaluation_as_of=evaluation_as_of,
+    )
+    projection_fields = {
+        "schema_version", "context", "source_target", "target_contract",
+        "disposition", "target_applicability", "evidence_index",
+    }
+    if not isinstance(projection, Mapping) or set(projection) != projection_fields:
+        raise ValueError("shared current-target projection has an unexpected field set")
+    if projection.get("context") != expected_context:
+        raise ValueError("shared current-target projection context differs from the release evaluation")
+    source_target = projection.get("source_target")
+    target_contract = projection.get("target_contract")
+    disposition = projection.get("disposition")
+    applicability = projection.get("target_applicability")
+    expected_source_fields = {
+        "schema_version", "selection_key", "original_observation_sha256",
+        "target_contract_sha256", "original_admission_ref",
+    }
+    expected_contract_fields = {
+        "schema_version", "source_sha", "source_tree_sha", "inventory_sha256",
+        "contract_sha256", "changed_classes",
+    }
+    expected_disposition_fields = {
+        "schema_version", "selection_key", "original_observation_sha256",
+        "target_contract_sha256", "disposition", "reason", "journal_commit",
+        "evidence_refs", "revision_ref", "purpose_ref",
+    }
+    if (
+        not isinstance(source_target, Mapping) or set(source_target) != expected_source_fields
+        or not isinstance(target_contract, Mapping) or set(target_contract) != expected_contract_fields
+        or not isinstance(disposition, Mapping) or set(disposition) != expected_disposition_fields
+        or not isinstance(applicability, Mapping)
+        or set(applicability) != {"status", "reason_code", "disposition"}
+    ):
+        raise ValueError("shared current-target projection contains an invalid closed record")
+    admission = source_target.get("original_admission_ref")
+    expected_admission_fields = {
+        "schema_version", "generation_id", "producer_run_id", "run_attempt", "head_sha",
+        "artifact_id", "artifact_digest_sha256", "refresh_evidence_sha256",
+    }
+    if not isinstance(admission, Mapping) or set(admission) != expected_admission_fields:
+        raise ValueError("current-target original admission reference is incomplete")
+    if (
+        target_contract.get("source_sha") != release_source_sha
+        or target_contract.get("source_tree_sha") != target_tree_sha
+        or source_target.get("target_contract_sha256") != target_contract.get("contract_sha256")
+        or disposition.get("selection_key") != source_target.get("selection_key")
+        or disposition.get("original_observation_sha256") != source_target.get("original_observation_sha256")
+        or disposition.get("target_contract_sha256") != source_target.get("target_contract_sha256")
+    ):
+        raise ValueError("current-target selection, contract, disposition, and release target do not cross-bind")
+    status = applicability.get("status")
+    if status not in {"current", "historical", "unavailable", "rejected", "not_applicable"}:
+        raise ValueError("shared current-target applicability status is unsupported")
+    reason_code = applicability.get("reason_code")
+    if reason_code is not None and (
+        not isinstance(reason_code, str) or re.fullmatch(r"[a-z0-9_]{1,96}", reason_code) is None
+    ):
+        raise ValueError("shared current-target applicability reason is malformed")
+    disposition_status = applicability.get("disposition")
+    if disposition_status not in {"unseen", "pending", "completed", "blocked"}:
+        raise ValueError("shared current-target disposition is unsupported")
+    expected_status = {
+        "unseen": "not_applicable",
+        "pending": "current",
+        "completed": "current",
+        "blocked": "unavailable",
+    }[disposition_status]
+    if status != expected_status or disposition.get("disposition") != disposition_status:
+        raise ValueError("current-target applicability status disagrees with its authenticated disposition")
+    result.update({
+        "status": status,
+        "reason_code": reason_code,
+        "disposition": disposition_status,
+        "source_target": copy.deepcopy(dict(source_target)),
+        "target_contract": copy.deepcopy(dict(target_contract)),
+        "evidence_index": _target_evidence_index(projection.get("evidence_index")),
+    })
+    return result
+
+
+def evaluate_current_release(
+    *, root: pathlib.Path, input_root: pathlib.Path, input_index_path: pathlib.Path,
+    release_source_sha: str, trusted_main_sha: str, evaluation_as_of: str,
+    live_evidence_index: dict[str, Any] | None = None,
+    live_evidence_root: pathlib.Path | None = None,
+    current_target_evidence: Any | None = None,
+) -> dict[str, Any]:
+    """Authenticate current-release applicability separately from the stored snapshot.
+
+    The optional live bundle is caller-retained evidence, never a result flag. It
+    is merged only after removing the snapshot's old publisher/ACK rows and then
+    passes through the existing input, workflow, distribution, read-back, and
+    acknowledgement validators. Production callers must obtain that bundle
+    through their existing authenticated native reader; the CLI does not accept
+    an arbitrary local live-evidence path. Current-target evidence is a separate
+    opaque result from the shared native collector. It is projected for
+    applicability only and never supplies complete, current, or updated claims.
+    """
+    root = root.resolve()
+    input_root = input_root.resolve()
+    input_index_path = input_index_path.resolve()
+    if not re.fullmatch(r"[a-f0-9]{40}", release_source_sha):
+        raise ValueError("release source must be a full lowercase Git commit SHA")
+    if not re.fullmatch(r"[a-f0-9]{40}", trusted_main_sha):
+        raise ValueError("trusted main must be a full lowercase Git commit SHA")
+    as_of = parse_time(evaluation_as_of, "current-release evaluation as-of")
+    normalized_as_of = as_of.isoformat().replace("+00:00", "Z")
+    target_head = git_read_only(root, ["rev-parse", "HEAD"]).decode("ascii").strip()
+    if target_head != release_source_sha:
+        raise ValueError("current-release evaluation source must equal the checked-out target commit")
+    selected_main = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode("ascii").strip()
+    if selected_main != trusted_main_sha:
+        raise ValueError("caller trusted-main SHA differs from the selected fetched origin/main tip")
+    target_kind = "current_main"
+    if release_source_sha != trusted_main_sha:
+        ancestry = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", release_source_sha, trusted_main_sha],
+            cwd=root, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        if ancestry.returncode not in {0, 1}:
+            raise ValueError("cannot establish release target ancestry from trusted main")
+        target_kind = "historical" if ancestry.returncode == 0 else "candidate"
+    source_tree = git_read_only(root, ["rev-parse", f"{release_source_sha}^{{tree}}"])
+    tree_sha = source_tree.decode("ascii").strip()
+    if not re.fullmatch(r"[a-f0-9]{40}", tree_sha):
+        raise ValueError("release target has no exact Git tree identity")
+
+    committed_snapshot_raw = git_read_only(root, ["show", f"{release_source_sha}:{OUTPUT_JSON_PATH}"])
+    snapshot = json.loads(committed_snapshot_raw)
+    validate_schema(snapshot, root / ROLLUP_V2_SCHEMA_PATH, "stored completeness evidence snapshot")
+    snapshot_raw = render_json(snapshot)
+    if snapshot_raw != committed_snapshot_raw:
+        raise ValueError("committed completeness snapshot is not in its canonical serialized form")
+    manifest_raw, manifest_rows = _release_manifest_rows(root=root, source_sha=release_source_sha)
+    snapshot_member = manifest_rows.get(OUTPUT_JSON_PATH)
+    if snapshot_member is None or (snapshot_member.get("bytes"), snapshot_member.get("sha256")) != (
+        len(snapshot_raw), sha256_bytes(snapshot_raw),
+    ):
+        raise ValueError("target raw release manifest does not bind the exact completeness snapshot bytes")
+
+    # Rebuild from the named, already admitted inputs. This rejects a
+    # coordinated snapshot+manifest edit rather than trusting their digests.
+    rebuilt = build_report(
+        root=root, input_root=input_root, input_index_path=input_index_path,
+        as_of=snapshot["evaluation_epoch"],
+        repository_subject_sha=(release_source_sha if target_kind != "candidate" else None),
+    )
+    if render_json(rebuilt) != snapshot_raw:
+        raise ValueError("stored completeness snapshot does not rebuild from its authenticated named inputs")
+    scope_registry, policy, scope_by_id = load_and_validate_registry(root)
+    base_index = object_at(input_index_path, "completeness input index")
+    candidate_context, _candidate_changed = validate_candidate_input_index(
+        root=root, index=base_index, input_index_path=input_index_path,
+    )
+    base_index, base_inputs, base_resolved = validate_input_index(
+        root=root, input_root=input_root, index_path=input_index_path,
+        scope_by_id=scope_by_id, index_value=base_index,
+    )
+    merged_index = _without_snapshot_live_evidence(base_index)
+    path_roots: dict[str, pathlib.Path] = {}
+    if live_evidence_index is not None:
+        live_root = (live_evidence_root or input_root).resolve()
+        index_for_merge = copy.deepcopy(live_evidence_index)
+        # The ordinary index validator resolves repository rows under root and
+        # evidence rows under input_root. Remap only the separately retained
+        # live rows after their role/namespace checks.
+        live_rows = index_for_merge.get("inputs") if isinstance(index_for_merge, dict) else None
+        if not isinstance(live_rows, list):
+            raise ValueError("live current-release evidence index lacks an input list")
+        merged_index = _merge_live_evidence_inputs(
+            root=root, base_index=base_index, live_index=index_for_merge,
+            input_root_by_id=path_roots, live_root=live_root,
+        )
+    # Validate role cardinality, schemas and hashes using the same validator
+    # as the stored input index. Snapshot-bound publisher/ACK rows are always
+    # excluded, even when no live bundle was supplied.
+    _checked_index, merged_inputs, merged_resolved = validate_input_index(
+        root=root, input_root=input_root, index_path=input_index_path,
+        scope_by_id=scope_by_id, index_value=merged_index, input_roots=path_roots,
+    )
+    # Re-resolve separately retained paths under their caller-owned root and
+    # bind exact byte count/SHA a second time; repository snapshot rows retain
+    # the original resolved paths.
+    total_live_bytes = 0
+    for item in merged_inputs:
+        if item["input_id"] not in path_roots:
+            continue
+        path = resolve_under(path_roots[item["input_id"]], item["path"], "live evidence input")
+        data = read_bytes(path)
+        if len(data) != item["bytes"] or sha256_bytes(data) != item["sha256"]:
+            raise ValueError("live current-release evidence bytes differ from their selected input identity")
+        total_live_bytes += len(data)
+        if total_live_bytes > MAX_LIVE_EVIDENCE_BYTES:
+            raise ValueError("live current-release evidence exceeds its bounded byte limit")
+        merged_resolved[item["input_id"]] = path
+
+    canonical_registry_row, target_manifest_sha = source_lfs_binding(root, release_source_sha)
+    canonical_registry = {
+        key: canonical_registry_row[key] for key in ("path", "bytes", "sha256")
+    }
+    catalog_identity = _verify_target_artifact(
+        root=root, source_sha=release_source_sha, rows=manifest_rows,
+        expected=snapshot["evaluation_context"]["inventory_subject"]["catalog"],
+        label="registered catalog inventory",
+    )
+    operation_identity = _verify_target_artifact(
+        root=root, source_sha=release_source_sha, rows=manifest_rows,
+        expected=snapshot["evaluation_context"]["inventory_subject"]["operation_manifest"],
+        label="registered operation manifest",
+    )
+    if (canonical_registry["bytes"], canonical_registry["sha256"]) != (
+        catalog_identity["bytes"], catalog_identity["sha256"],
+    ):
+        raise ValueError("target manifest LFS identity differs from the snapshot's registered catalog subject")
+
+    script_raw = git_read_only(root, ["show", f"{release_source_sha}:scripts/generate-completeness-proof-rollup.py"])
+    evaluator_identity = {
+        "revision": release_source_sha, "path": "scripts/generate-completeness-proof-rollup.py",
+        "bytes": len(script_raw), "sha256": sha256_bytes(script_raw),
+    }
+    target = {
+        "source_sha": release_source_sha, "tree_sha": tree_sha,
+        "release_manifest": artifact("manifest.json", manifest_raw),
+        "canonical_registry": canonical_registry,
+        "operation_manifest": operation_identity,
+    }
+    snapshot_binding = artifact(OUTPUT_JSON_PATH, snapshot_raw)
+    target_applicability = current_target_applicability_projection(
+        root=root, release_source_sha=release_source_sha,
+        trusted_main_sha=trusted_main_sha, evaluation_as_of=normalized_as_of,
+        target_tree_sha=tree_sha, target_kind=target_kind,
+        evidence=current_target_evidence,
+    )
+    # Re-evaluate the native stages using the caller's explicit as-of time.
+    # This remains conservative when the repository snapshot has no later
+    # publisher/ACK evidence outside its own manifest.
+    operation_scopes = [
+        scope for scope in scope_registry["scopes"]
+        if scope.get("source_id") == "data_go_kr" and scope.get("resource_kind") == "api_operation_manifest"
+    ]
+    if len(operation_scopes) != 1:
+        raise ValueError("live evaluation requires exactly one registered data.go.kr operation scope")
+    operation_scope = operation_scopes[0]
+    operation_inputs = [item for item in merged_inputs if item["scope_id"] == operation_scope["scope_id"]]
+    live_publisher_present = live_evidence_index is not None and any(
+        item["scope_id"] == operation_scope["scope_id"]
+        and item["role"] in LIVE_PUBLISHER_EVIDENCE_ROLES
+        for item in merged_inputs
+    )
+    live_pipeline = validate_pipeline_evidence(
+        root=root, operation_inputs=operation_inputs, all_inputs=merged_inputs,
+        resolved=merged_resolved, evaluation_epoch=normalized_as_of,
+        scope_registry=scope_registry, candidate_context=candidate_context or None,
+        repository_subject_sha=release_source_sha,
+    )
+    proof_validator = import_module("completeness_proof_contract_for_current_eval", root / "scripts/validate-completeness-proof.py")
+    proof_validator.POLICY = root / POLICY_PATH
+    proof_validator.POLICY_SCHEMA = root / "schemas/datapan.completeness-proof-policy.v1.schema.json"
+    proof_validator.PROOF_SCHEMA = root / "schemas/datapan.completeness-proof.v1.schema.json"
+    results: list[dict[str, Any]] = []
+    for snapshot_scope in snapshot["scopes"]:
+        scope_id = snapshot_scope["scope_id"]
+        source_relation = target_kind
+        missing: list[dict[str, str]] = []
+        proof_rows = [
+            item for item in merged_inputs
+            if item["scope_id"] == scope_id and item["role"] == "proof_v1"
+        ]
+        complete = bool(snapshot_scope["evaluated_claims"]["complete"])
+        current = False
+        updated = False
+        if not proof_rows:
+            missing.append(missing_entry("completeness_proof_missing", "StatPan/datapan-registry", "#754"))
+        else:
+            if len(proof_rows) != 1:
+                raise ValueError(f"current evaluation found ambiguous proof inputs for {scope_id}")
+            proof_item = proof_rows[0]
+            proof = object_at(merged_resolved[proof_item["input_id"]], "current evaluation v1 proof")
+            proof_validator.validate_proof(proof, policy)
+            freshness = proof["freshness"]
+            age = (as_of - parse_time(freshness["evidence_observed_at"], "proof observation time")).total_seconds()
+            fresh_now = 0 <= age <= freshness["max_age_seconds"]
+            current = (
+                target_kind == "current_main" and complete
+                and snapshot_scope["evaluated_claims"]["current"] is True and fresh_now
+            )
+            if target_kind != "current_main":
+                missing.append(missing_entry("target_is_not_trusted_current_main", "StatPan/datapan-registry", "#754"))
+            elif not fresh_now:
+                missing.append(missing_entry("completeness_evidence_not_fresh_at_current_evaluation", "StatPan/datapan-registry", "#754"))
+            elif not snapshot_scope["evaluated_claims"]["current"]:
+                missing.append(missing_entry("evaluated_subject_current_claim_not_proven", "StatPan/datapan-registry", "#754"))
+
+            if (
+                target_kind == "current_main" and current
+                and snapshot_scope["evaluated_claims"]["updated"] is True
+                and scope_id == operation_scope["scope_id"]
+                and live_publisher_present
+            ):
+                source_inputs = [
+                    item for item in merged_inputs
+                    if item["scope_id"] == scope_id and item["role"] == "authoritative_source_snapshot"
+                ]
+                if len(source_inputs) != 1:
+                    raise ValueError("updated current claim lacks one authenticated proof source snapshot")
+                delivery = validate_updated_claim_inputs(
+                    root=root, scope=operation_scope, scoped_inputs=operation_inputs,
+                    resolved=merged_resolved, proof=proof, source_input=source_inputs[0],
+                    scope_registry=scope_registry, evaluation_epoch=normalized_as_of,
+                    pipeline_evidence=live_pipeline,
+                )
+                publisher = delivery.get("publisher", {})
+                artifact_expires_at = publisher.get("artifact_expires_at")
+                publisher_artifact_current = (
+                    publisher.get("artifact_expired_at_evaluation") is False
+                    and isinstance(artifact_expires_at, str)
+                    and as_of < parse_time(artifact_expires_at, "publisher artifact expiry at current evaluation")
+                )
+                if (
+                    publisher_artifact_current
+                    and
+                    publisher.get("source_sha") == release_source_sha
+                    and publisher.get("manifest_sha256") == target_manifest_sha
+                    and delivery.get("acknowledgement") is not None
+                    and live_pipeline is not None
+                    and isinstance(live_pipeline.get("publication"), dict)
+                    and live_pipeline["publication"].get("status") == "verified"
+                ):
+                    updated = True
+                else:
+                    code = (
+                        "publisher_artifact_expired_at_current_evaluation"
+                        if not publisher_artifact_current
+                        else "same_subject_current_publication_readback_ack_missing"
+                    )
+                    missing.append(missing_entry(code, "StatPan/datapan-registry", "#754"))
+            elif snapshot_scope["evaluated_claims"]["updated"]:
+                missing.append(missing_entry("same_subject_current_publication_readback_ack_missing", "StatPan/datapan-registry", "#754"))
+        if target_kind != "current_main":
+            current = False
+            updated = False
+        status = "historical" if target_kind != "current_main" else ("applicable" if proof_rows else "missing")
+        results.append({
+            "scope_id": scope_id, "relation": source_relation, "status": status,
+            "claims": {"complete": complete, "current": current, "updated": updated},
+            "missing_evidence": dedupe_missing(missing),
+        })
+
+    if len(results) != len(scope_by_id) or {row["scope_id"] for row in results} != set(scope_by_id):
+        raise ValueError("current release evaluation does not cover the exact registered scope set")
+    status_counts = {status: sum(row["status"] == status for row in results) for status in ("applicable", "historical", "missing", "unavailable", "rejected")}
+    claim_counts = {claim: sum(row["claims"][claim] for row in results) for claim in ("complete", "current", "updated")}
+    evaluation = {
+        "schema_version": "datapan.completeness-current-release-evaluation.v1",
+        "evaluation_as_of": normalized_as_of,
+        "evaluator_source": evaluator_identity,
+        "trusted_main_sha": trusted_main_sha,
+        "target_kind": target_kind,
+        "target": target,
+        "snapshot": snapshot_binding,
+        "target_applicability": target_applicability,
+        "summary": {"registered_scopes": len(results), "statuses": status_counts, "claims": claim_counts},
+        "scopes": results,
+    }
+    validate_schema(evaluation, root / CURRENT_EVALUATION_SCHEMA_PATH, "current release evaluation")
+    return evaluation
 
 
 def markdown_escape(value: Any) -> str:
@@ -6295,13 +7171,15 @@ def markdown_compact_json(value: Any) -> str:
 
 def render_markdown(report: dict[str, Any]) -> bytes:
     lines = [
-        "# Public-data completeness proof rollup",
+        "# Public-data completeness proof snapshot",
         "",
         f"As of `{report['evaluation_epoch']}`. This report covers only the registered scopes below; it does not claim to cover all Korean public data.",
         "",
-        (f"Evaluation mode: `{report['evaluation_context']['mode']}`; candidate source inventories are local context and cannot establish authority, publication, or an updated claim. Baseline main: `{report['evaluation_context']['baseline_main_sha']}`."
-         if report["evaluation_context"]["mode"] == "candidate"
-         else "Evaluation mode: `repository`."),
+        (f"Snapshot mode: `candidate`; candidate source inventories are local context and cannot establish authority, publication, or an updated claim. Baseline main: `{report['evaluation_context']['baseline_main_sha']}`."
+         if report["evaluation_context"]["mode"] == "candidate_evidence_snapshot"
+         else "Snapshot mode: `repository evidence`."),
+        "",
+        "All claims below describe only the evidence inputs named by this snapshot at its fixed evaluation epoch. Current-release applicability requires a separate authenticated evaluation against the raw release manifest.",
         "",
         f"Registered scopes: {report['summary']['registered_scopes']}; states: "
         + ", ".join(f"{key}={value}" for key, value in report["summary"]["states"].items())
@@ -6309,7 +7187,7 @@ def render_markdown(report: dict[str, Any]) -> bytes:
         "",
         "Local profiles and candidate denominators are inventory context, not authoritative source-wide denominator evidence. Missing v1 proofs are shown as blocked or unknown without synthetic hashes, timestamps, or counts.",
         "",
-        "| Scope | Resource kind | Local identities | Proof state | Complete | Current | Updated | Missing evidence |",
+        "| Scope | Resource kind | Local identities | Proof state | Evaluated complete | Fresh at snapshot epoch | Updated in evidence subject | Missing evidence |",
         "| --- | --- | ---: | --- | --- | --- | --- | --- |",
     ]
     for row in report["scopes"]:
@@ -6324,9 +7202,9 @@ def render_markdown(report: dict[str, Any]) -> bytes:
                     row["resource_kind"],
                     row["inventory_context"]["local_identity_count"],
                     row["proof_state"],
-                    row["claims"]["complete"],
-                    row["claims"]["current"],
-                    row["claims"]["updated"],
+                    row["evaluated_claims"]["complete"],
+                    row["evaluated_claims"]["current"],
+                    row["evaluated_claims"]["updated"],
                     missing,
                 )
             ) + " |"
@@ -6335,7 +7213,7 @@ def render_markdown(report: dict[str, Any]) -> bytes:
         "",
         "## Evidence facets",
         "",
-        "Facet states describe only the recorded evidence subject. Historical publication/read-back does not imply current release applicability; payload equivalence is shown separately.",
+        "Facet states describe only the recorded evidence subject. Historical publication/read-back does not imply current-release applicability; the relation is evaluated separately. Payload equivalence is shown against the registered catalog inventory.",
         "",
     ])
     for row in report["scopes"]:
@@ -6352,7 +7230,7 @@ def render_markdown(report: dict[str, Any]) -> bytes:
         "",
         f"Input index semantic identity: `{report['input_index']['path']}` has SHA-256 `{report['input_index']['sha256']}` over canonicalized JSON; this is not the raw input file digest.",
         "",
-        "`updated` requires the existing #631 import-durability, immutable-publication, and consumer-read-back predicates for the same subject. Producer-receipt cutover (#592) is a separate facet and is not silently activated here.",
+        "An evaluated-subject `updated` claim requires the existing #631 import-durability, immutable-publication, and consumer-read-back predicates for that subject. Producer-receipt cutover (#592) is a separate facet and is not silently activated here.",
         "",
         "A historical import or scheduled B/C/Health no-op remains historical evidence. It does not add a new source observation or satisfy the original #634 post-fix scheduled-chain and same-subject read-back acceptance by itself.",
         "",
@@ -6375,6 +7253,8 @@ def atomic_write(path: pathlib.Path, data: bytes) -> None:
 
 
 def require_claims(report: dict[str, Any], requirements: list[str]) -> None:
+    if report.get("schema_version") != "datapan.completeness-current-release-evaluation.v1":
+        raise ValueError("--require-claim is supported only by authenticated current-release evaluation")
     rows = {row["scope_id"]: row for row in report["scopes"]}
     failures: list[str] = []
     for requirement in requirements:
@@ -6404,6 +7284,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--as-of")
     parser.add_argument("--output-json", default=OUTPUT_JSON_PATH)
     parser.add_argument("--output-markdown", default=OUTPUT_MARKDOWN_PATH)
+    parser.add_argument("--evaluate-current-release", action="store_true")
+    parser.add_argument("--collect-current-target-evidence", action="store_true")
+    parser.add_argument("--release-source-sha")
+    parser.add_argument("--evaluation-as-of")
+    parser.add_argument("--evaluation-output")
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--write", action="store_true")
     action.add_argument("--check", action="store_true")
@@ -6417,14 +7302,123 @@ def output_path(root: pathlib.Path, value: str, label: str) -> pathlib.Path:
     return path
 
 
+def current_target_guardian_deadline() -> float:
+    """Read the launch window from a live, identity-bound local guardian."""
+    try:
+        channel = socket.socket(fileno=3)
+    except OSError as exc:
+        raise ValueError("current-target collection requires the dedicated launcher") from exc
+    try:
+        peer_pid, peer_uid, _peer_gid = struct.unpack(
+            "3i", channel.getsockopt(socket.SOL_SOCKET, socket.SO_PEERCRED, struct.calcsize("3i"))
+        )
+        raw = channel.recv(1024)
+        if not raw:
+            raise ValueError("current-target launch handshake is unavailable")
+        value = json.loads(raw.decode("ascii"))
+    except (OSError, UnicodeError, json.JSONDecodeError, struct.error) as exc:
+        raise ValueError("current-target launch handshake is invalid") from exc
+    finally:
+        channel.close()
+    expected = {
+        "kind", "guardian_pid", "guardian_starttime", "worker_pid",
+        "worker_starttime", "deadline_monotonic",
+    }
+    if not isinstance(value, dict) or set(value) != expected or value.get("kind") != "datapan.current-target-launch.v1":
+        raise ValueError("current-target launch handshake has an unexpected shape")
+    guardian_pid = os.getppid()
+    worker_pid = os.getpid()
+    if (
+        peer_pid != guardian_pid or peer_uid != os.getuid()
+        or value.get("guardian_pid") != guardian_pid
+        or value.get("worker_pid") != worker_pid
+    ):
+        raise ValueError("current-target launch handshake is not bound to this worker and parent")
+
+    def starttime(pid: int) -> int:
+        try:
+            raw_stat = pathlib.Path(f"/proc/{pid}/stat").read_text(encoding="ascii")
+        except OSError as exc:
+            raise ValueError("current-target guardian process identity is unavailable") from exc
+        close = raw_stat.rfind(")")
+        fields = raw_stat[close + 1 :].split() if close >= 0 else []
+        if len(fields) < 20:
+            raise ValueError("current-target guardian process identity is malformed")
+        try:
+            return int(fields[19])
+        except ValueError as exc:
+            raise ValueError("current-target guardian process identity is malformed") from exc
+
+    guardian_start = starttime(guardian_pid)
+    worker_start = starttime(worker_pid)
+    if value.get("guardian_starttime") != guardian_start or value.get("worker_starttime") != worker_start:
+        raise ValueError("current-target launch handshake process identity changed")
+    deadline = value.get("deadline_monotonic")
+    if (
+        isinstance(deadline, bool) or not isinstance(deadline, (int, float))
+        or not math.isfinite(float(deadline))
+    ):
+        raise ValueError("current-target guardian deadline is invalid")
+    remaining = float(deadline) - time.monotonic()
+    if remaining <= 0 or remaining > CURRENT_TARGET_COLLECTION_BUDGET_SECONDS:
+        raise ValueError("current-target guardian deadline is outside the fixed 120-second window")
+    return float(deadline)
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    if args.collect_current_target_evidence and not args.evaluate_current_release:
+        print(
+            "FAIL completeness proof rollup: --collect-current-target-evidence requires --evaluate-current-release",
+            file=sys.stderr,
+        )
+        return 1
+    if args.evaluate_current_release and not args.check:
+        print(
+            "FAIL completeness proof rollup: --evaluate-current-release must be combined with --check",
+            file=sys.stderr,
+        )
+        return 1
+    if args.evaluate_current_release and (
+        not args.release_source_sha or not args.evaluation_as_of or not args.evaluation_output
+    ):
+        print(
+            "FAIL completeness proof rollup: current-release evaluation requires --release-source-sha, --evaluation-as-of, and --evaluation-output",
+            file=sys.stderr,
+        )
+        return 1
+    try:
+        current_target_deadline = (
+            current_target_guardian_deadline()
+            if args.collect_current_target_evidence else None
+        )
+    except ValueError as exc:
+        print(f"FAIL completeness proof rollup: {exc}", file=sys.stderr)
+        return 1
     root = args.repo_root.resolve()
     input_root = (args.input_root or root).resolve()
     input_index = args.input_index or (root / INPUT_INDEX_PATH)
     json_output = output_path(root, args.output_json, "JSON output path")
     markdown_output = output_path(root, args.output_markdown, "Markdown output path")
     try:
+        if args.require_claim and not args.evaluate_current_release:
+            raise ValueError("--require-claim requires --evaluate-current-release; snapshot claims are not current-release claims")
+        if args.collect_current_target_evidence and not args.evaluate_current_release:
+            raise ValueError("--collect-current-target-evidence requires --evaluate-current-release")
+        if args.evaluate_current_release:
+            if not args.check:
+                raise ValueError("--evaluate-current-release must be combined with --check")
+            if not args.release_source_sha or not args.evaluation_as_of or not args.evaluation_output:
+                raise ValueError("current-release evaluation requires --release-source-sha, --evaluation-as-of, and --evaluation-output")
+            evaluation_output = output_path(root, args.evaluation_output, "current evaluation output path")
+            try:
+                evaluation_output.relative_to(root / ".datapan/ci")
+            except ValueError as exc:
+                raise ValueError("current evaluation output must remain outside the release manifest under .datapan/ci") from exc
+            if evaluation_output in {json_output, markdown_output, input_index.resolve()}:
+                raise ValueError("current evaluation output must not replace a snapshot, source input, or generated report")
+        else:
+            evaluation_output = None
         candidate_requested = args.candidate_registry is not None or args.candidate_operation_manifest is not None
         if (args.candidate_registry is None) != (args.candidate_operation_manifest is None):
             raise ValueError("candidate mode requires both --candidate-registry and --candidate-operation-manifest")
@@ -6459,9 +7453,25 @@ def main(argv: list[str] | None = None) -> int:
             input_index_override=candidate_index,
             candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
         )
-        require_claims(report, args.require_claim)
         json_bytes = render_json(report)
         markdown_bytes = render_markdown(report)
+        evaluation = None
+        if args.evaluate_current_release:
+            trusted_main_sha = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode("ascii").strip()
+            evaluation = evaluate_current_release(
+                root=root, input_root=input_root, input_index_path=input_index,
+                release_source_sha=args.release_source_sha, trusted_main_sha=trusted_main_sha,
+                evaluation_as_of=args.evaluation_as_of,
+                current_target_evidence=(
+                    collect_current_target_evidence_for_cli(
+                        root=root, release_source_sha=args.release_source_sha,
+                        trusted_main_sha=trusted_main_sha,
+                        evaluation_as_of=args.evaluation_as_of,
+                        deadline_monotonic=current_target_deadline,
+                    ) if args.collect_current_target_evidence else None
+                ),
+            )
+            require_claims(evaluation, args.require_claim)
         if args.write:
             if candidate_index is not None:
                 atomic_write(input_index, canonical_json_bytes(candidate_index))
@@ -6476,6 +7486,9 @@ def main(argv: list[str] | None = None) -> int:
             ]
             if mismatches:
                 raise ValueError("generated output drift: " + ", ".join(mismatches))
+            if evaluation is not None:
+                assert evaluation_output is not None
+                atomic_write(evaluation_output, render_json(evaluation))
             print(f"ok completeness proof rollup check ({report['summary']['registered_scopes']} scopes)")
     except Exception as exc:  # noqa: BLE001
         print(f"FAIL completeness proof rollup: {exc}", file=sys.stderr)
