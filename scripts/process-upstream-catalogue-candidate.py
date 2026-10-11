@@ -766,6 +766,13 @@ def _object_sha256(value: Any) -> str:
     return sha256_bytes(canonical_json(value))
 
 
+_GENERATION_IDENTITY_INPUT_KEYS = frozenset({
+    "source_id", "source_scope", "baseline_sha256", "candidate_sha256",
+    "observation_failure_sha256", "policy_sha256", "adapter_revision",
+    "generator_revision", "extractor_revision",
+})
+
+
 def _replay_admission(
     checkpoint: Mapping[str, Any], index: Mapping[str, Any],
 ) -> dict[str, Any]:
@@ -795,7 +802,6 @@ def _replay_admission(
         if item["producer_run_id"] == str(observation.get("producer_run_id") or "")
         and item["refresh_evidence_sha256"] == observation.get("refresh_evidence_sha256")
         and item["artifact_id"] == str(reference.get("artifact_id") or "")
-        and item["generation_id"] == checkpoint.get("generation_id")
     ]
     if len(matches) != 1:
         raise ValueError("replay_original_admission_not_unique")
@@ -808,7 +814,104 @@ def _replay_admission(
         or reference.get("candidate_sha256") != admission["candidate_sha256"]
     ):
         raise ValueError("replay_original_admission_binding_mismatch")
+    if admission["generation_id"] != checkpoint.get("generation_id"):
+        if not isinstance(generation_inputs, Mapping):
+            raise ValueError("replay_derived_generation_inputs_invalid")
+        if "same_observation_derivation" in generation_inputs:
+            if set(generation_inputs) != _GENERATION_IDENTITY_INPUT_KEYS | {"same_observation_derivation"}:
+                raise ValueError("replay_derived_generation_inputs_invalid")
+            raw_derivation = generation_inputs.get("same_observation_derivation")
+            if not isinstance(raw_derivation, Mapping):
+                raise ValueError("replay_derived_generation_missing")
+            try:
+                envelope = DERIVATION.validate_derivation_envelope(raw_derivation)
+            except (DERIVATION.DerivationError, TypeError) as exc:
+                raise ValueError("replay_derived_generation_invalid") from exc
+            if dict(raw_derivation) != envelope:
+                raise ValueError("replay_derived_generation_not_canonical")
+            # Hash the checkpoint's complete recorded inputs. Recomputing them
+            # through generation_identity would substitute this worker revision.
+            if _object_sha256(dict(generation_inputs)) != checkpoint.get("generation_id"):
+                raise ValueError("replay_derived_generation_identity_mismatch")
+            first_generation_id = admission["generation_id"]
+            if (
+                first_generation_id == checkpoint.get("generation_id")
+                or first_generation_id not in envelope["ancestor_generation_ids"]
+            ):
+                raise ValueError("replay_original_generation_not_ancestor")
+            try:
+                DERIVATION.original_observation_from_checkpoint(checkpoint, admission)
+            except DERIVATION.DerivationError as exc:
+                raise ValueError("replay_derived_admission_binding_mismatch") from exc
+        else:
+            # A later processor epoch can have a new generation identity while
+            # retaining the same latest A observation and its first durable
+            # admission row. This branch is deliberately limited to the exact
+            # ordinary input shape; it does not create derivation ancestry.
+            if set(generation_inputs) != _GENERATION_IDENTITY_INPUT_KEYS:
+                raise ValueError("replay_ordinary_generation_inputs_invalid")
+            source_id = generation_inputs.get("source_id")
+            source_scope = generation_inputs.get("source_scope")
+            baseline_sha256 = generation_inputs.get("baseline_sha256")
+            candidate_sha256 = generation_inputs.get("candidate_sha256")
+            revision_fields = (
+                "policy_sha256", "adapter_revision", "generator_revision", "extractor_revision",
+            )
+            if (
+                type(source_id) is not str or len(source_id) < 1
+                or type(source_scope) is not str or len(source_scope) < 1
+                or baseline_sha256 is not None and (
+                    type(baseline_sha256) is not str
+                    or re.fullmatch(r"[a-f0-9]{64}", baseline_sha256) is None
+                )
+                or type(candidate_sha256) is not str
+                or re.fullmatch(r"[a-f0-9]{64}", candidate_sha256) is None
+                or generation_inputs.get("observation_failure_sha256") is not None
+                or any(
+                    type(generation_inputs.get(field)) is not str
+                    or re.fullmatch(r"[a-f0-9]{64}", generation_inputs[field]) is None
+                    for field in revision_fields
+                )
+            ):
+                raise ValueError("replay_ordinary_generation_inputs_invalid")
+            if _object_sha256(dict(generation_inputs)) != checkpoint.get("generation_id"):
+                raise ValueError("replay_ordinary_generation_identity_mismatch")
+            if (
+                checkpoint.get("status") not in {"ready", "no-change"}
+                or source_id != checkpoint.get("source_id")
+                or source_scope != checkpoint.get("source_scope")
+                or observation.get("collection_status") != "success"
+                or observation.get("execution_mode") != "live"
+                or str(observation.get("producer_run_id") or "") != admission["producer_run_id"]
+                or observation.get("refresh_evidence_sha256") != admission["refresh_evidence_sha256"]
+                or reference.get("name") != admission["artifact_name"]
+                or str(reference.get("artifact_id") or "") != admission["artifact_id"]
+                or reference.get("expires_at") != admission["artifact_expires_at"]
+                or reference.get("evidence_sha256") != admission["refresh_evidence_sha256"]
+                or reference.get("candidate_sha256") != admission["candidate_sha256"]
+            ):
+                raise ValueError("replay_ordinary_generation_binding_mismatch")
     return admission
+
+
+def _replay_incoming_admission_matches(
+    durable: Mapping[str, Any], incoming: Mapping[str, Any], *, current_generation_id: str,
+) -> bool:
+    """Compare a live row after _replay_admission authenticated the durable row."""
+    if (
+        set(durable) != set(incoming)
+        or incoming.get("generation_id") != current_generation_id
+    ):
+        return False
+    processing_provenance = {"admitted_at"}
+    if durable.get("generation_id") != current_generation_id:
+        # _replay_admission permits this only for a validated ordinary epoch
+        # or a validated same-A derivative. The first durable row is retained.
+        processing_provenance.add("generation_id")
+    return all(
+        durable.get(field) == incoming.get(field)
+        for field in set(durable) - processing_provenance
+    )
 
 
 def _replay_index_transition(
@@ -3093,9 +3196,9 @@ def process(
                 raise ValueError("replay_authenticated_context_unavailable")
             durable_admission = _replay_admission(replay_prior_checkpoint, replay_prior_index)
             incoming_admission = validate_admission_row(collector_admission)
-            if any(
-                durable_admission.get(field) != incoming_admission.get(field)
-                for field in set(durable_admission) - {"admitted_at"}
+            if not _replay_incoming_admission_matches(
+                durable_admission, incoming_admission,
+                current_generation_id=str(checkpoint.get("generation_id") or ""),
             ):
                 raise ValueError("replay_authenticated_admission_mismatch")
 
