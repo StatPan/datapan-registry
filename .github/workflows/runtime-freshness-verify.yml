@@ -49,7 +49,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
-          ref: acf060e71e2329b6a04ad4ab0abf669fbbfe9dac
+          ref: d4226321c1a4c6c7aa091753dc6f03f4ab04cddd
           path: datapan-cli
 
       - name: Setup Go
@@ -131,7 +131,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
-          ref: acf060e71e2329b6a04ad4ab0abf669fbbfe9dac
+          ref: d4226321c1a4c6c7aa091753dc6f03f4ab04cddd
           path: datapan-cli
 
       - name: Setup Go
