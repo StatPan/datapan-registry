@@ -166,6 +166,8 @@ jobs:
           python -m pip install jsonschema
           python -m pip install --disable-pip-version-check 'PyYAML==6.0.2'
           python scripts/validate-source-reference-drift.py
+          python scripts/validate-source-runtime-candidates.py
+          python scripts/validate-source-runtime-evidence-plans.py
           python scripts/sync-release-schema-artifacts.py --check
           python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-data-go-kr-operation-manifest.py --check
@@ -285,8 +287,6 @@ jobs:
           python scripts/validate-source-report-inventory.py
           python scripts/validate-release-report-artifacts.py
           python scripts/validate-release-receipt-boundary.py
-          python scripts/validate-source-runtime-candidates.py
-          python scripts/validate-source-runtime-evidence-plans.py
           python scripts/validate-source-runtime-evidence-rollup.py
           python scripts/validate-runtime-evidence-growth.py
           python scripts/generate-sustainable-coverage.py --self-test
