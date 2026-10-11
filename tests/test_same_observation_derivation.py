@@ -2066,6 +2066,34 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         with mock.patch.object(PROCESSOR, "generator_revision", return_value="b" * 64):
             b1 = self._run_claim_and_worker(2, resume=self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json")
         self.assertNotEqual(first_revision, b1["generation_inputs"]["generator_revision"])
+        # Ordinary processor epochs retain the first authenticated A row even
+        # when a later worker has a different generation identity. This is the
+        # non-derived counterpart to the B3 descendant checks below.
+        b1_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        b1_admissions = HANDOFF.validate_ledger(b1_index["collector_handoff"])["admitted_observations"]
+        self.assertEqual(len(b1_admissions), 1)
+        b0_admission = b1_admissions[0]
+        self.assertEqual(b0_admission["generation_id"], b0["generation_id"])
+        self.assertNotEqual(b0_admission["generation_id"], b1["generation_id"])
+        self.assertEqual(set(b1["generation_inputs"]), PROCESSOR._GENERATION_IDENTITY_INPUT_KEYS)
+        self.assertEqual(PROCESSOR._object_sha256(b1["generation_inputs"]), b1["generation_id"])
+        self.assertEqual(PROCESSOR._replay_admission(b1, b1_index), b0_admission)
+        incoming_b1 = copy.deepcopy(b0_admission)
+        incoming_b1["generation_id"] = b1["generation_id"]
+        incoming_b1["admitted_at"] = "2026-10-12T00:00:00Z"
+        self.assertTrue(PROCESSOR._replay_incoming_admission_matches(
+            b0_admission, incoming_b1, current_generation_id=b1["generation_id"],
+        ))
+        wrong_incoming_generation = copy.deepcopy(incoming_b1)
+        wrong_incoming_generation["generation_id"] = "f" * 64
+        self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+            b0_admission, wrong_incoming_generation, current_generation_id=b1["generation_id"],
+        ))
+        changed_incoming_a = copy.deepcopy(incoming_b1)
+        changed_incoming_a["artifact_digest_sha256"] = "f" * 64
+        self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+            b0_admission, changed_incoming_a, current_generation_id=b1["generation_id"],
+        ))
         journal1, c1 = self._synthetic_c_journal(b0, 1)
         stale_selected, stale_blocked, stale_existing, stale_pr_reads = self._select_actual_derived_candidate(
             b1, journal1, c1,
@@ -2358,21 +2386,259 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         replay_args.canonical_update_journal_schema = ROOT / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
         replay_checkpoint_path = generation_dir / f"{b3['generation_id']}.json"
         before_checkpoint = PROCESSOR.load_json(replay_checkpoint_path)
-        before_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        index_path = self.helper.state_dir / "sources/data_go_kr/index.json"
+        before_index = PROCESSOR.load_json(index_path)
+        durable_admission = PROCESSOR._replay_admission(before_checkpoint, before_index)
+        durable_rows = HANDOFF.validate_ledger(before_index["collector_handoff"])["admitted_observations"]
+        self.assertEqual(len(durable_rows), 1)
+        self.assertEqual(durable_admission, durable_rows[0])
+        self.assertEqual(durable_admission["generation_id"], b0["generation_id"])
+        self.assertNotEqual(durable_admission["generation_id"], b3["generation_id"])
+        self.assertIn(
+            durable_admission["generation_id"],
+            before_checkpoint["generation_inputs"]["same_observation_derivation"]["ancestor_generation_ids"],
+        )
+        self.assertEqual(PROCESSOR._object_sha256(before_checkpoint["generation_inputs"]), b3["generation_id"])
+
+        # A second valid attempt sharing run/evidence/artifact is ambiguous;
+        # replay must not pick a latest row or filter by current generation.
+        duplicate_index = copy.deepcopy(before_index)
+        duplicate = copy.deepcopy(durable_admission)
+        duplicate["run_attempt"] += 1
+        duplicate["admission_id"] = HANDOFF.admission_id(
+            duplicate["producer_run_id"], duplicate["run_attempt"],
+            duplicate["refresh_evidence_sha256"],
+        )
+        duplicate_index["collector_handoff"]["admitted_observations"].append(duplicate)
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR._replay_admission(before_checkpoint, duplicate_index)
+
+        missing_index = copy.deepcopy(before_index)
+        missing_index["collector_handoff"]["admitted_observations"] = []
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR._replay_admission(before_checkpoint, missing_index)
+
+        foreign_index = copy.deepcopy(before_index)
+        foreign = foreign_index["collector_handoff"]["admitted_observations"][0]
+        foreign["refresh_evidence_sha256"] = "f" * 64
+        foreign["admission_id"] = HANDOFF.admission_id(
+            foreign["producer_run_id"], foreign["run_attempt"],
+            foreign["refresh_evidence_sha256"],
+        )
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR._replay_admission(before_checkpoint, foreign_index)
+
+        for field in ("head_sha", "run_attempt", "artifact_digest_sha256"):
+            with self.subTest(replay_durable_original_a_field=field):
+                changed_index = copy.deepcopy(before_index)
+                changed = changed_index["collector_handoff"]["admitted_observations"][0]
+                if field == "head_sha":
+                    changed[field] = "f" * 40 if changed[field] != "f" * 40 else "e" * 40
+                elif field == "run_attempt":
+                    changed[field] += 1
+                    changed["admission_id"] = HANDOFF.admission_id(
+                        changed["producer_run_id"], changed[field], changed["refresh_evidence_sha256"],
+                    )
+                else:
+                    changed[field] = "f" * 64 if changed[field] != "f" * 64 else "e" * 64
+                with self.assertRaisesRegex(ValueError, "replay_derived_admission_binding_mismatch"):
+                    PROCESSOR._replay_admission(before_checkpoint, changed_index)
+
+        missing_derivation = copy.deepcopy(before_checkpoint)
+        missing_derivation["generation_inputs"].pop("same_observation_derivation")
+        PROCESSOR.seal_checkpoint(missing_derivation)
+        with self.assertRaisesRegex(ValueError, "replay_derived_generation_inputs_invalid"):
+            PROCESSOR._replay_admission(missing_derivation, before_index)
+        malformed_derivation = copy.deepcopy(before_checkpoint)
+        malformed_derivation["generation_inputs"]["same_observation_derivation"] = {"schema_version": "bad"}
+        PROCESSOR.seal_checkpoint(malformed_derivation)
+        with self.assertRaisesRegex(ValueError, "replay_derived_generation_invalid"):
+            PROCESSOR._replay_admission(malformed_derivation, before_index)
+        wrong_generation_inputs = copy.deepcopy(before_checkpoint)
+        wrong_generation_inputs["generation_inputs"]["generator_revision"] = "f" * 64
+        PROCESSOR.seal_checkpoint(wrong_generation_inputs)
+        with self.assertRaisesRegex(ValueError, "replay_derived_generation_identity_mismatch"):
+            PROCESSOR._replay_admission(wrong_generation_inputs, before_index)
+        outside_ancestry_index = copy.deepcopy(before_index)
+        outside_ancestry = outside_ancestry_index["collector_handoff"]["admitted_observations"][0]
+        outside_generation_id = "0" * 64
+        ancestors = before_checkpoint["generation_inputs"]["same_observation_derivation"]["ancestor_generation_ids"]
+        while outside_generation_id in ancestors or outside_generation_id == b3["generation_id"]:
+            outside_generation_id = hashlib.sha256(outside_generation_id.encode("ascii")).hexdigest()
+        outside_ancestry["generation_id"] = outside_generation_id
+        with self.assertRaisesRegex(ValueError, "replay_original_generation_not_ancestor"):
+            PROCESSOR._replay_admission(before_checkpoint, outside_ancestry_index)
+
+        # This pure comparison is downstream of _replay_admission above. The
+        # actual replay below still authenticates the incoming row and archive.
+        incoming_admission = copy.deepcopy(durable_admission)
+        incoming_admission["generation_id"] = b3["generation_id"]
+        incoming_admission["admitted_at"] = (
+            HANDOFF.parse_time(durable_admission["admitted_at"]) + dt.timedelta(seconds=1)
+        ).isoformat().replace("+00:00", "Z")
+        incoming_admission = HANDOFF.validate_admission_row(incoming_admission)
+        self.assertTrue(PROCESSOR._replay_incoming_admission_matches(
+            durable_admission, incoming_admission, current_generation_id=b3["generation_id"],
+        ))
+        same_generation_incoming = copy.deepcopy(durable_admission)
+        same_generation_incoming["admitted_at"] = (
+            HANDOFF.parse_time(durable_admission["admitted_at"]) + dt.timedelta(seconds=1)
+        ).isoformat().replace("+00:00", "Z")
+        self.assertTrue(PROCESSOR._replay_incoming_admission_matches(
+            durable_admission,
+            HANDOFF.validate_admission_row(same_generation_incoming),
+            current_generation_id=durable_admission["generation_id"],
+        ))
+        for field in set(durable_admission) - {"admitted_at", "generation_id"}:
+            with self.subTest(replay_incoming_immutable_field=field):
+                changed_incoming = dict(incoming_admission)
+                changed_incoming[field] = object()
+                self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+                    durable_admission, changed_incoming, current_generation_id=b3["generation_id"],
+                ))
+        wrong_incoming_generation = dict(incoming_admission)
+        wrong_incoming_generation["generation_id"] = durable_admission["generation_id"]
+        self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+            durable_admission, wrong_incoming_generation,
+            current_generation_id=b3["generation_id"],
+        ))
         before_calls = len(self.detail_calls)
+
+        # Give the exact replay a real, local State revision to bind. This
+        # repository contains only the selected State subtree; no source,
+        # registry, or artifact tree is copied or staged.
+        state_root = self.helper.state_dir
+        state_subtree = state_root / "sources/data_go_kr"
+        self.assertTrue(state_subtree.is_dir())
+
+        def snapshot_state_bytes() -> dict[str, bytes]:
+            files = sorted(state_subtree.rglob("*"))
+            self.assertTrue(all(not path.is_symlink() for path in files))
+            return {
+                path.relative_to(state_root).as_posix(): path.read_bytes()
+                for path in files if path.is_file()
+            }
+
+        before_state_bytes = snapshot_state_bytes()
+        self.assertIn("sources/data_go_kr/index.json", before_state_bytes)
+        self.assertLessEqual(sum(map(len, before_state_bytes.values())), 4 * 1024 * 1024)
+        self.assertFalse((state_root / ".git").exists())
+
+        subprocess.run(["git", "init", "--quiet", str(state_root)], check=True, capture_output=True)
+
+        def state_git(*argv: str) -> bytes:
+            completed = subprocess.run(
+                ["git", *argv], cwd=state_root, check=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            )
+            return completed.stdout
+
+        state_git("config", "user.name", "Datapan same-observation test")
+        state_git("config", "user.email", "datapan-same-observation-test@example.invalid")
+        state_git("add", "--", "sources/data_go_kr")
+        tracked_state_paths = [
+            value.decode("utf-8") for value in state_git("ls-files", "-z").split(b"\0") if value
+        ]
+        self.assertEqual(tracked_state_paths, sorted(before_state_bytes))
+        state_git("commit", "--quiet", "-m", "capture same-observation replay State")
+        replay_state_head_sha = state_git("rev-parse", "HEAD").decode("ascii").strip()
+        self.assertRegex(replay_state_head_sha, r"^[a-f0-9]{40}$")
+        self.assertEqual(state_git("status", "--porcelain"), b"")
+        for relative_path, expected_bytes in before_state_bytes.items():
+            self.assertEqual(state_git("show", f"HEAD:{relative_path}"), expected_bytes)
+        self.assertEqual(snapshot_state_bytes(), before_state_bytes)
+
+        # The live replay guard rejects a missing State revision before any
+        # State write, receipt context, or provider call. Keep this negative on
+        # a deep-copied namespace so the positive replay below remains exact.
+        missing_head_args = copy.deepcopy(replay_args)
+        delattr(missing_head_args, "replay_state_head_sha")
+        with self._derivation_git(
+            snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2,
+        ):
+            with self.assertRaisesRegex(ValueError, "replay_authenticated_context_unavailable"):
+                PROCESSOR.process(
+                    missing_head_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
+                )
+        self.assertEqual(snapshot_state_bytes(), before_state_bytes)
+        self.assertEqual(len(self.detail_calls), before_calls)
+        self.assertFalse(getattr(missing_head_args, "exact_delivery_replay", False))
+        self.assertIsNone(getattr(missing_head_args, "exact_delivery_replay_context", None))
+        self.assertIsNone(getattr(missing_head_args, "replay_persistence_receipt", None))
+
+        # A malformed revision reaches the separate strict SHA guard and has
+        # the same no-mutation/no-receipt behavior.
+        malformed_head_args = copy.deepcopy(replay_args)
+        malformed_head_args.replay_state_head_sha = "not-a-state-head"
+        with self._derivation_git(
+            snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2,
+        ):
+            with self.assertRaisesRegex(ValueError, "replay_state_head_sha_invalid"):
+                PROCESSOR.process(
+                    malformed_head_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
+                )
+        self.assertEqual(snapshot_state_bytes(), before_state_bytes)
+        self.assertEqual(len(self.detail_calls), before_calls)
+        self.assertFalse(getattr(malformed_head_args, "exact_delivery_replay", False))
+        self.assertIsNone(getattr(malformed_head_args, "exact_delivery_replay_context", None))
+
+        replay_args.replay_state_head_sha = replay_state_head_sha
         with self._derivation_git(snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2):
             replay_code, replayed = PROCESSOR.process(
                 replay_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
             )
         after_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        after_checkpoint = PROCESSOR.load_json(replay_checkpoint_path)
         self.assertEqual(replay_code, 0)
         self.assertEqual(replayed["generation_id"], b3["generation_id"])
         self.assertEqual(replayed["output_artifact"]["artifact_id"], before_checkpoint["output_artifact"]["artifact_id"])
         self.assertEqual(replayed["observation_count"], before_checkpoint["observation_count"])
         self.assertEqual(replayed["attempts_consumed"], before_checkpoint["attempts_consumed"])
+        self.assertEqual(replayed["observed_at"], before_checkpoint["observed_at"])
+        self.assertEqual(replayed["last_observation"], before_checkpoint["last_observation"])
+        self.assertEqual(replayed["input_artifacts"], before_checkpoint["input_artifacts"])
+        self.assertEqual(replayed["output_artifact"], before_checkpoint["output_artifact"])
+        self.assertEqual(replayed["output_digests"], before_checkpoint["output_digests"])
+        before_immutable_checkpoint = copy.deepcopy(before_checkpoint)
+        after_immutable_checkpoint = copy.deepcopy(after_checkpoint)
+        for value in (before_immutable_checkpoint, after_immutable_checkpoint):
+            value.pop("last_heartbeat_at")
+            value.pop("checkpoint_sha256")
+        self.assertEqual(after_immutable_checkpoint, before_immutable_checkpoint)
         self.assertEqual(after_index["detail_queue_cursor"], before_index["detail_queue_cursor"])
         self.assertEqual(after_index["detail_retry_state"], before_index["detail_retry_state"])
+        self.assertEqual(after_index["collector_handoff"], before_index["collector_handoff"])
         self.assertEqual(len(self.detail_calls), before_calls)
+        self.assertTrue(getattr(replay_args, "exact_delivery_replay", False))
+        replay_context = getattr(replay_args, "exact_delivery_replay_context", None)
+        self.assertIsInstance(replay_context, dict)
+        self.assertEqual(replay_context["state_head_sha"], replay_state_head_sha)
+        replay_result = PROCESSOR.processing_result(
+            replayed,
+            exact_delivery_replay=True,
+            producer_run_id=replay_args.producer_run_id,
+            processor_run_id=replay_args.processor_run_id or replay_args.producer_run_id,
+            processor_artifact_run_id=(
+                replay_args.processor_artifact_run_id
+                or replay_args.processor_run_id
+                or replay_args.producer_run_id
+            ),
+        )
+        replay_receipt = PROCESSOR.build_replay_persistence_receipt(
+            result=replay_result, **replay_context,
+        )
+        self.assertEqual(
+            PROCESSOR.verify_replay_persistence_receipt(
+                replay_receipt, result=replay_result, **replay_context,
+            ),
+            replay_receipt,
+        )
+        self.assertEqual(replay_receipt["state_head_sha"], replay_state_head_sha)
+        self.assertEqual(replay_receipt["generation_id"], b3["generation_id"])
+        self.assertEqual(
+            replay_receipt["collector_admission_sha256"],
+            PROCESSOR._object_sha256(durable_admission),
+        )
 
         # A pure same-observation recomposition can have no newly eligible
         # detail requests. It must still compose accumulated parent evidence,
