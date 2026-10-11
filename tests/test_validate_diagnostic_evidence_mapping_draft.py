@@ -61,6 +61,34 @@ class DiagnosticEvidenceMappingDraftTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "historical health catalog mapping pin drift"):
             MODULE.validate_inputs(mapping)
 
+    def test_historical_error_action_rollup_resolves_from_exact_archive(self):
+        rollup = next(item for item in self.mapping["authoritative_inputs"] if item["path"] == "reports/error-action-routing-rollup.json")
+        archive = MODULE.historical_authoritative_input_path(rollup["path"])
+        self.assertEqual(archive, MODULE.ARCHIVED_ERROR_ACTION_ROLLUP)
+        self.assertEqual(hashlib.sha256(archive.read_bytes()).hexdigest(), rollup["sha256"])
+        self.assertIsNotNone(MODULE.validate_inputs(self.mapping, MODULE.REGISTRY_IDENTITY_PROOF))
+
+    def test_source_basis_uses_historical_rollup_even_when_current_path_differs(self):
+        mapping = {
+            "authoritative_inputs": [{"path": "reports/error-action-routing-rollup.json"}],
+            "cause_mappings": [{
+                "cause": "historical_rollup_fact",
+                "source_basis": [{
+                    "type": "registry_fact",
+                    "artifact": "reports/error-action-routing-rollup.json",
+                    "json_pointer": "/summary/rules",
+                    "equals": 33,
+                }],
+            }],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            current = root / "reports/error-action-routing-rollup.json"
+            current.parent.mkdir(parents=True)
+            current.write_text('{"summary":{"rules":999}}\n', encoding="utf-8")
+            with mock.patch.object(MODULE, "ROOT", root):
+                MODULE.validate_source_basis(mapping)
+
     def test_registry_identity_proof_rejects_synchronized_source_semantic_drift(self):
         proof = MODULE.load(MODULE.REGISTRY_IDENTITY_PROOF)
         proof["datasets"][0]["operations"][0]["source_system"] = "forged.example"

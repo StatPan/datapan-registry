@@ -89,6 +89,9 @@ WRITE_COMMANDS: tuple[Command, ...] = (
 CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-schema-artifacts.py", "--check")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--check")),
+    Command(("python3", "scripts/validate-source-reference-drift.py")),
+    Command(("python3", "scripts/validate-source-runtime-candidates.py")),
+    Command(("python3", "scripts/validate-source-runtime-evidence-plans.py")),
     Command(("python3", "scripts/generate-diagnostic-current-source-applicability.py", "--check")),
     Command(("python3", "scripts/validate-diagnostic-current-source-applicability.py")),
     Command(("python3", "-m", "unittest", "tests/test_diagnostic_current_source_applicability.py")),

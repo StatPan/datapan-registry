@@ -1,0 +1,1154 @@
+{
+  "artifact_kind": "shard",
+  "records": [
+    {
+      "admission": {
+        "evidence_refs": [],
+        "reasons": [
+          "request_plan_incomplete",
+          "runtime_binding_unbound"
+        ],
+        "status": "not_admitted"
+      },
+      "artifact_kind": "operation_plan",
+      "operation_identity": {
+        "operation_id": "kosis-statistics-data-dt-1b41",
+        "operation_name": "KOSIS population table bounded data query",
+        "protocol": "REST",
+        "registered_endpoint": {
+          "host": "kosis.kr",
+          "path": "/openapi/Param/statisticsParameterData.do"
+        }
+      },
+      "request_plan": {
+        "evidence_refs": [
+          {
+            "artifact_path": "reports/kosis/operation-denominator.json",
+            "evidence_kind": "operation_denominator",
+            "json_pointer": "#/operations/0",
+            "sha256": "03c57ba3715b713d3ecac7be0cd5147d5d4f19187a79fb810dfce8a031255e9b"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/authentication",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/effect",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/identity",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/limits/provider_quota",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/operation_document/title",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/0/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/1/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/10",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/10/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/10/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/10/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/10/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/10/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/10/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/11",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/11/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/11/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/11/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/11/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/11/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/11/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/12",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/12/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/12/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/12/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/12/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/12/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/12/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/13",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/13/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/13/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/13/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/13/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/13/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/13/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/14",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/14/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/14/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/14/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/14/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/14/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/14/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/15",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/15/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/15/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/15/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/15/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/15/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/15/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/16",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/16/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/16/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/16/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/16/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/16/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/16/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/17",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/17/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/17/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/17/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/17/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/17/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/17/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/18",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/18/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/18/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/18/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/18/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/18/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/18/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/19",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/19/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/19/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/19/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/19/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/19/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/19/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/2/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/3/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/4/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/5/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/6/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/7/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/8",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/8/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/8/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/8/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/8/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/8/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/8/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/9",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/9/cardinality",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/9/data_type",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/9/default",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/9/enum",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/9/location",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/parameters/9/requiredness",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/0",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/1",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/10",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/11",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/12",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/13",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/14",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/15",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/16",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/17",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/2",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/3",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/4",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/5",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/6",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/7",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/8",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/declared_output_fields/9",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/0",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/1",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/2",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/3",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/4",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/5",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/6",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/7",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/8",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/response_contract/documented_error_contract/codes/9",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/source_bindings/0",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/source_bindings/1",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/fixed_query_selectors/0",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/host",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/path",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/protocol",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          },
+          {
+            "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+            "evidence_kind": "operation_document",
+            "json_pointer": "#/transport/scheme",
+            "sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f"
+          }
+        ],
+        "missing_fields": [
+          "operation_method_authority",
+          "parameter_cardinality",
+          "request_resource_limits",
+          "response_assertion_and_empty_result_semantics",
+          "response_collection_semantics_unknown",
+          "response_empty_result_policy_unknown",
+          "response_payload_kind",
+          "response_success_schema_shape",
+          "safe_value_strategy_for_required_inputs"
+        ],
+        "status": "incomplete"
+      },
+      "runtime_binding": {
+        "evidence_refs": [],
+        "missing_fields": [
+          "credential_entitlement_reference",
+          "shared_quota_scopes_and_limits",
+          "observation_period"
+        ],
+        "status": "unbound"
+      },
+      "schema_version": "datapan.operation-observation-plan.v1",
+      "source_binding": {
+        "adapter_id": "kosis",
+        "inventory_status": "partial",
+        "inventory_unknown": true,
+        "provider": "KOSIS",
+        "source_id": "kosis",
+        "test_only": false
+      }
+    }
+  ],
+  "schema_version": "datapan.operation-observation-plan.v1",
+  "shard_index": 0,
+  "source_id": "kosis"
+}

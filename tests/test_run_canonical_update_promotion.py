@@ -654,6 +654,33 @@ class VerifyReleaseRunAdapterTests(unittest.TestCase):
         self.assertEqual(request.get_header("X-github-api-version"), "2026-03-10")
 
 
+def _track_processor_composer_cleanup(process: subprocess.Popen[bytes], events: list[str]) -> None:
+    """Record parent-side cleanup calls without relying on child signal-handler timing."""
+    terminate = process.terminate
+    wait = process.wait
+    kill = process.kill
+
+    def record_terminate() -> None:
+        events.append("terminate")
+        terminate()
+
+    def record_wait(*args, **kwargs):
+        events.append("wait")
+        try:
+            return wait(*args, **kwargs)
+        except subprocess.TimeoutExpired:
+            events.append("wait-timeout")
+            raise
+
+    def record_kill() -> None:
+        events.append("kill")
+        kill()
+
+    process.terminate = record_terminate
+    process.wait = record_wait
+    process.kill = record_kill
+
+
 class ProcessorBundleContractTests(unittest.TestCase):
     def test_ready_bundle_requires_eight_bound_outputs_in_frozen_order(self) -> None:
         expected = [
@@ -1325,10 +1352,12 @@ class ProcessorBundleContractTests(unittest.TestCase):
                     env_path = root / f"{mode}.env"
                     term_path = root / f"{mode}.term"
                     processes = []
+                    cleanup_events = []
 
                     def spawn(*args, **kwargs):
                         process = real_popen(*args, **kwargs)
                         processes.append(process)
+                        _track_processor_composer_cleanup(process, cleanup_events)
                         return process
 
                     environment = {
@@ -1358,7 +1387,10 @@ class ProcessorBundleContractTests(unittest.TestCase):
                     self.assertIsNotNone(process.returncode)
                     self.assertTrue(process.stdout.closed)
                     self.assertTrue(process.stderr.closed)
-                    self.assertEqual(term_path.read_text(encoding="utf-8"), "terminate\n")
+                    self.assertEqual(
+                        cleanup_events,
+                        ["terminate", "wait", "wait-timeout", "kill", "wait"],
+                    )
                     identity_environment = json.loads(env_path.read_text(encoding="utf-8"))
                     self.assertEqual(identity_environment, {
                         "GIT_NO_LAZY_FETCH": "1",
@@ -1382,6 +1414,9 @@ class ProcessorBundleContractTests(unittest.TestCase):
                 "import os, pathlib, signal, time\n"
                 "pathlib.Path(os.environ['FAKE_GIT_PID']).write_text(str(os.getpid()))\n"
                 "def term(_signum, _frame):\n"
+                "    if os.environ['FAKE_GIT_LABEL'] == 'stdout-close':\n"
+                "        while True:\n"
+                "            time.sleep(1)\n"
                 "    pathlib.Path(os.environ['FAKE_GIT_TERM']).write_text('terminate\\n')\n"
                 "signal.signal(signal.SIGTERM, term)\n"
                 "pathlib.Path(os.environ['FAKE_GIT_READY']).write_text('ready\\n')\n"
@@ -1421,6 +1456,7 @@ class ProcessorBundleContractTests(unittest.TestCase):
                 term_path = root / f"{label}.term"
                 processes = []
                 original_streams = []
+                cleanup_events = []
 
                 def wait_until_ready() -> None:
                     deadline = time.monotonic() + 2.0
@@ -1436,6 +1472,7 @@ class ProcessorBundleContractTests(unittest.TestCase):
                     process = real_popen(*args, **kwargs)
                     processes.append(process)
                     original_streams.append((process.stdout, process.stderr))
+                    _track_processor_composer_cleanup(process, cleanup_events)
                     if stdout_close_fault:
                         process.stdout = FaultingStdout(process.stdout)
                     return process
@@ -1449,6 +1486,7 @@ class ProcessorBundleContractTests(unittest.TestCase):
                     "FAKE_GIT_PID": str(pid_path),
                     "FAKE_GIT_READY": str(ready_path),
                     "FAKE_GIT_TERM": str(term_path),
+                    "FAKE_GIT_LABEL": label,
                 }
                 selector = selector_factory(wait_until_ready)
                 try:
@@ -1482,7 +1520,12 @@ class ProcessorBundleContractTests(unittest.TestCase):
                     self.assertIsNotNone(process.returncode)
                     self.assertTrue(stdout.closed)
                     self.assertTrue(stderr.closed)
-                    self.assertEqual(term_path.read_text(encoding="utf-8"), "terminate\n")
+                    self.assertEqual(
+                        cleanup_events,
+                        ["terminate", "wait", "wait-timeout", "kill", "wait"],
+                    )
+                    if label == "stdout-close":
+                        self.assertFalse(term_path.exists())
                     pid = int(pid_path.read_text(encoding="utf-8"))
                     with self.assertRaises(ProcessLookupError):
                         os.kill(pid, 0)

@@ -1,0 +1,37 @@
+{
+  "attempted_at": "2026-10-07T07:16:52Z",
+  "documents": [
+    {
+      "bytes": 206179,
+      "encoding": "utf-8",
+      "media_type": "text/html; charset=UTF-8",
+      "present": true,
+      "retrieved_at": null,
+      "role": "catalogue",
+      "sha256": "71f5ac322807e385287e20738248ef83814b8433bf4746f2143ec3ae96a17c41"
+    },
+    {
+      "bytes": 12132,
+      "encoding": "utf-8",
+      "media_type": "text/html; charset=UTF-8",
+      "present": true,
+      "retrieved_at": null,
+      "role": "operation_detail",
+      "sha256": "6ca1cc26571678afbe3b6dcb1511efd4e2e71930c4e563361bccecff1326872f"
+    },
+    {
+      "bytes": 350272,
+      "encoding": "utf-8",
+      "media_type": "application/octet-stream; charset=UTF-8",
+      "present": true,
+      "retrieved_at": null,
+      "role": "reference_guide",
+      "sha256": "e7c4e377568e6988d1855ad1c4e650946362325eec09d2ec2765fa284ed93775"
+    }
+  ],
+  "evidence_sha256": "f61f9cf93d3b6f449fb74346756733ef8d964d25cbf3336acff5df77460654d6",
+  "operation_id": "055f19f2cf0b5c8f86d769cd3fa83f453bb152e8e90eba190aedf322983ad799",
+  "reason_code": null,
+  "schema_version": "datapan.operation-document-capture-receipt.v2",
+  "status": "acquired"
+}

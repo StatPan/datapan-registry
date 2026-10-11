@@ -20,12 +20,72 @@ from unittest import mock
 
 
 ROOT = pathlib.Path(__file__).parents[1]
+CHECKED_OUT_ROOT = ROOT
 SCRIPT = ROOT / "scripts" / "generate-completeness-proof-rollup.py"
 SPEC = importlib.util.spec_from_file_location("generate_completeness_proof_rollup", SCRIPT)
 assert SPEC and SPEC.loader
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 _PRESERVE_REPLAY_PR_NUMBER = object()
+
+# The completeness packet validators are dynamically imported into an old-main
+# fixture. Keep their source closure explicit so that the fixture executes the
+# tested branch's code and schemas while preserving the fixture's authenticated
+# origin/main ref. Repository-input files and published artifacts retain their
+# own byte/SHA pins; unmanifested validator sources are pinned to this test
+# process's exact Git commit and checked-out bytes.
+COMPLETENESS_VALIDATOR_CODE_DEPENDENCIES = frozenset({
+    "scripts/validate-completeness-proof.py",
+    "scripts/validate-data-go-kr-operation-manifest.py",
+    "scripts/generate-data-go-kr-operation-manifest.py",
+    "scripts/seoul_oa109_operation_declaration.py",
+    "scripts/attest-runtime-freshness-import.py",
+    "scripts/run-canonical-update-promotion.py",
+    "scripts/canonical_update_pr.py",
+    "scripts/canonical_update_ci.py",
+    "scripts/compose-upstream-catalogue-candidate.py",
+    "scripts/upstream_catalogue_derivation.py",
+    "scripts/upstream_catalogue_handoff.py",
+    "scripts/materialize-canonical-registry.py",
+    "scripts/refresh-canonical-snapshot-evidence.py",
+    "scripts/persist-upstream-catalogue-health.py",
+    "scripts/recover-canonical-publication-ack.py",
+    "scripts/completeness_publication_evidence.py",
+})
+COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES = frozenset({
+    "schemas/datapan.operation-denominator.v1.schema.json",
+    "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+    "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+    "schemas/datapan.runtime-freshness-import-admission.v1.schema.json",
+    "schemas/datapan.runtime-freshness-import-receipt.v1.schema.json",
+    "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+    "schemas/datapan.catalog-diff.v1.schema.json",
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "schemas/datapan.completeness-proof.v1.schema.json",
+    "schemas/datapan.completeness-proof-policy.v1.schema.json",
+    "schemas/datapan.completeness-proof-rollup.v1.schema.json",
+    "schemas/datapan.completeness-proof-scopes.v1.schema.json",
+    "schemas/datapan.completeness-proof-inputs.v1.schema.json",
+    "schemas/datapan.completeness-proof-identities.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-state-owner.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "schemas/datapan.diagnostic-current-source-applicability.v1.schema.json",
+    "schemas/datapan.diagnostic-envelope.v1.schema.json",
+    "schemas/datapan.provider-index.v1.schema.json",
+    "schemas/datapan.specs.v1.schema.json",
+    "schemas/index.json",
+})
+COMPLETENESS_VALIDATOR_SOURCE_DEPENDENCIES = (
+    COMPLETENESS_VALIDATOR_CODE_DEPENDENCIES | COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES
+)
 
 
 def _fixture_file_snapshot(path: pathlib.Path) -> tuple[int, ...]:
@@ -207,6 +267,157 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 ):
                     _materialize_exact_fixture_file(source, destination)
 
+    def test_catalog_input_schema_requires_an_exact_revision_only_for_repository_snapshot(self) -> None:
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        schema = json.loads((ROOT / "schemas/datapan.completeness-proof-inputs.v1.schema.json").read_bytes())
+        MODULE.validate_schema_value(index, schema, "input index")
+        catalog_item = next(item for item in index["inputs"] if item["role"] == "source_catalog_snapshot")
+
+        missing_subject = copy.deepcopy(index)
+        missing = next(item for item in missing_subject["inputs"] if item["role"] == "source_catalog_snapshot")
+        missing.pop("subject")
+        with self.assertRaisesRegex(ValueError, "subject|source_revision"):
+            MODULE.validate_schema_value(missing_subject, schema, "input index")
+
+        short_revision = copy.deepcopy(index)
+        short = next(item for item in short_revision["inputs"] if item["role"] == "source_catalog_snapshot")
+        short["subject"]["source_revision"] = catalog_item["subject"]["source_revision"][:-1]
+        with self.assertRaisesRegex(ValueError, "source_revision"):
+            MODULE.validate_schema_value(short_revision, schema, "input index")
+
+        long_revision = copy.deepcopy(index)
+        long = next(item for item in long_revision["inputs"] if item["role"] == "source_catalog_snapshot")
+        long["subject"]["source_revision"] += "0"
+        with self.assertRaisesRegex(ValueError, "source_revision"):
+            MODULE.validate_schema_value(long_revision, schema, "input index")
+
+        other_role = copy.deepcopy(index)
+        other = next(item for item in other_role["inputs"] if item["role"] == "source_profile")
+        other["subject"] = {"source_revision": "a" * 64}
+        MODULE.validate_schema_value(other_role, schema, "input index")
+
+        candidate_index = copy.deepcopy(index)
+        candidate_index["evaluation_context"] = {
+            "mode": "candidate",
+            "baseline_main_sha": "a" * 40,
+            **{
+                key: {"path": f"fixture:{key}", "bytes": 0, "sha256": "0" * 64}
+                for key in (
+                    "baseline_input_index", "baseline_registry", "baseline_operation_manifest",
+                    "baseline_release_manifest", "baseline_policy", "baseline_scope_registry",
+                    "candidate_registry", "candidate_operation_manifest",
+                )
+            },
+        }
+        candidate_catalog = next(
+            item for item in candidate_index["inputs"] if item["role"] == "source_catalog_snapshot"
+        )
+        candidate_catalog.pop("subject")
+        MODULE.validate_schema_value(candidate_index, schema, "candidate input index")
+
+    def test_catalog_binding_witness_is_stable_across_main_tip_and_requires_updated_pin_for_new_bytes(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="completeness-catalog-binding-") as name:
+            repository = pathlib.Path(name) / "repository"
+            inputs, scope_registry, resolved, pinned_revision = self._prepare_synthetic_catalog_binding_repository(
+                repository, registry_bytes=b"[]\n",
+            )
+            first = MODULE.validate_current_catalog_subject(
+                root=repository, inputs=inputs, resolved=resolved, scope_registry=scope_registry,
+            )
+            self.assertEqual(first["release_manifest_sha256"], None)
+            self.assertFalse(first["current_release_applicable"])
+            self.assertEqual(first["catalog_binding_witness"]["source_revision"], pinned_revision)
+            self.assertTrue(first["catalog_binding_witness"]["main_ancestry_verified"])
+
+            current_manifest = json.loads((repository / "manifest.json").read_bytes())
+            current_manifest["generated_at"] = "2026-10-10T00:00:00Z"
+            (repository / "manifest.json").write_text(
+                json.dumps(current_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8",
+            )
+            subprocess.run(["git", "add", "--", "manifest.json"], cwd=repository, check=True)
+            subprocess.run(["git", "commit", "--quiet", "-m", "advance trusted main without catalog change"], cwd=repository, check=True)
+            advanced_tip = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
+            subprocess.run(
+                ["git", "update-ref", "refs/remotes/origin/main", advanced_tip], cwd=repository, check=True,
+            )
+            after_tip_advance = MODULE.validate_current_catalog_subject(
+                root=repository, inputs=inputs, resolved=resolved, scope_registry=scope_registry,
+            )
+            self.assertEqual(after_tip_advance, first)
+
+            changed_registry = b"[{\"catalog_revision\":2}]\n"
+            catalog_item = next(item for item in inputs if item["role"] == "source_catalog_snapshot")
+            catalog_path = resolved[catalog_item["input_id"]]
+            catalog_path.write_bytes(changed_registry)
+            catalog_item["bytes"] = len(changed_registry)
+            catalog_item["sha256"] = MODULE.sha256_bytes(changed_registry)
+            with self.assertRaisesRegex(ValueError, "differs from its pinned main manifest and LFS pointer"):
+                MODULE.validate_current_catalog_subject(
+                    root=repository, inputs=inputs, resolved=resolved, scope_registry=scope_registry,
+                )
+
+            updated_pin = self._commit_synthetic_catalog_revision(
+                repository, registry_bytes=changed_registry, message="update trusted catalog snapshot",
+            )
+            catalog_item["subject"]["source_revision"] = updated_pin
+            rebound = MODULE.validate_current_catalog_subject(
+                root=repository, inputs=inputs, resolved=resolved, scope_registry=scope_registry,
+            )
+            self.assertEqual(rebound["catalog_binding_witness"]["source_revision"], updated_pin)
+            self.assertNotEqual(rebound["catalog_binding_witness"], first["catalog_binding_witness"])
+            self.assertIsNone(rebound["release_manifest_sha256"])
+            self.assertFalse(rebound["current_release_applicable"])
+
+    def test_catalog_binding_witness_rejects_untrusted_revision_and_tampered_lfs_pointer(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="completeness-catalog-binding-negative-") as name:
+            repository = pathlib.Path(name) / "repository"
+            inputs, scope_registry, resolved, pinned_revision = self._prepare_synthetic_catalog_binding_repository(
+                repository, registry_bytes=b"[]\n",
+            )
+            catalog_item = next(item for item in inputs if item["role"] == "source_catalog_snapshot")
+            subprocess.run(
+                ["git", "update-ref", "refs/heads/untrusted", pinned_revision], cwd=repository, check=True,
+            )
+            subprocess.run(
+                ["git", "symbolic-ref", "HEAD", "refs/heads/untrusted"], cwd=repository, check=True,
+            )
+            (repository / "untrusted.txt").write_text("not on trusted main\n", encoding="utf-8")
+            subprocess.run(["git", "add", "--", "untrusted.txt"], cwd=repository, check=True)
+            subprocess.run(["git", "commit", "--quiet", "-m", "untrusted side commit"], cwd=repository, check=True)
+            untrusted_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
+            catalog_item["subject"]["source_revision"] = untrusted_revision
+            with self.assertRaisesRegex(ValueError, "not reachable from the selected trusted origin/main history"):
+                MODULE.validate_current_catalog_subject(
+                    root=repository, inputs=inputs, resolved=resolved, scope_registry=scope_registry,
+                )
+
+            subprocess.run(
+                ["git", "update-ref", "refs/heads/main", pinned_revision], cwd=repository, check=True,
+            )
+            subprocess.run(["git", "symbolic-ref", "HEAD", "refs/heads/main"], cwd=repository, check=True)
+            bad_pointer = (
+                "version https://git-lfs.github.com/spec/v1\n"
+                + "oid sha256:" + "f" * 64 + "\n"
+                + "size 3\n"
+            ).encode("ascii")
+            pointer_blob = subprocess.check_output(
+                ["git", "hash-object", "-w", "--stdin"], cwd=repository, input=bad_pointer,
+            ).decode("ascii").strip()
+            subprocess.run(
+                ["git", "update-index", "--add", "--cacheinfo", f"100644,{pointer_blob},data/data-go-kr.registry.json"],
+                cwd=repository, check=True,
+            )
+            subprocess.run(["git", "commit", "--quiet", "-m", "tamper trusted LFS pointer"], cwd=repository, check=True)
+            tampered_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
+            subprocess.run(
+                ["git", "update-ref", "refs/remotes/origin/main", tampered_revision], cwd=repository, check=True,
+            )
+            catalog_item["subject"]["source_revision"] = tampered_revision
+            with self.assertRaisesRegex(ValueError, "manifest and committed Git LFS pointer do not identify the same payload"):
+                MODULE.validate_current_catalog_subject(
+                    root=repository, inputs=inputs, resolved=resolved, scope_registry=scope_registry,
+                )
+
     @staticmethod
     def _hardlink_worktree(source: pathlib.Path, destination: pathlib.Path) -> None:
         skipped = {".git", ".datapan", "__pycache__", ".pytest_cache"}
@@ -230,6 +441,114 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     os.link(source_file, target_file)
                 except OSError:
                     shutil.copy2(source_file, target_file)
+
+    def _prepare_synthetic_catalog_binding_repository(
+        self, repository: pathlib.Path, *, registry_bytes: bytes = b"[]\n",
+    ) -> tuple[list[dict[str, object]], dict[str, object], dict[str, pathlib.Path], str]:
+        """Create a tiny trusted main history with a manifest-bound LFS catalog."""
+        repository.mkdir(parents=True)
+        base_sha = subprocess.check_output(
+            ["git", "rev-parse", "refs/remotes/origin/main"], cwd=ROOT, text=True,
+        ).strip()
+        common_dir = pathlib.Path(subprocess.check_output(
+            ["git", "rev-parse", "--git-common-dir"], cwd=ROOT, text=True,
+        ).strip()).resolve()
+        subprocess.run(
+            ["git", "init", "--quiet", "--initial-branch=main", str(repository)], check=True,
+        )
+        alternates = repository / ".git/objects/info/alternates"
+        alternates.parent.mkdir(parents=True, exist_ok=True)
+        alternates.write_text(str(common_dir / "objects") + "\n")
+        subprocess.run(["git", "config", "user.name", "Catalog binding test"], cwd=repository, check=True)
+        subprocess.run(["git", "config", "user.email", "catalog-binding@example.invalid"], cwd=repository, check=True)
+        subprocess.run(["git", "update-ref", "refs/heads/main", base_sha], cwd=repository, check=True)
+        subprocess.run(["git", "update-ref", "refs/remotes/origin/main", base_sha], cwd=repository, check=True)
+        subprocess.run(["git", "symbolic-ref", "HEAD", "refs/heads/main"], cwd=repository, check=True)
+        subprocess.run(["git", "read-tree", base_sha], cwd=repository, check=True)
+
+        catalog_path = repository / "data/data-go-kr.registry.json"
+        catalog_path.parent.mkdir(parents=True, exist_ok=True)
+        catalog_path.write_bytes(registry_bytes)
+        manifest = json.loads(subprocess.check_output(
+            ["git", "show", f"{base_sha}:manifest.json"], cwd=repository,
+        ))
+        artifact_rows = [
+            row for row in manifest["artifacts"]
+            if row.get("path") == "data/data-go-kr.registry.json"
+        ]
+        self.assertEqual(len(artifact_rows), 1)
+        artifact_rows[0]["bytes"] = len(registry_bytes)
+        artifact_rows[0]["sha256"] = MODULE.sha256_bytes(registry_bytes)
+        (repository / "manifest.json").write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8",
+        )
+        subprocess.run(["git", "add", "--", "manifest.json"], cwd=repository, check=True)
+        pointer = (
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{MODULE.sha256_bytes(registry_bytes)}\n"
+            f"size {len(registry_bytes)}\n"
+        ).encode("ascii")
+        pointer_blob = subprocess.check_output(
+            ["git", "hash-object", "-w", "--stdin"], cwd=repository, input=pointer,
+        ).decode("ascii").strip()
+        subprocess.run(
+            ["git", "update-index", "--add", "--cacheinfo", f"100644,{pointer_blob},data/data-go-kr.registry.json"],
+            cwd=repository, check=True,
+        )
+        subprocess.run(["git", "commit", "--quiet", "-m", "synthetic pinned catalog"], cwd=repository, check=True)
+        pinned_revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
+        subprocess.run(
+            ["git", "update-ref", "refs/remotes/origin/main", pinned_revision], cwd=repository, check=True,
+        )
+
+        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        inputs = copy.deepcopy(index["inputs"])
+        catalog_item = next(item for item in inputs if item["role"] == "source_catalog_snapshot")
+        catalog_item["bytes"] = len(registry_bytes)
+        catalog_item["sha256"] = MODULE.sha256_bytes(registry_bytes)
+        catalog_item.setdefault("subject", {})["source_revision"] = pinned_revision
+        scope_registry = json.loads((ROOT / MODULE.SCOPE_REGISTRY_PATH).read_bytes())
+        return inputs, scope_registry, {catalog_item["input_id"]: catalog_path}, pinned_revision
+
+    @staticmethod
+    def _commit_synthetic_catalog_revision(
+        repository: pathlib.Path, *, registry_bytes: bytes, message: str,
+    ) -> str:
+        parent_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
+        manifest = json.loads(subprocess.check_output(
+            ["git", "show", f"{parent_sha}:manifest.json"], cwd=repository,
+        ))
+        artifact_rows = [
+            row for row in manifest["artifacts"]
+            if row.get("path") == "data/data-go-kr.registry.json"
+        ]
+        if len(artifact_rows) != 1:
+            raise AssertionError("synthetic manifest lacks one canonical catalog artifact")
+        artifact_rows[0]["bytes"] = len(registry_bytes)
+        artifact_rows[0]["sha256"] = MODULE.sha256_bytes(registry_bytes)
+        (repository / "manifest.json").write_text(
+            json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8",
+        )
+        (repository / "data/data-go-kr.registry.json").write_bytes(registry_bytes)
+        subprocess.run(["git", "add", "--", "manifest.json"], cwd=repository, check=True)
+        pointer = (
+            "version https://git-lfs.github.com/spec/v1\n"
+            f"oid sha256:{MODULE.sha256_bytes(registry_bytes)}\n"
+            f"size {len(registry_bytes)}\n"
+        ).encode("ascii")
+        pointer_blob = subprocess.check_output(
+            ["git", "hash-object", "-w", "--stdin"], cwd=repository, input=pointer,
+        ).decode("ascii").strip()
+        subprocess.run(
+            ["git", "update-index", "--add", "--cacheinfo", f"100644,{pointer_blob},data/data-go-kr.registry.json"],
+            cwd=repository, check=True,
+        )
+        subprocess.run(["git", "commit", "--quiet", "-m", message], cwd=repository, check=True)
+        revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
+        subprocess.run(
+            ["git", "update-ref", "refs/remotes/origin/main", revision], cwd=repository, check=True,
+        )
+        return revision
 
     @staticmethod
     def _write_json_file(root: pathlib.Path, relative: str, value: object) -> None:
@@ -992,7 +1311,17 @@ class CompletenessProofRollupTest(unittest.TestCase):
     ) -> tuple[str, str]:
         """Clone test files, then locally fetch and verify the exact trusted-main tree."""
         source_root = source_root.resolve()
-        environment = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"}
+        environment = {
+            **os.environ,
+            "GIT_LFS_SKIP_SMUDGE": "1",
+            "GIT_CONFIG_COUNT": "3",
+            "GIT_CONFIG_KEY_0": "gc.auto",
+            "GIT_CONFIG_VALUE_0": "0",
+            "GIT_CONFIG_KEY_1": "maintenance.auto",
+            "GIT_CONFIG_VALUE_1": "false",
+            "GIT_CONFIG_KEY_2": "gc.autoDetach",
+            "GIT_CONFIG_VALUE_2": "false",
+        }
         trusted_main = subprocess.check_output(
             ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
             cwd=source_root,
@@ -1915,13 +2244,13 @@ class CompletenessProofRollupTest(unittest.TestCase):
         only_source_processor: bool = False,
     ) -> tuple[pathlib.Path, pathlib.Path, str]:
         """Rebind a local, producer-shaped B→merged-C→Health packet without external writes."""
-        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(CHECKED_OUT_ROOT)
         operation_scope = next(
             scope for scope in registry["scopes"]
             if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
         )
         operation_id = operation_scope["scope_id"]
-        index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        index = json.loads((CHECKED_OUT_ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
 
         repository = input_root / "repository"
         trusted_main, trusted_tree = self._clone_disposable_at_verified_main(ROOT, repository)
@@ -1930,26 +2259,78 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 index=index, input_root=input_root, repository=repository,
                 variant=processor_history_variant,
             )
+        pinned_repository_inputs: dict[str, tuple[int, str]] = {}
+        for item in index["inputs"]:
+            if item.get("root") != "repository":
+                continue
+            relative = item["path"]
+            pin = (item["bytes"], item["sha256"])
+            previous = pinned_repository_inputs.setdefault(relative, pin)
+            if previous != pin:
+                raise AssertionError(f"input index gives conflicting repository pins for {relative}")
         needed_paths = {
             MODULE.SCOPE_REGISTRY_PATH, MODULE.POLICY_PATH,
             MODULE.ROLLUP_SCHEMA_PATH,
-            "scripts/completeness_publication_evidence.py",
             "schemas/datapan.completeness-proof-scopes.v1.schema.json",
             "schemas/datapan.completeness-proof-identities.v1.schema.json",
             "schemas/datapan.completeness-proof-inputs.v1.schema.json",
             "schemas/datapan.completeness-proof-policy.v1.schema.json",
+            *COMPLETENESS_VALIDATOR_CODE_DEPENDENCIES,
+            *COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES,
             *(item["path"] for item in index["inputs"] if item.get("root") == "repository"),
         }
-        for relative in sorted(needed_paths):
-            source_path = ROOT / relative
-            destination_path = repository / relative
-            if not source_path.is_file() or destination_path.exists():
+        current_manifest = json.loads((CHECKED_OUT_ROOT / "manifest.json").read_bytes())
+        manifest_pins: dict[str, tuple[int, str]] = {}
+        for artifact in current_manifest.get("artifacts", []):
+            relative = artifact.get("path")
+            pin = (artifact.get("bytes"), artifact.get("sha256"))
+            if not isinstance(relative, str) or not isinstance(pin[0], int) or not isinstance(pin[1], str):
                 continue
+            if relative in manifest_pins:
+                raise AssertionError(f"current release manifest repeats an artifact path: {relative}")
+            manifest_pins[relative] = pin
+        fixture_source_revision = subprocess.check_output(
+            ["git", "rev-parse", "--verify", "HEAD^{commit}"], cwd=CHECKED_OUT_ROOT, text=True,
+        ).strip()
+        for relative in sorted(needed_paths):
+            source_path = CHECKED_OUT_ROOT / relative
+            destination_path = repository / relative
+            if not source_path.is_file():
+                raise AssertionError(f"required source for pinned completeness fixture is missing: {relative}")
+            source_bytes = source_path.read_bytes()
+            source_digest = MODULE.sha256_bytes(source_bytes)
+            pin = pinned_repository_inputs.get(relative)
+            manifest_pin = manifest_pins.get(relative)
+            if pin is not None and manifest_pin is not None and pin != manifest_pin:
+                raise AssertionError(f"input-index and release-manifest pins conflict for {relative}")
+            if pin is None:
+                pin = manifest_pin
+            if pin is None and relative in COMPLETENESS_VALIDATOR_SOURCE_DEPENDENCIES:
+                tracked_bytes = subprocess.check_output(
+                    ["git", "show", f"{fixture_source_revision}:{relative}"], cwd=CHECKED_OUT_ROOT,
+                )
+                pin = (len(tracked_bytes), MODULE.sha256_bytes(tracked_bytes))
+                if source_bytes != tracked_bytes:
+                    raise AssertionError(
+                        f"checked-out validator source differs from its pinned Git commit {fixture_source_revision}: {relative}"
+                    )
+            if pin is not None and (len(source_bytes), source_digest) != pin:
+                raise AssertionError(
+                    f"checked-out source does not match its authoritative byte/SHA pin for {relative}"
+                )
+            if destination_path.is_file():
+                destination_bytes = destination_path.read_bytes()
+                if pin is not None and (len(destination_bytes), MODULE.sha256_bytes(destination_bytes)) == pin:
+                    continue
+                destination_path.unlink()
+            elif destination_path.exists():
+                raise AssertionError(f"temporary repository input path is not a file: {relative}")
             destination_path.parent.mkdir(parents=True, exist_ok=True)
-            try:
-                os.link(source_path, destination_path)
-            except OSError:
-                shutil.copy2(source_path, destination_path)
+            shutil.copy2(source_path, destination_path)
+            if pin is not None:
+                destination_bytes = destination_path.read_bytes()
+                if (len(destination_bytes), MODULE.sha256_bytes(destination_bytes)) != pin:
+                    raise AssertionError(f"materialized fixture dependency differs from its pinned bytes: {relative}")
         c_run_head = "01148419bef5d7f212e92ab96d0ba1c3da6c298c"
         self.assertEqual(
             subprocess.run(
@@ -1986,6 +2367,15 @@ class CompletenessProofRollupTest(unittest.TestCase):
             ROOT / "data/data-go-kr.registry.json", local_registry,
         )
         current_artifact, candidate_manifest_sha = MODULE.source_lfs_binding(repository, candidate_head)
+        catalog_item = next(item for item in index["inputs"] if item.get("role") == "source_catalog_snapshot")
+        catalog_path = repository / catalog_item["path"]
+        local_catalog_identity = (catalog_path.stat().st_size, MODULE.sha256_file(catalog_path))
+        manifest_catalog_identity = (current_artifact["bytes"], current_artifact["sha256"])
+        if local_catalog_identity != manifest_catalog_identity or local_catalog_identity != (
+            catalog_item["bytes"], catalog_item["sha256"],
+        ):
+            raise AssertionError("synthetic trusted main does not bind the exact current catalog input")
+        catalog_item.setdefault("subject", {})["source_revision"] = candidate_head
 
         by_role = {
             item["role"]: item for item in index["inputs"]
@@ -2938,6 +3328,17 @@ class CompletenessProofRollupTest(unittest.TestCase):
 
     def test_nested_linked_worktree_fetch_preserves_authenticated_main(self) -> None:
         """The reader preserves exact main from pointer and materialized shallow sources."""
+        maintenance_guard = mock.patch.dict(os.environ, {
+            "GIT_CONFIG_COUNT": "3",
+            "GIT_CONFIG_KEY_0": "gc.auto",
+            "GIT_CONFIG_VALUE_0": "0",
+            "GIT_CONFIG_KEY_1": "maintenance.auto",
+            "GIT_CONFIG_VALUE_1": "false",
+            "GIT_CONFIG_KEY_2": "gc.autoDetach",
+            "GIT_CONFIG_VALUE_2": "false",
+        })
+        maintenance_guard.start()
+        self.addCleanup(maintenance_guard.stop)
         integration = importlib.import_module("tests.test_apply_runtime_freshness_import_integration")
         fixture = integration.ApplyRuntimeFreshnessImportIntegrationTest
         pointer_source_revision = subprocess.check_output(
@@ -2973,6 +3374,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                             materialize_registry=True,
                             source_revision=prepared_source_revision,
                             source_root=prepared_source_root,
+                            authenticated_main_root=integration.ROOT,
                         )
                         expected_representation = "materialized"
                     self.assertEqual(fixture.registry_representation, expected_representation)
@@ -3545,7 +3947,13 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_proof_validated"])
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_claims_suppressed"])
             self.assertEqual(candidate_facets["specification_pipeline"]["state"], "historical")
+            self.assertFalse(candidate_facets["specification_pipeline"]["details"]["current_release_applicable"])
             self.assertEqual(candidate_facets["immutable_publication_read_back"]["state"], "historical")
+            candidate_publication = candidate_facets["immutable_publication_read_back"]["details"]
+            self.assertIsNone(candidate_publication["current_release_manifest_sha256"])
+            self.assertFalse(candidate_publication["current_release_subject_applicable"])
+            self.assertFalse(candidate_publication["current_release_applicable"])
+            self.assertTrue(candidate_publication["candidate_release_publication_unproven"])
             rebuilt_candidate_index = json.loads(canonical_index_path.read_bytes())
             _candidate_context, changed_scopes = MODULE.validate_candidate_input_index(
                 root=temp_root, index=rebuilt_candidate_index,
@@ -4179,6 +4587,28 @@ class CompletenessProofRollupTest(unittest.TestCase):
             delivery["details"]["subject"]["source_sha"],
             "6a5138c792f4b7402da0c5ab439646bd752a307f",
         )
+
+    def test_build_report_rejects_tampered_materialized_repository_input(self) -> None:
+        """Current candidate bytes are copied into old-main fixtures but retain exact input pins."""
+        with tempfile.TemporaryDirectory(prefix="completeness-materialized-input-tamper-") as name:
+            input_root = pathlib.Path(name) / "evidence"
+            input_root.mkdir()
+            repository, index_path, _generation = self._build_synthetic_matching_b_c_packet(input_root)
+            index = json.loads(index_path.read_bytes())
+            kosis_input = next(
+                item for item in index["inputs"]
+                if item.get("root") == "repository"
+                and item["path"] == "reports/kosis/operation-denominator.json"
+            )
+            self.assertGreater(kosis_input["bytes"], 0)
+            destination = repository / kosis_input["path"]
+            self.assertEqual(
+                (len(destination.read_bytes()), MODULE.sha256_file(destination)),
+                (kosis_input["bytes"], kosis_input["sha256"]),
+            )
+            destination.write_bytes(destination.read_bytes() + b" ")
+            with self.assertRaisesRegex(ValueError, "byte count or SHA-256 differs"):
+                MODULE.build_report(root=repository, input_root=input_root, input_index_path=index_path)
 
     def test_build_report_keeps_synthetic_c_lifecycle_separate_from_native_publication(self) -> None:
         """C journal transitions remain visible but cannot stand in for publisher/ACK runs."""
@@ -5357,6 +5787,14 @@ class CompletenessProofRollupTest(unittest.TestCase):
             subprocess.run(["git", "update-ref", "refs/heads/main", base_main], cwd=repository, check=True)
             subprocess.run(["git", "symbolic-ref", "HEAD", "refs/heads/main"], cwd=repository, check=True)
             subprocess.run(["git", "read-tree", base_main], cwd=repository, check=True)
+
+            input_root = repository / ".test-native-publication"
+            input_root.mkdir()
+            index_path, _source = self._build_synthetic_native_ack_packet(
+                input_root, outcome="already_acknowledged", publisher_identity=(99972280001, 2),
+            )
+            report_before = MODULE.build_report(root=repository, input_root=input_root, input_index_path=index_path)
+
             subprocess.run(["git", "add", "manifest.json"], cwd=repository, check=True)
             subprocess.run(["git", "commit", "--quiet", "-m", "metadata-only manifest fixture"], cwd=repository, check=True)
             metadata_main = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
@@ -5365,24 +5803,25 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 subprocess.check_output(["git", "show", f"{metadata_main}:manifest.json"], cwd=repository),
                 changed_manifest_raw,
             )
-
-            input_root = repository / ".test-native-publication"
-            input_root.mkdir()
-            index_path, _source = self._build_synthetic_native_ack_packet(
-                input_root, outcome="already_acknowledged", publisher_identity=(99972280001, 2),
-            )
             report = MODULE.build_report(root=repository, input_root=input_root, input_index_path=index_path)
 
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
         delivery = next(item for item in row["facets"] if item["facet_id"] == "immutable_publication_read_back")
         details = delivery["details"]
+        before_row = next(item for item in report_before["scopes"] if item["scope_id"] == operation_id)
+        before_delivery = next(item for item in before_row["facets"] if item["facet_id"] == "immutable_publication_read_back")
+        self.assertEqual(report, report_before, "advancing trusted main metadata alone must not alter the completeness report")
         self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(details["subject"]["publisher_run_id"], "99972280001")
         self.assertEqual(details["subject"]["publisher_attempt"], 2)
-        self.assertEqual(details["current_release_manifest_sha256"], MODULE.sha256_bytes(changed_manifest_raw))
-        self.assertNotEqual(details["current_release_manifest_sha256"], details["subject"]["manifest_sha256"])
-        self.assertTrue(details["payload_equivalent_to_current_registry"])
+        self.assertIsNone(details["current_release_manifest_sha256"])
+        self.assertFalse(details["current_release_applicable"])
         self.assertFalse(details["current_release_subject_applicable"])
+        self.assertEqual(details["catalog_binding_witness"]["release_manifest_sha256"], MODULE.sha256_bytes(base_manifest_raw))
+        self.assertEqual(details["catalog_binding_witness"]["source_revision"], base_main)
+        self.assertTrue(details["catalog_binding_witness"]["main_ancestry_verified"])
+        self.assertEqual(before_delivery["details"]["catalog_binding_witness"], details["catalog_binding_witness"])
+        self.assertTrue(details["payload_equivalent_to_current_registry"])
         self.assertEqual(delivery["state"], "historical")
 
     def test_build_report_rejects_nonlegacy_ack_replay_mutations_and_preserves_outputs(self) -> None:

@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-response-assertion.v1.schema.json",
+  "title": "Datapan Operation Response Assertion v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact_kind", "source_binding", "operation_identity", "document_evidence", "review", "assertion"],
+  "properties": {
+    "schema_version": { "const": "datapan.operation-response-assertion.v1" },
+    "artifact_kind": { "const": "operation_response_assertion" },
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "provider", "protocol"],
+      "properties": {
+        "source_id": { "$ref": "#/$defs/slug" },
+        "provider": { "$ref": "#/$defs/non_empty" },
+        "protocol": { "enum": ["REST", "SOAP", "HTTP"] }
+      }
+    },
+    "operation_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation_id", "dataset_id", "operation_name", "upstream_operation_key"],
+      "properties": {
+        "operation_id": { "$ref": "#/$defs/non_empty" },
+        "dataset_id": { "$ref": "#/$defs/non_empty" },
+        "operation_name": { "$ref": "#/$defs/non_empty" },
+        "upstream_operation_key": { "$ref": "#/$defs/non_empty" }
+      }
+    },
+    "document_evidence": { "$ref": "#/$defs/artifact_ref" },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["review_ref", "reviewed_by", "rationale"],
+      "properties": {
+        "review_ref": { "type": "string", "format": "uri", "maxLength": 2048 },
+        "reviewed_by": { "$ref": "#/$defs/non_empty" },
+        "rationale": { "$ref": "#/$defs/non_empty" }
+      }
+    },
+    "assertion": { "$ref": "#/$defs/assertion" }
+  },
+  "$defs": {
+    "non_empty": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "bytes"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^(?!/)[A-Za-z0-9._/-]+$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 26214400 }
+      }
+    },
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_path", "sha256", "json_pointer", "evidence_kind"],
+      "properties": {
+        "artifact_path": { "type": "string", "pattern": "^(?!/)[A-Za-z0-9._/-]+$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "json_pointer": { "$ref": "#/$defs/json_pointer" },
+        "evidence_kind": { "const": "operation_document" }
+      }
+    },
+    "source_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source_ref" } },
+    "review_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_path", "sha256", "json_pointer", "evidence_kind"],
+      "properties": {
+        "artifact_path": { "type": "string", "pattern": "^(?!/)[A-Za-z0-9._/-]+$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "json_pointer": { "$ref": "#/$defs/json_pointer" },
+        "evidence_kind": { "const": "reviewed_policy" }
+      }
+    },
+    "review_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/review_ref" } },
+    "json_pointer": { "type": "string", "pattern": "^#(?:/(?:[^~/]|~[01])*)*$", "maxLength": 2048 },
+    "path": {
+      "description": "A deliberately restricted response selector. JSON Pointer resolves exactly one node; XML QName segments select matching child elements in order. Arbitrary JSONPath, XPath, regular expressions, scripts, and sample-value predicates are not supported.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "json_pointer" },
+            "value": { "$ref": "#/$defs/json_pointer" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "segments"],
+          "properties": {
+            "kind": { "const": "xml_qname_path" },
+            "segments": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "items": { "$ref": "#/$defs/qname" }
+            }
+          }
+        }
+      ]
+    },
+    "qname": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "local_name"],
+      "properties": {
+        "namespace": { "type": "string", "format": "uri", "maxLength": 2048 },
+        "local_name": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9._-]*$", "maxLength": 256 }
+      }
+    },
+    "cardinality": {
+      "description": "The required number of selected nodes. For a JSON Pointer this is presence (zero or one), not the length of an array at that pointer. For an XML QName path it is the number of matching elements.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum", "maximum"],
+      "properties": {
+        "minimum": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "maximum": { "type": ["integer", "null"], "minimum": 1, "maximum": 1000000 }
+      }
+    },
+    "required_field": {
+      "description": "A reviewed response predicate. The selected node occurrences must satisfy this cardinality and strict type; arrays are checked as arrays, with element count governed separately by result_collection semantics.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "value_type", "cardinality", "source_refs"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "value_type": { "enum": ["object", "array", "string", "integer", "number", "boolean"] },
+        "cardinality": { "$ref": "#/$defs/cardinality" },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "scalar_values": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          { "type": "string", "minLength": 1, "maxLength": 512 },
+          { "type": "integer" },
+          { "type": "number" },
+          { "type": "boolean" }
+        ]
+      }
+    },
+    "provider_result_codes": {
+      "description": "A typed expected-success predicate for a provider result code. Documented code maps require disjoint success and error sets. An explicitly labelled successful example may support only a narrow expected-success value; every other, absent, or unrecognized code remains indeterminate.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "value_type", "basis", "success_values", "source_refs"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "value_type": { "enum": ["string", "integer", "number", "boolean"] },
+        "basis": { "enum": ["documented_code_map", "official_success_example"] },
+        "success_values": { "$ref": "#/$defs/scalar_values" },
+        "error_values": { "$ref": "#/$defs/scalar_values" },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "result_collection": {
+      "description": "The exact typed response collection. JSON path resolves the required array node; XML/SOAP requires one container node plus a relative item selector. A missing array or container is shape drift. valid accepts zero array items / XML item matches; invalid rejects zero. Other required-field predicates remain independently enforced.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "container_path", "item_path", "value_type", "semantics", "source_refs"],
+      "properties": {
+        "path": { "anyOf": [{ "$ref": "#/$defs/path" }, { "type": "null" }] },
+        "container_path": { "$ref": "#/$defs/path" },
+        "item_path": { "anyOf": [{ "$ref": "#/$defs/path" }, { "type": "null" }] },
+        "container_cardinality": { "$ref": "#/$defs/cardinality" },
+        "value_type": { "const": "array" },
+        "semantics": { "enum": ["valid", "invalid"] },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "assertion": {
+      "description": "A reviewed bounded response check. `payload_kind=json` maps to plan kind `json_contract`; `xml` maps to `xml_contract`; `soap_xml` maps to `soap_fault_free` while this artifact carries the typed XML predicates.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["payload_kind", "accepted_http_status_codes", "http_status_source_refs", "required_fields", "provider_result_code_status", "provider_result_code_evidence_refs", "result_collection"],
+      "properties": {
+        "payload_kind": { "enum": ["json", "xml", "soap_xml"] },
+        "accepted_http_status_codes": {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 200, "maximum": 299 }
+        },
+        "http_status_source_refs": { "$ref": "#/$defs/source_refs" },
+        "required_fields": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 256,
+          "items": { "$ref": "#/$defs/required_field" }
+        },
+        "provider_result_code_status": { "enum": ["documented", "expected_success_example", "not_applicable", "none_by_policy"] },
+        "provider_result_code_evidence_refs": { "$ref": "#/$defs/source_refs" },
+        "provider_result_codes": { "$ref": "#/$defs/provider_result_codes" },
+        "result_collection": { "$ref": "#/$defs/result_collection" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "payload_kind": { "const": "json" } }, "required": ["payload_kind"] },
+          "then": {
+            "properties": {
+              "result_collection": {
+                "properties": {
+                  "path": { "type": "object", "properties": { "kind": { "const": "json_pointer" } }, "required": ["kind"] },
+                  "container_path": { "type": "object", "properties": { "kind": { "const": "json_pointer" } }, "required": ["kind"] },
+                  "item_path": { "type": "null" },
+                  "container_cardinality": false
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload_kind": { "enum": ["xml", "soap_xml"] } }, "required": ["payload_kind"] },
+          "then": {
+            "properties": {
+              "result_collection": {
+                "required": ["container_cardinality"],
+                "properties": {
+                  "path": { "type": "null" },
+                  "container_path": { "type": "object", "properties": { "kind": { "const": "xml_qname_path" } }, "required": ["kind"] },
+                  "item_path": { "type": "object", "properties": { "kind": { "const": "xml_qname_path" } }, "required": ["kind"] },
+                  "container_cardinality": {
+                    "properties": { "minimum": { "const": 1 }, "maximum": { "const": 1 } },
+                    "required": ["minimum", "maximum"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "provider_result_code_status": { "const": "documented" } }, "required": ["provider_result_code_status"] },
+          "then": {
+            "required": ["provider_result_codes"],
+            "properties": {
+              "provider_result_codes": {
+                "required": ["error_values"],
+                "properties": { "basis": { "const": "documented_code_map" } }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "provider_result_code_status": { "const": "expected_success_example" } }, "required": ["provider_result_code_status"] },
+          "then": {
+            "required": ["provider_result_codes"],
+            "properties": {
+              "provider_result_codes": {
+                "not": { "required": ["error_values"] },
+                "properties": { "basis": { "const": "official_success_example" } }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "provider_result_code_status": { "const": "not_applicable" } }, "required": ["provider_result_code_status"] },
+          "then": { "properties": { "provider_result_codes": false } }
+        },
+        {
+          "if": { "properties": { "provider_result_code_status": { "const": "none_by_policy" } }, "required": ["provider_result_code_status"] },
+          "then": { "properties": { "provider_result_codes": false } }
+        }
+      ]
+    }
+  }
+}

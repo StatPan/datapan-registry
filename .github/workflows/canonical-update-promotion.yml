@@ -106,7 +106,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
-          ref: e3b2fa44cb0f68d7e58e003fbd71ecde505878de
+          ref: acf060e71e2329b6a04ad4ab0abf669fbbfe9dac
           path: .datapan/datapan-cli
           fetch-depth: 1
 

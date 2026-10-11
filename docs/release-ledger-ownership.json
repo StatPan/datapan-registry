@@ -82,15 +82,23 @@
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
       "manifest_relationship": "Error catalogs, recurring failure observations, ownership policy, recovery receipts, and deduplicated work routing are manifest-bound release evidence.",
-      "schema_relationship": "Validated against error catalog, error-action-routing, failure observation, policy, and recovery rollup schemas.",
+      "schema_relationship": "Validated against error catalog, error-action-routing, failure observation, policy, recovery rollup, operation-document-evidence, and operation-observation-plan schemas.",
       "package_relationship": "Included in release packages through manifest.json.",
-      "exemption_boundary": "Routing changes should preserve bounded action IDs and manual-review boundaries."
+      "exemption_boundary": "Source operation plans preserve unknown method, input, quota, and entitlement facts as incomplete; no Registry artifact admits a provider call by itself."
     },
     {
       "id": "source_contract_runtime_evidence",
       "artifact_kinds": [
         "health_probe_catalog",
         "data_go_kr_operation_manifest",
+        "operation_document_evidence",
+        "operation_document_work_queue",
+        "operation_document_reconciliation",
+        "operation_observation_plan",
+        "operation_observation_plan_shard",
+        "operation_observation_plan_source",
+        "operation_observation_policy",
+        "operation_response_assertion",
         "current_runtime_evidence_projection",
         "runtime_evidence_growth",
         "credential_runtime_evidence_policy",
@@ -124,6 +132,12 @@
       "generated_by": [
         "policy/health-probe-canaries.json plus python scripts/generate-health-probe-catalog.py",
         "python scripts/generate-data-go-kr-operation-manifest.py",
+        "python scripts/operation_document_evidence.py --build-queue",
+        "python scripts/operation_document_evidence.py --parse-captures --capture-root <private-capture-directory> --evidence-dir reports/operation-document-evidence",
+        "python scripts/operation_document_evidence.py --reconcile",
+        "python scripts/generate-operation-observation-plan.py --source-revision <compiler-source-commit-sha>",
+        "python scripts/register-operation-observation-plan-artifacts.py --write",
+        "python scripts/sync-release-schema-artifacts.py --write",
         "python scripts/update-data-go-kr-operation-denominator-expectation.py",
         "python scripts/generate-current-runtime-evidence-projection.py",
         "python scripts/generate-coverage-backlog.py",
@@ -154,6 +168,11 @@
       "checked_by": [
         "python scripts/generate-health-probe-catalog.py --check",
         "python scripts/validate-health-probe-catalog.py",
+        "python scripts/generate-operation-observation-plan.py --check",
+        "python scripts/register-operation-observation-plan-artifacts.py --check",
+        "python scripts/sync-release-schema-artifacts.py --check",
+        "python -m unittest tests/test_operation_document_evidence.py",
+        "python -m unittest tests/test_operation_observation_plan_fixtures.py tests/test_generate_operation_observation_plan.py",
         "python scripts/generate-data-go-kr-operation-manifest.py --check",
         "python scripts/validate-data-go-kr-operation-manifest.py",
         "python -m unittest tests/test_validate_data_go_kr_operation_manifest.py",
@@ -193,10 +212,10 @@
     "python scripts/validate-source-refresh-policy.py",
         "python scripts/sync-release-manifest-artifacts.py --check"
       ],
-      "manifest_relationship": "Source rollups, current runtime evidence projection, sustainable coverage, completeness-proof registry, input index and rollup, and source refresh policies, source-bound operation denominator expectations, credential runtime evidence, runner readiness, operator packets, collection execution plans, manual-review acceptance packets, and inventories are top-level manifest evidence for registered public-data scopes, authoritative denominators, immutable operation-bound evidence, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundary actions.",
-      "schema_relationship": "Schema-backed source, denominator expectation, current runtime projection, sustainable coverage, completeness-proof registry, input index and rollup, and credential reports are indexed through schemas/index.json and source-report-inventory.json where applicable.",
+      "manifest_relationship": "Source rollups, current runtime evidence projection, sustainable coverage, completeness-proof registry, input index and rollup, source refresh policies, source-bound operation denominators, credential runtime evidence, operation-document evidence, its work queue and reconciliation, observation-plan source index/shards, reviewed policies, and per-operation response assertions are top-level manifest evidence for registered public-data scopes, authoritative denominators, immutable operation-bound evidence, freshness-aware coverage, scheduled upstream observation, nested source reports, reviewed receipt collection actions, and explicit manual-review release boundaries. The repository catalog snapshot is pinned to an exact full source revision whose LFS pointer must match the indexed payload; its catalog-binding witness is identity evidence and never current-release or publication authority. Document acquisition work counts do not establish complete request plans or runtime admission.",
+      "schema_relationship": "Schema-backed source, denominator expectation, current runtime projection, sustainable coverage, completeness-proof registry, input index and rollup, credential reports, operation-document evidence/reconciliation/work items, observation plans, reviewed operation policies, and response assertions are indexed through schemas/index.json and source-report-inventory.json where applicable.",
       "package_relationship": "Included in release packages through manifest.json.",
-      "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json."
+      "exemption_boundary": "Nested source reports stay out of the top-level manifest when covered by source-report-inventory.json. Operation plans, source snapshots, policies, and assertions describe reviewed request authority only; they do not bind runtime credentials, admit calls, or prove provider health."
     },
     {
       "id": "upstream_catalogue_health_policy",

@@ -1,0 +1,28 @@
+{
+  "artifact_kind": "operation_response_assertion",
+  "assertion": {
+    "mode": "observation_only"
+  },
+  "document_evidence": {
+    "bytes": 139121,
+    "path": "reports/operation-document-evidence/v2/15110287-49875.json",
+    "sha256": "4f22dbe0e15f9d6ab41b9ea449245749915cb439804ff6224aa7d11200d565da"
+  },
+  "operation_identity": {
+    "dataset_id": "15110287",
+    "operation_id": "04d1170f65e3e7f6f36ba0e84490f9825ba8ee51f543fb48734142d6f0c858dc",
+    "operation_name": "전라남도 보성군 차 관련 단체 정보 데이터 조회",
+    "upstream_operation_key": "49875"
+  },
+  "review": {
+    "rationale": "This bounded profile authorizes construction of one documented HTTPS GET retrieval request with the exact documented query credential reference and no noncredential input values. It omits only documented optional parameters with minimum cardinality zero, and records response semantics as observation-only. It does not authorize provider calls, assert response health, bind credentials or quotas, or admit runtime execution.",
+    "review_ref": "https://github.com/StatPan/datapan-registry/issues/759",
+    "reviewed_by": "StatPan Registry maintainers"
+  },
+  "schema_version": "datapan.operation-response-assertion.v2",
+  "source_binding": {
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr"
+  }
+}
