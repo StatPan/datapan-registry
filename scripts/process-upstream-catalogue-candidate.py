@@ -3081,35 +3081,79 @@ def process(
     # quarantine, lease acquisition, or request reservation can write state.
     preflight_generation_retention(index_path, generation_dir, retention_candidate)
     if checkpoint.get("status") in {"ready", "no-change", "quarantined"} and not new_observation_received and not ready_has_detail_work:
-        checkpoint["last_heartbeat_at"] = timestamp(now)
-        atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
+        terminal_status = checkpoint.get("status")
+        now_text = timestamp(now)
+        exact_replay = args.execution_mode == "live" and terminal_status in {"ready", "no-change"}
+        if exact_replay:
+            if (
+                collector_admission is None
+                or replay_prior_index is None
+                or not getattr(args, "replay_state_head_sha", None)
+            ):
+                raise ValueError("replay_authenticated_context_unavailable")
+            durable_admission = _replay_admission(replay_prior_checkpoint, replay_prior_index)
+            incoming_admission = validate_admission_row(collector_admission)
+            if any(
+                durable_admission.get(field) != incoming_admission.get(field)
+                for field in set(durable_admission) - {"admitted_at"}
+            ):
+                raise ValueError("replay_authenticated_admission_mismatch")
+
+            # Validate the exact checkpoint/index transition before touching
+            # State. append_generation_index is run against a temporary index,
+            # while its read-only retention inputs remain the selected State.
+            current_checkpoint = copy.deepcopy(checkpoint)
+            current_checkpoint["last_heartbeat_at"] = now_text
+            current_checkpoint = seal_checkpoint(current_checkpoint)
+            with tempfile.TemporaryDirectory(prefix="upstream-catalogue-replay-index-") as temp_dir:
+                proposed_index_path = pathlib.Path(temp_dir) / "index.json"
+                atomic_write_json(proposed_index_path, replay_prior_index)
+                append_generation_index(
+                    proposed_index_path, checkpoint_path, current_checkpoint,
+                    collector_admission=collector_admission,
+                    legacy_floor=legacy_floor,
+                    admitted_at=now_text,
+                )
+                current_index = load_json(proposed_index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+            replay_context = {
+                "prior_checkpoint": replay_prior_checkpoint,
+                "current_checkpoint": current_checkpoint,
+                "prior_index": replay_prior_index,
+                "current_index": current_index,
+                "state_head_sha": args.replay_state_head_sha,
+                "checkpoint_schema": schema,
+            }
+            replay_result = processing_result(
+                current_checkpoint,
+                exact_delivery_replay=True,
+                producer_run_id=args.producer_run_id,
+                processor_run_id=args.processor_run_id or args.producer_run_id,
+                processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+            )
+            proposed_receipt = build_replay_persistence_receipt(
+                result=replay_result, **replay_context,
+            )
+            verify_replay_persistence_receipt(
+                proposed_receipt, result=replay_result, **replay_context,
+            )
+            args.exact_delivery_replay = True
+            args.exact_delivery_replay_context = replay_context
+            checkpoint = current_checkpoint
+        else:
+            checkpoint["last_heartbeat_at"] = now_text
+            checkpoint = seal_checkpoint(checkpoint)
+            args.exact_delivery_replay = False
+
+        atomic_write_json(checkpoint_path, checkpoint)
         append_generation_index(
             index_path, checkpoint_path, checkpoint,
-            collector_admission=collector_admission, legacy_floor=legacy_floor, admitted_at=timestamp(now),
+            collector_admission=collector_admission, legacy_floor=legacy_floor, admitted_at=now_text,
         )
-        args.exact_delivery_replay = True
-        if checkpoint.get("status") in {"ready", "no-change"}:
-            if (
-                collector_admission is not None
-                and replay_prior_index is not None
-                and getattr(args, "replay_state_head_sha", None)
-            ):
-                durable_admission = _replay_admission(replay_prior_checkpoint, replay_prior_index)
-                incoming_admission = validate_admission_row(collector_admission)
-                if any(
-                    durable_admission.get(field) != incoming_admission.get(field)
-                    for field in set(durable_admission) - {"admitted_at"}
-                ):
-                    raise ValueError("replay_authenticated_admission_mismatch")
-                args.exact_delivery_replay_context = {
-                    "prior_checkpoint": replay_prior_checkpoint,
-                    "current_checkpoint": copy.deepcopy(checkpoint),
-                    "prior_index": replay_prior_index,
-                    "current_index": load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT),
-                    "state_head_sha": args.replay_state_head_sha,
-                    "checkpoint_schema": schema,
-                }
-        return (0 if checkpoint.get("status") in {"ready", "no-change"} else 3), checkpoint
+        if exact_replay:
+            persisted_index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+            if persisted_index != args.exact_delivery_replay_context["current_index"]:
+                raise ValueError("replay_persisted_transition_mismatch")
+        return (0 if terminal_status in {"ready", "no-change"} else 3), checkpoint
     if checkpoint.get("status") in {"ready", "no-change"} and (new_observation_received or ready_has_detail_work):
         checkpoint["status"] = "retry"
 
@@ -4023,22 +4067,38 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("failed_processor_recovery_arguments_incomplete")
             status, checkpoint = process(args)
         exact_delivery_replay = bool(getattr(args, "exact_delivery_replay", False))
-        result = processing_result(
-            checkpoint,
-            exact_delivery_replay=exact_delivery_replay,
-            producer_run_id=args.producer_run_id,
-            processor_run_id=args.processor_run_id or args.producer_run_id,
-            processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+        checkpoint_is_sealed = (
+            checkpoint.get("schema_version") == CHECKPOINT_SCHEMA
+            and checkpoint.get("checkpoint_sha256") == checkpoint_digest(checkpoint)
         )
-        atomic_output(args.output_dir, "upstream-catalogue-processing-result.json", result)
-        if checkpoint.get("schema_version") == CHECKPOINT_SCHEMA and checkpoint.get("checkpoint_sha256") == checkpoint_digest(checkpoint):
-            if exact_delivery_replay:
-                replay_context = getattr(args, "exact_delivery_replay_context", None)
-                if replay_context is not None:
-                    receipt = build_replay_persistence_receipt(result=result, **replay_context)
-                    atomic_output(args.output_dir, "upstream-catalogue-checkpoint-receipt.json", checkpoint)
-                    atomic_output(args.output_dir, REPLAY_PERSISTENCE_RECEIPT, receipt)
-            else:
+        if exact_delivery_replay:
+            replay_context = getattr(args, "exact_delivery_replay_context", None)
+            if not checkpoint_is_sealed or not isinstance(replay_context, dict):
+                raise ValueError("replay_authenticated_context_unavailable")
+            result = processing_result(
+                checkpoint,
+                exact_delivery_replay=True,
+                producer_run_id=args.producer_run_id,
+                processor_run_id=args.processor_run_id or args.producer_run_id,
+                processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+            )
+            receipt = build_replay_persistence_receipt(result=result, **replay_context)
+            verify_replay_persistence_receipt(receipt, result=result, **replay_context)
+            # The idle result is the success signal consumed by the workflow.
+            # Persist both verifier inputs before making that signal visible.
+            atomic_output(args.output_dir, "upstream-catalogue-checkpoint-receipt.json", checkpoint)
+            atomic_output(args.output_dir, REPLAY_PERSISTENCE_RECEIPT, receipt)
+            atomic_output(args.output_dir, "upstream-catalogue-processing-result.json", result)
+        else:
+            result = processing_result(
+                checkpoint,
+                exact_delivery_replay=False,
+                producer_run_id=args.producer_run_id,
+                processor_run_id=args.processor_run_id or args.producer_run_id,
+                processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+            )
+            atomic_output(args.output_dir, "upstream-catalogue-processing-result.json", result)
+            if checkpoint_is_sealed:
                 atomic_output(args.output_dir, "upstream-catalogue-checkpoint-receipt.json", checkpoint)
         print(json.dumps(result, sort_keys=True))
         return status
