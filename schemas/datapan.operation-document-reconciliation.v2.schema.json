@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-document-reconciliation.v2.schema.json",
+  "title": "Datapan operation document reconciliation v2",
+  "description": "Separates source evidence, retryable official-document acquisition, pending work, and registered-inventory exclusions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_binding",
+    "summary",
+    "scope",
+    "source_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.operation-document-reconciliation.v2"
+    },
+    "manifest_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "source_snapshot_sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "reports/data-go-kr/operation-manifest.json"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "source_snapshot_sha256": {
+          "const": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registered_api_operations",
+        "statuses",
+        "invalid_artifacts_not_bound_to_registered_identity",
+        "coverage_complete"
+      ],
+      "properties": {
+        "registered_api_operations": {
+          "const": 12662
+        },
+        "statuses": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pending",
+            "acquired",
+            "parsed_with_unknowns",
+            "parsed_complete",
+            "missing",
+            "ambiguous",
+            "unsupported",
+            "invalid",
+            "retryable"
+          ],
+          "properties": {
+            "pending": {
+              "$ref": "#/$defs/count"
+            },
+            "acquired": {
+              "$ref": "#/$defs/count"
+            },
+            "parsed_with_unknowns": {
+              "$ref": "#/$defs/count"
+            },
+            "parsed_complete": {
+              "$ref": "#/$defs/count"
+            },
+            "missing": {
+              "$ref": "#/$defs/count"
+            },
+            "ambiguous": {
+              "$ref": "#/$defs/count"
+            },
+            "unsupported": {
+              "$ref": "#/$defs/count"
+            },
+            "invalid": {
+              "$ref": "#/$defs/count"
+            },
+            "retryable": {
+              "$ref": "#/$defs/count"
+            }
+          }
+        },
+        "invalid_artifacts_not_bound_to_registered_identity": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "coverage_complete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "inventory",
+        "registered_protocols",
+        "link_operations_excluded",
+        "operationless_catalog_entries_excluded",
+        "worldwide_provider_apis_included"
+      ],
+      "properties": {
+        "provider": {
+          "const": "data.go.kr"
+        },
+        "inventory": {
+          "const": "registered_rest_and_soap_operations_only"
+        },
+        "registered_protocols": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "REST",
+            "SOAP"
+          ],
+          "properties": {
+            "REST": {
+              "const": 12627
+            },
+            "SOAP": {
+              "const": 35
+            }
+          }
+        },
+        "link_operations_excluded": {
+          "const": 8871
+        },
+        "operationless_catalog_entries_excluded": {
+          "const": 473
+        },
+        "worldwide_provider_apis_included": {
+          "const": false
+        }
+      }
+    },
+    "source_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official_document_hosts",
+        "provider_operation_calls",
+        "external_openapi_refs_followed",
+        "soap_wsdl_imports_followed",
+        "raw_capture_directory_private",
+        "transport_bounds"
+      ],
+      "properties": {
+        "official_document_hosts": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "www.data.go.kr",
+              "www.safetydata.go.kr"
+            ]
+          }
+        },
+        "provider_operation_calls": {
+          "const": 0
+        },
+        "external_openapi_refs_followed": {
+          "const": false
+        },
+        "soap_wsdl_imports_followed": {
+          "const": false
+        },
+        "raw_capture_directory_private": {
+          "const": true
+        },
+        "transport_bounds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "max_document_requests_per_operation",
+            "request_deadline_seconds",
+            "max_concurrent_requests_per_host",
+            "max_batch_operations",
+            "max_response_bytes",
+            "redirects_followed",
+            "compressed_responses_accepted",
+            "minimum_interval_between_document_requests_ms",
+            "max_schema_variants_per_response",
+            "max_private_capture_root_bytes"
+          ],
+          "properties": {
+            "max_document_requests_per_operation": {
+              "const": 3
+            },
+            "request_deadline_seconds": {
+              "const": 35
+            },
+            "max_concurrent_requests_per_host": {
+              "const": 1
+            },
+            "max_batch_operations": {
+              "const": 50
+            },
+            "max_response_bytes": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "catalogue",
+                "operation_detail",
+                "reference_guide"
+              ],
+              "properties": {
+                "catalogue": {
+                  "const": 3145728
+                },
+                "operation_detail": {
+                  "const": 1048576
+                },
+                "reference_guide": {
+                  "const": 8388608
+                }
+              }
+            },
+            "redirects_followed": {
+              "const": false
+            },
+            "compressed_responses_accepted": {
+              "const": false
+            },
+            "minimum_interval_between_document_requests_ms": {
+              "const": 1000
+            },
+            "max_schema_variants_per_response": {
+              "const": 16
+            },
+            "max_private_capture_root_bytes": {
+              "const": 1073741824
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

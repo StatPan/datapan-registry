@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-document-work-item.v2.schema.json",
+  "title": "Datapan operation document work item v2",
+  "description": "One deterministic, resumable documentation-only task keyed by the Registry operation identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "operation_identity",
+    "status",
+    "source_profile_id",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.operation-document-work-item.v2"
+    },
+    "operation_identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "acquired",
+        "parsed_with_unknowns",
+        "parsed_complete",
+        "missing",
+        "ambiguous",
+        "unsupported",
+        "invalid",
+        "retryable"
+      ]
+    },
+    "source_profile_id": {
+      "enum": [
+        "data_go_kr_v1",
+        "safetydata_v1"
+      ]
+    },
+    "next_action": {
+      "enum": [
+        "acquire_official_catalogue_detail_and_guide",
+        "implement_safetydata_document_profile",
+        "run_offline_document_parser",
+        "compile_request_contract_and_resolve_unknowns",
+        "compile_request_contract",
+        "retry_or_locate_official_document",
+        "resolve_operation_document_match",
+        "implement_or_register_document_adapter",
+        "implement_legacy_ole_or_hwp_guide_adapter",
+        "repair_invalid_evidence_binding",
+        "retry_official_document_capture",
+        "locate_official_document"
+      ]
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^reports/operation-document-evidence/v2/[0-9]+-[A-Za-z0-9_.-]+\\.json$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "reason_code": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,127}$"
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "operation_id",
+        "provider",
+        "dataset_id",
+        "protocol",
+        "source_system",
+        "upstream_operation_key",
+        "operation_name"
+      ],
+      "properties": {
+        "source_id": {
+          "const": "data_go_kr"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "provider": {
+          "const": "data.go.kr"
+        },
+        "dataset_id": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "protocol": {
+          "enum": [
+            "REST",
+            "SOAP"
+          ]
+        },
+        "source_system": {
+          "enum": [
+            "data.go.kr",
+            "safetydata.go.kr"
+          ]
+        },
+        "upstream_operation_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "operation_name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

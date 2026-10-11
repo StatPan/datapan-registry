@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-document-evidence.v1.schema.json",
+  "title": "Datapan registered operation document evidence v1",
+  "description": "Redacted, digest-bound facts parsed from official operation documentation. Sample values and response rows are never retained. This evidence does not itself authorize execution.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "parser", "identity", "source_bindings", "parse_status", "transport", "effect", "parameters", "authentication", "limits", "response_assertion", "explicit_unknowns"],
+  "properties": {
+    "schema_version": { "const": "datapan.operation-document-evidence.v1" },
+    "parser": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version"],
+      "properties": { "id": { "const": "data-go-kr-operation-document-parser" }, "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" } }
+    },
+    "identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["operation_id", "provider", "dataset_id", "protocol", "source_system", "upstream_operation_key", "operation_name", "source_refs"],
+      "properties": {
+        "operation_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "provider": { "const": "data.go.kr" },
+        "dataset_id": { "type": "string", "pattern": "^[0-9]+$" }, "protocol": { "enum": ["REST", "SOAP"] },
+        "source_system": { "enum": ["data.go.kr", "safetydata.go.kr"] }, "upstream_operation_key": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "operation_name": { "type": "string", "minLength": 1 }, "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "source_bindings": { "type": "array", "minItems": 3, "items": { "$ref": "#/$defs/source_binding" } },
+    "parse_status": { "enum": ["parsed_with_unknowns", "parsed_complete", "ambiguous", "unsupported"] },
+    "transport": {
+      "type": "object", "additionalProperties": false,
+      "required": ["protocol", "scheme", "host", "path", "http_method", "soap_action", "soap_version", "envelope_namespace", "operation_qname", "body_encoding"],
+      "properties": {
+        "protocol": { "$ref": "#/$defs/fact" }, "scheme": { "$ref": "#/$defs/fact" }, "host": { "$ref": "#/$defs/fact" }, "path": { "$ref": "#/$defs/fact" },
+        "http_method": {
+          "type": "object", "additionalProperties": false, "required": ["value", "status", "authority_scope", "source_refs"],
+          "properties": { "value": { "type": ["string", "null"], "enum": ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", null] }, "status": { "enum": ["documented", "unknown", "conflict"] }, "authority_scope": { "enum": ["operation_specific", "service_level_only", "not_found_in_parsed_operation_sources"] }, "source_refs": { "$ref": "#/$defs/source_refs" } }
+        },
+        "soap_action": { "$ref": "#/$defs/fact" }, "soap_version": { "$ref": "#/$defs/fact" }, "envelope_namespace": { "$ref": "#/$defs/fact" }, "operation_qname": { "$ref": "#/$defs/fact" }, "body_encoding": { "$ref": "#/$defs/fact" }
+      }
+    },
+    "effect": {
+      "type": "object", "additionalProperties": false, "required": ["classification", "status", "authority", "source_refs"],
+      "properties": { "classification": { "type": ["string", "null"], "enum": ["read_only", null] }, "status": { "$ref": "#/$defs/status" }, "authority": { "const": "operation_document" }, "source_refs": { "$ref": "#/$defs/source_refs" } }
+    },
+    "parameters": { "type": "array", "items": { "$ref": "#/$defs/parameter" } },
+    "authentication": {
+      "type": "object", "additionalProperties": false, "required": ["requirement", "status", "mechanism", "parameter_names", "placement", "source_refs"],
+      "properties": { "requirement": { "type": ["string", "null"], "enum": ["required", "none", null] }, "status": { "enum": ["documented", "indicated_by_example", "unknown", "conflict"] }, "mechanism": { "type": ["string", "null"], "enum": ["service_key", "api_key", "authorization", null] }, "parameter_names": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }, "placement": { "type": ["string", "null"], "enum": ["query", "header", "soap_header", null] }, "source_refs": { "$ref": "#/$defs/source_refs" } }
+    },
+    "limits": {
+      "type": "object", "additionalProperties": false, "required": ["provider_quota", "request_budget"],
+      "properties": {
+        "provider_quota": { "type": "object", "additionalProperties": false, "required": ["value", "unit", "status", "source_refs"], "properties": { "value": { "type": ["number", "string", "null"] }, "unit": { "type": ["string", "null"] }, "status": { "enum": ["documented", "not_parsed", "unknown", "conflict"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+        "request_budget": { "type": "object", "additionalProperties": false, "required": ["value", "status", "source_refs"], "properties": { "value": { "type": ["integer", "null"], "minimum": 1 }, "status": { "enum": ["not_a_provider_fact", "documented", "unknown"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } }
+      }
+    },
+    "response_assertion": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "fields", "empty_result_semantics", "source_refs"],
+      "properties": { "kind": { "enum": ["documented_response_fields", "unknown"] }, "fields": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }, "empty_result_semantics": { "$ref": "#/$defs/empty_semantics" }, "source_refs": { "$ref": "#/$defs/source_refs" } }
+    },
+    "explicit_unknowns": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "status": { "enum": ["documented", "unknown", "conflict", "not_established", "not_found_in_parsed_operation_sources", "demonstrated_by_example", "registered_manifest", "not_applicable", "not_parsed"] },
+    "fact": { "type": "object", "additionalProperties": false, "required": ["value", "status", "source_refs"], "properties": { "value": { "type": ["string", "null"] }, "status": { "$ref": "#/$defs/status" }, "source_refs": { "$ref": "#/$defs/source_refs" }, "authority_scope": { "type": "string" } } },
+    "empty_semantics": { "type": "object", "additionalProperties": false, "required": ["value", "status", "source_refs"], "properties": { "value": { "type": ["string", "null"], "enum": ["valid", "invalid", null] }, "status": { "enum": ["unknown", "documented", "conflict"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+    "source_refs": { "type": "array", "items": { "$ref": "#/$defs/source_ref" } },
+    "source_ref": { "type": "object", "additionalProperties": false, "required": ["locator", "evidence_kind"], "properties": { "evidence_kind": { "type": "string", "minLength": 1 }, "locator": { "$ref": "#/$defs/locator" } } },
+    "locator": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["source_id", "kind", "table_index", "row_index", "cell_index"], "properties": { "source_id": { "type": "string" }, "kind": { "const": "html_table_cell" }, "table_index": { "type": "integer", "minimum": 0 }, "row_index": { "type": "integer", "minimum": 0 }, "cell_index": { "type": "integer", "minimum": 0 }, "column_label": { "type": "string" } } },
+        { "type": "object", "additionalProperties": false, "required": ["source_id", "kind", "table_index", "row_index", "cell_index", "part"], "properties": { "source_id": { "type": "string" }, "kind": { "const": "docx_table_cell" }, "table_index": { "type": "integer", "minimum": 0 }, "row_index": { "type": "integer", "minimum": 0 }, "cell_index": { "type": "integer", "minimum": 0 }, "column_label": { "type": "string" }, "part": { "const": "word/document.xml" } } }
+        ,{ "type": "object", "additionalProperties": false, "required": ["source_id", "kind", "select_id", "option_index", "value", "text"], "properties": { "source_id": { "type": "string" }, "kind": { "const": "html_select_option" }, "select_id": { "const": "open_api_detail_select" }, "option_index": { "type": "integer", "minimum": 0 }, "value": { "type": "string", "minLength": 1 }, "text": { "type": "string", "minLength": 1 } } }
+      ]
+    },
+    "source_binding": {
+      "type": "object", "additionalProperties": false, "required": ["source_id", "origin", "media_type", "bytes", "sha256", "retrieved_at", "capture_role", "parser"],
+      "properties": {
+        "source_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "origin": { "type": "object", "additionalProperties": false, "required": ["scheme", "host", "path", "method", "query_values_stored", "body_values_stored"], "properties": { "scheme": { "const": "https" }, "host": { "enum": ["www.data.go.kr", "www.safetydata.go.kr"] }, "path": { "type": "string", "pattern": "^/[^?]*$" }, "method": { "enum": ["GET", "POST"] }, "query_values_stored": { "const": false }, "body_values_stored": { "const": false } } },
+        "media_type": { "type": "string" }, "bytes": { "type": "integer", "minimum": 1 }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "retrieved_at": { "type": "string", "format": "date-time" }, "capture_role": { "type": "string" }, "parser": { "type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": { "id": { "type": "string" }, "version": { "type": "string" } } }
+      }
+    },
+    "parameter": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "location", "cardinality", "requiredness", "size", "data_type", "enum", "default", "sample", "source_refs"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "location": { "type": "object", "additionalProperties": false, "required": ["value", "status", "source_refs"], "properties": { "value": { "type": ["string", "null"], "enum": ["query", "path", "header", "body", "soap_header", null] }, "status": { "enum": ["documented", "demonstrated_by_example", "unknown", "conflict"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+        "cardinality": { "type": "object", "additionalProperties": false, "required": ["minimum", "maximum", "status", "source_refs"], "properties": { "minimum": { "type": ["integer", "null"], "minimum": 0 }, "maximum": { "type": ["integer", "null"], "minimum": 0 }, "status": { "enum": ["unknown", "conflict"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+        "requiredness": { "type": "object", "additionalProperties": false, "required": ["value", "status", "source_refs"], "properties": { "value": { "type": ["string", "null"], "enum": ["required", "optional", null] }, "status": { "enum": ["documented", "unknown", "conflict"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+        "size": { "type": "object", "additionalProperties": false, "required": ["value", "observed_values", "status", "source_refs"], "properties": { "value": { "type": ["string", "null" ] }, "observed_values": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }, "status": { "enum": ["documented", "unknown", "conflict"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+        "data_type": { "$ref": "#/$defs/value_fact" }, "enum": { "type": "object", "additionalProperties": false, "required": ["values", "status", "source_refs"], "properties": { "values": { "type": "array", "items": { "type": "string" } }, "status": { "enum": ["documented", "not_established", "unknown", "conflict"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+        "default": { "$ref": "#/$defs/value_fact" },
+        "sample": { "type": "object", "additionalProperties": false, "required": ["present", "value_stored", "source_refs"], "properties": { "present": { "type": "boolean" }, "value_stored": { "const": false }, "source_refs": { "$ref": "#/$defs/source_refs" } } },
+        "source_refs": { "$ref": "#/$defs/source_refs" }
+      }
+    },
+    "value_fact": { "type": "object", "additionalProperties": false, "required": ["value", "status", "source_refs"], "properties": { "value": { "type": ["string", "null"] }, "status": { "enum": ["documented", "not_established", "unknown", "conflict", "not_parsed"] }, "source_refs": { "$ref": "#/$defs/source_refs" } } }
+  }
+}

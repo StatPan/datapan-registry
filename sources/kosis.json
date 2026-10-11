@@ -17,14 +17,14 @@
   },
   "references": {
     "homepage_url": "https://kosis.kr/openapi/index/index.jsp",
-    "api_docs_url": "https://kosis.kr/openapi/devGuide/devGuide_0101List.do",
+    "api_docs_url": "https://kosis.kr/openapi/devGuide/devGuide_0201List.do",
     "key_request_url": "https://kosis.kr/openapi/index/index.jsp",
     "last_reviewed_at": "2026-06-29"
   },
   "catalogue": {
     "model": "statistics",
     "list_endpoint": "https://kosis.kr/openapi/statisticsList.do?method=getList",
-    "detail_endpoint": "https://kosis.kr/openapi/statisticsData.do?method=getList",
+    "detail_endpoint": "https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList",
     "search_endpoint": "https://kosis.kr/openapi/statisticsSearch.do?method=getList",
     "update_cadence": "source-dependent",
     "identity_fields": [

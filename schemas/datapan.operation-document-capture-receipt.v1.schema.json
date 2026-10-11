@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-document-capture-receipt.v1.schema.json",
+  "title": "Datapan official operation-document capture receipt v1",
+  "description": "Public digest-only receipt for bounded official-document acquisition. It records no source URLs, queries, credentials, raw document paths, or response rows.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "operation_id", "status", "reason_code", "attempted_at", "documents", "evidence_sha256"],
+  "properties": {
+    "schema_version": { "const": "datapan.operation-document-capture-receipt.v1" },
+    "operation_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "status": { "enum": ["acquired", "missing", "ambiguous", "unsupported"] },
+    "reason_code": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9_]{0,127}$" },
+    "attempted_at": { "type": "string", "format": "date-time" },
+    "documents": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "contains": { "type": "object", "properties": { "role": { "const": "catalogue" } }, "required": ["role"] }, "minContains": 1, "maxContains": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["role", "present", "bytes", "sha256", "media_type", "encoding", "retrieved_at"],
+        "properties": {
+          "role": { "enum": ["catalogue", "operation_detail", "reference_guide"] },
+          "present": { "type": "boolean" },
+          "bytes": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+          "media_type": { "type": ["string", "null"] },
+          "encoding": { "type": ["string", "null"] },
+          "retrieved_at": { "type": ["string", "null"], "format": "date-time" }
+        },
+        "allOf": [
+          { "if": { "properties": { "present": { "const": true } }, "required": ["present"] }, "then": { "properties": { "bytes": { "minimum": 1 }, "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "media_type": { "type": "string", "minLength": 1 }, "encoding": { "type": "string", "minLength": 1 } } } },
+          { "if": { "properties": { "present": { "const": false } }, "required": ["present"] }, "then": { "properties": { "bytes": { "const": 0 }, "sha256": { "type": "null" }, "media_type": { "type": "null" }, "encoding": { "type": "null" }, "retrieved_at": { "type": "null" } } } }
+        ]
+      }
+    },
+    "evidence_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" }
+  },
+  "allOf": [
+    { "properties": { "documents": { "contains": { "type": "object", "properties": { "role": { "const": "operation_detail" } }, "required": ["role"] }, "minContains": 1, "maxContains": 1 } } },
+    { "properties": { "documents": { "contains": { "type": "object", "properties": { "role": { "const": "reference_guide" } }, "required": ["role"] }, "minContains": 1, "maxContains": 1 } } }
+  ]
+}

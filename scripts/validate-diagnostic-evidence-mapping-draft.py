@@ -25,6 +25,10 @@ PACKETS = DRAFT / "consumer-compatibility"
 REGISTRY_IDENTITY_PROOF = DRAFT / "data-go-kr-registry-identity-proof.v1.json"
 EXPECTED_REGISTRY_IDENTITY_PROOF_SHA256 = "b4b8fac3de722db5cf3a55ad195be90c8b57a16f11791213542fd67cbc8c4df0"
 HISTORICAL_HEALTH_CATALOG = ROOT / "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.v1.json"
+ARCHIVED_ERROR_ACTION_ROLLUP = ROOT / "tests/fixtures/diagnostic-source-applicability/error-action-routing-rollup.json"
+ARCHIVED_AUTHORITATIVE_INPUTS = {
+    "reports/error-action-routing-rollup.json": ARCHIVED_ERROR_ACTION_ROLLUP,
+}
 EXPECTED_HISTORICAL_HEALTH_SHA256 = "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840"
 EXPECTED_HISTORICAL_REGISTRY = {
     "path": "data/data-go-kr.registry.json",
@@ -137,13 +141,20 @@ def validate_registry_identity_proof(mapping: dict[str, Any], path: pathlib.Path
     return frozenset(expected_dataset_ids)
 
 
+def historical_authoritative_input_path(relative_path: str) -> pathlib.Path:
+    """Resolve immutable mapping facts from archived bytes where current reports evolve."""
+    if relative_path == "reports/health-probe-catalog.json":
+        return HISTORICAL_HEALTH_CATALOG
+    return ARCHIVED_AUTHORITATIVE_INPUTS.get(relative_path, ROOT / relative_path)
+
+
 def effective_registry_ids(mapping: dict[str, Any], registry_ids: frozenset[str] | None) -> frozenset[str]:
     return registry_ids if registry_ids is not None else validate_registry_identity_proof(mapping, REGISTRY_IDENTITY_PROOF)
 
 
 def validate_inputs(mapping: dict[str, Any], registry_identity_proof: pathlib.Path | None = None) -> frozenset[str] | None:
     for item in mapping["authoritative_inputs"]:
-        path = HISTORICAL_HEALTH_CATALOG if item["path"] == "reports/health-probe-catalog.json" else ROOT / item["path"]
+        path = historical_authoritative_input_path(item["path"])
         if not path.is_file():
             raise ValueError(f"missing authoritative input: {item['path']}")
         if item["schema_version"] == "datapan.data-go-kr-registry-array.v1" and registry_identity_proof is not None:
@@ -253,7 +264,7 @@ def validate_source_basis(mapping: dict[str, Any], registry_ids: frozenset[str] 
                     raise ValueError(f"{item['cause']}: source basis shape drift")
                 if basis.get("artifact") not in allowed_artifacts:
                     raise ValueError(f"{item['cause']}: unpinned Registry source basis")
-                artifact = HISTORICAL_HEALTH_CATALOG if basis.get("artifact") == "reports/health-probe-catalog.json" else ROOT / basis.get("artifact", "")
+                artifact = historical_authoritative_input_path(basis.get("artifact", ""))
                 try:
                     actual = pointer_get(load(artifact), basis["json_pointer"])
                 except (OSError, KeyError, IndexError, ValueError, TypeError) as exc:

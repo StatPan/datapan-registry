@@ -1,0 +1,1155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-observation-policy.v1.schema.json",
+  "title": "Datapan Operation Observation Reviewed Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_kind",
+    "policies",
+    "profiles"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "https://schemas.datapan.dev/datapan.operation-observation-policy.v1.schema.json"
+    },
+    "schema_version": {
+      "const": "datapan.operation-observation-policy.v1"
+    },
+    "artifact_kind": {
+      "const": "operation_observation_policy_set"
+    },
+    "policies": {
+      "type": "array",
+      "maxItems": 12666,
+      "items": {
+        "$ref": "#/$defs/policy"
+      }
+    },
+    "profiles": {
+      "description": "Reusable, reviewed operator policy applied only when all source selector facts match exactly. Profiles cannot supply or override source facts.",
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/profile"
+      }
+    },
+    "effect_profiles": {
+      "description": "Reusable reviewed read-only classifications; actual operations must independently match exact operation-specific method and source-bound purpose facts.",
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/effect_profile"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "qname": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespace", "local_name"],
+      "properties": {
+        "namespace": {
+          "anyOf": [
+            { "type": "string", "format": "uri" },
+            { "const": "" }
+          ]
+        },
+        "local_name": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][A-Za-z0-9._-]*$"
+        }
+      }
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "operation_id",
+        "provider",
+        "protocol",
+        "dataset_id",
+        "operation_name",
+        "upstream_operation_key"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "provider": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "protocol": {
+          "enum": [
+            "REST",
+            "SOAP",
+            "HTTP"
+          ]
+        },
+        "dataset_id": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "operation_name": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "upstream_operation_key": {
+          "$ref": "#/$defs/non_empty"
+        }
+      }
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(?!/)[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 26214400
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "review_ref",
+        "reviewed_by",
+        "rationale"
+      ],
+      "properties": {
+        "review_ref": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048
+        },
+        "reviewed_by": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "rationale": {
+          "$ref": "#/$defs/non_empty"
+        }
+      }
+    },
+    "effect_review": {
+      "description": "A scoped operator classification used only with an operation-specific safe HTTP method and source-bound retrieval purpose. It cannot override documented mutation evidence.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "basis", "rfc_reference", "purpose_terms", "rationale"],
+      "properties": {
+        "classification": { "const": "read_only" },
+        "basis": { "const": "rfc9110_safe_method_and_retrieval_purpose" },
+        "rfc_reference": { "const": "https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1" },
+        "purpose_terms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 9,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["조회", "목록", "검색", "현황", "retrieve", "list", "search", "read", "lookup"]
+          }
+        },
+        "rationale": { "$ref": "#/$defs/non_empty" }
+      }
+    },
+    "effect_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "selector", "effect_review", "review"],
+      "properties": {
+        "profile_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$" },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_id", "provider", "protocol", "method"],
+          "properties": {
+            "source_id": { "type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$" },
+            "provider": { "$ref": "#/$defs/non_empty" },
+            "protocol": { "const": "REST" },
+            "method": { "enum": ["GET", "HEAD"] }
+          }
+        },
+        "effect_review": { "$ref": "#/$defs/effect_review" },
+        "review": { "$ref": "#/$defs/review" }
+      }
+    },
+    "value_strategy": {
+      "description": "An explicitly reviewed, bounded input choice. Values must not be copied from provider examples/defaults or contain credentials; credential inputs use the credential-reference strategy emitted from runtime_binding instead.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "minimum",
+            "maximum",
+            "selection"
+          ],
+          "properties": {
+            "kind": {
+              "const": "bounded_integer"
+            },
+            "minimum": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "maximum": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            },
+            "selection": {
+              "enum": [
+                "minimum",
+                "maximum",
+                "fixed"
+              ]
+            },
+            "selected_value": {
+              "type": "integer",
+              "minimum": -2147483648,
+              "maximum": 2147483647
+            }
+          },
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "selection": {
+                    "const": "fixed"
+                  }
+                },
+                "required": [
+                  "selection"
+                ]
+              },
+              "then": {
+                "required": [
+                  "selected_value"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "selection": {
+                    "enum": [
+                      "minimum",
+                      "maximum"
+                    ]
+                  }
+                },
+                "required": [
+                  "selection"
+                ]
+              },
+              "then": {
+                "not": {
+                  "required": [
+                    "selected_value"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "offset_years",
+            "minimum_year",
+            "maximum_year",
+            "anchor"
+          ],
+          "properties": {
+            "kind": {
+              "const": "relative_year"
+            },
+            "offset_years": {
+              "type": "integer",
+              "minimum": -100,
+              "maximum": 100
+            },
+            "minimum_year": {
+              "type": "integer",
+              "minimum": 1900,
+              "maximum": 2200
+            },
+            "maximum_year": {
+              "type": "integer",
+              "minimum": 1900,
+              "maximum": 2200
+            },
+            "anchor": {
+              "const": "observation_calendar_year"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "selected_value"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "reviewed_enum",
+                "reviewed_literal"
+              ]
+            },
+            "selected_value": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "parameter_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "strategy"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "strategy": {
+          "$ref": "#/$defs/value_strategy"
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_budget",
+        "timeout_ms",
+        "max_request_bytes",
+        "max_response_bytes"
+      ],
+      "properties": {
+        "request_budget": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120000
+        },
+        "max_request_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048576
+        },
+        "max_response_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1048576
+        }
+      }
+    },
+    "quota_policy": {
+      "description": "One independent shared budget constraint. Reuse the same non-secret scope_key for every operation subject to that budget; Registry rejects inconsistent limits for the same scope.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_kind",
+        "scope_key",
+        "max_concurrent",
+        "requests_per_window",
+        "window_seconds",
+        "minimum_interval_seconds"
+      ],
+      "properties": {
+        "scope_kind": {
+          "enum": [
+            "global",
+            "provider",
+            "credential",
+            "api",
+            "organization"
+          ]
+        },
+        "scope_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "max_concurrent": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "requests_per_window": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "window_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 31536000
+        },
+        "minimum_interval_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 31536000
+        }
+      }
+    },
+    "runtime_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "quota_policies",
+        "observation_period_seconds"
+      ],
+      "properties": {
+        "credential_reference": {
+          "type": "string",
+          "pattern": "^(credential|vault|secret|datapan)://[A-Za-z0-9][A-Za-z0-9._/-]*$",
+          "maxLength": 256
+        },
+        "credential_scope_key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "quota_policies": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/quota_policy"
+          }
+        },
+        "observation_period_seconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 31536000
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "document_evidence",
+        "review",
+        "request"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "document_evidence": {
+          "$ref": "#/$defs/artifact_ref"
+        },
+        "review": {
+          "$ref": "#/$defs/review"
+        },
+        "request": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "parameter_strategies",
+            "omit_unmapped_optional_parameters",
+            "limits",
+            "response_assertion_artifact"
+          ],
+          "properties": {
+            "effect_review": {
+              "$ref": "#/$defs/effect_review"
+            },
+            "parameter_strategies": {
+              "type": "array",
+              "maxItems": 256,
+              "items": {
+                "$ref": "#/$defs/parameter_strategy"
+              }
+            },
+            "omit_unmapped_optional_parameters": {
+              "type": "boolean"
+            },
+            "limits": {
+              "$ref": "#/$defs/limits"
+            },
+            "response_assertion_artifact": {
+              "$ref": "#/$defs/artifact_ref"
+            }
+          }
+        },
+        "runtime_binding": {
+          "$ref": "#/$defs/runtime_binding"
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "selector",
+        "review",
+        "request"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_id",
+            "provider",
+            "protocol",
+            "effect",
+            "method",
+            "authentication"
+          ],
+          "properties": {
+            "source_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+            },
+            "provider": {
+              "$ref": "#/$defs/non_empty"
+            },
+            "protocol": {
+              "enum": [
+                "REST",
+                "SOAP"
+              ]
+            },
+            "effect": {
+              "const": "read_only"
+            },
+            "method": {
+              "enum": [
+                "GET",
+                "HEAD",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "OPTIONS"
+              ]
+            },
+            "authentication": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "requirement",
+                "mechanism",
+                "placement",
+                "parameter_name"
+              ],
+              "properties": {
+                "requirement": {
+                  "enum": [
+                    "none",
+                    "required"
+                  ]
+                },
+                "mechanism": {
+                  "enum": [
+                    "none",
+                    "service_key",
+                    "api_key",
+                    "basic",
+                    "oauth2",
+                    "mutual_tls",
+                    "other"
+                  ]
+                },
+                "placement": {
+                  "enum": [
+                    "none",
+                    "query",
+                    "header",
+                    "soap_header"
+                  ]
+                },
+                "parameter_name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 256
+                }
+              }
+            }
+          }
+        },
+        "review": {
+          "$ref": "#/$defs/review"
+        },
+        "request": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "parameter_strategies",
+            "omit_unmapped_optional_parameters",
+            "limits",
+            "response"
+          ],
+          "properties": {
+            "effect_review": {
+              "$ref": "#/$defs/effect_review"
+            },
+            "parameter_strategies": {
+              "type": "array",
+              "maxItems": 256,
+              "items": {
+                "$ref": "#/$defs/parameter_strategy"
+              }
+            },
+            "omit_unmapped_optional_parameters": {
+              "type": "boolean"
+            },
+            "limits": {
+              "$ref": "#/$defs/limits"
+            },
+            "response": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "mode"
+                  ],
+                  "properties": {
+                    "mode": {
+                      "const": "observation_only"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "payload_kind",
+                    "branches"
+                  ],
+                  "properties": {
+                    "payload_kind": {
+                      "enum": [
+                        "json",
+                        "xml",
+                        "soap_xml"
+                      ]
+                    },
+                    "branches": {
+                      "type": "array",
+                      "minItems": 1,
+                      "maxItems": 16,
+                      "items": {
+                        "$ref": "#/$defs/profile_branch"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "runtime_binding": {
+          "$ref": "#/$defs/runtime_binding"
+        }
+      }
+    },
+    "profile_response_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "value_type",
+        "minimum",
+        "maximum"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/response_path"
+        },
+        "value_type": {
+          "enum": [
+            "object",
+            "array",
+            "string",
+            "integer",
+            "number",
+            "boolean"
+          ]
+        },
+        "minimum": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50000
+        },
+        "maximum": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 50000
+        }
+      }
+    },
+    "response_path": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "json_pointer"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^#(?:/(?:[^~/]|~[01])*)*$",
+              "maxLength": 2048
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "segments"
+          ],
+          "properties": {
+            "kind": {
+              "const": "xml_qname_path"
+            },
+            "segments": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "namespace",
+                  "local_name"
+                ],
+                "properties": {
+                  "namespace": {
+                    "type": "string",
+                    "format": "uri",
+                    "maxLength": 2048
+                  },
+                  "local_name": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z_][A-Za-z0-9._-]*$",
+                    "maxLength": 256
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "profile_discriminator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "predicate"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/response_path"
+        },
+        "predicate": {
+          "enum": [
+            "present",
+            "absent",
+            "node_type",
+            "equals_any"
+          ]
+        },
+        "value_type": {
+          "enum": [
+            "object",
+            "array",
+            "string",
+            "integer",
+            "number",
+            "boolean"
+          ]
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "predicate": {
+                "enum": [
+                  "present",
+                  "absent"
+                ]
+              }
+            },
+            "required": [
+              "predicate"
+            ]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "value_type"
+                  ]
+                },
+                {
+                  "required": [
+                    "values"
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "predicate": {
+                "const": "node_type"
+              }
+            },
+            "required": [
+              "predicate"
+            ]
+          },
+          "then": {
+            "required": [
+              "value_type"
+            ],
+            "not": {
+              "required": [
+                "values"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "predicate": {
+                "const": "equals_any"
+              }
+            },
+            "required": [
+              "predicate"
+            ]
+          },
+          "then": {
+            "required": [
+              "value_type",
+              "values"
+            ]
+          }
+        }
+      ]
+    },
+    "profile_branch_selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_http_status_codes",
+        "root_kind",
+        "discriminators"
+      ],
+      "properties": {
+        "accepted_http_status_codes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          }
+        },
+        "root_kind": {
+          "enum": [
+            "object",
+            "array",
+            "scalar",
+            "xml_element"
+          ]
+        },
+        "root_qname": {
+          "$ref": "#/$defs/qname"
+        },
+        "discriminators": {
+          "type": "array",
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/profile_discriminator"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "root_kind": {
+                "const": "xml_element"
+              }
+            },
+            "required": [
+              "root_kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "root_qname"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "root_kind": {
+                "enum": [
+                  "object",
+                  "array",
+                  "scalar"
+                ]
+              }
+            },
+            "required": [
+              "root_kind"
+            ]
+          },
+          "then": {
+            "not": {
+              "required": [
+                "root_qname"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "profile_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch_id",
+        "classification",
+        "selector",
+        "empty_result_semantics",
+        "code_mode",
+        "code_mode_rationale",
+        "required_fields"
+      ],
+      "properties": {
+        "branch_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"
+        },
+        "classification": {
+          "enum": [
+            "success",
+            "provider_error"
+          ]
+        },
+        "selector": {
+          "$ref": "#/$defs/profile_branch_selector"
+        },
+        "empty_result_semantics": {
+          "enum": [
+            "valid",
+            "invalid",
+            "not_applicable"
+          ]
+        },
+        "code_mode": {
+          "enum": [
+            "source",
+            "none"
+          ]
+        },
+        "code_mode_rationale": {
+          "$ref": "#/$defs/non_empty"
+        },
+        "required_fields": {
+          "type": "array",
+          "maxItems": 128,
+          "items": {
+            "$ref": "#/$defs/profile_response_field"
+          }
+        },
+        "result_collection": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/profile_result_collection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "code_mode": {
+                "const": "none"
+              }
+            },
+            "required": [
+              "code_mode"
+            ]
+          },
+          "then": {
+            "required": [
+              "code_mode_rationale"
+            ]
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              { "not": { "required": ["result_collection"] } },
+              { "properties": { "result_collection": { "type": "null" } }, "required": ["result_collection"] }
+            ]
+          },
+          "then": { "properties": { "empty_result_semantics": { "const": "not_applicable" } } }
+        },
+        {
+          "if": {
+            "properties": { "result_collection": { "type": "object" } },
+            "required": ["result_collection"]
+          },
+          "then": { "properties": { "empty_result_semantics": { "enum": ["valid", "invalid"] } } }
+        }
+      ]
+    },
+    "profile_result_collection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "container_path",
+        "item_path"
+      ],
+      "properties": {
+        "path": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/response_path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "container_path": {
+          "$ref": "#/$defs/response_path"
+        },
+        "item_path": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/response_path"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

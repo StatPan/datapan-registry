@@ -111,9 +111,10 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
             value = MODULE.expected(self.policy(decision_path, baseline), {"artifacts": artifacts}, {"summary": {}}, decision_path)
             self.assertEqual(value["status"], "approved_artifact_only_rebinding")
             self.assertEqual(value["old_compatibility_sha256"], "a" * 64)
+            self.assertTrue(value["historical_rebinding_eligible"])
             self.assertEqual(value["manifest_delta"]["added_paths"], ["reports/health.json", "schemas/health.schema.json"])
             with self.assertRaisesRegex(ValueError, "allowlist"):
-                MODULE.expected(self.policy(decision_path, baseline), {"artifacts": artifacts + [{"path": "reports/extra.json"}]}, {"summary": {}}, decision_path)
+                MODULE.expected(self.policy(decision_path, baseline), {"artifacts": artifacts + [{"path": "reports/extra.json", "kind": "extra"}]}, {"summary": {}}, decision_path)
 
     def test_exact_independent_ticket_artifacts_do_not_expand_health_approval(self):
         with tempfile.TemporaryDirectory() as raw:
@@ -197,7 +198,7 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "byte-for-byte unchanged"):
                 MODULE.expected(policy, {"artifacts": artifacts}, {"summary": {}}, decision_path)
 
-    def test_explicit_future_review_converges_with_rebinding_and_acceptance(self):
+    def test_explicit_future_review_is_current_scope_only_not_historical_rebinding(self):
         decision, decision_bytes, context = self.explicit_decision("2026-12-31T00:00:00Z")
         with tempfile.TemporaryDirectory() as raw:
             decision_path = pathlib.Path(raw) / "decision.json"
@@ -225,7 +226,10 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
 
         current_sha = hashlib.sha256(decision_bytes).hexdigest()
         self.assertNotEqual(current_sha, policy["decision_sha256"])
-        self.assertEqual(rebinding["status"], "approved_artifact_only_rebinding")
+        self.assertEqual(rebinding["status"], "outside_historical_rebinding_scope")
+        self.assertFalse(rebinding["historical_rebinding_eligible"])
+        self.assertEqual(rebinding["revalidation_reason"], "manifest_delta_outside_approved_allowlist")
+        self.assertFalse(rebinding["manifest_delta"]["scope_matches_approved_allowlist"])
         self.assertEqual(rebinding["decision_sha256"], current_sha)
         self.assertEqual(rebinding["historical_decision_sha256"], policy["decision_sha256"])
         self.assertEqual(
@@ -262,7 +266,27 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
                 as_of=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc),
             )
 
-        self.assertEqual(rebinding["status"], "revalidation_required")
+        self.assertEqual(rebinding["status"], "outside_historical_rebinding_scope")
+        self.assertFalse(rebinding["historical_rebinding_eligible"])
+        self.assertEqual(rebinding["revalidation_reason"], "manifest_delta_outside_approved_allowlist")
+        self.assertFalse(rebinding["manifest_delta"]["scope_matches_approved_allowlist"])
+        self.assertGreater(
+            rebinding["manifest_delta"]["stripped_artifact_count"],
+            rebinding["baseline"]["artifact_count"],
+        )
+        self.assertEqual(
+            rebinding["manifest_delta"]["stripped_artifact_contract_sha256"],
+            MODULE.artifact_contract_digest(
+                [
+                    item
+                    for item in context["manifest"]["artifacts"]
+                    if item["path"] not in {
+                        row["path"]
+                        for row in policy["allowed_additions"] + policy["independent_additions"]
+                    }
+                ]
+            ),
+        )
         self.assertEqual(rebinding["historical_decision_sha256"], policy["decision_sha256"])
         self.assertFalse(acceptance["summary"]["accepted"])
         self.assertEqual(acceptance["summary"]["acceptance_status"], "revalidation_required")
@@ -271,3 +295,54 @@ class ManualReviewTechnicalRebindingTest(unittest.TestCase):
             "goal_remains_open_until_reviewed_receipts_or_explicit_acceptance",
         )
         self.assertTrue(acceptance["review_scope"]["decision_expired"])
+
+    def test_invalid_historical_binding_does_not_soften_manifest_boundary(self):
+        decision, decision_bytes, context = self.explicit_decision("2026-09-30T00:00:00Z")
+        with tempfile.TemporaryDirectory() as raw:
+            decision_path = pathlib.Path(raw) / "decision.json"
+            decision_path.write_bytes(decision_bytes)
+            policy = json.loads((ROOT / "policy/health-observation-plan-technical-rebinding.json").read_text())
+            scope = copy.deepcopy(context["evaluation"])
+            scope["historical_decision_valid"] = False
+            with self.assertRaisesRegex(ValueError, "historical manual-review proof"):
+                MODULE.expected(
+                    policy,
+                    context["manifest"],
+                    context["compatibility"],
+                    decision_path,
+                    scope_evaluation=scope,
+                )
+
+    def test_unproven_scope_does_not_soften_manifest_boundary(self):
+        decision, decision_bytes, context = self.explicit_decision("2026-09-30T00:00:00Z")
+        with tempfile.TemporaryDirectory() as raw:
+            decision_path = pathlib.Path(raw) / "decision.json"
+            decision_path.write_bytes(decision_bytes)
+            policy = json.loads((ROOT / "policy/health-observation-plan-technical-rebinding.json").read_text())
+            scope = copy.deepcopy(context["evaluation"])
+            scope["scope_status"] = "unproven"
+            with self.assertRaisesRegex(ValueError, "allowlist"):
+                MODULE.expected(
+                    policy,
+                    context["manifest"],
+                    context["compatibility"],
+                    decision_path,
+                    scope_evaluation=scope,
+                )
+
+    def test_duplicate_artifact_still_fails_before_scope_revalidation_receipt(self):
+        decision, decision_bytes, context = self.explicit_decision("2026-09-30T00:00:00Z")
+        with tempfile.TemporaryDirectory() as raw:
+            decision_path = pathlib.Path(raw) / "decision.json"
+            decision_path.write_bytes(decision_bytes)
+            policy = json.loads((ROOT / "policy/health-observation-plan-technical-rebinding.json").read_text())
+            manifest = copy.deepcopy(context["manifest"])
+            manifest["artifacts"].append(copy.deepcopy(manifest["artifacts"][0]))
+            with self.assertRaisesRegex(ValueError, "duplicate path"):
+                MODULE.expected(
+                    policy,
+                    manifest,
+                    context["compatibility"],
+                    decision_path,
+                    scope_evaluation=context["evaluation"],
+                )

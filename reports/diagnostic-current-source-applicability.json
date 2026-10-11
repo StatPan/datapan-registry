@@ -126,6 +126,16 @@
       "path": "tests/fixtures/diagnostic-source-applicability/health-probe-catalog.provenance.v1.json",
       "bytes": 340,
       "sha256": "05fe6f98a65dd72fc994129e6b9712d54c6400d1705b911c1be940717cc852b2"
+    },
+    {
+      "path": "tests/fixtures/diagnostic-source-applicability/error-action-routing-rollup.json",
+      "bytes": 8323,
+      "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"
+    },
+    {
+      "path": "tests/fixtures/diagnostic-source-applicability/error-action-routing-rollup.provenance.v1.json",
+      "bytes": 346,
+      "sha256": "af10b7ee13b897c07648d3327ad255b2e62c63e0e0f63f6471ce2d1741bf9a54"
     }
   ],
   "historical_registry_identity": {
@@ -145,6 +155,21 @@
       "blob": "f3c286b8b8998e2d139a3d71e02dee5af032856f"
     }
   },
+  "archived_authoritative_inputs": [
+    {
+      "mapping_path": "reports/error-action-routing-rollup.json",
+      "artifact": {
+        "path": "tests/fixtures/diagnostic-source-applicability/error-action-routing-rollup.json",
+        "bytes": 8323,
+        "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"
+      },
+      "source_git": {
+        "path": "reports/error-action-routing-rollup.json",
+        "commit": "b49d66b97d8155c34649f4dd2040b884c4212d64",
+        "blob": "12f49f827dfd9fe11ff905f516ff079eb5be3b17"
+      }
+    }
+  ],
   "current_inputs": {
     "registry": {
       "path": "data/data-go-kr.registry.json",
@@ -165,7 +190,7 @@
       {
         "path": "reports/error-action-routing-rollup.json",
         "bytes": 8323,
-        "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1"
+        "sha256": "06ba021852ea2ef9cc522d9169ceb0f1cd17f8ebb58012b0782277c3b9f37eed"
       },
       {
         "path": "sources/data_go_kr.json",
@@ -579,6 +604,12 @@
         "bytes": 16753,
         "sha256": "0503ddd9c93c31781c7920ccccdaf55aa5f3ed7e8061cb7dd16f0d8eb95611d2"
       }
+    },
+    {
+      "code": "non_source_authoritative_input_changed",
+      "path": "reports/error-action-routing-rollup.json",
+      "expected": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1",
+      "actual": "06ba021852ea2ef9cc522d9169ceb0f1cd17f8ebb58012b0782277c3b9f37eed"
     }
   ],
   "authority": {

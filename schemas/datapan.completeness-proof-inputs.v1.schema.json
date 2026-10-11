@@ -11,6 +11,49 @@
     "evaluation_context": {"$ref": "#/$defs/evaluation_context"},
     "inputs": {"type": "array", "items": {"$ref": "#/$defs/input"}}
   },
+  "allOf": [
+    {
+      "if": {
+        "required": ["evaluation_context"],
+        "properties": {
+          "evaluation_context": {
+            "required": ["mode"],
+            "properties": {"mode": {"const": "candidate"}}
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "inputs": {
+            "items": {
+              "allOf": [
+                {
+                  "if": {
+                    "required": ["role", "root"],
+                    "properties": {
+                      "role": {"const": "source_catalog_snapshot"},
+                      "root": {"const": "repository"}
+                    }
+                  },
+                  "then": {
+                    "required": ["subject"],
+                    "properties": {
+                      "subject": {
+                        "required": ["source_revision"],
+                        "properties": {
+                          "source_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"}
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "artifact": {

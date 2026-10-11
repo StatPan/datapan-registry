@@ -55,6 +55,25 @@ jobs:
           path: datapan-registry
           lfs: false
 
+      - name: Fetch pinned operation-plan source revision and bounded release ancestry
+        working-directory: datapan-registry
+        env:
+          RELEASE_HEAD_SHA: ${{ github.sha }}
+        run: |
+          source_revision="$(python3 -c 'import json; print(json.load(open("reports/operation-observation-plan/index.json"))["registry_revision"])')"
+          if [[ ! "${source_revision}" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Invalid operation-plan source revision"
+            exit 1
+          fi
+          if [[ ! "${RELEASE_HEAD_SHA}" =~ ^[0-9a-f]{40}$ ]] || [[ "$(git rev-parse HEAD)" != "${RELEASE_HEAD_SHA}" ]]; then
+            echo "Checked-out release head does not match the workflow commit"
+            exit 1
+          fi
+          git fetch --no-tags --depth=1 origin "${source_revision}"
+          git fetch --no-tags --depth=128 origin "${RELEASE_HEAD_SHA}"
+          git cat-file -e "${source_revision}^{commit}"
+          git merge-base --is-ancestor "${source_revision}" HEAD
+
       - name: Materialize manifest-bound canonical registry
         working-directory: datapan-registry
         run: |
@@ -65,7 +84,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: StatPan/datapan-cli
-          ref: e3b2fa44cb0f68d7e58e003fbd71ecde505878de
+          ref: acf060e71e2329b6a04ad4ab0abf669fbbfe9dac
           path: datapan-cli
 
       - name: Setup Go
@@ -96,6 +115,10 @@ jobs:
             scripts/generate-error-action-routing-rollup.py \
             scripts/generate-failure-recovery-rollup.py \
             scripts/generate-operation-denominator-rollup.py \
+            scripts/generate-operation-observation-plan.py \
+            scripts/register-operation-observation-plan-artifacts.py \
+            scripts/generate-operation-observation-plan-fixtures.py \
+            scripts/operation_document_evidence.py \
             scripts/generate-runtime-freshness-queue.py \
             scripts/generate-source-runtime-evidence-rollup.py \
             scripts/generate-runtime-freshness-batch.py \
@@ -169,6 +192,10 @@ jobs:
           python scripts/generate-data-go-kr-operation-manifest.py --check
           python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
+          python scripts/generate-operation-observation-plan.py --check
+          python scripts/register-operation-observation-plan-artifacts.py --check
+          python -m unittest tests/test_operation_document_evidence.py
+          python -m unittest tests/test_operation_observation_plan_fixtures.py tests/test_generate_operation_observation_plan.py
           python scripts/generate-health-probe-catalog.py --check
           python scripts/validate-health-probe-catalog.py
           python -m unittest tests/test_validate_health_probe_catalog.py

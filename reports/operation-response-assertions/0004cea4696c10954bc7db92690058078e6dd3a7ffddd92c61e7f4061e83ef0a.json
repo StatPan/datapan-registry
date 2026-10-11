@@ -1,0 +1,28 @@
+{
+  "artifact_kind": "operation_response_assertion",
+  "assertion": {
+    "mode": "observation_only"
+  },
+  "document_evidence": {
+    "bytes": 110358,
+    "path": "reports/operation-document-evidence/v2/15158634-67738.json",
+    "sha256": "583f5ae3b6ebed683bac7ae425e8fc7e5b2404d711f19d21324c1752d735aede"
+  },
+  "operation_identity": {
+    "dataset_id": "15158634",
+    "operation_id": "0004cea4696c10954bc7db92690058078e6dd3a7ffddd92c61e7f4061e83ef0a",
+    "operation_name": "무질서단속계도활동 조회",
+    "upstream_operation_key": "67738"
+  },
+  "review": {
+    "rationale": "This bounded profile authorizes construction of one documented HTTPS GET retrieval request with the exact documented query credential reference and no noncredential input values. It omits only documented optional parameters with minimum cardinality zero, and records response semantics as observation-only. It does not authorize provider calls, assert response health, bind credentials or quotas, or admit runtime execution.",
+    "review_ref": "https://github.com/StatPan/datapan-registry/issues/759",
+    "reviewed_by": "StatPan Registry maintainers"
+  },
+  "schema_version": "datapan.operation-response-assertion.v2",
+  "source_binding": {
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr"
+  }
+}

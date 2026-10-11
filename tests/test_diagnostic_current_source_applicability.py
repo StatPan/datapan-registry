@@ -121,6 +121,28 @@ class DiagnosticCurrentSourceApplicabilityTest(unittest.TestCase):
         self.assertEqual(report["status"], "revalidation_required")
         self.assertIn("non_source_authoritative_input_changed", {item["code"] for item in report["mismatches"]})
 
+    def test_regenerated_authoritative_rollup_is_compared_to_its_archived_mapping_source(self):
+        historical = MODULE.load_json(MODULE.ARCHIVED_ERROR_ACTION_ROLLUP)
+        historical["generated_at"] = "2026-10-07T00:00:00Z"
+        with tempfile.TemporaryDirectory() as directory:
+            changed = pathlib.Path(directory) / "error-action-routing-rollup.json"
+            changed.write_text(json.dumps(historical, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            registry = pathlib.Path(directory) / "registry.json"
+            registry.write_text("[]", encoding="utf-8")
+            with mock.patch.object(MODULE, "evaluate_registry_identities", return_value=([], [])):
+                report = MODULE.build_report(current_paths={
+                    "reports/error-action-routing-rollup.json": changed,
+                    "data/data-go-kr.registry.json": registry,
+                })
+        mismatch = next(item for item in report["mismatches"] if item["path"] == "reports/error-action-routing-rollup.json")
+        current = next(item for item in report["current_inputs"]["other_authoritative_inputs"] if item["path"] == "reports/error-action-routing-rollup.json")
+        self.assertEqual(report["status"], "revalidation_required")
+        self.assertEqual(mismatch["code"], "non_source_authoritative_input_changed")
+        self.assertEqual(mismatch["expected"], "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1")
+        self.assertNotEqual(current["sha256"], mismatch["expected"])
+        self.assertEqual(report["archived_authoritative_inputs"][0]["artifact"]["sha256"], mismatch["expected"])
+        self.assertTrue(all(value is False for value in report["authority"].values()))
+
     def test_archive_and_receipt_tampering_fail(self):
         with tempfile.TemporaryDirectory() as directory:
             bad_archive = pathlib.Path(directory) / "health.json"
@@ -128,6 +150,12 @@ class DiagnosticCurrentSourceApplicabilityTest(unittest.TestCase):
             with mock.patch.object(MODULE, "ARCHIVED_HEALTH", bad_archive):
                 with self.assertRaisesRegex(ValueError, "archive digest drift"):
                     MODULE.verify_archive_provenance()
+
+            bad_rollup = pathlib.Path(directory) / "rollup.json"
+            bad_rollup.write_bytes(MODULE.ARCHIVED_ERROR_ACTION_ROLLUP.read_bytes() + b" ")
+            with mock.patch.object(MODULE, "ARCHIVED_ERROR_ACTION_ROLLUP", bad_rollup):
+                with self.assertRaisesRegex(ValueError, "archive digest drift"):
+                    MODULE.verify_error_action_rollup_provenance()
 
         report = MODULE.load_json(MODULE.REPORT)
         report["historical_inputs"][0]["sha256"] = "0" * 64

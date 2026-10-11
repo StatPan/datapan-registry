@@ -1,8 +1,49 @@
 {
-  "schema_version": "datapan.operation-denominator.v1", "generated_at": "2026-07-04T06:39:24Z", "source_id": "kosis", "provider": "KOSIS",
-  "scope": {"kind": "enumerated_supported_operations", "definition": "Operations explicitly registered and bounded by the KOSIS runtime candidate catalog.", "unknown_upstream_operations_covered": false},
-  "provenance": {"source_profile": "sources/kosis.json", "catalog_artifact": "reports/kosis/runtime-candidates.json", "reviewed_at": "2026-07-04"},
-  "identity_fields": ["operation_id"], "summary": {"operations": 1, "callable_operations": 1},
-  "operations": [{"operation_id": "kosis-statistics-data-dt-1b41", "method": "GET", "endpoint_template": "https://kosis.kr/openapi/statisticsData.do?method=getList", "callable": true}],
-  "maintenance": {"refresh_owner": "datapan-registry", "refresh_trigger": "source_profile_or_candidate_change"}
+  "schema_version": "datapan.operation-denominator.v1",
+  "generated_at": "2026-07-04T06:39:24Z",
+  "source_id": "kosis",
+  "provider": "KOSIS",
+  "scope": {
+    "kind": "enumerated_supported_operations",
+    "definition": "Operations explicitly registered and bounded by the KOSIS runtime candidate catalog.",
+    "unknown_upstream_operations_covered": false
+  },
+  "provenance": {
+    "source_profile": "sources/kosis.json",
+    "catalog_artifact": "reports/kosis/runtime-candidates.json",
+    "reviewed_at": "2026-07-04",
+    "documentation_binding": {
+      "artifact_path": "reports/operation-document-evidence/source-scopes/kosis-statistics-data-dt-1b41.json",
+      "artifact_sha256": "74c32e047d9421894ca952d4820b9310336d1a827551c90c49a0427bb9ac5b4f",
+      "schema_uri": "https://schemas.datapan.dev/datapan.operation-document-evidence.v2.schema.json",
+      "source_id": "kosis",
+      "operation_id": "kosis-statistics-data-dt-1b41",
+      "source_document_sha256": "ffa38d0e4afaf09d54b8e3542fe815b5a4cc1237a4376b4812ce49fd15b07c52",
+      "source_locator": {
+        "source_id": "kosis_official_devguide",
+        "kind": "html_byte_range",
+        "byte_start": 26712,
+        "byte_end": 26768
+      }
+    }
+  },
+  "identity_fields": [
+    "operation_id"
+  ],
+  "summary": {
+    "operations": 1,
+    "callable_operations": 1
+  },
+  "operations": [
+    {
+      "operation_id": "kosis-statistics-data-dt-1b41",
+      "method": "GET",
+      "endpoint_template": "https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList",
+      "callable": true
+    }
+  ],
+  "maintenance": {
+    "refresh_owner": "datapan-registry",
+    "refresh_trigger": "source_profile_or_candidate_change"
+  }
 }

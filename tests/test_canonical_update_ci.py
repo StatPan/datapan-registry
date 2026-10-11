@@ -594,6 +594,24 @@ class CanonicalUpdateCITests(unittest.TestCase):
             )
             self.assertIn("${{ github.sha }}", steps[guard_index]["env"]["ACTUAL_HEAD_SHA"])
 
+    def test_operation_plan_source_revision_fetches_bounded_release_ancestry(self) -> None:
+        import yaml
+
+        repository = pathlib.Path(__file__).parents[1]
+        workflows = {
+            "verify-release.yml": ("verify",),
+            "release-draft.yml": ("draft",),
+        }
+        for filename, jobs in workflows.items():
+            workflow = yaml.load((repository / ".github/workflows" / filename).read_text(), Loader=yaml.BaseLoader)
+            for job_name in jobs:
+                steps = workflow["jobs"][job_name]["steps"]
+                source_step = next(step for step in steps if step.get("name") == "Fetch pinned operation-plan source revision and bounded release ancestry")
+                self.assertIn("${{ github.sha }}", source_step["env"]["RELEASE_HEAD_SHA"])
+                self.assertIn("--depth=1 origin \"${source_revision}\"", source_step["run"])
+                self.assertIn("--depth=128 origin \"${RELEASE_HEAD_SHA}\"", source_step["run"])
+                self.assertIn("git merge-base --is-ancestor \"${source_revision}\" HEAD", source_step["run"])
+
     def test_verify_release_runs_terminal_evidence_intake_tests_and_compiles_sources(self) -> None:
         import yaml
 

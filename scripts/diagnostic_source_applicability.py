@@ -21,6 +21,8 @@ PROOF = ROOT / "drafts/diagnostic-envelope/data-go-kr-registry-identity-proof.v1
 ARCHIVE_DIR = ROOT / "tests/fixtures/diagnostic-source-applicability"
 ARCHIVED_HEALTH = ARCHIVE_DIR / "health-probe-catalog.v1.json"
 ARCHIVE_PROVENANCE = ARCHIVE_DIR / "health-probe-catalog.provenance.v1.json"
+ARCHIVED_ERROR_ACTION_ROLLUP = ARCHIVE_DIR / "error-action-routing-rollup.json"
+ERROR_ACTION_ROLLUP_PROVENANCE = ARCHIVE_DIR / "error-action-routing-rollup.provenance.v1.json"
 
 HISTORICAL_REGISTRY = {
     "path": "data/data-go-kr.registry.json",
@@ -33,6 +35,13 @@ HISTORICAL_HEALTH = {
     "sha256": "e84f0da2f532a32833def1118a4610bf2322f370783d120b84cf85306d244840",
     "git_commit": "b49d66b97d8155c34649f4dd2040b884c4212d64",
     "git_blob": "f3c286b8b8998e2d139a3d71e02dee5af032856f",
+}
+HISTORICAL_ERROR_ACTION_ROLLUP = {
+    "path": "reports/error-action-routing-rollup.json",
+    "bytes": 8323,
+    "sha256": "d66a5d68ecab483354d1c48c9ce4f443eff77e84cf747ca1bb25c452ca5d8cf1",
+    "git_commit": "b49d66b97d8155c34649f4dd2040b884c4212d64",
+    "git_blob": "12f49f827dfd9fe11ff905f516ff079eb5be3b17",
 }
 
 # These immutable bytes are the historical consumer and human-review contract.
@@ -139,6 +148,45 @@ def verify_archive_provenance() -> dict[str, Any]:
     }
 
 
+def verify_error_action_rollup_provenance() -> dict[str, Any]:
+    provenance = load_json(ERROR_ACTION_ROLLUP_PROVENANCE)
+    expected = {
+        "schema_version": "datapan.diagnostic-historical-source-provenance.v1",
+        "path": HISTORICAL_ERROR_ACTION_ROLLUP["path"],
+        "git_commit": HISTORICAL_ERROR_ACTION_ROLLUP["git_commit"],
+        "git_blob": HISTORICAL_ERROR_ACTION_ROLLUP["git_blob"],
+        "bytes": HISTORICAL_ERROR_ACTION_ROLLUP["bytes"],
+        "sha256": HISTORICAL_ERROR_ACTION_ROLLUP["sha256"],
+    }
+    if provenance != expected:
+        raise ValueError("historical error-action rollup provenance descriptor drift")
+    archive = ARCHIVED_ERROR_ACTION_ROLLUP.read_bytes()
+    if len(archive) != HISTORICAL_ERROR_ACTION_ROLLUP["bytes"] or hashlib.sha256(archive).hexdigest() != HISTORICAL_ERROR_ACTION_ROLLUP["sha256"]:
+        raise ValueError("historical error-action rollup archive digest drift")
+    git_blob = hashlib.sha1(b"blob " + str(len(archive)).encode("ascii") + b"\0" + archive).hexdigest()
+    if git_blob != HISTORICAL_ERROR_ACTION_ROLLUP["git_blob"]:
+        raise ValueError("historical error-action rollup archive Git blob drift")
+    try:
+        commit_blob = subprocess.check_output(
+            ["git", "rev-parse", f"{HISTORICAL_ERROR_ACTION_ROLLUP['git_commit']}:{HISTORICAL_ERROR_ACTION_ROLLUP['path']}"],
+            cwd=ROOT,
+            stderr=subprocess.STDOUT,
+            text=True,
+        ).strip()
+    except subprocess.CalledProcessError as exc:
+        raise ValueError("historical error-action rollup Git commit is unavailable; fetch the pinned commit before validation") from exc
+    if commit_blob != HISTORICAL_ERROR_ACTION_ROLLUP["git_blob"]:
+        raise ValueError("historical error-action rollup Git commit does not contain the pinned blob")
+    return {
+        "artifact": artifact_identity(ARCHIVED_ERROR_ACTION_ROLLUP),
+        "source_git": {
+            "path": HISTORICAL_ERROR_ACTION_ROLLUP["path"],
+            "commit": HISTORICAL_ERROR_ACTION_ROLLUP["git_commit"],
+            "blob": HISTORICAL_ERROR_ACTION_ROLLUP["git_blob"],
+        },
+    }
+
+
 def validate_historical_inputs() -> list[dict[str, Any]]:
     identities = []
     for path, expected_bytes, expected_sha256 in HISTORICAL_INPUTS:
@@ -149,6 +197,9 @@ def validate_historical_inputs() -> list[dict[str, Any]]:
     archive = verify_archive_provenance()
     identities.append(archive["artifact"])
     identities.append(artifact_identity(ARCHIVE_PROVENANCE))
+    error_action_archive = verify_error_action_rollup_provenance()
+    identities.append(error_action_archive["artifact"])
+    identities.append(artifact_identity(ERROR_ACTION_ROLLUP_PROVENANCE))
     return identities
 
 
@@ -353,6 +404,12 @@ def build_report(current_paths: dict[str, pathlib.Path] | None = None) -> dict[s
         "historical_inputs": historical_inputs,
         "historical_registry_identity": dict(HISTORICAL_REGISTRY),
         "archived_health_catalog": verify_archive_provenance(),
+        "archived_authoritative_inputs": [
+            {
+                "mapping_path": HISTORICAL_ERROR_ACTION_ROLLUP["path"],
+                **verify_error_action_rollup_provenance(),
+            }
+        ],
         "current_inputs": {
             "registry": current_registry,
             "health_catalog": current_health,

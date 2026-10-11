@@ -26,8 +26,8 @@
       "path": "sources/kosis.json",
       "source_id": "kosis",
       "provider": "KOSIS",
-      "bytes": 2949,
-      "sha256": "2fcff2cd1e5e7968473d0ecfc8a35ee90f0bafa4b5f2d82005f4ed00e3d1d344"
+      "bytes": 2964,
+      "sha256": "b24be7097c06f73f0ce72b7a171316e97d3077059434d853738bf1633dd17c50"
     },
     {
       "path": "sources/open_assembly.json",
@@ -46,9 +46,9 @@
   ],
   "schema_index_input": {
     "path": "schemas/index.json",
-    "schemas": 115,
-    "bytes": 47568,
-    "sha256": "d44b0edb776c816cfc7f9a170c1df1aaecd648d649b62ef73bd22f1cc33137b2"
+    "schemas": 127,
+    "bytes": 52735,
+    "sha256": "339b0e6c7dbac77cef8ea9a7b0a980361549c46c171ded9e3ddba542e6a74eab"
   },
   "recommended_reports": [
     "adapter-targets.json",
@@ -1256,8 +1256,8 @@
         {
           "name": "operation-denominator.json",
           "path": "reports/kosis/operation-denominator.json",
-          "bytes": 888,
-          "sha256": "5e03008ac38a5c4a98f235c91a92b6b1a147fcb930e8e6c681240e984a10c081",
+          "bytes": 1712,
+          "sha256": "03c57ba3715b713d3ecac7be0cd5147d5d4f19187a79fb810dfce8a031255e9b",
           "schema_version": "datapan.operation-denominator.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.operation-denominator.v1.schema.json",
           "expected_schema_path": "schemas/datapan.operation-denominator.v1.schema.json",
@@ -1267,7 +1267,7 @@
           "name": "runtime-candidates.json",
           "path": "reports/kosis/runtime-candidates.json",
           "bytes": 1809,
-          "sha256": "389e21301b6c5ddaf1827ec9252b274a6e2f1ed24f66df54ed53b84c8d4d762b",
+          "sha256": "317bdc18202099e4045beac251a8ec21cec47031ba1573ffb98b0e30bac40a8c",
           "schema_version": "datapan.source-runtime-candidates.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-candidates.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-candidates.v1.schema.json",
@@ -1277,7 +1277,7 @@
           "name": "runtime-evidence-plan.json",
           "path": "reports/kosis/runtime-evidence-plan.json",
           "bytes": 2265,
-          "sha256": "a3dfdd6da8af934732834c6202db54a59c0c35885e01f7213d62bbdd9d324f3b",
+          "sha256": "1c39da646bf5f2802e7bac53ea6c6c9cb54bbab386a14268a2b1fd5e755d7642",
           "schema_version": "datapan.source-runtime-evidence-plan.v1",
           "expected_schema_id": "https://schemas.datapan.dev/datapan.source-runtime-evidence-plan.v1.schema.json",
           "expected_schema_path": "schemas/datapan.source-runtime-evidence-plan.v1.schema.json",

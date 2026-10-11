@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.operation-document-work-item.v1.schema.json",
+  "title": "Datapan operation document work item v1",
+  "description": "One deterministic, resumable documentation-only task keyed by the Registry operation identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "operation_identity", "status", "source_profile_id"],
+  "properties": {
+    "schema_version": { "const": "datapan.operation-document-work-item.v1" },
+    "operation_identity": { "$ref": "#/$defs/identity" },
+    "status": { "enum": ["pending", "acquired", "parsed_with_unknowns", "parsed_complete", "missing", "ambiguous", "unsupported"] },
+    "source_profile_id": { "enum": ["data_go_kr_v1", "safetydata_v1"] }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["operation_id", "provider", "dataset_id", "protocol", "source_system", "upstream_operation_key", "operation_name"],
+      "properties": {
+        "operation_id": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "provider": { "const": "data.go.kr" },
+        "dataset_id": { "type": "string", "pattern": "^[0-9]+$" }, "protocol": { "enum": ["REST", "SOAP"] },
+        "source_system": { "enum": ["data.go.kr", "safetydata.go.kr"] }, "upstream_operation_key": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "operation_name": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

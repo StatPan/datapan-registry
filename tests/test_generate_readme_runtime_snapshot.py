@@ -16,7 +16,9 @@ SPEC.loader.exec_module(snapshot)
 README_TEMPLATE = """- Provider: `data.go.kr`
 - Specs: `12060`
 - Operations: `21256`
-- Callable operations: `21114` (`99.3%`)
+- Legacy catalog non-excluded count: `21114` (`99.3%`); this is not probe admission or a provider-call budget.
+- Operation observation plans: `3` currently known registered API-operation IDs (`2` source-complete; `1` across `1` partial source inventories with upstream coverage unknown; `1` complete, `1` runtime-bound, `1` admitted).
+- Operation inventory context: `5` link operations are separate; `4` provider-index entries are adapters, not API operations.
 - Sustainable coverage decision: `old` (`0` of `4` layers meet
   policy targets).
 - Supported-source denominator coverage: old
@@ -80,6 +82,27 @@ class ReadmeRuntimeSnapshotTest(unittest.TestCase):
                     "operations": institution_operations,
                     "callable_operations": institution_callable_operations,
                 },
+            },
+            "reports/operation-observation-plan/index.json": {
+                "summary": {
+                    "known_operations": 3,
+                    "request_plans_complete": 1,
+                    "request_plans_incomplete": 2,
+                    "runtime_bindings_bound": 1,
+                    "runtime_bindings_unbound": 2,
+                    "admitted": 1,
+                    "not_admitted": 2,
+                    "inventory_unknown_scopes": 1,
+                },
+                "inventory_context": {
+                    "separate_link_operations": 5,
+                    "provider_index_adapter_entries": 4,
+                    "provider_index_entries_counted_as_operations": False,
+                },
+                "source_scopes": [
+                    {"inventory_status": "source_complete", "inventory_unknown": False, "registered_operations": 2},
+                    {"inventory_status": "partial", "inventory_unknown": True, "registered_operations": 1},
+                ],
             },
             "reports/sustainable-coverage.json": {
                 "summary": {"decision": "coverage_gaps", "layers_meeting_target": 0, "layers_total": 4},
@@ -156,7 +179,14 @@ class ReadmeRuntimeSnapshotTest(unittest.TestCase):
 
         self.assertIn("- Specs: `12282`", rendered)
         self.assertIn("- Operations: `21533`", rendered)
-        self.assertIn("- Callable operations: `21391` (`99.3%`)", rendered)
+        self.assertIn("- Legacy catalog non-excluded count: `21391` (`99.3%`); this is not probe admission or a provider-call budget.", rendered)
+        self.assertIn(
+            "- Operation observation plans: `3` currently known registered API-operation IDs "
+            "(`2` source-complete; `1` across `1` partial source inventories with upstream coverage unknown; "
+            "`1` complete, `1` runtime-bound, `1` admitted).",
+            rendered,
+        )
+        self.assertIn("- Operation inventory context: `5` link operations are separate; `4` provider-index entries are adapters, not API operations.", rendered)
         self.assertIn(
             "- Institution API overview: `416` organizations, `12282` APIs, and `21533`\n"
             "  operations in `reports/data-go-kr/institution-api-overview.json`",
@@ -171,7 +201,14 @@ class ReadmeRuntimeSnapshotTest(unittest.TestCase):
             callable_operations=87,
             institutions=4,
         )
-        self.assertIn("- Callable operations: `87` (`87.0%`)", rendered)
+        self.assertIn("- Legacy catalog non-excluded count: `87` (`87.0%`); this is not probe admission or a provider-call budget.", rendered)
+
+    def test_partial_inventory_rows_are_not_mislabeled_as_source_complete(self) -> None:
+        reports = self.make_reports()
+        reports["reports/operation-observation-plan/index.json"]["source_scopes"][1]["inventory_unknown"] = False
+        with patch.object(snapshot, "load", side_effect=reports.__getitem__):
+            with self.assertRaisesRegex(ValueError, "inventory totals do not reconcile"):
+                snapshot.build(README_TEMPLATE)
 
     def test_coverage_and_institution_totals_must_agree(self) -> None:
         for field in ("apis", "operations", "callable_operations"):

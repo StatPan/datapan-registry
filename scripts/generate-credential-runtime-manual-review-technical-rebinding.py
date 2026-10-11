@@ -202,6 +202,10 @@ def expected(
     baseline = policy.get("baseline")
     if not isinstance(artifacts, list) or not all(isinstance(item, dict) for item in artifacts):
         raise ValueError("manifest artifacts must be objects")
+    # Validate every row before applying the historical allowlist. In
+    # particular, duplicate or malformed rows must not be downgraded into a
+    # revalidation receipt when the manifest is outside that allowlist.
+    artifact_contract(artifacts)
     if not isinstance(additions, list) or not all(isinstance(item, dict) for item in additions):
         raise ValueError("policy allowed_additions must be objects")
     if not isinstance(independent_additions, list) or not all(
@@ -238,10 +242,40 @@ def expected(
         raise ValueError("technical rebinding requires every independently authorized addition")
     excluded_paths = set(allowed) | set(independent)
     stripped = [item for item in artifacts if str(item.get("path")) not in excluded_paths]
-    if len(stripped) != baseline.get("artifact_count") or artifact_contract_digest(stripped) != baseline.get("artifact_contract_sha256"):
-        raise ValueError("manifest delta exceeds the approved Health plan/schema allowlist")
-    if len(artifacts) != int(baseline["artifact_count"]) + len(excluded_paths):
-        raise ValueError("manifest artifact count is outside the approved technical rebinding scope")
+    stripped_contract = artifact_contract(stripped)
+    stripped_contract_sha256 = artifact_contract_digest(stripped)
+    baseline_matches = (
+        len(stripped_contract) == baseline.get("artifact_count")
+        and stripped_contract_sha256 == baseline.get("artifact_contract_sha256")
+        and len(artifacts) == int(baseline["artifact_count"]) + len(excluded_paths)
+    )
+
+    reviewed_binding: dict[str, Any] | None = None
+    if scope_evaluation is not None:
+        reviewed_binding = scope_evaluation.get("reviewed_binding")
+        if not isinstance(reviewed_binding, dict):
+            raise ValueError("review scope must include the verified historical binding")
+        if policy.get("decision_sha256") != reviewed_binding.get("decision_sha256"):
+            raise ValueError("technical rebinding policy must preserve the pinned historical decision")
+        if scope_evaluation.get("historical_decision_valid") is not True:
+            raise ValueError("pinned historical manual-review proof is invalid")
+
+    if not baseline_matches:
+        if scope_evaluation is None:
+            raise ValueError("manifest delta exceeds the approved Health plan/schema allowlist")
+        scope_status = scope_evaluation.get("scope_status")
+        effective_accepted = scope_evaluation.get("effective_accepted")
+        historical_decision = scope_evaluation.get("historical_decision")
+        safely_reportable_scope = (
+            (scope_status == "revalidation_required" and effective_accepted is False)
+            or (
+                scope_status == "explicitly_revalidated"
+                and effective_accepted is True
+                and historical_decision is False
+            )
+        )
+        if not safely_reportable_scope:
+            raise ValueError("manifest delta exceeds the approved Health plan/schema allowlist")
     for rules, metadata_keys in ((allowed, set()), (independent, {"authority_ticket"})):
         for path, rule in rules.items():
             for key, value in rule.items():
@@ -252,13 +286,8 @@ def expected(
     decision_sha = digest_bytes(decision_path.read_bytes())
     historical_decision_sha = policy.get("decision_sha256")
     if scope_evaluation is not None:
-        reviewed_binding = scope_evaluation.get("reviewed_binding")
-        if not isinstance(reviewed_binding, dict):
-            raise ValueError("review scope must include the verified historical binding")
-        if historical_decision_sha != reviewed_binding.get("decision_sha256"):
+        if historical_decision_sha != reviewed_binding["decision_sha256"]:
             raise ValueError("technical rebinding policy must preserve the pinned historical decision")
-        if scope_evaluation.get("historical_decision_valid") is not True:
-            raise ValueError("pinned historical manual-review proof is invalid")
     elif decision_sha != historical_decision_sha:
         # Callers without the scope evaluator cannot authorize a replacement
         # decision. Production always supplies a scope evaluation, which keeps
@@ -273,7 +302,14 @@ def expected(
     if not isinstance(old, str) or len(old) != 64:
         raise ValueError("accepted decision has no compatibility SHA-256")
     status = "approved_artifact_only_rebinding"
-    if scope_evaluation is not None and scope_evaluation.get("effective_accepted") is not True:
+    if not baseline_matches:
+        # This record only says that the old artifact-only rebind cannot cover
+        # the current manifest. The independent acceptance generator remains
+        # the sole authority for any explicitly reviewed current scope.
+        status = "outside_historical_rebinding_scope"
+    elif scope_evaluation is not None and scope_evaluation.get("scope_status") == "explicitly_revalidated":
+        status = "explicit_current_scope_review"
+    elif scope_evaluation is not None and scope_evaluation.get("effective_accepted") is not True:
         status = (
             "revalidation_required"
             if scope_evaluation.get("scope_status") == "revalidation_required"
@@ -287,6 +323,8 @@ def expected(
         "historical_decision_sha256": historical_decision_sha,
         "old_compatibility_sha256": old,
         "new_compatibility_sha256": compatibility_binding_sha256(compatibility),
+        "historical_rebinding_eligible": baseline_matches,
+        "revalidation_reason": None if baseline_matches else "manifest_delta_outside_approved_allowlist",
         "baseline": baseline, "allowed_additions": additions,
         "independent_additions": independent_additions,
         "manifest_delta": {
@@ -294,6 +332,9 @@ def expected(
             "independent_paths": sorted(independent),
             "artifact_count_before": baseline["artifact_count"],
             "artifact_count_after": len(artifacts),
+            "scope_matches_approved_allowlist": baseline_matches,
+            "stripped_artifact_count": len(stripped_contract),
+            "stripped_artifact_contract_sha256": stripped_contract_sha256,
         },
     }
     if scope_evaluation is not None:

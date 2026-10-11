@@ -25,7 +25,9 @@ redistributing, contributing, or reporting a vulnerability.
 - Provider: `data.go.kr`
 - Specs: `12282`
 - Operations: `21533`
-- Callable operations: `21391` (`99.3%`)
+- Legacy catalog non-excluded count: `21391` (`99.3%`); this is not probe admission or a provider-call budget.
+- Operation observation plans: `12666` currently known registered API-operation IDs (`12662` source-complete; `4` across `4` partial source inventories with upstream coverage unknown; `19` complete, `0` runtime-bound, `0` admitted).
+- Operation inventory context: `8871` link operations are separate; `138` provider-index entries are adapters, not API operations.
 - Sustainable coverage decision: `coverage_gaps` (`6` of `9` layers meet
   policy targets). Routable coverage is not treated as total usability.
 - Supported-source denominator coverage: `5` of `5` sources have an explicit
@@ -132,6 +134,13 @@ identities, denominator/import evidence, and any independently validated
 pipeline or publication evidence. A local candidate inventory is context only;
 missing authority or stale evidence stays unknown or blocked, and historical
 publication does not imply that the current release was published or read back.
+The repository catalog snapshot pins an exact 40-character `subject.source_revision`
+that must remain in trusted `origin/main` history and whose committed LFS pointer
+must match the indexed catalog bytes. Its `catalog_binding_witness` establishes
+catalog identity only; it does not establish current-release applicability or
+renew publication, review, or runtime authority.
+Candidate evaluation rows are bound to their separately pinned baseline and exact
+candidate bytes; they do not claim a trusted source revision for uncommitted candidate data.
 
 Review the generated [scope report](reports/completeness-proof-rollup.md),
 [machine-readable rollup](reports/completeness-proof-rollup.json), and
