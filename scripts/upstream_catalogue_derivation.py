@@ -29,6 +29,8 @@ PROCESSOR_BUNDLE_FILES = (
     "regeneration-queue.json",
     "quarantine.json",
     "composition-receipt.json",
+    "upstream-catalogue-original-candidate.registry.json",
+    "upstream-catalogue-cache-source-context.json",
     "upstream-catalogue-enrichment-evidence.json",
     "upstream-catalogue-processing-result.json",
 )
@@ -758,7 +760,7 @@ def authenticate_canonical_merge_ack(
     ):
         raise DerivationError("canonical_parent_merge_ack_clock_invalid")
     try:
-        now_utc = now.astimezone(dt.timezone.utc)
+        now.astimezone(dt.timezone.utc)
     except (OverflowError, TypeError, ValueError) as exc:
         raise DerivationError("canonical_parent_merge_ack_clock_invalid") from exc
     ack = dict(merged[0])
@@ -771,9 +773,79 @@ def authenticate_canonical_merge_ack(
         evidence = health.collect_run_attempt_evidence(repository, run_id, attempt)
     except Exception as exc:
         raise DerivationError("canonical_parent_merge_ack_evidence_unavailable") from exc
+    return validate_canonical_merge_ack_evidence(
+        repository, row, health_policy, workflow_id=workflow_id,
+        attempt_evidence=evidence, health=health, now=now,
+    )
+
+
+def validate_canonical_merge_ack_evidence(
+    repository: str,
+    row: Mapping[str, Any],
+    health_policy: Mapping[str, Any],
+    *,
+    workflow_id: Any,
+    attempt_evidence: Mapping[str, Any],
+    health: Any,
+    now: dt.datetime,
+) -> dict[str, Any]:
+    """Validate an already-acquired exact ACK attempt without doing I/O.
+
+    Productive replay callers must obtain ``attempt_evidence`` and
+    ``workflow_id`` from the typed Native original-parent facts capability.
+    This function validates those facts and never acquires evidence or mints
+    an authority capability of its own.
+    """
+    candidate = row.get("candidate") if isinstance(row.get("candidate"), Mapping) else {}
+    acknowledgements = row.get("acknowledgements")
+    merged = [
+        item for item in acknowledgements
+        if isinstance(item, Mapping) and item.get("status") == "merged"
+    ] if isinstance(acknowledgements, list) else []
+    pr = row.get("pr") if isinstance(row.get("pr"), Mapping) else {}
+    if (
+        len(merged) != 1
+        or not isinstance(candidate.get("repository"), str)
+        or candidate["repository"].casefold() != repository.casefold()
+        or row.get("status") not in {"merged", "publication-pending", "published", "read-back-confirmed"}
+        or pr.get("state") != "merged"
+        or pr.get("merge_commit_sha") != merged[0].get("source_sha")
+        or candidate.get("manifest_sha256") != merged[0].get("manifest_sha256")
+    ):
+        raise DerivationError("canonical_parent_merge_ack_identity_invalid")
+    promotion = health_policy.get("promotion_state") if isinstance(health_policy, Mapping) else None
+    workflow_path = promotion.get("promotion_workflow_path") if isinstance(promotion, Mapping) else None
+    if not isinstance(workflow_path, str) or not workflow_path:
+        raise DerivationError("canonical_parent_promotion_workflow_missing")
+    clock = health_policy.get("clock") if isinstance(health_policy, Mapping) else None
+    maximum_future_skew = clock.get("maximum_future_skew_seconds", 300) if isinstance(clock, Mapping) else 300
+    try:
+        valid_now = isinstance(now, dt.datetime) and now.tzinfo is not None and now.utcoffset() is not None
+    except (OverflowError, TypeError, ValueError):
+        valid_now = False
+    if (
+        isinstance(maximum_future_skew, bool)
+        or not isinstance(maximum_future_skew, int)
+        or not 0 <= maximum_future_skew <= 3600
+        or not valid_now
+    ):
+        raise DerivationError("canonical_parent_merge_ack_clock_invalid")
+    try:
+        now_utc = now.astimezone(dt.timezone.utc)
+    except (OverflowError, TypeError, ValueError) as exc:
+        raise DerivationError("canonical_parent_merge_ack_clock_invalid") from exc
+    ack = dict(merged[0])
+    run_id = str(ack.get("run_id") or "")
+    attempt = ack.get("run_attempt")
+    if not run_id.isdigit() or isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+        raise DerivationError("canonical_parent_merge_ack_attempt_invalid")
+    if not callable(getattr(health, "trusted_promotion_run", None)) or not callable(
+        getattr(health, "parse_time", None)
+    ):
+        raise DerivationError("canonical_parent_merge_ack_validator_unavailable")
     run_key = f"{run_id}/{attempt}"
     trusted = health.trusted_promotion_run(
-        ack, {run_key: evidence}, repository,
+        ack, {run_key: attempt_evidence}, repository,
         {"promotion_workflow_path": workflow_path}, {workflow_path: workflow_id},
         now_utc, maximum_future_skew,
     )
@@ -781,24 +853,23 @@ def authenticate_canonical_merge_ack(
         raise DerivationError("canonical_parent_merge_ack_run_untrusted")
     try:
         observed = health.parse_time(ack.get("observed_at"), "canonical_parent_merge_ack.observed_at")
-        # `trusted_promotion_run` deliberately returns presentation timestamps
-        # rounded to seconds. Keep the temporal decision at native precision.
+        # trusted_promotion_run returns a presentation timestamp rounded to
+        # seconds. Make the temporal decision from the exact native job rows.
         completed = max(
             health.parse_time(job.get("completed_at"), "promotion_job.completed_at")
-            for job in evidence["jobs"]
+            for job in attempt_evidence["jobs"]
         )
     except (KeyError, TypeError, ValueError, OverflowError) as exc:
         raise DerivationError("canonical_parent_merge_ack_clock_invalid") from exc
     skew = dt.timedelta(seconds=maximum_future_skew)
     emitted_during_successful_job = any(
         _timestamp_in_successful_job_window(job, observed, skew, health)
-        for job in evidence.get("jobs", [])
+        for job in attempt_evidence.get("jobs", [])
         if isinstance(job, Mapping)
     )
     # The ACK writer runs inside the reconcile job, before the workflow attempt
-    # can complete. Keep the old after-all-jobs case as a separate compatible
-    # branch; skipped/neutral jobs still count for finality but never establish
-    # an emission window.
+    # can complete. Keep the post-completion path as a separate compatible
+    # branch; skipped/neutral jobs never establish an emission window.
     if observed > now_utc + skew or not (observed >= completed or emitted_during_successful_job):
         raise DerivationError("canonical_parent_merge_ack_order_invalid")
     return {
@@ -809,16 +880,96 @@ def authenticate_canonical_merge_ack(
     }
 
 
+def validate_canonical_merge_ack_native_facts(
+    repository: str,
+    health_policy: Mapping[str, Any],
+    *,
+    parent_facts: Any,
+    native_module: Any,
+    health: Any,
+    now: dt.datetime,
+) -> dict[str, Any]:
+    """Validate C's original merge ACK from one exact Native parent capability.
+
+    This adapter performs no acquisition. It rejects ordinary mappings and
+    derives the journal row, workflow identity, exact attempt and complete job
+    page only from the sealed Native facts object before delegating to the
+    same pure validator used by the legacy acquisition path.
+    """
+    require_facts = getattr(native_module, "require_verified_original_canonical_parent_facts", None)
+    if not callable(require_facts):
+        raise DerivationError("canonical_parent_native_facts_validator_unavailable")
+    try:
+        verified = require_facts(parent_facts)
+    except Exception as exc:
+        raise DerivationError("canonical_parent_native_facts_invalid") from exc
+    if verified is not parent_facts:
+        raise DerivationError("canonical_parent_native_facts_invalid")
+
+    promotion = health_policy.get("promotion_state") if isinstance(health_policy, Mapping) else None
+    workflow_path = promotion.get("promotion_workflow_path") if isinstance(promotion, Mapping) else None
+    workflow = verified.workflow_identity
+    ack = verified.acknowledgement
+    run = verified.ack_run
+    jobs_page = verified.ack_jobs
+    snapshot = verified.journal_snapshot
+    row = snapshot.selected_row
+    if (
+        not isinstance(repository, str) or not repository
+        or not isinstance(workflow_path, str) or not workflow_path
+        or not isinstance(workflow, Mapping)
+        or not isinstance(workflow.get("repository"), str)
+        or workflow["repository"].casefold() != repository.casefold()
+        or workflow.get("path") != workflow_path
+        or workflow.get("state") != "active"
+        or type(workflow.get("id")) is not int or workflow["id"] < 1
+        or not isinstance(ack, Mapping)
+        or not isinstance(run, Mapping)
+        or not isinstance(jobs_page, Mapping)
+        or set(jobs_page) != {"total_count", "jobs"}
+        or not isinstance(jobs_page.get("jobs"), list)
+        or type(jobs_page.get("total_count")) is not int
+        or jobs_page["total_count"] != len(jobs_page["jobs"])
+        or not isinstance(row, Mapping)
+        or not isinstance(verified.repository, str)
+        or verified.repository.casefold() != repository.casefold()
+    ):
+        raise DerivationError("canonical_parent_native_ack_facts_invalid")
+    run_id = ack.get("run_id")
+    attempt = ack.get("run_attempt")
+    if (
+        type(run_id) is not int or run_id < 1
+        or type(attempt) is not int or attempt < 1
+        or run.get("id") != run_id
+        or run.get("run_attempt") != attempt
+        or run.get("workflow_id") != workflow.get("id")
+        or not 1 <= jobs_page["total_count"] <= 100
+    ):
+        raise DerivationError("canonical_parent_native_ack_attempt_invalid")
+    attempt_evidence = {
+        "run": dict(run),
+        "attempt_number": attempt,
+        "jobs_api_endpoint": f"repos/{repository}/actions/runs/{run_id}/attempts/{attempt}/jobs",
+        "job_count": jobs_page["total_count"],
+        "jobs": [dict(job) if isinstance(job, Mapping) else job for job in jobs_page["jobs"]],
+    }
+    return validate_canonical_merge_ack_evidence(
+        repository, row, health_policy,
+        workflow_id=workflow["id"], attempt_evidence=attempt_evidence,
+        health=health, now=now,
+    )
+
+
 def _timestamp_in_successful_job_window(
     job: Mapping[str, Any], observed: dt.datetime, skew: dt.timedelta, health: Any,
 ) -> bool:
-    """Whether an ACK observation falls within one exact successful job interval plus clock skew."""
+    """Whether an ACK time lies within one exact successful job plus skew."""
     if job.get("status") != "completed" or job.get("conclusion") != "success":
         return False
     try:
         started = health.parse_time(job.get("started_at"), "promotion_job.started_at")
         completed = health.parse_time(job.get("completed_at"), "promotion_job.completed_at")
-    except (OverflowError, ValueError):
+    except (OverflowError, TypeError, ValueError):
         return False
     if started > completed:
         return False
@@ -922,35 +1073,60 @@ def validate_processor_parent_checkpoint(
 
 def validate_processor_parent_bundle(
     reference: Mapping[str, Any], checkpoint: Mapping[str, Any], bundle_dir: Any,
+    *, cache_source_helper: Any | None = None, owner_contract: Any | None = None,
 ) -> dict[str, Any]:
     """Validate every archived parent output before it can seed recomposition.
 
     This is intentionally local and bounded. The workflow authenticates the
     Actions run/artifact API response and downloads the ZIP; this function then
-    binds each extracted member to the checkpoint's complete eight-file
+    binds each extracted member to the checkpoint's complete ten-file
     inventory and validates the checkpoint copy shipped inside that archive.
     """
     import pathlib
 
     ref = validate_processor_parent(reference, "processor_parent")
     root = pathlib.Path(bundle_dir)
-    expected_members = set(PROCESSOR_BUNDLE_FILES) | {CHECKPOINT_RECEIPT}
+    if (
+        cache_source_helper is None
+        or type(owner_contract) is not cache_source_helper.AuthenticatedCacheContract
+    ):
+        raise DerivationError("parent_bundle_cache_source_contract_unauthenticated")
+    if owner_contract.profile != cache_source_helper.CACHE_SOURCE_PROFILE:
+        raise DerivationError("parent_bundle_cache_source_contract_unsupported")
+    expected_outputs = PROCESSOR_BUNDLE_FILES
+    expected_members = set(expected_outputs) | {CHECKPOINT_RECEIPT}
     if any(path.is_symlink() or not path.is_file() for path in root.iterdir()) or {path.name for path in root.iterdir()} != expected_members:
         raise DerivationError("parent_bundle_member_set_invalid")
     outputs = checkpoint.get("output_digests")
-    if not isinstance(outputs, list) or [row.get("path") for row in outputs if isinstance(row, Mapping)] != list(PROCESSOR_BUNDLE_FILES):
+    if not isinstance(outputs, list) or [row.get("path") for row in outputs if isinstance(row, Mapping)] != list(expected_outputs):
         raise DerivationError("parent_bundle_inventory_invalid")
     if object_sha256(outputs) != ref["bundle_manifest_sha256"]:
         raise DerivationError("parent_bundle_inventory_digest_mismatch")
     for row in outputs:
         name = row.get("path") if isinstance(row, Mapping) else None
-        if not isinstance(name, str) or name not in PROCESSOR_BUNDLE_FILES:
+        if not isinstance(name, str) or name not in expected_outputs:
             raise DerivationError("parent_bundle_member_path_invalid")
         path = root / name
         if path.is_symlink() or not path.is_file():
             raise DerivationError("parent_bundle_member_missing")
         if path.stat().st_size != row.get("bytes") or sha256_bytes(path.read_bytes()) != row.get("sha256"):
             raise DerivationError("parent_bundle_member_digest_mismatch")
+    try:
+        context, original_candidate, provenance = cache_source_helper.validate_bound_context_bundle(
+            context_path=root / "upstream-catalogue-cache-source-context.json",
+            owner_checkpoint=checkpoint,
+            owner_contract=owner_contract,
+        )
+    except Exception as exc:
+        raise DerivationError("parent_bundle_cache_source_invalid") from exc
+    generation_inputs = checkpoint.get("generation_inputs")
+    if (
+        provenance != "modern"
+        or not isinstance(generation_inputs, Mapping)
+        or context.get("candidate", {}).get("sha256") != generation_inputs.get("candidate_sha256")
+        or cache_source_helper.file_sha256(original_candidate) != generation_inputs.get("candidate_sha256")
+    ):
+        raise DerivationError("parent_bundle_cache_source_identity_mismatch")
     checkpoint_path = root / CHECKPOINT_RECEIPT
     if checkpoint_path.is_symlink() or not checkpoint_path.is_file():
         raise DerivationError("parent_bundle_checkpoint_copy_missing")

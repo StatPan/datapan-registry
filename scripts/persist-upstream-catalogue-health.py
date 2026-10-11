@@ -29,6 +29,8 @@ PROCESSOR_OUTPUT_PATHS = (
     "regeneration-queue.json",
     "quarantine.json",
     "composition-receipt.json",
+    "upstream-catalogue-original-candidate.registry.json",
+    "upstream-catalogue-cache-source-context.json",
     "upstream-catalogue-enrichment-evidence.json",
     "upstream-catalogue-processing-result.json",
 )

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import pathlib
 import unittest
@@ -203,6 +204,386 @@ class RequestReservationAccountingTest(unittest.TestCase):
             **{str(identity): 2 for identity in range(100, 108)},
             **{str(identity): 3 for identity in range(108, 116)},
         })
+
+    def test_source_epoch_paid_claim_runs_durably_at_the_cumulative_cap(self) -> None:
+        rows = [self.row(identity, legacy=identity == 101) for identity in range(100, 108)]
+        self.prepare(rows)
+        _initial_args, initial = self.claim(max_attempts=1, max_queue=8, retries=2)
+        initial_path = self.fixture.checkpoint_path(initial)
+        predecessor = copy.deepcopy(initial)
+        predecessor.update({
+            "status": "ready", "outcome": {"reason": "synthetic_authenticated_a_parent"},
+            "lease": None, "request_reservation": None,
+            "attempts_consumed": 16,
+            "attempts_by_id": {
+                "100": 0, "101": 0, "102": 1,
+                "103": 3, "104": 3, "105": 3, "106": 3, "107": 3,
+            },
+            "detail_retry_reset_ids": [], "detail_records": [], "detail_queue_cursor": 0,
+        })
+        MODULE.seal_checkpoint(predecessor)
+        initial_path.write_text(json.dumps(predecessor, sort_keys=True), encoding="utf-8")
+        index_path = self.fixture.state_dir / "sources/data_go_kr/index.json"
+        MODULE.append_generation_index(index_path, initial_path, predecessor)
+        # Seed a coherent prior retry ledger for the synthetic predecessor;
+        # the initial setup claim above only creates the test checkpoint.
+        index = MODULE.load_json(index_path)
+        retry_state = index["detail_retry_state"]
+        for row in rows:
+            identity = row["id"]
+            attempts = predecessor["attempts_by_id"][identity]
+            if attempts:
+                retry_state[identity] = {
+                    "source_sha256": MODULE.source_fingerprint(row),
+                    "guide_sha256": MODULE.guide_fingerprint(row),
+                    "attempts": attempts,
+                    "last_attempt_at": NOW,
+                }
+            else:
+                retry_state.pop(identity, None)
+        index_path.write_text(json.dumps(index, sort_keys=True), encoding="utf-8")
+
+        eligibility = MODULE.SOURCE_ELIGIBILITY
+        target_contract = {
+            "schema_version": eligibility.TARGET_CONTRACT_SCHEMA_VERSION,
+            "source_sha": "1" * 40,
+            "source_tree_sha": "2" * 40,
+            "inventory_sha256": "3" * 64,
+            "contract_sha256": eligibility.target_contract_digest("3" * 64),
+            "changed_classes": [eligibility.SAME_A_PROCESSING],
+        }
+        epoch = eligibility.build_source_epoch(
+            original_observation_sha256=eligibility.object_sha256(predecessor["last_observation"]),
+            target_contract_sha256=target_contract["contract_sha256"],
+            predecessor_generation_id=predecessor["generation_id"],
+            target_generation_id=None,
+            ordinal=2,
+        )
+        old_inputs = predecessor["generation_inputs"]
+        epoch_generation_id, epoch_inputs = MODULE.generation_identity(
+            predecessor["source_id"], predecessor["source_scope"],
+            old_inputs["baseline_sha256"], old_inputs["candidate_sha256"],
+            old_inputs["observation_failure_sha256"], old_inputs["policy_sha256"],
+            old_inputs["adapter_revision"], source_epoch=epoch,
+            source_target_contract=target_contract,
+        )
+        successor = copy.deepcopy(predecessor)
+        successor.update({
+            "generation_id": epoch_generation_id,
+            "generation_inputs": epoch_inputs,
+            "status": "retry",
+            "outcome": {"reason": "synthetic_prepaid_source_epoch_fixture"},
+            "request_reservation": None,
+        })
+        MODULE.seal_checkpoint(successor)
+        successor_path = initial_path.with_name(f"{epoch_generation_id}.json")
+        successor_path.write_text(json.dumps(successor, sort_keys=True), encoding="utf-8")
+        MODULE.append_generation_index(index_path, successor_path, successor)
+
+        args = self.fixture.args(run_id="701", **{
+            "--claim-only": None,
+            "--max-attempts": 8,
+            "--max-queue": 8,
+            "--retries-per-detail": 2,
+        })
+        calls: list[str] = []
+        with mock.patch.object(
+            MODULE, "generation_identity", return_value=(epoch_generation_id, epoch_inputs),
+        ):
+            claim_code, claim = MODULE.process(
+                args,
+                fetcher=lambda url, _timeout: calls.append(url) or self.fail("claim performed HTTP I/O"),
+                resolver_fetcher=lambda *_: self.fail("claim performed resolver I/O"),
+            )
+        self.assertEqual(claim_code, 0, claim.get("outcome"))
+        self.assertEqual(claim["attempts_consumed"], 24)
+        self.assertEqual(claim["request_reservation"]["reserved_attempts"], 8)
+        self.assertEqual(claim["request_reservation"]["attempts_made"], 0)
+        self.assertEqual(claim["attempts_by_id"], {str(identity): 3 for identity in range(100, 108)})
+        self.assertEqual(
+            {row["id"]: row["attempts_reserved"] for row in claim["request_reservation"]["records"]},
+            {"100": 3, "101": 3, "102": 2},
+        )
+        self.assertEqual(calls, [])
+
+        queue, _retained, _pending = MODULE.detail_queue(
+            [], rows, {}, datetime.fromisoformat(NOW.replace("Z", "+00:00")),
+        )
+        instant = datetime.fromisoformat(NOW.replace("Z", "+00:00"))
+        with self.assertRaisesRegex(ValueError, "durable_request_reservation_missing"):
+            MODULE.validate_durable_request_reservation(
+                {**claim, "request_reservation": {**claim["request_reservation"], "owner_run_id": "702"}},
+                queue, processor_run_id="701", fencing_token=claim["fencing_token"], now=instant,
+            )
+        with self.assertRaisesRegex(ValueError, "durable_request_reservation_expired"):
+            MODULE.validate_durable_request_reservation(
+                {**claim, "request_reservation": {
+                    **claim["request_reservation"], "expires_at": "2026-09-30T00:00:00Z",
+                }},
+                queue, processor_run_id="701", fencing_token=claim["fencing_token"], now=instant,
+            )
+        with self.assertRaisesRegex(ValueError, "durable_request_reservation_record_mismatch"):
+            MODULE.validate_durable_request_reservation(
+                {**claim, "request_reservation": {
+                    **claim["request_reservation"],
+                    "records": [
+                        {**claim["request_reservation"]["records"][0], "source_sha256": "f" * 64},
+                        *claim["request_reservation"]["records"][1:],
+                    ],
+                }},
+                queue, processor_run_id="701", fencing_token=claim["fencing_token"], now=instant,
+            )
+        fully_consumed = {
+            **claim, "request_reservation": {
+                **claim["request_reservation"], "attempts_made": 8,
+                "records": [
+                    {**record, "attempts_made": record["attempts_reserved"]}
+                    for record in claim["request_reservation"]["records"]
+                ],
+            },
+        }
+        _reservation, paid_rows, unreserved_rows = MODULE.validate_durable_request_reservation(
+            fully_consumed, queue, processor_run_id="701",
+            fencing_token=claim["fencing_token"], now=instant,
+        )
+        self.assertEqual([row["id"] for row in paid_rows], ["100", "101", "102"])
+        self.assertEqual(len(unreserved_rows), 5)
+
+        args.claim_only = False
+        args.require_durable_reservation = True
+        args.max_attempts = 4
+        interrupted_calls: list[str] = []
+
+        def first_pass_page_timeout(url: str, _timeout: float):
+            identity = url.split("/data/")[1].split("/")[0]
+            interrupted_calls.append(identity)
+            self.assertIn(identity, {"100", "101"}, "row 102 must not start before the injected crash")
+            raise TimeoutError("fixture page transport failure before row 102")
+
+        original_atomic_write_json = MODULE.atomic_write_json
+
+        def interrupt_after_row_101_unused_slots_are_durable(path, value):
+            original_atomic_write_json(path, value)
+            if pathlib.Path(path) != self.fixture.checkpoint_path(claim):
+                return
+            reservation_value = value.get("request_reservation")
+            records_value = (
+                reservation_value.get("records") if isinstance(reservation_value, dict) else None
+            )
+            made_by_id = {
+                record.get("id"): record.get("attempts_made")
+                for record in records_value or [] if isinstance(record, dict)
+            }
+            detail_records = value.get("detail_records")
+            if (
+                made_by_id == {"100": 3, "101": 1, "102": 0}
+                and reservation_value.get("reserved_attempts") == 8
+                and [row.get("id") for row in detail_records or []] == ["100", "101"]
+            ):
+                raise Interrupted("simulated process loss after row 101 returned unused paid slots")
+
+        with mock.patch.object(
+            MODULE, "generation_identity", return_value=(epoch_generation_id, epoch_inputs),
+        ):
+            with mock.patch.object(
+                MODULE, "atomic_write_json", side_effect=interrupt_after_row_101_unused_slots_are_durable,
+            ):
+                with self.assertRaisesRegex(Interrupted, "returned unused paid slots"):
+                    MODULE.process(
+                        args, fetcher=first_pass_page_timeout,
+                        resolver_fetcher=lambda *_: self.fail("unexpected resolver call"),
+                        sleeper=lambda _delay: None,
+                    )
+        self.assertEqual(interrupted_calls, ["100", "100", "100", "101"])
+        partial = json.loads(self.fixture.checkpoint_path(claim).read_text(encoding="utf-8"))
+        self.assertEqual(partial["attempts_consumed"], 24)
+        self.assertEqual(partial["attempts_by_id"], {str(identity): 3 for identity in range(100, 108)})
+        self.assertEqual(partial["request_reservation"]["reserved_attempts"], 8)
+        self.assertEqual(partial["request_reservation"]["attempts_made"], 4)
+        partial_by_id = {
+            record["id"]: (record["attempts_reserved"], record["attempts_made"])
+            for record in partial["request_reservation"]["records"]
+        }
+        self.assertEqual(partial_by_id, {"100": (3, 3), "101": (3, 1), "102": (2, 0)})
+        self.assertEqual(
+            [(row["id"], row["status"]) for row in partial["detail_records"]],
+            [("100", "retry"), ("101", "retry")],
+        )
+
+        page_calls: list[str] = []
+
+        def complete_row_101_and_exhaust_row_102(url: str, _timeout: float):
+            identity = url.split("/data/")[1].split("/")[0]
+            page_calls.append(identity)
+            if identity == "100":
+                self.fail("a fully spent row must not replay any physical request")
+            if identity == "101":
+                return '<a href="https://api.example.gov/op/101" onclick="fn_LinkApiRequest()">API</a>'
+            if identity == "102":
+                raise TimeoutError("fixture page transport failure for row 102")
+            self.fail(f"unreserved row {identity} must not make a physical request")
+
+        with mock.patch.object(
+            MODULE, "generation_identity", return_value=(epoch_generation_id, epoch_inputs),
+        ):
+            worker_code, completed = MODULE.process(
+                args, fetcher=complete_row_101_and_exhaust_row_102,
+                resolver_fetcher=lambda *_: self.fail("unexpected resolver call"),
+                sleeper=lambda _delay: None,
+            )
+        self.assertEqual(worker_code, 2)
+        self.assertEqual(page_calls, ["101", "102", "102"])
+        self.assertEqual(completed["attempts_consumed"], 23)
+        self.assertEqual(completed["request_reservation"]["attempts_made"], 7)
+        self.assertEqual(completed["request_reservation"]["reserved_attempts"], 7)
+        self.assertEqual(
+            {
+                record["id"]: (record["attempts_reserved"], record["attempts_made"])
+                for record in completed["request_reservation"]["records"]
+            },
+            {"100": (3, 3), "101": (2, 2), "102": (2, 2)},
+        )
+        self.assertEqual(
+            completed["attempts_by_id"],
+            {**{str(identity): 3 for identity in range(100, 101)},
+             **{str(identity): 3 for identity in range(102, 108)}},
+        )
+        self.assertNotEqual(completed["generation_id"], predecessor["generation_id"])
+
+    def test_processor_rejects_tampered_reservation_aggregate_before_fetch(self) -> None:
+        self.prepare([self.row(2, legacy=True)])
+        _claim_args, claim = self.claim(max_attempts=3, max_queue=1, retries=2)
+        checkpoint_path = self.fixture.checkpoint_path(claim)
+        index_path = self.fixture.state_dir / "sources/data_go_kr/index.json"
+        variants = (
+            (1, 0),  # Aggregate claims one consumed slot, while the record claims none.
+            (0, 1),  # Record claims one consumed slot, while the aggregate claims none.
+        )
+        for aggregate_made, row_made in variants:
+            with self.subTest(aggregate_made=aggregate_made, row_made=row_made):
+                tampered = copy.deepcopy(claim)
+                tampered["request_reservation"]["attempts_made"] = aggregate_made
+                tampered["request_reservation"]["records"][0]["attempts_made"] = row_made
+                MODULE.seal_checkpoint(tampered)
+                checkpoint_path.write_text(json.dumps(tampered, sort_keys=True), encoding="utf-8")
+                MODULE.append_generation_index(index_path, checkpoint_path, tampered)
+                fetches: list[str] = []
+                args = self.worker_args("701", max_attempts=3, max_queue=1, retries=2)
+                with self.assertRaisesRegex(ValueError, "durable_request_reservation_record_mismatch"):
+                    MODULE.process(
+                        args,
+                        fetcher=lambda url, _timeout: fetches.append(url),
+                        resolver_fetcher=lambda *_: self.fail("invalid reservation must fail before resolver"),
+                    )
+                self.assertEqual(fetches, [])
+
+    def test_durable_charge_before_first_fetch_is_never_replayed_or_refunded(self) -> None:
+        self.prepare([self.row(2, legacy=True)])
+        _claim_args, claim = self.claim(max_attempts=3, max_queue=1, retries=2)
+        args = self.worker_args("701", max_attempts=3, max_queue=1, retries=2)
+        precrash_fetches: list[str] = []
+        checkpoint_path = self.fixture.checkpoint_path(claim)
+        original_atomic_write_json = MODULE.atomic_write_json
+
+        def persist_then_crash_before_fetch(path, value):
+            original_atomic_write_json(path, value)
+            if pathlib.Path(path) != checkpoint_path:
+                return
+            reservation_value = value.get("request_reservation")
+            records_value = (
+                reservation_value.get("records") if isinstance(reservation_value, dict) else None
+            )
+            if (
+                isinstance(records_value, list) and len(records_value) == 1
+                and records_value[0].get("attempts_made") == 1
+            ):
+                raise Interrupted("simulated crash after atomic charge and before fetch")
+
+        with mock.patch.object(MODULE, "atomic_write_json", side_effect=persist_then_crash_before_fetch):
+            with self.assertRaisesRegex(Interrupted, "after atomic charge and before fetch"):
+                MODULE.process(
+                    args, fetcher=lambda url, _timeout: precrash_fetches.append(url),
+                    resolver_fetcher=lambda *_: self.fail("resolver must not precede the page"),
+                )
+        self.assertEqual(precrash_fetches, [])
+        interrupted = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        self.assertEqual(interrupted["attempts_consumed"], 3)
+        self.assertEqual(interrupted["request_reservation"]["attempts_made"], 1)
+        self.assertEqual(interrupted["request_reservation"]["records"][0]["attempts_made"], 1)
+
+        resumed_fetches: list[str] = []
+
+        def resume_with_only_paid_remainder(url: str, _timeout: float) -> str:
+            resumed_fetches.append(url)
+            if len(resumed_fetches) == 1:
+                raise TimeoutError("the uncertain pre-crash slot is not replayed")
+            return '<a href="https://api.example.gov/op/2" onclick="fn_LinkApiRequest()">API</a>'
+
+        code, completed = MODULE.process(
+            args, fetcher=resume_with_only_paid_remainder,
+            resolver_fetcher=lambda *_: self.fail("legacy-anchor rows must not use resolver"),
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(code, 0, completed.get("outcome"))
+        self.assertEqual(len(resumed_fetches), 2)
+        self.assertEqual(completed["attempts_consumed"], 3)
+        self.assertNotIn("2", completed["attempts_by_id"])
+        self.assertEqual(completed["request_reservation"]["attempts_made"], 3)
+        self.assertEqual(completed["request_reservation"]["reserved_attempts"], 3)
+        self.assertEqual(completed["request_reservation"]["records"][0]["attempts_made"], 3)
+
+    def test_partial_durable_reservation_resume_uses_only_recorded_paid_remainder(self) -> None:
+        self.prepare([self.row(2, legacy=True)])
+        _claim_args, claim = self.claim(max_attempts=3, max_queue=1, retries=2)
+        args = self.worker_args("701", max_attempts=3, max_queue=1, retries=2)
+        started_calls: list[str] = []
+
+        def interrupted_page(url: str, _timeout: float):
+            started_calls.append(url)
+            raise Interrupted("simulated process loss after slot was durably charged")
+
+        with self.assertRaises(Interrupted):
+            MODULE.process(
+                args, fetcher=interrupted_page,
+                resolver_fetcher=lambda *_: self.fail("resolver must not precede the page"),
+            )
+        interrupted = json.loads(self.fixture.checkpoint_path(claim).read_text(encoding="utf-8"))
+        self.assertEqual(interrupted["attempts_consumed"], 3)
+        self.assertEqual(interrupted["request_reservation"]["attempts_made"], 1)
+        self.assertEqual(interrupted["request_reservation"]["records"][0]["attempts_made"], 1)
+
+        page_calls: list[str] = []
+
+        def fetch_page(url: str, _timeout: float) -> str:
+            page_calls.append(url)
+            if len(page_calls) == 1:
+                raise TimeoutError("fixture retry within the paid remainder")
+            return '<a href="https://api.example.gov/op/2" onclick="fn_LinkApiRequest()">API</a>'
+
+        code, resumed = MODULE.process(
+            args, fetcher=fetch_page,
+            resolver_fetcher=lambda *_: self.fail("legacy-anchor rows must not use resolver"),
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(code, 0, resumed.get("outcome"))
+        self.assertEqual(len(started_calls), 1)
+        self.assertEqual(len(page_calls), 2)
+        self.assertEqual(resumed["attempts_consumed"], 3)
+        self.assertEqual(resumed["request_reservation"]["reserved_attempts"], 3)
+        self.assertEqual(resumed["request_reservation"]["attempts_made"], 3)
+        self.assertEqual(resumed["request_reservation"]["records"][0]["attempts_made"], 3)
+
+        queue, _retained, _pending = MODULE.detail_queue(
+            [], [self.row(2)], {}, datetime.fromisoformat(NOW.replace("Z", "+00:00")),
+        )
+        instant = datetime.fromisoformat(NOW.replace("Z", "+00:00"))
+        old_partial = copy.deepcopy(claim)
+        old_partial["request_reservation"]["attempts_made"] = 1
+        old_partial["request_reservation"]["records"][0].pop("attempts_made")
+        with self.assertRaisesRegex(ValueError, "durable_request_reservation_attempt_history_unavailable"):
+            MODULE.validate_durable_request_reservation(
+                old_partial, queue, processor_run_id="701", fencing_token=claim["fencing_token"], now=instant,
+            )
 
     def test_production_48_row_allocator_skips_exhausted_prefix_and_uses_odd_residual_capacity(self) -> None:
         queue = [

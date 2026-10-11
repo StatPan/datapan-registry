@@ -7,10 +7,13 @@ import json
 import os
 import pathlib
 import copy
+import subprocess
 import tempfile
+import time
 import unittest
 import urllib.request
 import urllib.response
+import zipfile
 from email.message import Message
 from datetime import datetime, timedelta, timezone
 from unittest import mock
@@ -659,6 +662,131 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         self.assertEqual(stable_ids, {row["id"] for row in candidate})
         return baseline, candidate, args
 
+    def _write_resume_owner_archive(self, checkpoint: dict, archive_path: pathlib.Path) -> None:
+        with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for entry in checkpoint["output_digests"]:
+                archive.write(self.output_dir / entry["path"], entry["path"])
+            archive.writestr(
+                MODULE.CACHE_SOURCE.CHECKPOINT_RECEIPT_MEMBER,
+                MODULE.CACHE_SOURCE.canonical_json(checkpoint) + b"\n",
+            )
+
+    def _bind_authenticated_resume_owner(self, checkpoint: dict) -> tuple[dict, pathlib.Path, object]:
+        processor_run_id = "123456-1"
+        processor_artifact_run_id = "123456"
+        artifact_id = "7654321"
+        MODULE.bind_output_artifact_id(
+            self.state_dir, "data_go_kr", checkpoint["generation_id"], artifact_id,
+            ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+            processor_run_id=processor_run_id,
+            processor_artifact_run_id=processor_artifact_run_id,
+            artifact_expires_at=checkpoint["output_artifact"]["expires_at"],
+        )
+        owner_path = self.state_dir / "sources/data_go_kr/generations" / f"{checkpoint['generation_id']}.json"
+        owner = MODULE.verify_checkpoint(
+            MODULE.load_json(owner_path),
+            MODULE.load_json(ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"),
+        )
+        archive_path = self.tmp / f"{checkpoint['generation_id']}-owner.zip"
+        self._write_resume_owner_archive(owner, archive_path)
+        # The test exercises the modern owner contract against one immutable
+        # source revision.  Build that revision in its own local Git fixture so
+        # an uncommitted processor edit in the parent test checkout cannot make
+        # the archived run appear to attest different source bytes.
+        source_repo = self.tmp / "cache-source-contract-repo"
+        source_repo.mkdir()
+        source_paths = tuple(MODULE.CACHE_SOURCE.MODERN_GENERATOR_INPUTS.values())
+        for relative in source_paths:
+            target = source_repo / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes((ROOT / relative).read_bytes())
+        git_environment = {
+            **os.environ,
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_TERMINAL_PROMPT": "0",
+            "GIT_AUTHOR_NAME": "Fixture",
+            "GIT_AUTHOR_EMAIL": "fixture@example.invalid",
+            "GIT_COMMITTER_NAME": "Fixture",
+            "GIT_COMMITTER_EMAIL": "fixture@example.invalid",
+        }
+        subprocess.run(
+            ("git", "init", "--quiet", str(source_repo)),
+            cwd=self.tmp, env=git_environment, check=True,
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ("git", "add", "--", *source_paths),
+            cwd=source_repo, env=git_environment, check=True,
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        subprocess.run(
+            ("git", "commit", "--quiet", "-m", "cache source contract fixture"),
+            cwd=source_repo, env=git_environment, check=True,
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        source_head = subprocess.run(
+            ("git", "rev-parse", "HEAD"), cwd=source_repo, env=git_environment, text=True,
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+        ).stdout.strip()
+        deadline = time.monotonic() + 120.0
+        git_reader = MODULE.CACHE_SOURCE.LocalGitSourceReader(
+            cwd=source_repo, deadline_monotonic=deadline,
+        )
+
+        class Reader:
+            def __init__(self) -> None:
+                self.deadline = deadline
+                self.calls: list[tuple[str, str]] = []
+
+            def _artifact(self) -> dict:
+                current_owner = MODULE.load_json(owner_path)
+                return {
+                    "id": int(artifact_id),
+                    "name": current_owner["output_artifact"]["name"],
+                    "size_in_bytes": archive_path.stat().st_size,
+                    "digest": "sha256:" + MODULE.file_sha256(archive_path),
+                    "expired": False,
+                    "created_at": "2026-10-05T00:00:00Z",
+                    "updated_at": "2026-10-05T00:00:01Z",
+                    "expires_at": current_owner["output_artifact"]["expires_at"],
+                    "workflow_run": {
+                        "id": int(processor_artifact_run_id),
+                        "head_sha": source_head,
+                        "head_branch": "main",
+                        "repository_id": 1,
+                        "head_repository_id": 1,
+                    },
+                }
+
+            def json(self, endpoint: str):
+                self.calls.append(("json", endpoint))
+                if endpoint == f"repos/StatPan/datapan-registry/actions/runs/{processor_artifact_run_id}/artifacts?per_page=100":
+                    return {"total_count": 1, "artifacts": [self._artifact()]}
+                if endpoint == f"repos/StatPan/datapan-registry/actions/artifacts/{artifact_id}":
+                    return self._artifact()
+                if endpoint == f"repos/StatPan/datapan-registry/actions/runs/{processor_artifact_run_id}/attempts/1":
+                    return {
+                        "id": int(processor_artifact_run_id),
+                        "run_attempt": 1,
+                        "path": ".github/workflows/upstream-catalogue-process.yml",
+                        "head_branch": "main",
+                        "head_sha": source_head,
+                        "status": "completed",
+                        "conclusion": "success",
+                        "event": "schedule",
+                        "repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+                        "head_repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+                    }
+                raise AssertionError(f"unexpected cache-source endpoint: {endpoint}")
+
+            def source_file(self, repository: str, head_sha: str, path: str, *, maximum_bytes: int) -> bytes:
+                self.calls.append(("source_file", path))
+                return git_reader.source_file(
+                    repository, head_sha, path, maximum_bytes=maximum_bytes,
+                )
+
+        return owner, archive_path, Reader()
+
     def _observations(self, *, page_transform=None, resolver_transform=None):
         page_calls: list[tuple[str, float]] = []
         resolver_calls: list[tuple[str, float]] = []
@@ -706,6 +834,8 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         baseline, _candidate, args = self._inputs(
             ("15056854", "15056858"), empty_baseline_ids=("15056858",),
         )
+        args.processor_run_id = "123456-1"
+        args.processor_artifact_run_id = "123456"
         page_get, resolver_get, page_calls, resolver_calls = self._observations()
         code, checkpoint = MODULE.process(
             args,
@@ -787,6 +917,7 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         provider_index = json.loads((ROOT / "data/provider-index.json").read_text(encoding="utf-8"))
         evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
         evidence_digest_before_resume = MODULE.file_sha256(evidence_path)
+        checkpoint, archive_path, cache_source_reader = self._bind_authenticated_resume_owner(checkpoint)
         MODULE.validated_resume_records(
             evidence_path,
             checkpoint=checkpoint,
@@ -797,6 +928,10 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
             candidate_by_id={row["id"]: row for row in _candidate},
             registered_hosts=MODULE.DETAIL_HELPERS.registered_hosts(provider_index),
             now=MODULE.parse_timestamp(self.NOW),
+            repository="StatPan/datapan-registry",
+            default_branch="main",
+            cache_source_reader=cache_source_reader,
+            resume_source_archive=archive_path,
         )
         self.assertEqual(MODULE.file_sha256(evidence_path), evidence_digest_before_resume)
 
@@ -804,6 +939,8 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         _baseline, candidate, args = self._inputs(
             ("15056854", "15056858"), empty_baseline_ids=("15056858",),
         )
+        args.processor_run_id = "123456-1"
+        args.processor_artifact_run_id = "123456"
         page_get, resolver_get, _page_calls, _resolver_calls = self._observations()
         code, _processed = MODULE.process(
             args,
@@ -813,6 +950,7 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
             clock=lambda: datetime(2026, 10, 5, 0, 0, 2, tzinfo=timezone.utc),
         )
         self.assertEqual(code, 2)
+        _processed, archive_path, cache_source_reader = self._bind_authenticated_resume_owner(_processed)
 
         evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
         owner_path = self.state_dir / "sources" / "data_go_kr" / "generations" / f"{_processed['generation_id']}.json"
@@ -839,6 +977,7 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
         def validate_bound(checkpoint_value: dict) -> dict:
             evidence_bytes = evidence_path.read_bytes()
             owner_bytes = owner_path.read_bytes()
+            archive_bytes = archive_path.read_bytes()
             try:
                 return MODULE.validated_resume_records(
                     evidence_path,
@@ -850,10 +989,15 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
                     candidate_by_id=candidate_by_id,
                     registered_hosts=registered_hosts,
                     now=MODULE.parse_timestamp(self.NOW),
+                    repository="StatPan/datapan-registry",
+                    default_branch="main",
+                    cache_source_reader=cache_source_reader,
+                    resume_source_archive=archive_path,
                 )
             finally:
                 self.assertEqual(evidence_path.read_bytes(), evidence_bytes)
                 self.assertEqual(owner_path.read_bytes(), owner_bytes)
+                self.assertEqual(archive_path.read_bytes(), archive_bytes)
 
         def bind_variant(evidence_value: dict, owner_value: dict) -> dict:
             self._write_json(evidence_path, evidence_value)
@@ -873,6 +1017,7 @@ class LinkResolverWorkerIntegrationTests(unittest.TestCase):
             owner_path.write_text(
                 json.dumps(bound_owner, ensure_ascii=False, sort_keys=True), encoding="utf-8",
             )
+            self._write_resume_owner_archive(bound_owner, archive_path)
             return bound_owner
 
         # A genuine current worker output with both modern diagnostic rows resumes.

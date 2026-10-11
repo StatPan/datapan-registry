@@ -24,6 +24,9 @@ from unittest import mock
 import yaml
 import jsonschema
 
+from scripts import upstream_catalogue_cache_source as CACHE_SOURCE
+from scripts import upstream_catalogue_handoff as HANDOFF
+
 
 SCRIPT = pathlib.Path(__file__).parents[1] / "scripts/run-canonical-update-promotion.py"
 SPEC = importlib.util.spec_from_file_location("run_canonical_update_promotion_test_module", SCRIPT)
@@ -98,6 +101,197 @@ assert command.label == 'python3 scripts/validate-diagnostic-publication.py'
             with self.assertRaisesRegex(RuntimeError, "intentional import failure"):
                 RUNNER.load_module(path, name)
             self.assertNotIn(name, sys.modules)
+
+
+class CurrentControlRuntimeBindingTests(unittest.TestCase):
+    def _committed_control_fixture(self, root: pathlib.Path) -> str:
+        scripts = root / "scripts"
+        scripts.mkdir(parents=True)
+        (scripts / "run-canonical-update-promotion.py").write_bytes(SCRIPT.read_bytes())
+        (scripts / "canonical_publication_state.py").write_text(
+            "class GitObjectStore:\n    pass\n"
+            "class PythonModuleIndex:\n    pass\n"
+            "class PythonModuleIndexEntry:\n    pass\n",
+            encoding="utf-8",
+        )
+        (scripts / "canonical_update_pr.py").write_text(
+            "def validate(value):\n    return value\n", encoding="utf-8",
+        )
+        (scripts / "canonical_release_closure.py").write_text(
+            "def identity(value):\n    return value\n", encoding="utf-8",
+        )
+        (scripts / "canonical_release_closure_native_v2.py").write_text(
+            "BASE = None\ndef identity(value):\n    return value\n", encoding="utf-8",
+        )
+        (scripts / "upstream_catalogue_source_eligibility.py").write_text(
+            "def validate(value):\n    return value\n", encoding="utf-8",
+        )
+        (scripts / "upstream_catalogue_derivation.py").write_text(
+            "def validate(value):\n    return value\n", encoding="utf-8",
+        )
+        (scripts / "canonical_release_closure_rules_v1.json").write_text(
+            "{\"version\": 1}\n", encoding="utf-8",
+        )
+        (scripts / "canonical_release_generator_consumer_membership.v3.json").write_text(
+            "{\"paths\": [\"scripts/a.py\"]}\n", encoding="utf-8",
+        )
+        subprocess.run(("git", "init", "-q", str(root)), check=True)
+        subprocess.run(("git", "-C", str(root), "config", "user.name", "Codex Test"), check=True)
+        subprocess.run(("git", "-C", str(root), "config", "user.email", "codex-test@example.invalid"), check=True)
+        subprocess.run(("git", "-C", str(root), "add", "scripts"), check=True)
+        subprocess.run(("git", "-C", str(root), "commit", "-q", "-m", "current CONTROL fixture"), check=True)
+        return subprocess.run(
+            ("git", "-C", str(root), "rev-parse", "HEAD"),
+            check=True, text=True, capture_output=True,
+        ).stdout.strip()
+
+    def test_state_runtime_change_after_current_commit_load_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            head = self._committed_control_fixture(root)
+            code = r"""
+import importlib.util, pathlib, sys, time
+runner_path = pathlib.Path(sys.argv[1])
+root = pathlib.Path(sys.argv[2])
+spec = importlib.util.spec_from_file_location('promotion_runner_fixture', runner_path)
+runner = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = runner
+spec.loader.exec_module(runner)
+state = runner.load_current_control_publication_state(root, deadline_monotonic=time.monotonic() + 30)
+identity = state.__datapan_current_control_state_identity__
+state.PythonModuleIndex.fixture_drift = True
+try:
+    runner._require_current_control_state_module(
+        state, state_path=root / 'scripts/canonical_publication_state.py',
+        identity=identity, deadline_monotonic=time.monotonic() + 30,
+    )
+except runner.PromotionError:
+    print('runtime drift rejected')
+else:
+    raise SystemExit('runtime drift was accepted')
+"""
+            result = subprocess.run(
+                (sys.executable, "-B", "-c", code,
+                 str(root / "scripts/run-canonical-update-promotion.py"), str(root)),
+                check=False, text=True, capture_output=True,
+                env={**os.environ, "GITHUB_SHA": head, "PYTHONDONTWRITEBYTECODE": "1"},
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("runtime drift rejected", result.stdout)
+
+    def test_preloaded_sourcefileloader_state_module_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            head = self._committed_control_fixture(root)
+            code = r"""
+import importlib.util, pathlib, sys, time
+runner_path = pathlib.Path(sys.argv[1])
+root = pathlib.Path(sys.argv[2])
+spec = importlib.util.spec_from_file_location('promotion_runner_fixture', runner_path)
+runner = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = runner
+spec.loader.exec_module(runner)
+state_path = root / 'scripts/canonical_publication_state.py'
+state_spec = importlib.util.spec_from_file_location('canonical_publication_state', state_path)
+state = importlib.util.module_from_spec(state_spec)
+sys.modules['canonical_publication_state'] = state
+state_spec.loader.exec_module(state)
+try:
+    runner.load_current_control_publication_state(root, deadline_monotonic=time.monotonic() + 30)
+except runner.PromotionError:
+    print('preloaded state rejected')
+else:
+    raise SystemExit('preloaded state was accepted')
+"""
+            result = subprocess.run(
+                (sys.executable, "-B", "-c", code,
+                 str(root / "scripts/run-canonical-update-promotion.py"), str(root)),
+                check=False, text=True, capture_output=True,
+                env={**os.environ, "GITHUB_SHA": head, "PYTHONDONTWRITEBYTECODE": "1"},
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("preloaded state rejected", result.stdout)
+
+    def test_current_control_helper_code_mutation_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            head = self._committed_control_fixture(root)
+            code = r"""
+import importlib.util, pathlib, sys, time
+runner_path = pathlib.Path(sys.argv[1])
+root = pathlib.Path(sys.argv[2])
+spec = importlib.util.spec_from_file_location('promotion_runner_fixture', runner_path)
+runner = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = runner
+spec.loader.exec_module(runner)
+deadline = time.monotonic() + 30
+state = runner.load_current_control_publication_state(root, deadline_monotonic=deadline)
+helper = runner.load_current_control_source_module(
+    root, 'scripts/canonical_update_pr.py',
+    module_name='canonical_update_pr_release_closure_ack',
+    state_module=state, deadline_monotonic=deadline,
+)
+exec('def changed(value): return value + 1', helper.__dict__)
+helper.validate = helper.changed
+try:
+    runner._require_current_control_source_module_runtime(
+        helper, module_name='canonical_update_pr_release_closure_ack',
+        deadline_monotonic=deadline,
+    )
+except runner.PromotionError:
+    print('helper code drift rejected')
+else:
+    raise SystemExit('helper code drift was accepted')
+"""
+            result = subprocess.run(
+                (sys.executable, "-B", "-c", code,
+                 str(root / "scripts/run-canonical-update-promotion.py"), str(root)),
+                check=False, text=True, capture_output=True,
+                env={**os.environ, "GITHUB_SHA": head, "PYTHONDONTWRITEBYTECODE": "1"},
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("helper code drift rejected", result.stdout)
+
+    def test_current_control_resource_change_after_commit_binding_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = pathlib.Path(raw)
+            head = self._committed_control_fixture(root)
+            code = r"""
+import importlib.util, pathlib, sys, time
+runner_path = pathlib.Path(sys.argv[1])
+root = pathlib.Path(sys.argv[2])
+spec = importlib.util.spec_from_file_location('promotion_runner_fixture', runner_path)
+runner = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = runner
+spec.loader.exec_module(runner)
+deadline = time.monotonic() + 30
+state = runner.load_current_control_publication_state(root, deadline_monotonic=deadline)
+runner.load_current_control_source_module(
+    root, 'scripts/canonical_release_closure.py',
+    module_name='canonical_release_closure_frozen_v3',
+    state_module=state, deadline_monotonic=deadline,
+)
+path = root / 'scripts/canonical_release_generator_consumer_membership.v3.json'
+path.write_text('{"paths": ["tampered.py"]}\n', encoding='utf-8')
+try:
+    runner._require_control_source_resource_runtime(
+        root, sys.modules['canonical_publication_state'].__datapan_current_control_state_identity__[1],
+        'scripts/canonical_release_generator_consumer_membership.v3.json',
+        deadline_monotonic=deadline,
+    )
+except runner.PromotionError:
+    print('resource drift rejected')
+else:
+    raise SystemExit('resource drift was accepted')
+"""
+            result = subprocess.run(
+                (sys.executable, "-B", "-c", code,
+                 str(root / "scripts/run-canonical-update-promotion.py"), str(root)),
+                check=False, text=True, capture_output=True,
+                env={**os.environ, "GITHUB_SHA": head, "PYTHONDONTWRITEBYTECODE": "1"},
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("resource drift rejected", result.stdout)
 
 
 class PublicationAcknowledgementWorkflowDependencyTests(unittest.TestCase):
@@ -682,7 +876,7 @@ def _track_processor_composer_cleanup(process: subprocess.Popen[bytes], events: 
 
 
 class ProcessorBundleContractTests(unittest.TestCase):
-    def test_ready_bundle_requires_eight_bound_outputs_in_frozen_order(self) -> None:
+    def test_ready_bundle_requires_ten_bound_outputs_in_frozen_order(self) -> None:
         expected = [
             "composed-candidate.registry.json",
             "ready-scope.registry.json",
@@ -690,6 +884,8 @@ class ProcessorBundleContractTests(unittest.TestCase):
             "regeneration-queue.json",
             "quarantine.json",
             "composition-receipt.json",
+            "upstream-catalogue-original-candidate.registry.json",
+            "upstream-catalogue-cache-source-context.json",
             "upstream-catalogue-enrichment-evidence.json",
             "upstream-catalogue-processing-result.json",
         ]
@@ -700,7 +896,7 @@ class ProcessorBundleContractTests(unittest.TestCase):
             "output_artifact": {"bundle_manifest_sha256": "0" * 64},
         }
         with tempfile.TemporaryDirectory() as raw:
-            with self.assertRaisesRegex(RUNNER.PromotionError, "exact ordered eight-file contract"):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "exact ordered ten-file contract"):
                 RUNNER.validate_processor_bundle(checkpoint, pathlib.Path(raw), {}, None)
 
         checkpoint["output_digests"] = [
@@ -710,7 +906,7 @@ class ProcessorBundleContractTests(unittest.TestCase):
             checkpoint["output_digests"][-1], checkpoint["output_digests"][0],
         )
         with tempfile.TemporaryDirectory() as raw:
-            with self.assertRaisesRegex(RUNNER.PromotionError, "exact ordered eight-file contract"):
+            with self.assertRaisesRegex(RUNNER.PromotionError, "exact ordered ten-file contract"):
                 RUNNER.validate_processor_bundle(checkpoint, pathlib.Path(raw), {}, None)
 
     def test_result_only_quarantine_is_verified_as_no_candidate(self) -> None:
@@ -1195,7 +1391,10 @@ class ProcessorBundleContractTests(unittest.TestCase):
         head = subprocess.run(
             ("git", "rev-parse", "HEAD"), cwd=root, check=True, text=True, capture_output=True,
         ).stdout.strip()
-        expected_bytes = (root / RUNNER.PROCESSOR_COMPOSITION_INPUTS["composer"]).read_bytes()
+        expected_bytes = subprocess.run(
+            ("git", "show", f"{head}:{RUNNER.PROCESSOR_COMPOSITION_INPUTS['composer']}"),
+            cwd=root, check=True, capture_output=True,
+        ).stdout
         real_popen = subprocess.Popen
         with mock.patch.object(RUNNER.subprocess, "Popen", wraps=real_popen) as spawn:
             self.assertEqual(
@@ -1668,6 +1867,19 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
         candidate_sha256: str = "d" * 64,
         baseline_sha256: str = "c" * 64,
     ) -> dict[str, object]:
+        generator_paths = {
+            "processor_script_sha256": "scripts/process-upstream-catalogue-candidate.py",
+            "collector_handoff_helper_sha256": "scripts/upstream_catalogue_handoff.py",
+            "cache_source_helper_sha256": "scripts/upstream_catalogue_cache_source.py",
+            "seoul_operation_declaration_helper_sha256": "scripts/seoul_oa109_operation_declaration.py",
+            "seoul_historical_subject_snapshot_generator_sha256": "scripts/generate-seoul-oa109-subject-snapshot.py",
+            "seoul_operation_declaration_sha256": "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
+            "seoul_historical_subject_snapshot_sha256": "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+        }
+        generator_revision = hashlib.sha256(RUNNER.canonical_json({
+            field: hashlib.sha256((SCRIPT.parents[1] / path).read_bytes()).hexdigest()
+            for field, path in generator_paths.items()
+        })).hexdigest()
         return {
             "source_id": "data_go_kr",
             "source_scope": "aggregate_supported_catalog",
@@ -1676,8 +1888,33 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             "observation_failure_sha256": None,
             "policy_sha256": "e" * 64,
             "adapter_revision": "1" * 64,
-            "generator_revision": "2" * 64,
+            "generator_revision": generator_revision,
             "extractor_revision": "3" * 64,
+            "cache_source_profile": CACHE_SOURCE.CACHE_SOURCE_PROFILE,
+        }
+
+    def cache_source_contract(self, checkpoint: Mapping[str, object]) -> object:
+        class SourceReader:
+            @staticmethod
+            def source_file(
+                _repository: str, _head_sha: str, path: str, *, maximum_bytes: int,
+            ) -> bytes:
+                value = (SCRIPT.parents[1] / path).read_bytes()
+                if not 0 < len(value) <= maximum_bytes:
+                    raise AssertionError("fixture cache source input exceeds its bound")
+                return value
+
+        return CACHE_SOURCE._contract_from_bound_run(
+            checkpoint,
+            repository=self.repository,
+            run={"head_sha": self.source_sha},
+            reader=SourceReader(),
+        )
+
+    def cache_source_kwargs(self, checkpoint: Mapping[str, object]) -> dict[str, object]:
+        return {
+            "cache_source_helper": CACHE_SOURCE,
+            "cache_source_contract": self.cache_source_contract(checkpoint),
         }
 
     @staticmethod
@@ -1744,11 +1981,11 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             "output_digests": [],
             "input_artifacts": [{
                 "run_id": "36646768289",
-                "name": "upstream-catalogue-refresh-36646768289",
+                "name": "upstream-catalog-refresh-36646768289",
                 "artifact_id": "987654",
                 "expires_at": self.expiry,
                 "candidate_sha256": candidate_sha256,
-                "evidence_sha256": "b" * 64,
+                "evidence_sha256": "f" * 64,
                 "diff_sha256": "c" * 64,
             }],
         }
@@ -1786,6 +2023,32 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             "processing_replay": False,
             "candidate_available": True,
         }
+        original_candidate_path = bundle / CACHE_SOURCE.ORIGINAL_CANDIDATE_MEMBER
+        original_candidate_path.write_bytes(candidate_bytes)
+        admission = {
+            "admission_id": HANDOFF.admission_id("36646768289", 1, "f" * 64),
+            "producer_run_id": "36646768289",
+            "run_attempt": 1,
+            "head_sha": "9" * 40,
+            "run_started_at": "2026-10-02T16:59:00Z",
+            "artifact_id": "987654",
+            "artifact_name": "upstream-catalog-refresh-36646768289",
+            "artifact_expires_at": self.expiry,
+            "artifact_digest_sha256": "8" * 64,
+            "artifact_size_bytes": len(candidate_bytes),
+            "refresh_evidence_sha256": "f" * 64,
+            "observed_at": checkpoint["last_observation"]["observed_at"],
+            "generation_id": "7" * 64,
+            "candidate_sha256": candidate_sha,
+            "admitted_at": "2026-10-02T17:01:00Z",
+        }
+        context = CACHE_SOURCE.build_context(
+            owner_generation_id=checkpoint["generation_id"],
+            source_id=checkpoint["source_id"],
+            source_scope=checkpoint["source_scope"],
+            original_admission_ref=admission,
+            candidate_path=original_candidate_path,
+        )
         contents = {
             "composed-candidate.registry.json": candidate_bytes,
             "ready-scope.registry.json": b"{}\n",
@@ -1793,6 +2056,8 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             "regeneration-queue.json": b"{}\n",
             "quarantine.json": b"{}\n",
             "composition-receipt.json": RUNNER.canonical_json(composition),
+            CACHE_SOURCE.ORIGINAL_CANDIDATE_MEMBER: candidate_bytes,
+            CACHE_SOURCE.CONTEXT_MEMBER: RUNNER.canonical_json(context) + b"\n",
             "upstream-catalogue-enrichment-evidence.json": b"{}\n",
             "upstream-catalogue-processing-result.json": RUNNER.canonical_json(result),
         }
@@ -1877,10 +2142,25 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
         payloads["upstream-catalogue-enrichment-evidence.json"] = evidence_bytes
         payloads["upstream-catalogue-processing-result.json"] = RUNNER.canonical_json(result)
 
+        # This fixture is the exact pre-cache-provenance eight-output protocol.
+        # Keep its inventory distinct from the current ten-output contract so
+        # historical read validation cannot accidentally manufacture modern
+        # producer provenance.
+        historical_required_files = (
+            "composed-candidate.registry.json",
+            "ready-scope.registry.json",
+            "semantic-diff.json",
+            "regeneration-queue.json",
+            "quarantine.json",
+            "composition-receipt.json",
+            "upstream-catalogue-enrichment-evidence.json",
+            "upstream-catalogue-processing-result.json",
+        )
+
         bundle = root / "historical-link-contract-bundle"
         bundle.mkdir()
         digests = []
-        for name in RUNNER.REQUIRED_PROCESSOR_FILES:
+        for name in historical_required_files:
             payload = payloads[name]
             (bundle / name).write_bytes(payload)
             digests.append({
@@ -2488,7 +2768,9 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             bundle, checkpoint, _uploaded = self.ready_bundle(root)
             RUNNER.verify_processor_checkpoint(checkpoint, self.schema(root))
             helper = mock.Mock()
-            validated = RUNNER.validate_processor_bundle(checkpoint, bundle, {}, helper)
+            validated = RUNNER.validate_processor_bundle(
+                checkpoint, bundle, {}, helper, **self.cache_source_kwargs(checkpoint),
+            )
             self.assertEqual(validated["status"], "ready")
             self.assertEqual(validated["registry_sha256"], checkpoint["generation_inputs"]["candidate_sha256"])
             helper.validate_composition.assert_called_once()
@@ -2516,59 +2798,95 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                     checkpoint, bundle, {}, helper, root=SCRIPT.parents[1],
                     producer_head_sha=self.source_sha,
                     defer_seoul_declaration=True,
+                    **self.cache_source_kwargs(checkpoint),
                 )
 
             helper.validate_composition.assert_called_once()
             authenticate.assert_called_once_with(bundle, diagnostics, encoding="projected")
             self.assertEqual(validated["contract_diagnostics"], diagnostics)
 
-    def test_actual_c_bundle_accepts_authentic_historical_composer_bytes_unchanged(self) -> None:
+    def test_authentic_historical_composer_bytes_remain_readable_and_unchanged(self) -> None:
         repository_root = pathlib.Path(__file__).parents[1]
         with tempfile.TemporaryDirectory() as raw:
             temp_root = pathlib.Path(raw)
             bundle, checkpoint, payloads, fixture = self.historical_link_contract_bundle(temp_root)
-            before = {name: (bundle / name).read_bytes() for name in RUNNER.REQUIRED_PROCESSOR_FILES}
+            historical_files = tuple(row["path"] for row in checkpoint["output_digests"])
+            before = {name: (bundle / name).read_bytes() for name in historical_files}
             RUNNER.verify_processor_checkpoint(checkpoint, self.schema(temp_root))
+            producer_commit = fixture["provenance"]["producer_commit"]
+            producer_composer = RUNNER.processor_composer_source_identity(
+                repository_root, producer_commit,
+            )
+            self.assertEqual(producer_composer, RUNNER.HISTORICAL_LINK_CONTRACT_COMPOSER)
+            composition = RUNNER.load_object(bundle / "composition-receipt.json")
+            diagnostics = RUNNER.validate_processor_link_metadata(
+                checkpoint, bundle, root=repository_root, validate_seoul=False,
+            )
+            encoding = RUNNER.authenticate_contract_diagnostic_encoding(
+                composition, producer_composer,
+            )
+            self.assertEqual(encoding, "historical")
+            RUNNER.validate_processor_contract_diagnostic_outputs(
+                bundle, diagnostics, encoding=encoding,
+            )
+            self.assertEqual(len(diagnostics), 1)
+            self.assertEqual(diagnostics[0]["detail_status"], "legacy_detail_unknown")
+            self.assertEqual(
+                hashlib.sha256(payloads["composed-candidate.registry.json"]).hexdigest(),
+                fixture["payloads"]["composed-candidate.registry.json"]["sha256"],
+            )
+            self.assertEqual(
+                {name: (bundle / name).read_bytes() for name in historical_files},
+                before,
+            )
+
+            for label, unavailable_head in {
+                "missing_head": None,
+                "unknown_head": "f" * 40,
+            }.items():
+                with self.subTest(case=label):
+                    unavailable_identity = (
+                        None if unavailable_head is None
+                        else RUNNER.processor_composer_source_identity(repository_root, unavailable_head)
+                    )
+                    self.assertIsNone(unavailable_identity)
+                    strict_encoding = RUNNER.authenticate_contract_diagnostic_encoding(
+                        composition, unavailable_identity,
+                    )
+                    self.assertEqual(strict_encoding, "projected")
+                    with self.assertRaises(RUNNER.PromotionError):
+                        RUNNER.validate_processor_contract_diagnostic_outputs(
+                            bundle, diagnostics, encoding=strict_encoding,
+                        )
+
+            with self.assertRaisesRegex(
+                RUNNER.PromotionError,
+                "composition receipt composer identity differs from its authenticated producer source",
+            ):
+                RUNNER.authenticate_contract_diagnostic_encoding(
+                    composition, {"bytes": 1, "sha256": "a" * 64},
+                )
+
+    def test_current_c_rejects_authentic_historical_eight_output_bundle(self) -> None:
+        repository_root = pathlib.Path(__file__).parents[1]
+        with tempfile.TemporaryDirectory() as raw:
+            bundle, checkpoint, _payloads, fixture = self.historical_link_contract_bundle(
+                pathlib.Path(raw),
+            )
             composition_schema = RUNNER.load_object(
                 repository_root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
             )
             composition_helper = RUNNER.load_canonical_update_pr(repository_root)
-            producer_commit = fixture["provenance"]["producer_commit"]
-            self.assertEqual(
-                RUNNER.processor_composer_source_identity(repository_root, producer_commit),
-                RUNNER.HISTORICAL_LINK_CONTRACT_COMPOSER,
-            )
-            validated = RUNNER.validate_processor_bundle(
-                checkpoint, bundle, composition_schema, composition_helper,
-                root=repository_root, producer_head_sha=producer_commit,
-                defer_seoul_declaration=True,
-            )
-            self.assertEqual(validated["status"], "ready")
-            self.assertEqual(validated["registry_sha256"], hashlib.sha256(
-                payloads["composed-candidate.registry.json"],
-            ).hexdigest())
-            self.assertEqual(len(validated["contract_diagnostics"]), 1)
-            self.assertEqual(validated["contract_diagnostics"][0]["detail_status"], "legacy_detail_unknown")
-            self.assertEqual(
-                {name: (bundle / name).read_bytes() for name in RUNNER.REQUIRED_PROCESSOR_FILES},
-                before,
-            )
-
-            for label, identity in {
-                "missing_head": None,
-                "unavailable_head": None,
-                "receipt_head_mismatch": {"bytes": 1, "sha256": "a" * 64},
-            }.items():
-                with self.subTest(case=label), mock.patch.object(
-                    RUNNER, "processor_composer_source_identity", return_value=identity,
-                ):
-                    with self.assertRaises(RUNNER.PromotionError):
-                        RUNNER.validate_processor_bundle(
-                            checkpoint, bundle, composition_schema, composition_helper,
-                            root=repository_root,
-                            producer_head_sha=None if label == "missing_head" else "f" * 40,
-                            defer_seoul_declaration=True,
-                        )
+            with self.assertRaisesRegex(
+                RUNNER.PromotionError,
+                "exact ordered ten-file contract",
+            ):
+                RUNNER.validate_processor_bundle(
+                    checkpoint, bundle, composition_schema, composition_helper,
+                    root=repository_root,
+                    producer_head_sha=fixture["provenance"]["producer_commit"],
+                    defer_seoul_declaration=True,
+                )
 
     def test_current_composer_projects_the_same_legacy_worker_input_strictly(self) -> None:
         repository_root = pathlib.Path(__file__).parents[1]
@@ -2682,9 +3000,11 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 self.assertEqual(repository, self.repository)
                 composition_helper = kwargs["composition_helper"]
                 self.assertTrue(callable(composition_helper.validate_composition))
-                validation_results.append(RUNNER.validate_processor_bundle(
+                validated_bundle = RUNNER.validate_processor_bundle(
                     candidates[0], bundle, kwargs["composition_schema"], composition_helper,
-                ))
+                    **self.cache_source_kwargs(candidates[0]),
+                )
+                validation_results.append(validated_bundle)
                 locator = checkpoint["output_artifact"]
                 return ({
                     "bundle_dir": bundle,
@@ -2692,6 +3012,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                     "attempt": 2,
                     "run": {"head_sha": self.source_sha},
                     "artifact_id": locator["artifact_id"],
+                    "bundle": validated_bundle,
                 }, blocked)
 
             args = types.SimpleNamespace(
@@ -2704,13 +3025,16 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                     "GITHUB_REPOSITORY": self.repository,
                     "GITHUB_DEFAULT_BRANCH": self.default_branch,
                 }, clear=False),
-                mock.patch.object(RUNNER, "load_promotion_journal", return_value=None),
+                mock.patch.object(RUNNER, "pr_helper_remote_sha", return_value=None) as remote_sha,
                 mock.patch.object(RUNNER, "list_recoverable_processor_checkpoints", return_value=([checkpoint], [])),
                 mock.patch.object(RUNNER, "select_first_eligible_processor_bundle", side_effect=select_candidate),
                 mock.patch.object(RUNNER, "execute_candidate_preparation") as prepare,
             ):
                 RUNNER.recover_ready_processor_candidate(args, repository_root)
 
+            remote_sha.assert_called_once_with(
+                mock.ANY, repository_root.resolve(), f"refs/heads/{RUNNER.STATE_BRANCH}",
+            )
             self.assertEqual(len(validation_results), 1)
             self.assertEqual(validation_results[0]["registry_sha256"], checkpoint["generation_inputs"]["candidate_sha256"])
             prepare.assert_called_once_with(args, repository_root)
@@ -2747,7 +3071,10 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
                 mutate(checkpoint)
                 self.seal(checkpoint)
                 RUNNER.verify_processor_checkpoint(checkpoint, self.schema(root))
-                with self.assertRaisesRegex(RUNNER.PromotionError, "immutable durable generation state"):
+                with self.assertRaisesRegex(
+                    RUNNER.PromotionError,
+                    "immutable durable generation state|processor cache source context is invalid",
+                ):
                     RUNNER.validate_processor_bundle(checkpoint, bundle, {}, mock.Mock())
 
     def test_resealed_uploaded_copy_cannot_rebind_observation_or_input_artifacts(self) -> None:
@@ -3084,6 +3411,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             generator_material = {
                 "processor_script_sha256": hashlib.sha256((root / "scripts/process-upstream-catalogue-candidate.py").read_bytes()).hexdigest(),
                 "collector_handoff_helper_sha256": hashlib.sha256((root / "scripts/upstream_catalogue_handoff.py").read_bytes()).hexdigest(),
+                "cache_source_helper_sha256": hashlib.sha256((root / "scripts/upstream_catalogue_cache_source.py").read_bytes()).hexdigest(),
                 "seoul_operation_declaration_helper_sha256": hashlib.sha256((root / "scripts/seoul_oa109_operation_declaration.py").read_bytes()).hexdigest(),
                 "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256((root / "scripts/generate-seoul-oa109-subject-snapshot.py").read_bytes()).hexdigest(),
                 "seoul_operation_declaration_sha256": hashlib.sha256((root / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json").read_bytes()).hexdigest(),
@@ -3092,6 +3420,7 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             generation_inputs["generator_revision"] = hashlib.sha256(
                 json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
             ).hexdigest()
+            generation_inputs["cache_source_profile"] = CACHE_SOURCE.CACHE_SOURCE_PROFILE
             subprocess.run(("git", "add", "."), cwd=root, check=True)
             subprocess.run(("git", "commit", "-qm", "processor source"), cwd=root, check=True)
             processor_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
@@ -3106,9 +3435,43 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             subprocess.run(("git", "add", "manifest.json"), cwd=root, check=True)
             subprocess.run(("git", "commit", "-qm", "unrelated metadata"), cwd=root, check=True)
             current_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
-            checkpoint = {"generation_inputs": generation_inputs}
+            checkpoint = {
+                "generation_id": hashlib.sha256(RUNNER.canonical_json(generation_inputs)).hexdigest(),
+                "generation_inputs": generation_inputs,
+                "output_artifact": {
+                    "artifact_id": "123456",
+                    "bundle_manifest_sha256": "b" * 64,
+                },
+            }
+            checkpoint["checkpoint_sha256"] = hashlib.sha256(RUNNER.canonical_json(checkpoint)).hexdigest()
+
+            class SourceReader:
+                @staticmethod
+                def source_file(
+                    _repository: str, head_sha: str, path: str, *, maximum_bytes: int,
+                ) -> bytes:
+                    value = subprocess.run(
+                        ("git", "show", f"{head_sha}:{path}"), cwd=root,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+                    ).stdout
+                    if not 0 < len(value) <= maximum_bytes:
+                        raise AssertionError("fixture source input exceeds its bound")
+                    return value
+
+            contract = CACHE_SOURCE._contract_from_bound_run(
+                checkpoint,
+                repository=self.repository,
+                run={"head_sha": processor_head},
+                reader=SourceReader(),
+            )
+            compatibility = {
+                "cache_source_helper": CACHE_SOURCE,
+                "cache_source_contract": contract,
+            }
             composition = {"input_digests": receipt_digests}
-            RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, current_head, composition)
+            RUNNER.verify_processor_input_compatibility(
+                root, checkpoint, processor_head, current_head, composition, **compatibility,
+            )
 
             handoff_path = root / "scripts/upstream_catalogue_handoff.py"
             prior_handoff = handoff_path.read_bytes()
@@ -3117,7 +3480,9 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             subprocess.run(("git", "commit", "-qm", "change collector handoff semantics"), cwd=root, check=True)
             handoff_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
             with self.assertRaisesRegex(RUNNER.PromotionError, "input contract changed since observation: scripts/upstream_catalogue_handoff.py"):
-                RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, handoff_head, composition)
+                RUNNER.verify_processor_input_compatibility(
+                    root, checkpoint, processor_head, handoff_head, composition, **compatibility,
+                )
             handoff_path.write_bytes(prior_handoff)
             subprocess.run(("git", "add", str(handoff_path)), cwd=root, check=True)
             subprocess.run(("git", "commit", "-qm", "restore collector handoff"), cwd=root, check=True)
@@ -3129,7 +3494,9 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             subprocess.run(("git", "commit", "-qm", "change Seoul operation declaration"), cwd=root, check=True)
             declaration_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
             with self.assertRaisesRegex(RUNNER.PromotionError, "input contract changed since observation: contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"):
-                RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, declaration_head, composition)
+                RUNNER.verify_processor_input_compatibility(
+                    root, checkpoint, processor_head, declaration_head, composition, **compatibility,
+                )
             declaration_path.write_bytes(prior_declaration)
             subprocess.run(("git", "add", str(declaration_path)), cwd=root, check=True)
             subprocess.run(("git", "commit", "-qm", "restore Seoul operation declaration"), cwd=root, check=True)
@@ -3141,14 +3508,18 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             subprocess.run(("git", "commit", "-qm", "change Seoul historical subject snapshot"), cwd=root, check=True)
             snapshot_head = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
             with self.assertRaisesRegex(RUNNER.PromotionError, "input contract changed since observation: contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"):
-                RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, snapshot_head, composition)
+                RUNNER.verify_processor_input_compatibility(
+                    root, checkpoint, processor_head, snapshot_head, composition, **compatibility,
+                )
             snapshot_path.write_bytes(prior_snapshot)
             subprocess.run(("git", "add", str(snapshot_path)), cwd=root, check=True)
             subprocess.run(("git", "commit", "-qm", "restore Seoul historical subject snapshot"), cwd=root, check=True)
 
             tampered_composition = {"input_digests": {**receipt_digests, "registry_schema": {"bytes": 1, "sha256": "0" * 64}}}
             with self.assertRaisesRegex(RUNNER.PromotionError, "registry_schema digest"):
-                RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, current_head, tampered_composition)
+                RUNNER.verify_processor_input_compatibility(
+                    root, checkpoint, processor_head, current_head, tampered_composition, **compatibility,
+                )
 
             changed = root / "policy/source-refresh.json"
             changed.write_text("changed policy\n", encoding="utf-8")
@@ -3156,7 +3527,9 @@ class DurableProcessorRecoveryTests(unittest.TestCase):
             subprocess.run(("git", "commit", "-qm", "change source policy"), cwd=root, check=True)
             latest = subprocess.run(("git", "rev-parse", "HEAD"), cwd=root, text=True, capture_output=True, check=True).stdout.strip()
             with self.assertRaisesRegex(RUNNER.PromotionError, "contract changed"):
-                RUNNER.verify_processor_input_compatibility(root, checkpoint, processor_head, latest, composition)
+                RUNNER.verify_processor_input_compatibility(
+                    root, checkpoint, processor_head, latest, composition, **compatibility,
+                )
 
 class OwnedPRRefreshRecoveryTests(unittest.TestCase):
     repository = "StatPan/datapan-registry"
@@ -5658,6 +6031,7 @@ class TerminalOutcomeReceiptTests(unittest.TestCase):
                 (root / ".datapan/ci/canonical-update-promotion-outcomes/123456/2/recover-ready/terminal-outcome.sha256").read_text(),
                 f"{hashlib.sha256(output.read_bytes()).hexdigest()}  terminal-outcome.json\n",
             )
+
 
 
 if __name__ == "__main__":

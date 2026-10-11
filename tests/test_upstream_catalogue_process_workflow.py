@@ -208,6 +208,8 @@ def write_exact_replay_fixture(repo: pathlib.Path) -> dict[str, object]:
     for name in (
         "upstream_catalogue_handoff.py",
         "upstream_catalogue_derivation.py",
+        "upstream_catalogue_cache_source.py",
+        "upstream_catalogue_source_eligibility.py",
         "generate-batch-link-detail-registry-patches.py",
         "seoul_oa109_operation_declaration.py",
     ):
@@ -600,6 +602,88 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("processing_artifact_id", self.text)
         self.assertIn("processing_status", self.text)
 
+    def test_reused_cache_owner_archive_is_carried_through_both_derivation_phases(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        by_id = {step.get("id"): step for step in steps if step.get("id")}
+        cache = by_id["cache"]
+        derivation = by_id["derivation"]
+        claim = by_id["claim"]
+        processor = by_id["run_processor"]
+
+        self.assertIn("scripts/upstream_catalogue_cache_source.py restore", cache["run"])
+        self.assertIn("--github-output", cache["run"])
+        self.assertEqual(
+            derivation["env"]["SOURCE_WORK_REQUEST"],
+            "${{ steps.select.outputs.source_work_request }}",
+        )
+        self.assertIn('--source-work-request "${SOURCE_WORK_REQUEST}"', derivation["run"])
+        self.assertLess(steps.index(cache), steps.index(derivation))
+        self.assertLess(steps.index(derivation), steps.index(claim))
+        self.assertEqual(
+            derivation["env"]["CACHE_OWNER_ARCHIVE"],
+            "${{ steps.cache.outputs.owner_archive_path }}",
+        )
+        self.assertIn(
+            'archive_args+=(--resume-bundle-archive "../datapan-registry/${CACHE_OWNER_ARCHIVE}")',
+            derivation["run"],
+        )
+
+        for consumer in (claim, processor):
+            self.assertEqual(
+                consumer["env"]["RESUME_EVIDENCE"],
+                "${{ steps.cache.outputs.evidence_path }}",
+            )
+            self.assertEqual(
+                consumer["env"]["RESUME_SOURCE_CONTEXT"],
+                "${{ steps.cache.outputs.source_context_path }}",
+            )
+            self.assertEqual(
+                consumer["env"]["RESUME_OWNER_ARCHIVE"],
+                "${{ steps.cache.outputs.owner_archive_path }}",
+            )
+            self.assertEqual(
+                consumer["env"]["SOURCE_EPOCH"],
+                "${{ steps.derivation.outputs.source_epoch_path }}",
+            )
+            self.assertEqual(
+                consumer["env"]["SOURCE_TARGET_CONTRACT"],
+                "${{ steps.derivation.outputs.source_target_contract_path }}",
+            )
+            self.assertEqual(
+                consumer["env"]["RESUME_PARENT_ARCHIVE"],
+                "${{ steps.derivation.outputs.resume_parent_archive_path }}",
+            )
+            self.assertEqual(
+                consumer["env"]["CANONICAL_PARENT_ARCHIVE"],
+                "${{ steps.derivation.outputs.canonical_parent_archive_path }}",
+            )
+            self.assertIn('RESUME_OWNER_ARCHIVE="${RESUME_PARENT_ARCHIVE}"', consumer["run"])
+            self.assertIn('--resume-parent-archive "${RESUME_PARENT_ARCHIVE}"', consumer["run"])
+            self.assertIn('--canonical-parent-archive "${CANONICAL_PARENT_ARCHIVE}"', consumer["run"])
+            self.assertIn('--resume-owner-archive "${RESUME_OWNER_ARCHIVE}"', consumer["run"])
+            self.assertIn('--source-epoch "${SOURCE_EPOCH}"', consumer["run"])
+            self.assertIn('--source-target-contract "${SOURCE_TARGET_CONTRACT}"', consumer["run"])
+            self.assertIn(
+                "authenticated detail cache lacks its exact retained owner archive",
+                consumer["run"],
+            )
+
+    def test_derivation_source_request_args_are_independent_and_shell_valid(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        derivation = next(step for step in steps if step.get("id") == "derivation")
+        script = derivation["run"]
+        self.assertIn(
+            'if [ -n "${CACHE_OWNER_ARCHIVE}" ]; then\n'
+            '  archive_args+=(--resume-bundle-archive "../datapan-registry/${CACHE_OWNER_ARCHIVE}")\n'
+            'fi\nsource_request_args=()\n',
+            script,
+        )
+        self.assertIn('--source-work-request "${SOURCE_WORK_REQUEST}"', script)
+        checked = subprocess.run(
+            ["bash", "-n"], input=script, text=True, capture_output=True, check=False,
+        )
+        self.assertEqual(checked.returncode, 0, checked.stderr)
+
     def test_scheduled_handoff_uses_authenticated_bounded_discovery_before_selection(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]
         handoff = next(step for step in steps if step.get("id") == "handoff")
@@ -751,6 +835,8 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("sha256:", artifact["run"])
         self.assertIn("actions/artifacts/${artifact_id}/zip", artifact["run"])
         self.assertIn("downloaded failed processor artifact digest mismatch", artifact["run"])
+        self.assertIn('size_in_bytes", 0)) <= 536936448', artifact["run"])
+        self.assertIn("total > 536936448", artifact["run"])
         recovery = by_id["run_recovery"]
         self.assertEqual(recovery["if"], "steps.select.outputs.decision == 'recover'")
         self.assertIn("--recover-failed-processor-run-id", recovery["run"])
@@ -773,6 +859,13 @@ class WorkflowContractTests(unittest.TestCase):
         publish = next(step for step in steps if step.get("id") == "publish_result")
         self.assertIn("processing_replay:", self.text)
         self.assertIn("candidate_available:", self.text)
+        self.assertEqual(
+            self.text.count("verify_replay_persistence_receipt_from_committed_state("),
+            2,
+        )
+        self.assertIn("phase=processor._REPLAY_VERIFY_PRE_CAS", self.text)
+        self.assertIn("phase=processor._REPLAY_VERIFY_POST_CAS", self.text)
+        self.assertNotIn("processor.verify_replay_persistence_receipt(", self.text)
         replay_receipt_lines = [
             line for line in publish["run"].splitlines()
             if line.lstrip().startswith("elif ") and "steps.bundle_check.outputs.replay" in line
@@ -977,6 +1070,9 @@ class WorkflowContractTests(unittest.TestCase):
             (root / "scripts/upstream_catalogue_derivation.py").write_bytes(
                 (ROOT / "scripts/upstream_catalogue_derivation.py").read_bytes(),
             )
+            (root / "scripts/upstream_catalogue_source_eligibility.py").write_bytes(
+                (ROOT / "scripts/upstream_catalogue_source_eligibility.py").read_bytes(),
+            )
             state = root / "state"
             generation_id = "a" * 64
             expires_at = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=5)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -1157,17 +1253,19 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertIn("steps.bundle_check.outputs.verified == 'true'", final_gate["if"])
             self.assertIn("outputs.state_publication_status == 'published'", final_gate["if"])
 
-    def test_ready_bundle_verifies_exact_eight_file_order_including_result(self) -> None:
+    def test_ready_bundle_verifies_exact_ten_file_order_including_result(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]
         bundle_step = next(step for step in steps if step.get("id") == "bundle_check")
         ensure_step = next(step for step in steps if step.get("name", "").startswith("Ensure the processor artifact"))
         bundle_order = [
             "composed-candidate.registry.json", "ready-scope.registry.json", "semantic-diff.json",
             "regeneration-queue.json", "quarantine.json", "composition-receipt.json",
+            "upstream-catalogue-original-candidate.registry.json",
+            "upstream-catalogue-cache-source-context.json",
             "upstream-catalogue-enrichment-evidence.json", "upstream-catalogue-processing-result.json",
         ]
 
-        with tempfile.TemporaryDirectory(prefix="catalogue-ready-eight-") as temp:
+        with tempfile.TemporaryDirectory(prefix="catalogue-ready-ten-") as temp:
             repo = pathlib.Path(temp)
             root = repo / "datapan-registry/.datapan/ci/upstream-catalogue-processing"
             root.mkdir(parents=True)
@@ -1179,6 +1277,10 @@ class WorkflowContractTests(unittest.TestCase):
                 "regeneration-queue.json": {"items": []},
                 "quarantine.json": {"items": []},
                 "composition-receipt.json": {"status": "ready_scoped"},
+                "upstream-catalogue-original-candidate.registry.json": [],
+                "upstream-catalogue-cache-source-context.json": {
+                    "schema_version": "datapan.upstream-catalogue-cache-source-context.v1",
+                },
                 "upstream-catalogue-enrichment-evidence.json": {"records": []},
                 "upstream-catalogue-processing-result.json": {
                     "status": "ready", "generation_id": generation_id,

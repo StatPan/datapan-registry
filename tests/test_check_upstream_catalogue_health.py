@@ -78,6 +78,16 @@ REAL_PROCESSOR_READY_BUNDLE = [
         "bytes": 896,
     },
     {
+        "path": "upstream-catalogue-original-candidate.registry.json",
+        "sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
+        "bytes": 109412233,
+    },
+    {
+        "path": "upstream-catalogue-cache-source-context.json",
+        "sha256": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+        "bytes": 1042,
+    },
+    {
         "path": "upstream-catalogue-enrichment-evidence.json",
         "sha256": "936a0b772094548b3904358ab3d153981806e90c2a2e2a0cf6a69abbd5c1303a",
         "bytes": 1826,
@@ -88,7 +98,7 @@ REAL_PROCESSOR_READY_BUNDLE = [
         "bytes": 520,
     },
 ]
-REAL_PROCESSOR_READY_BUNDLE_SHA256 = "16f5b87a7027821c66e540bb5243e0248695a009c339e6167b05c9368886821e"
+REAL_PROCESSOR_READY_BUNDLE_SHA256 = HEALTH.sha256_bytes(HEALTH.canonical_json(REAL_PROCESSOR_READY_BUNDLE))
 DISTINCT_REVISION_JOURNAL = ROOT / "tests/fixtures/upstream-catalogue-health/promotion-journal-distinct-revisions.json"
 DISTINCT_REVISION_JOURNAL_SHA256 = "89bad0fc177203a49e59c878f3a5022005836cdd498b939844990324c446050e"
 DISTINCT_REVISION_GENERATION = "66a2ae130fce7463dfbdd47caa48d3b7013e47a365a9a2745fe22b5378cd77d4"
@@ -137,7 +147,7 @@ def checkpoint(
         "detail_records": [],
         "detail_queue_cursor": 0,
         "output_digests": ([
-            {"path": path, "sha256": str(index + 1) * 64, "bytes": 123 + index}
+            {"path": path, "sha256": f"{index + 1:064x}", "bytes": 123 + index}
             for index, path in enumerate(HEALTH.PROCESSOR_OUTPUT_PATHS)
         ] if status in {"ready", "no-change"} else []),
         "output_artifact": {
@@ -145,7 +155,7 @@ def checkpoint(
             "name": "upstream-catalogue-processing-200", "artifact_id": "201",
             "expires_at": output_expiry,
             "bundle_manifest_sha256": HEALTH.sha256_bytes(HEALTH.canonical_json([
-                {"path": path, "sha256": str(index + 1) * 64, "bytes": 123 + index}
+                {"path": path, "sha256": f"{index + 1:064x}", "bytes": 123 + index}
                 for index, path in enumerate(HEALTH.PROCESSOR_OUTPUT_PATHS)
             ])) if status in {"ready", "no-change"} else None,
         },
@@ -2605,7 +2615,7 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
         reasons = {row["reason"] for row in report["sources"][0]["faults"]}
         self.assertIn("candidate_output_bundle_duplicate_path", reasons)
 
-    def test_real_processor_eight_file_bundle_is_accepted_and_result_tampering_is_rejected(self) -> None:
+    def test_real_processor_ten_file_bundle_is_accepted_and_result_tampering_is_rejected(self) -> None:
         # Captured from #657's test_ready_scoped_candidate_has_exact_composer_evidence_and_durable_artifact_digests.
         self.assertEqual(tuple(row["path"] for row in REAL_PROCESSOR_READY_BUNDLE), HEALTH.PROCESSOR_OUTPUT_PATHS)
         self.assertEqual(

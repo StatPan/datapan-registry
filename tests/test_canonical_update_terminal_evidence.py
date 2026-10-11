@@ -183,16 +183,31 @@ def _source_contract(context: dict, *, source_bytes: dict[str, bytes] | None = N
             path: (ROOT / path).read_bytes()
             for path in EVIDENCE.EVALUATOR_SOURCE_PATHS
         }
-    schema_bytes = source_bytes[EVIDENCE.SCHEMA_PATH]
-    schema_sha = _hash(schema_bytes)
+    schemas = {
+        version: {
+            "path": path,
+            "bytes": source_bytes[path],
+            "sha256": _hash(source_bytes[path]),
+        }
+        for version, path in (
+            (EVIDENCE.SCHEMA_VERSION, EVIDENCE.SCHEMA_PATH),
+            (EVIDENCE.SCHEMA_VERSION_V2, EVIDENCE.SCHEMA_PATH_V2),
+        )
+    }
+    schema_bytes = schemas[EVIDENCE.SCHEMA_VERSION]["bytes"]
+    schema_sha = schemas[EVIDENCE.SCHEMA_VERSION]["sha256"]
     return {
         "repository": context["repository"],
         "workflow_id": context["workflow_id"],
         "workflow_path": context["workflow_path"],
         "source_sha": context["head_sha"],
+        "closure_version": "terminal-evaluator/v2-source-target",
+        "producer_schema_version": EVIDENCE.SCHEMA_VERSION_V2,
+        "producer_schema_path": EVIDENCE.SCHEMA_PATH_V2,
         "schema_path": EVIDENCE.SCHEMA_PATH,
         "schema_bytes": schema_bytes,
         "schema_sha256": schema_sha,
+        "schemas": schemas,
         "source_files": {path: _hash(raw) for path, raw in source_bytes.items()},
         "mode_steps": copy.deepcopy(EVIDENCE.MODE_STEPS),
     }
@@ -295,6 +310,46 @@ def _validate(**overrides) -> dict:
     return EVIDENCE.validate_terminal_evidence(**args)
 
 
+BASE_EVALUATOR_SOURCE_PATHS = frozenset({
+    ".github/workflows/canonical-update-promotion.yml",
+    "policy/upstream-catalogue-health.json",
+    "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
+    "schemas/datapan.catalog-diff.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "schemas/datapan.provider-index.v1.schema.json",
+    "schemas/datapan.specs.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "scripts/canonical_update_ci.py",
+    "scripts/canonical_update_pr.py",
+    "scripts/canonical_update_terminal_evidence.py",
+    "scripts/check-upstream-catalogue-health.py",
+    "scripts/compose-upstream-catalogue-candidate.py",
+    "scripts/generate-batch-link-detail-registry-patches.py",
+    "scripts/materialize-canonical-registry.py",
+    "scripts/refresh-canonical-snapshot-evidence.py",
+    "scripts/run-canonical-update-promotion.py",
+    "scripts/seoul_oa109_operation_declaration.py",
+    "scripts/upstream-catalogue-state-branch.py",
+    "scripts/upstream_catalogue_derivation.py",
+    "scripts/upstream_catalogue_handoff.py",
+})
+
+APPROVED_STALE_QUEUE_SOURCE_PATHS = frozenset({
+    "policy/canonical-stale-queue-recovery.v1.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
+    "schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
+    "scripts/canonical_publication_state.py",
+    "scripts/canonical_stale_queue_recovery.py",
+    "scripts/canonical_stale_queue_recovery_gate.py",
+    "scripts/canonical_stale_queue_state.py",
+})
+
+
 class TerminalEvidenceTests(unittest.TestCase):
     def test_exact_completed_mode_is_verified_even_if_later_c_step_failed(self) -> None:
         result = _validate()
@@ -315,8 +370,21 @@ class TerminalEvidenceTests(unittest.TestCase):
                 self.assertEqual(result["artifact"]["name"], f"canonical-update-promotion-terminal-{RUN_ID}-2-{mode}")
 
     def test_real_git_tree_source_contract_uses_exact_production_blob_hashes(self) -> None:
-        relative_paths = tuple(sorted(EVIDENCE.EVALUATOR_SOURCE_PATHS))
-        self.assertEqual(len(relative_paths), 25)
+        observed_paths = tuple(EVIDENCE.EVALUATOR_SOURCE_PATHS)
+        relative_paths = tuple(sorted(observed_paths))
+        expected_paths = EVIDENCE.V2_EVALUATOR_SOURCE_PATHS
+        self.assertEqual(len(BASE_EVALUATOR_SOURCE_PATHS), 25)
+        self.assertEqual(len(APPROVED_STALE_QUEUE_SOURCE_PATHS), 8)
+        self.assertEqual(EVIDENCE.HISTORICAL_V1_EVALUATOR_SOURCE_PATHS, BASE_EVALUATOR_SOURCE_PATHS)
+        self.assertEqual(
+            EVIDENCE.CURRENT_V1_EVALUATOR_SOURCE_PATHS,
+            BASE_EVALUATOR_SOURCE_PATHS | APPROVED_STALE_QUEUE_SOURCE_PATHS
+            | {"scripts/upstream_catalogue_cache_source.py"},
+        )
+        self.assertEqual(len(EVIDENCE.CURRENT_V1_EVALUATOR_SOURCE_PATHS), 34)
+        self.assertEqual(len(expected_paths), 40)
+        self.assertEqual(len(observed_paths), len(set(observed_paths)))
+        self.assertEqual(set(observed_paths), expected_paths)
         self.assertNotIn("scripts/validate-diagnostic-publication.py", relative_paths)
         working_bytes = {relative: (ROOT / relative).read_bytes() for relative in relative_paths}
 
@@ -337,6 +405,20 @@ class TerminalEvidenceTests(unittest.TestCase):
                 cwd=tree, check=True, capture_output=True,
             )
             source_sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=tree, text=True).strip()
+            tree_entries = subprocess.check_output(
+                ["git", "ls-tree", "-r", "-z", source_sha], cwd=tree,
+            ).split(b"\0")
+            framed_blobs: dict[str, tuple[str, str]] = {}
+            for entry in tree_entries:
+                if not entry:
+                    continue
+                header, raw_path = entry.split(b"\t", 1)
+                mode, object_type, object_id = header.decode("ascii").split(" ")
+                relative = raw_path.decode("utf-8")
+                self.assertEqual(object_type, "blob", relative)
+                self.assertIn(mode, {"100644", "100755"}, relative)
+                framed_blobs[relative] = (mode, object_id)
+            self.assertEqual(set(framed_blobs), expected_paths)
             committed_bytes = {
                 relative: subprocess.check_output(["git", "show", f"{source_sha}:{relative}"], cwd=tree)
                 for relative in relative_paths
@@ -354,6 +436,10 @@ class TerminalEvidenceTests(unittest.TestCase):
         fixture["run"] = _run(context)
         fixture["jobs"] = _jobs(context)
         fixture["artifact_inventory"] = _artifact_inventory(context, fixture["archive_bytes"])
+        expected_source_digests = {
+            relative: _hash(content) for relative, content in committed_bytes.items()
+        }
+        self.assertEqual(fixture["source_contract"]["source_files"], expected_source_digests)
 
         result = EVIDENCE.validate_terminal_evidence(**fixture)
 
@@ -648,6 +734,8 @@ class TerminalEvidenceTests(unittest.TestCase):
                 contract["schema_bytes"] = schema_bytes
                 contract["schema_sha256"] = schema_sha
                 contract["source_files"][EVIDENCE.SCHEMA_PATH] = schema_sha
+                contract["schemas"][EVIDENCE.SCHEMA_VERSION]["bytes"] = schema_bytes
+                contract["schemas"][EVIDENCE.SCHEMA_VERSION]["sha256"] = schema_sha
                 fixture["source_contract"] = contract
 
                 with mock.patch.object(EVIDENCE, "_deny_external_schema_resource", side_effect=AssertionError("external resolver reached")) as resolver:
@@ -669,6 +757,8 @@ class TerminalEvidenceTests(unittest.TestCase):
         contract["schema_bytes"] = schema_bytes
         contract["schema_sha256"] = schema_sha
         contract["source_files"][EVIDENCE.SCHEMA_PATH] = schema_sha
+        contract["schemas"][EVIDENCE.SCHEMA_VERSION]["bytes"] = schema_bytes
+        contract["schemas"][EVIDENCE.SCHEMA_VERSION]["sha256"] = schema_sha
         fixture["source_contract"] = contract
         with mock.patch.object(EVIDENCE, "_deny_external_schema_resource", side_effect=AssertionError("external resolver reached")) as resolver:
             result = EVIDENCE.validate_terminal_evidence(**fixture)

@@ -4,6 +4,7 @@ import copy
 import argparse
 import hashlib
 import importlib.util
+import io
 import json
 import os
 import pathlib
@@ -14,6 +15,7 @@ import unittest
 import sys
 import urllib.error
 import urllib.request
+import zipfile
 import jsonschema
 from typing import Any
 from datetime import datetime, timedelta, timezone
@@ -91,6 +93,8 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
         self.policy_path.write_text(json.dumps({"sources": [{"source_id": "data_go_kr", "canonical_registry": str(self.baseline_path)}]}), encoding="utf-8")
         self.provider_index_path.write_text(json.dumps({"adapters": [{"name": "example", "hosts": ["api.example.gov"]}]}), encoding="utf-8")
         self.composer_path.write_text(self.fake_composer_source(), encoding="utf-8")
+        self._resume_auth: dict[pathlib.Path, tuple[pathlib.Path, Any]] = {}
+        self._resume_artifact_sequence = 0
 
     def pointer_only_c_root(self) -> pathlib.Path:
         """Build the production C validator inputs with the registry still an LFS pointer."""
@@ -100,6 +104,8 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             "scripts/compose-upstream-catalogue-candidate.py",
             "scripts/generate-batch-link-detail-registry-patches.py",
             "scripts/seoul_oa109_operation_declaration.py",
+            "scripts/upstream_catalogue_cache_source.py",
+            "scripts/upstream_catalogue_handoff.py",
             "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
             "schemas/datapan.specs.v1.schema.json",
             "data/provider-index.json",
@@ -130,6 +136,7 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             scripts.mkdir()
             processor_path = scripts / "process-upstream-catalogue-candidate.py"
             helper_path = scripts / "upstream_catalogue_handoff.py"
+            cache_source_path = scripts / "upstream_catalogue_cache_source.py"
             declaration_helper_path = scripts / "seoul_oa109_operation_declaration.py"
             snapshot_generator_path = scripts / "generate-seoul-oa109-subject-snapshot.py"
             declaration_path = root / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
@@ -137,6 +144,7 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             declaration_path.parent.mkdir(parents=True)
             shutil.copy2(SCRIPT, processor_path)
             shutil.copy2(ROOT / "scripts/upstream_catalogue_handoff.py", helper_path)
+            shutil.copy2(ROOT / "scripts/upstream_catalogue_cache_source.py", cache_source_path)
             shutil.copy2(ROOT / "scripts/seoul_oa109_operation_declaration.py", declaration_helper_path)
             shutil.copy2(ROOT / "scripts/generate-seoul-oa109-subject-snapshot.py", snapshot_generator_path)
             shutil.copy2(ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json", declaration_path)
@@ -152,6 +160,7 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
                 contract = {
                     "processor_script_sha256": hashlib.sha256(processor_path.read_bytes()).hexdigest(),
                     "collector_handoff_helper_sha256": hashlib.sha256(helper_path.read_bytes()).hexdigest(),
+                    "cache_source_helper_sha256": hashlib.sha256(cache_source_path.read_bytes()).hexdigest(),
                     "seoul_operation_declaration_helper_sha256": hashlib.sha256(declaration_helper_path.read_bytes()).hexdigest(),
                     "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256(snapshot_generator_path.read_bytes()).hexdigest(),
                     "seoul_operation_declaration_sha256": hashlib.sha256(declaration_path.read_bytes()).hexdigest(),
@@ -166,7 +175,7 @@ class UpstreamCatalogueProcessorTest(unittest.TestCase):
             changed = processor.generator_revision()
             self.assertNotEqual(changed, original)
             self.assertEqual(changed, independently_derive())
-            for path in (declaration_helper_path, snapshot_generator_path, declaration_path, historical_snapshot_path):
+            for path in (cache_source_path, declaration_helper_path, snapshot_generator_path, declaration_path, historical_snapshot_path):
                 previous = path.read_bytes()
                 path.write_bytes(previous + b"\n# pinned declaration revision change\n")
                 changed = processor.generator_revision()
@@ -244,6 +253,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                 argv.append(str(value))
         return MODULE.build_parser().parse_args(argv)
 
+    # #761 exact replay / live producer fixture helpers.
     def authenticated_live_args(
         self, *, processor_run_id: str, processor_artifact_run_id: str,
         state_dir: pathlib.Path, output_dir: pathlib.Path, state_head_sha: str | None = None,
@@ -330,6 +340,134 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                 argv.extend((action.option_strings[0], str(value)))
         return argv
 
+    # #758 selected-owner resume-source archive/context helpers.
+    def bind_authenticated_resume_source(
+        self,
+        evidence_path: pathlib.Path,
+        context_path: pathlib.Path,
+    ) -> tuple[pathlib.Path, Any]:
+        """Model the real upload/bind readbacks for one locally produced B bundle."""
+        context = MODULE.CACHE_SOURCE.validate_context(json.loads(context_path.read_text(encoding="utf-8")))
+        generation_id = context["owner_generation_id"]
+        owner_path = self.state_dir / "sources/data_go_kr/generations" / f"{generation_id}.json"
+        schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        )
+        owner = MODULE.verify_checkpoint(json.loads(owner_path.read_text(encoding="utf-8")), schema)
+        locator = owner["output_artifact"]
+        run_id = str(locator["run_id"])
+        self.assertTrue(run_id.isdigit(), run_id)
+        attempt = 1
+        self._resume_artifact_sequence += 1
+        artifact_id = str(int(run_id) * 100 + self._resume_artifact_sequence)
+        artifact_name = f"upstream-catalogue-processing-{run_id}-{attempt}"
+
+        archived = copy.deepcopy(owner)
+        archived["output_artifact"]["name"] = artifact_name
+        archived["output_artifact"]["artifact_id"] = None
+        archived = MODULE.seal_checkpoint(archived)
+        output_entries = {entry["path"]: entry for entry in archived["output_digests"]}
+        self.assertEqual(len(output_entries), len(archived["output_digests"]))
+        archive_buffer = io.BytesIO()
+        with zipfile.ZipFile(archive_buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for name in output_entries:
+                source = self.output_dir / name
+                self.assertTrue(source.is_file(), name)
+                self.assertEqual(source.stat().st_size, output_entries[name]["bytes"])
+                self.assertEqual(MODULE.file_sha256(source), output_entries[name]["sha256"])
+                archive.writestr(name, source.read_bytes())
+            archive.writestr(
+                MODULE.CACHE_SOURCE.CHECKPOINT_RECEIPT_MEMBER,
+                MODULE.canonical_json(archived) + b"\n",
+            )
+        archive_raw = archive_buffer.getvalue()
+        archive_dir = self.root / "authenticated-resume-archives"
+        archive_dir.mkdir(exist_ok=True)
+        archive_path = archive_dir / f"{run_id}-{self._resume_artifact_sequence}.zip"
+        archive_path.write_bytes(archive_raw)
+
+        durable = copy.deepcopy(archived)
+        durable["output_artifact"]["artifact_id"] = artifact_id
+        durable = MODULE.seal_checkpoint(durable)
+        MODULE.verify_checkpoint(durable, schema)
+        MODULE.atomic_write_json(owner_path, durable)
+
+        source_head = "3" * 40
+        artifact_metadata = {
+            "id": int(artifact_id),
+            "name": artifact_name,
+            "size_in_bytes": len(archive_raw),
+            "digest": "sha256:" + MODULE.sha256_bytes(archive_raw),
+            "expired": False,
+            "created_at": self.now,
+            "updated_at": self.now,
+            "expires_at": durable["output_artifact"]["expires_at"],
+            "workflow_run": {
+                "id": int(run_id),
+                "head_sha": source_head,
+                "head_branch": "main",
+                "repository_id": 1,
+                "head_repository_id": 1,
+            },
+        }
+        run_metadata = {
+            "id": int(run_id),
+            "run_attempt": attempt,
+            "path": ".github/workflows/upstream-catalogue-process.yml",
+            "head_branch": "main",
+            "head_sha": source_head,
+            "status": "completed",
+            "conclusion": "success",
+            "event": "schedule",
+            "repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+            "head_repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+        }
+
+        class NativeReader:
+            def __init__(self) -> None:
+                self.archive_calls = 0
+
+            def json(self, endpoint: str):
+                if endpoint.endswith(f"/runs/{run_id}/artifacts?per_page=100"):
+                    return {"artifacts": [copy.deepcopy(artifact_metadata)]}
+                if endpoint.endswith(f"/artifacts/{artifact_id}"):
+                    return copy.deepcopy(artifact_metadata)
+                if endpoint.endswith(f"/runs/{run_id}/attempts/{attempt}"):
+                    return copy.deepcopy(run_metadata)
+                raise AssertionError(f"unexpected native endpoint: {endpoint}")
+
+            def archive(self, *_args, **_kwargs) -> bytes:
+                self.archive_calls += 1
+                raise AssertionError("retained resume archive must not be downloaded again")
+
+            def source_file(
+                self, repository: str, head_sha: str, path: str, *, maximum_bytes: int,
+            ) -> bytes:
+                self_outer.assertEqual(repository, "StatPan/datapan-registry")
+                self_outer.assertEqual(head_sha, source_head)
+                raw = (ROOT / path).read_bytes()
+                self_outer.assertLessEqual(len(raw), maximum_bytes)
+                return raw
+
+        self_outer = self
+        reader = NativeReader()
+        key = evidence_path.resolve()
+        self._resume_auth[key] = (archive_path, reader)
+        return archive_path, reader
+
+    def copy_resume_bundle(self, destination: pathlib.Path) -> tuple[pathlib.Path, pathlib.Path]:
+        destination.mkdir(parents=True, exist_ok=True)
+        for name in (
+            "upstream-catalogue-enrichment-evidence.json",
+            MODULE.CACHE_SOURCE.ORIGINAL_CANDIDATE_MEMBER,
+            MODULE.CACHE_SOURCE.CONTEXT_MEMBER,
+        ):
+            shutil.copy2(self.output_dir / name, destination / name)
+        evidence_path = destination / "upstream-catalogue-enrichment-evidence.json"
+        context_path = destination / MODULE.CACHE_SOURCE.CONTEXT_MEMBER
+        self.bind_authenticated_resume_source(evidence_path, context_path)
+        return evidence_path, context_path
+
     def assert_c_processor_bundle_accepts(
         self, checkpoint: dict[str, Any], baseline: list[dict[str, Any]], candidate: list[dict[str, Any]],
         provider_index: dict[str, Any], enrichment: dict[str, Any], composer: Any,
@@ -337,7 +475,8 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         root: pathlib.Path | None = None,
         current_canonical: tuple[dict[str, Any], bytes] | None = None,
         allow_terminal_noop: bool = False,
-    ) -> pathlib.Path:
+        return_screened_evidence: bool = False,
+    ) -> pathlib.Path | dict[str, Any]:
         """Exercise the real C bundle gate over a real composition result."""
         import importlib.util
 
@@ -396,6 +535,11 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         (bundle_dir / "upstream-catalogue-enrichment-evidence.json").write_bytes(
             MODULE.canonical_json(enrichment) + b"\n",
         )
+        for name in (
+            MODULE.CACHE_SOURCE.ORIGINAL_CANDIDATE_MEMBER,
+            MODULE.CACHE_SOURCE.CONTEXT_MEMBER,
+        ):
+            shutil.copy2(self.output_dir / name, bundle_dir / name)
         if bundle_mutator is not None:
             bundle_mutator(bundle_dir)
             composition_path = bundle_dir / "composition-receipt.json"
@@ -411,6 +555,8 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         final = copy.deepcopy(checkpoint)
         processor_run_id = str(final["output_artifact"]["name"]).removeprefix("upstream-catalogue-processing-")
         processor_artifact_run_id = str(final["output_artifact"]["run_id"])
+        if processor_run_id == processor_artifact_run_id:
+            processor_run_id = f"{processor_artifact_run_id}-1"
         final["output_artifact"].update({
             "artifact_id": "20100000001",
             "expires_at": "2026-11-01T00:00:00Z",
@@ -444,6 +590,78 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         (bundle_dir / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
             MODULE.canonical_json(MODULE.seal_checkpoint(uploaded)) + b"\n",
         )
+        MODULE.seal_checkpoint(final)
+        archive_buffer = io.BytesIO()
+        with zipfile.ZipFile(archive_buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for name in (*runner.REQUIRED_PROCESSOR_FILES, "upstream-catalogue-checkpoint-receipt.json"):
+                archive.writestr(name, (bundle_dir / name).read_bytes())
+        archive_raw = archive_buffer.getvalue()
+        locator = final["output_artifact"]
+        artifact_run_id = str(locator["run_id"])
+        artifact_name = str(locator["name"])
+        attempt_match = __import__("re").fullmatch(
+            rf"upstream-catalogue-processing-{artifact_run_id}-([1-9][0-9]*)",
+            artifact_name,
+        )
+        self.assertIsNotNone(attempt_match)
+        assert attempt_match is not None
+        attempt = int(attempt_match.group(1))
+        source_head = "3" * 40
+        artifact_metadata = {
+            "id": int(locator["artifact_id"]), "name": artifact_name,
+            "size_in_bytes": len(archive_raw),
+            "digest": "sha256:" + MODULE.sha256_bytes(archive_raw),
+            "expired": False,
+            "created_at": "2026-10-05T00:00:00Z",
+            "updated_at": "2026-10-05T00:01:00Z",
+            "expires_at": locator["expires_at"],
+            "workflow_run": {
+                "id": int(artifact_run_id), "head_sha": source_head,
+                "head_branch": "main", "repository_id": 1,
+                "head_repository_id": 1,
+            },
+        }
+        run_metadata = {
+            "id": int(artifact_run_id), "run_attempt": attempt,
+            "path": ".github/workflows/upstream-catalogue-process.yml",
+            "head_branch": "main", "head_sha": source_head,
+            "status": "completed", "conclusion": "success", "event": "schedule",
+            "repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+            "head_repository": {"id": 1, "full_name": "StatPan/datapan-registry"},
+        }
+
+        class NativeReader:
+            def json(self, endpoint: str):
+                if endpoint.endswith(f"/runs/{artifact_run_id}/artifacts?per_page=100"):
+                    return {"artifacts": [copy.deepcopy(artifact_metadata)]}
+                if endpoint.endswith(f"/artifacts/{locator['artifact_id']}"):
+                    return copy.deepcopy(artifact_metadata)
+                if endpoint.endswith(f"/runs/{artifact_run_id}/attempts/{attempt}"):
+                    return copy.deepcopy(run_metadata)
+                raise AssertionError(f"unexpected native endpoint: {endpoint}")
+
+            def archive(self, repository: str, artifact_id: str, *, expected_bytes: int) -> bytes:
+                if repository != "StatPan/datapan-registry" or artifact_id != str(locator["artifact_id"]):
+                    raise AssertionError("unexpected artifact identity")
+                if expected_bytes != len(archive_raw):
+                    raise AssertionError("unexpected artifact byte count")
+                return archive_raw
+
+            def source_file(
+                self, repository: str, head_sha: str, path: str, *, maximum_bytes: int,
+            ) -> bytes:
+                if repository != "StatPan/datapan-registry" or head_sha != source_head:
+                    raise AssertionError("unexpected source identity")
+                raw = (ROOT / path).read_bytes()
+                if not 0 < len(raw) <= maximum_bytes:
+                    raise AssertionError("unexpected source byte count")
+                return raw
+
+        cache_source_kwargs = {
+            "repository": "StatPan/datapan-registry",
+            "default_branch": "main",
+            "cache_source_native_reader": NativeReader(),
+        }
         schema = json.loads((ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json").read_text())
         composition_helper = runner.load_canonical_update_pr(ROOT)
         canonical_context = None
@@ -459,18 +677,44 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         if expected_rejection is None:
             validate = lambda: runner.validate_processor_bundle(
                 final, bundle_dir, schema, composition_helper, root=validation_root,
+                producer_head_sha=source_head,
                 canonical_context=canonical_context,
                 allow_terminal_noop=allow_terminal_noop,
+                **cache_source_kwargs,
             )
-            validate()
+            validated = validate()
         else:
             with self.assertRaisesRegex(runner.PromotionError, expected_rejection):
                 validate = lambda: runner.validate_processor_bundle(
                     final, bundle_dir, schema, composition_helper, root=validation_root,
+                    producer_head_sha=source_head,
                     canonical_context=canonical_context,
                     allow_terminal_noop=allow_terminal_noop,
+                    **cache_source_kwargs,
                 )
                 validate()
+            validated = None
+        if return_screened_evidence:
+            self.assertIsNotNone(validated)
+            return {
+                "bundle_dir": bundle_dir,
+                "checkpoint": final,
+                "screen_result": {
+                    "status": "verified",
+                    "stage": "complete",
+                    "reason_code": None,
+                    "screened": {
+                        "run_id": artifact_run_id,
+                        "attempt": attempt,
+                        "run": copy.deepcopy(run_metadata),
+                        "artifact_id": str(locator["artifact_id"]),
+                        "bundle_dir": bundle_dir,
+                        "bundle": validated,
+                        "generation_id": final["generation_id"],
+                        "canonical_context": canonical_context,
+                    },
+                },
+            }
         return bundle_dir
 
     def successful_fetch(self, url: str, timeout: float) -> str:
@@ -607,8 +851,14 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
 
         schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
         registered = __import__("json").loads((ROOT / "data/provider-index.json").read_text())
+        resume_context = self.output_dir / MODULE.CACHE_SOURCE.CONTEXT_MEMBER
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, resume_context,
+        )
         resumed = MODULE.validated_resume_records(
             evidence_path,
+            resume_source_context=resume_context,
+            resume_source_archive=resume_archive,
             checkpoint=checkpoint,
             state_dir=self.state_dir,
             source_id="data_go_kr",
@@ -617,6 +867,8 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             candidate_by_id={candidate["id"]: candidate},
             registered_hosts=MODULE.DETAIL_HELPERS.registered_hosts(registered),
             now=MODULE.parse_timestamp(self.now),
+            repository="StatPan/datapan-registry",
+            cache_source_reader=resume_reader,
         )
         self.assertEqual(resumed["15056854"]["declaration_provenance"], record["declaration_provenance"])
 
@@ -971,11 +1223,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(len(page_calls), 1)
         self.assertEqual(len(resolver_calls), 1)
         cached_dir = self.root / "cached-seoul"
-        cached_dir.mkdir()
-        cached_evidence_path = cached_dir / "upstream-catalogue-enrichment-evidence.json"
-        cached_evidence_path.write_bytes(
-            (self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_bytes(),
-        )
+        cached_evidence_path, cached_context_path = self.copy_resume_bundle(cached_dir)
 
         baseline = copy.deepcopy(candidate)
         baseline["operations"] = []
@@ -983,7 +1231,10 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         second_args = self.args(run_id="101002", **{
             "--composer": ACTUAL_COMPOSER,
             "--resume-enrichment-evidence": cached_evidence_path,
+            "--resume-source-context": cached_context_path,
         })
+        cached_archive_path, cached_reader = self._resume_auth[cached_evidence_path.resolve()]
+        second_args.resume_owner_archive = cached_archive_path
         second_args.fixture_composer = None
         second_args.allow_fixture_composer = False
 
@@ -996,6 +1247,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         code, checkpoint = MODULE.process(
             second_args, fetcher=no_page_fetch, resolver_fetcher=no_resolver_fetch,
             sleeper=lambda _delay: None,
+            cache_source_reader=cached_reader,
         )
         self.assertEqual(code, 0, checkpoint)
         self.assertEqual(checkpoint["status"], "ready")
@@ -1078,7 +1330,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         no_change_args = self.args(run_id="101003", **{
             "--composer": ACTUAL_COMPOSER,
             "--resume-enrichment-evidence": cached_evidence_path,
+            "--resume-source-context": cached_context_path,
         })
+        no_change_args.resume_owner_archive = cached_archive_path
         no_change_args.fixture_composer = None
         no_change_args.allow_fixture_composer = False
         code, no_change_checkpoint = MODULE.process(
@@ -1086,6 +1340,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             fetcher=no_page_fetch,
             resolver_fetcher=no_resolver_fetch,
             sleeper=lambda _delay: None,
+            cache_source_reader=cached_reader,
         )
         self.assertEqual(code, 0, no_change_checkpoint)
         self.assertEqual(no_change_checkpoint["status"], "no-change")
@@ -1127,7 +1382,9 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         mixed_args = self.args(run_id="101004", **{
             "--composer": ACTUAL_COMPOSER,
             "--resume-enrichment-evidence": cached_evidence_path,
+            "--resume-source-context": cached_context_path,
         })
+        mixed_args.resume_owner_archive = cached_archive_path
         mixed_args.fixture_composer = None
         mixed_args.allow_fixture_composer = False
         mixed_code, mixed_checkpoint = MODULE.process(
@@ -1135,6 +1392,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             fetcher=no_page_fetch,
             resolver_fetcher=no_resolver_fetch,
             sleeper=lambda _delay: None,
+            cache_source_reader=cached_reader,
         )
         self.assertEqual(mixed_code, 0, mixed_checkpoint)
         self.assertEqual(mixed_checkpoint["status"], "ready")
@@ -1215,10 +1473,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         candidate = copy.deepcopy(subject)
         # Treat the pinned target as a newly observed catalogue row so the
         # first pass legitimately acquires its page/resolver cache.
-        self.baseline_path.write_text("[]", encoding="utf-8")
-        self.candidate_path.write_text(json.dumps([candidate]), encoding="utf-8")
-        self.provider_index_path.write_bytes((ROOT / "data/provider-index.json").read_bytes())
-        self.write_observation(self.now)
+        self.write_real_composer_inputs([], [candidate], self.now)
 
         helper = MODULE.SEOUL_DECLARATION
         page_url = helper.PAGE_URL
@@ -1291,45 +1546,136 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             now=MODULE.parse_timestamp(self.now),
             registered_hosts=MODULE.DETAIL_HELPERS.registered_hosts(json.loads(self.provider_index_path.read_text())),
         ))
-        first_evidence_path.write_text(json.dumps(old_evidence, ensure_ascii=False), encoding="utf-8")
-        generation_path = self.state_dir / "sources/data_go_kr/generations" / f"{first['generation_id']}.json"
-        bound_owner = json.loads(generation_path.read_text(encoding="utf-8"))
-        evidence_digest = MODULE.file_sha256(first_evidence_path)
-        evidence_entry = next(
-            item for item in bound_owner["output_digests"]
-            if item["path"] == first_evidence_path.name
+        # Restore the unresolved Seoul evidence through the authenticated
+        # historical two-source contract and its bound original A artifact.
+        # This is the only place where the old cache is admitted. The current
+        # processor below must reauthenticate the retained ZIP and mint the
+        # modern ten-output contract before C or Health can consume it.
+        cache_spec = importlib.util.spec_from_file_location(
+            "seoul_legacy_cache_test_support",
+            ROOT / "tests/test_upstream_catalogue_cache_source.py",
         )
-        evidence_entry.update({"sha256": evidence_digest, "bytes": first_evidence_path.stat().st_size})
-        bound_owner["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
-            MODULE.canonical_json(bound_owner["output_digests"]),
+        assert cache_spec is not None and cache_spec.loader is not None
+        cache_support = importlib.util.module_from_spec(cache_spec)
+        cache_spec.loader.exec_module(cache_support)
+        legacy_case = cache_support.CacheSourceTest(methodName="runTest")
+        legacy_case.setUp()
+        self.addCleanup(legacy_case.tearDown)
+        legacy = legacy_case.restore_legacy_cache_fixture(
+            candidate=self.candidate_path.read_bytes(),
+            evidence=MODULE.canonical_json(old_evidence) + b"\n",
+            checkpoint_template=first,
         )
-        generation_path.write_text(json.dumps(MODULE.seal_checkpoint(bound_owner), sort_keys=True), encoding="utf-8")
+        legacy_checkpoint = legacy["checkpoint"]
+        self.assertNotIn("cache_source_profile", legacy_checkpoint["generation_inputs"])
+        self.assertEqual(len(legacy_checkpoint["output_digests"]), 8)
+        self.assertEqual(legacy["provenance"], "legacy")
+        resume_reader = legacy["reader"]
+        self.assertEqual(
+            [value for kind, value in resume_reader.calls if kind == "archive"],
+            ["201", "101"],
+        )
 
-        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        def reject_second_archive(*_args, **_kwargs):
+            self.fail("current processor must reauthenticate the retained legacy ZIP without downloading it")
+
+        resume_reader.archive = reject_second_archive
+        resume_evidence_path = pathlib.Path(legacy["evidence_path"])
+        resume_context_path = pathlib.Path(legacy["source_context_path"])
+        resume_archive_path = pathlib.Path(legacy["owner_archive_path"])
+        legacy_state_dir = pathlib.Path(legacy["state_dir"])
+        index_path = legacy_state_dir / "sources/data_go_kr/index.json"
         index = json.loads(index_path.read_text(encoding="utf-8"))
-        index["detail_queue_cursor"] = 19
-        index["detail_retry_state"]["15056854"] = {
-            "source_sha256": MODULE.source_fingerprint(candidate),
-            "guide_sha256": None,
-            "attempts": 3,
-            "last_attempt_at": self.now,
-            "failure_diagnostic": {"code": "resolved_link_operation_contract_unproven", "phase": "resolver"},
-        }
         retry_before = copy.deepcopy(index["detail_retry_state"]["15056854"])
-        index_path.write_text(json.dumps(index, sort_keys=True), encoding="utf-8")
 
         # A changed source policy creates a new processor generation while the
         # candidate/source row and the cache remain exactly the same.
         alternate_policy = self.root / "source-policy-with-new-generation.json"
-        alternate_policy.write_text(json.dumps(json.loads(self.policy_path.read_text()), indent=2) + "\n", encoding="utf-8")
+        alternate_policy.write_bytes((ROOT / "policy/source-refresh.json").read_bytes())
         self.assertNotEqual(MODULE.file_sha256(alternate_policy), MODULE.file_sha256(self.policy_path))
-        claim_args = self.args(run_id="202")
+        producer_run_id = "20200000000"
+        processor_artifact_run_id = "30200000000"
+        input_artifact_id = "40200000000"
+        current_observed_at = "2026-10-01T10:10:00Z"
+        current_refresh = json.loads(self.evidence_path.read_text(encoding="utf-8"))
+        current_refresh["observed_at"] = current_observed_at
+        current_refresh["snapshot"]["sha256"] = MODULE.file_sha256(self.candidate_path)
+        current_refresh["snapshot"]["bytes"] = self.candidate_path.stat().st_size
+        current_refresh["diff"]["sha256"] = MODULE.file_sha256(self.diff_path)
+        self.evidence_path.write_text(
+            json.dumps(current_refresh, sort_keys=True), encoding="utf-8",
+        )
+        collector_archive = self.root / "current-a-observation.zip"
+        with zipfile.ZipFile(collector_archive, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for name, payload in (
+                ("candidate.registry.json", self.candidate_path.read_bytes()),
+                ("catalog-diff.json", self.diff_path.read_bytes()),
+                ("upstream-refresh-evidence.json", self.evidence_path.read_bytes()),
+                ("upstream-refresh-work-packet.json", b'{"schema_version":"test.packet.v1"}\n'),
+            ):
+                archive.writestr(name, payload)
+        archive_sha = MODULE.file_sha256(collector_archive)
+        archive_size = collector_archive.stat().st_size
+        admission = {
+            "schema_version": "datapan.upstream-catalogue-admission-envelope.v1",
+            "repository": "StatPan/datapan-registry",
+            "producer_run_id": producer_run_id,
+            "run_attempt": 1,
+            "head_sha": "3" * 40,
+            "run_started_at": "2026-10-01T10:05:00Z",
+            "run_completed_at": "2026-10-01T10:12:00Z",
+            "observe_job_started_at": "2026-10-01T10:06:00Z",
+            "observe_job_completed_at": "2026-10-01T10:11:00Z",
+            "artifact_id": input_artifact_id,
+            "artifact_name": f"upstream-catalog-refresh-{producer_run_id}",
+            "artifact_expires_at": "2026-10-31T00:00:00Z",
+            "artifact_created_at": "2026-10-01T10:11:00Z",
+            "artifact_digest_sha256": archive_sha,
+            "artifact_size_bytes": archive_size,
+            "archive_sha256": archive_sha,
+            "archive_size_bytes": archive_size,
+            "observed_at": current_observed_at,
+            "refresh_evidence_sha256": MODULE.file_sha256(self.evidence_path),
+            "event": "schedule",
+        }
+        admission_path = self.root / "current-a-admission.json"
+        admission_path.write_text(json.dumps(admission, sort_keys=True), encoding="utf-8")
+        claim_args = self.args(run_id=producer_run_id, **{
+            "--state-dir": legacy_state_dir,
+            "--processor-run-id": f"{processor_artifact_run_id}-1",
+            "--processor-artifact-run-id": processor_artifact_run_id,
+            "--execution-mode": "live",
+            "--producer-head-sha": admission["head_sha"],
+            "--producer-run-attempt": admission["run_attempt"],
+            "--producer-run-started-at": admission["run_started_at"],
+            "--producer-run-completed-at": admission["run_completed_at"],
+            "--producer-observe-job-started-at": admission["observe_job_started_at"],
+            "--producer-observe-job-completed-at": admission["observe_job_completed_at"],
+            "--producer-artifact-created-at": admission["artifact_created_at"],
+            "--producer-artifact-digest-sha256": admission["artifact_digest_sha256"],
+            "--producer-artifact-size-bytes": admission["artifact_size_bytes"],
+            "--producer-event": admission["event"],
+            "--collector-admission-file": admission_path,
+            "--collector-archive": collector_archive,
+            "--input-artifact-id": input_artifact_id,
+            "--artifact-name": admission["artifact_name"],
+            "--artifact-expires-at": admission["artifact_expires_at"],
+            "--output-artifact-expires-at": "2026-11-01T00:00:00Z",
+            "--composer": ACTUAL_COMPOSER,
+        })
+        claim_args.now = None
+        claim_args.fixture_composer = None
+        claim_args.allow_fixture_composer = False
         claim_args.source_policy = alternate_policy
-        claim_args.resume_enrichment_evidence = first_evidence_path
+        claim_args.resume_enrichment_evidence = resume_evidence_path
+        claim_args.resume_source_context = resume_context_path
+        claim_args.resume_owner_archive = resume_archive_path
         claim_args.claim_only = True
         forbidden = lambda *_args, **_kwargs: self.fail("cached local declaration must not issue HTTP")
+        live_clock = lambda: MODULE.parse_timestamp("2026-10-01T10:20:00Z")
         claim_code, claimed = MODULE.process(
             claim_args, fetcher=forbidden, resolver_fetcher=forbidden, sleeper=lambda _delay: None,
+            cache_source_reader=resume_reader, clock=live_clock,
         )
         self.assertEqual(claim_code, 0, claimed)
         self.assertEqual(claimed["attempts_consumed"], 0)
@@ -1342,16 +1688,48 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         worker_args.require_durable_reservation = True
         worker_code, worker = MODULE.process(
             worker_args, fetcher=forbidden, resolver_fetcher=forbidden, sleeper=lambda _delay: None,
+            cache_source_reader=resume_reader, clock=live_clock,
         )
-        self.assertEqual(worker_code, 0, worker)
+        composer_diagnostic = ""
+        if worker_code != 0:
+            diagnostic_output = self.root / "diagnostic-composer-output"
+            diagnostic = subprocess.run(
+                [
+                    os.sys.executable, str(ACTUAL_COMPOSER),
+                    "--baseline", str(self.baseline_path),
+                    "--candidate", str(self.candidate_path),
+                    "--diff", str(self.diff_path),
+                    "--refresh-evidence", str(self.evidence_path),
+                    "--provider-index", str(self.provider_index_path),
+                    "--source-policy", str(alternate_policy),
+                    "--producer-run-id", producer_run_id,
+                    "--producer-run-url", claim_args.producer_run_url,
+                    "--output-dir", str(diagnostic_output),
+                    "--enrichment-evidence", str(self.output_dir / "upstream-catalogue-enrichment-evidence.json"),
+                ],
+                text=True, capture_output=True, check=False,
+            )
+            composer_diagnostic = f"\ncomposer stdout={diagnostic.stdout}\ncomposer stderr={diagnostic.stderr}"
+        self.assertEqual(worker_code, 0, f"{worker}{composer_diagnostic}")
         self.assertEqual(worker["attempts_consumed"], 0)
         self.assertEqual(worker["attempts_by_id"], {})
         self.assertEqual(worker["detail_queue_cursor"], 19)
+        self.assertEqual(
+            worker["generation_inputs"]["cache_source_profile"],
+            MODULE.CACHE_SOURCE.CACHE_SOURCE_PROFILE,
+        )
+        self.assertEqual(worker["generation_inputs"]["generator_revision"], MODULE.generator_revision())
+        self.assertEqual(
+            [value for kind, value in resume_reader.calls if kind == "archive"],
+            ["201", "101"],
+        )
         after_index = json.loads(index_path.read_text(encoding="utf-8"))
         self.assertEqual(after_index["detail_retry_state"]["15056854"], retry_before)
         self.assertEqual(after_index["detail_queue_cursor"], 19)
 
-        cached_result = json.loads(first_evidence_path.read_text(encoding="utf-8"))
+        cached_result = json.loads(
+            (self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_text(encoding="utf-8"),
+        )
         self.assertEqual(len(cached_result["records"]), 1)
         self.assertEqual(len(cached_result["records"][0]["operations"]), 4)
         self.assertEqual(cached_result["records"][0]["operations"][:3], baseline["operations"])
@@ -1374,10 +1752,408 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             registry_schema=composer.load_json(composer.REGISTRY_SCHEMA),
         )
         self.assertNotIn("_binding_error", validated[("data.go.kr", "15056854")])
-        self.assert_c_processor_bundle_accepts(
+        joined = self.assert_c_processor_bundle_accepts(
             worker, [], [candidate], provider_index, cached_result, composer,
             root=self.pointer_only_c_root(),
+            return_screened_evidence=True,
         )
+        self.assertIsInstance(joined, dict)
+        assert isinstance(joined, dict)
+        final_checkpoint = joined["checkpoint"]
+        self.assertEqual(
+            [row["path"] for row in final_checkpoint["output_digests"]],
+            [
+                "composed-candidate.registry.json",
+                "ready-scope.registry.json",
+                "semantic-diff.json",
+                "regeneration-queue.json",
+                "quarantine.json",
+                "composition-receipt.json",
+                MODULE.CACHE_SOURCE.ORIGINAL_CANDIDATE_MEMBER,
+                MODULE.CACHE_SOURCE.CONTEXT_MEMBER,
+                "upstream-catalogue-enrichment-evidence.json",
+                "upstream-catalogue-processing-result.json",
+            ],
+        )
+        self.assertEqual(len(final_checkpoint["output_digests"]), 10)
+
+        # Feed the same current processor checkpoint and real C validation
+        # result into Health. The only boundary double is the exact current
+        # main identity: this fixture's authenticated composition baseline is
+        # its local empty registry, so the current output correctly remains a
+        # promotion-required candidate rather than a false publication claim.
+        health_spec = importlib.util.spec_from_file_location(
+            "seoul_cached_joined_health_test_support",
+            ROOT / "tests/test_check_upstream_catalogue_health.py",
+        )
+        assert health_spec is not None and health_spec.loader is not None
+        health_support = importlib.util.module_from_spec(health_spec)
+        health_spec.loader.exec_module(health_support)
+        baseline_bytes = self.baseline_path.read_bytes()
+        main_revision = joined["screen_result"]["screened"]["run"]["head_sha"]
+        main_identity = {
+            "revision": main_revision,
+            "manifest_sha256": "b" * 64,
+            "registry_path": "data/data-go-kr.registry.json",
+            "registry_bytes": len(baseline_bytes),
+            "registry_sha256": MODULE.sha256_bytes(baseline_bytes),
+        }
+        screened = joined["screen_result"]["screened"]
+        locator = final_checkpoint["output_artifact"]
+        self.assertEqual(
+            final_checkpoint["generation_id"],
+            health_support.HEALTH.sha256_bytes(
+                health_support.HEALTH.canonical_json(final_checkpoint["generation_inputs"]),
+            ),
+        )
+        self.assertEqual(screened["generation_id"], final_checkpoint["generation_id"])
+        self.assertEqual(screened["run_id"], str(locator["run_id"]))
+        self.assertEqual(str(screened["run"]["id"]), str(locator["run_id"]))
+        name_match = __import__("re").fullmatch(
+            r"upstream-catalogue-processing-([0-9]{6,20})-([1-9][0-9]*)",
+            str(locator["name"]),
+        )
+        self.assertIsNotNone(name_match, locator)
+        assert name_match is not None
+        self.assertEqual(name_match.group(1), str(locator["run_id"]))
+        self.assertEqual(str(screened["attempt"]), name_match.group(2))
+        self.assertEqual(str(screened["run"]["run_attempt"]), name_match.group(2))
+        self.assertEqual(screened["artifact_id"], str(locator["artifact_id"]))
+        self.assertEqual(final_checkpoint["source_id"], "data_go_kr")
+        self.assertEqual(final_checkpoint["source_scope"], "aggregate_supported_catalog")
+        self.assertEqual(final_checkpoint["generation_inputs"]["source_id"], "data_go_kr")
+        self.assertEqual(
+            final_checkpoint["generation_inputs"]["source_scope"],
+            "aggregate_supported_catalog",
+        )
+        self.assertEqual(screened["bundle"]["status"], final_checkpoint["status"])
+        self.assertEqual(screened["bundle"]["registry_path"], main_identity["registry_path"])
+        health_case = health_support.UpstreamCatalogueHealthTest(methodName="runTest")
+        with mock.patch.object(
+            health_support.HEALTH,
+            "manifest_registry_identity",
+            return_value=main_identity,
+        ):
+            receipt = health_case.run_health(
+                self.root / "joined-health",
+                cp=[final_checkpoint],
+                as_of=datetime.fromisoformat("2026-10-05T01:00:00+00:00"),
+                main_revision=main_revision,
+                manifest_sha256=main_identity["manifest_sha256"],
+                processor_candidate_screen=lambda _checkpoint: joined["screen_result"],
+                evaluator_source_sha=main_revision,
+            )
+        source_health = receipt["sources"][0]
+        evaluation = source_health["canonical"]["current_candidate_evaluation"]
+        projection = source_health["processor"]["link_contract_diagnostics"]
+        self.assertEqual(
+            (evaluation["status"], evaluation["reason_code"]),
+            ("rejected", "candidate_payload_requires_promotion"),
+        )
+        self.assertEqual(projection["status"], "verified")
+        self.assertEqual(projection["applicability"], "current")
+        self.assertEqual(projection["records"], [])
+        self.assertIsNone(source_health["canonical"]["publication"])
+        self.assertTrue(source_health["canonical"]["last_good"]["verified"])
+        health_support.HEALTH.validate_schema(
+            receipt,
+            ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+            "joined health receipt",
+        )
+        receipt_path = self.root / "joined-health-receipt.json"
+        receipt_path.write_text(json.dumps(receipt, sort_keys=True), encoding="utf-8")
+        state_root = self.root / "persisted" / "health/upstream-catalogue"
+        persisted = health_support.PERSIST.persist(
+            receipt_path,
+            state_root,
+            ROOT / "policy/upstream-catalogue-health.json",
+            "StatPan/datapan-registry",
+        )
+        self.assertEqual(persisted["status"], "persisted")
+        stored_state = json.loads((state_root / "state.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            stored_state["last_good_by_source"]["data_go_kr"]["publication_revision"],
+            "9" * 40,
+        )
+
+        # The successful Seoul conversion above deliberately resolves the old
+        # diagnostic. Exercise the distinct honest-unknown outcome with stale
+        # cached observations: current B remains retry, C admits only its
+        # terminal no-candidate evidence, and Health cannot turn it into a
+        # current publication candidate.
+        unknown_evidence = copy.deepcopy(old_evidence)
+        unknown_evidence["worker_outcomes"][0]["link_metadata"] = copy.deepcopy(
+            stale_outcome["link_metadata"],
+        )
+        unknown_case = cache_support.CacheSourceTest(methodName="runTest")
+        unknown_case.setUp()
+        self.addCleanup(unknown_case.tearDown)
+        unknown_legacy = unknown_case.restore_legacy_cache_fixture(
+            candidate=self.candidate_path.read_bytes(),
+            evidence=MODULE.canonical_json(unknown_evidence) + b"\n",
+            checkpoint_template=first,
+        )
+        unknown_reader = unknown_legacy["reader"]
+        self.assertEqual(
+            [value for kind, value in unknown_reader.calls if kind == "archive"],
+            ["201", "101"],
+        )
+
+        def reject_unknown_archive(*_args, **_kwargs):
+            self.fail("unknown-path current B must reuse the retained legacy ZIP")
+
+        unknown_reader.archive = reject_unknown_archive
+        unknown_args = copy.deepcopy(worker_args)
+        unknown_args.state_dir = pathlib.Path(unknown_legacy["state_dir"])
+        unknown_args.output_dir = self.root / "unknown-current-output"
+        unknown_args.processor_run_id = "30200000001-1"
+        unknown_args.processor_artifact_run_id = "30200000001"
+        unknown_args.resume_enrichment_evidence = pathlib.Path(unknown_legacy["evidence_path"])
+        unknown_args.resume_source_context = pathlib.Path(unknown_legacy["source_context_path"])
+        unknown_args.resume_owner_archive = pathlib.Path(unknown_legacy["owner_archive_path"])
+        unknown_args.claim_only = True
+        unknown_args.require_durable_reservation = False
+        unknown_claim_code, unknown_claim = MODULE.process(
+            unknown_args, fetcher=forbidden, resolver_fetcher=forbidden,
+            sleeper=lambda _delay: None, cache_source_reader=unknown_reader,
+            clock=live_clock,
+        )
+        self.assertEqual(unknown_claim_code, 0, unknown_claim)
+        self.assertEqual(unknown_claim["request_reservation"]["records"], [])
+        unknown_worker_args = copy.deepcopy(unknown_args)
+        unknown_worker_args.claim_only = False
+        unknown_worker_args.require_durable_reservation = True
+        unknown_code, unknown_worker = MODULE.process(
+            unknown_worker_args, fetcher=forbidden, resolver_fetcher=forbidden,
+            sleeper=lambda _delay: None, cache_source_reader=unknown_reader,
+            clock=live_clock,
+        )
+        self.assertEqual(unknown_code, 2, unknown_worker)
+        self.assertEqual(unknown_worker["status"], "retry")
+        self.assertEqual(unknown_worker["attempts_consumed"], 0)
+        # One pending row normalizes the ordinary queue cursor to its only
+        # valid slot; this is distinct from the Seoul success path's preserved
+        # cursor assertion above.
+        self.assertEqual(unknown_worker["detail_queue_cursor"], 0)
+        unknown_detail = unknown_worker["detail_records"][0]
+        authenticated_unknown_outcome = unknown_evidence["worker_outcomes"][0]
+        self.assertEqual(unknown_detail["status"], authenticated_unknown_outcome["status"])
+        self.assertEqual(
+            unknown_detail["link_metadata"],
+            authenticated_unknown_outcome["link_metadata"],
+        )
+        self.assertEqual(
+            unknown_detail["failure_diagnostic"],
+            authenticated_unknown_outcome["failure_diagnostic"],
+        )
+        unknown_output_evidence = json.loads((
+            unknown_args.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        ).read_text(encoding="utf-8"))
+        self.assertEqual(
+            unknown_output_evidence["worker_outcomes"][0],
+            authenticated_unknown_outcome,
+        )
+        self.assertNotIn(
+            "contract_failure",
+            unknown_output_evidence["worker_outcomes"][0]["failure_diagnostic"],
+        )
+        self.assertEqual(
+            [value for kind, value in unknown_reader.calls if kind == "archive"],
+            ["201", "101"],
+        )
+
+        runner_spec = importlib.util.spec_from_file_location(
+            "seoul_unknown_canonical_promotion",
+            ROOT / "scripts/run-canonical-update-promotion.py",
+        )
+        assert runner_spec is not None and runner_spec.loader is not None
+        runner = importlib.util.module_from_spec(runner_spec)
+        runner_spec.loader.exec_module(runner)
+        uploaded_unknown = copy.deepcopy(unknown_worker)
+        self.assertIsNone(uploaded_unknown["output_artifact"]["artifact_id"])
+        (unknown_args.output_dir / "upstream-catalogue-checkpoint-receipt.json").write_bytes(
+            MODULE.canonical_json(uploaded_unknown) + b"\n",
+        )
+        final_unknown = copy.deepcopy(unknown_worker)
+        final_unknown["output_artifact"]["artifact_id"] = "30200000002"
+        MODULE.seal_checkpoint(final_unknown)
+        runner.verify_processor_checkpoint(
+            final_unknown,
+            ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+        )
+        unknown_c = runner.validate_processor_bundle(
+            final_unknown,
+            unknown_args.output_dir,
+            runner.load_object(ROOT / "schemas/datapan.catalogue-composition-receipt.v1.schema.json"),
+            runner.load_canonical_update_pr(ROOT),
+            root=ROOT,
+            producer_head_sha="3" * 40,
+        )
+        self.assertEqual(unknown_c["status"], "retry")
+        self.assertEqual(len(unknown_c["contract_diagnostics"]), 1)
+        self.assertEqual(
+            unknown_c["contract_diagnostics"][0]["detail_status"],
+            "legacy_detail_unknown",
+        )
+        self.assertNotIn("contract_failure", unknown_c["contract_diagnostics"][0])
+
+        screen_calls = 0
+
+        def reject_unknown_screen(_checkpoint):
+            nonlocal screen_calls
+            screen_calls += 1
+            self.fail("retry checkpoint must not enter the candidate screen")
+
+        unknown_health = health_case.run_health(
+            self.root / "unknown-health",
+            cp=[final_unknown],
+            as_of=datetime.fromisoformat("2026-10-05T02:00:00+00:00"),
+            main_revision="3" * 40,
+            processor_candidate_screen=reject_unknown_screen,
+            evaluator_source_sha="3" * 40,
+        )
+        unknown_source = unknown_health["sources"][0]
+        self.assertEqual(screen_calls, 0)
+        self.assertEqual(
+            unknown_source["processor"]["detail_records"][0]["failure_diagnostic"],
+            authenticated_unknown_outcome["failure_diagnostic"],
+        )
+        self.assertEqual(
+            unknown_source["processor"]["detail_records"][0]["link_metadata"],
+            authenticated_unknown_outcome["link_metadata"],
+        )
+        unknown_projection = unknown_source["processor"]["link_contract_diagnostics"]
+        self.assertEqual(
+            (
+                unknown_projection["status"], unknown_projection["applicability"],
+                unknown_projection["reason_code"], unknown_projection["records"],
+            ),
+            ("not_applicable", "not_applicable", "candidate_not_screenable", []),
+        )
+        self.assertIsNone(unknown_source["canonical"]["publication"])
+        self.assertEqual(
+            unknown_source["canonical"]["last_good"]["publication_revision"],
+            "9" * 40,
+        )
+        health_support.HEALTH.validate_schema(
+            unknown_health,
+            ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+            "unknown joined health receipt",
+        )
+        unknown_receipt_path = self.root / "unknown-health-receipt.json"
+        unknown_receipt_path.write_text(
+            json.dumps(unknown_health, sort_keys=True), encoding="utf-8",
+        )
+        persisted_unknown = health_support.PERSIST.persist(
+            unknown_receipt_path,
+            state_root,
+            ROOT / "policy/upstream-catalogue-health.json",
+            "StatPan/datapan-registry",
+        )
+        self.assertEqual(persisted_unknown["status"], "persisted")
+        state_after_unknown = json.loads((state_root / "state.json").read_text(encoding="utf-8"))
+        self.assertEqual(
+            state_after_unknown["last_good_by_source"]["data_go_kr"]["publication_revision"],
+            "9" * 40,
+        )
+        stored_unknown = json.loads((
+            state_root / "receipts" / health_support.PERSIST.receipt_file_name(unknown_health)
+        ).read_text(encoding="utf-8"))
+        stored_unknown_source = stored_unknown["sources"][0]
+        self.assertIsNone(stored_unknown_source["canonical"]["publication"])
+        self.assertEqual(
+            stored_unknown_source["processor"]["detail_records"][0]["link_metadata"],
+            authenticated_unknown_outcome["link_metadata"],
+        )
+        self.assertEqual(
+            stored_unknown_source["processor"]["link_contract_diagnostics"],
+            unknown_projection,
+        )
+
+        # A newly reserved attempt must start from the current observation and
+        # must not inherit authenticated metadata from the unresolved legacy
+        # cache. Remove the durable retry charge so this independent current
+        # generation owns one real page attempt, then make that attempt fail.
+        fresh_case = cache_support.CacheSourceTest(methodName="runTest")
+        fresh_case.setUp()
+        self.addCleanup(fresh_case.tearDown)
+        fresh_legacy = fresh_case.restore_legacy_cache_fixture(
+            candidate=self.candidate_path.read_bytes(),
+            evidence=MODULE.canonical_json(unknown_evidence) + b"\n",
+            checkpoint_template=first,
+        )
+        fresh_reader = fresh_legacy["reader"]
+        fresh_reader.archive = lambda *_args, **_kwargs: self.fail(
+            "fresh-reservation current B must reuse the retained legacy ZIP",
+        )
+        fresh_state_dir = pathlib.Path(fresh_legacy["state_dir"])
+        fresh_index_path = fresh_state_dir / "sources/data_go_kr/index.json"
+        fresh_index = json.loads(fresh_index_path.read_text(encoding="utf-8"))
+        fresh_index["detail_retry_state"].pop("15056854")
+        fresh_index_path.write_text(json.dumps(fresh_index, sort_keys=True), encoding="utf-8")
+
+        fresh_args = copy.deepcopy(worker_args)
+        fresh_args.state_dir = fresh_state_dir
+        fresh_args.output_dir = self.root / "fresh-reserved-current-output"
+        fresh_args.processor_run_id = "30200000003-1"
+        fresh_args.processor_artifact_run_id = "30200000003"
+        fresh_args.resume_enrichment_evidence = pathlib.Path(fresh_legacy["evidence_path"])
+        fresh_args.resume_source_context = pathlib.Path(fresh_legacy["source_context_path"])
+        fresh_args.resume_owner_archive = pathlib.Path(fresh_legacy["owner_archive_path"])
+        fresh_args.max_attempts = 1
+        fresh_args.max_queue = 1
+        fresh_args.retries_per_detail = 0
+        fresh_args.claim_only = True
+        fresh_args.require_durable_reservation = False
+        fresh_claim_code, fresh_claim = MODULE.process(
+            fresh_args, fetcher=forbidden, resolver_fetcher=forbidden,
+            sleeper=lambda _delay: None, cache_source_reader=fresh_reader,
+            clock=live_clock,
+        )
+        self.assertEqual(fresh_claim_code, 0, fresh_claim)
+        self.assertEqual(fresh_claim["attempts_consumed"], 1)
+        self.assertEqual(
+            [row["id"] for row in fresh_claim["request_reservation"]["records"]],
+            ["15056854"],
+        )
+
+        page_attempts: list[str] = []
+
+        def fail_fresh_page(url: str, _timeout: float):
+            page_attempts.append(url)
+            raise TimeoutError("fresh reservation fixture timeout")
+
+        fresh_worker_args = copy.deepcopy(fresh_args)
+        fresh_worker_args.claim_only = False
+        fresh_worker_args.require_durable_reservation = True
+        fresh_code, fresh_worker = MODULE.process(
+            fresh_worker_args,
+            fetcher=fail_fresh_page,
+            resolver_fetcher=lambda *_args, **_kwargs: self.fail(
+                "page timeout must not call the resolver",
+            ),
+            sleeper=lambda _delay: None,
+            cache_source_reader=fresh_reader,
+            clock=live_clock,
+        )
+        self.assertEqual(fresh_code, 2, fresh_worker)
+        self.assertEqual(page_attempts, [MODULE.safe_public_page_url("15056854")])
+        self.assertEqual(fresh_worker["attempts_consumed"], 1)
+        self.assertEqual(fresh_worker["attempts_by_id"], {"15056854": 1})
+        fresh_detail = fresh_worker["detail_records"][0]
+        self.assertEqual(
+            fresh_detail["failure_diagnostic"],
+            {"code": "timeout", "phase": "page"},
+        )
+        self.assertNotIn("link_metadata", fresh_detail)
+        fresh_evidence = json.loads((
+            fresh_args.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        ).read_text(encoding="utf-8"))
+        self.assertEqual(
+            fresh_evidence["worker_outcomes"][0]["failure_diagnostic"],
+            {"code": "timeout", "phase": "page"},
+        )
+        self.assertNotIn("link_metadata", fresh_evidence["worker_outcomes"][0])
 
     def test_resume_rejects_resolver_diagnostic_when_metadata_chain_is_missing(self) -> None:
         page_url = "https://www.data.go.kr/data/2/openapi.do"
@@ -1417,6 +2193,17 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             "resolved_link_operation_contract_unproven",
         )
         original_evidence = copy.deepcopy(evidence)
+        resume_context = self.output_dir / MODULE.CACHE_SOURCE.CONTEXT_MEMBER
+        context = MODULE.CACHE_SOURCE.validate_context(
+            json.loads(resume_context.read_text(encoding="utf-8")),
+        )
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertIsNone(index.get("collector_handoff"))
+        MODULE.add_admission(
+            index, context["original_admission_ref"], now=self.now,
+        )
+        MODULE.atomic_write_json(index_path, index)
 
         def rebind_evidence(value: dict) -> None:
             evidence_path.write_text(json.dumps(value), encoding="utf-8")
@@ -1424,6 +2211,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             for output in checkpoint["output_digests"]:
                 if output["path"] == evidence_path.name:
                     output["sha256"] = evidence_sha
+                    output["bytes"] = evidence_path.stat().st_size
                     break
             checkpoint["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
                 MODULE.canonical_json(checkpoint["output_digests"]),
@@ -1434,19 +2222,27 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         stripped_contract_failure = copy.deepcopy(original_evidence)
         stripped_contract_failure["worker_outcomes"][0]["failure_diagnostic"].pop("contract_failure")
         rebind_evidence(stripped_contract_failure)
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, resume_context,
+        )
+        checkpoint_schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        )
         with self.assertRaisesRegex(ValueError, "resume_worker_contract_failure_binding_mismatch"):
             MODULE.validated_resume_records(
                 evidence_path,
+                resume_source_context=resume_context,
+                resume_source_archive=resume_archive,
                 checkpoint=checkpoint,
                 state_dir=self.state_dir,
                 source_id="data_go_kr",
-                checkpoint_schema=json.loads(
-                    (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
-                ),
-                provider_index_sha256=MODULE.file_sha256(self.provider_index_path),
-                candidate_by_id={self.new_link["id"]: self.new_link},
+                checkpoint_schema=checkpoint_schema,
+                provider_index_sha256=checkpoint["generation_inputs"]["adapter_revision"],
+                candidate_by_id={"2": self.new_link},
                 registered_hosts={"api.example.gov"},
                 now=MODULE.parse_timestamp(self.now),
+                repository="StatPan/datapan-registry",
+                cache_source_reader=resume_reader,
             )
         rebind_evidence(original_evidence)
 
@@ -1456,13 +2252,15 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         secret_metadata["resolver"]["resolved_url"] = secret_url
         secret_metadata["resolver"]["resolved_url_sha256"] = MODULE.sha256_bytes(secret_url.encode("utf-8"))
         rebind_evidence(secret_evidence)
-
-        checkpoint_schema = json.loads(
-            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, resume_context,
         )
+
         with self.assertRaisesRegex(ValueError, "resume_worker_link_metadata_invalid"):
             MODULE.validated_resume_records(
                 evidence_path,
+                resume_source_context=resume_context,
+                resume_source_archive=resume_archive,
                 checkpoint=checkpoint,
                 state_dir=self.state_dir,
                 source_id="data_go_kr",
@@ -1471,11 +2269,16 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                 candidate_by_id={"2": self.new_link},
                 registered_hosts={"api.example.gov"},
                 now=MODULE.parse_timestamp(self.now),
+                repository="StatPan/datapan-registry",
+                cache_source_reader=resume_reader,
             )
 
         evidence = copy.deepcopy(original_evidence)
         evidence["worker_outcomes"][0].pop("link_metadata")
         rebind_evidence(evidence)
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, resume_context,
+        )
 
         # Rebind the altered bytes to an otherwise valid owner to exercise the
         # resume validator's semantic rule, not only its digest guard.
@@ -1487,6 +2290,8 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         with self.assertRaisesRegex(ValueError, "resume_worker_link_metadata_missing"):
             MODULE.validated_resume_records(
                 evidence_path,
+                resume_source_context=resume_context,
+                resume_source_archive=resume_archive,
                 checkpoint=checkpoint,
                 state_dir=self.state_dir,
                 source_id="data_go_kr",
@@ -1495,7 +2300,360 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                 candidate_by_id={"2": self.new_link},
                 registered_hosts={"api.example.gov"},
                 now=MODULE.parse_timestamp(self.now),
+                repository="StatPan/datapan-registry",
+                cache_source_reader=resume_reader,
             )
+
+        # The unresolved-outcome sink is populated only after the entire
+        # evidence document and compatibility contract have passed. It keeps
+        # precise diagnostics byte-for-byte, leaves incompatible inputs empty,
+        # and never partially publishes on a late row or collision failure.
+        rebind_evidence(original_evidence)
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, resume_context,
+        )
+
+        def validate_sink(
+            sink: dict[str, dict[str, Any]], *,
+            candidates: dict[str, dict[str, Any]] | None = None,
+            provider_sha: str | None = None,
+        ) -> dict[str, dict[str, Any]]:
+            return MODULE.validated_resume_records(
+                evidence_path,
+                resume_source_context=resume_context,
+                resume_source_archive=resume_archive,
+                checkpoint=checkpoint,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=checkpoint_schema,
+                provider_index_sha256=(
+                    provider_sha or checkpoint["generation_inputs"]["adapter_revision"]
+                ),
+                candidate_by_id=candidates or {"2": self.new_link},
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+                repository="StatPan/datapan-registry",
+                cache_source_reader=resume_reader,
+                validated_worker_outcomes=sink,
+            )
+
+        sink: dict[str, dict[str, Any]] = {}
+        self.assertEqual(validate_sink(sink), {})
+        self.assertEqual(sink, {"2": original_evidence["worker_outcomes"][0]})
+        self.assertEqual(
+            sink["2"]["failure_diagnostic"]["contract_failure"],
+            original_evidence["worker_outcomes"][0]["failure_diagnostic"]["contract_failure"],
+        )
+
+        incompatible_sink = {"sentinel": {"status": "unchanged"}}
+        incompatible_before = copy.deepcopy(incompatible_sink)
+        self.assertEqual(validate_sink(incompatible_sink, provider_sha="0" * 64), {})
+        self.assertEqual(incompatible_sink, incompatible_before)
+
+        changed_candidate = copy.deepcopy(self.new_link)
+        changed_candidate["source"]["raw"]["title"] = "changed source contract"
+        stale_sink = {"sentinel": {"status": "unchanged"}}
+        stale_before = copy.deepcopy(stale_sink)
+        with self.assertRaisesRegex(ValueError, "resume_worker_outcome_binding_mismatch"):
+            validate_sink(stale_sink, candidates={"2": changed_candidate})
+        self.assertEqual(stale_sink, stale_before)
+
+        late_malformed = copy.deepcopy(original_evidence)
+        late_malformed["records"].append({
+            "api_key": {"provider": "data.go.kr", "id": "999"},
+            "status": "enriched",
+        })
+        rebind_evidence(late_malformed)
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, resume_context,
+        )
+        malformed_sink = {"sentinel": {"status": "unchanged"}}
+        malformed_before = copy.deepcopy(malformed_sink)
+        with self.assertRaisesRegex(ValueError, "resume_enrichment_record_invalid"):
+            validate_sink(malformed_sink)
+        self.assertEqual(malformed_sink, malformed_before)
+
+        rebind_evidence(original_evidence)
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, resume_context,
+        )
+        collision_sink = {
+            "sentinel": {"status": "unchanged"},
+            "2": {"status": "different"},
+        }
+        collision_before = copy.deepcopy(collision_sink)
+        with self.assertRaisesRegex(ValueError, "resume_worker_outcome_parent_conflict"):
+            validate_sink(collision_sink)
+        self.assertEqual(collision_sink, collision_before)
+
+        parent_sink = {
+            "first": {"status": "quarantined"},
+            "conflict": {"status": "retry"},
+        }
+        parent_before = copy.deepcopy(parent_sink)
+        with self.assertRaisesRegex(ValueError, "resume_worker_outcome_parent_conflict"):
+            MODULE.merge_validated_worker_outcomes(parent_sink, {
+                "would_partially_publish": {"status": "quarantined"},
+                "conflict": {"status": "quarantined"},
+            })
+        self.assertEqual(parent_sink, parent_before)
+
+        conflicting_retry = {
+            "2": {
+                "source_sha256": original_evidence["worker_outcomes"][0]["source_sha256"],
+                "guide_sha256": original_evidence["worker_outcomes"][0]["guide_sha256"],
+                "failure_diagnostic": {"code": "timeout", "phase": "page"},
+            },
+        }
+        with self.assertRaisesRegex(ValueError, "resume_worker_retry_diagnostic_mismatch"):
+            MODULE.validate_retained_worker_outcome_retry_state(
+                {"2": original_evidence["worker_outcomes"][0]}, conflicting_retry,
+            )
+
+    def test_distinct_candidate_skips_only_stale_authenticated_resume_outcome(self) -> None:
+        def link(identity: str, title: str) -> dict[str, Any]:
+            row = copy.deepcopy(self.new_link)
+            row["id"] = identity
+            row["title"] = title
+            row["source"]["url"] = f"https://www.data.go.kr/data/{identity}/openapi.do"
+            row["source"]["raw"].update({
+                "api_id": identity,
+                "meta_url": row["source"]["url"],
+                "title": title,
+            })
+            return row
+
+        historical_stale = link("2", "Historical stale source")
+        unchanged_control = link("3", "Unchanged control source")
+        self.baseline_path.write_text(json.dumps([self.old_link]), encoding="utf-8")
+        self.diff_path.write_text(
+            json.dumps({"summary": {"added": 2, "removed": 0, "changed": 0}}),
+            encoding="utf-8",
+        )
+        self.write_observation(self.now)
+        historical_candidate_path = self.root / "historical-candidate.registry.json"
+        historical_candidate_path.write_text(
+            json.dumps([self.old_link, historical_stale, unchanged_control]),
+            encoding="utf-8",
+        )
+        self.provider_index_path.write_text(json.dumps({
+            "adapters": [{"name": "example", "hosts": ["api.example.gov"]}],
+        }), encoding="utf-8")
+
+        def page_fetch(url: str, _timeout: float):
+            identity = url.split("/data/", 1)[1].split("/", 1)[0]
+            detail_id = f"uddi:fixture-{identity}"
+            body = (
+                f'<button onclick="fn_goUrlLink(\'{identity}\')">Open</button>'
+                f'<input type="hidden" id="publicDataPk" value="{identity}">'
+                f'<input type="hidden" id="publicDataDetailPk" value="{detail_id}">'
+            )
+            page_bytes = body.encode("utf-8")
+            return MODULE.DetailPageObservation(
+                body=body,
+                page_url=url,
+                effective_url=url,
+                page_sha256=MODULE.sha256_bytes(page_bytes),
+                observed_at=self.now,
+                page_bytes=page_bytes,
+            )
+
+        def resolver_fetch(url: str, _timeout: float):
+            identity = url.rsplit("=", 1)[1]
+            body = json.dumps({
+                "publicDataDetailPk": f"uddi:fixture-{identity}",
+                "linkUrl": "http://api.example.gov/catalogue/landing",
+                "status": True,
+            }, separators=(",", ":")).encode("utf-8")
+            return MODULE.LinkResolverObservation(
+                body=body, request_url=url, effective_url=url, observed_at=self.now,
+            )
+
+        historical_args = self.args(
+            run_id="501",
+            **{"--candidate": historical_candidate_path},
+        )
+        historical_code, historical_checkpoint = MODULE.process(
+            historical_args,
+            fetcher=page_fetch,
+            resolver_fetcher=resolver_fetch,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(historical_code, 2)
+        evidence_path = self.output_dir / "upstream-catalogue-enrichment-evidence.json"
+        context_path = self.output_dir / MODULE.CACHE_SOURCE.CONTEXT_MEMBER
+        historical_evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        self.assertEqual(
+            {row["api_key"]["id"] for row in historical_evidence["worker_outcomes"]},
+            {"2", "3"},
+        )
+
+        context = MODULE.CACHE_SOURCE.validate_context(
+            json.loads(context_path.read_text(encoding="utf-8")),
+        )
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertIsNone(index.get("collector_handoff"))
+        MODULE.add_admission(index, context["original_admission_ref"], now=self.now)
+        MODULE.atomic_write_json(index_path, index)
+        resume_archive, resume_reader = self.bind_authenticated_resume_source(
+            evidence_path, context_path,
+        )
+
+        current_stale = link("2", "Current changed source")
+        current_stale["source"]["raw"]["description"] = "current source contract changed"
+        current_candidate_path = self.root / "current-candidate.registry.json"
+        current_candidate_path.write_text(
+            json.dumps([self.old_link, current_stale, unchanged_control]),
+            encoding="utf-8",
+        )
+        current_output_dir = self.root / "current-output"
+        current_args = self.args(
+            run_id="502",
+            **{
+                "--candidate": current_candidate_path,
+                "--output-dir": current_output_dir,
+            },
+        )
+        current_code, current_checkpoint = MODULE.process(
+            current_args,
+            fetcher=page_fetch,
+            resolver_fetcher=resolver_fetch,
+            sleeper=lambda _delay: None,
+        )
+        self.assertEqual(current_code, 2)
+        self.assertNotEqual(
+            historical_checkpoint["generation_inputs"]["candidate_sha256"],
+            current_checkpoint["generation_inputs"]["candidate_sha256"],
+        )
+        current_rows = MODULE.load_registry(current_candidate_path)
+        candidate_by_id = {row["id"]: row for row in current_rows}
+        checkpoint_schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        )
+        historical_owner_path = self.checkpoint_path(historical_checkpoint)
+        current_owner_path = self.checkpoint_path(current_checkpoint)
+
+        def protected_state() -> dict[pathlib.Path, bytes]:
+            return {
+                path: path.read_bytes()
+                for path in (
+                    evidence_path,
+                    context_path,
+                    historical_owner_path,
+                    current_owner_path,
+                    index_path,
+                )
+            }
+
+        before_files = protected_state()
+        before_index = json.loads(index_path.read_text(encoding="utf-8"))
+        before_retry_state = copy.deepcopy(before_index["detail_retry_state"])
+        sink = {"sentinel": {"status": "preserve"}}
+        sink_before = copy.deepcopy(sink)
+        resumed = MODULE.validated_resume_records(
+            evidence_path,
+            resume_source_context=context_path,
+            resume_source_archive=resume_archive,
+            checkpoint=current_checkpoint,
+            state_dir=self.state_dir,
+            source_id="data_go_kr",
+            checkpoint_schema=checkpoint_schema,
+            provider_index_sha256=current_checkpoint["generation_inputs"]["adapter_revision"],
+            candidate_by_id=candidate_by_id,
+            registered_hosts={"api.example.gov"},
+            now=MODULE.parse_timestamp(self.now),
+            expected_owner_generation_id=historical_checkpoint["generation_id"],
+            repository="StatPan/datapan-registry",
+            cache_source_reader=resume_reader,
+            validated_worker_outcomes=sink,
+        )
+        self.assertNotIn("2", resumed)
+        self.assertEqual(set(sink), {"sentinel", "3"})
+        self.assertEqual(sink["sentinel"], sink_before["sentinel"])
+        self.assertEqual(sink["3"], next((
+            row for row in historical_evidence["worker_outcomes"] if row["api_key"]["id"] == "3"
+        ), None))
+        self.assertEqual(protected_state(), before_files)
+        after_index = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertEqual(after_index["detail_retry_state"], before_retry_state)
+
+        strict_sink = {"sentinel": {"status": "preserve"}}
+        strict_before = copy.deepcopy(strict_sink)
+        with self.assertRaisesRegex(ValueError, "resume_worker_outcome_binding_mismatch"):
+            MODULE.validated_resume_records(
+                evidence_path,
+                resume_source_context=context_path,
+                resume_source_archive=resume_archive,
+                checkpoint=current_checkpoint,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=checkpoint_schema,
+                provider_index_sha256=current_checkpoint["generation_inputs"]["adapter_revision"],
+                candidate_by_id=candidate_by_id,
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+                reject_stale_source_or_guide_contract=True,
+                expected_owner_generation_id=historical_checkpoint["generation_id"],
+                repository="StatPan/datapan-registry",
+                cache_source_reader=resume_reader,
+                validated_worker_outcomes=strict_sink,
+            )
+        self.assertEqual(strict_sink, strict_before)
+        self.assertEqual(protected_state(), before_files)
+
+        malformed_evidence = copy.deepcopy(historical_evidence)
+        stale_outcome = next((
+            row for row in malformed_evidence["worker_outcomes"] if row["api_key"]["id"] == "2"
+        ), None)
+        original_stale_outcome = next((
+            row for row in historical_evidence["worker_outcomes"] if row["api_key"]["id"] == "2"
+        ), None)
+        self.assertIsNotNone(stale_outcome)
+        self.assertIsNotNone(original_stale_outcome)
+        stale_outcome["source_sha256"] = "0" * 64
+        self.assertNotEqual(stale_outcome["source_sha256"], original_stale_outcome["source_sha256"])
+        evidence_path.write_text(json.dumps(malformed_evidence), encoding="utf-8")
+        historical_owner = MODULE.verify_checkpoint(
+            json.loads(historical_owner_path.read_text(encoding="utf-8")), checkpoint_schema,
+        )
+        for output in historical_owner["output_digests"]:
+            if output["path"] == evidence_path.name:
+                output["sha256"] = MODULE.file_sha256(evidence_path)
+                output["bytes"] = evidence_path.stat().st_size
+                break
+        historical_owner["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+            MODULE.canonical_json(historical_owner["output_digests"]),
+        )
+        historical_owner_path.write_text(
+            json.dumps(MODULE.seal_checkpoint(historical_owner)), encoding="utf-8",
+        )
+        malformed_archive, malformed_reader = self.bind_authenticated_resume_source(
+            evidence_path, context_path,
+        )
+        malformed_before = protected_state()
+        malformed_sink = {"sentinel": {"status": "preserve"}}
+        malformed_sink_before = copy.deepcopy(malformed_sink)
+        with self.assertRaisesRegex(ValueError, "resume_worker_outcome_binding_mismatch"):
+            MODULE.validated_resume_records(
+                evidence_path,
+                resume_source_context=context_path,
+                resume_source_archive=malformed_archive,
+                checkpoint=current_checkpoint,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=checkpoint_schema,
+                provider_index_sha256=current_checkpoint["generation_inputs"]["adapter_revision"],
+                candidate_by_id=candidate_by_id,
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+                expected_owner_generation_id=historical_checkpoint["generation_id"],
+                repository="StatPan/datapan-registry",
+                cache_source_reader=malformed_reader,
+                validated_worker_outcomes=malformed_sink,
+            )
+        self.assertEqual(malformed_sink, malformed_sink_before)
+        self.assertEqual(protected_state(), malformed_before)
 
     def test_wrong_current_template_button_cannot_fall_back_to_legacy_anchor(self) -> None:
         page_url = "https://www.data.go.kr/data/2/openapi.do"
@@ -1562,7 +2720,18 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(opener.timeout, MODULE.DEFAULT_TIMEOUT_SECONDS)
 
     def invoke(self, *, run_id: str = "101", fetcher=None, **overrides):
-        return MODULE.process(self.args(run_id=run_id, **overrides), fetcher=fetcher or self.successful_fetch, sleeper=lambda _delay: None)
+        args = self.args(run_id=run_id, **overrides)
+        reader = None
+        if args.resume_enrichment_evidence is not None:
+            auth = self._resume_auth.get(args.resume_enrichment_evidence.resolve())
+            if auth is not None:
+                archive_path, reader = auth
+                if args.resume_owner_archive is None:
+                    args.resume_owner_archive = archive_path
+        return MODULE.process(
+            args, fetcher=fetcher or self.successful_fetch,
+            sleeper=lambda _delay: None, cache_source_reader=reader,
+        )
 
     def checkpoint_path(self, checkpoint: dict) -> pathlib.Path:
         return self.state_dir / "sources/data_go_kr/generations" / f"{checkpoint['generation_id']}.json"
@@ -1613,14 +2782,15 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(code, 0)
         first_progress = first["last_progress_at"]
         resume_dir = self.root / "duplicate-resume"
-        resume_dir.mkdir()
-        resume = resume_dir / "upstream-catalogue-enrichment-evidence.json"
-        resume.write_bytes((self.output_dir / resume.name).read_bytes())
+        resume, resume_context = self.copy_resume_bundle(resume_dir)
         self.write_observation("2026-10-02T10:00:00Z")
         self.now = "2026-10-02T10:00:01Z"
         code, second = self.invoke(
             run_id="102", fetcher=fetch,
-            **{"--resume-enrichment-evidence": resume},
+            **{
+                "--resume-enrichment-evidence": resume,
+                "--resume-source-context": resume_context,
+            },
         )
         self.assertEqual(code, 0)
         self.assertEqual(second["generation_id"], first["generation_id"])
@@ -1646,7 +2816,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(replay["observation_count"], 1)
         self.assertEqual(replay["last_progress_at"], first["last_progress_at"])
         self.assertNotEqual(replay["last_heartbeat_at"], first["last_heartbeat_at"])
-    def test_exact_delivery_replay_has_an_explicit_idle_result_without_rebinding_old_artifact(self) -> None:
+    def test_fixture_duplicate_does_not_claim_authenticated_exact_replay(self) -> None:
         code, first = self.invoke()
         self.assertEqual(code, 0)
         prior_locator = copy.deepcopy(first["output_artifact"])
@@ -1657,26 +2827,16 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         )
         code, replay = MODULE.process(replay_args, fetcher=lambda *_args: self.fail("exact replay must not fetch"))
         self.assertEqual(code, 0)
-        self.assertTrue(replay_args.exact_delivery_replay)
-        self.assertEqual(
-            MODULE.processing_result(
-                replay,
-                exact_delivery_replay=True,
-                producer_run_id="101",
-                processor_run_id="102",
-                processor_artifact_run_id="102",
-            ),
-            {
-                "status": "idle",
-                "reason": "exact_producer_delivery_replay",
-                "processing_replay": True,
-                "candidate_available": False,
-                "source_id": "data_go_kr",
-                "producer_run_id": "101",
-                "processor_run_id": "102",
-                "processor_artifact_run_id": "102",
-            },
+        self.assertFalse(replay_args.exact_delivery_replay)
+        result = MODULE.processing_result(
+            replay,
+            producer_run_id="101",
+            processor_run_id="102",
+            processor_artifact_run_id="102",
         )
+        self.assertEqual(result["status"], "ready")
+        self.assertFalse(result["processing_replay"])
+        self.assertTrue(result["candidate_available"])
         self.assertEqual(replay["output_artifact"], prior_locator)
         self.assertFalse((self.output_dir / "upstream-catalogue-checkpoint-receipt.json").exists())
         self.assertFalse((self.output_dir / "composed-candidate.registry.json").exists())
@@ -1800,6 +2960,105 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertGreater(len(page_calls), pages_before_retry)
         self.assertFalse(getattr(retry_args, "exact_delivery_replay", False))
         self.assertFalse((retry_output_dir / MODULE.REPLAY_PERSISTENCE_RECEIPT).exists())
+
+        # Exact replay prerequisites must fail before either durable state
+        # file changes. Exercise the three independent missing-proof gates on
+        # copies of the real authenticated ready checkpoint and index.
+        def assert_replay_prerequisite_fails(
+            name: str, *, include_state_head: bool = True,
+            remove_index: bool = False, omit_admission: bool = False,
+        ) -> None:
+            copied_state = self.root / f"replay-prerequisite-{name}-state"
+            shutil.copytree(state_dir, copied_state)
+            copied_index = copied_state / "sources/data_go_kr/index.json"
+            copied_checkpoint = copied_state / "sources/data_go_kr/generations" / f"{prior['generation_id']}.json"
+            if remove_index:
+                copied_index.unlink()
+            checkpoint_before = copied_checkpoint.read_bytes()
+            index_before = copied_index.read_bytes() if copied_index.exists() else None
+            copied_output = self.root / f"replay-prerequisite-{name}-output"
+            processor_run_id = {
+                "state-head": "8891-1", "index": "8892-1", "admission": "8893-1",
+            }[name]
+            args = self.authenticated_live_args(
+                processor_run_id=processor_run_id, processor_artifact_run_id=processor_run_id.split("-")[0],
+                state_dir=copied_state, output_dir=copied_output,
+                state_head_sha=old_sha if include_state_head else None,
+            )
+            if omit_admission:
+                args.input_error = "artifact_missing"
+            with self.assertRaises(ValueError):
+                MODULE.process(args, fetcher=lambda *_args: self.fail("exact replay must not fetch"))
+            self.assertEqual(copied_checkpoint.read_bytes(), checkpoint_before)
+            self.assertEqual(
+                copied_index.read_bytes() if copied_index.exists() else None,
+                index_before,
+            )
+            self.assertFalse(copied_output.exists())
+
+        assert_replay_prerequisite_fails("state-head", include_state_head=False)
+        assert_replay_prerequisite_fails("index", remove_index=True)
+        assert_replay_prerequisite_fails("admission", omit_admission=True)
+
+        # A quarantined terminal state stays quarantined and never receives
+        # the authenticated exact-replay result or persistence receipt.
+        quarantine_state = self.root / "quarantined-replay-state"
+        shutil.copytree(state_dir, quarantine_state)
+        quarantine_checkpoint_path = (
+            quarantine_state / "sources/data_go_kr/generations" / f"{prior['generation_id']}.json"
+        )
+        quarantined = json.loads(quarantine_checkpoint_path.read_text(encoding="utf-8"))
+        quarantined["status"] = "quarantined"
+        quarantined["outcome"] = {"reason": "input_expired"}
+        quarantined["lease"] = None
+        quarantined["request_reservation"] = None
+        MODULE.atomic_write_json(quarantine_checkpoint_path, MODULE.seal_checkpoint(quarantined))
+        quarantine_index_path = quarantine_state / "sources/data_go_kr/index.json"
+        quarantine_index = json.loads(quarantine_index_path.read_text(encoding="utf-8"))
+        next(row for row in quarantine_index["generations"] if row["generation_id"] == prior["generation_id"])["status"] = "quarantined"
+        MODULE.atomic_write_json(quarantine_index_path, quarantine_index)
+        quarantine_output = self.root / "quarantined-replay-output"
+        quarantine_args = self.authenticated_live_args(
+            processor_run_id="890-2", processor_artifact_run_id="890",
+            state_dir=quarantine_state, output_dir=quarantine_output, state_head_sha=old_sha,
+        )
+        quarantine_code = MODULE.main(self.namespace_argv(quarantine_args))
+        self.assertEqual(quarantine_code, 3)
+        quarantine_result = json.loads(
+            (quarantine_output / "upstream-catalogue-processing-result.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(quarantine_result["status"], "quarantined")
+        self.assertFalse(quarantine_result["processing_replay"])
+        self.assertFalse((quarantine_output / MODULE.REPLAY_PERSISTENCE_RECEIPT).exists())
+
+        # The workflow idle result is written only after both durable replay
+        # receipts succeed. A receipt write failure produces a retry result.
+        receipt_failure_state = self.root / "replay-receipt-failure-state"
+        shutil.copytree(state_dir, receipt_failure_state)
+        receipt_failure_output = self.root / "replay-receipt-failure-output"
+        receipt_failure_args = self.authenticated_live_args(
+            processor_run_id="891-2", processor_artifact_run_id="891",
+            state_dir=receipt_failure_state, output_dir=receipt_failure_output,
+            state_head_sha=old_sha,
+        )
+        real_atomic_output = MODULE.atomic_output
+
+        def fail_replay_receipt(output_dir: pathlib.Path, name: str, value: Any) -> pathlib.Path:
+            if name == MODULE.REPLAY_PERSISTENCE_RECEIPT:
+                self.assertTrue((output_dir / "upstream-catalogue-checkpoint-receipt.json").is_file())
+                self.assertFalse((output_dir / "upstream-catalogue-processing-result.json").exists())
+                raise OSError("fixture receipt persistence failure")
+            return real_atomic_output(output_dir, name, value)
+
+        with mock.patch.object(MODULE, "atomic_output", side_effect=fail_replay_receipt):
+            receipt_failure_code = MODULE.main(self.namespace_argv(receipt_failure_args))
+        self.assertEqual(receipt_failure_code, 1)
+        failure_result = json.loads(
+            (receipt_failure_output / "upstream-catalogue-processing-result.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(failure_result["status"], "retry")
+        self.assertFalse(failure_result.get("processing_replay", False))
+        self.assertFalse((receipt_failure_output / MODULE.REPLAY_PERSISTENCE_RECEIPT).exists())
 
         shutil.rmtree(output_dir)
         self.now = "2026-10-01T10:00:01Z"
@@ -2749,9 +4008,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(composed[0]["source"]["raw"]["guide_url"], "https://www.data.go.kr/guide/2.pdf")
         enrichment_name = "upstream-catalogue-enrichment-evidence.json"
         resume_dir = self.root / "real-composer-resume"
-        resume_dir.mkdir()
-        resume = resume_dir / "upstream-catalogue-enrichment-evidence.json"
-        resume.write_bytes((self.output_dir / enrichment_name).read_bytes())
+        resume, resume_context = self.copy_resume_bundle(resume_dir)
 
         second_at = "2026-10-02T10:00:00Z"
         row2 = self.real_link_row(request_count=2)
@@ -2761,14 +4018,18 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.now = second_at
         second_args = self.args(run_id="102002", **{
             "--baseline": self.baseline_path, "--resume-enrichment-evidence": resume,
+            "--resume-source-context": resume_context,
             "--composer": ACTUAL_COMPOSER,
         })
+        resume_archive_path, resume_reader = self._resume_auth[resume.resolve()]
+        second_args.resume_owner_archive = resume_archive_path
         second_args.fixture_composer = None
         second_args.allow_fixture_composer = False
         second_calls = []
         code, second = MODULE.process(
             second_args, fetcher=lambda url, timeout: (second_calls.append(url) or observation),
             sleeper=lambda _delay: None,
+            cache_source_reader=resume_reader,
         )
         self.assertEqual(code, 0, second.get("outcome"))
         self.assertEqual(second["status"], "no-change")
@@ -3172,9 +4433,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             "https://www.data.go.kr/data/3/openapi.do",
         ])
         resume_dir = self.root / "resume"
-        resume_dir.mkdir()
-        resume = resume_dir / "upstream-catalogue-enrichment-evidence.json"
-        resume.write_bytes((self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_bytes())
+        resume, resume_context = self.copy_resume_bundle(resume_dir)
         self.write_observation("2026-10-02T10:00:00Z")
         self.now = "2026-10-02T10:00:01Z"
         second_calls = []
@@ -3183,7 +4442,11 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             return self.successful_fetch(url, timeout)
         code, resumed = self.invoke(
             run_id="102", fetcher=second_fetch,
-            **{"--retries-per-detail": 2, "--max-attempts": 2, "--resume-enrichment-evidence": resume},
+            **{
+                "--retries-per-detail": 2, "--max-attempts": 2,
+                "--resume-enrichment-evidence": resume,
+                "--resume-source-context": resume_context,
+            },
         )
         self.assertEqual(code, 0)
         self.assertEqual(second_calls, ["https://www.data.go.kr/data/3/openapi.do"])
@@ -3254,9 +4517,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(first["detail_queue_cursor"], 24)
 
         resume_dir = self.root / "large-queue-resume"
-        resume_dir.mkdir()
-        resume = resume_dir / "upstream-catalogue-enrichment-evidence.json"
-        resume.write_bytes((self.output_dir / resume.name).read_bytes())
+        resume, resume_context = self.copy_resume_bundle(resume_dir)
         for row in rows:
             row["source"]["raw"]["request_cnt"] = 8
         self.candidate_path.write_text(json.dumps(rows), encoding="utf-8")
@@ -3268,6 +4529,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             **{
                 "--max-attempts": 24, "--max-queue": 48, "--retries-per-detail": 0,
                 "--resume-enrichment-evidence": resume,
+                "--resume-source-context": resume_context,
             },
         )
         self.assertEqual(code, 0)
@@ -3325,6 +4587,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             options = {"--max-attempts": 1, "--retries-per-detail": 2}
             if current_resume is not None:
                 options["--resume-enrichment-evidence"] = current_resume
+                options["--resume-source-context"] = current_context
             code, checkpoint = self.invoke(
                 run_id=run_id,
                 fetcher=lambda url, timeout: (total_calls.append(url) or self.successful_fetch(url, timeout)),
@@ -3333,9 +4596,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             self.assertEqual(code, 0, checkpoint.get("outcome"))
             checkpoints.append(checkpoint)
             resume_dir = self.root / f"ttl-resume-{sequence}"
-            resume_dir.mkdir()
-            current_resume = resume_dir / "upstream-catalogue-enrichment-evidence.json"
-            current_resume.write_bytes((self.output_dir / current_resume.name).read_bytes())
+            current_resume, current_context = self.copy_resume_bundle(resume_dir)
         self.assertEqual(len(total_calls), 4)
         self.assertEqual(checkpoints[-1]["attempts_consumed"], 4)
         self.assertEqual(checkpoints[-1]["attempts_by_id"], {})

@@ -136,6 +136,27 @@ EXPECTED_INDEPENDENT_ADDITIONS = [
         "kind": "schema",
         "authority_ticket": "StatPan/datapan-registry#741",
     },
+    {
+        "path": "schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
+        "kind": "schema",
+        "authority_ticket": "StatPan/datapan-registry#767",
+    },
+    {
+        "path": "schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
+        "kind": "schema",
+        "authority_ticket": "StatPan/datapan-registry#767",
+    },
+    {
+        "path": "schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
+        "kind": "schema",
+        "authority_ticket": "StatPan/datapan-registry#767",
+    },
+    {
+        "path": "policy/canonical-stale-queue-recovery.v1.json",
+        "kind": "canonical_stale_queue_recovery_policy",
+        "schema": "https://statpan.com/schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
+        "authority_ticket": "StatPan/datapan-registry#767",
+    },
 ]
 
 

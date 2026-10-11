@@ -14,25 +14,31 @@ import argparse
 import copy
 import datetime as dt
 import hashlib
+import importlib.machinery
 import importlib.util
+import io
 import json
+import math
+import marshal
 import os
 import pathlib
 import re
 import selectors
 import shutil
 import shlex
+import signal
 import stat
 import subprocess
 import sys
 import tarfile
 import tempfile
 import time
+import types
 import urllib.error
 import urllib.parse
 import urllib.request
 import zipfile
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 import yaml
@@ -97,6 +103,7 @@ PROCESSOR_COMPATIBILITY_FILES = (
     ".github/workflows/upstream-catalog-refresh.yml",
     "scripts/upstream-catalogue-state-branch.py",
     "scripts/upstream_catalogue_handoff.py",
+    "scripts/upstream_catalogue_cache_source.py",
     "scripts/seoul_oa109_operation_declaration.py",
     "scripts/generate-seoul-oa109-subject-snapshot.py",
     "scripts/compose-upstream-catalogue-candidate.py",
@@ -104,6 +111,7 @@ PROCESSOR_COMPATIBILITY_FILES = (
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
     *PROCESSOR_COMPOSITION_INPUTS.values(),
 )
+PROCESSOR_DERIVATION_COMPATIBILITY_FILE = "scripts/upstream_catalogue_derivation.py"
 GENERATED_FILE_ALLOWLIST = frozenset({
     "data/data-go-kr.registry.json", "manifest.json", "schemas/index.json",
     "policy/data-go-kr-operation-denominator-expectation.json",
@@ -157,9 +165,50 @@ REQUIRED_PROCESSOR_FILES = (
     "regeneration-queue.json",
     "quarantine.json",
     "composition-receipt.json",
+    "upstream-catalogue-original-candidate.registry.json",
+    "upstream-catalogue-cache-source-context.json",
     "upstream-catalogue-enrichment-evidence.json",
     "upstream-catalogue-processing-result.json",
 )
+HISTORICAL_RETAINED_PROCESSOR_FILES = (
+    "composed-candidate.registry.json",
+    "ready-scope.registry.json",
+    "semantic-diff.json",
+    "regeneration-queue.json",
+    "quarantine.json",
+    "composition-receipt.json",
+    "upstream-catalogue-enrichment-evidence.json",
+    "upstream-catalogue-processing-result.json",
+)
+RETAINED_PROCESSOR_RESULT_ONLY_FILES = (
+    "upstream-catalogue-processing-result.json",
+)
+RETAINED_PROCESSOR_CHECKPOINT_MEMBER = "upstream-catalogue-checkpoint-receipt.json"
+MODERN_RETAINED_PROCESSOR_PROTOCOL = "modern-ten-output-v1"
+HISTORICAL_RETAINED_PROCESSOR_PROTOCOL = "historical-eight-output-v1"
+HISTORICAL_RETAINED_PROCESSOR_CURRENT_REASON = (
+    "historical_eight_output_protocol_not_current_eligible"
+)
+# This is the exact closed producer/source format of the retained 01148419 B
+# packet used by the completeness report.  Matching file absence or an
+# eight-member inventory is never enough to select the historical reader.
+# The same immutable bytes may appear at another authenticated B head, but an
+# unknown source closure must remain unavailable until separately reviewed.
+HISTORICAL_RETAINED_PROCESSOR_SOURCE_IDENTITIES = {
+    "policy/source-refresh.json": (1127, "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc"),
+    "data/provider-index.json": (26315, "b235d6f053bd8ec1f87d6a889a07912dfde1a944353eb640da8713fdf640e4d6"),
+    "scripts/generate-batch-link-detail-registry-patches.py": (10251, "9cb122dd6f20bee3faf36359bb22d66b165cb2ccc43a13ec0408796108910983"),
+    "scripts/process-upstream-catalogue-candidate.py": (111277, "418be4c660fc59beae4ad8fa3c04cab5385a6c174103ea2af268cb65c35915b2"),
+    "scripts/compose-upstream-catalogue-candidate.py": (70733, "2e5ce37eb68002a28c5d313ee9b274b2bdfabf845211d384ea804d6685787e08"),
+    ".github/workflows/upstream-catalogue-process.yml": (83097, "a0a5de9e921e11d8ea49516507a662164e67caf436ffb6d2e193d11fde4d0ff2"),
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json": (9959, "2f276ab822ea81f7caa6854bbca830b06c578507044e646d902758b556dc0639"),
+    "schemas/datapan.specs.v1.schema.json": (3371, "ca5b95521fe4772b73dbff3bac915d475098270691cd408fb5e615a16d9c0cd9"),
+    "schemas/datapan.provider-index.v1.schema.json": (3167, "00258077f9ca3421f755e4cad7f39d1a8e89b4fe072d6f9c77ae82ebb7993b05"),
+    "schemas/datapan.catalog-diff.v1.schema.json": (4278, "2cc4dd60b4455276a34f9751b6ee92457d4a8734e070578e608550222499959f"),
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json": (3866, "81eb66ec3bbcd1a0687b5b8cc0cace6936a8b4fef6414a760bd50f9c8d23b917"),
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json": (4401, "fd9f7ef1d5ea77617191a3548ecb485d81775247aa64d358126675a8dc2462c7"),
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json": (3740, "00e13f478c7902bdd457f8b27916237b89de4f7c491b5d85915d80b9d507d1b8"),
+}
 
 
 class PromotionError(RuntimeError):
@@ -172,6 +221,83 @@ class ProcessorCandidateError(PromotionError):
 
 class ProcessorArtifactUnavailable(ProcessorCandidateError):
     pass
+
+
+_RETAINED_REPORT_CAPABILITY = object()
+
+
+class RetainedProcessorReportContract:
+    """Opaque protocol decision for one exact retained B report packet."""
+
+    __slots__ = (
+        "_protocol", "_expected_members", "_generation_id", "_checkpoint_sha256",
+        "_producer_head_sha", "_run_id", "_run_attempt", "_artifact_id",
+        "_archive_sha256", "_archive_bytes", "_source_reader", "_cache_source_helper",
+        "_cache_source_contract", "_repository", "_default_branch",
+    )
+
+    def __init__(
+        self, token: object, *, protocol: str, expected_members: Sequence[str],
+        checkpoint: Mapping[str, Any], producer_head_sha: str, run_id: str,
+        run_attempt: int, artifact_id: str, archive_sha256: str, archive_bytes: int,
+        source_reader: Any, cache_source_helper: Any, repository: str,
+        default_branch: str,
+        cache_source_contract: Any | None,
+    ) -> None:
+        if token is not _RETAINED_REPORT_CAPABILITY:
+            raise PromotionError("retained processor report contract cannot be constructed directly")
+        self._protocol = protocol
+        self._expected_members = tuple(expected_members)
+        self._generation_id = str(checkpoint.get("generation_id") or "")
+        self._checkpoint_sha256 = str(checkpoint.get("checkpoint_sha256") or "")
+        self._producer_head_sha = producer_head_sha
+        self._run_id = run_id
+        self._run_attempt = run_attempt
+        self._artifact_id = artifact_id
+        self._archive_sha256 = archive_sha256
+        self._archive_bytes = archive_bytes
+        self._source_reader = source_reader
+        self._cache_source_helper = cache_source_helper
+        self._cache_source_contract = cache_source_contract
+        self._repository = repository
+        self._default_branch = default_branch
+
+    @property
+    def protocol(self) -> str:
+        return self._protocol
+
+    @property
+    def expected_members(self) -> tuple[str, ...]:
+        return self._expected_members
+
+    @property
+    def cache_source_contract(self) -> Any:
+        if (
+            self._protocol != MODERN_RETAINED_PROCESSOR_PROTOCOL
+            or type(self._cache_source_contract)
+            is not self._cache_source_helper.AuthenticatedCacheContract
+        ):
+            raise PromotionError("retained processor report contract has no modern cache capability")
+        return self._cache_source_contract
+
+
+class RetainedProcessorReportBundle:
+    """Closed report facts; this value carries no live-C/cache capability."""
+
+    __slots__ = ("_protocol", "_facts")
+
+    def __init__(self, token: object, *, protocol: str, facts: Mapping[str, Any]) -> None:
+        if token is not _RETAINED_REPORT_CAPABILITY:
+            raise PromotionError("retained processor report bundle cannot be constructed directly")
+        self._protocol = protocol
+        self._facts = copy.deepcopy(dict(facts))
+
+    @property
+    def protocol(self) -> str:
+        return self._protocol
+
+    def as_report_facts(self) -> dict[str, Any]:
+        return copy.deepcopy(self._facts)
 
 
 def canonical_json(value: Any) -> bytes:
@@ -205,7 +331,8 @@ def load_json_value(path: pathlib.Path) -> Any:
 
 
 def load_module(path: pathlib.Path, name: str) -> Any:
-    spec = importlib.util.spec_from_file_location(name, path)
+    loader = _NoBytecodeSourceLoader(name, str(path))
+    spec = importlib.util.spec_from_file_location(name, path, loader=loader)
     if spec is None or spec.loader is None:
         raise PromotionError(f"cannot load required helper: {path}")
     module = importlib.util.module_from_spec(spec)
@@ -398,12 +525,24 @@ def export_processor_state_pin(
     return destination, provenance
 
 
-def verify_processor_checkpoint(value: dict[str, Any], schema_path: pathlib.Path) -> dict[str, Any]:
+def verify_processor_checkpoint(
+    value: dict[str, Any],
+    schema_path: pathlib.Path,
+    *,
+    eligibility_module: types.ModuleType | None = None,
+    schema_document: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     import jsonschema
 
     if value.get("schema_version") != PROCESSOR_SCHEMA:
         raise PromotionError("processor state uses an unsupported checkpoint schema")
-    schema = load_object(schema_path)
+    if eligibility_module is not None and type(eligibility_module) is not types.ModuleType:
+        raise PromotionError("processor checkpoint eligibility helper is not an exact module")
+    if schema_document is not None and type(schema_document) is not dict:
+        raise PromotionError("processor checkpoint CONTROL schema is not an exact JSON object")
+    if schema_document is not None and eligibility_module is None:
+        raise PromotionError("processor checkpoint CONTROL schema has no authenticated eligibility module")
+    schema = schema_document if schema_document is not None else load_object(schema_path)
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(value)
     unsigned = dict(value)
     claimed = unsigned.pop("checkpoint_sha256", None)
@@ -417,10 +556,243 @@ def verify_processor_checkpoint(value: dict[str, Any], schema_path: pathlib.Path
         or generation_inputs.get("source_scope") != value.get("source_scope")
     ):
         raise PromotionError("processor checkpoint generation source identity is inconsistent")
-    expected_generation_id = hashlib.sha256(canonical_json(generation_inputs)).hexdigest()
+    source_epoch = generation_inputs.get("source_epoch")
+    if source_epoch is None:
+        expected_generation_id = hashlib.sha256(canonical_json(generation_inputs)).hexdigest()
+    else:
+        if eligibility_module is None:
+            # Ordinary Runner checkpoint reads use the helper beside the
+            # current Source schema. A replay supplies its exact authenticated
+            # CONTROL module above and therefore never enters this path.
+            helper_path = schema_path.resolve().parent.parent / "scripts/upstream_catalogue_source_eligibility.py"
+            try:
+                eligibility_module = load_module(
+                    helper_path, "trusted_processor_checkpoint_source_eligibility",
+                )
+            except Exception as exc:
+                raise PromotionError("source-epoch checkpoint eligibility helper is unavailable") from exc
+        if type(eligibility_module) is not types.ModuleType:
+            raise PromotionError("source-epoch checkpoint has no authenticated eligibility module")
+        validate_epoch = getattr(eligibility_module, "validate_source_epoch", None)
+        validate_contract = getattr(eligibility_module, "validate_target_contract", None)
+        bind_generation = getattr(eligibility_module, "bind_source_epoch_generation", None)
+        if not callable(validate_epoch) or not callable(validate_contract) or not callable(bind_generation):
+            raise PromotionError("source-epoch checkpoint CONTROL identity helpers are unavailable")
+        try:
+            validated_epoch = validate_epoch(source_epoch)
+            validated_contract = validate_contract(generation_inputs.get("source_target_contract"))
+            if validated_epoch["target_contract_sha256"] != validated_contract["contract_sha256"]:
+                raise ValueError("source_epoch_target_contract_mismatch")
+            expected_generation_id, bound_inputs = bind_generation(generation_inputs)
+        except Exception as exc:
+            raise PromotionError("processor checkpoint source-epoch identity is invalid") from exc
+        if (
+            type(bound_inputs) is not dict
+            or canonical_json(bound_inputs) != canonical_json(generation_inputs)
+        ):
+            raise PromotionError("processor checkpoint source-epoch inputs are not canonically bound")
     if value.get("generation_id") != expected_generation_id:
         raise PromotionError("processor checkpoint generation id does not bind its immutable inputs")
     return value
+
+
+def _source_eligibility_state_snapshot(
+    state_root: pathlib.Path,
+    repository: str,
+    generation_id: str,
+    schema_path: pathlib.Path,
+    *,
+    eligibility_module: types.ModuleType | None = None,
+) -> dict[str, Any]:
+    """Bind one eligible generation to the exact committed processor state."""
+    if not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+        raise PromotionError("source eligibility generation identity is invalid")
+    state_root = state_root.resolve()
+    state_repository = next(
+        (candidate for candidate in (state_root, *state_root.parents)
+         if (candidate / ".git").exists() and not (candidate / ".git").is_symlink()),
+        None,
+    )
+    if state_repository is None:
+        raise PromotionError("source eligibility state checkout is not a Git repository")
+    try:
+        relative_root = state_root.relative_to(state_repository)
+    except ValueError as exc:
+        raise PromotionError("source eligibility state root escaped its checkout") from exc
+    if pathlib.PurePosixPath(relative_root.as_posix()) != PROCESSOR_STATE_ROOT:
+        raise PromotionError("source eligibility state root is not the owned processor state path")
+    origin_url = command(("git", "config", "--get", "remote.origin.url"), state_repository).stdout.strip()
+    if processor_state_repository_from_remote(origin_url).casefold() != repository.casefold():
+        raise PromotionError("source eligibility state checkout names another repository")
+    if command(("git", "status", "--porcelain=v1", "--untracked-files=all"), state_repository).stdout:
+        raise PromotionError("source eligibility state checkout is dirty")
+    state_commit = command(("git", "rev-parse", "HEAD"), state_repository).stdout.strip()
+    if not re.fullmatch(r"[a-f0-9]{40}", state_commit):
+        raise PromotionError("source eligibility state commit is invalid")
+
+    index_relative = PROCESSOR_STATE_ROOT / "sources/data_go_kr/index.json"
+    checkpoint_relative = PROCESSOR_STATE_ROOT / "sources/data_go_kr/generations" / f"{generation_id}.json"
+    file_limits = {
+        index_relative: 2 * 1024 * 1024,
+        checkpoint_relative: 256 * 1024,
+    }
+
+    def object_spec(relative: pathlib.PurePosixPath) -> str:
+        object_spec = f"{state_commit}:{relative.as_posix()}"
+        object_type = command(("git", "cat-file", "-t", object_spec), state_repository).stdout.strip()
+        if object_type != "blob":
+            raise PromotionError("source eligibility state object is not a Git blob")
+        size_text = command(("git", "cat-file", "-s", object_spec), state_repository).stdout.strip()
+        if not re.fullmatch(r"[0-9]{1,10}", size_text):
+            raise PromotionError("source eligibility state object size is invalid")
+        if not 0 < int(size_text) <= file_limits[relative]:
+            raise PromotionError("source eligibility state object exceeds its byte limit")
+        return object_spec
+
+    def read_committed(relative: pathlib.PurePosixPath) -> bytes:
+        spec = object_spec(relative)
+        result = subprocess.run(
+            ("git", "cat-file", "blob", spec), cwd=state_repository,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+        )
+        if result.returncode != 0 or len(result.stdout) > file_limits[relative]:
+            raise PromotionError("source eligibility state object is unavailable from the pinned commit")
+        return result.stdout
+
+    def read_working(relative: pathlib.PurePosixPath) -> bytes:
+        path = state_repository / pathlib.Path(*relative.parts)
+        try:
+            before = path.lstat()
+        except OSError as exc:
+            raise PromotionError("source eligibility state files are missing or unsafe") from exc
+        if not stat.S_ISREG(before.st_mode) or before.st_size > file_limits[relative]:
+            raise PromotionError("source eligibility state files are missing or unsafe")
+        try:
+            descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+            with os.fdopen(descriptor, "rb") as handle:
+                opened = os.fstat(handle.fileno())
+                if (opened.st_dev, opened.st_ino) != (before.st_dev, before.st_ino):
+                    raise PromotionError("source eligibility state file changed while opening")
+                payload = handle.read(file_limits[relative] + 1)
+                if len(payload) > file_limits[relative]:
+                    raise PromotionError("source eligibility state file exceeds its byte limit")
+                if handle.read(1):
+                    raise PromotionError("source eligibility state file changed while reading")
+        except OSError as exc:
+            raise PromotionError("source eligibility state files are missing or unsafe") from exc
+        return payload
+
+    index_path = state_repository / pathlib.Path(*index_relative.parts)
+    checkpoint_path = state_repository / pathlib.Path(*checkpoint_relative.parts)
+    index_bytes = read_working(index_relative)
+    checkpoint_bytes = read_working(checkpoint_relative)
+    if read_committed(index_relative) != index_bytes or read_committed(checkpoint_relative) != checkpoint_bytes:
+        raise PromotionError("source eligibility working state differs from its pinned commit")
+    try:
+        index = json.loads(index_bytes)
+        checkpoint_value = json.loads(checkpoint_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PromotionError("source eligibility state JSON is invalid") from exc
+    if not isinstance(index, Mapping) or index.get("schema_version") != PROCESSOR_SCHEMA:
+        raise PromotionError("source eligibility state index is invalid")
+    rows = index.get("generations")
+    matches = [
+        row for row in rows if isinstance(row, Mapping)
+        and row.get("generation_id") == generation_id
+        and row.get("checkpoint") == f"{generation_id}.json"
+    ] if isinstance(rows, list) else []
+    if len(matches) != 1 or not isinstance(checkpoint_value, dict):
+        raise PromotionError("source eligibility generation is not uniquely indexed")
+    checkpoint = verify_processor_checkpoint(
+        checkpoint_value, schema_path, eligibility_module=eligibility_module,
+    )
+    if checkpoint.get("generation_id") != generation_id:
+        raise PromotionError("source eligibility checkpoint identity differs from its index")
+
+    if (
+        command(("git", "rev-parse", "HEAD"), state_repository).stdout.strip() != state_commit
+        or read_working(index_relative) != index_bytes
+        or read_working(checkpoint_relative) != checkpoint_bytes
+        or read_committed(index_relative) != index_bytes
+        or read_committed(checkpoint_relative) != checkpoint_bytes
+    ):
+        raise PromotionError("source eligibility state changed during snapshot")
+    return {
+        "state_repository": state_repository,
+        "state_commit": state_commit,
+        "index_relative": index_relative.as_posix(),
+        "checkpoint_relative": checkpoint_relative.as_posix(),
+        "index_bytes": index_bytes,
+        "checkpoint_bytes": checkpoint_bytes,
+        "index": dict(index),
+        "checkpoint": checkpoint,
+    }
+
+
+def _source_eligibility_selection_state_revision(
+    state_root: pathlib.Path,
+    repository: str,
+) -> str | None:
+    """Pin the clean processor-state revision before selecting a generation."""
+    state_root = state_root.resolve()
+    marker_path = state_root / "state-root.json"
+    try:
+        marker_stat = marker_path.lstat()
+    except FileNotFoundError:
+        return None
+    except OSError as exc:
+        raise PromotionError("source eligibility state marker is unavailable") from exc
+    if not stat.S_ISREG(marker_stat.st_mode) or marker_stat.st_size > 8192:
+        raise PromotionError("source eligibility state marker is unsafe")
+    try:
+        descriptor = os.open(marker_path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+        with os.fdopen(descriptor, "rb") as handle:
+            opened = os.fstat(handle.fileno())
+            if (opened.st_dev, opened.st_ino) != (marker_stat.st_dev, marker_stat.st_ino):
+                raise PromotionError("source eligibility state marker changed while opening")
+            marker_bytes = handle.read(8193)
+            if len(marker_bytes) > 8192 or handle.read(1):
+                raise PromotionError("source eligibility state marker changed while reading")
+        marker = json.loads(marker_bytes)
+    except PromotionError:
+        raise
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PromotionError("source eligibility state marker is invalid") from exc
+    if marker != {
+        "schema_version": "datapan.upstream-catalogue-state-root.v1",
+        "repository": repository,
+        "source_id": "data_go_kr",
+        "state_root": PROCESSOR_STATE_ROOT.as_posix(),
+    }:
+        raise PromotionError("source eligibility state marker identity is invalid")
+
+    state_repository = next(
+        (candidate for candidate in (state_root, *state_root.parents)
+         if (candidate / ".git").exists() and not (candidate / ".git").is_symlink()),
+        None,
+    )
+    if state_repository is None:
+        raise PromotionError("source eligibility state checkout is not a Git repository")
+    try:
+        relative_root = state_root.relative_to(state_repository)
+    except ValueError as exc:
+        raise PromotionError("source eligibility state root escaped its checkout") from exc
+    if pathlib.PurePosixPath(relative_root.as_posix()) != PROCESSOR_STATE_ROOT:
+        raise PromotionError("source eligibility state root is not the owned processor state path")
+    origin_url = command(("git", "config", "--get", "remote.origin.url"), state_repository).stdout.strip()
+    if processor_state_repository_from_remote(origin_url).casefold() != repository.casefold():
+        raise PromotionError("source eligibility state checkout names another repository")
+    if command(("git", "status", "--porcelain=v1", "--untracked-files=all"), state_repository).stdout:
+        raise PromotionError("source eligibility state checkout is dirty")
+    state_commit = command(("git", "rev-parse", "HEAD"), state_repository).stdout.strip()
+    if not re.fullmatch(r"[a-f0-9]{40}", state_commit):
+        raise PromotionError("source eligibility state commit is invalid")
+    if (
+        command(("git", "rev-parse", "HEAD"), state_repository).stdout.strip() != state_commit
+        or command(("git", "status", "--porcelain=v1", "--untracked-files=all"), state_repository).stdout
+    ):
+        raise PromotionError("source eligibility selection state changed while pinning")
+    return state_commit
 
 
 def locate_processor_checkpoint(
@@ -651,12 +1023,59 @@ def select_recoverable_processor_checkpoint(
     return candidates[0] if candidates else None
 
 
+def authenticated_processor_compatibility_paths(
+    generation_inputs: Mapping[str, Any],
+    *,
+    root: pathlib.Path,
+    producer_file: Callable[[str], bytes],
+) -> tuple[str, ...]:
+    """Return the closed compatibility projection after authenticating derived source."""
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("processor checkpoint lacks generation input provenance")
+    paths = list(PROCESSOR_COMPATIBILITY_FILES)
+    derivation_value = generation_inputs.get("same_observation_derivation")
+    if derivation_value is None:
+        return tuple(dict.fromkeys(paths))
+    try:
+        derivation_helper = load_module(
+            root / PROCESSOR_DERIVATION_COMPATIBILITY_FILE,
+            "processor_compatibility_same_observation_derivation",
+        )
+        derivation = derivation_helper.validate_derivation_envelope(derivation_value)
+    except Exception as exc:
+        raise PromotionError("processor same-observation derivation envelope is invalid") from exc
+    try:
+        material = {
+            "processor_script_sha256": hashlib.sha256(
+                producer_file("scripts/process-upstream-catalogue-candidate.py")
+            ).hexdigest(),
+            "collector_handoff_helper_sha256": hashlib.sha256(
+                producer_file("scripts/upstream_catalogue_handoff.py")
+            ).hexdigest(),
+            "same_observation_derivation_helper_sha256": hashlib.sha256(
+                producer_file(PROCESSOR_DERIVATION_COMPATIBILITY_FILE)
+            ).hexdigest(),
+            "cache_source_helper_sha256": hashlib.sha256(
+                producer_file("scripts/upstream_catalogue_cache_source.py")
+            ).hexdigest(),
+        }
+    except Exception as exc:
+        raise PromotionError("processor same-observation producer source is unavailable") from exc
+    expected_revision = hashlib.sha256(canonical_json(material)).hexdigest()
+    if derivation.get("derivation_processor_revision_sha256") != expected_revision:
+        raise PromotionError("processor same-observation revision differs from producer source")
+    paths.append(PROCESSOR_DERIVATION_COMPATIBILITY_FILE)
+    return tuple(dict.fromkeys(paths))
+
+
 def verify_processor_input_compatibility(
     root: pathlib.Path,
     checkpoint: Mapping[str, Any],
     processor_head_sha: str,
     current_head_sha: str,
     composition_receipt: Mapping[str, Any] | None = None,
+    *, cache_source_helper: Any | None = None,
+    cache_source_contract: Any | None = None,
 ) -> None:
     """Permit an older B run only when its relevant source contract is byte-identical."""
     if not re.fullmatch(r"[a-f0-9]{40}", processor_head_sha) or not re.fullmatch(r"[a-f0-9]{40}", current_head_sha):
@@ -667,6 +1086,14 @@ def verify_processor_input_compatibility(
     generation_inputs = checkpoint.get("generation_inputs")
     if not isinstance(generation_inputs, Mapping):
         raise PromotionError("processor checkpoint lacks generation input provenance")
+    if (
+        cache_source_helper is None
+        or type(cache_source_contract) is not cache_source_helper.AuthenticatedCacheContract
+        or cache_source_contract.producer_head_sha != processor_head_sha
+    ):
+        raise PromotionError("processor cache source contract is not bound to its source commit")
+    if cache_source_contract.profile != cache_source_helper.CACHE_SOURCE_PROFILE:
+        raise PromotionError("processor cache source contract profile is unsupported")
     historical_bytes: dict[str, bytes] = {}
     compatibility_files = list(PROCESSOR_COMPATIBILITY_FILES)
     derivation_value = generation_inputs.get("same_observation_derivation")
@@ -691,24 +1118,27 @@ def verify_processor_input_compatibility(
             raise PromotionError(f"processor input contract changed since observation: {raw_path}")
     processor_path = PROCESSOR_INPUT_PROVENANCE["generator_revision"]
     handoff_path = "scripts/upstream_catalogue_handoff.py"
+    cache_source_path = "scripts/upstream_catalogue_cache_source.py"
     declaration_helper_path = "scripts/seoul_oa109_operation_declaration.py"
     snapshot_generator_path = "scripts/generate-seoul-oa109-subject-snapshot.py"
     declaration_path = "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
     historical_snapshot_path = "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
     processor_bytes = historical_bytes.get(processor_path)
     handoff_bytes = historical_bytes.get(handoff_path)
+    cache_source_bytes = historical_bytes.get(cache_source_path)
     declaration_helper_bytes = historical_bytes.get(declaration_helper_path)
     snapshot_generator_bytes = historical_bytes.get(snapshot_generator_path)
     declaration_bytes = historical_bytes.get(declaration_path)
     historical_snapshot_bytes = historical_bytes.get(historical_snapshot_path)
     if any(value is None for value in (
-        processor_bytes, handoff_bytes, declaration_helper_bytes, snapshot_generator_bytes,
+        processor_bytes, handoff_bytes, cache_source_bytes, declaration_helper_bytes, snapshot_generator_bytes,
         declaration_bytes, historical_snapshot_bytes,
     )):
-        raise PromotionError("processor source is missing a collector handoff or operation declaration compatibility input")
+        raise PromotionError("processor source is missing a cache-source or operation declaration compatibility input")
     generator_material = {
         "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
         "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
+        "cache_source_helper_sha256": hashlib.sha256(cache_source_bytes).hexdigest(),
         "seoul_operation_declaration_helper_sha256": hashlib.sha256(declaration_helper_bytes).hexdigest(),
         "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256(snapshot_generator_bytes).hexdigest(),
         "seoul_operation_declaration_sha256": hashlib.sha256(declaration_bytes).hexdigest(),
@@ -723,6 +1153,8 @@ def verify_processor_input_compatibility(
             "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
             "same_observation_derivation_helper_sha256": hashlib.sha256(derivation_bytes).hexdigest(),
         }
+        assert cache_source_bytes is not None
+        derivation_material["cache_source_helper_sha256"] = hashlib.sha256(cache_source_bytes).hexdigest()
         derivation_revision = hashlib.sha256(
             json.dumps(derivation_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()
@@ -955,7 +1387,20 @@ def download_processor_artifact(
         shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True)
     archive = output_dir.parent / f"{output_dir.name}.zip"
-    archive.write_bytes(raw)
+    if archive.exists() or archive.is_symlink():
+        try:
+            mode = archive.lstat().st_mode
+        except OSError as exc:
+            raise ProcessorCandidateError("processor archive path could not be inspected") from exc
+        if not stat.S_ISREG(mode) or stat.S_ISLNK(mode):
+            raise ProcessorCandidateError("processor archive path is not a regular private file")
+        archive.unlink()
+    try:
+        with archive.open("xb") as handle:
+            for offset in range(0, len(raw), 1024 * 1024):
+                handle.write(raw[offset:offset + 1024 * 1024])
+    except OSError as exc:
+        raise ProcessorCandidateError("processor archive could not be retained as a private file") from exc
     expected = set(REQUIRED_PROCESSOR_FILES) | {"upstream-catalogue-checkpoint-receipt.json"}
     total = 0
     try:
@@ -996,6 +1441,8 @@ def validate_processor_link_metadata(
     canonical_context: Mapping[str, Any] | None = None,
     allow_terminal_noop: bool = False,
     validate_seoul: bool = True,
+    replay_control: OriginalCReplayControlBinding | None = None,
+    deadline_monotonic: float | None = None,
 ) -> list[dict[str, Any]]:
     """Semantically bind unresolved resolver metadata to its checkpoint row."""
     evidence_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
@@ -1020,7 +1467,15 @@ def validate_processor_link_metadata(
     except ImportError as exc:
         raise PromotionError("processor enrichment schema validator is unavailable") from exc
     try:
-        enrichment_schema = load_object(root / "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json")
+        if replay_control is not None:
+            if deadline_monotonic is None:
+                raise PromotionError("original C replay schema access has no inherited deadline")
+            replay_control.require(deadline_monotonic=deadline_monotonic)
+            enrichment_schema = replay_control.data(
+                "enrichment_schema", deadline_monotonic=deadline_monotonic,
+            )
+        else:
+            enrichment_schema = load_object(root / "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json")
         jsonschema.Draft202012Validator(
             enrichment_schema, format_checker=jsonschema.FormatChecker(),
         ).validate(evidence)
@@ -1033,6 +1488,8 @@ def validate_processor_link_metadata(
             composition_baseline_bytes=composition_baseline_bytes,
             canonical_context=canonical_context,
             allow_terminal_noop=allow_terminal_noop,
+            replay_control=replay_control,
+            deadline_monotonic=deadline_monotonic,
         )
     outcomes = evidence.get("worker_outcomes", [])
     if not isinstance(outcomes, list):
@@ -1064,18 +1521,35 @@ def validate_processor_link_metadata(
             raise PromotionError("processor checkpoint resolver diagnostic is missing its link metadata provenance")
     if not metadata_outcomes and not metadata_records:
         return []
-    try:
-        composer = load_module(
-            root / "scripts/compose-upstream-catalogue-candidate.py",
-            "processor_catalogue_composer_for_bundle_validation",
+    declaration_document: Mapping[str, Any] | None = None
+    if replay_control is not None:
+        if deadline_monotonic is None:
+            raise PromotionError("original C replay helper access has no inherited deadline")
+        composer = replay_control.module("composer", deadline_monotonic=deadline_monotonic)
+        helper = replay_control.module("link_detail", deadline_monotonic=deadline_monotonic)
+        declaration_document = replay_control.data(
+            "seoul_operation_declaration", deadline_monotonic=deadline_monotonic,
         )
-    except (OSError, PromotionError) as exc:
-        raise PromotionError("trusted processor composer is unavailable for link metadata") from exc
-    helper = getattr(composer, "LINK_DETAIL_HELPERS", None)
+        if getattr(composer, "LINK_DETAIL_HELPERS", None) is not helper:
+            raise PromotionError("original C replay composer changed its authenticated link-detail dependency")
+    else:
+        try:
+            composer = load_module(
+                root / "scripts/compose-upstream-catalogue-candidate.py",
+                "processor_catalogue_composer_for_bundle_validation",
+            )
+        except (OSError, PromotionError) as exc:
+            raise PromotionError("trusted processor composer is unavailable for link metadata") from exc
+        helper = getattr(composer, "LINK_DETAIL_HELPERS", None)
     if helper is None or not callable(getattr(helper, "validate_link_metadata", None)):
         raise PromotionError("processor link metadata validator is unavailable")
     try:
-        provider_index = load_object(root / "data/provider-index.json")
+        if replay_control is not None:
+            provider_index = replay_control.data(
+                "provider_index", deadline_monotonic=deadline_monotonic,
+            )
+        else:
+            provider_index = load_object(root / "data/provider-index.json")
         registered = helper.registered_hosts(provider_index)
     except (OSError, PromotionError, AttributeError, TypeError) as exc:
         raise PromotionError("trusted provider host index is unavailable for link metadata") from exc
@@ -1120,7 +1594,9 @@ def validate_processor_link_metadata(
         except (ValueError, TypeError) as exc:
             raise PromotionError("processor link metadata provenance is invalid") from exc
         try:
-            projection = composer.worker_contract_projection(dict(item))
+            projection = composer.worker_contract_projection(
+                dict(item), seoul_declaration_document=declaration_document,
+            )
         except (AttributeError, TypeError, ValueError) as exc:
             raise PromotionError("processor resolver contract diagnostic is invalid") from exc
         if not isinstance(projection, Mapping) or not projection:
@@ -1148,6 +1624,7 @@ def validate_processor_link_metadata(
         contract_diagnostics,
         key=lambda row: (str(row["api_key"]["provider"]), str(row["api_key"]["id"])),
     )
+
 
 
 CONTRACT_DIAGNOSTIC_PROJECTION_FIELDS = frozenset({
@@ -1497,20 +1974,57 @@ def validate_processor_seoul_declaration(
     composition_baseline_bytes: int | None,
     canonical_context: Mapping[str, Any] | None,
     allow_terminal_noop: bool = False,
+    replay_control: OriginalCReplayControlBinding | None = None,
+    deadline_monotonic: float | None = None,
 ) -> None:
     """Revalidate a successful pinned declaration against the trusted source and C outputs."""
-    try:
-        composer = load_module(
-            root / "scripts/compose-upstream-catalogue-candidate.py",
-            "processor_catalogue_composer_for_declaration_validation",
+    declaration_document: Mapping[str, Any] | None = None
+    if replay_control is not None:
+        if deadline_monotonic is None:
+            raise PromotionError("original C replay declaration access has no inherited deadline")
+        composer = replay_control.module("composer", deadline_monotonic=deadline_monotonic)
+        declaration = replay_control.module("seoul_declaration", deadline_monotonic=deadline_monotonic)
+        link_detail = replay_control.module("link_detail", deadline_monotonic=deadline_monotonic)
+        provider_index = replay_control.data("provider_index", deadline_monotonic=deadline_monotonic)
+        schema = replay_control.data("specs_schema", deadline_monotonic=deadline_monotonic)
+        historical_subject = replay_control.data(
+            "historical_subject_declaration", deadline_monotonic=deadline_monotonic,
         )
-    except (OSError, PromotionError) as exc:
-        raise PromotionError("trusted processor composer is unavailable for declaration validation") from exc
-    declaration = getattr(composer, "SEOUL_OPERATION_DECLARATION", None)
+        declaration_document = replay_control.data(
+            "seoul_operation_declaration", deadline_monotonic=deadline_monotonic,
+        )
+        if (
+            getattr(composer, "SEOUL_OPERATION_DECLARATION", None) is not declaration
+            or getattr(composer, "LINK_DETAIL_HELPERS", None) is not link_detail
+        ):
+            raise PromotionError("original C replay declaration dependency identity changed")
+        try:
+            declaration_document = declaration.validate_declaration_document(declaration_document)
+        except Exception as exc:
+            raise PromotionError("original C replay declaration document is invalid") from exc
+    else:
+        try:
+            composer = load_module(
+                root / "scripts/compose-upstream-catalogue-candidate.py",
+                "processor_catalogue_composer_for_declaration_validation",
+            )
+        except (OSError, PromotionError) as exc:
+            raise PromotionError("trusted processor composer is unavailable for declaration validation") from exc
+        declaration = getattr(composer, "SEOUL_OPERATION_DECLARATION", None)
+        provider_index = None
+        schema = None
+        historical_subject = None
+        link_detail = getattr(composer, "LINK_DETAIL_HELPERS", None)
+        declaration_document = getattr(declaration, "DECLARATION", None)
     declaration_id = getattr(declaration, "DECLARATION_ID", None)
     if not isinstance(declaration_id, str) or not declaration_id:
         raise PromotionError("trusted Seoul operation declaration validator is unavailable")
-    target_id = str(declaration.DECLARATION["subject"]["portal_dataset_id"])
+    declaration_value = (
+        declaration_document
+        if replay_control is not None
+        else declaration.DECLARATION
+    )
+    target_id = str(declaration_value["subject"]["portal_dataset_id"])
     records = evidence.get("records")
     if not isinstance(records, list):
         raise PromotionError("processor enrichment records are invalid for declaration validation")
@@ -1567,9 +2081,17 @@ def validate_processor_seoul_declaration(
         # authenticated 0085 payload and pinned by both declaration and helper.
         # It remains independent of current canonical bytes and works in the
         # processor's intentional pointer-only checkout.
-        historical_snapshot = declaration.load_historical_subject_snapshot(root)
+        historical_snapshot = declaration.load_historical_subject_snapshot(
+            root,
+            authenticated_snapshot=historical_subject,
+            declaration_document=declaration_document,
+        )
         pinned_source_row = copy.deepcopy(dict(historical_snapshot["subject_row"]))
-        declaration.validate_subject_row(pinned_source_row)
+        declaration.validate_subject_row(
+            pinned_source_row, root=root,
+            authenticated_snapshot=historical_snapshot,
+            declaration_document=declaration_document,
+        )
     except (AttributeError, OSError, TypeError, ValueError) as exc:
         raise PromotionError("processor Seoul historical subject snapshot is unavailable or invalid") from exc
     composed_path = bundle_dir / "composed-candidate.registry.json"
@@ -1697,11 +2219,22 @@ def validate_processor_seoul_declaration(
     # transform plus the one declaration operation.
     original_row = copy.deepcopy(pinned_source_row)
     try:
-        declaration.validate_enriched_record(original_row, record, root=root)
+        declaration.validate_enriched_record(
+            original_row, record, root=root,
+            authenticated_snapshot=historical_snapshot,
+            declaration_document=declaration_document,
+        )
         generation_inputs = checkpoint.get("generation_inputs")
         candidate_sha256 = generation_inputs.get("candidate_sha256") if isinstance(generation_inputs, Mapping) else None
-        provider_index = load_object(root / "data/provider-index.json")
-        provider_index_sha256 = file_sha256(root / "data/provider-index.json")
+        if replay_control is None:
+            provider_index = load_object(root / "data/provider-index.json")
+            provider_index_sha256 = file_sha256(root / "data/provider-index.json")
+            schema = load_object(root / "schemas/datapan.specs.v1.schema.json")
+        else:
+            provider_index_sha256 = _original_c_control_data_sha256(
+                replay_control, "data/provider-index.json",
+                deadline_monotonic=deadline_monotonic,
+            )
         composition = load_object(bundle_dir / "composition-receipt.json")
         input_digests = composition.get("input_digests") if isinstance(composition, Mapping) else None
         if (
@@ -1713,7 +2246,6 @@ def validate_processor_seoul_declaration(
             or input_digests["provider_index"].get("sha256") != provider_index_sha256
         ):
             raise PromotionError("processor declaration evidence is not bound to trusted candidate and provider inputs")
-        schema = load_object(root / "schemas/datapan.specs.v1.schema.json")
         filtered_evidence = copy.deepcopy(dict(evidence))
         filtered_evidence["records"] = [copy.deepcopy(dict(record))]
         filtered_evidence.pop("worker_outcomes", None)
@@ -1725,12 +2257,18 @@ def validate_processor_seoul_declaration(
             provider_index_sha256=provider_index_sha256,
             hosts=composer.registered_hosts(provider_index),
             registry_schema=schema,
+            seoul_declaration_document=declaration_document,
+            historical_subject_snapshot=historical_snapshot,
         )
         validated_record = validated.get(("data.go.kr", target_id))
         if not isinstance(validated_record, Mapping) or validated_record.get("_binding_error"):
             raise PromotionError("processor Seoul declaration semantic binding was rejected")
-        declaration.validate_declared_operation(original_row, record_op, root=root)
-        composer.LINK_DETAIL_HELPERS.validate_link_metadata(
+        declaration.validate_declared_operation(
+            original_row, record_op, root=root,
+            authenticated_snapshot=historical_snapshot,
+            declaration_document=declaration_document,
+        )
+        link_detail.validate_link_metadata(
             record["declaration_provenance"]["page_resolver"],
             target_id,
             composer.registered_hosts(provider_index),
@@ -1748,6 +2286,7 @@ def validate_processor_seoul_declaration(
         raise PromotionError("processor Seoul declaration semantic binding is invalid") from exc
 
 
+
 def validate_processor_seoul_bundle(
     checkpoint: Mapping[str, Any],
     bundle_dir: pathlib.Path,
@@ -1756,6 +2295,8 @@ def validate_processor_seoul_bundle(
     root: pathlib.Path,
     canonical_context: Mapping[str, Any] | None,
     allow_terminal_noop: bool,
+    replay_control: OriginalCReplayControlBinding | None = None,
+    deadline_monotonic: float | None = None,
 ) -> None:
     """Apply the Seoul semantic gate after producer lineage and bundle checks."""
     enrichment_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
@@ -1767,6 +2308,8 @@ def validate_processor_seoul_bundle(
             composition_baseline_bytes=bundle.get("composition_baseline_bytes"),
             canonical_context=canonical_context,
             allow_terminal_noop=allow_terminal_noop,
+            replay_control=replay_control,
+            deadline_monotonic=deadline_monotonic,
         )
         return
     target_id = "15056854"
@@ -1780,7 +2323,314 @@ def validate_processor_seoul_bundle(
         raise PromotionError("successful Seoul declaration row is missing its enrichment evidence")
 
 
-def validate_processor_bundle(
+
+def authenticate_processor_cache_source_contract(
+    root: pathlib.Path,
+    checkpoint: Mapping[str, Any],
+    *,
+    repository: str,
+    default_branch: str,
+    native_reader: Any | None = None,
+    archive_path: pathlib.Path | None = None,
+) -> tuple[Any, Any]:
+    """Mint one opaque cache-source contract from native B/source/archive reads."""
+    helper = load_module(
+        root / "scripts/upstream_catalogue_cache_source.py",
+        f"promotion_upstream_catalogue_cache_source_{id(checkpoint)}",
+    )
+    try:
+        reader = native_reader or helper.GitHubNativeReader(
+            cwd=root,
+            deadline_monotonic=time.monotonic() + helper.MAX_WHOLE_ATTEMPT_SECONDS,
+        )
+        if archive_path is None:
+            contract = helper.authenticate_owner_contract(
+                checkpoint,
+                repository=repository,
+                default_branch=default_branch,
+                reader=reader,
+            )
+        else:
+            contract = helper.authenticate_owner_contract_from_archive_path(
+                checkpoint,
+                repository=repository,
+                default_branch=default_branch,
+                reader=reader,
+                archive_path=archive_path,
+            )
+    except Exception as exc:
+        raise PromotionError("processor cache source producer contract is unauthenticated") from exc
+    if type(contract) is not helper.AuthenticatedCacheContract:
+        raise PromotionError("processor cache source producer contract has an invalid capability type")
+    return helper, contract
+
+
+def _retained_processor_checkpoint_identity(
+    checkpoint: Mapping[str, Any],
+) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
+    """Validate the immutable checkpoint seal before choosing an output protocol."""
+    if checkpoint.get("schema_version") != PROCESSOR_SCHEMA:
+        raise PromotionError("retained processor checkpoint schema is unsupported")
+    claimed_checkpoint_sha256 = checkpoint.get("checkpoint_sha256")
+    unsigned = copy.deepcopy(dict(checkpoint))
+    unsigned.pop("checkpoint_sha256", None)
+    if (
+        not isinstance(claimed_checkpoint_sha256, str)
+        or not re.fullmatch(r"[a-f0-9]{64}", claimed_checkpoint_sha256)
+        or hashlib.sha256(canonical_json(unsigned)).hexdigest() != claimed_checkpoint_sha256
+    ):
+        raise PromotionError("retained processor checkpoint digest is invalid")
+    generation_inputs = checkpoint.get("generation_inputs")
+    if (
+        not isinstance(generation_inputs, Mapping)
+        or generation_inputs.get("source_id") != checkpoint.get("source_id")
+        or generation_inputs.get("source_scope") != checkpoint.get("source_scope")
+        or checkpoint.get("generation_id")
+        != hashlib.sha256(canonical_json(generation_inputs)).hexdigest()
+    ):
+        raise PromotionError("retained processor generation identity is invalid")
+    locator = checkpoint.get("output_artifact")
+    if not isinstance(locator, Mapping):
+        raise PromotionError("retained processor checkpoint has no output artifact locator")
+    return generation_inputs, locator
+
+
+def _retained_processor_native_identity(
+    checkpoint: Mapping[str, Any],
+    run: Mapping[str, Any],
+    artifact_inventory: Mapping[str, Any],
+    archive_bytes: bytes,
+    *,
+    repository: str,
+    default_branch: str,
+    cache_source_helper: Any,
+    source_reader: Any,
+    deadline_monotonic: float,
+) -> tuple[str, str, int, str, str]:
+    """Bind retained ZIP bytes to one native B attempt and bounded local Git reader."""
+    if (
+        type(source_reader) is not cache_source_helper.LocalGitSourceReader
+        or source_reader.deadline != float(deadline_monotonic)
+    ):
+        raise PromotionError("retained processor report requires its exact bounded local Git reader")
+    try:
+        source_reader.check_deadline()
+    except Exception as exc:
+        raise PromotionError("retained processor report source deadline is unavailable") from exc
+    locator = checkpoint.get("output_artifact")
+    if not isinstance(locator, Mapping):
+        raise PromotionError("retained processor checkpoint has no output artifact locator")
+    run_id, attempt_raw, name = processor_attempt_from_locator(checkpoint)
+    bound_run = validate_trusted_processor_run(
+        run,
+        repository=repository,
+        run_id=run_id,
+        attempt=attempt_raw,
+        default_branch=default_branch,
+    )
+    if (
+        not isinstance(artifact_inventory, Mapping)
+        or artifact_inventory.get("total_count") != 1
+        or not isinstance(artifact_inventory.get("artifacts"), list)
+        or len(artifact_inventory["artifacts"]) != 1
+        or not isinstance(artifact_inventory["artifacts"][0], Mapping)
+    ):
+        raise PromotionError("retained processor artifact inventory is not exact")
+    artifact = artifact_inventory["artifacts"][0]
+    artifact_run = artifact.get("workflow_run")
+    artifact_id = str(locator.get("artifact_id") or "")
+    archive_digest = artifact.get("digest")
+    archive_size = artifact.get("size_in_bytes")
+    if (
+        not artifact_id.isdigit()
+        or str(artifact.get("id") or "") != artifact_id
+        or artifact.get("name") != name
+        or artifact.get("expired") is not False
+        or artifact.get("expires_at") != locator.get("expires_at")
+        or str(locator.get("repository") or "").casefold() != repository.casefold()
+        or not isinstance(artifact_run, Mapping)
+        or str(artifact_run.get("id") or "") != run_id
+        or artifact_run.get("head_sha") != bound_run.get("head_sha")
+        or artifact_run.get("head_branch") != default_branch
+        or isinstance(archive_size, bool)
+        or not isinstance(archive_size, int)
+        or archive_size < 1
+        or archive_size > MAX_PROCESSOR_ARCHIVE_BYTES
+        or not isinstance(archive_digest, str)
+        or not re.fullmatch(r"sha256:[a-f0-9]{64}", archive_digest)
+        or not isinstance(archive_bytes, bytes)
+        or len(archive_bytes) != archive_size
+        or hashlib.sha256(archive_bytes).hexdigest() != archive_digest.removeprefix("sha256:")
+    ):
+        raise PromotionError("retained processor archive differs from its native run and artifact identity")
+    source_reader.check_deadline()
+    return (
+        str(bound_run["head_sha"]), run_id, int(attempt_raw), artifact_id,
+        archive_digest.removeprefix("sha256:"),
+    )
+
+
+def _validate_retained_processor_output_inventory(
+    checkpoint: Mapping[str, Any], *, expected_outputs: Sequence[str],
+) -> None:
+    digests = checkpoint.get("output_digests")
+    locator = checkpoint.get("output_artifact")
+    if not isinstance(digests, list) or not isinstance(locator, Mapping):
+        raise PromotionError("retained processor checkpoint is missing its output inventory")
+    names: list[str] = []
+    for row in digests:
+        if (
+            not isinstance(row, Mapping)
+            or not isinstance(row.get("path"), str)
+            or isinstance(row.get("bytes"), bool)
+            or not isinstance(row.get("bytes"), int)
+            or row["bytes"] < 1
+            or not isinstance(row.get("sha256"), str)
+            or not re.fullmatch(r"[a-f0-9]{64}", row["sha256"])
+        ):
+            raise PromotionError("retained processor output inventory is malformed")
+        names.append(row["path"])
+    if names != list(expected_outputs) or len(names) != len(set(names)):
+        raise PromotionError("retained processor output inventory differs from its authenticated protocol")
+    if hashlib.sha256(canonical_json(digests)).hexdigest() != locator.get("bundle_manifest_sha256"):
+        raise PromotionError("retained processor output inventory digest differs from its checkpoint")
+
+
+def _authenticate_historical_retained_processor_source(
+    checkpoint: Mapping[str, Any], *, repository: str, producer_head_sha: str,
+    cache_source_helper: Any, source_reader: Any,
+) -> dict[str, bytes]:
+    """Authenticate the closed pre-cache-profile source format used by retained 011."""
+    generation_inputs = checkpoint.get("generation_inputs")
+    exact_fields = {
+        "source_id", "source_scope", "candidate_sha256", "baseline_sha256",
+        "observation_failure_sha256", "policy_sha256", "adapter_revision",
+        "extractor_revision", "generator_revision",
+    }
+    if (
+        not isinstance(generation_inputs, Mapping)
+        or set(generation_inputs) != exact_fields
+        or generation_inputs.get("source_id") != "data_go_kr"
+        or generation_inputs.get("source_scope") != "aggregate_supported_catalog"
+        or generation_inputs.get("observation_failure_sha256") is not None
+    ):
+        raise PromotionError("retained historical processor generation fields are unsupported")
+    source_bytes: dict[str, bytes] = {}
+    for path, (expected_size, expected_sha256) in HISTORICAL_RETAINED_PROCESSOR_SOURCE_IDENTITIES.items():
+        try:
+            raw = source_reader.source_file(
+                repository, producer_head_sha, path,
+                maximum_bytes=cache_source_helper.MAX_SOURCE_FILE_BYTES,
+            )
+        except Exception as exc:
+            raise PromotionError(f"retained historical processor source is unavailable: {path}") from exc
+        if len(raw) != expected_size or hashlib.sha256(raw).hexdigest() != expected_sha256:
+            raise PromotionError(f"retained historical processor source identity differs: {path}")
+        source_bytes[path] = raw
+    for field, path in PROCESSOR_INPUT_PROVENANCE.items():
+        if generation_inputs.get(field) != hashlib.sha256(source_bytes[path]).hexdigest():
+            raise PromotionError(f"retained historical checkpoint provenance differs: {path}")
+    source_reader.check_deadline()
+    return source_bytes
+
+
+def classify_retained_processor_bundle_for_report(
+    checkpoint: Mapping[str, Any],
+    run: Mapping[str, Any],
+    artifact_inventory: Mapping[str, Any],
+    archive_bytes: bytes,
+    *,
+    repository: str,
+    default_branch: str,
+    cache_source_helper: Any,
+    source_reader: Any,
+    deadline_monotonic: float,
+) -> RetainedProcessorReportContract:
+    """Authenticate a retained report protocol before choosing ZIP members.
+
+    The returned contract only selects an exact report ZIP shape. It carries no
+    candidate, cache, or live-C capability, including for modern terminal data.
+    """
+    generation_inputs, _locator = _retained_processor_checkpoint_identity(checkpoint)
+    producer_head_sha, run_id, attempt, artifact_id, archive_sha256 = (
+        _retained_processor_native_identity(
+            checkpoint, run, artifact_inventory, archive_bytes,
+            repository=repository, default_branch=default_branch,
+            cache_source_helper=cache_source_helper, source_reader=source_reader,
+            deadline_monotonic=deadline_monotonic,
+        )
+    )
+    profile = generation_inputs.get("cache_source_profile")
+    cache_source_contract: Any | None = None
+    if profile == cache_source_helper.CACHE_SOURCE_PROFILE:
+        try:
+            cache_source_contract = cache_source_helper.authenticate_owner_contract_from_bound_evidence(
+                checkpoint,
+                repository=repository,
+                default_branch=default_branch,
+                artifact_inventory=artifact_inventory,
+                run=run,
+                archive=archive_bytes,
+                source_reader=source_reader,
+                deadline_monotonic=deadline_monotonic,
+            )
+        except Exception as exc:
+            raise PromotionError("retained modern processor protocol is unauthenticated") from exc
+        if (
+            type(cache_source_contract) is not cache_source_helper.AuthenticatedCacheContract
+            or cache_source_contract.profile != cache_source_helper.CACHE_SOURCE_PROFILE
+            or cache_source_contract.producer_head_sha != producer_head_sha
+        ):
+            raise PromotionError("retained modern processor capability is invalid")
+        protocol = MODERN_RETAINED_PROCESSOR_PROTOCOL
+        expected_outputs = REQUIRED_PROCESSOR_FILES
+    elif profile is None:
+        _authenticate_historical_retained_processor_source(
+            checkpoint, repository=repository, producer_head_sha=producer_head_sha,
+            cache_source_helper=cache_source_helper, source_reader=source_reader,
+        )
+        protocol = HISTORICAL_RETAINED_PROCESSOR_PROTOCOL
+        expected_outputs = HISTORICAL_RETAINED_PROCESSOR_FILES
+    else:
+        raise PromotionError("retained processor source protocol is unsupported")
+    processor_status = checkpoint.get("status")
+    if protocol == MODERN_RETAINED_PROCESSOR_PROTOCOL:
+        # Modern terminal reports have two producer-reachable closed shapes:
+        # retry is emitted with the full ten-member bundle, while a quarantined
+        # input terminal is emitted as the result-only marker.  Neither shape
+        # carries a candidate or grants current/live-C eligibility.
+        if processor_status in {"ready", "no-change", "retry"}:
+            expected_outputs = REQUIRED_PROCESSOR_FILES
+        elif processor_status == "quarantined":
+            expected_outputs = RETAINED_PROCESSOR_RESULT_ONLY_FILES
+        else:
+            raise PromotionError("retained modern report status has no producer-owned bundle profile")
+    elif processor_status not in {"ready", "no-change"}:
+        # Preserve the historical eight-member report contract exactly.
+        raise PromotionError("retained historical report protocol requires a reviewable processor output")
+    _validate_retained_processor_output_inventory(
+        checkpoint, expected_outputs=expected_outputs,
+    )
+    return RetainedProcessorReportContract(
+        _RETAINED_REPORT_CAPABILITY,
+        protocol=protocol,
+        expected_members=(*expected_outputs, RETAINED_PROCESSOR_CHECKPOINT_MEMBER),
+        checkpoint=checkpoint,
+        producer_head_sha=producer_head_sha,
+        run_id=run_id,
+        run_attempt=attempt,
+        artifact_id=artifact_id,
+        archive_sha256=archive_sha256,
+        archive_bytes=len(archive_bytes),
+        source_reader=source_reader,
+        cache_source_helper=cache_source_helper,
+        repository=repository,
+        default_branch=default_branch,
+        cache_source_contract=cache_source_contract,
+    )
+
+
+def _validate_processor_bundle_content(
     checkpoint: Mapping[str, Any],
     bundle_dir: pathlib.Path,
     composition_schema: Mapping[str, Any],
@@ -1791,6 +2641,17 @@ def validate_processor_bundle(
     canonical_context: Mapping[str, Any] | None = None,
     allow_terminal_noop: bool = False,
     defer_seoul_declaration: bool = False,
+    repository: str | None = None,
+    default_branch: str | None = None,
+    cache_source_native_reader: Any | None = None,
+    cache_source_helper: Any | None = None,
+    cache_source_contract: Any | None = None,
+    cache_source_archive_path: pathlib.Path | None = None,
+    _retained_report_contract: RetainedProcessorReportContract | None = None,
+    producer_composer_identity: Mapping[str, Any] | None = None,
+    derivation_module: Any | None = None,
+    replay_control: OriginalCReplayControlBinding | None = None,
+    deadline_monotonic: float | None = None,
 ) -> dict[str, Any]:
     digests = checkpoint.get("output_digests")
     locator = checkpoint.get("output_artifact")
@@ -1800,7 +2661,7 @@ def validate_processor_bundle(
     processor_status = checkpoint.get("status")
     if processor_status in {"ready", "no-change"}:
         if names != list(REQUIRED_PROCESSOR_FILES):
-            raise PromotionError("reviewable processor bundle inventory does not contain the exact ordered eight-file contract")
+            raise PromotionError("reviewable processor bundle inventory does not contain the exact ordered ten-file contract")
     elif processor_status in {"retry", "quarantined"}:
         if not names or len(names) != len(set(names)) or not set(names).issubset(set(REQUIRED_PROCESSOR_FILES)):
             raise PromotionError("non-candidate bundle inventory is empty, duplicated, or contains an unrecognized output")
@@ -1866,13 +2727,22 @@ def validate_processor_bundle(
             output_artifact["expires_at"] = None
     if uploaded_normalized != durable_normalized:
         raise PromotionError("uploaded processor checkpoint receipt differs from immutable durable generation state")
+    report_only_quarantine = False
+    if _retained_report_contract is not None:
+        report_only_quarantine = _require_report_only_quarantine_capability(
+            _retained_report_contract,
+            checkpoint,
+            root=root,
+            producer_head_sha=producer_head_sha,
+        )
     contract_diagnostics: list[dict[str, Any]] = []
-    if root is not None:
+    if root is not None and not report_only_quarantine:
         # Keep schema and unresolved-link checks on every terminal processor
         # status. Only the Seoul unchanged-decision check needs the resolved
         # composition-baseline identity below.
         contract_diagnostics = validate_processor_link_metadata(
             checkpoint, bundle_dir, root=root, validate_seoul=False,
+            replay_control=replay_control, deadline_monotonic=deadline_monotonic,
         )
     result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
     if result.get("generation_id") != checkpoint.get("generation_id") or result.get("status") != processor_status:
@@ -1892,6 +2762,11 @@ def validate_processor_bundle(
     outcome = checkpoint.get("outcome")
     if not isinstance(outcome, dict) or result.get("reason") != outcome.get("reason"):
         raise PromotionError("uploaded processor result reason differs from its durable checkpoint")
+    if report_only_quarantine:
+        assert root is not None
+        contract_diagnostics = _validate_report_only_quarantine_detail_metadata(
+            checkpoint, bundle_dir, result, root=root,
+        )
     if processor_status in {"retry", "quarantined"}:
         return {
             "status": processor_status,
@@ -1908,11 +2783,32 @@ def validate_processor_bundle(
     derivation_value = generation_inputs.get("same_observation_derivation")
     composition_baseline_sha = original_baseline_sha
     if derivation_value is not None:
-        derivation_helper = load_module(
-            (root / "scripts/upstream_catalogue_derivation.py") if root is not None
-            else pathlib.Path(__file__).with_name("upstream_catalogue_derivation.py"),
-            "promotion_same_observation_derivation",
-        )
+        if derivation_module is None:
+            derivation_helper = load_module(
+                (root / "scripts/upstream_catalogue_derivation.py") if root is not None
+                else pathlib.Path(__file__).with_name("upstream_catalogue_derivation.py"),
+                "promotion_same_observation_derivation",
+            )
+        else:
+            module_name = getattr(derivation_module, "__name__", None)
+            module_file = getattr(derivation_module, "__file__", None)
+            expected_file = (
+                root / "scripts/upstream_catalogue_derivation.py"
+                if root is not None else pathlib.Path(__file__).with_name("upstream_catalogue_derivation.py")
+            )
+            try:
+                expected_file = expected_file.resolve(strict=True)
+                observed_file = pathlib.Path(module_file).resolve(strict=True) if isinstance(module_file, str) else None
+            except OSError as exc:
+                raise PromotionError("processor derivation helper singleton source is unavailable") from exc
+            if (
+                not isinstance(module_name, str) or not module_name
+                or sys.modules.get(module_name) is not derivation_module
+                or observed_file != expected_file
+                or expected_file.is_symlink() or not expected_file.is_file()
+            ):
+                raise PromotionError("processor bundle requires the exact current derivation helper singleton")
+            derivation_helper = derivation_module
         try:
             derivation_value = derivation_helper.validate_derivation_envelope(derivation_value)
         except (ValueError, TypeError) as exc:
@@ -1978,13 +2874,59 @@ def validate_processor_bundle(
     except Exception as exc:
         raise PromotionError(f"composer did not admit a valid {expected_composition_status} candidate receipt") from exc
     diagnostic_encoding = "projected"
-    if contract_diagnostics and root is not None and producer_head_sha is not None:
+    if contract_diagnostics and producer_composer_identity is not None:
+        producer_composer = producer_composer_identity
+        if (
+            set(producer_composer) != {"bytes", "sha256"}
+            or isinstance(producer_composer.get("bytes"), bool)
+            or not isinstance(producer_composer.get("bytes"), int)
+            or producer_composer["bytes"] < 1
+            or not isinstance(producer_composer.get("sha256"), str)
+            or not re.fullmatch(r"[a-f0-9]{64}", producer_composer["sha256"])
+        ):
+            raise PromotionError("processor bundle producer composer identity is malformed")
+        diagnostic_encoding = authenticate_contract_diagnostic_encoding(
+            composition, producer_composer,
+        )
+    elif contract_diagnostics and root is not None and producer_head_sha is not None:
         producer_composer = processor_composer_source_identity(root, producer_head_sha)
         diagnostic_encoding = authenticate_contract_diagnostic_encoding(composition, producer_composer)
     if root is not None or contract_diagnostics:
         validate_processor_contract_diagnostic_outputs(
             bundle_dir, contract_diagnostics, encoding=diagnostic_encoding,
         )
+    if cache_source_helper is None or cache_source_contract is None:
+        if root is None or not isinstance(repository, str) or not isinstance(default_branch, str):
+            raise PromotionError("processor cache source producer contract is required")
+        cache_source_helper, cache_source_contract = authenticate_processor_cache_source_contract(
+            root, checkpoint,
+            repository=repository,
+            default_branch=default_branch,
+            native_reader=cache_source_native_reader,
+            archive_path=cache_source_archive_path,
+        )
+    if type(cache_source_contract) is not cache_source_helper.AuthenticatedCacheContract:
+        raise PromotionError("processor cache source producer contract has an invalid capability type")
+    if (
+        cache_source_contract.profile != cache_source_helper.CACHE_SOURCE_PROFILE
+        or names != list(REQUIRED_PROCESSOR_FILES)
+    ):
+        raise PromotionError("processor bundle inventory differs from its authenticated producer contract")
+    try:
+        context, original_candidate, provenance = cache_source_helper.validate_bound_context_bundle(
+            context_path=bundle_dir / "upstream-catalogue-cache-source-context.json",
+            owner_checkpoint=checkpoint,
+            owner_contract=cache_source_contract,
+        )
+    except Exception as exc:
+        raise PromotionError("processor cache source context is invalid") from exc
+    if (
+        provenance != "modern"
+        or not isinstance(generation_inputs, Mapping)
+        or context.get("candidate", {}).get("sha256") != generation_inputs.get("candidate_sha256")
+        or file_sha256(original_candidate) != generation_inputs.get("candidate_sha256")
+    ):
+        raise PromotionError("processor cache source context does not bind its exact original A candidate")
     outcome = checkpoint.get("outcome", {})
     if processor_status == "no-change":
         if candidate_sha != composition_baseline_sha or outcome.get("composer_status") != "no_change" or int(outcome.get("pending_count", -1)) != 0 or int(outcome.get("detail_retry_count", -1)) != 0:
@@ -2006,14 +2948,896 @@ def validate_processor_bundle(
         "composition_receipt_sha256": file_sha256(receipt_path),
         "composition_outputs_dir": str(bundle_dir.resolve()),
         "contract_diagnostics": contract_diagnostics,
+        "_cache_source_helper": cache_source_helper,
+        "_cache_source_contract": cache_source_contract,
     }
     if root is not None and not defer_seoul_declaration:
         validate_processor_seoul_bundle(
             checkpoint, bundle_dir, result, root=root,
             canonical_context=canonical_context,
             allow_terminal_noop=allow_terminal_noop,
+            replay_control=replay_control, deadline_monotonic=deadline_monotonic,
         )
     return result
+
+
+def _require_report_only_quarantine_capability(
+    contract: RetainedProcessorReportContract,
+    checkpoint: Mapping[str, Any],
+    *,
+    root: pathlib.Path | None,
+    producer_head_sha: str | None,
+) -> bool:
+    """Allow the result-only exception only for one authenticated modern report."""
+    if (
+        type(contract) is not RetainedProcessorReportContract
+        or contract.protocol != MODERN_RETAINED_PROCESSOR_PROTOCOL
+        or root is None
+        or producer_head_sha != contract._producer_head_sha
+        or type(contract._cache_source_contract)
+        is not contract._cache_source_helper.AuthenticatedCacheContract
+    ):
+        raise PromotionError("report-only quarantine exception lacks its authenticated modern source capability")
+    generation_inputs = checkpoint.get("generation_inputs")
+    outcome = checkpoint.get("outcome")
+    if (
+        checkpoint.get("status") != "quarantined"
+        or not isinstance(generation_inputs, Mapping)
+        or generation_inputs.get("cache_source_profile") != contract._cache_source_helper.CACHE_SOURCE_PROFILE
+        or not isinstance(outcome, Mapping)
+        or outcome.get("reason") != "composer_scope_omits_worker_outcomes"
+        or contract.expected_members != (
+            *RETAINED_PROCESSOR_RESULT_ONLY_FILES,
+            RETAINED_PROCESSOR_CHECKPOINT_MEMBER,
+        )
+    ):
+        raise PromotionError("report-only quarantine exception does not match its exact producer profile")
+    _validate_retained_processor_output_inventory(
+        checkpoint, expected_outputs=RETAINED_PROCESSOR_RESULT_ONLY_FILES,
+    )
+    return True
+
+
+def _validate_report_only_quarantine_detail_metadata(
+    checkpoint: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+    result: Mapping[str, Any],
+    *,
+    root: pathlib.Path,
+) -> list[dict[str, Any]]:
+    """Validate retained resolver metadata without inventing enrichment evidence."""
+    outcome = checkpoint.get("outcome")
+    if (
+        checkpoint.get("status") != "quarantined"
+        or not isinstance(outcome, Mapping)
+        or outcome.get("reason") != "composer_scope_omits_worker_outcomes"
+        or result.get("status") != "quarantined"
+        or result.get("reason") != outcome.get("reason")
+        or result.get("candidate_available") is not False
+        or (bundle_dir / "upstream-catalogue-enrichment-evidence.json").exists()
+    ):
+        raise PromotionError("report-only quarantine metadata does not match its result-only marker")
+    detail_records = checkpoint.get("detail_records")
+    if not isinstance(detail_records, list):
+        raise PromotionError("report-only quarantine detail records are invalid")
+    try:
+        composer = load_module(
+            root / "scripts/compose-upstream-catalogue-candidate.py",
+            "processor_catalogue_composer_for_report_only_quarantine",
+        )
+        helpers = getattr(composer, "LINK_DETAIL_HELPERS", None)
+        validate_metadata = getattr(helpers, "validate_link_metadata", None)
+        registered_hosts = helpers.registered_hosts(
+            load_object(root / "data/provider-index.json"),
+        )
+    except (OSError, PromotionError, AttributeError, TypeError) as exc:
+        raise PromotionError("trusted resolver metadata validators are unavailable") from exc
+    if not callable(validate_metadata):
+        raise PromotionError("trusted resolver metadata validator is unavailable")
+
+    seen: set[str] = set()
+    diagnostics: list[dict[str, Any]] = []
+    for row in detail_records:
+        if not isinstance(row, Mapping):
+            raise PromotionError("report-only quarantine contains a malformed detail row")
+        identity = str(row.get("id") or "")
+        if identity:
+            if identity in seen:
+                raise PromotionError("report-only quarantine contains duplicate detail identities")
+            seen.add(identity)
+        diagnostic = row.get("failure_diagnostic")
+        has_metadata = "link_metadata" in row
+        has_contract_failure = (
+            isinstance(diagnostic, Mapping)
+            and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
+        )
+        if has_contract_failure and not has_metadata:
+            raise PromotionError("report-only resolver diagnostic is missing its link metadata provenance")
+        if not has_metadata:
+            continue
+        if (
+            not identity
+            or row.get("status") != "quarantined"
+            or not has_contract_failure
+            or diagnostic.get("phase") != "resolver"
+            or not isinstance(row.get("source_sha256"), str)
+            or not re.fullmatch(r"[a-f0-9]{64}", row["source_sha256"])
+            or row.get("guide_sha256") is not None
+            and (
+                not isinstance(row.get("guide_sha256"), str)
+                or not re.fullmatch(r"[a-f0-9]{64}", row["guide_sha256"])
+            )
+        ):
+            raise PromotionError("report-only resolver metadata is not bound to a quarantined detail row")
+        try:
+            validate_metadata(row["link_metadata"], identity, registered_hosts)
+            projection = composer.worker_contract_projection(dict(row))
+        except (ValueError, TypeError, AttributeError) as exc:
+            raise PromotionError("report-only resolver metadata failed its strict row validation") from exc
+        if not isinstance(projection, Mapping) or not projection:
+            raise PromotionError("report-only resolver row has no trusted diagnostic projection")
+        projected = {
+            "api_key": {"provider": "data.go.kr", "id": identity},
+            "worker_status": row.get("status"),
+            "source_sha256": row.get("source_sha256"),
+            "guide_sha256": row.get("guide_sha256"),
+            "worker_outcome_sha256": projection.get("worker_outcome_sha256"),
+            "detail_status": (
+                "verified" if "contract_failure" in projection else "legacy_detail_unknown"
+            ),
+            "next_action": projection.get("next_action"),
+        }
+        if "contract_failure" in projection:
+            projected["contract_failure"] = copy.deepcopy(projection["contract_failure"])
+        elif projection.get("contract_failure_status") != "legacy_detail_unknown":
+            raise PromotionError("report-only resolver legacy projection is invalid")
+        diagnostics.append(projected)
+    return sorted(
+        diagnostics,
+        key=lambda item: (str(item["api_key"]["provider"]), str(item["api_key"]["id"])),
+    )
+
+
+def validate_processor_bundle(
+    checkpoint: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+    composition_schema: Mapping[str, Any],
+    composition_helper: Any,
+    *,
+    root: pathlib.Path | None = None,
+    producer_head_sha: str | None = None,
+    canonical_context: Mapping[str, Any] | None = None,
+    allow_terminal_noop: bool = False,
+    defer_seoul_declaration: bool = False,
+    repository: str | None = None,
+    default_branch: str | None = None,
+    cache_source_native_reader: Any | None = None,
+    cache_source_helper: Any | None = None,
+    cache_source_contract: Any | None = None,
+    cache_source_archive_path: pathlib.Path | None = None,
+    producer_composer_identity: Mapping[str, Any] | None = None,
+    derivation_module: Any | None = None,
+    replay_control: OriginalCReplayControlBinding | None = None,
+    deadline_monotonic: float | None = None,
+) -> dict[str, Any]:
+    """Validate a live processor bundle without retained-report exceptions."""
+    return _validate_processor_bundle_content(
+        checkpoint,
+        bundle_dir,
+        composition_schema,
+        composition_helper,
+        root=root,
+        producer_head_sha=producer_head_sha,
+        canonical_context=canonical_context,
+        allow_terminal_noop=allow_terminal_noop,
+        defer_seoul_declaration=defer_seoul_declaration,
+        repository=repository,
+        default_branch=default_branch,
+        cache_source_native_reader=cache_source_native_reader,
+        cache_source_helper=cache_source_helper,
+        cache_source_contract=cache_source_contract,
+        cache_source_archive_path=cache_source_archive_path,
+        producer_composer_identity=producer_composer_identity,
+        derivation_module=derivation_module,
+        replay_control=replay_control,
+        deadline_monotonic=deadline_monotonic,
+    )
+
+
+def _validate_retained_report_contract_binding(
+    contract: RetainedProcessorReportContract,
+    checkpoint: Mapping[str, Any],
+    *,
+    root: pathlib.Path,
+    producer_head_sha: str,
+    source_reader: Any,
+) -> None:
+    if type(contract) is not RetainedProcessorReportContract:
+        raise PromotionError("retained processor report contract has an invalid capability type")
+    _retained_processor_checkpoint_identity(checkpoint)
+    if (
+        source_reader is not contract._source_reader
+        or contract._producer_head_sha != producer_head_sha
+        or contract._generation_id != checkpoint.get("generation_id")
+        or contract._checkpoint_sha256 != checkpoint.get("checkpoint_sha256")
+        or not root.is_dir()
+        or pathlib.Path(source_reader.cwd).resolve() != root.resolve()
+    ):
+        raise PromotionError("retained processor report contract differs from its exact checkpoint or source")
+    source_reader.check_deadline()
+
+
+def _validate_retained_uploaded_checkpoint(
+    checkpoint: Mapping[str, Any], bundle_dir: pathlib.Path,
+) -> None:
+    locator = checkpoint.get("output_artifact")
+    if not isinstance(locator, Mapping):
+        raise PromotionError("retained processor checkpoint has no output artifact locator")
+    checkpoint_copy = load_object(bundle_dir / RETAINED_PROCESSOR_CHECKPOINT_MEMBER)
+    if checkpoint_copy.get("generation_id") != checkpoint.get("generation_id"):
+        raise PromotionError("uploaded retained processor checkpoint belongs to another generation")
+    unsigned_copy = copy.deepcopy(checkpoint_copy)
+    claimed_copy_sha = unsigned_copy.pop("checkpoint_sha256", None)
+    if claimed_copy_sha != hashlib.sha256(canonical_json(unsigned_copy)).hexdigest():
+        raise PromotionError("uploaded retained processor checkpoint receipt digest is invalid")
+    copy_locator = checkpoint_copy.get("output_artifact")
+    if not isinstance(copy_locator, Mapping) or copy_locator.get("artifact_id") is not None:
+        raise PromotionError("uploaded retained processor checkpoint has an invalid artifact locator")
+    copied_expiry = parse_utc_timestamp(copy_locator.get("expires_at"), "uploaded processor artifact expiry")
+    final_expiry = parse_utc_timestamp(locator.get("expires_at"), "durable processor artifact expiry")
+    copied_heartbeat = parse_utc_timestamp(
+        checkpoint_copy.get("last_heartbeat_at"), "uploaded processor checkpoint heartbeat",
+    )
+    final_heartbeat = parse_utc_timestamp(
+        checkpoint.get("last_heartbeat_at"), "durable processor checkpoint heartbeat",
+    )
+    observation = checkpoint.get("last_observation")
+    observed_at = parse_utc_timestamp(
+        observation.get("observed_at") if isinstance(observation, Mapping) else checkpoint.get("observed_at"),
+        "processor generation observation",
+    )
+    generation_started_at = parse_utc_timestamp(
+        checkpoint_copy.get("observed_at") or checkpoint.get("observed_at") or observed_at.isoformat(),
+        "processor generation start",
+    )
+    if copied_heartbeat < generation_started_at or copied_heartbeat > final_heartbeat:
+        raise PromotionError("uploaded retained processor checkpoint heartbeat is outside its timeline")
+    if copied_expiry <= observed_at or copied_expiry > final_expiry:
+        raise PromotionError("uploaded retained processor checkpoint expiry is outside its timeline")
+    uploaded_normalized = copy.deepcopy(checkpoint_copy)
+    durable_normalized = copy.deepcopy(dict(checkpoint))
+    uploaded_normalized.pop("checkpoint_sha256", None)
+    durable_normalized.pop("checkpoint_sha256", None)
+    for normalized in (uploaded_normalized, durable_normalized):
+        normalized["last_heartbeat_at"] = None
+        normalized_locator = normalized.get("output_artifact")
+        if isinstance(normalized_locator, dict):
+            normalized_locator["artifact_id"] = None
+            normalized_locator["expires_at"] = None
+    if uploaded_normalized != durable_normalized:
+        raise PromotionError("uploaded retained processor checkpoint differs from durable state")
+
+
+def _retained_processor_source_facts(
+    contract: RetainedProcessorReportContract,
+    checkpoint: Mapping[str, Any],
+    composition: Mapping[str, Any] | None,
+    *,
+    root: pathlib.Path,
+) -> list[str]:
+    """Verify producer-head provenance and report current source drift."""
+    helper = contract._cache_source_helper
+    reader = contract._source_reader
+    repository = contract._repository
+    producer_head_sha = contract._producer_head_sha
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("retained processor checkpoint lacks generation inputs")
+    source_bytes: dict[str, bytes] = {}
+
+    def producer_file(path: str) -> bytes:
+        cached = source_bytes.get(path)
+        if cached is not None:
+            return cached
+        try:
+            raw = reader.source_file(
+                repository, producer_head_sha, path,
+                maximum_bytes=helper.MAX_SOURCE_FILE_BYTES,
+            )
+        except Exception as exc:
+            raise PromotionError(f"retained processor producer source is unavailable: {path}") from exc
+        source_bytes[path] = raw
+        return raw
+
+    for field, path in PROCESSOR_INPUT_PROVENANCE.items():
+        if field == "generator_revision":
+            continue
+        if generation_inputs.get(field) != hashlib.sha256(producer_file(path)).hexdigest():
+            raise PromotionError(f"retained processor checkpoint provenance differs: {path}")
+    if contract.protocol == MODERN_RETAINED_PROCESSOR_PROTOCOL:
+        try:
+            expected_generator_revision = helper.modern_generator_revision(
+                repository=repository, head_sha=producer_head_sha, reader=reader,
+            )
+        except Exception as exc:
+            raise PromotionError("retained modern processor generator source is unavailable") from exc
+        if generation_inputs.get("generator_revision") != expected_generator_revision:
+            raise PromotionError("retained modern processor generator revision differs from producer source")
+    elif generation_inputs.get("generator_revision") != hashlib.sha256(
+        producer_file(PROCESSOR_INPUT_PROVENANCE["generator_revision"])
+    ).hexdigest():
+        raise PromotionError("retained historical processor generator revision differs from producer source")
+
+    compatibility_paths = authenticated_processor_compatibility_paths(
+        generation_inputs, root=root, producer_file=producer_file,
+    )
+
+    if composition is None:
+        if checkpoint.get("status") not in {"retry", "quarantined"}:
+            raise PromotionError("reviewable retained processor report lacks its composition receipt")
+    else:
+        input_digests = composition.get("input_digests")
+        if not isinstance(input_digests, Mapping):
+            raise PromotionError("retained processor composition receipt lacks source digests")
+        for input_name, path in PROCESSOR_COMPOSITION_INPUTS.items():
+            raw = producer_file(path)
+            observed = input_digests.get(input_name)
+            if (
+                not isinstance(observed, Mapping)
+                or observed.get("bytes") != len(raw)
+                or observed.get("sha256") != hashlib.sha256(raw).hexdigest()
+            ):
+                raise PromotionError(
+                    f"retained processor composition input differs from producer source: {path}"
+                )
+
+    changed: list[str] = []
+    for path in compatibility_paths:
+        try:
+            historical = producer_file(path)
+            current_path = root / path
+            before = current_path.lstat()
+            if (
+                not stat.S_ISREG(before.st_mode) or stat.S_ISLNK(before.st_mode)
+                or before.st_size < 1 or before.st_size > helper.MAX_SOURCE_FILE_BYTES
+            ):
+                raise OSError("current input is not a bounded regular file")
+            current = current_path.read_bytes()
+            after = current_path.lstat()
+            if (
+                len(current) != before.st_size
+                or (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+                != (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)
+            ):
+                raise OSError("current input changed while reading")
+            reader.check_deadline()
+        except Exception:
+            changed.append(path)
+            continue
+        if historical != current:
+            changed.append(path)
+    reader.check_deadline()
+    return sorted(set(changed))
+
+
+def _validate_report_only_retry_composition(
+    checkpoint: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+    composition_schema: Mapping[str, Any],
+    cache_source_helper: Any,
+    *,
+    cache_source_contract: Any | None,
+    root: pathlib.Path,
+    require_opaque_cache_contract: bool = True,
+) -> Mapping[str, Any]:
+    """Validate a retry report's full producer bundle without returning a candidate.
+
+    The live-C bundle validator deliberately stops before candidate admission for
+    retry.  The report reader still needs to bind the producer's receipt, its
+    exact source inputs, all five composer outputs, and the original-A cache
+    context.  This function returns the receipt only to its immediate caller;
+    the public report facts never expose it or any candidate identity.
+    """
+    if checkpoint.get("status") != "retry":
+        raise PromotionError("report-only retry validator received another terminal status")
+    try:
+        import jsonschema
+    except ImportError as exc:
+        raise PromotionError("report-only retry schema validator is unavailable") from exc
+
+    generation_inputs = checkpoint.get("generation_inputs")
+    locator = checkpoint.get("output_artifact")
+    observation = checkpoint.get("last_observation")
+    outcome = checkpoint.get("outcome")
+    if (
+        not isinstance(generation_inputs, Mapping)
+        or not isinstance(locator, Mapping)
+        or not isinstance(observation, Mapping)
+        or not isinstance(outcome, Mapping)
+    ):
+        raise PromotionError("report-only retry checkpoint is missing its source or outcome identity")
+
+    digests = checkpoint.get("output_digests")
+    if not isinstance(digests, list) or [
+        row.get("path") for row in digests if isinstance(row, Mapping)
+    ] != list(REQUIRED_PROCESSOR_FILES):
+        raise PromotionError("report-only retry does not carry the exact full-ten output inventory")
+    output_rows = {str(row["path"]): row for row in digests if isinstance(row, Mapping)}
+    composition_path = bundle_dir / "composition-receipt.json"
+    composition = load_object(composition_path)
+    try:
+        jsonschema.Draft202012Validator(
+            composition_schema, format_checker=jsonschema.FormatChecker(),
+        ).validate(composition)
+    except jsonschema.ValidationError as exc:
+        raise PromotionError("report-only retry composer receipt does not match its schema") from exc
+
+    try:
+        processor = load_module(
+            root / "scripts/process-upstream-catalogue-candidate.py",
+            "report_only_retry_processor_validator",
+        )
+        composer_valid, composer_status, composer_receipt = processor.composer_outputs_valid(
+            bundle_dir,
+            str(generation_inputs.get("candidate_sha256") or ""),
+            str(generation_inputs.get("baseline_sha256") or ""),
+        )
+    except (OSError, PromotionError, AttributeError, TypeError, ValueError) as exc:
+        raise PromotionError("report-only retry producer validator is unavailable") from exc
+    if (
+        composer_valid is not True
+        or composer_status != composition.get("status")
+        or composer_receipt != composition
+    ):
+        raise PromotionError("report-only retry receipt fails the producer's actual output validator")
+
+    status = composition.get("status")
+    if status not in {"no_safe_change", "no_change"} or status != outcome.get("composer_status"):
+        raise PromotionError("report-only retry composer status differs from its checkpoint outcome")
+    reason = outcome.get("reason")
+    pending_count = outcome.get("pending_count")
+    retry_count = outcome.get("detail_retry_count")
+    for label, value in (("pending", pending_count), ("detail retry", retry_count)):
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise PromotionError(f"report-only retry {label} count is invalid")
+    if reason != "pending_detail_or_no_safe_change" or not (pending_count or retry_count):
+        raise PromotionError("report-only retry lacks the producer's pending-work reason and counts")
+
+    scope = composition.get("scope")
+    if not isinstance(scope, Mapping) or scope.get("full_scope_fresh") is not False or scope.get("publication_allowed") is not False:
+        raise PromotionError("report-only retry composer scope is not explicitly non-publishing")
+    applied = scope.get("applied_api_keys")
+    pending = scope.get("retained_pending_api_keys")
+    quarantined = scope.get("quarantined_api_keys")
+    if not isinstance(applied, list) or not isinstance(pending, list) or not isinstance(quarantined, list):
+        raise PromotionError("report-only retry composer scope identity lists are invalid")
+
+    def identity_set(values: list[Any], label: str) -> set[tuple[str, str]]:
+        identities: list[tuple[str, str]] = []
+        for value in values:
+            if (
+                not isinstance(value, Mapping)
+                or not isinstance(value.get("provider"), str) or not value["provider"]
+                or not isinstance(value.get("id"), str) or not value["id"]
+            ):
+                raise PromotionError(f"report-only retry {label} identity is malformed")
+            identities.append((value["provider"].casefold(), value["id"]))
+        if len(identities) != len(set(identities)):
+            raise PromotionError(f"report-only retry {label} identities are duplicated")
+        return set(identities)
+
+    applied_ids = identity_set(applied, "applied")
+    pending_ids = identity_set(pending, "pending")
+    quarantined_ids = identity_set(quarantined, "quarantine")
+    if applied_ids or pending_ids & quarantined_ids:
+        raise PromotionError("report-only retry composer scope has conflicting terminal dispositions")
+    if status == "no_safe_change" and not (pending_ids or quarantined_ids):
+        raise PromotionError("report-only no-safe-change receipt has no pending or quarantined work")
+    if pending_count != len(pending_ids | quarantined_ids):
+        raise PromotionError("report-only retry pending count differs from composer scope identities")
+
+    expected_composer_outputs = {
+        "composed-candidate.registry.json", "ready-scope.registry.json", "semantic-diff.json",
+        "regeneration-queue.json", "quarantine.json",
+    }
+    outputs = composition.get("outputs")
+    if not isinstance(outputs, Mapping) or set(outputs) != expected_composer_outputs:
+        raise PromotionError("report-only retry composer output inventory is not the exact five-file contract")
+    for name, row in outputs.items():
+        checkpoint_row = output_rows.get(name)
+        output_path = bundle_dir / name
+        if (
+            not isinstance(row, Mapping) or not isinstance(checkpoint_row, Mapping)
+            or row != {"bytes": checkpoint_row.get("bytes"), "sha256": checkpoint_row.get("sha256")}
+            or output_path.is_symlink() or not output_path.is_file()
+            or (output_path.stat().st_size, file_sha256(output_path))
+            != (row.get("bytes"), row.get("sha256"))
+        ):
+            raise PromotionError(f"report-only retry composer output differs from its exact bundle digest: {name}")
+
+    inputs = composition.get("input_digests")
+    if not isinstance(inputs, Mapping):
+        raise PromotionError("report-only retry composer receipt lacks its exact inputs")
+    input_artifacts = checkpoint.get("input_artifacts")
+    if not isinstance(input_artifacts, list):
+        raise PromotionError("report-only retry checkpoint lacks its original producer artifact")
+    producer_run_id = str(observation.get("producer_run_id") or "")
+    producer_artifacts = [
+        row for row in input_artifacts if isinstance(row, Mapping)
+        and str(row.get("run_id") or "") == producer_run_id
+    ]
+    if len(producer_artifacts) != 1:
+        raise PromotionError("report-only retry original producer artifact is ambiguous")
+    producer_artifact = producer_artifacts[0]
+
+    def require_digest(name: str, expected_sha256: Any, *, expected_bytes: int | None = None) -> Mapping[str, Any]:
+        row = inputs.get(name)
+        if (
+            not isinstance(row, Mapping)
+            or not isinstance(row.get("sha256"), str)
+            or not re.fullmatch(r"[a-f0-9]{64}", row["sha256"])
+            or isinstance(row.get("bytes"), bool)
+            or not isinstance(row.get("bytes"), int)
+            or row["bytes"] < 0
+            or row.get("sha256") != expected_sha256
+            or (expected_bytes is not None and row.get("bytes") != expected_bytes)
+        ):
+            raise PromotionError(f"report-only retry composer {name} input differs from its producer identity")
+        return row
+
+    candidate_member = "upstream-catalogue-original-candidate.registry.json"
+    context_member = "upstream-catalogue-cache-source-context.json"
+    candidate_row = output_rows.get(candidate_member)
+    context_row = output_rows.get(context_member)
+    candidate_path = bundle_dir / candidate_member
+    context_path = bundle_dir / context_member
+    if (
+        not isinstance(candidate_row, Mapping) or not isinstance(context_row, Mapping)
+        or candidate_path.is_symlink() or context_path.is_symlink()
+        or not candidate_path.is_file() or not context_path.is_file()
+        or (candidate_path.stat().st_size, file_sha256(candidate_path))
+        != (candidate_row.get("bytes"), candidate_row.get("sha256"))
+        or (context_path.stat().st_size, file_sha256(context_path))
+        != (context_row.get("bytes"), context_row.get("sha256"))
+    ):
+        raise PromotionError("report-only retry original-A or cache context differs from its bundle inventory")
+    if generation_inputs.get("cache_source_profile") != cache_source_helper.CACHE_SOURCE_PROFILE:
+        raise PromotionError("report-only retry has no modern original-A cache-source profile")
+    if require_opaque_cache_contract:
+        if type(cache_source_contract) is not cache_source_helper.AuthenticatedCacheContract:
+            raise PromotionError("report-only retry original-A cache contract is unauthenticated")
+        try:
+            context, original_candidate, provenance = cache_source_helper.validate_bound_context_bundle(
+                context_path=context_path,
+                owner_checkpoint=checkpoint,
+                owner_contract=cache_source_contract,
+            )
+        except Exception as exc:
+            raise PromotionError("report-only retry cache context or original-A binding is invalid") from exc
+    else:
+        try:
+            context = cache_source_helper.validate_context(
+                cache_source_helper.load_strict_json(
+                    context_path, label="cache source context",
+                    maximum_bytes=cache_source_helper.MAX_CONTEXT_BYTES,
+                ),
+            )
+            admission = context["original_admission_ref"]
+            cache_source_helper._checkpoint_input_binding(
+                checkpoint, admission, context["candidate"]["sha256"],
+            )
+        except Exception as exc:
+            raise PromotionError("report-only retry cache context or original-A binding is invalid") from exc
+        original_candidate = candidate_path
+        provenance = "modern"
+        if (
+            context.get("owner_generation_id") != checkpoint.get("generation_id")
+            or context.get("source_id") != checkpoint.get("source_id")
+            or context.get("source_scope") != checkpoint.get("source_scope")
+            or context.get("candidate", {}).get("path") != candidate_member
+            or context.get("candidate", {}).get("bytes") != candidate_path.stat().st_size
+            or context.get("candidate", {}).get("sha256") != file_sha256(candidate_path)
+        ):
+            raise PromotionError("report-only retry cache context does not bind exact original-A bytes")
+    if (
+        provenance != "modern"
+        or context.get("candidate", {}).get("sha256") != generation_inputs.get("candidate_sha256")
+        or file_sha256(original_candidate) != generation_inputs.get("candidate_sha256")
+    ):
+        raise PromotionError("report-only retry cache source does not bind its exact original-A candidate")
+
+    require_digest("baseline", generation_inputs.get("baseline_sha256"))
+    require_digest(
+        "candidate", generation_inputs.get("candidate_sha256"),
+        expected_bytes=candidate_path.stat().st_size,
+    )
+    require_digest("full_diff", producer_artifact.get("diff_sha256"))
+    require_digest("refresh_evidence", observation.get("refresh_evidence_sha256"))
+    require_digest("provider_index", generation_inputs.get("adapter_revision"))
+    require_digest("source_policy", generation_inputs.get("policy_sha256"))
+    enrichment_row = output_rows.get("upstream-catalogue-enrichment-evidence.json")
+    if not isinstance(enrichment_row, Mapping):
+        raise PromotionError("report-only retry lacks its immutable enrichment evidence")
+    require_digest(
+        "enrichment_evidence", enrichment_row.get("sha256"),
+        expected_bytes=enrichment_row.get("bytes"),
+    )
+
+    derivation = generation_inputs.get("same_observation_derivation")
+    composition_baseline = inputs.get("composition_baseline")
+    if derivation is None:
+        if composition_baseline is not None or composition.get("same_observation_derivation") is not None:
+            raise PromotionError("report-only retry contains an unbound composition baseline")
+    else:
+        try:
+            derivation_helper = load_module(
+                pathlib.Path(__file__).with_name("upstream_catalogue_derivation.py"),
+                "report_only_retry_derivation",
+            )
+            validated_derivation = derivation_helper.validate_derivation_envelope(derivation)
+        except Exception as exc:
+            raise PromotionError("report-only retry derivation envelope is invalid") from exc
+        expected_baseline = validated_derivation["composition_baseline"]
+        if (
+            composition.get("same_observation_derivation") != validated_derivation
+            or not isinstance(composition_baseline, Mapping)
+            or composition_baseline.get("sha256") != expected_baseline["registry_sha256"]
+            or composition_baseline.get("bytes") != expected_baseline["registry_bytes"]
+        ):
+            raise PromotionError("report-only retry composition baseline differs from its authenticated derivation")
+
+    producer = composition.get("producer")
+    if (
+        not isinstance(producer, Mapping)
+        or producer.get("repository") != "StatPan/datapan-registry"
+        or producer.get("run_id") != producer_run_id
+        or producer.get("run_url") != f"https://github.com/StatPan/datapan-registry/actions/runs/{producer_run_id}"
+    ):
+        raise PromotionError("report-only retry composer receipt is bound to another producer run")
+
+    semantic_path = bundle_dir / "semantic-diff.json"
+    semantic_diff = load_object(semantic_path)
+    for field, identities in (
+        ("applied_api_keys", applied),
+        ("retained_pending_api_keys", pending),
+        ("quarantined_api_keys", quarantined),
+    ):
+        if semantic_diff.get(field) != identities:
+            raise PromotionError(f"report-only retry composer scope differs from semantic diff: {field}")
+
+    result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
+    if (
+        result.get("generation_id") != checkpoint.get("generation_id")
+        or result.get("status") != "retry"
+        or result.get("source_id") != checkpoint.get("source_id")
+        or result.get("reason") != reason
+        or result.get("candidate_available") is not False
+        or result.get("processing_replay") is not False
+        or str(result.get("producer_run_id") or "") != producer_run_id
+        or str(result.get("processor_run_id") or "") != str(locator.get("name", "")).removeprefix(PROCESSING_PREFIX)
+        or str(result.get("processor_artifact_run_id") or "") != str(locator.get("run_id") or "")
+    ):
+        raise PromotionError("report-only retry result does not bind its exact checkpoint")
+    return composition
+
+
+def _validate_historical_retained_processor_bundle(
+    contract: RetainedProcessorReportContract,
+    checkpoint: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+    composition_helper: Any,
+    *,
+    root: pathlib.Path,
+) -> dict[str, Any]:
+    """Read one authenticated pre-profile B packet without granting live-C authority."""
+    if contract.protocol != HISTORICAL_RETAINED_PROCESSOR_PROTOCOL:
+        raise PromotionError("historical retained processor reader received another protocol")
+    _validate_retained_processor_output_inventory(
+        checkpoint, expected_outputs=HISTORICAL_RETAINED_PROCESSOR_FILES,
+    )
+    digests = checkpoint.get("output_digests")
+    assert isinstance(digests, list)
+    for record in digests:
+        assert isinstance(record, Mapping)
+        path_name = str(record["path"])
+        relative = pathlib.PurePosixPath(path_name)
+        path = bundle_dir / path_name
+        if (
+            relative.is_absolute() or ".." in relative.parts or "\\" in path_name
+            or not path.is_file() or path.is_symlink()
+            or (path.stat().st_size, file_sha256(path))
+            != (record["bytes"], record["sha256"])
+        ):
+            raise PromotionError(f"retained historical processor output differs: {path_name}")
+    _validate_retained_uploaded_checkpoint(checkpoint, bundle_dir)
+
+    try:
+        import jsonschema
+        historical_schema_raw = contract._source_reader.source_file(
+            contract._repository, contract._producer_head_sha,
+            "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+            maximum_bytes=contract._cache_source_helper.MAX_SOURCE_FILE_BYTES,
+        )
+        historical_checkpoint_schema = json.loads(historical_schema_raw)
+        jsonschema.Draft202012Validator(
+            historical_checkpoint_schema, format_checker=jsonschema.FormatChecker(),
+        ).validate(dict(checkpoint))
+    except Exception as exc:
+        raise PromotionError("retained historical checkpoint fails its producer-head schema") from exc
+
+    contract_diagnostics = validate_processor_link_metadata(
+        checkpoint, bundle_dir, root=root, validate_seoul=False,
+    )
+    result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
+    status = checkpoint.get("status")
+    locator = checkpoint.get("output_artifact")
+    observation = checkpoint.get("last_observation")
+    outcome = checkpoint.get("outcome")
+    if not isinstance(locator, Mapping) or not isinstance(outcome, Mapping):
+        raise PromotionError("retained historical processor state lacks its outcome identity")
+    locator_run_id = str(locator.get("run_id") or "")
+    if (
+        result.get("generation_id") != checkpoint.get("generation_id")
+        or result.get("status") != status
+        or result.get("source_id") != checkpoint.get("source_id")
+        or result.get("producer_run_id")
+        != (observation.get("producer_run_id") if isinstance(observation, Mapping) else None)
+        or result.get("processor_run_id") != f"{locator_run_id}-{contract._run_attempt}"
+        or str(result.get("processor_artifact_run_id") or "") != locator_run_id
+        or result.get("processing_replay") is not False
+        or result.get("candidate_available") is not (status == "ready")
+        or result.get("reason") != outcome.get("reason")
+    ):
+        raise PromotionError("retained historical processor result differs from its checkpoint")
+
+    candidate_path = bundle_dir / "composed-candidate.registry.json"
+    receipt_path = bundle_dir / "composition-receipt.json"
+    candidate_sha256 = file_sha256(candidate_path)
+    composition = load_object(receipt_path)
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("retained historical checkpoint lacks generation inputs")
+    input_digests = composition.get("input_digests")
+    baseline_sha256 = generation_inputs.get("baseline_sha256")
+    candidate_input_sha256 = generation_inputs.get("candidate_sha256")
+    if not isinstance(input_digests, Mapping):
+        raise PromotionError("retained historical composition lacks input digests")
+    baseline_input = input_digests.get("baseline")
+    candidate_input = input_digests.get("candidate")
+    if (
+        not isinstance(baseline_input, Mapping)
+        or baseline_input.get("sha256") != baseline_sha256
+        or isinstance(baseline_input.get("bytes"), bool)
+        or not isinstance(baseline_input.get("bytes"), int)
+        or baseline_input["bytes"] < 1
+        or not isinstance(candidate_input, Mapping)
+        or candidate_input.get("sha256") != candidate_input_sha256
+    ):
+        raise PromotionError("retained historical composition differs from checkpoint inputs")
+    try:
+        historical_composition_schema = json.loads(
+            contract._source_reader.source_file(
+                contract._repository, contract._producer_head_sha,
+                PROCESSOR_COMPOSITION_INPUTS["receipt_schema"],
+                maximum_bytes=contract._cache_source_helper.MAX_SOURCE_FILE_BYTES,
+            )
+        )
+        composition_helper.validate_composition(
+            composition, bundle_dir, historical_composition_schema, candidate_sha256,
+            expected_status="ready_scoped" if status == "ready" else "no_change",
+        )
+    except Exception as exc:
+        raise PromotionError("retained historical composition receipt is invalid") from exc
+    changed_paths = _retained_processor_source_facts(
+        contract, checkpoint, composition, root=root,
+    )
+    validate_processor_contract_diagnostic_outputs(
+        bundle_dir, contract_diagnostics, encoding="historical",
+    )
+    if status == "no-change" and (
+        candidate_sha256 != baseline_sha256
+        or outcome.get("composer_status") != "no_change"
+        or int(outcome.get("pending_count", -1)) != 0
+        or int(outcome.get("detail_retry_count", -1)) != 0
+    ):
+        raise PromotionError("retained historical no-change proof is inconsistent")
+    return {
+        "status": status,
+        "registry_path": "data/data-go-kr.registry.json",
+        "registry_bytes": candidate_path.stat().st_size,
+        "registry_sha256": candidate_sha256,
+        "baseline_sha256": baseline_sha256,
+        "composition_baseline_sha256": baseline_sha256,
+        "composition_baseline_bytes": baseline_input["bytes"],
+        "original_baseline_sha256": baseline_sha256,
+        "producer_candidate_sha256": candidate_input_sha256,
+        "composition_receipt": composition,
+        "composition_receipt_path": str(receipt_path.resolve()),
+        "composition_receipt_sha256": file_sha256(receipt_path),
+        "composition_outputs_dir": str(bundle_dir.resolve()),
+        "contract_diagnostics": contract_diagnostics,
+        "current_input_contract_compatible": False,
+        "current_input_contract_changed_paths": changed_paths,
+        "current_input_contract_reason_code": HISTORICAL_RETAINED_PROCESSOR_CURRENT_REASON,
+    }
+
+
+def validate_retained_processor_bundle_for_report(
+    contract: RetainedProcessorReportContract,
+    checkpoint: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+    composition_schema: Mapping[str, Any],
+    composition_helper: Any,
+    *,
+    root: pathlib.Path,
+    producer_head_sha: str,
+    source_reader: Any,
+) -> RetainedProcessorReportBundle:
+    """Validate retained B facts for a report without broadening live-C admission."""
+    _validate_retained_report_contract_binding(
+        contract, checkpoint, root=root, producer_head_sha=producer_head_sha,
+        source_reader=source_reader,
+    )
+    if contract.protocol == MODERN_RETAINED_PROCESSOR_PROTOCOL:
+        outcome = checkpoint.get("outcome")
+        report_only_quarantine = (
+            checkpoint.get("status") == "quarantined"
+            and isinstance(outcome, Mapping)
+            and outcome.get("reason") == "composer_scope_omits_worker_outcomes"
+        )
+        validation = (
+            _validate_processor_bundle_content
+            if report_only_quarantine else validate_processor_bundle
+        )
+        validation_kwargs: dict[str, Any] = {
+            "root": root,
+            "producer_head_sha": producer_head_sha,
+            "defer_seoul_declaration": True,
+            "cache_source_helper": contract._cache_source_helper,
+            "cache_source_contract": contract.cache_source_contract,
+        }
+        if report_only_quarantine:
+            validation_kwargs["_retained_report_contract"] = contract
+        bundle = validation(
+            checkpoint, bundle_dir, composition_schema, composition_helper,
+            **validation_kwargs,
+        )
+        composition = bundle.get("composition_receipt")
+        if composition is not None and not isinstance(composition, Mapping):
+            raise PromotionError("retained modern processor report lacks a composition receipt")
+        if checkpoint.get("status") == "retry":
+            composition = _validate_report_only_retry_composition(
+                checkpoint,
+                bundle_dir,
+                composition_schema,
+                contract._cache_source_helper,
+                cache_source_contract=contract.cache_source_contract,
+                root=root,
+            )
+        if composition is None and checkpoint.get("status") not in {"retry", "quarantined"}:
+            raise PromotionError("reviewable retained modern processor report lacks a composition receipt")
+        changed_paths = _retained_processor_source_facts(
+            contract, checkpoint, composition, root=root,
+        )
+        facts = dict(bundle)
+        facts.pop("_cache_source_helper", None)
+        facts.pop("_cache_source_contract", None)
+        facts.update({
+            "current_input_contract_compatible": not changed_paths,
+            "current_input_contract_changed_paths": changed_paths,
+            "current_input_contract_reason_code": (
+                None if not changed_paths else "modern_processor_input_contract_changed"
+            ),
+        })
+    elif contract.protocol == HISTORICAL_RETAINED_PROCESSOR_PROTOCOL:
+        facts = _validate_historical_retained_processor_bundle(
+            contract, checkpoint, bundle_dir, composition_helper, root=root,
+        )
+    else:
+        raise PromotionError("retained processor report contract protocol is unsupported")
+    return RetainedProcessorReportBundle(
+        _RETAINED_REPORT_CAPABILITY, protocol=contract.protocol, facts=facts,
+    )
 
 
 def screen_processor_recovery_candidate(
@@ -2072,10 +3896,15 @@ def screen_processor_recovery_candidate(
             canonical_context=canonical_context,
             allow_terminal_noop=True,
             defer_seoul_declaration=True,
+            repository=repository,
+            default_branch=default_branch,
+            cache_source_archive_path=bundle_dir.with_suffix(".zip"),
         )
         verify_processor_input_compatibility(
             root, checkpoint, str(run["head_sha"]), current_head_sha,
             composition_receipt=bundle.get("composition_receipt"),
+            cache_source_helper=bundle.get("_cache_source_helper"),
+            cache_source_contract=bundle.get("_cache_source_contract"),
         )
         canonical_identity = canonical_context.get("identity") if isinstance(canonical_context, Mapping) else None
         terminal_already_canonical = (
@@ -2136,6 +3965,7 @@ TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "scripts/refresh-canonical-snapshot-evidence.py",
     "scripts/upstream-catalogue-state-branch.py",
     "scripts/upstream_catalogue_handoff.py",
+    "scripts/upstream_catalogue_cache_source.py",
     "scripts/compose-upstream-catalogue-candidate.py",
     "scripts/generate-batch-link-detail-registry-patches.py",
     "scripts/seoul_oa109_operation_declaration.py",
@@ -2143,6 +3973,10 @@ TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "scripts/materialize-canonical-registry.py",
     "scripts/check-upstream-catalogue-health.py",
     "scripts/canonical_update_terminal_evidence.py",
+    "scripts/canonical_stale_queue_recovery.py",
+    "scripts/canonical_stale_queue_recovery_gate.py",
+    "scripts/canonical_stale_queue_state.py",
+    "scripts/canonical_publication_state.py",
     "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
     "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
@@ -2153,7 +3987,11 @@ TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
+    "schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
     "policy/upstream-catalogue-health.json",
+    "policy/canonical-stale-queue-recovery.v1.json",
 )
 
 
@@ -4739,10 +6577,17 @@ def execute_candidate_preparation(args: argparse.Namespace, root: pathlib.Path) 
         canonical_context=canonical_context,
         allow_terminal_noop=not explicit_source_refresh,
         defer_seoul_declaration=True,
+        repository=repo,
+        default_branch=os.environ.get("GITHUB_DEFAULT_BRANCH", "main"),
+        cache_source_helper=getattr(args, "_cache_source_helper", None),
+        cache_source_contract=getattr(args, "_cache_source_contract", None),
+        cache_source_archive_path=getattr(args, "_cache_source_archive_path", None),
     )
     verify_processor_input_compatibility(
         root, checkpoint, args.workflow_run_head_sha, head_sha,
         composition_receipt=bundle.get("composition_receipt"),
+        cache_source_helper=bundle.get("_cache_source_helper"),
+        cache_source_contract=bundle.get("_cache_source_contract"),
     )
     if bundle.get("status") in {"ready", "no-change"}:
         validate_processor_seoul_bundle(
@@ -5356,6 +7201,9 @@ def recover_ready_processor_candidate(args: argparse.Namespace, root: pathlib.Pa
     args.workflow_run_head_sha = str(screened["run"]["head_sha"])
     args.processor_artifact_id = screened["artifact_id"]
     args._authenticated_canonical_context = screened.get("canonical_context")
+    args._cache_source_helper = screened["bundle"].get("_cache_source_helper")
+    args._cache_source_contract = screened["bundle"].get("_cache_source_contract")
+    args._cache_source_archive_path = screened["bundle_dir"].with_suffix(".zip")
     execute_candidate_preparation(args, root)
     return terminal_recovery_result(
         status="candidate_preparation_returned",
@@ -6007,10 +7855,15 @@ def prepare_source_refresh_candidate(
         canonical_context=canonical_context,
         allow_terminal_noop=False,
         defer_seoul_declaration=True,
+        repository=repository,
+        default_branch=default_branch,
+        cache_source_archive_path=bundle_dir.with_suffix(".zip"),
     )
     verify_processor_input_compatibility(
         root, checkpoint, str(run["head_sha"]), target_main,
         composition_receipt=bundle.get("composition_receipt"),
+        cache_source_helper=bundle.get("_cache_source_helper"),
+        cache_source_contract=bundle.get("_cache_source_contract"),
     )
     if checkpoint.get("generation_inputs", {}).get("same_observation_derivation") is not None:
         raise PromotionError("same-observation derivation cannot be combined with a trusted source-refresh predecessor")
@@ -6054,6 +7907,9 @@ def prepare_source_refresh_candidate(
     args.processor_artifact_id = artifact_id
     args.bundle_dir = bundle_dir
     args._authenticated_canonical_context = canonical_context
+    args._cache_source_helper = bundle.get("_cache_source_helper")
+    args._cache_source_contract = bundle.get("_cache_source_contract")
+    args._cache_source_archive_path = bundle_dir.with_suffix(".zip")
     execute_candidate_preparation(args, root)
 
 
@@ -6135,6 +7991,3921 @@ def main() -> int:
         print(f"FAIL canonical update promotion: {exc}", file=sys.stderr)
         return 1
 
+
+
+
+# #754 source-target / Native replay and release-closure additions.
+_RESOLVED_SOURCE_TARGET = object()
+
+_RESOLVED_SOURCE_ELIGIBILITY = object()
+
+_VALIDATED_SOURCE_TARGET_NOOP_EVALUATION = object()
+
+_ORIGINAL_C_REPLAY_EVIDENCE = object()
+
+_ORIGINAL_C_REPLAY_CONTROL_BINDING = object()
+
+RELEASE_CLOSURE_COMPARISON_TOP_FIELDS = frozenset({
+    "schema_version", "purpose", "release_closure_reference", "admitted_parent_ref",
+    "original_generation", "source_eligibility_evidence", "source_refresh_evidence_sha256",
+    "generator_consumer_closure_sha256", "provenance_dependency_digests", "comparison",
+})
+
+RELEASE_CLOSURE_COMPARISON_LEGACY_TOP_FIELDS = frozenset({
+    "schema_version", "purpose", "release_closure_reference", "parent_reference",
+    "original_generation", "source_eligibility_evidence", "source_refresh_evidence_sha256",
+    "generator_consumer_closure_sha256", "provenance_dependency_digests", "comparison",
+})
+
+RELEASE_CLOSURE_COMPARISON_FIELDS = frozenset({
+    "ruleset_sha256", "canonical_sha256", "canonical_representation",
+    "canonical_git_blob_sha1", "canonical_git_blob_bytes", "canonical_git_blob_sha256",
+    "admitted_parent_ref_sha256", "current_preparation_base",
+    "admitted_parent_projection_sha256", "current_base_projection_sha256",
+    "regenerated_projection_sha256", "parent_delta_paths", "current_base_delta_paths",
+    "parent_delta_records", "current_base_delta_records", "current_base_delta_sha256",
+    "captured_changed_paths", "projection_input_bounds", "source_eligibility_evidence_sha256",
+    "original_generation_sha256", "original_generation_epoch", "original_epoch_origin",
+    "original_observed_at",
+})
+
+RELEASE_CLOSURE_COMPARISON_LEGACY_FIELDS = frozenset({
+    "ruleset_sha256", "canonical_sha256", "canonical_representation",
+    "canonical_git_blob_sha1", "canonical_git_blob_bytes", "canonical_git_blob_sha256",
+    "legacy_baseline_id", "current_preparation_base",
+    "legacy_parent_projection_sha256", "current_base_projection_sha256",
+    "generated_projection_sha256", "parent_delta_paths", "current_base_delta_paths",
+    "parent_delta_records", "current_base_delta_records", "current_base_delta_sha256",
+    "captured_changed_paths", "projection_input_bounds", "source_eligibility_evidence_sha256",
+    "original_generation_sha256", "original_generation_epoch", "original_epoch_origin",
+    "original_observed_at",
+})
+
+RELEASE_CLOSURE_LEGACY_BASELINE_FIELDS = frozenset({
+    "schema_version", "role", "baseline_id", "identity", "evidence",
+})
+
+RELEASE_CLOSURE_LEGACY_BASELINE_IDENTITY_FIELDS = frozenset({
+    "repository", "source_id", "scope", "generation_id", "candidate_head_sha",
+    "candidate_base_sha", "merged_pr_number", "merged_sha", "ownership",
+    "release_manifest", "canonical_registry",
+})
+
+RELEASE_CLOSURE_LEGACY_BASELINE_EVIDENCE_FIELDS = frozenset({
+    "journal", "merged_pr", "merge_ack", "source_contract", "retained_inputs",
+})
+
+RELEASE_CLOSURE_LEGACY_REFERENCE_FIELDS = frozenset({
+    "schema_version", "purpose", "refresh_key", "legacy_baseline_id",
+    "generation_id", "canonical_sha256", "legacy_parent_projection_sha256",
+    "current_base_delta_sha256", "generated_projection_sha256", "branch",
+})
+
+RELEASE_CLOSURE_LEGACY_PARENT_FIELDS = frozenset({"kind", "reference"})
+
+MAX_RELEASE_CLOSURE_COMPARISON_BYTES = 64 * 1024 * 1024
+
+MAX_NATIVE_RELEASE_CLOSURE_COMPARISON_BLOB_BYTES = 8 * 1024 * 1024
+
+MAX_CURRENT_CONTROL_SOURCE_BYTES = 8 * 1024 * 1024
+
+MAX_RELEASE_CLOSURE_MEMBER_PATHS = 1024
+
+RELEASE_CLOSURE_GIT_COMMANDS_PER_BLOB = 4
+
+RELEASE_CLOSURE_GIT_COMMAND_SETUP_RESERVE = 64
+
+_CURRENT_CONTROL_STATE_MODULES: dict[
+    str, tuple[types.ModuleType, tuple[str, str, str, str], bytes],
+] = {}
+
+_CONTROL_STATE_MISSING = object()
+
+_CONTROL_SOURCE_MODULES: dict[
+    str, tuple[types.ModuleType, tuple[str, ...], bytes],
+] = {}
+
+_CONTROL_SOURCE_RESOURCE_BASELINES: dict[tuple[str, str, str], bytes] = {}
+
+_CONTROL_SOURCE_MODULE_PATHS = {
+    "canonical_update_pr_release_closure_ack": "scripts/canonical_update_pr.py",
+    "canonical_release_closure_frozen_v3": "scripts/canonical_release_closure.py",
+    "canonical_release_closure_native_v2_ack": "scripts/canonical_release_closure_native_v2.py",
+    "upstream_catalogue_source_eligibility_c2_ack": "scripts/upstream_catalogue_source_eligibility.py",
+    "upstream_catalogue_derivation_c2_ack": "scripts/upstream_catalogue_derivation.py",
+}
+
+_CONTROL_SOURCE_RESOURCE_PATHS = frozenset({
+    "scripts/canonical_release_closure_rules_v1.json",
+    "scripts/canonical_release_generator_consumer_membership.v3.json",
+})
+
+_CONTROL_ACK_MODULES_SEAL = object()
+
+_ACK_RUNTIME_MAX_DEPTH = 20
+
+_ACK_RUNTIME_MAX_ITEMS = 8192
+
+class ResolvedSourceTarget:
+    """Runner-owned capability resolved before any mutable C-parent choice."""
+
+    __slots__ = (
+        "selection_key", "reason_code", "evaluation", "original_admission", "original_observation",
+        "original_generation", "target_contract", "target_inventory", "generation_id",
+        "state_refs", "_state_snapshot",
+    )
+
+    def __init__(
+        self,
+        token: object,
+        *,
+        selection_key: str,
+        reason_code: str,
+        evaluation: Mapping[str, Any],
+        original_admission: Mapping[str, Any],
+        original_observation: Mapping[str, Any],
+        original_generation: Mapping[str, Any],
+        target_contract: Mapping[str, Any],
+        target_inventory: Sequence[Mapping[str, Any]],
+        generation_id: str,
+        state_refs: Sequence[Mapping[str, Any]],
+        state_snapshot: Mapping[str, Any],
+    ) -> None:
+        if token is not _RESOLVED_SOURCE_TARGET:
+            raise PromotionError("resolved source target constructor is private")
+        if (
+            not re.fullmatch(r"[a-f0-9]{64}", selection_key)
+            or not re.fullmatch(r"[a-f0-9]{64}", generation_id)
+            or not isinstance(reason_code, str)
+            or not reason_code
+            or original_generation.get("generation_id") != generation_id
+        ):
+            raise PromotionError("resolved source target identity is invalid")
+        self.selection_key = selection_key
+        self.reason_code = reason_code
+        self.evaluation = copy.deepcopy(dict(evaluation))
+        self.original_admission = copy.deepcopy(dict(original_admission))
+        self.original_observation = copy.deepcopy(dict(original_observation))
+        self.original_generation = copy.deepcopy(dict(original_generation))
+        self.target_contract = copy.deepcopy(dict(target_contract))
+        self.target_inventory = copy.deepcopy(list(target_inventory))
+        self.generation_id = generation_id
+        self.state_refs = copy.deepcopy(list(state_refs))
+        self._state_snapshot = copy.deepcopy(dict(state_snapshot))
+
+class ResolvedSourceEligibility:
+    """Runner-owned capability binding eligibility to one screened B artifact."""
+
+    __slots__ = (
+        "selection", "original_generation", "target_contract", "source_epoch",
+        "processor_candidate",
+    )
+
+    def __init__(self, token: object, verified: Any, processor_candidate: Mapping[str, Any]) -> None:
+        if token is not _RESOLVED_SOURCE_ELIGIBILITY:
+            raise PromotionError("resolved source eligibility constructor is private")
+        selection = getattr(verified, "selection", None)
+        if (
+            not isinstance(selection, Mapping)
+            or selection.get("action") != "revalidate_c"
+            or not isinstance(processor_candidate, Mapping)
+            or not isinstance(processor_candidate.get("checkpoint"), Mapping)
+            or processor_candidate.get("generation_id")
+            != selection.get("evidence", {}).get("original_generation", {}).get("generation_id")
+            or processor_candidate["checkpoint"].get("generation_id")
+            != processor_candidate.get("generation_id")
+        ):
+            raise PromotionError("resolved source eligibility processor binding is invalid")
+        self.selection = copy.deepcopy(dict(selection))
+        self.original_generation = copy.deepcopy(dict(verified.original_generation))
+        self.target_contract = copy.deepcopy(dict(verified.target_contract))
+        self.source_epoch = copy.deepcopy(dict(verified.source_epoch))
+        self.processor_candidate = copy.deepcopy(dict(processor_candidate))
+
+class OriginalCReplayEvidence:
+    """Runner-owned bundle of same-resolver Native facts for original C replay.
+
+    This is acquisition only. It does not grant source eligibility; that is
+    minted later after exact checkpoint, B bundle, target-contract, parent,
+    and full-selection recomputation succeed.
+    """
+
+    __slots__ = (
+        "native_resolver", "native_module", "facts", "control", "decoded",
+        "processor_state", "processor_artifact", "parent_facts", "expected_ref",
+        "journal_snapshot", "requested_pr_number", "deadline_monotonic",
+    )
+
+    def __init__(
+        self, token: object, *, native_resolver: Any, native_module: Any,
+        facts: Any, control: Any, decoded: Any, processor_state: Any,
+        processor_artifact: Any, parent_facts: Any, expected_ref: Mapping[str, Any],
+        journal_snapshot: Mapping[str, Any], requested_pr_number: int,
+        deadline_monotonic: float,
+    ) -> None:
+        if token is not _ORIGINAL_C_REPLAY_EVIDENCE:
+            raise PromotionError("original C replay evidence constructor is private")
+        self.native_resolver = native_resolver
+        self.native_module = native_module
+        self.facts = facts
+        self.control = control
+        self.decoded = decoded
+        self.processor_state = processor_state
+        self.processor_artifact = processor_artifact
+        self.parent_facts = parent_facts
+        self.expected_ref = copy.deepcopy(dict(expected_ref))
+        self.journal_snapshot = copy.deepcopy(dict(journal_snapshot))
+        self.requested_pr_number = requested_pr_number
+        self.deadline_monotonic = float(deadline_monotonic)
+
+class OriginalCReplayControlBinding:
+    """Runner-owned view of Native's closed current-CONTROL replay handle.
+
+    The Native capability remains the authority for every helper/data read.
+    This wrapper only narrows the names the replay path may consume and makes
+    each access revalidate the same resolver-issued facts and deadline.
+    """
+
+    __slots__ = ("replay", "source_facts", "native_control", "deadline_monotonic")
+
+    _MODULE_ACCESSORS = {
+        "runner": "runner_module",
+        "eligibility": "eligibility_module",
+        "handoff": "handoff_module",
+        "derivation": "derivation_module",
+        "preparer": "preparer_module",
+        "processor": "processor_module",
+        "health": "health_module",
+        "canonical_update_pr": "canonical_update_pr_module",
+        "composer": "composer_module",
+        "link_detail": "link_detail_module",
+        "seoul_declaration": "seoul_declaration_module",
+        "terminal_evidence": "terminal_evidence_module",
+    }
+    _DATA_ACCESSORS = {
+        "checkpoint_schema": "checkpoint_schema",
+        "composition_schema": "composition_schema",
+        "enrichment_schema": "enrichment_schema",
+        "specs_schema": "specs_schema",
+        "health_policy": "health_policy",
+        "provider_index": "provider_index",
+        "seoul_operation_declaration": "seoul_operation_declaration",
+        "historical_subject_declaration": "historical_subject_declaration",
+    }
+
+    def __init__(
+        self,
+        token: object,
+        *,
+        replay: OriginalCReplayEvidence,
+        source_facts: Any,
+        native_control: Any,
+    ) -> None:
+        if token is not _ORIGINAL_C_REPLAY_CONTROL_BINDING:
+            raise PromotionError("original C replay CONTROL binding constructor is private")
+        self.replay = replay
+        self.source_facts = source_facts
+        self.native_control = native_control
+        self.deadline_monotonic = replay.deadline_monotonic
+
+    def require(self, *, deadline_monotonic: float) -> Any:
+        replay = self.replay
+        native_module = replay.native_module
+        if (
+            type(replay) is not OriginalCReplayEvidence
+            or isinstance(deadline_monotonic, bool)
+            or not isinstance(deadline_monotonic, (int, float))
+            or not math.isfinite(deadline_monotonic)
+            or float(deadline_monotonic) != self.deadline_monotonic
+            or float(deadline_monotonic) != replay.deadline_monotonic
+            or deadline_monotonic <= time.monotonic()
+            or native_module is not sys.modules.get(getattr(native_module, "__name__", ""))
+            or replay.native_resolver is None
+        ):
+            raise PromotionError("original C replay CONTROL binding deadline or context is invalid")
+        require_facts = getattr(native_module, "require_verified_native_owned_c_revision_facts", None)
+        require_source = getattr(native_module, "require_verified_original_source_contract_facts", None)
+        require_control = getattr(native_module, "require_verified_original_replay_control", None)
+        if not all(callable(item) for item in (require_facts, require_source, require_control)):
+            raise PromotionError("original C replay CONTROL validators are unavailable")
+        try:
+            if require_facts(replay.facts) is not replay.facts:
+                raise PromotionError("original C preliminary facts changed during replay")
+            if require_source(self.source_facts) is not self.source_facts:
+                raise PromotionError("original C source facts changed during replay")
+            if require_control(
+                self.native_control, deadline_monotonic=deadline_monotonic,
+            ) is not self.native_control:
+                raise PromotionError("original C replay CONTROL handle changed during replay")
+        except PromotionError:
+            raise
+        except Exception as exc:
+            raise PromotionError("original C replay CONTROL drift check failed") from exc
+        if (
+            getattr(self.native_control, "runner_module", None)
+            is not sys.modules.get(__name__)
+            or getattr(self.source_facts, "runner_module", None)
+            is not getattr(self.native_control, "runner_module", None)
+            or getattr(self.native_control, "eligibility_control", None) is not replay.control
+            or getattr(self.source_facts, "eligibility_control", None) is not replay.control
+            or getattr(self.native_control, "eligibility_module", None)
+            is not getattr(replay.control, "eligibility_module", None)
+        ):
+            raise PromotionError("original C replay CONTROL changed runner or eligibility singleton")
+        return self.native_control
+
+    def module(self, name: str, *, deadline_monotonic: float) -> Any:
+        accessor = self._MODULE_ACCESSORS.get(name)
+        if accessor is None:
+            raise PromotionError("original C replay requested an unregistered CONTROL module")
+        control = self.require(deadline_monotonic=deadline_monotonic)
+        value = getattr(control, accessor, None)
+        if (
+            not isinstance(value, type(sys))
+            or not isinstance(getattr(value, "__name__", None), str)
+            or sys.modules.get(value.__name__) is not value
+        ):
+            raise PromotionError(f"original C replay CONTROL module is not registered: {name}")
+        return value
+
+    def data(self, name: str, *, deadline_monotonic: float) -> Any:
+        accessor = self._DATA_ACCESSORS.get(name)
+        if accessor is None:
+            raise PromotionError("original C replay requested unregistered CONTROL data")
+        control = self.require(deadline_monotonic=deadline_monotonic)
+        value = getattr(control, accessor, None)
+        if not isinstance(value, Mapping):
+            raise PromotionError(f"original C replay CONTROL data is unavailable: {name}")
+        try:
+            return copy.deepcopy(dict(value))
+        except Exception as exc:
+            raise PromotionError(f"original C replay CONTROL data is not copyable: {name}") from exc
+
+def acquire_original_c_replay_evidence(
+    *,
+    native_resolver: Any,
+    native_module: Any,
+    expected_ref: Any,
+    requested_pr_number: int,
+    deadline_monotonic: float,
+) -> OriginalCReplayEvidence:
+    """Acquire the exact preliminary/state/B/parent facts through one resolver.
+
+    The receiver must call this only after its native caller/ref checks. Every
+    acquired capability is minted by the same Native resolver; this function
+    does not accept caller-selected generations, run IDs, artifact IDs, or
+    parent records and does not perform fallback GitHub/Git/Health reads.
+    """
+    if (
+        isinstance(deadline_monotonic, bool)
+        or not isinstance(deadline_monotonic, (int, float))
+        or not math.isfinite(deadline_monotonic)
+        or deadline_monotonic <= time.monotonic()
+        or isinstance(requested_pr_number, bool)
+        or not isinstance(requested_pr_number, int)
+        or requested_pr_number < 1
+        or not isinstance(native_module, type(sys))
+        or not isinstance(getattr(native_module, "__name__", None), str)
+        or sys.modules.get(native_module.__name__) is not native_module
+        or not callable(getattr(native_resolver, "read_original_c_journal_snapshot", None))
+        or not callable(getattr(native_resolver, "read_owned_c_revision_facts", None))
+    ):
+        raise PromotionError("original C replay Native context is unavailable or malformed")
+    resolver_type = getattr(native_module, "NativeOwnedCRevisionResolver", None)
+    if not isinstance(resolver_type, type) or type(native_resolver) is not resolver_type:
+        raise PromotionError("original C replay requires the exact Native resolver type")
+    try:
+        journal_snapshot = native_resolver.read_original_c_journal_snapshot(
+            expected_ref=expected_ref,
+            deadline_monotonic=deadline_monotonic,
+        )
+        require_snapshot = getattr(
+            native_module, "require_verified_original_c_journal_snapshot", None,
+        )
+        if not callable(require_snapshot) or require_snapshot(journal_snapshot) is not journal_snapshot:
+            raise PromotionError("original C journal snapshot is not the exact Native-issued capability")
+        facts = native_resolver.read_owned_c_revision_facts(
+            expected_ref=expected_ref,
+            journal_snapshot=journal_snapshot,
+            requested_pr_number=requested_pr_number,
+            deadline_monotonic=deadline_monotonic,
+        )
+        require_facts = getattr(native_module, "require_verified_native_owned_c_revision_facts", None)
+        if not callable(require_facts) or require_facts(facts) is not facts:
+            raise PromotionError("original C preliminary facts failed exact Native validation")
+        control = native_resolver.original_source_eligibility_control(
+            expected_facts=facts, deadline_monotonic=deadline_monotonic,
+        )
+        require_control = getattr(native_module, "require_verified_original_source_eligibility_control", None)
+        if not callable(require_control) or require_control(control) is not control:
+            raise PromotionError("original C current-CONTROL source validator is not Native sealed")
+        decoded = native_resolver.decode_original_source_selection(
+            expected_facts=facts, deadline_monotonic=deadline_monotonic,
+        )
+        require_decoded = getattr(native_module, "require_decoded_original_source_selection", None)
+        if not callable(require_decoded) or require_decoded(decoded) is not decoded:
+            raise PromotionError("original C source selection is not Native decoded")
+        state = native_resolver.read_original_processor_state(
+            expected_facts=facts, deadline_monotonic=deadline_monotonic,
+        )
+        require_state = getattr(native_module, "require_verified_original_processor_state", None)
+        if not callable(require_state) or require_state(state) is not state:
+            raise PromotionError("original B processor state is not Native sealed")
+        artifact = native_resolver.read_original_processor_artifact(
+            expected_facts=facts, state=state,
+            deadline_monotonic=deadline_monotonic,
+        )
+        require_artifact = getattr(native_module, "require_verified_original_processor_artifact", None)
+        if not callable(require_artifact) or require_artifact(artifact) is not artifact:
+            raise PromotionError("original B artifact is not Native sealed")
+        parent_facts = native_resolver.read_original_canonical_parent_facts(
+            expected_facts=facts, processor_state=state,
+            deadline_monotonic=deadline_monotonic,
+        )
+        require_parent = getattr(native_module, "require_verified_original_canonical_parent_facts", None)
+        if not callable(require_parent) or require_parent(parent_facts) is not parent_facts:
+            raise PromotionError("original C parent facts are not Native sealed")
+    except PromotionError:
+        raise
+    except Exception as exc:
+        raise PromotionError("original C replay Native acquisition failed closed") from exc
+    return OriginalCReplayEvidence(
+        _ORIGINAL_C_REPLAY_EVIDENCE,
+        native_resolver=native_resolver, native_module=native_module,
+        facts=facts, control=control, decoded=decoded,
+        processor_state=state, processor_artifact=artifact,
+        parent_facts=parent_facts, expected_ref=expected_ref,
+        journal_snapshot=journal_snapshot, requested_pr_number=requested_pr_number,
+        deadline_monotonic=deadline_monotonic,
+    )
+
+def recheck_original_c_processor_state(
+    replay: OriginalCReplayEvidence, *, deadline_monotonic: float,
+) -> Any:
+    """Perform Native's sole post-reconstruction state read and bind it bytewise."""
+    if (
+        type(replay) is not OriginalCReplayEvidence
+        or isinstance(deadline_monotonic, bool)
+        or not isinstance(deadline_monotonic, (int, float))
+        or not math.isfinite(deadline_monotonic)
+        or float(deadline_monotonic) != replay.deadline_monotonic
+        or deadline_monotonic <= time.monotonic()
+    ):
+        raise PromotionError("original C replay state reread deadline or context is invalid")
+    reader = getattr(replay.native_resolver, "read_original_processor_state", None)
+    require = getattr(replay.native_module, "require_verified_original_processor_state", None)
+    if not callable(reader) or not callable(require):
+        raise PromotionError("original B Native state reread is unavailable")
+    try:
+        later = reader(
+            expected_facts=replay.facts, deadline_monotonic=deadline_monotonic,
+        )
+        if require(later) is not later:
+            raise PromotionError("original B Native state reread is not sealed")
+    except PromotionError:
+        raise
+    except Exception as exc:
+        raise PromotionError("original B Native state reread failed closed") from exc
+    for field in (
+        "repository", "state_commit", "tree_sha", "generation_id", "index_path",
+        "index_bytes", "index_sha256", "checkpoint_path", "checkpoint_bytes",
+        "checkpoint_sha256",
+    ):
+        if getattr(replay.processor_state, field, None) != getattr(later, field, None):
+            raise PromotionError("original B processor state changed during source replay")
+    return later
+
+def acquire_original_c_source_contract_facts(
+    replay: OriginalCReplayEvidence,
+    *,
+    deadline_monotonic: float,
+) -> Any:
+    """Read the fixed-role source contract through the same Native resolver."""
+    if (
+        type(replay) is not OriginalCReplayEvidence
+        or isinstance(deadline_monotonic, bool)
+        or not isinstance(deadline_monotonic, (int, float))
+        or not math.isfinite(deadline_monotonic)
+        or float(deadline_monotonic) != replay.deadline_monotonic
+        or deadline_monotonic <= time.monotonic()
+        or replay.native_resolver is None
+        or replay.native_module is not sys.modules.get(
+            getattr(replay.native_module, "__name__", ""),
+        )
+    ):
+        raise PromotionError("original C source-contract Native context is unavailable")
+    method = getattr(replay.native_resolver, "read_original_source_contract_facts", None)
+    require = getattr(
+        replay.native_module,
+        "require_verified_original_source_contract_facts",
+        None,
+    )
+    if not callable(method) or not callable(require):
+        raise PromotionError("original C source-contract Native reader is unavailable")
+    try:
+        facts = method(
+            expected_facts=replay.facts,
+            processor_state=replay.processor_state,
+            processor_artifact=replay.processor_artifact,
+            deadline_monotonic=deadline_monotonic,
+        )
+        if require(facts) is not facts:
+            raise PromotionError("original C source-contract facts are not Native sealed")
+        if getattr(facts, "eligibility_control", None) is not replay.control:
+            raise PromotionError("original C source-contract facts changed CONTROL singleton")
+    except PromotionError:
+        raise
+    except Exception as exc:
+        raise PromotionError("original C source-contract acquisition failed closed") from exc
+    return facts
+
+def acquire_original_c_replay_control(
+    replay: OriginalCReplayEvidence,
+    source_facts: Any,
+    *,
+    deadline_monotonic: float,
+) -> OriginalCReplayControlBinding:
+    """Acquire Native's finite, source-proven current replay closure."""
+    if (
+        type(replay) is not OriginalCReplayEvidence
+        or isinstance(deadline_monotonic, bool)
+        or not isinstance(deadline_monotonic, (int, float))
+        or not math.isfinite(deadline_monotonic)
+        or float(deadline_monotonic) != replay.deadline_monotonic
+        or deadline_monotonic <= time.monotonic()
+    ):
+        raise PromotionError("original C replay CONTROL deadline is invalid")
+    resolver = replay.native_resolver
+    native_module = replay.native_module
+    read_control = getattr(resolver, "read_original_replay_control", None)
+    require_control = getattr(native_module, "require_verified_original_replay_control", None)
+    if not callable(read_control) or not callable(require_control):
+        raise PromotionError("original C current replay CONTROL closure is unavailable")
+    try:
+        handle = read_control(
+            expected_facts=replay.facts,
+            source_facts=source_facts,
+            deadline_monotonic=deadline_monotonic,
+        )
+        if require_control(handle, deadline_monotonic=deadline_monotonic) is not handle:
+            raise PromotionError("original C replay CONTROL closure is not Native sealed")
+        binding = OriginalCReplayControlBinding(
+            _ORIGINAL_C_REPLAY_CONTROL_BINDING,
+            replay=replay, source_facts=source_facts, native_control=handle,
+        )
+        binding.require(deadline_monotonic=deadline_monotonic)
+    except PromotionError:
+        raise
+    except Exception as exc:
+        raise PromotionError("original C current replay CONTROL closure failed closed") from exc
+    return binding
+
+def _original_c_control_data_sha256(
+    control: OriginalCReplayControlBinding,
+    relative_path: str,
+    *,
+    deadline_monotonic: float,
+) -> str:
+    """Return one exact raw-data digest from Native's closed execution inventory."""
+    native_control = control.require(deadline_monotonic=deadline_monotonic)
+    inventory = getattr(native_control, "inventory", None)
+    if not isinstance(inventory, (list, tuple)):
+        raise PromotionError("original C replay CONTROL inventory is unavailable")
+    matches = [
+        item for item in inventory
+        if isinstance(item, Mapping) and item.get("path") == relative_path
+    ]
+    if len(matches) != 1:
+        raise PromotionError("original C replay CONTROL data path is not uniquely inventoried")
+    row = matches[0]
+    digest = row.get("sha256")
+    byte_count = row.get("bytes")
+    if (
+        not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest)
+        or type(byte_count) is not int or byte_count < 1
+        or not isinstance(row.get("kind"), str) or not row["kind"]
+    ):
+        raise PromotionError("original C replay CONTROL data inventory row is malformed")
+    return digest
+
+def _original_c_replay_modules(
+    control: OriginalCReplayControlBinding,
+    *,
+    deadline_monotonic: float,
+) -> dict[str, Any]:
+    """Return only modules from the revalidated Native CONTROL capability."""
+    if type(control) is not OriginalCReplayControlBinding:
+        raise PromotionError("original C replay helper closure is not runner sealed")
+    control.require(deadline_monotonic=deadline_monotonic)
+    return {
+        name: control.module(name, deadline_monotonic=deadline_monotonic)
+        for name in (
+            "eligibility", "handoff", "derivation", "preparer", "processor",
+            "health", "canonical_update_pr", "composer", "link_detail",
+            "seoul_declaration", "terminal_evidence",
+        )
+    }
+
+def _native_original_source_role_inputs(
+    source_facts: Any,
+    eligibility: Any,
+    checkpoint: Mapping[str, Any],
+) -> dict[str, dict[str, Any]]:
+    """Validate and project exact fixed-role Git blobs from a Native capability.
+
+    This function consumes only the closed Native record shape. Its returned
+    dictionaries are data for pure validators; they do not carry authority.
+    """
+    declared = getattr(eligibility, "CONTRACT_INPUTS", None)
+    roles = getattr(source_facts, "roles", None)
+    if not isinstance(declared, tuple) or not isinstance(roles, Mapping):
+        raise PromotionError("original C source-contract role inventory is unavailable")
+    expected_inputs: tuple[tuple[str, str], ...] = tuple(declared)
+    if (
+        not expected_inputs
+        or any(
+            not isinstance(row, tuple) or len(row) != 2
+            or not isinstance(row[0], str) or not isinstance(row[1], str)
+            for row in expected_inputs
+        )
+        or len({path for path, _effect in expected_inputs}) != len(expected_inputs)
+        or tuple(tuple(row) for row in getattr(source_facts, "contract_inputs", ())) != expected_inputs
+    ):
+        raise PromotionError("original C source-contract inputs differ from the current CONTROL inventory")
+    required_a_paths = tuple(
+        path for path, effect in expected_inputs
+        if effect == getattr(eligibility, "REQUIRES_NEW_A", None)
+    )
+    if tuple(getattr(source_facts, "requires_new_a_paths", ())) != required_a_paths:
+        raise PromotionError("original C source-contract A-required paths differ from current CONTROL")
+    input_provenance = getattr(source_facts, "processor_input_provenance", None)
+    composition_inputs = getattr(source_facts, "processor_composition_inputs", None)
+    if (
+        not isinstance(input_provenance, Mapping)
+        or not isinstance(composition_inputs, Mapping)
+        or dict(input_provenance) != PROCESSOR_INPUT_PROVENANCE
+        or dict(composition_inputs) != PROCESSOR_COMPOSITION_INPUTS
+    ):
+        raise PromotionError("original C source-contract processor lineage map differs from current CONTROL")
+    compat_paths = tuple(getattr(source_facts, "processor_compatibility_paths", ()))
+    expected_compat_paths = _processor_compatibility_source_paths(checkpoint)
+    if (
+        compat_paths != expected_compat_paths
+        or len(compat_paths) != len(set(compat_paths))
+        or any(path not in {item[0] for item in expected_inputs} for path in compat_paths)
+    ):
+        raise PromotionError("original C source-contract compatibility paths are open or invalid")
+
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("original C processor checkpoint lacks generation inputs")
+    predecessor = generation_inputs.get("source_target_contract")
+    expected_roles = {"processor_b", "original_m", "predecessor_target", "original_a"}
+    if set(roles) != expected_roles:
+        raise PromotionError("original C source-contract roles differ from the closed four-role set")
+    all_paths = tuple(path for path, _effect in expected_inputs)
+    role_paths = {
+        "processor_b": all_paths,
+        "original_m": all_paths,
+        "predecessor_target": all_paths,
+        "original_a": required_a_paths,
+    }
+    if predecessor is None:
+        if roles.get("predecessor_target") is not None:
+            raise PromotionError("legacy original C checkpoint has an unexpected predecessor target role")
+    elif not isinstance(predecessor, Mapping) or not isinstance(roles.get("predecessor_target"), Mapping):
+        raise PromotionError("modern original C checkpoint lacks its authenticated predecessor target role")
+    input_positions = {
+        path: (position, effect)
+        for position, (path, effect) in enumerate(expected_inputs)
+    }
+
+    result: dict[str, dict[str, Any]] = {}
+    for role, expected_paths in role_paths.items():
+        record = roles.get(role)
+        if record is None:
+            if role == "predecessor_target" and predecessor is None:
+                result[role] = {"commit_sha": None, "tree_sha": None, "content": {}}
+                continue
+            raise PromotionError(f"original C source-contract {role} role is missing")
+        if not isinstance(record, Mapping) or set(record) != {"role", "commit_sha", "tree_sha", "paths"}:
+            raise PromotionError(f"original C source-contract {role} role shape is invalid")
+        if (
+            record.get("role") != role
+            or not isinstance(record.get("commit_sha"), str)
+            or not re.fullmatch(r"[a-f0-9]{40}", record["commit_sha"])
+            or not isinstance(record.get("tree_sha"), str)
+            or not re.fullmatch(r"[a-f0-9]{40}", record["tree_sha"])
+            or not isinstance(record.get("paths"), (list, tuple))
+            or len(record["paths"]) != len(expected_paths)
+        ):
+            raise PromotionError(f"original C source-contract {role} role identity is invalid")
+        contents: dict[str, bytes | None] = {}
+        for row_index, path in enumerate(expected_paths):
+            position, effect = input_positions[path]
+            row = record["paths"][row_index]
+            if not isinstance(row, Mapping) or set(row) != {
+                "position", "path", "class", "present", "mode", "git_blob_sha1",
+                "bytes", "sha256", "content",
+            }:
+                raise PromotionError(f"original C source-contract {role} path row is malformed")
+            if row.get("position") != position or row.get("path") != path or row.get("class") != effect:
+                raise PromotionError(f"original C source-contract {role} path order or class changed")
+            if row.get("present") is False:
+                if (
+                    role != "original_a" or effect != getattr(eligibility, "REQUIRES_NEW_A", None)
+                    or row.get("mode") is not None or row.get("git_blob_sha1") is not None
+                    or row.get("bytes") != 0 or row.get("sha256") is not None
+                    or row.get("content") is not None
+                ):
+                    raise PromotionError("original C source-contract has an unauthorized absent blob")
+                contents[path] = None
+                continue
+            content = row.get("content")
+            mode = row.get("mode")
+            byte_count = row.get("bytes")
+            git_oid = row.get("git_blob_sha1")
+            digest = row.get("sha256")
+            if (
+                row.get("present") is not True
+                or mode not in {"100644", "100755"}
+                or not isinstance(content, bytes)
+                or type(byte_count) is not int or byte_count != len(content)
+                or not isinstance(git_oid, str) or not re.fullmatch(r"[a-f0-9]{40}", git_oid)
+                or not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest)
+                or hashlib.sha256(content).hexdigest() != digest
+                or hashlib.sha1(b"blob " + str(len(content)).encode("ascii") + b"\0" + content).hexdigest() != git_oid
+            ):
+                raise PromotionError(f"original C source-contract {role} blob digest or mode is invalid")
+            contents[path] = content
+        result[role] = {
+            "commit_sha": record["commit_sha"],
+            "tree_sha": record["tree_sha"],
+            "content": contents,
+        }
+    return result
+
+def revalidate_original_c_source_target_contract(
+    replay: OriginalCReplayEvidence,
+    source_facts: Any,
+) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Bind Native role facts to the retained selection and recompute its target.
+
+    This validates source identity and current-Control classification only. It
+    does not create ``ResolvedSourceEligibility``; the caller must still
+    reproduce the original candidate and pass it through the current
+    eligibility module's native reread resolver before any productive use.
+    """
+    if type(replay) is not OriginalCReplayEvidence:
+        raise PromotionError("original C replay acquisition is not runner sealed")
+    native_module = replay.native_module
+    require = getattr(native_module, "require_verified_original_source_contract_facts", None)
+    if not callable(require):
+        raise PromotionError("original C source-contract Native validator is unavailable")
+    try:
+        if require(source_facts) is not source_facts:
+            raise PromotionError("original C source-contract facts are not Native sealed")
+    except PromotionError:
+        raise
+    except Exception as exc:
+        raise PromotionError("original C source-contract facts failed Native validation") from exc
+    if (
+        getattr(source_facts, "eligibility_control", None) is not replay.control
+        or getattr(replay.control, "eligibility_module", None) is None
+    ):
+        raise PromotionError("original C source-contract facts changed their current CONTROL singleton")
+    eligibility = replay.control.eligibility_module
+    selection = getattr(replay.decoded, "selection", None)
+    if (
+        not isinstance(selection, Mapping)
+        or selection.get("action") != "revalidate_c"
+        or not isinstance(selection.get("evidence"), Mapping)
+        or not isinstance(selection.get("evaluation"), Mapping)
+    ):
+        raise PromotionError("original C retained source selection is not a selected C action")
+    try:
+        evaluation = eligibility.validate_evaluation(selection["evaluation"])
+    except Exception as exc:
+        raise PromotionError("original C retained evaluation is invalid under current CONTROL") from exc
+    if canonical_json(evaluation) != canonical_json(selection["evaluation"]):
+        raise PromotionError("original C retained evaluation changed during validation")
+
+    checkpoint = getattr(replay.processor_state, "checkpoint", None)
+    run = getattr(replay.processor_artifact, "run", None)
+    if not isinstance(checkpoint, Mapping) or not isinstance(run, Mapping):
+        raise PromotionError("original C processor state or run evidence is unavailable")
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("original C processor checkpoint lacks generation inputs")
+    evidence = selection["evidence"]
+    original_observation = evidence.get("original_observation")
+    selected_target = evidence.get("target_contract")
+    if not isinstance(original_observation, Mapping) or not isinstance(selected_target, Mapping):
+        raise PromotionError("original C selection lacks its retained observation or target contract")
+
+    roles = _native_original_source_role_inputs(source_facts, eligibility, checkpoint)
+    processor_b = roles["processor_b"]
+    original_m = roles["original_m"]
+    original_a = roles["original_a"]
+    predecessor = roles["predecessor_target"]
+    source_sha = evaluation.get("source_sha")
+    source_tree_sha = evaluation.get("source_tree_sha")
+    producer_head = run.get("head_sha")
+    observation_head = original_observation.get("producer_head_sha")
+    if (
+        processor_b["commit_sha"] != producer_head
+        or original_m["commit_sha"] != source_sha
+        or original_m["tree_sha"] != source_tree_sha
+        or original_a["commit_sha"] != observation_head
+        or getattr(source_facts, "processor_is_ancestor", None) is not True
+    ):
+        raise PromotionError("original C B, A, and M source roles are not bound to the retained selection")
+    preparation_base = getattr(source_facts, "preparation_base", None)
+    if (
+        not isinstance(preparation_base, Mapping)
+        or preparation_base.get("commit_sha") != source_sha
+        or preparation_base.get("tree_sha") != source_tree_sha
+    ):
+        raise PromotionError("original C preparation base differs from the retained M evaluation")
+    stored_target = generation_inputs.get("source_target_contract")
+    if stored_target is None:
+        if predecessor["commit_sha"] is not None or predecessor["content"]:
+            raise PromotionError("legacy original C checkpoint unexpectedly has predecessor-target facts")
+        predecessor_tree_sha = None
+        predecessor_bytes = None
+    else:
+        if not isinstance(stored_target, Mapping):
+            raise PromotionError("original C stored predecessor target is malformed")
+        if (
+            predecessor["commit_sha"] != stored_target.get("source_sha")
+            or predecessor["tree_sha"] != stored_target.get("source_tree_sha")
+            or any(value is None for value in predecessor["content"].values())
+        ):
+            raise PromotionError("original C predecessor-target role differs from its stored contract")
+        predecessor_tree_sha = predecessor["tree_sha"]
+        predecessor_bytes = predecessor["content"]
+
+    try:
+        target_contract, inventory = target_contract_from_original_bounded_facts(
+            eligibility,
+            checkpoint,
+            original_observation,
+            current_source_sha=source_sha,
+            current_source_tree_sha=source_tree_sha,
+            current_input_bytes=original_m["content"],
+            predecessor_source_tree_sha=predecessor_tree_sha,
+            predecessor_input_bytes=predecessor_bytes,
+            original_a_required_input_bytes=original_a["content"],
+        )
+    except PromotionError:
+        raise
+    except Exception as exc:
+        raise PromotionError("original C retained target contract could not be recomputed") from exc
+    try:
+        selected = eligibility.validate_target_contract(selected_target)
+    except Exception as exc:
+        raise PromotionError("original C retained target contract is invalid under current CONTROL") from exc
+    if canonical_json(target_contract) != canonical_json(selected):
+        raise PromotionError("original C recomputed M target contract differs from the retained selection")
+    return target_contract, inventory, roles
+
+def validate_original_c_processor_source_compatibility(
+    replay: OriginalCReplayEvidence,
+    source_facts: Any,
+    roles: Mapping[str, Mapping[str, Any]],
+    *,
+    composition_receipt: Mapping[str, Any] | None = None,
+) -> None:
+    """Apply the exact legacy or source-epoch B→M rule to Native role bytes."""
+    if type(replay) is not OriginalCReplayEvidence:
+        raise PromotionError("original C replay acquisition is not runner sealed")
+    eligibility = getattr(replay.control, "eligibility_module", None)
+    checkpoint = getattr(replay.processor_state, "checkpoint", None)
+    run = getattr(replay.processor_artifact, "run", None)
+    if not isinstance(checkpoint, Mapping) or not isinstance(run, Mapping):
+        raise PromotionError("original C processor compatibility context is unavailable")
+    if set(roles) != {"processor_b", "original_m", "predecessor_target", "original_a"}:
+        raise PromotionError("original C processor compatibility roles are open")
+    producer = roles["processor_b"]
+    current = roles["original_m"]
+    producer_sha = producer.get("commit_sha")
+    current_sha = current.get("commit_sha")
+    if (
+        not isinstance(producer_sha, str)
+        or not isinstance(current_sha, str)
+        or producer_sha != run.get("head_sha")
+        or getattr(source_facts, "processor_is_ancestor", None) is not True
+    ):
+        raise PromotionError("original C B→M source ancestry is not Native authenticated")
+    producer_bytes = producer.get("content")
+    current_bytes = current.get("content")
+    if not isinstance(producer_bytes, Mapping) or not isinstance(current_bytes, Mapping):
+        raise PromotionError("original C B→M source bytes are incomplete")
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("original C checkpoint lacks processor source lineage")
+    source_epoch = generation_inputs.get("source_epoch")
+    if source_epoch is None:
+        compatibility_paths = _processor_compatibility_source_paths(checkpoint)
+        if any(path not in producer_bytes or path not in current_bytes for path in compatibility_paths):
+            raise PromotionError("original C legacy compatibility inputs are incomplete")
+        _verify_processor_input_compatibility_from_bytes(
+            checkpoint,
+            producer_sha,
+            current_sha,
+            producer_bytes={path: producer_bytes[path] for path in compatibility_paths},
+            current_bytes={path: current_bytes[path] for path in compatibility_paths},
+            producer_is_ancestor=True,
+            composition_receipt=composition_receipt,
+        )
+        return
+    if eligibility is None:
+        raise PromotionError("original C source-epoch current CONTROL module is unavailable")
+    decoded_selection = getattr(replay.decoded, "selection", None)
+    original_observation = (
+        decoded_selection.get("evidence", {}).get("original_observation")
+        if isinstance(decoded_selection, Mapping)
+        and isinstance(decoded_selection.get("evidence"), Mapping)
+        else None
+    )
+    evaluation = (
+        decoded_selection.get("evaluation")
+        if isinstance(decoded_selection, Mapping) else None
+    )
+    if not isinstance(original_observation, Mapping) or not isinstance(evaluation, Mapping):
+        raise PromotionError("original C source epoch lacks retained A observation or M evaluation")
+    if set(producer_bytes) != set(eligibility.CONTRACT_PATHS) or set(current_bytes) != set(eligibility.CONTRACT_PATHS):
+        raise PromotionError("original C source epoch contract inputs are incomplete")
+    try:
+        evaluation = eligibility.validate_evaluation(evaluation)
+    except Exception as exc:
+        raise PromotionError("original C source epoch M evaluation is invalid") from exc
+    if (
+        evaluation.get("source_sha") != current_sha
+        or evaluation.get("source_tree_sha") != current.get("tree_sha")
+    ):
+        raise PromotionError("original C source epoch role differs from the retained M evaluation")
+    try:
+        stored_target = eligibility.validate_target_contract(
+            generation_inputs.get("source_target_contract"),
+        )
+        epoch = eligibility.validate_source_epoch(source_epoch)
+    except Exception as exc:
+        raise PromotionError("original C source-epoch provenance is invalid under current CONTROL") from exc
+    if (
+        stored_target.get("source_sha") != producer_sha
+        or stored_target.get("source_tree_sha") != producer.get("tree_sha")
+        or epoch.get("target_contract_sha256") != stored_target.get("contract_sha256")
+        or epoch.get("original_observation_sha256")
+        != hashlib.sha256(canonical_json(original_observation)).hexdigest()
+    ):
+        raise PromotionError("original C source epoch does not bind its exact B source and original A observation")
+    producer_contract, producer_inventory = target_contract_from_bounded_source_bytes(
+        eligibility,
+        source_sha=producer_sha,
+        source_tree_sha=producer["tree_sha"],
+        input_bytes=producer_bytes,
+    )
+    if any(
+        producer_contract[field] != stored_target[field]
+        for field in (
+            "schema_version", "source_sha", "source_tree_sha",
+            "inventory_sha256", "contract_sha256",
+        )
+    ):
+        raise PromotionError("original C stored target contract differs from exact B source bytes")
+    current_contract, _current_inventory = target_contract_from_bounded_source_bytes(
+        eligibility,
+        source_sha=current_sha,
+        source_tree_sha=current["tree_sha"],
+        input_bytes=current_bytes,
+        previous_inventory=producer_inventory,
+    )
+    changed = current_contract.get("changed_classes")
+    if not isinstance(changed, list) or any(
+        effect in changed
+        for effect in (eligibility.SAME_A_PROCESSING, eligibility.REQUIRES_NEW_A)
+    ):
+        raise PromotionError("original C source epoch changed outside the C-only compatibility class")
+
+def _original_c_strict_json(raw: bytes, *, label: str) -> Any:
+    """Decode bounded replay JSON without accepting duplicate keys/constants."""
+    def unique_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        value: dict[str, Any] = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError("duplicate JSON object key")
+            value[key] = item
+        return value
+
+    def reject_constant(_value: str) -> Any:
+        raise ValueError("non-finite JSON constant")
+
+    try:
+        return json.loads(
+            raw.decode("utf-8"), object_pairs_hook=unique_pairs,
+            parse_constant=reject_constant,
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+        raise PromotionError(f"original C {label} JSON is invalid") from exc
+
+def original_m_canonical_context_from_replay(
+    replay: OriginalCReplayEvidence,
+    *,
+    root: pathlib.Path,
+    checkpoint: Mapping[str, Any],
+    source_facts: Any,
+    bundle_dir: pathlib.Path,
+) -> dict[str, Any]:
+    """Join Native M identity to actual matching B registry bytes and rows.
+
+    The returned shape is the existing pure validator context. It proves only
+    that these exact B bytes match the registry digest declared by Native's
+    sealed original-M Git manifest and pointer; it does not claim a provider
+    read, publication, or current-pointer observation.
+    """
+    if type(replay) is not OriginalCReplayEvidence:
+        raise PromotionError("original M canonical context lacks sealed C replay facts")
+    require_parent = getattr(
+        replay.native_module,
+        "require_verified_original_canonical_parent_facts",
+        None,
+    )
+    if not callable(require_parent):
+        raise PromotionError("original M canonical identity validator is unavailable")
+    try:
+        parent_facts = require_parent(replay.parent_facts)
+    except Exception as exc:
+        raise PromotionError("original M canonical parent facts are not Native sealed") from exc
+    if parent_facts is not replay.parent_facts:
+        raise PromotionError("original M canonical parent facts changed identity")
+    identity = getattr(parent_facts, "original_m_canonical_identity", None)
+    expected_fields = {
+        "repository", "purpose", "main_sha", "tree_sha", "manifest_path",
+        "manifest_bytes", "manifest_sha256", "manifest_git_blob_sha1",
+        "registry_path", "registry_bytes", "registry_sha256",
+        "registry_representation", "registry_git_blob_sha1",
+        "registry_git_blob_bytes", "registry_git_blob_sha256",
+    }
+    if not isinstance(identity, Mapping) or set(identity) != expected_fields:
+        raise PromotionError("original M canonical identity is unavailable or open")
+    decoded = getattr(replay.decoded, "selection", None)
+    evaluation = decoded.get("evaluation") if isinstance(decoded, Mapping) else None
+    roles = _native_original_source_role_inputs(
+        source_facts,
+        replay.control.eligibility_module,
+        checkpoint,
+    )
+    original_m = roles["original_m"]
+    repository = getattr(replay.facts, "repository", None)
+    parent_base = getattr(parent_facts, "preparation_base", None)
+    manifest_sha = identity.get("manifest_sha256")
+    registry_bytes = identity.get("registry_bytes")
+    registry_git_bytes = identity.get("registry_git_blob_bytes")
+    registry_path = identity.get("registry_path")
+    if (
+        not isinstance(evaluation, Mapping)
+        or not isinstance(repository, str) or not repository
+        or not isinstance(identity.get("repository"), str)
+        or identity["repository"].casefold() != repository.casefold()
+        or identity.get("purpose") != "original-c-selection"
+        or identity.get("main_sha") != evaluation.get("source_sha")
+        or identity.get("tree_sha") != evaluation.get("source_tree_sha")
+        or identity.get("main_sha") != original_m.get("commit_sha")
+        or identity.get("tree_sha") != original_m.get("tree_sha")
+        or identity.get("manifest_path") != "manifest.json"
+        or identity.get("registry_path") != "data/data-go-kr.registry.json"
+        or identity.get("registry_representation") != "git-lfs-pointer"
+        or type(identity.get("manifest_bytes")) is not int or identity["manifest_bytes"] < 1
+        or type(registry_bytes) is not int or registry_bytes < 1
+        or type(registry_git_bytes) is not int or registry_git_bytes < 1
+        or not isinstance(manifest_sha, str) or not re.fullmatch(r"[a-f0-9]{64}", manifest_sha)
+        or not isinstance(identity.get("registry_sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", identity["registry_sha256"])
+        or not isinstance(identity.get("manifest_git_blob_sha1"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", identity["manifest_git_blob_sha1"])
+        or not isinstance(identity.get("registry_git_blob_sha1"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", identity["registry_git_blob_sha1"])
+        or not isinstance(identity.get("registry_git_blob_sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", identity["registry_git_blob_sha256"])
+        or not isinstance(registry_path, str)
+        or pathlib.PurePosixPath(registry_path).is_absolute()
+        or ".." in pathlib.PurePosixPath(registry_path).parts
+        or "\\" in registry_path
+        or not isinstance(parent_base, Mapping)
+        or identity.get("main_sha") != parent_base.get("commit_sha")
+        or identity.get("tree_sha") != parent_base.get("tree_sha")
+    ):
+        raise PromotionError("original M canonical identity differs from the retained evaluation")
+
+    candidate_path = bundle_dir / "composed-candidate.registry.json"
+    checkpoint_outputs = checkpoint.get("output_digests")
+    matches = [
+        row for row in checkpoint_outputs if isinstance(row, Mapping)
+        and row.get("path") == "composed-candidate.registry.json"
+    ] if isinstance(checkpoint_outputs, list) else []
+    if len(matches) != 1 or candidate_path.is_symlink() or not candidate_path.is_file():
+        raise PromotionError("original B archive lacks one regular composed registry payload")
+    try:
+        raw = candidate_path.read_bytes()
+    except OSError as exc:
+        raise PromotionError("original B composed registry payload is unavailable") from exc
+    record = matches[0]
+    digest = hashlib.sha256(raw).hexdigest()
+    if (
+        len(raw) != registry_bytes
+        or digest != identity.get("registry_sha256")
+        or record.get("bytes") != len(raw)
+        or record.get("sha256") != digest
+    ):
+        raise PromotionError("original B composed registry bytes differ from Native M manifest and pointer")
+    rows = _original_c_strict_json(raw, label="original B registry payload")
+    if not isinstance(rows, list) or not rows:
+        raise PromotionError("original M canonical payload is not a nonempty registry array")
+    return {
+        "identity": {
+            "main_sha": identity["main_sha"],
+            "tree_sha": identity["tree_sha"],
+            "manifest_sha256": manifest_sha,
+            "registry_path": registry_path,
+            "registry_bytes": registry_bytes,
+            "registry_sha256": identity["registry_sha256"],
+        },
+        "rows": rows,
+    }
+
+def _original_c_candidate_from_replay(
+    replay: OriginalCReplayEvidence,
+    source_facts: Any,
+    modules: Mapping[str, Any],
+    *,
+    checkpoint: Mapping[str, Any],
+    state: Any,
+    source_target_contract: Mapping[str, Any],
+    source_inventory: Sequence[Mapping[str, Any]],
+    roles: Mapping[str, Mapping[str, Any]],
+    canonical_parent_readback: Mapping[str, Any],
+    bundle_dir: pathlib.Path,
+) -> dict[str, Any]:
+    """Rebuild the one retained C candidate from authenticated A/B state."""
+    eligibility = modules.get("eligibility")
+    handoff = modules.get("handoff")
+    derivation = modules.get("derivation")
+    preparer = modules.get("preparer")
+    processor = modules.get("processor")
+    if any(module is None for module in (eligibility, handoff, derivation, preparer, processor)):
+        raise PromotionError("original C replay helper closure is incomplete")
+    if checkpoint.get("status") not in {"ready", "no-change"}:
+        raise PromotionError("original C retained B checkpoint is not reviewable")
+    index = getattr(state, "index", None)
+    index_bytes = getattr(state, "index_bytes", None)
+    state_commit = getattr(state, "state_commit", None)
+    index_path = getattr(state, "index_path", None)
+    checkpoint_bytes = getattr(state, "checkpoint_bytes", None)
+    checkpoint_path = getattr(state, "checkpoint_path", None)
+    if (
+        not isinstance(index, Mapping)
+        or not isinstance(index_bytes, bytes)
+        or not isinstance(state_commit, str) or not re.fullmatch(r"[a-f0-9]{40}", state_commit)
+        or not isinstance(index_path, str) or not isinstance(checkpoint_path, str)
+        or not isinstance(checkpoint_bytes, bytes)
+        or canonical_json(index) != canonical_json(_original_c_strict_json(index_bytes, label="processor state index"))
+        or canonical_json(checkpoint) != canonical_json(_original_c_strict_json(checkpoint_bytes, label="processor checkpoint"))
+    ):
+        raise PromotionError("original B state bytes differ from the Native sealed index or checkpoint")
+    try:
+        admission = preparer.admission_for_checkpoint(checkpoint, index, handoff)
+        original = derivation.original_observation_from_checkpoint(checkpoint, admission)
+        original_generation = eligibility.normalize_original_generation(checkpoint)
+        source_epoch = eligibility.validate_source_epoch(
+            checkpoint.get("generation_inputs", {}).get("source_epoch"),
+        )
+        readback = derivation.validate_parent_readback(canonical_parent_readback)
+    except Exception as exc:
+        raise PromotionError("original C retained A, epoch, or parent readback failed current CONTROL validation") from exc
+    if original_generation.get("generation_id") != checkpoint.get("generation_id"):
+        raise PromotionError("original C retained generation identity differs from B checkpoint")
+    if source_epoch.get("target_generation_id") != checkpoint.get("generation_id"):
+        raise PromotionError("original C retained source epoch differs from B generation")
+
+    locator = checkpoint.get("output_artifact")
+    if not isinstance(locator, Mapping):
+        raise PromotionError("original C B checkpoint has no artifact locator")
+    enrichment_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+    if enrichment_path.is_symlink() or not enrichment_path.is_file():
+        raise PromotionError("original B archive lacks its exact enrichment evidence")
+    enrichment_bytes = enrichment_path.read_bytes()
+    enrichment = _original_c_strict_json(enrichment_bytes, label="processor enrichment evidence")
+    if not isinstance(enrichment, Mapping):
+        raise PromotionError("original B enrichment evidence is not an object")
+    try:
+        processor_parent = derivation.processor_parent_reference(
+            checkpoint,
+            repository=str(getattr(replay.facts, "repository", "")),
+            original_observation=original,
+            enrichment_evidence=enrichment,
+            enrichment_evidence_bytes=enrichment_bytes,
+        )
+    except Exception as exc:
+        raise PromotionError("original B processor parent reference failed current CONTROL validation") from exc
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("original B checkpoint lacks generation inputs")
+    stored_target = generation_inputs.get("source_target_contract")
+    if stored_target is not None:
+        try:
+            stored_target = eligibility.validate_target_contract(stored_target)
+        except Exception as exc:
+            raise PromotionError("original B stored target contract is invalid") from exc
+    output_rows = checkpoint.get("output_digests")
+    if not isinstance(output_rows, list):
+        raise PromotionError("original B checkpoint output inventory is invalid")
+    artifact_run = str(locator.get("run_id") or "")
+    artifact_name = str(locator.get("name") or "")
+    attempt_match = re.fullmatch(r"upstream-catalogue-processing-[0-9]{6,20}-([1-9][0-9]*)", artifact_name)
+    if not attempt_match:
+        raise PromotionError("original B artifact attempt locator is malformed")
+    accounting = {
+        "checkpoint_ref": checkpoint.get("checkpoint_sha256"),
+        "attempts_consumed": int(checkpoint.get("attempts_consumed", 0)),
+        "attempts_by_id_sha256": eligibility.object_sha256(checkpoint.get("attempts_by_id", {})),
+        "detail_queue_cursor": int(checkpoint.get("detail_queue_cursor", 0)),
+        "detail_retry_reset_ids_sha256": eligibility.object_sha256(checkpoint.get("detail_retry_reset_ids", [])),
+        "request_reservation_sha256": (
+            eligibility.object_sha256(checkpoint["request_reservation"])
+            if checkpoint.get("request_reservation") is not None else None
+        ),
+        "lease_sha256": (
+            eligibility.object_sha256(checkpoint["lease"])
+            if checkpoint.get("lease") is not None else None
+        ),
+        "fencing_token": int(checkpoint.get("fencing_token", 0)),
+    }
+    state_ref = {
+        "repository": getattr(state, "repository", None),
+        "commit_sha": state_commit,
+        "path": index_path,
+        "bytes": len(index_bytes),
+        "sha256": hashlib.sha256(index_bytes).hexdigest(),
+    }
+    checkpoint_ref = {
+        "repository": getattr(state, "repository", None),
+        "commit_sha": state_commit,
+        "path": checkpoint_path,
+        "bytes": len(checkpoint_bytes),
+        "sha256": hashlib.sha256(checkpoint_bytes).hexdigest(),
+    }
+    evidence_refs = [
+        {"role": "admission_index", "kind": "git", **state_ref},
+        {"role": "processor_checkpoint", "kind": "git", **checkpoint_ref},
+        {
+            "role": "processor_bundle", "repository": getattr(replay.facts, "repository", None),
+            "kind": "actions", "run_id": artifact_run,
+            "run_attempt": int(attempt_match.group(1)),
+            "artifact_id": str(locator.get("artifact_id") or ""),
+            "artifact_name": artifact_name,
+            "bundle_manifest_sha256": str(locator.get("bundle_manifest_sha256") or ""),
+            "output_bytes": sum(
+                int(row.get("bytes", 0)) for row in output_rows if isinstance(row, Mapping)
+            ),
+        },
+    ]
+    admission_evidence = {
+        **admission,
+        "index_locator": {
+            key: state_ref[key] for key in ("repository", "commit_sha", "path", "bytes", "sha256")
+        },
+    }
+    evidence = {
+        "original_observation": original,
+        "admission": admission_evidence,
+        "original_generation": original_generation,
+        "processor_parent": processor_parent,
+        "target_contract": dict(source_target_contract),
+        "source_epoch": source_epoch,
+        "accounting": accounting,
+        "canonical_parent_readback": readback,
+        "evidence_refs": evidence_refs,
+    }
+    return {
+        "source_id": original["source_id"],
+        "source_scope": original["source_scope"],
+        "generation_id": checkpoint.get("generation_id"),
+        "status": checkpoint.get("status"),
+        "artifact_expires_at": admission.get("artifact_expires_at"),
+        "accounting_exhausted": (
+            int(checkpoint.get("attempts_consumed", 0)) >= processor.DEFAULT_MAX_ATTEMPTS
+        ),
+        "canonical_completed": False,
+        "lease": checkpoint.get("lease"),
+        "target_contract": stored_target,
+        "original_observation": original,
+        "evidence": evidence,
+    }
+
+def resolve_original_c_replay_eligibility(
+    replay: OriginalCReplayEvidence,
+    *,
+    root: pathlib.Path,
+) -> tuple[ResolvedSourceEligibility, Any]:
+    """Replay the exact original selection, then perform Native's fresh join.
+
+    This operation only constructs a runner eligibility capability after the
+    original full selection has been recomputed from one exact A candidate,
+    the admitted B artifact, and the original M target. The same Native
+    resolver then re-reads the selected C identity and joins every preliminary
+    fact before returning a revision capability.
+    """
+    if type(replay) is not OriginalCReplayEvidence:
+        raise PromotionError("original C replay requires the exact runner acquisition capability")
+    deadline = replay.deadline_monotonic
+    if not math.isfinite(deadline) or deadline <= time.monotonic():
+        raise PromotionError("original C replay deadline has expired")
+    root = root.resolve(strict=True)
+    source_facts = acquire_original_c_source_contract_facts(
+        replay, deadline_monotonic=deadline,
+    )
+    replay_control = acquire_original_c_replay_control(
+        replay, source_facts, deadline_monotonic=deadline,
+    )
+    modules = _original_c_replay_modules(
+        replay_control, deadline_monotonic=deadline,
+    )
+    eligibility = modules["eligibility"]
+    checkpoint_schema_value = replay_control.data(
+        "checkpoint_schema", deadline_monotonic=deadline,
+    )
+    composition_schema = replay_control.data(
+        "composition_schema", deadline_monotonic=deadline,
+    )
+    checkpoint_schema_path = root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    try:
+        checkpoint = verify_processor_checkpoint(
+            dict(replay.processor_state.checkpoint),
+            checkpoint_schema_path,
+            eligibility_module=eligibility,
+            schema_document=checkpoint_schema_value,
+        )
+    except Exception as exc:
+        raise PromotionError("original B checkpoint failed current CONTROL validation") from exc
+    if (
+        checkpoint.get("source_id") != "data_go_kr"
+        or checkpoint.get("source_scope") != "aggregate_supported_catalog"
+        or checkpoint.get("generation_id") != replay.processor_state.generation_id
+        or checkpoint.get("status") not in {"ready", "no-change"}
+    ):
+        raise PromotionError("original B checkpoint is outside the exact revalidation source or status")
+    run_id, attempt, _artifact_name = processor_attempt_from_locator(checkpoint)
+    run_value = getattr(replay.processor_artifact, "run", None)
+    artifact_value = getattr(replay.processor_artifact, "artifact", None)
+    archive = getattr(replay.processor_artifact, "archive_bytes", None)
+    metadata_size = artifact_value.get("size_in_bytes") if isinstance(artifact_value, Mapping) else None
+    if not isinstance(run_value, Mapping) or not isinstance(artifact_value, Mapping) or not isinstance(archive, bytes):
+        raise PromotionError("original B attempt or immutable artifact bytes are unavailable")
+    repository = str(getattr(replay.facts, "repository", ""))
+    now = dt.datetime.now(dt.timezone.utc)
+    try:
+        trusted_run = validate_trusted_processor_run(
+            run_value, repository=repository, run_id=run_id, attempt=attempt,
+            default_branch="main", expected_head_sha=str(run_value.get("head_sha") or ""),
+        )
+        artifact = validate_processor_artifact_metadata(
+            artifact_value, checkpoint, trusted_run, repository=repository, now=now,
+        )
+    except Exception as exc:
+        raise PromotionError("original B run or artifact metadata failed current CONTROL validation") from exc
+    if (
+        type(metadata_size) is not int or len(archive) != metadata_size
+        or len(archive) != getattr(replay.processor_artifact, "archive_byte_count", None)
+        or hashlib.sha256(archive).hexdigest() != getattr(replay.processor_artifact, "archive_sha256", None)
+    ):
+        raise PromotionError("original B Native archive bytes differ from their exact artifact identity")
+
+    with tempfile.TemporaryDirectory(prefix="datapan-original-c-replay-") as temporary:
+        bundle_dir = pathlib.Path(temporary) / "bundle"
+        try:
+            extract_processor_artifact_archive_bytes(archive, artifact, bundle_dir)
+        except Exception as exc:
+            raise PromotionError("original B Native archive failed exact bounded extraction") from exc
+        replay_control.require(deadline_monotonic=deadline)
+        target_contract, target_inventory, roles = revalidate_original_c_source_target_contract(
+            replay, source_facts,
+        )
+        if canonical_json(target_inventory) != canonical_json(
+            eligibility.validate_inventory(list(target_inventory)),
+        ):
+            raise PromotionError("original C recomputed M inventory changed during validation")
+        replay_control.require(deadline_monotonic=deadline)
+        canonical_context = original_m_canonical_context_from_replay(
+            replay, root=root, checkpoint=checkpoint, source_facts=source_facts,
+            bundle_dir=bundle_dir,
+        )
+        bundle_path = bundle_dir / "composed-candidate.registry.json"
+        raw_candidate = bundle_path.read_bytes()
+        bundle_output_rows = checkpoint.get("output_digests")
+        candidate_outputs = [
+            row for row in bundle_output_rows if isinstance(row, Mapping)
+            and row.get("path") == "composed-candidate.registry.json"
+        ] if isinstance(bundle_output_rows, list) else []
+        if len(candidate_outputs) != 1:
+            raise PromotionError("original B output inventory lacks one composed registry")
+        composer_path = "scripts/compose-upstream-catalogue-candidate.py"
+        producer_composer = roles["processor_b"]["content"].get(composer_path)
+        if not isinstance(producer_composer, bytes):
+            raise PromotionError("original B source facts lack the exact producer composer")
+        try:
+            composition_helper = modules["canonical_update_pr"]
+            bundle = validate_processor_bundle(
+                checkpoint,
+                bundle_dir,
+                composition_schema,
+                composition_helper,
+                root=root,
+                producer_composer_identity={
+                    "bytes": len(producer_composer),
+                    "sha256": hashlib.sha256(producer_composer).hexdigest(),
+                },
+                derivation_module=modules["derivation"],
+                canonical_context=canonical_context,
+                allow_terminal_noop=True,
+                replay_control=replay_control,
+                deadline_monotonic=deadline,
+            )
+            replay_control.require(deadline_monotonic=deadline)
+            validate_original_c_processor_source_compatibility(
+                replay, source_facts, roles,
+                composition_receipt=bundle.get("composition_receipt"),
+            )
+            health_policy = replay_control.data("health_policy", deadline_monotonic=deadline)
+            modules["preparer"].authenticate_original_native_canonical_parent(
+                repository,
+                checkpoint,
+                canonical_context,
+                health_policy,
+                parent_facts=replay.parent_facts,
+                native_module=replay.native_module,
+                derivation=modules["derivation"],
+                health=modules["health"],
+                now=now,
+            )
+        except PromotionError:
+            raise
+        except Exception as exc:
+            raise PromotionError("original C B/M/P semantic validation failed closed") from exc
+
+        selection = getattr(replay.decoded, "selection", None)
+        if not isinstance(selection, Mapping) or selection.get("action") != "revalidate_c":
+            raise PromotionError("original C retained selection is not the original revalidate-C action")
+        selection_evidence = selection.get("evidence")
+        if not isinstance(selection_evidence, Mapping):
+            raise PromotionError("original C retained selection has no closed evidence")
+        candidate = _original_c_candidate_from_replay(
+            replay,
+            source_facts,
+            modules,
+            checkpoint=checkpoint,
+            state=replay.processor_state,
+            source_target_contract=target_contract,
+            source_inventory=target_inventory,
+            roles=roles,
+            canonical_parent_readback=replay.parent_facts.parent_readback,
+            bundle_dir=bundle_dir,
+        )
+        replay_control.require(deadline_monotonic=deadline)
+        try:
+            recomputed = eligibility.select_source_work(
+                repository=repository,
+                source_id=str(selection.get("source_id") or ""),
+                source_scope=str(selection.get("source_scope") or ""),
+                evaluation=selection.get("evaluation", {}),
+                target_contract=target_contract,
+                candidates=[candidate],
+            )
+        except Exception as exc:
+            raise PromotionError("original C source selection could not be reproduced") from exc
+        if canonical_json(recomputed) != canonical_json(selection):
+            raise PromotionError("original C full source selection differs from exact retained comparison")
+        facts_candidate = getattr(replay.facts, "selected_row", None)
+        row_candidate = facts_candidate.get("candidate") if isinstance(facts_candidate, Mapping) else None
+        source_target_binding = row_candidate.get("source_target") if isinstance(row_candidate, Mapping) else None
+        try:
+            checked_binding = modules["canonical_update_pr"].validate_source_target_binding(
+                source_target_binding,
+            )
+        except Exception as exc:
+            raise PromotionError("original C native source-target binding is invalid") from exc
+        original_admission = selection_evidence.get("admission")
+        original_observation = selection_evidence.get("original_observation")
+        selected_contract = selection_evidence.get("target_contract")
+        if (
+            not isinstance(original_admission, Mapping)
+            or not isinstance(original_observation, Mapping)
+            or not isinstance(selected_contract, Mapping)
+        ):
+            raise PromotionError("original C selected source evidence is malformed")
+        try:
+            admission_reference = {
+                "schema_version": modules["canonical_update_pr"].SOURCE_TARGET_ADMISSION_REF_SCHEMA,
+                "generation_id": str(candidate["generation_id"]),
+                "producer_run_id": str(original_admission.get("producer_run_id") or ""),
+                "run_attempt": original_admission.get("run_attempt"),
+                "head_sha": original_admission.get("head_sha"),
+                "artifact_id": int(original_admission.get("artifact_id")),
+                "artifact_digest_sha256": original_admission.get("artifact_digest_sha256"),
+                "refresh_evidence_sha256": original_admission.get("refresh_evidence_sha256"),
+            }
+        except (TypeError, ValueError) as exc:
+            raise PromotionError("original C selected A admission is malformed") from exc
+        if (
+            checked_binding.get("selection_key") != recomputed.get("selection_key")
+            or checked_binding.get("original_observation_sha256")
+            != hashlib.sha256(canonical_json(original_observation)).hexdigest()
+            or checked_binding.get("target_contract_sha256") != selected_contract.get("contract_sha256")
+            or checked_binding.get("original_admission_ref") != admission_reference
+        ):
+            raise PromotionError("original C selected row does not bind the exact recomputed A/M selection")
+
+        def reread_candidates() -> list[Mapping[str, Any]]:
+            replay_control.require(deadline_monotonic=deadline)
+            state_again = recheck_original_c_processor_state(
+                replay, deadline_monotonic=deadline,
+            )
+            checkpoint_again = getattr(state_again, "checkpoint", None)
+            if not isinstance(checkpoint_again, Mapping) or canonical_json(checkpoint_again) != canonical_json(checkpoint):
+                raise PromotionError("original B checkpoint changed before eligibility capability mint")
+            source_facts_again = acquire_original_c_source_contract_facts(
+                replay, deadline_monotonic=deadline,
+            )
+            if source_facts_again is not source_facts:
+                raise PromotionError("original C Native source-contract facts changed during replay")
+            replay_control.require(deadline_monotonic=deadline)
+            return [
+                _original_c_candidate_from_replay(
+                    replay, source_facts, modules,
+                    checkpoint=checkpoint_again, state=state_again,
+                    source_target_contract=target_contract,
+                    source_inventory=target_inventory,
+                    roles=roles,
+                    canonical_parent_readback=replay.parent_facts.parent_readback,
+                    bundle_dir=bundle_dir,
+                ),
+            ]
+
+        try:
+            replay_control.require(deadline_monotonic=deadline)
+            verified = eligibility.resolve_verified_source_eligibility(
+                recomputed, reread_candidates=reread_candidates,
+            )
+        except Exception as exc:
+            raise PromotionError("original C source eligibility Native reread failed") from exc
+        runner_capability = ResolvedSourceEligibility(
+            _RESOLVED_SOURCE_ELIGIBILITY,
+            verified,
+            {"checkpoint": checkpoint, "generation_id": checkpoint["generation_id"]},
+        )
+        resolve_final = getattr(replay.native_resolver, "resolve_owned_c_revision", None)
+        require_final = getattr(replay.native_module, "require_verified_native_owned_c_revision", None)
+        if not callable(resolve_final) or not callable(require_final):
+            raise PromotionError("original C same-resolver final join is unavailable")
+        try:
+            replay_control.require(deadline_monotonic=deadline)
+            final = resolve_final(
+                verified_source_eligibility=runner_capability,
+                journal_snapshot=replay.journal_snapshot,
+                requested_pr_number=replay.requested_pr_number,
+                deadline_monotonic=deadline,
+                expected_facts=replay.facts,
+                expected_ref=replay.expected_ref,
+                expected_replay_control=replay_control.native_control,
+            )
+            if require_final(final) is not final:
+                raise PromotionError("original C final Native join is not sealed")
+        except PromotionError:
+            raise
+        except Exception as exc:
+            raise PromotionError("original C same-resolver final join failed closed") from exc
+        return runner_capability, final
+
+class ValidatedSourceTargetNoopEvaluation:
+    """Runner-owned proof that one exact source target screened to no C delta."""
+
+    __slots__ = (
+        "source_target", "source_eligibility", "evaluated_base_sha", "evaluator_identity",
+        "terminal_outcome", "projection", "target_inventory",
+    )
+
+    def __init__(
+        self,
+        token: object,
+        *,
+        source_target: ResolvedSourceTarget,
+        source_eligibility: ResolvedSourceEligibility,
+        evaluated_base_sha: str,
+        evaluator_identity: Mapping[str, Any],
+        terminal_outcome: Mapping[str, Any],
+        projection: Mapping[str, Any],
+        target_inventory: Sequence[Mapping[str, Any]],
+    ) -> None:
+        if token is not _VALIDATED_SOURCE_TARGET_NOOP_EVALUATION:
+            raise PromotionError("validated source-target no-op constructor is private")
+        if type(source_target) is not ResolvedSourceTarget or type(source_eligibility) is not ResolvedSourceEligibility:
+            raise PromotionError("validated source-target no-op lacks runner-owned capabilities")
+        if not re.fullmatch(r"[a-f0-9]{40}", evaluated_base_sha):
+            raise PromotionError("validated source-target no-op base is invalid")
+        if source_target.evaluation.get("source_sha") != evaluated_base_sha:
+            raise PromotionError("validated source-target no-op base differs from its source target")
+        selection = source_eligibility.selection
+        if (
+            selection.get("action") != "revalidate_c"
+            or selection.get("selection_key") != source_target.selection_key
+            or source_eligibility.original_generation.get("generation_id") != source_target.generation_id
+            or source_eligibility.target_contract != source_target.target_contract
+        ):
+            raise PromotionError("validated source-target no-op eligibility differs from its target")
+        rows = terminal_outcome.get("generations")
+        matching = [
+            row for row in rows if isinstance(row, Mapping)
+            and row.get("generation_id") == source_target.generation_id
+            and row.get("status") == "already_canonical"
+            and row.get("reason_code") == "source_contract_revalidated"
+        ] if isinstance(rows, list) else []
+        if (
+            terminal_outcome.get("kind") != "recover-ready"
+            or terminal_outcome.get("candidate_available") is not False
+            or terminal_outcome.get("preparation_returned") is not False
+            or terminal_outcome.get("selected_generation_id") is not None
+            or len(matching) != 1
+        ):
+            raise PromotionError("validated source-target no-op terminal result is not a screened no-delta result")
+        source_revalidation = source_eligibility.processor_candidate.get("source_revalidation")
+        if (
+            not isinstance(source_revalidation, Mapping)
+            or projection != {
+                "source_revalidation": dict(source_revalidation),
+                "target_contract": source_target.target_contract,
+            }
+        ):
+            raise PromotionError("validated source-target no-op projection differs from native screening")
+        eligibility = load_module(
+            pathlib.Path(__file__).resolve().parents[1] / "scripts/upstream_catalogue_source_eligibility.py",
+            "validated_source_target_noop_inventory",
+        )
+        inventory = eligibility.validate_inventory(target_inventory)
+        if inventory != source_target.target_inventory:
+            raise PromotionError("validated source-target no-op inventory differs from its target")
+        required_identity = {
+            "repository", "workflow_path", "mode", "event", "run_id", "run_attempt",
+            "source_sha", "source_tree_sha",
+        }
+        if set(evaluator_identity) != required_identity:
+            raise PromotionError("validated source-target no-op evaluator identity is not closed")
+        if (
+            evaluator_identity.get("workflow_path") != TERMINAL_OUTCOME_WORKFLOW_PATH
+            or evaluator_identity.get("mode") != "recover-ready"
+            or evaluator_identity.get("source_sha") != evaluated_base_sha
+            or evaluator_identity.get("source_tree_sha") != source_target.evaluation.get("source_tree_sha")
+            or evaluator_identity.get("event") not in {"schedule", "workflow_run", "workflow_dispatch", "local"}
+            or not re.fullmatch(r"[0-9]{1,20}", str(evaluator_identity.get("run_id", "")))
+            or isinstance(evaluator_identity.get("run_attempt"), bool)
+            or not isinstance(evaluator_identity.get("run_attempt"), int)
+            or evaluator_identity.get("run_attempt", 0) < 1
+        ):
+            raise PromotionError("validated source-target no-op evaluator identity differs from the exact C invocation")
+        self.source_target = source_target
+        self.source_eligibility = source_eligibility
+        self.evaluated_base_sha = evaluated_base_sha
+        self.evaluator_identity = copy.deepcopy(dict(evaluator_identity))
+        self.terminal_outcome = copy.deepcopy(dict(terminal_outcome))
+        self.projection = copy.deepcopy(dict(projection))
+        self.target_inventory = copy.deepcopy(inventory)
+
+def source_target_selection_key(
+    admission: Mapping[str, Any], target_contract: Mapping[str, Any],
+) -> str:
+    """Recompute a target key through the exact runner-owned selector source."""
+    eligibility = load_module(
+        pathlib.Path(__file__).resolve().parents[1]
+        / "scripts/upstream_catalogue_source_eligibility.py",
+        "trusted_c_source_target_key",
+    )
+    return str(eligibility.selection_key(admission, target_contract))
+
+def target_contract_from_bounded_source_bytes(
+    eligibility: Any,
+    *,
+    source_sha: str,
+    source_tree_sha: str,
+    input_bytes: Mapping[str, bytes],
+    previous_inventory: Sequence[Mapping[str, Any]] | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Build the source target contract from already authenticated Git blobs.
+
+    This is deliberately a pure semantic step. The caller must obtain the
+    bytes and tree identity through the resolver's bounded, role-specific
+    Native facts API; this helper never reads the checkout or starts Git.
+    """
+    if (
+        not re.fullmatch(r"[a-f0-9]{40}", source_sha)
+        or not re.fullmatch(r"[a-f0-9]{40}", source_tree_sha)
+        or not isinstance(input_bytes, Mapping)
+        or not isinstance(getattr(eligibility, "CONTRACT_INPUTS", None), tuple)
+    ):
+        raise PromotionError("original source target inputs are incomplete")
+    declared = tuple(eligibility.CONTRACT_INPUTS)
+    expected_paths = tuple(path for path, _effect in declared)
+    if (
+        len(expected_paths) != len(set(expected_paths))
+        or set(input_bytes) != set(expected_paths)
+        or any(not isinstance(input_bytes[path], bytes) for path in expected_paths)
+    ):
+        raise PromotionError("original source target inputs differ from the closed CONTROL inventory")
+    raw_inventory = [
+        {
+            "position": position,
+            "path": path,
+            "class": effect,
+            "bytes": len(input_bytes[path]),
+            "sha256": hashlib.sha256(input_bytes[path]).hexdigest(),
+        }
+        for position, (path, effect) in enumerate(declared)
+    ]
+    try:
+        inventory = eligibility.validate_inventory(raw_inventory)
+        previous = (
+            eligibility.validate_inventory(list(previous_inventory))
+            if previous_inventory is not None else None
+        )
+        inventory_sha256 = eligibility.object_sha256(inventory)
+        contract = eligibility.validate_target_contract({
+            "schema_version": eligibility.TARGET_CONTRACT_SCHEMA_VERSION,
+            "source_sha": source_sha,
+            "source_tree_sha": source_tree_sha,
+            "inventory_sha256": inventory_sha256,
+            "contract_sha256": eligibility.target_contract_digest(inventory_sha256),
+            "changed_classes": eligibility.changed_contract_classes(previous, inventory),
+        })
+    except Exception as exc:
+        raise PromotionError("original source target contract failed current CONTROL validation") from exc
+    return contract, inventory
+
+def target_contract_from_original_bounded_facts(
+    eligibility: Any,
+    checkpoint: Mapping[str, Any],
+    original_observation: Mapping[str, Any],
+    *,
+    current_source_sha: str,
+    current_source_tree_sha: str,
+    current_input_bytes: Mapping[str, bytes],
+    predecessor_source_tree_sha: str | None = None,
+    predecessor_input_bytes: Mapping[str, bytes] | None = None,
+    original_a_required_input_bytes: Mapping[str, bytes | None] | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Recompute the retained target contract without selecting new work.
+
+    Source maps are projections of one Native sealed fixed-role facts object,
+    not caller-provided authority. A ``None`` A input is accepted only as an
+    explicit authenticated absence emitted by that facts object.
+    """
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("source selection generation inputs are invalid")
+    current_contract, current_inventory = target_contract_from_bounded_source_bytes(
+        eligibility,
+        source_sha=current_source_sha,
+        source_tree_sha=current_source_tree_sha,
+        input_bytes=current_input_bytes,
+    )
+    stored_value = generation_inputs.get("source_target_contract")
+    if stored_value is not None:
+        try:
+            prior_contract = eligibility.validate_target_contract(stored_value)
+        except Exception as exc:
+            raise PromotionError("stored source target contract is invalid") from exc
+        prior_sha = prior_contract.get("source_sha")
+        if (
+            not isinstance(prior_sha, str)
+            or predecessor_source_tree_sha is None
+            or predecessor_input_bytes is None
+        ):
+            raise PromotionError("stored source target contract lacks its exact predecessor readback")
+        recomputed_prior, prior_inventory = target_contract_from_bounded_source_bytes(
+            eligibility,
+            source_sha=prior_sha,
+            source_tree_sha=predecessor_source_tree_sha,
+            input_bytes=predecessor_input_bytes,
+        )
+        if any(
+            recomputed_prior[field] != prior_contract[field]
+            for field in (
+                "schema_version", "source_sha", "source_tree_sha",
+                "inventory_sha256", "contract_sha256",
+            )
+        ):
+            raise PromotionError("stored source target contract differs from its exact predecessor readback")
+        return target_contract_from_bounded_source_bytes(
+            eligibility,
+            source_sha=current_source_sha,
+            source_tree_sha=current_source_tree_sha,
+            input_bytes=current_input_bytes,
+            previous_inventory=prior_inventory,
+        )
+
+    a_source_sha = original_observation.get("producer_head_sha")
+    if not isinstance(a_source_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", a_source_sha):
+        raise PromotionError("original A source identity is malformed")
+    required_paths = tuple(
+        path for path, effect in eligibility.CONTRACT_INPUTS
+        if effect == eligibility.REQUIRES_NEW_A
+    )
+    if (
+        not isinstance(original_a_required_input_bytes, Mapping)
+        or set(original_a_required_input_bytes) != set(required_paths)
+        or any(
+            value is not None and not isinstance(value, bytes)
+            for value in original_a_required_input_bytes.values()
+        )
+    ):
+        raise PromotionError("original A source-contract facts are incomplete or open")
+    changed = any(
+        original_a_required_input_bytes[path] is None
+        or original_a_required_input_bytes[path] != current_input_bytes[path]
+        for path in required_paths
+    )
+    try:
+        contract = eligibility.validate_target_contract({
+            **current_contract,
+            "changed_classes": [
+                eligibility.REQUIRES_NEW_A if changed else eligibility.SAME_A_PROCESSING
+            ],
+        })
+    except Exception as exc:
+        raise PromotionError("legacy original A target classification failed current CONTROL validation") from exc
+    return contract, current_inventory
+
+class _NoBytecodeSourceLoader(importlib.machinery.SourceFileLoader):
+    """Load one explicit source path without writing import caches or toggling process globals."""
+
+    def get_code(self, fullname: str) -> Any:
+        source_path = self.get_filename(fullname)
+        source = self.get_data(source_path)
+        return self.source_to_code(source, source_path)
+
+def _processor_compatibility_source_paths(checkpoint: Mapping[str, Any]) -> tuple[str, ...]:
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("processor checkpoint lacks generation input provenance")
+    paths = list(PROCESSOR_COMPATIBILITY_FILES)
+    if generation_inputs.get("same_observation_derivation") is not None:
+        paths.append("scripts/upstream_catalogue_derivation.py")
+    result = tuple(dict.fromkeys(paths))
+    if not result or any(
+        not isinstance(path, str)
+        or not path
+        or pathlib.PurePosixPath(path).is_absolute()
+        or ".." in pathlib.PurePosixPath(path).parts
+        or "\\" in path
+        for path in result
+    ):
+        raise PromotionError("processor compatibility contract contains an unsafe source path")
+    return result
+
+def _verify_processor_input_compatibility_from_bytes(
+    checkpoint: Mapping[str, Any],
+    processor_head_sha: str,
+    current_head_sha: str,
+    *,
+    producer_bytes: Mapping[str, bytes],
+    current_bytes: Mapping[str, bytes],
+    producer_is_ancestor: bool,
+    composition_receipt: Mapping[str, Any] | None = None,
+) -> None:
+    """Apply the full legacy B→M compatibility contract to bounded readbacks.
+
+    The original-C replay path supplies these exact maps from Native's sealed
+    fixed-role source-facts capability. It must not pass a callback that can
+    fall back to local Git, checkout files, or another transport.
+    """
+    if not re.fullmatch(r"[a-f0-9]{40}", processor_head_sha) or not re.fullmatch(r"[a-f0-9]{40}", current_head_sha):
+        raise PromotionError("processor/current source commits must be full immutable Git SHAs")
+    if producer_is_ancestor is not True:
+        raise PromotionError("processor source commit is not an ancestor of the current trusted default branch")
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise PromotionError("processor checkpoint lacks generation input provenance")
+    expected_paths = set(_processor_compatibility_source_paths(checkpoint))
+    if (
+        not isinstance(producer_bytes, Mapping)
+        or not isinstance(current_bytes, Mapping)
+        or set(producer_bytes) != expected_paths
+        or set(current_bytes) != expected_paths
+        or any(not isinstance(value, bytes) for value in producer_bytes.values())
+        or any(not isinstance(value, bytes) for value in current_bytes.values())
+    ):
+        raise PromotionError("bounded processor compatibility facts are incomplete or open")
+    historical_bytes: dict[str, bytes] = {}
+    for raw_path in expected_paths:
+        source_bytes = producer_bytes[raw_path]
+        historical_bytes[raw_path] = source_bytes
+        source_digest = hashlib.sha256(source_bytes).hexdigest()
+        current_digest = hashlib.sha256(current_bytes[raw_path]).hexdigest()
+        expected_field = next((field for field, input_path in PROCESSOR_INPUT_PROVENANCE.items() if input_path == raw_path), None)
+        if expected_field is not None and expected_field != "generator_revision" and generation_inputs.get(expected_field) != source_digest:
+            raise PromotionError(f"processor checkpoint provenance does not match its source commit: {raw_path}")
+        if source_digest != current_digest:
+            raise PromotionError(f"processor input contract changed since observation: {raw_path}")
+    processor_path = PROCESSOR_INPUT_PROVENANCE["generator_revision"]
+    handoff_path = "scripts/upstream_catalogue_handoff.py"
+    declaration_helper_path = "scripts/seoul_oa109_operation_declaration.py"
+    snapshot_generator_path = "scripts/generate-seoul-oa109-subject-snapshot.py"
+    declaration_path = "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+    historical_snapshot_path = "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json"
+    processor_bytes = historical_bytes.get(processor_path)
+    handoff_bytes = historical_bytes.get(handoff_path)
+    declaration_helper_bytes = historical_bytes.get(declaration_helper_path)
+    snapshot_generator_bytes = historical_bytes.get(snapshot_generator_path)
+    declaration_bytes = historical_bytes.get(declaration_path)
+    historical_snapshot_bytes = historical_bytes.get(historical_snapshot_path)
+    if any(value is None for value in (
+        processor_bytes, handoff_bytes, declaration_helper_bytes, snapshot_generator_bytes,
+        declaration_bytes, historical_snapshot_bytes,
+    )):
+        raise PromotionError("processor source is missing a collector handoff or operation declaration compatibility input")
+    generator_material = {
+        "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
+        "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
+        "seoul_operation_declaration_helper_sha256": hashlib.sha256(declaration_helper_bytes).hexdigest(),
+        "seoul_historical_subject_snapshot_generator_sha256": hashlib.sha256(snapshot_generator_bytes).hexdigest(),
+        "seoul_operation_declaration_sha256": hashlib.sha256(declaration_bytes).hexdigest(),
+        "seoul_historical_subject_snapshot_sha256": hashlib.sha256(historical_snapshot_bytes).hexdigest(),
+    }
+    derivation_value = generation_inputs.get("same_observation_derivation")
+    if derivation_value is not None:
+        derivation_bytes = historical_bytes.get("scripts/upstream_catalogue_derivation.py")
+        if derivation_bytes is None:
+            raise PromotionError("derived processor source is missing its same-observation lineage validator")
+        derivation_material = {
+            "processor_script_sha256": hashlib.sha256(processor_bytes).hexdigest(),
+            "collector_handoff_helper_sha256": hashlib.sha256(handoff_bytes).hexdigest(),
+            "same_observation_derivation_helper_sha256": hashlib.sha256(derivation_bytes).hexdigest(),
+        }
+        derivation_revision = hashlib.sha256(
+            json.dumps(derivation_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if derivation_value.get("derivation_processor_revision_sha256") != derivation_revision:
+            raise PromotionError("processor same-observation revision does not bind its trusted source commit")
+    expected_generator_revision = hashlib.sha256(
+        json.dumps(generator_material, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    if generation_inputs.get("generator_revision") != expected_generator_revision:
+        raise PromotionError("processor checkpoint generator revision does not bind its handoff and declaration inputs")
+    if composition_receipt is not None:
+        input_digests = composition_receipt.get("input_digests")
+        if not isinstance(input_digests, Mapping):
+            raise PromotionError("composition receipt lacks exact producer input digests")
+        for input_name, raw_path in PROCESSOR_COMPOSITION_INPUTS.items():
+            observed = input_digests.get(input_name)
+            expected_bytes = historical_bytes.get(raw_path)
+            if not isinstance(observed, Mapping) or expected_bytes is None:
+                raise PromotionError(f"composition receipt is missing its exact {input_name} input digest")
+            if (
+                observed.get("bytes") != len(expected_bytes)
+                or observed.get("sha256") != hashlib.sha256(expected_bytes).hexdigest()
+            ):
+                raise PromotionError(f"composition receipt {input_name} digest differs from the trusted producer commit")
+
+def extract_processor_artifact_archive_bytes(
+    raw: bytes,
+    metadata: Mapping[str, Any],
+    output_dir: pathlib.Path,
+) -> pathlib.Path:
+    """Materialize one already-acquired Native archive without network fallback."""
+    if not isinstance(raw, bytes):
+        raise ProcessorCandidateError("processor artifact archive is not an immutable byte string")
+    size = metadata.get("size_in_bytes")
+    if len(raw) != size:
+        raise ProcessorCandidateError("downloaded processor artifact byte count differs from GitHub metadata")
+    digest = metadata.get("digest")
+    if isinstance(digest, str) and hashlib.sha256(raw).hexdigest() != digest.removeprefix("sha256:"):
+        raise ProcessorCandidateError("downloaded processor archive digest differs from GitHub metadata")
+    if output_dir.is_symlink():
+        raise ProcessorCandidateError("processor artifact extraction destination is symbolic")
+    output_dir = output_dir.absolute()
+    if output_dir.exists():
+        raise ProcessorCandidateError("processor artifact extraction destination already exists")
+    output_dir.mkdir(parents=True, exist_ok=False)
+    expected = set(REQUIRED_PROCESSOR_FILES) | {"upstream-catalogue-checkpoint-receipt.json"}
+    total = 0
+    try:
+        with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
+            members = bundle.infolist()
+            names = [member.filename for member in members]
+            if len(names) != len(set(names)) or set(names) != expected:
+                raise ProcessorCandidateError("processor artifact does not contain the exact frozen bundle file set")
+            for member in members:
+                name = member.filename
+                path = pathlib.PurePosixPath(name)
+                mode = member.external_attr >> 16
+                if (
+                    path.is_absolute() or ".." in path.parts or "\\" in name
+                    or len(path.parts) != 1 or member.is_dir() or stat.S_ISLNK(mode)
+                ):
+                    raise ProcessorCandidateError("processor artifact contains an unsafe path, directory, or link")
+                maximum = 64 * 1024 * 1024 if name == "upstream-catalogue-checkpoint-receipt.json" else 512 * 1024 * 1024
+                if member.file_size < 0 or member.file_size > maximum:
+                    raise ProcessorCandidateError("processor artifact member exceeds its bounded byte limit")
+                total += member.file_size
+                if total > MAX_PROCESSOR_BUNDLE_BYTES:
+                    raise ProcessorCandidateError("processor artifact expands beyond its bounded bundle limit")
+                target = output_dir / name
+                content = bundle.read(member)
+                if len(content) != member.file_size:
+                    raise ProcessorCandidateError("processor artifact member was truncated during extraction")
+                with target.open("xb") as handle:
+                    handle.write(content)
+    except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
+        shutil.rmtree(output_dir, ignore_errors=True)
+        raise ProcessorCandidateError("processor artifact is not a readable immutable ZIP bundle") from exc
+    except BaseException:
+        shutil.rmtree(output_dir, ignore_errors=True)
+        raise
+    return output_dir
+
+def _release_closure_assessment_evidence(assessment: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
+    """Return the closed reference and comparison record from either parent version."""
+    modern = assessment.get("evidence")
+    if isinstance(modern, Mapping):
+        reference = modern.get("release_closure_reference")
+        record = modern
+    else:
+        reference = assessment.get("reference")
+        record = assessment.get("comparison")
+    if not isinstance(reference, Mapping) or not isinstance(record, Mapping):
+        raise PromotionError("release closure assessment lacks its versioned reference and comparison record")
+    return reference, record
+
+def _release_closure_comparison_path(reference: Mapping[str, Any]) -> str:
+    key = reference.get("refresh_key")
+    if not isinstance(key, str) or not re.fullmatch(r"[a-f0-9]{64}", key):
+        raise PromotionError("release closure comparison reference has no full refresh key")
+    return f"reports/data-go-kr/upstream-catalogue-review/release-closure/{key}/comparison.json"
+
+def _check_release_closure_comparison_target(root: pathlib.Path, relative: str, *, must_be_absent: bool) -> pathlib.Path:
+    pure = pathlib.PurePosixPath(relative)
+    if pure.is_absolute() or not pure.parts or any(part in {"", ".", ".."} for part in pure.parts):
+        raise PromotionError("release closure comparison path is unsafe")
+    resolved_root = root.resolve(strict=True)
+    target = resolved_root
+    for index, part in enumerate(pure.parts):
+        target = target / part
+        if target.is_symlink():
+            raise PromotionError("release closure comparison path traverses a symlink")
+        if index < len(pure.parts) - 1 and target.exists() and not target.is_dir():
+            raise PromotionError("release closure comparison parent is not a directory")
+    if must_be_absent and target.exists():
+        raise PromotionError("release closure comparison path already exists before the pre-receipt cut")
+    return target
+
+def _validate_release_closure_pre_receipt_cut(
+    root: pathlib.Path,
+    *,
+    closure_helper: Any,
+    reference: Mapping[str, Any],
+    assessment_record: Mapping[str, Any],
+) -> tuple[str, dict[str, Any]]:
+    """Re-read G0 immediately before creating its sole post-cut comparison file."""
+    comparison_path = _release_closure_comparison_path(reference)
+    _check_release_closure_comparison_target(root, comparison_path, must_be_absent=True)
+    base = assessment_record.get("current_preparation_base")
+    if not isinstance(base, Mapping) or set(base) != {"commit_sha", "tree_sha"}:
+        raise PromotionError("release closure pre-receipt cut has no exact M identity")
+    current_head = command(("git", "rev-parse", "HEAD"), root).stdout.strip()
+    current_tree = command(("git", "rev-parse", "HEAD^{tree}"), root).stdout.strip()
+    if current_head != base.get("commit_sha") or current_tree != base.get("tree_sha"):
+        raise PromotionError("release closure pre-receipt cut no longer uses its exact M commit/tree")
+    captured = assessment_record.get("captured_changed_paths")
+    if (
+        not isinstance(captured, list)
+        or any(not isinstance(path, str) or not path for path in captured)
+        or captured != sorted(set(captured))
+        or comparison_path in captured
+        or changed_repository_paths(root) != captured
+    ):
+        raise PromotionError("release closure pre-receipt cut changed paths differ from the exact G0 readback")
+    canonical_sha = assessment_record.get("canonical_sha256")
+    original_observed_at = assessment_record.get("original_observed_at")
+    rules_loader = getattr(closure_helper, "load_rules", None)
+    projector = getattr(closure_helper, "project_tree", None)
+    if not callable(rules_loader) or not callable(projector):
+        raise PromotionError("release closure pre-receipt cut lacks its pinned project_tree implementation")
+    try:
+        projection = projector(
+            root, canonical_sha256=canonical_sha,
+            original_observed_at=original_observed_at, rules=rules_loader(),
+        )
+    except Exception as exc:  # noqa: BLE001 - unknown projection failures must stop before comparison creation
+        raise PromotionError("release closure G0 projection could not be authenticated") from exc
+    expected_bounds = assessment_record.get("projection_input_bounds")
+    regenerated_bounds = expected_bounds.get("regenerated") if isinstance(expected_bounds, Mapping) else None
+    actual_bounds = {
+        "selected_bytes": projection.get("selected_bytes"),
+        "raw_evidence_bytes": projection.get("raw_evidence_bytes"),
+    }
+    raw_paths = projection.get("raw_evidence_paths")
+    if (
+        not isinstance(regenerated_bounds, Mapping)
+        or dict(regenerated_bounds) != actual_bounds
+        or projection.get("projection_sha256") != assessment_record.get("regenerated_projection_sha256")
+        or not isinstance(raw_paths, list)
+        or comparison_path in raw_paths
+    ):
+        raise PromotionError("release closure G0 projection or raw evidence bounds differ from the assessment")
+    return comparison_path, projection
+
+def write_release_closure_comparison(
+    root: pathlib.Path,
+    *,
+    closure_helper: Any,
+    admitted_parent_ref: Mapping[str, Any],
+    original_generation: Mapping[str, Any],
+    source_eligibility_evidence: Mapping[str, Any],
+    assessment: Mapping[str, Any],
+    source_refresh_evidence_sha256: str,
+    generator_consumer_closure_sha256: str,
+    provenance_dependency_digests: Mapping[str, str],
+) -> dict[str, Any]:
+    """Persist the immutable positive pre-receipt comparison without self-links."""
+    if assessment.get("status") != "eligible":
+        raise PromotionError("release closure comparison artifact requires a positive pre-receipt assessment")
+    reference, evidence = _release_closure_assessment_evidence(assessment)
+    modern_parent = reference.get("schema_version") == "datapan.canonical-release-closure-refresh-reference.v2"
+    if modern_parent:
+        try:
+            closure_helper.validate_admitted_parent_ref(admitted_parent_ref)
+        except Exception as exc:  # noqa: BLE001 - native parent version must fail closed
+            raise PromotionError("release closure parent reference failed exact versioned validation") from exc
+    elif (
+        reference.get("schema_version") != "datapan.canonical-release-closure-refresh-reference.v3"
+        or not isinstance(admitted_parent_ref, Mapping)
+        or set(admitted_parent_ref) != {"kind", "reference"}
+        or admitted_parent_ref.get("kind") != "legacy_c_baseline"
+        or not isinstance(admitted_parent_ref.get("reference"), Mapping)
+    ):
+        raise PromotionError("legacy release closure comparison lacks its exact tagged native baseline")
+    try:
+        derived_generator_closure = closure_helper.derive_generator_consumer_closure_sha256(
+            provenance_dependency_digests,
+        )
+    except Exception as exc:  # noqa: BLE001 - reject open/incomplete membership before writing
+        raise PromotionError("release closure dependencies do not match the complete reviewed membership") from exc
+    if (
+        original_generation.get("generation_id") != (
+            admitted_parent_ref.get("generation_id") if modern_parent
+            else admitted_parent_ref["reference"].get("identity", {}).get("generation_id")
+        )
+        or evidence.get("generation_id", original_generation.get("generation_id")) != original_generation.get("generation_id")
+        or (modern_parent and evidence.get("admitted_parent_ref_sha256") != hashlib.sha256(
+            canonical_json(dict(admitted_parent_ref))
+        ).hexdigest())
+        or (not modern_parent and reference.get("legacy_baseline_id") != admitted_parent_ref["reference"].get("baseline_id"))
+        or (modern_parent and evidence.get("source_refresh_evidence_sha256") != source_refresh_evidence_sha256)
+        or (not modern_parent and assessment.get("source_refresh_evidence_sha256") != source_refresh_evidence_sha256)
+        or (modern_parent and evidence.get("generator_consumer_closure_sha256") != generator_consumer_closure_sha256)
+        or (modern_parent and evidence.get("provenance_dependency_digests") != dict(provenance_dependency_digests))
+        or (not modern_parent and assessment.get("generator_consumer_closure_sha256") != generator_consumer_closure_sha256)
+        or (not modern_parent and assessment.get("provenance_dependency_digests") != dict(provenance_dependency_digests))
+        or evidence.get("canonical_sha256") != reference.get("canonical_sha256")
+        or derived_generator_closure != generator_consumer_closure_sha256
+    ):
+        raise PromotionError("release closure comparison changed its admitted parent, generation, or authenticated input evidence")
+    key = reference.get("refresh_key")
+    original_observed_at = evidence.get("original_observed_at")
+    if not modern_parent:
+        comparison_record = assessment.get("comparison")
+        if not isinstance(comparison_record, Mapping):
+            raise PromotionError("legacy release closure assessment lacks its comparison record")
+        document = {
+            "schema_version": "datapan.canonical-release-closure-comparison.v2",
+            "purpose": "release-closure-refresh",
+            "release_closure_reference": dict(reference),
+            "parent_reference": dict(admitted_parent_ref),
+            "original_generation": dict(original_generation),
+            "source_eligibility_evidence": dict(source_eligibility_evidence),
+            "source_refresh_evidence_sha256": source_refresh_evidence_sha256,
+            "generator_consumer_closure_sha256": generator_consumer_closure_sha256,
+            "provenance_dependency_digests": dict(provenance_dependency_digests),
+            "comparison": comparison_record,
+        }
+    else:
+        document = {
+            "schema_version": "datapan.canonical-release-closure-comparison.v1",
+            "purpose": "release-closure-refresh",
+            "release_closure_reference": dict(reference),
+            "admitted_parent_ref": dict(admitted_parent_ref),
+            "original_generation": dict(original_generation),
+            "source_eligibility_evidence": dict(source_eligibility_evidence),
+            "source_refresh_evidence_sha256": source_refresh_evidence_sha256,
+            "generator_consumer_closure_sha256": generator_consumer_closure_sha256,
+            "provenance_dependency_digests": dict(provenance_dependency_digests),
+            "comparison": {
+                "ruleset_sha256": evidence.get("ruleset_sha256"),
+                "canonical_sha256": evidence.get("canonical_sha256"),
+                "canonical_representation": evidence.get("canonical_representation"),
+                "canonical_git_blob_sha1": evidence.get("canonical_git_blob_sha1"),
+                "canonical_git_blob_bytes": evidence.get("canonical_git_blob_bytes"),
+                "canonical_git_blob_sha256": evidence.get("canonical_git_blob_sha256"),
+                "admitted_parent_ref_sha256": evidence.get("admitted_parent_ref_sha256"),
+                "current_preparation_base": evidence.get("current_preparation_base"),
+                "admitted_parent_projection_sha256": evidence.get("admitted_parent_projection_sha256"),
+                "current_base_projection_sha256": evidence.get("current_base_projection_sha256"),
+                "regenerated_projection_sha256": evidence.get("regenerated_projection_sha256"),
+                "parent_delta_paths": evidence.get("parent_delta_paths"),
+                "current_base_delta_paths": evidence.get("current_base_delta_paths"),
+                "parent_delta_records": evidence.get("parent_delta_records"),
+                "current_base_delta_records": evidence.get("current_base_delta_records"),
+                "current_base_delta_sha256": evidence.get("current_base_delta_sha256"),
+                "captured_changed_paths": evidence.get("captured_changed_paths"),
+                "projection_input_bounds": evidence.get("projection_input_bounds"),
+                "source_eligibility_evidence_sha256": evidence.get("source_eligibility_evidence_sha256"),
+                "original_generation_sha256": evidence.get("original_generation_sha256"),
+                "original_generation_epoch": evidence.get("original_generation_epoch"),
+                "original_epoch_origin": evidence.get("original_epoch_origin"),
+                "original_observed_at": evidence.get("original_observed_at"),
+            },
+        }
+    encoded = json.dumps(document, ensure_ascii=False, sort_keys=True, indent=2).encode("utf-8") + b"\n"
+    maximum = getattr(closure_helper, "MAX_JSON_BYTES", 64 * 1024 * 1024)
+    if len(encoded) > maximum:
+        raise PromotionError("release closure comparison artifact exceeds the reviewed JSON evidence bound")
+    relative = pathlib.PurePosixPath(_release_closure_comparison_path(reference))
+    target = _check_release_closure_comparison_target(root, relative.as_posix(), must_be_absent=False)
+    if target.exists():
+        if target.is_symlink() or not target.is_file():
+            raise PromotionError("release closure comparison path is unsafe")
+        if not target.is_file() or target.read_bytes() != encoded:
+            raise PromotionError("existing release closure comparison key is bound to different immutable evidence")
+    else:
+        _validate_release_closure_pre_receipt_cut(
+            root, closure_helper=closure_helper, reference=reference,
+            assessment_record=evidence,
+        )
+        target.parent.mkdir(parents=True, exist_ok=True)
+        # Re-check path components after mkdir so a concurrent path substitution
+        # cannot turn the immutable cut write into a symlink traversal.
+        if _check_release_closure_comparison_target(root, relative.as_posix(), must_be_absent=True) != target:
+            raise PromotionError("release closure comparison target changed during cut creation")
+        fd = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(encoded)
+            stream.flush()
+            os.fsync(stream.fileno())
+        directory_fd = os.open(target.parent, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    return {"path": relative.as_posix(), "bytes": len(encoded), "sha256": hashlib.sha256(encoded).hexdigest()}
+
+def _strict_json_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise PromotionError("release closure comparison contains a duplicate JSON key")
+        result[key] = value
+    return result
+
+def _reject_nonfinite_comparison_value(value: str) -> None:
+    raise PromotionError("release closure comparison contains a non-finite JSON number")
+
+def _validate_release_closure_comparison_parent(
+    candidate: Mapping[str, Any],
+    reference: Mapping[str, Any],
+    document: Mapping[str, Any],
+    projection: Any,
+) -> tuple[str, str, str, str | None]:
+    """Validate the explicit modern-admission or legacy-baseline comparison wire."""
+    ref_version = reference.get("schema_version")
+    if ref_version == "datapan.canonical-release-closure-refresh-reference.v2":
+        if (
+            set(document) != RELEASE_CLOSURE_COMPARISON_TOP_FIELDS
+            or document.get("schema_version") != "datapan.canonical-release-closure-comparison.v1"
+            or not isinstance(document.get("admitted_parent_ref"), Mapping)
+        ):
+            raise PromotionError("modern release closure comparison has an unsupported or open shape")
+        parent_ref = document["admitted_parent_ref"]
+        try:
+            parent_ref = projection.validate_admitted_parent_ref(parent_ref)
+        except Exception as exc:  # noqa: BLE001 - the native admission-reference validator is authoritative
+            raise PromotionError("modern comparison parent is not a supported exact native reference") from exc
+        if (
+            set(document.get("comparison", {})) != RELEASE_CLOSURE_COMPARISON_FIELDS
+            or parent_ref.get("generation_id") != reference.get("generation_id")
+            or parent_ref.get("canonical_sha256") != reference.get("canonical_sha256")
+            or parent_ref.get("generation_id") != candidate.get("generation_id")
+            or parent_ref.get("canonical_sha256") != candidate.get("registry_sha256")
+        ):
+            raise PromotionError("modern comparison parent identity differs from its release closure subject")
+        return (
+            parent_ref["generation_id"],
+            parent_ref["canonical_sha256"],
+            reference["admitted_parent_projection_sha256"],
+            hashlib.sha256(canonical_json(dict(parent_ref))).hexdigest(),
+        )
+
+    if ref_version != "datapan.canonical-release-closure-refresh-reference.v3":
+        raise PromotionError("release closure comparison reference uses an unsupported version")
+    if (
+        set(reference) != RELEASE_CLOSURE_LEGACY_REFERENCE_FIELDS
+        or reference.get("purpose") != "release-closure-refresh"
+        or set(document) != RELEASE_CLOSURE_COMPARISON_LEGACY_TOP_FIELDS
+        or document.get("schema_version") != "datapan.canonical-release-closure-comparison.v2"
+    ):
+        raise PromotionError("legacy release closure comparison has an unsupported or open shape")
+    for name in (
+        "refresh_key", "legacy_baseline_id", "canonical_sha256",
+        "legacy_parent_projection_sha256", "current_base_delta_sha256",
+        "generated_projection_sha256",
+    ):
+        value = reference.get(name)
+        if not isinstance(value, str) or not re.fullmatch(r"[a-f0-9]{64}", value):
+            raise PromotionError(f"legacy release closure reference {name} is malformed")
+    if not isinstance(reference.get("generation_id"), str) or not reference["generation_id"]:
+        raise PromotionError("legacy release closure reference omits its original generation")
+    branch = reference.get("branch")
+    if not isinstance(branch, str) or not branch or ".." in branch or "//" in branch or "@{" in branch:
+        raise PromotionError("legacy release closure reference branch is malformed")
+    try:
+        branch_prefix = projection.BASE._safe_branch_prefix(
+            str(candidate.get("source_id", "")), str(candidate.get("scope", "")),
+        )
+    except Exception as exc:  # noqa: BLE001 - current CONTROL defines the only allowed branch namespace
+        raise PromotionError("legacy release closure source namespace is unsupported") from exc
+    suffix = branch[len(branch_prefix) + 1:] if branch.startswith(branch_prefix + "-") else ""
+    if suffix not in {reference["refresh_key"][:width] for width in (12, 16, 20, 24, 32, 40, 48, 56, 64)}:
+        raise PromotionError("legacy release closure branch is not bound to its exact full refresh key")
+
+    parent_reference = document.get("parent_reference")
+    if not isinstance(parent_reference, Mapping) or set(parent_reference) != RELEASE_CLOSURE_LEGACY_PARENT_FIELDS:
+        raise PromotionError("legacy comparison parent is not the exact tagged native baseline")
+    if parent_reference.get("kind") != "legacy_c_baseline":
+        raise PromotionError("legacy comparison parent has an unsupported native capability kind")
+    baseline = parent_reference.get("reference")
+    if not isinstance(baseline, Mapping) or set(baseline) != RELEASE_CLOSURE_LEGACY_BASELINE_FIELDS:
+        raise PromotionError("legacy comparison baseline has an unsupported or open shape")
+    identity = baseline.get("identity")
+    evidence = baseline.get("evidence")
+    if (
+        baseline.get("schema_version") != "datapan.canonical-release-legacy-c-baseline.v1"
+        or baseline.get("role") != "legacy_c_comparison_baseline"
+        or not isinstance(identity, Mapping)
+        or set(identity) != RELEASE_CLOSURE_LEGACY_BASELINE_IDENTITY_FIELDS
+        or not isinstance(evidence, Mapping)
+        or set(evidence) != RELEASE_CLOSURE_LEGACY_BASELINE_EVIDENCE_FIELDS
+    ):
+        raise PromotionError("legacy comparison baseline does not preserve the exact native baseline record")
+    baseline_id = baseline.get("baseline_id")
+    expected_baseline_id = hashlib.sha256(
+        b"datapan.canonical-release-legacy-c-baseline.v1\0" + canonical_json(dict(identity))
+    ).hexdigest()
+    if baseline_id != expected_baseline_id:
+        raise PromotionError("legacy comparison baseline ID does not bind its immutable identity")
+    if (
+        identity.get("repository", "").casefold() != "statpan/datapan-registry"
+        or identity.get("source_id") != candidate.get("source_id")
+        or identity.get("scope") != candidate.get("scope")
+        or identity.get("generation_id") != reference.get("generation_id")
+        or identity.get("generation_id") != candidate.get("generation_id")
+        or reference.get("legacy_baseline_id") != baseline_id
+    ):
+        raise PromotionError("legacy comparison baseline differs from the exact C subject")
+    for name in ("candidate_head_sha", "candidate_base_sha", "merged_sha"):
+        value = identity.get(name)
+        if not isinstance(value, str) or not re.fullmatch(r"[a-f0-9]{40}", value):
+            raise PromotionError(f"legacy baseline {name} is malformed")
+    if (
+        isinstance(identity.get("merged_pr_number"), bool)
+        or not isinstance(identity.get("merged_pr_number"), int)
+        or identity["merged_pr_number"] < 1
+    ):
+        raise PromotionError("legacy baseline merged PR number is malformed")
+    ownership = identity.get("ownership")
+    if (
+        not isinstance(ownership, Mapping)
+        or set(ownership) != {"owner_id", "branch", "body_sha256"}
+        or not isinstance(ownership.get("branch"), str)
+        or not ownership["branch"]
+        or not isinstance(ownership.get("body_sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", ownership["body_sha256"])
+    ):
+        raise PromotionError("legacy baseline ownership identity is malformed")
+    manifest = identity.get("release_manifest")
+    canonical = identity.get("canonical_registry")
+    git_representation = canonical.get("git_representation") if isinstance(canonical, Mapping) else None
+    if (
+        not isinstance(manifest, Mapping)
+        or set(manifest) != {"path", "bytes", "sha256"}
+        or manifest.get("path") != "manifest.json"
+        or isinstance(manifest.get("bytes"), bool)
+        or not isinstance(manifest.get("bytes"), int)
+        or manifest["bytes"] < 1
+        or not isinstance(manifest.get("sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", manifest["sha256"])
+        or not isinstance(canonical, Mapping)
+        or set(canonical) != {"path", "bytes", "sha256", "git_representation"}
+        or canonical.get("path") != candidate.get("registry_path")
+        or canonical.get("sha256") != candidate.get("registry_sha256")
+        or isinstance(canonical.get("bytes"), bool)
+        or not isinstance(canonical.get("bytes"), int)
+        or canonical["bytes"] != candidate.get("registry_bytes")
+        or not isinstance(git_representation, Mapping)
+        or set(git_representation) != {
+            "representation", "git_blob_sha1", "git_blob_bytes", "git_blob_sha256",
+            "payload_bytes", "payload_sha256",
+        }
+        or git_representation.get("representation") not in {"git-lfs-pointer-v1", "materialized-git-blob-v1"}
+        or not isinstance(git_representation.get("git_blob_sha1"), str)
+        or not re.fullmatch(r"[a-f0-9]{40}", git_representation["git_blob_sha1"])
+        or not isinstance(git_representation.get("git_blob_sha256"), str)
+        or not re.fullmatch(r"[a-f0-9]{64}", git_representation["git_blob_sha256"])
+        or isinstance(git_representation.get("git_blob_bytes"), bool)
+        or not isinstance(git_representation.get("git_blob_bytes"), int)
+        or git_representation["git_blob_bytes"] < 1
+        or git_representation.get("payload_sha256") != canonical.get("sha256")
+        or git_representation.get("payload_bytes") != canonical.get("bytes")
+    ):
+        raise PromotionError("legacy baseline manifest or canonical identity is malformed")
+    comparison = document.get("comparison")
+    if not isinstance(comparison, Mapping) or set(comparison) != RELEASE_CLOSURE_COMPARISON_LEGACY_FIELDS:
+        raise PromotionError("legacy release closure comparison record has an unsupported or open shape")
+    if (
+        comparison.get("legacy_baseline_id") != baseline_id
+        or comparison.get("legacy_parent_projection_sha256") != reference.get("legacy_parent_projection_sha256")
+    ):
+        raise PromotionError("legacy comparison changed its native baseline or parent projection identity")
+    return (
+        identity["generation_id"],
+        canonical["sha256"],
+        reference["legacy_parent_projection_sha256"],
+        None,
+    )
+
+class _CurrentControlStateSourceLoader:
+    """Execute only source bytes already matched to the executing CONTROL Git commit."""
+
+    def __init__(self, source: bytes, *, filename: str, identity: tuple[str, ...]) -> None:
+        self.source = source
+        self.filename = filename
+        self.identity = identity
+
+    def create_module(self, spec: Any) -> None:
+        return None
+
+    def exec_module(self, module: types.ModuleType) -> None:
+        code = compile(self.source, self.filename, "exec", dont_inherit=True)
+        exec(code, module.__dict__)
+
+def _check_absolute_deadline(deadline_monotonic: float, *, label: str) -> None:
+    if (
+        isinstance(deadline_monotonic, bool)
+        or not isinstance(deadline_monotonic, (int, float))
+        or not math.isfinite(deadline_monotonic)
+        or time.monotonic() >= deadline_monotonic
+    ):
+        raise PromotionError(f"{label} deadline is unavailable")
+
+def _ack_runtime_value(value: Any, *, seen: set[int], depth: int = 0) -> Any:
+    """Describe the bounded runtime state reached by one ACK helper module."""
+    if depth > _ACK_RUNTIME_MAX_DEPTH:
+        raise PromotionError("current CONTROL runtime state is too deeply nested")
+    if value is None or type(value) in {bool, int, str}:
+        return value
+    if isinstance(value, float):
+        if not math.isfinite(value):
+            raise PromotionError("current CONTROL runtime state contains a non-finite float")
+        return value
+    if isinstance(value, bytes):
+        return {"kind": "bytes", "bytes": len(value), "sha256": hashlib.sha256(value).hexdigest()}
+    if isinstance(value, pathlib.PurePath):
+        return {"kind": "path", "value": value.as_posix()}
+    if isinstance(value, re.Pattern):
+        return {
+            "kind": "pattern",
+            "pattern": _ack_runtime_value(value.pattern, seen=seen, depth=depth + 1),
+            "flags": value.flags,
+        }
+    identity = id(value)
+    if identity in seen:
+        return {"kind": "cycle", "identity": identity}
+    if isinstance(value, Mapping):
+        if len(value) > _ACK_RUNTIME_MAX_ITEMS:
+            raise PromotionError("current CONTROL runtime mapping exceeds its bound")
+        seen.add(identity)
+        try:
+            rows = [
+                (
+                    _ack_runtime_value(key, seen=seen, depth=depth + 1),
+                    _ack_runtime_value(item, seen=seen, depth=depth + 1),
+                )
+                for key, item in value.items()
+            ]
+            rows.sort(key=lambda row: canonical_json(row[0]))
+            return {"kind": "mapping", "rows": rows}
+        finally:
+            seen.remove(identity)
+    if isinstance(value, (list, tuple)):
+        if len(value) > _ACK_RUNTIME_MAX_ITEMS:
+            raise PromotionError("current CONTROL runtime sequence exceeds its bound")
+        seen.add(identity)
+        try:
+            return {
+                "kind": type(value).__name__,
+                "items": [
+                    _ack_runtime_value(item, seen=seen, depth=depth + 1)
+                    for item in value
+                ],
+            }
+        finally:
+            seen.remove(identity)
+    if isinstance(value, (set, frozenset)):
+        if len(value) > _ACK_RUNTIME_MAX_ITEMS:
+            raise PromotionError("current CONTROL runtime set exceeds its bound")
+        seen.add(identity)
+        try:
+            items = [
+                _ack_runtime_value(item, seen=seen, depth=depth + 1)
+                for item in value
+            ]
+            items.sort(key=canonical_json)
+            return {"kind": type(value).__name__, "items": items}
+        finally:
+            seen.remove(identity)
+    if isinstance(value, types.ModuleType):
+        return {"kind": "module", "name": value.__name__, "identity": identity}
+    if isinstance(value, property):
+        return {
+            "kind": "property", "identity": identity,
+            "fget": _ack_runtime_value(value.fget, seen=seen, depth=depth + 1),
+            "fset": _ack_runtime_value(value.fset, seen=seen, depth=depth + 1),
+            "fdel": _ack_runtime_value(value.fdel, seen=seen, depth=depth + 1),
+        }
+    if isinstance(value, (types.MemberDescriptorType, types.GetSetDescriptorType)):
+        owner = getattr(value, "__objclass__", None)
+        return {
+            "kind": type(value).__name__, "identity": identity,
+            "name": getattr(value, "__name__", None),
+            "owner_module": getattr(owner, "__module__", None),
+            "owner_qualname": getattr(owner, "__qualname__", None),
+        }
+    if isinstance(value, types.FunctionType):
+        closure = value.__closure__ or ()
+        try:
+            closure_values = [cell.cell_contents for cell in closure]
+        except ValueError as exc:
+            raise PromotionError("current CONTROL helper closure contains an empty cell") from exc
+        return {
+            "kind": "function", "identity": identity,
+            "module": value.__module__, "qualname": value.__qualname__,
+            "code_sha256": hashlib.sha256(marshal.dumps(value.__code__)).hexdigest(),
+            "defaults": _ack_runtime_value(value.__defaults__, seen=seen, depth=depth + 1),
+            "kwdefaults": _ack_runtime_value(value.__kwdefaults__, seen=seen, depth=depth + 1),
+            "annotations": _ack_runtime_value(value.__annotations__, seen=seen, depth=depth + 1),
+            "attributes": _ack_runtime_value(vars(value), seen=seen, depth=depth + 1),
+            "closure": [
+                _ack_runtime_value(item, seen=seen, depth=depth + 1)
+                for item in closure_values
+            ],
+        }
+    if isinstance(value, type):
+        return {
+            "kind": "class", "identity": identity,
+            "module": value.__module__, "qualname": value.__qualname__,
+        }
+    try:
+        attributes = vars(value)
+    except TypeError:
+        attributes = None
+    return {
+        "kind": "opaque", "identity": identity,
+        "type_module": type(value).__module__, "type_name": type(value).__qualname__,
+        "attributes": (
+            _ack_runtime_value(attributes, seen=seen, depth=depth + 1)
+            if isinstance(attributes, Mapping) else None
+        ),
+    }
+
+def _ack_module_runtime_seal(module: Any) -> bytes:
+    """Seal exact owned code, class descriptors, reached globals, and imports."""
+    name = getattr(module, "__name__", None)
+    if not isinstance(name, str) or not name or sys.modules.get(name) is not module:
+        raise PromotionError("current CONTROL module singleton is not registered")
+    namespace = vars(module)
+    owned: dict[str, Any] = {}
+    reached_globals: set[str] = set()
+    for symbol, value in sorted(namespace.items()):
+        if isinstance(value, types.FunctionType) and value.__module__ == name:
+            owned[symbol] = _ack_runtime_value(value, seen=set())
+            reached_globals.update(value.__code__.co_names)
+        elif isinstance(value, type) and value.__module__ == name:
+            class_state: dict[str, Any] = {}
+            for method_name, method in sorted(vars(value).items()):
+                if isinstance(method, (staticmethod, classmethod)):
+                    target = method.__func__
+                    class_state[method_name] = {
+                        "descriptor": type(method).__name__,
+                        "function": _ack_runtime_value(target, seen=set()),
+                    }
+                else:
+                    class_state[method_name] = _ack_runtime_value(method, seen=set())
+                    target = method
+                targets = (target.fget, target.fset, target.fdel) if isinstance(target, property) else (target,)
+                for function in targets:
+                    if isinstance(function, types.FunctionType):
+                        reached_globals.update(function.__code__.co_names)
+            owned[symbol] = {
+                "class": _ack_runtime_value(value, seen=set()),
+                "mro": [_ack_runtime_value(base, seen=set()) for base in value.__mro__],
+                "state": class_state,
+            }
+    globals_snapshot = {}
+    for symbol in sorted(reached_globals | {key for key in namespace if key.isupper()} | {"__annotations__"}):
+        if symbol in namespace:
+            globals_snapshot[symbol] = _ack_runtime_value(namespace[symbol], seen=set())
+    return canonical_json({"module": name, "owned": owned, "globals": globals_snapshot})
+
+def _path_has_symlink_component(path: pathlib.Path) -> bool:
+    absolute = path.absolute()
+    current = pathlib.Path(absolute.anchor)
+    for part in absolute.parts[1:]:
+        current = current / part
+        if current.is_symlink():
+            return True
+    return False
+
+def _control_git_output(
+    control_root: pathlib.Path,
+    args: Sequence[str],
+    *,
+    deadline_monotonic: float,
+    max_bytes: int,
+) -> bytes:
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL source read")
+    if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
+        raise PromotionError("current CONTROL Git output bound is invalid")
+    command_args = tuple(args)
+    allowed_paths = {
+        "scripts/run-canonical-update-promotion.py",
+        "scripts/canonical_publication_state.py",
+        "scripts/canonical_update_pr.py",
+        "scripts/canonical_release_closure.py",
+        "scripts/canonical_release_closure_native_v2.py",
+        *_CONTROL_SOURCE_MODULE_PATHS.values(),
+        *_CONTROL_SOURCE_RESOURCE_PATHS,
+    }
+    identity_read = command_args == ("rev-parse", "--show-toplevel", "HEAD")
+    blob_read = (
+        len(command_args) == 3
+        and command_args[0] == "cat-file"
+        and command_args[1] in {"-s", "blob"}
+        and isinstance(command_args[2], str)
+        and ":" in command_args[2]
+        and re.fullmatch(r"[a-f0-9]{40}", command_args[2].split(":", 1)[0]) is not None
+        and command_args[2].split(":", 1)[1] in allowed_paths
+    )
+    if not (identity_read or blob_read):
+        raise PromotionError("current CONTROL Git request is outside its fixed local read set")
+    clean_env = {key: value for key, value in os.environ.items() if not key.startswith("GIT_")}
+    clean_env.update({
+        "GIT_OPTIONAL_LOCKS": "0",
+        "GIT_NO_REPLACE_OBJECTS": "1",
+        "GIT_NO_LAZY_FETCH": "1",
+        "GIT_TERMINAL_PROMPT": "0",
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_CONFIG_SYSTEM": os.devnull,
+        "GIT_CONFIG_GLOBAL": os.devnull,
+        "GIT_ALLOW_PROTOCOL": "file",
+    })
+    remaining = deadline_monotonic - time.monotonic()
+    if remaining <= 0:
+        raise PromotionError("current CONTROL source read deadline expired")
+    process: subprocess.Popen[bytes] | None = None
+    selector: selectors.BaseSelector | None = None
+    captured = bytearray()
+
+    def reap_owned_child(child: subprocess.Popen[bytes]) -> bool:
+        # Kill the whole owned session even if Git has already exited: a
+        # descendant may still hold stdout open or continue after its parent.
+        try:
+            os.killpg(child.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+        except OSError:
+            return False
+        term_deadline = time.monotonic() + 0.5
+        while time.monotonic() < term_deadline:
+            try:
+                child.wait(timeout=min(0.05, max(0.0, term_deadline - time.monotonic())))
+            except subprocess.TimeoutExpired:
+                pass
+            except OSError:
+                return False
+            try:
+                os.killpg(child.pid, 0)
+            except ProcessLookupError:
+                return child.poll() is not None
+            except OSError:
+                return False
+            time.sleep(0.01)
+        try:
+            os.killpg(child.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        except OSError:
+            return False
+        try:
+            child.wait(timeout=0.5)
+        except (OSError, subprocess.TimeoutExpired):
+            if child.poll() is None:
+                return False
+        kill_deadline = time.monotonic() + 0.5
+        while time.monotonic() < kill_deadline:
+            try:
+                os.killpg(child.pid, 0)
+            except ProcessLookupError:
+                return child.poll() is not None
+            except OSError:
+                return False
+            time.sleep(0.01)
+        return False
+
+    try:
+        process = subprocess.Popen(
+            ("git", *command_args),
+            cwd=control_root,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            env=clean_env,
+            close_fds=True,
+            start_new_session=True,
+        )
+        assert process.stdout is not None
+        os.set_blocking(process.stdout.fileno(), False)
+        selector = selectors.DefaultSelector()
+        selector.register(process.stdout, selectors.EVENT_READ)
+        while True:
+            remaining = deadline_monotonic - time.monotonic()
+            if remaining <= 0:
+                if not reap_owned_child(process):
+                    raise PromotionError("current CONTROL Git child cleanup could not be confirmed")
+                raise PromotionError("current CONTROL Git identity read exceeded its absolute deadline")
+            events = selector.select(timeout=min(remaining, 0.25))
+            if not events:
+                continue
+            try:
+                chunk = os.read(
+                    process.stdout.fileno(),
+                    min(65536, max_bytes - len(captured) + 1),
+                )
+            except BlockingIOError:
+                continue
+            if not chunk:
+                selector.unregister(process.stdout)
+                break
+            captured.extend(chunk)
+            if len(captured) > max_bytes:
+                if not reap_owned_child(process):
+                    raise PromotionError("current CONTROL Git child cleanup could not be confirmed")
+                raise PromotionError("current CONTROL Git output exceeded its in-flight byte bound")
+        remaining = deadline_monotonic - time.monotonic()
+        if remaining <= 0:
+            if not reap_owned_child(process):
+                raise PromotionError("current CONTROL Git child cleanup could not be confirmed")
+            raise PromotionError("current CONTROL Git identity read exceeded its absolute deadline")
+        try:
+            return_code = process.wait(timeout=remaining)
+        except subprocess.TimeoutExpired as exc:
+            if not reap_owned_child(process):
+                raise PromotionError("current CONTROL Git child cleanup could not be confirmed") from exc
+            raise PromotionError("current CONTROL Git identity read exceeded its absolute deadline") from exc
+    except PromotionError:
+        raise
+    except (OSError, ValueError, selectors.SelectorError) as exc:
+        if process is not None and not reap_owned_child(process):
+            raise PromotionError("current CONTROL Git child cleanup could not be confirmed") from exc
+        raise PromotionError("current CONTROL Git identity could not be read within its deadline") from exc
+    finally:
+        cleanup_failed = False
+        if selector is not None:
+            try:
+                selector.close()
+            except OSError:
+                cleanup_failed = True
+        if process is not None:
+            if process.stdout is not None:
+                try:
+                    process.stdout.close()
+                except OSError:
+                    cleanup_failed = True
+            if process.poll() is None and not reap_owned_child(process):
+                raise PromotionError("current CONTROL Git child cleanup could not be confirmed")
+            if process.poll() is not None:
+                try:
+                    os.killpg(process.pid, 0)
+                except ProcessLookupError:
+                    pass
+                except OSError:
+                    cleanup_failed = True
+                else:
+                    if not reap_owned_child(process):
+                        raise PromotionError("current CONTROL Git descendant cleanup could not be confirmed")
+                    cleanup_failed = True
+        if cleanup_failed:
+            raise PromotionError("current CONTROL Git process resources could not be closed")
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL source read")
+    if return_code != 0 or len(captured) > max_bytes:
+        raise PromotionError("current CONTROL Git identity is missing or outside its byte bound")
+    return bytes(captured)
+
+def _read_current_control_blob(
+    control_root: pathlib.Path,
+    control_head_sha: str,
+    relative_path: str,
+    *,
+    deadline_monotonic: float,
+) -> bytes:
+    if (
+        not re.fullmatch(r"[a-f0-9]{40}", control_head_sha)
+        or relative_path not in {
+            "scripts/run-canonical-update-promotion.py",
+            "scripts/canonical_publication_state.py",
+            "scripts/canonical_update_pr.py",
+            "scripts/canonical_release_closure.py",
+            "scripts/canonical_release_closure_native_v2.py",
+            *_CONTROL_SOURCE_RESOURCE_PATHS,
+        }
+    ):
+        raise PromotionError("current CONTROL source identity is outside its fixed path set")
+    spec = f"{control_head_sha}:{relative_path}"
+    raw_size = _control_git_output(
+        control_root, ("cat-file", "-s", spec),
+        deadline_monotonic=deadline_monotonic, max_bytes=64,
+    )
+    try:
+        size_text = raw_size.decode("ascii").strip()
+        size = int(size_text)
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise PromotionError("current CONTROL source blob size is invalid") from exc
+    if size < 1 or size > MAX_CURRENT_CONTROL_SOURCE_BYTES:
+        raise PromotionError("current CONTROL source blob exceeds its fixed size bound")
+    raw = _control_git_output(
+        control_root, ("cat-file", "blob", spec),
+        deadline_monotonic=deadline_monotonic, max_bytes=MAX_CURRENT_CONTROL_SOURCE_BYTES,
+    )
+    if len(raw) != size:
+        raise PromotionError("current CONTROL source blob changed while it was read")
+    return raw
+
+def _require_control_source_resource(
+    control_root: pathlib.Path,
+    control_head_sha: str,
+    relative_path: str,
+    *,
+    deadline_monotonic: float,
+) -> None:
+    if relative_path not in _CONTROL_SOURCE_RESOURCE_PATHS:
+        raise PromotionError("current CONTROL helper resource is outside its fixed path set")
+    path = control_root / relative_path
+    if _path_has_symlink_component(path):
+        raise PromotionError("current CONTROL helper resource path contains a symlink")
+    try:
+        resolved = path.resolve(strict=True)
+        if control_root not in resolved.parents or not resolved.is_file():
+            raise PromotionError("current CONTROL helper resource is outside its checkout")
+        size = resolved.stat().st_size
+        if size < 1 or size > MAX_CURRENT_CONTROL_SOURCE_BYTES:
+            raise PromotionError("current CONTROL helper resource exceeds its fixed byte bound")
+        working_bytes = resolved.read_bytes()
+    except OSError as exc:
+        raise PromotionError("current CONTROL helper resource is unavailable") from exc
+    committed_bytes = _read_current_control_blob(
+        control_root, control_head_sha, relative_path,
+        deadline_monotonic=deadline_monotonic,
+    )
+    if len(working_bytes) != size or working_bytes != committed_bytes:
+        raise PromotionError("current CONTROL helper resource differs from its authenticated commit")
+    resource_key = (str(resolved), control_head_sha, relative_path)
+    baseline = _CONTROL_SOURCE_RESOURCE_BASELINES.get(resource_key)
+    if baseline is None:
+        _CONTROL_SOURCE_RESOURCE_BASELINES[resource_key] = bytes(committed_bytes)
+    elif baseline != committed_bytes:
+        raise PromotionError("current CONTROL helper resource changed after its authenticated baseline")
+
+def _require_control_source_resource_runtime(
+    control_root: pathlib.Path,
+    control_head_sha: str,
+    relative_path: str,
+    *,
+    deadline_monotonic: float,
+) -> None:
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL helper resource runtime check")
+    if relative_path not in _CONTROL_SOURCE_RESOURCE_PATHS:
+        raise PromotionError("current CONTROL helper resource is outside its fixed path set")
+    path = control_root / relative_path
+    if _path_has_symlink_component(path):
+        raise PromotionError("current CONTROL helper resource path contains a symlink")
+    try:
+        resolved = path.resolve(strict=True)
+        if resolved != path or control_root not in resolved.parents or not resolved.is_file():
+            raise OSError("current CONTROL helper resource path changed")
+        stat_result = resolved.stat()
+        if stat_result.st_size < 1 or stat_result.st_size > MAX_CURRENT_CONTROL_SOURCE_BYTES:
+            raise OSError("current CONTROL helper resource exceeds its byte bound")
+        current_bytes = resolved.read_bytes()
+    except (OSError, TypeError, ValueError) as exc:
+        raise PromotionError("current CONTROL helper resource is unavailable") from exc
+    key = (str(resolved), control_head_sha, relative_path)
+    baseline = _CONTROL_SOURCE_RESOURCE_BASELINES.get(key)
+    if (
+        baseline is None
+        or len(current_bytes) != stat_result.st_size
+        or current_bytes != baseline
+    ):
+        raise PromotionError("current CONTROL helper resource changed after its authenticated baseline")
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL helper resource runtime check")
+
+def load_current_control_source_module(
+    control_root: pathlib.Path,
+    relative_path: str,
+    *,
+    module_name: str,
+    state_module: types.ModuleType,
+    deadline_monotonic: float,
+) -> types.ModuleType:
+    """Execute one allowlisted helper from the authenticated current CONTROL commit."""
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL helper bootstrap")
+    if _CONTROL_SOURCE_MODULE_PATHS.get(module_name) != relative_path:
+        raise PromotionError("current CONTROL helper request is outside its fixed module map")
+    if type(state_module) is not types.ModuleType or sys.modules.get("canonical_publication_state") is not state_module:
+        raise PromotionError("current CONTROL helper requires the exact loaded State singleton")
+    state_identity = getattr(state_module, "__datapan_current_control_state_identity__", None)
+    if (
+        not isinstance(state_identity, tuple)
+        or len(state_identity) != 4
+        or state_identity[0] != str(pathlib.Path(control_root).resolve(strict=True))
+    ):
+        raise PromotionError("current CONTROL helper lacks the authenticated runner/state identity")
+    resolved_root = pathlib.Path(state_identity[0])
+    control_head_sha = state_identity[1]
+    source_path = resolved_root / relative_path
+    if _path_has_symlink_component(source_path):
+        raise PromotionError("current CONTROL helper source path contains a symlink")
+    try:
+        resolved_source = source_path.resolve(strict=True)
+        size = resolved_source.stat().st_size
+        if (
+            resolved_source != source_path
+            or resolved_root not in resolved_source.parents
+            or not resolved_source.is_file()
+            or size < 1
+            or size > MAX_CURRENT_CONTROL_SOURCE_BYTES
+        ):
+            raise PromotionError("current CONTROL helper source is outside its fixed size/path bounds")
+        working_bytes = resolved_source.read_bytes()
+    except OSError as exc:
+        raise PromotionError("current CONTROL helper source is unavailable") from exc
+    source_bytes = _read_current_control_blob(
+        resolved_root, control_head_sha, relative_path,
+        deadline_monotonic=deadline_monotonic,
+    )
+    if len(working_bytes) != size or working_bytes != source_bytes:
+        raise PromotionError("current CONTROL helper source differs from its authenticated commit")
+    if relative_path == "scripts/canonical_release_closure.py":
+        for resource_path in sorted(_CONTROL_SOURCE_RESOURCE_PATHS):
+            _require_control_source_resource(
+                resolved_root, control_head_sha, resource_path,
+                deadline_monotonic=deadline_monotonic,
+            )
+    identity = (*state_identity, module_name, relative_path, hashlib.sha256(source_bytes).hexdigest())
+    existing = sys.modules.get(module_name)
+    known = _CONTROL_SOURCE_MODULES.get(module_name)
+    if existing is not None:
+        if (
+            known is None
+            or known[0] is not existing
+            or known[1] != identity
+            or getattr(existing, "__datapan_current_control_source_identity__", None) != identity
+            or type(getattr(getattr(existing, "__spec__", None), "loader", None)) is not _CurrentControlStateSourceLoader
+        ):
+            raise PromotionError("current CONTROL helper module conflicts with its authenticated singleton")
+        _require_current_control_source_module_runtime(
+            existing, module_name=module_name, deadline_monotonic=deadline_monotonic,
+        )
+        return existing
+    loader = _CurrentControlStateSourceLoader(
+        source_bytes, filename=str(resolved_source), identity=identity,
+    )
+    spec = importlib.machinery.ModuleSpec(module_name, loader, origin=str(resolved_source))
+    spec.has_location = True
+    spec.cached = None
+    module = importlib.util.module_from_spec(spec)
+    module.__file__ = str(resolved_source)
+    module.__cached__ = None
+    sys.modules[module_name] = module
+    try:
+        _check_absolute_deadline(deadline_monotonic, label="current CONTROL helper bootstrap")
+        loader.exec_module(module)
+        module.__datapan_current_control_source_identity__ = identity
+        runtime_baseline = _ack_module_runtime_seal(module)
+        _CONTROL_SOURCE_MODULES[module_name] = (module, identity, runtime_baseline)
+        _check_absolute_deadline(deadline_monotonic, label="current CONTROL helper runtime binding")
+        return _require_current_control_source_module_runtime(
+            module, module_name=module_name, deadline_monotonic=deadline_monotonic,
+        )
+    except BaseException:
+        sys.modules.pop(module_name, None)
+        _CONTROL_SOURCE_MODULES.pop(module_name, None)
+        raise
+
+def _require_current_control_source_module_runtime(
+    module: Any,
+    *,
+    module_name: str,
+    deadline_monotonic: float,
+) -> types.ModuleType:
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL helper runtime check")
+    relative_path = _CONTROL_SOURCE_MODULE_PATHS.get(module_name)
+    if relative_path is None or type(module) is not types.ModuleType:
+        raise PromotionError("current CONTROL helper runtime request is outside its fixed module map")
+    known = _CONTROL_SOURCE_MODULES.get(module_name)
+    state = sys.modules.get("canonical_publication_state")
+    state_identity = getattr(state, "__datapan_current_control_state_identity__", None)
+    if (
+        known is None
+        or len(known) != 3
+        or known[0] is not module
+        or getattr(module, "__name__", None) != module_name
+        or sys.modules.get(module_name) is not module
+        or not isinstance(state_identity, tuple)
+        or len(state_identity) != 4
+    ):
+        raise PromotionError("current CONTROL helper runtime baseline is unavailable")
+    identity = known[1]
+    expected_identity_prefix = (*state_identity, module_name, relative_path)
+    if (
+        identity[:-1] != expected_identity_prefix
+        or getattr(module, "__datapan_current_control_source_identity__", None) != identity
+        or type(getattr(getattr(module, "__spec__", None), "loader", None)) is not _CurrentControlStateSourceLoader
+    ):
+        raise PromotionError("current CONTROL helper source binding changed after execution")
+    expected_path = pathlib.Path(state_identity[0]) / relative_path
+    try:
+        if (
+            _path_has_symlink_component(expected_path)
+            or expected_path.resolve(strict=True) != expected_path
+            or pathlib.Path(getattr(module, "__file__", None)).resolve(strict=True) != expected_path
+        ):
+            raise OSError("current CONTROL helper source path drifted")
+        stat_result = expected_path.stat()
+        if stat_result.st_size < 1 or stat_result.st_size > MAX_CURRENT_CONTROL_SOURCE_BYTES:
+            raise OSError("current CONTROL helper source exceeds its byte bound")
+        current_bytes = expected_path.read_bytes()
+    except (OSError, TypeError, ValueError) as exc:
+        raise PromotionError("current CONTROL helper source path is unavailable") from exc
+    if (
+        len(current_bytes) != stat_result.st_size
+        or hashlib.sha256(current_bytes).hexdigest() != identity[-1]
+        or _ack_module_runtime_seal(module) != known[2]
+    ):
+        raise PromotionError("current CONTROL helper source or runtime changed after authentication")
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL helper runtime check")
+    return module
+
+class _CurrentControlAckModules:
+    __slots__ = (
+        "state", "canonical_update_pr", "closure", "projection",
+        "source_eligibility", "derivation", "deadline_monotonic", "_seal",
+    )
+
+    def __init__(
+        self,
+        seal: object,
+        *,
+        state: types.ModuleType,
+        canonical_update_pr: types.ModuleType,
+        closure: types.ModuleType,
+        projection: types.ModuleType,
+        source_eligibility: types.ModuleType | None = None,
+        derivation: types.ModuleType | None = None,
+        deadline_monotonic: float,
+    ) -> None:
+        if seal is not _CONTROL_ACK_MODULES_SEAL:
+            raise PromotionError("current CONTROL ACK module bundle construction is private")
+        _check_absolute_deadline(deadline_monotonic, label="current CONTROL ACK bundle construction")
+        if source_eligibility is None or derivation is None:
+            raise PromotionError("current CONTROL ACK bundle lacks source eligibility or derivation")
+        self.state = state
+        self.canonical_update_pr = canonical_update_pr
+        self.closure = closure
+        self.projection = projection
+        self.source_eligibility = source_eligibility
+        self.derivation = derivation
+        self.deadline_monotonic = float(deadline_monotonic)
+        self._seal = seal
+
+def load_current_control_ack_modules(
+    control_root: pathlib.Path,
+    *,
+    deadline_monotonic: float,
+) -> _CurrentControlAckModules:
+    """Load the fixed ACK helper set after binding it to the executing CONTROL commit."""
+    deadline = deadline_monotonic
+    _check_absolute_deadline(deadline, label="current CONTROL ACK bootstrap")
+    state = load_current_control_publication_state(
+        control_root, deadline_monotonic=deadline,
+    )
+    helper = load_current_control_source_module(
+        control_root, "scripts/canonical_update_pr.py",
+        module_name="canonical_update_pr_release_closure_ack",
+        state_module=state, deadline_monotonic=deadline,
+    )
+    closure = load_current_control_source_module(
+        control_root, "scripts/canonical_release_closure.py",
+        module_name="canonical_release_closure_frozen_v3",
+        state_module=state, deadline_monotonic=deadline,
+    )
+    projection = load_current_control_source_module(
+        control_root, "scripts/canonical_release_closure_native_v2.py",
+        module_name="canonical_release_closure_native_v2_ack",
+        state_module=state, deadline_monotonic=deadline,
+    )
+    source_eligibility = load_current_control_source_module(
+        control_root, "scripts/upstream_catalogue_source_eligibility.py",
+        module_name="upstream_catalogue_source_eligibility_c2_ack",
+        state_module=state, deadline_monotonic=deadline,
+    )
+    derivation = load_current_control_source_module(
+        control_root, "scripts/upstream_catalogue_derivation.py",
+        module_name="upstream_catalogue_derivation_c2_ack",
+        state_module=state, deadline_monotonic=deadline,
+    )
+    if getattr(projection, "BASE", None) is not closure:
+        raise PromotionError("current CONTROL release-closure adapter did not reuse its authenticated base singleton")
+    modules = _CurrentControlAckModules(
+        _CONTROL_ACK_MODULES_SEAL,
+        state=state, canonical_update_pr=helper, closure=closure, projection=projection,
+        source_eligibility=source_eligibility, derivation=derivation,
+        deadline_monotonic=deadline,
+    )
+    return _require_current_control_ack_modules(modules, deadline_monotonic=deadline)
+
+def _require_current_control_ack_modules(
+    value: Any,
+    *,
+    deadline_monotonic: float,
+) -> _CurrentControlAckModules:
+    if type(value) is not _CurrentControlAckModules or value._seal is not _CONTROL_ACK_MODULES_SEAL:
+        raise PromotionError("publication ACK helper bundle is not the exact current CONTROL load")
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL ACK bundle validation")
+    if (
+        isinstance(deadline_monotonic, bool)
+        or not isinstance(deadline_monotonic, (int, float))
+        or float(deadline_monotonic) != value.deadline_monotonic
+        or time.monotonic() >= value.deadline_monotonic
+    ):
+        raise PromotionError("publication ACK helper bundle has a different or expired deadline")
+    expected = {
+        "canonical_publication_state": value.state,
+        "canonical_update_pr_release_closure_ack": value.canonical_update_pr,
+        "canonical_release_closure_frozen_v3": value.closure,
+        "canonical_release_closure_native_v2_ack": value.projection,
+        "upstream_catalogue_source_eligibility_c2_ack": value.source_eligibility,
+        "upstream_catalogue_derivation_c2_ack": value.derivation,
+    }
+    if any(
+        not isinstance(module, types.ModuleType)
+        or sys.modules.get(name) is not module
+        for name, module in expected.items()
+    ):
+        raise PromotionError("publication ACK helper singleton changed after current CONTROL binding")
+    if getattr(value.projection, "BASE", None) is not value.closure:
+        raise PromotionError("publication ACK adapter no longer uses its authenticated CONTROL base")
+    state_identity = getattr(value.state, "__datapan_current_control_state_identity__", None)
+    if not isinstance(state_identity, tuple) or len(state_identity) != 4:
+        raise PromotionError("publication ACK state identity is unavailable")
+    root = pathlib.Path(state_identity[0])
+    state_path = root / "scripts/canonical_publication_state.py"
+    _require_current_control_state_module(
+        value.state,
+        state_path=state_path,
+        identity=state_identity,
+        deadline_monotonic=deadline_monotonic,
+    )
+    for module, name in (
+        (value.canonical_update_pr, "canonical_update_pr_release_closure_ack"),
+        (value.closure, "canonical_release_closure_frozen_v3"),
+        (value.projection, "canonical_release_closure_native_v2_ack"),
+        (value.source_eligibility, "upstream_catalogue_source_eligibility_c2_ack"),
+        (value.derivation, "upstream_catalogue_derivation_c2_ack"),
+    ):
+        _require_current_control_source_module_runtime(
+            module, module_name=name, deadline_monotonic=deadline_monotonic,
+        )
+    for relative_path in sorted(_CONTROL_SOURCE_RESOURCE_PATHS):
+        _require_control_source_resource_runtime(
+            root, state_identity[1], relative_path,
+            deadline_monotonic=deadline_monotonic,
+        )
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL ACK bundle validation")
+    return value
+
+def _require_current_control_state_module(
+    module: Any,
+    *,
+    state_path: pathlib.Path,
+    identity: tuple[str, ...],
+    deadline_monotonic: float,
+) -> types.ModuleType:
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL state validation")
+    if type(module) is not types.ModuleType or getattr(module, "__name__", None) != "canonical_publication_state":
+        raise PromotionError("current CONTROL Git state singleton has a conflicting module type or name")
+    try:
+        module_path = pathlib.Path(getattr(module, "__file__", None)).resolve(strict=True)
+        expected_path = state_path.resolve(strict=True)
+        spec = getattr(module, "__spec__", None)
+        spec_origin = pathlib.Path(getattr(spec, "origin", None)).resolve(strict=True)
+    except (OSError, TypeError, ValueError) as exc:
+        raise PromotionError("current CONTROL Git state singleton has no exact source origin") from exc
+    if (
+        module_path != expected_path
+        or spec_origin != expected_path
+        or _path_has_symlink_component(state_path)
+    ):
+        raise PromotionError("current CONTROL Git state singleton is outside its exact source path")
+    loader = getattr(spec, "loader", None)
+    if (
+        type(loader) is not _CurrentControlStateSourceLoader
+        or loader.filename != str(expected_path)
+        or loader.identity != identity
+    ):
+        raise PromotionError("current CONTROL Git state singleton has an unsupported loader")
+    marker = getattr(module, "__datapan_current_control_state_identity__", None)
+    known = _CURRENT_CONTROL_STATE_MODULES.get(str(expected_path))
+    if marker != identity:
+        raise PromotionError("current CONTROL Git state singleton identity changed")
+    if known is not None and (
+        known[0] is not module or known[1] != identity or len(known) != 3
+    ):
+        raise PromotionError("current CONTROL Git state singleton conflicts with the validated process identity")
+    for name in ("GitObjectStore", "PythonModuleIndex", "PythonModuleIndexEntry"):
+        value = getattr(module, name, None)
+        if (
+            not isinstance(value, type)
+            or value.__module__ != "canonical_publication_state"
+            or sys.modules.get("canonical_publication_state") is not module
+        ):
+            raise PromotionError("current CONTROL Git state singleton has mismatched native type bindings")
+    runner_path = pathlib.Path(identity[0]) / "scripts/run-canonical-update-promotion.py"
+    try:
+        if _path_has_symlink_component(runner_path) or _path_has_symlink_component(state_path):
+            raise OSError("current CONTROL source path contains a symlink")
+        runner_resolved = runner_path.resolve(strict=True)
+        state_resolved = state_path.resolve(strict=True)
+        runner_stat = runner_resolved.stat()
+        state_stat = state_resolved.stat()
+        if (
+            runner_resolved != runner_path
+            or state_resolved != expected_path
+            or runner_stat.st_size < 1
+            or runner_stat.st_size > MAX_CURRENT_CONTROL_SOURCE_BYTES
+            or state_stat.st_size < 1
+            or state_stat.st_size > MAX_CURRENT_CONTROL_SOURCE_BYTES
+        ):
+            raise OSError("current CONTROL source exceeds its path or size bound")
+        runner_bytes = runner_resolved.read_bytes()
+        state_bytes = state_resolved.read_bytes()
+    except (OSError, TypeError, ValueError) as exc:
+        raise PromotionError("current CONTROL source changed or became unavailable") from exc
+    if (
+        len(runner_bytes) != runner_stat.st_size
+        or len(state_bytes) != state_stat.st_size
+        or hashlib.sha256(runner_bytes).hexdigest() != identity[2]
+        or hashlib.sha256(state_bytes).hexdigest() != identity[3]
+    ):
+        raise PromotionError("current CONTROL runner or state source changed after authentication")
+    identity_output = _control_git_output(
+        pathlib.Path(identity[0]), ("rev-parse", "--show-toplevel", "HEAD"),
+        deadline_monotonic=deadline_monotonic, max_bytes=4096,
+    )
+    try:
+        identity_lines = identity_output.decode("utf-8").splitlines()
+        if (
+            len(identity_lines) != 2
+            or pathlib.Path(identity_lines[0]).resolve(strict=True) != pathlib.Path(identity[0])
+            or identity_lines[1] != identity[1]
+            or os.environ.get("GITHUB_SHA") != identity[1]
+        ):
+            raise ValueError("current CONTROL workflow commit changed")
+    except (UnicodeDecodeError, OSError, ValueError) as exc:
+        raise PromotionError("current CONTROL workflow commit changed after authentication") from exc
+    if known is None:
+        runtime_baseline = _ack_module_runtime_seal(module)
+        _CURRENT_CONTROL_STATE_MODULES[str(expected_path)] = (module, identity, runtime_baseline)
+    elif known[2] != _ack_module_runtime_seal(module):
+        raise PromotionError("current CONTROL Git state runtime changed after authentication")
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL state validation")
+    return module
+
+def load_current_control_publication_state(
+    control_root: pathlib.Path,
+    *,
+    deadline_monotonic: float,
+) -> types.ModuleType:
+    """Load or reuse only the byte-authenticated state module from this runner's CONTROL checkout."""
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL state bootstrap")
+    try:
+        supplied_root = pathlib.Path(control_root).absolute()
+        runner_file = pathlib.Path(__file__).absolute()
+    except (OSError, TypeError, ValueError) as exc:
+        raise PromotionError("current CONTROL execution root is unavailable") from exc
+    if runner_file.name != "run-canonical-update-promotion.py" or runner_file.parent.name != "scripts":
+        raise PromotionError("current CONTROL execution file is not the approved promotion runner")
+    expected_control_root = runner_file.parent.parent
+    if (
+        supplied_root != expected_control_root
+        or _path_has_symlink_component(runner_file)
+        or _path_has_symlink_component(expected_control_root)
+    ):
+        raise PromotionError("current CONTROL root does not match the executing promotion runner")
+    try:
+        resolved_root = expected_control_root.resolve(strict=True)
+    except OSError as exc:
+        raise PromotionError("current CONTROL root cannot be resolved") from exc
+    if not resolved_root.is_dir() or _path_has_symlink_component(resolved_root / "scripts"):
+        raise PromotionError("current CONTROL root is not a safe repository directory")
+    state_path = resolved_root / "scripts/canonical_publication_state.py"
+    if _path_has_symlink_component(state_path):
+        raise PromotionError("current CONTROL Git state source path contains a symlink")
+    try:
+        resolved_state_path = state_path.resolve(strict=True)
+        runner_size = runner_file.stat().st_size
+        state_size = resolved_state_path.stat().st_size
+        if (
+            runner_size < 1 or runner_size > MAX_CURRENT_CONTROL_SOURCE_BYTES
+            or state_size < 1 or state_size > MAX_CURRENT_CONTROL_SOURCE_BYTES
+        ):
+            raise PromotionError("current CONTROL source files exceed their fixed size bound")
+        current_runner_bytes = runner_file.read_bytes()
+        current_state_bytes = resolved_state_path.read_bytes()
+    except OSError as exc:
+        raise PromotionError("current CONTROL source files are unavailable") from exc
+    if (
+        resolved_state_path != state_path
+        or not current_runner_bytes or len(current_runner_bytes) > MAX_CURRENT_CONTROL_SOURCE_BYTES
+        or not current_state_bytes or len(current_state_bytes) > MAX_CURRENT_CONTROL_SOURCE_BYTES
+    ):
+        raise PromotionError("current CONTROL source path or byte size is invalid")
+    identity_output = _control_git_output(
+        resolved_root, ("rev-parse", "--show-toplevel", "HEAD"),
+        deadline_monotonic=deadline_monotonic, max_bytes=4096,
+    )
+    try:
+        identity_lines = identity_output.decode("utf-8").splitlines()
+        if len(identity_lines) != 2:
+            raise ValueError("unexpected git identity row count")
+        git_root = pathlib.Path(identity_lines[0]).resolve(strict=True)
+        control_head_sha = identity_lines[1]
+    except (UnicodeDecodeError, IndexError, OSError, ValueError) as exc:
+        raise PromotionError("current CONTROL Git root or HEAD identity is malformed") from exc
+    workflow_sha = os.environ.get("GITHUB_SHA")
+    if (
+        git_root != resolved_root
+        or not isinstance(workflow_sha, str)
+        or not re.fullmatch(r"[a-f0-9]{40}", workflow_sha)
+        or workflow_sha != control_head_sha
+    ):
+        raise PromotionError("current CONTROL checkout does not match the executing workflow source")
+    runner_git_bytes = _read_current_control_blob(
+        resolved_root, control_head_sha, "scripts/run-canonical-update-promotion.py",
+        deadline_monotonic=deadline_monotonic,
+    )
+    state_git_bytes = _read_current_control_blob(
+        resolved_root, control_head_sha, "scripts/canonical_publication_state.py",
+        deadline_monotonic=deadline_monotonic,
+    )
+    if current_runner_bytes != runner_git_bytes or current_state_bytes != state_git_bytes:
+        raise PromotionError("current CONTROL working source differs from its authenticated workflow Git commit")
+    identity = (
+        str(resolved_root),
+        control_head_sha,
+        hashlib.sha256(runner_git_bytes).hexdigest(),
+        hashlib.sha256(state_git_bytes).hexdigest(),
+    )
+    _check_absolute_deadline(deadline_monotonic, label="current CONTROL state bootstrap")
+    existing = sys.modules.get("canonical_publication_state", _CONTROL_STATE_MISSING)
+    if existing is not _CONTROL_STATE_MISSING:
+        return _require_current_control_state_module(
+            existing, state_path=state_path, identity=identity,
+            deadline_monotonic=deadline_monotonic,
+        )
+
+    loader = _CurrentControlStateSourceLoader(
+        state_git_bytes, filename=str(resolved_state_path), identity=identity,
+    )
+    spec = importlib.machinery.ModuleSpec("canonical_publication_state", loader, origin=str(resolved_state_path))
+    spec.has_location = True
+    spec.cached = None
+    module = importlib.util.module_from_spec(spec)
+    module.__file__ = str(resolved_state_path)
+    module.__cached__ = None
+    sys.modules["canonical_publication_state"] = module
+    try:
+        _check_absolute_deadline(deadline_monotonic, label="current CONTROL state bootstrap")
+        loader.exec_module(module)
+        module.__datapan_current_control_state_identity__ = identity
+        return _require_current_control_state_module(
+            module, state_path=state_path, identity=identity,
+            deadline_monotonic=deadline_monotonic,
+        )
+    except BaseException:
+        sys.modules.pop("canonical_publication_state", None)
+        _CURRENT_CONTROL_STATE_MODULES.pop(str(resolved_state_path), None)
+        raise
+
+class _AuthenticatedLocalMReader:
+    """Read one exact M through the already-authenticated current native state module."""
+
+    def __init__(
+        self,
+        data_root: pathlib.Path,
+        *,
+        control_root: pathlib.Path,
+        state_module: types.ModuleType,
+        deadline_monotonic: float,
+        member_path_count: int,
+    ) -> None:
+        _check_absolute_deadline(deadline_monotonic, label="release closure M reader")
+        self.root = pathlib.Path(data_root).resolve(strict=True)
+        self.control_root = pathlib.Path(control_root).resolve(strict=True)
+        self.deadline_monotonic = deadline_monotonic
+        self._store: Any | None = None
+        if sys.modules.get("canonical_publication_state") is not state_module:
+            raise PromotionError("authenticated current CONTROL Git state module singleton changed")
+        state_path = self.control_root / "scripts/canonical_publication_state.py"
+        module_path_value = getattr(state_module, "__file__", None)
+        try:
+            module_path = pathlib.Path(module_path_value).resolve(strict=True)
+            expected_path = state_path.resolve(strict=True)
+        except (OSError, TypeError, ValueError) as exc:
+            raise PromotionError("authenticated current CONTROL Git state module path is unavailable") from exc
+        if (
+            state_path.is_symlink()
+            or module_path != expected_path
+            or self.control_root not in module_path.parents
+        ):
+            raise PromotionError("Git state module is not the exact current CONTROL singleton")
+        store_type = getattr(state_module, "GitObjectStore", None)
+        index_type = getattr(state_module, "PythonModuleIndex", None)
+        entry_type = getattr(state_module, "PythonModuleIndexEntry", None)
+        if (
+            not isinstance(store_type, type)
+            or store_type.__module__ != "canonical_publication_state"
+            or not isinstance(index_type, type)
+            or index_type.__module__ != "canonical_publication_state"
+            or not isinstance(entry_type, type)
+            or entry_type.__module__ != "canonical_publication_state"
+            or getattr(sys.modules.get("canonical_publication_state"), "PythonModuleIndex", None) is not index_type
+        ):
+            raise PromotionError("Git state module does not expose its exact native index and store types")
+        remaining = deadline_monotonic - time.monotonic()
+        if remaining <= 0:
+            raise PromotionError("release closure M reader deadline expired before local Git setup")
+        if (
+            isinstance(member_path_count, bool)
+            or not isinstance(member_path_count, int)
+            or not 1 <= member_path_count <= MAX_RELEASE_CLOSURE_MEMBER_PATHS
+        ):
+            raise PromotionError("release closure M member count is outside its fixed command budget")
+        command_budget = (
+            RELEASE_CLOSURE_GIT_COMMANDS_PER_BLOB * (member_path_count + 1)
+            + RELEASE_CLOSURE_GIT_COMMAND_SETUP_RESERVE
+        )
+        try:
+            # Use the checkout as a local Git source. This path performs no
+            # remote discovery or network fetch and keeps all M reads in one
+            # bounded native GitObjectStore budget.
+            self._store = store_type(
+                self.root,
+                remote_url=str(self.root),
+                timeout_seconds=remaining,
+                max_commands=command_budget,
+                max_output_bytes=192 * 1024 * 1024,
+                max_blob_bytes=8 * 1024 * 1024,
+                deadline_monotonic=deadline_monotonic,
+            )
+        except Exception as exc:  # noqa: BLE001 - do not expose Git/environment details
+            raise PromotionError("authenticated local Git store could not be initialized") from exc
+        self._state_module = state_module
+        self._index_type = index_type
+
+    def _check_deadline(self, deadline_monotonic: float) -> None:
+        if (
+            isinstance(deadline_monotonic, bool)
+            or not isinstance(deadline_monotonic, (int, float))
+            or deadline_monotonic != self.deadline_monotonic
+            or time.monotonic() >= self.deadline_monotonic
+        ):
+            raise PromotionError("release closure M reads do not share the exact live ACK deadline")
+
+    def read_blob(
+        self, commit_sha: str, path: str, *, max_bytes: int,
+        deadline_monotonic: float,
+    ) -> bytes:
+        self._check_deadline(deadline_monotonic)
+        if (
+            not isinstance(commit_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", commit_sha)
+            or isinstance(max_bytes, bool) or not isinstance(max_bytes, int)
+            or max_bytes < 1 or max_bytes > 8 * 1024 * 1024
+            or not isinstance(path, str) or not path
+        ):
+            raise PromotionError("release closure M blob request is outside its fixed bounds")
+        assert self._store is not None
+        try:
+            with self._store.bounded_deadline(self.deadline_monotonic):
+                raw = self._store.read_file(commit_sha, path, maximum=max_bytes)
+        except Exception as exc:  # noqa: BLE001 - native errors may contain repository details
+            raise PromotionError("release closure M Git blob read failed") from exc
+        self._check_deadline(deadline_monotonic)
+        if not isinstance(raw, bytes) or not raw or len(raw) > max_bytes:
+            raise PromotionError("release closure M Git blob is absent or exceeds its fixed bound")
+        return raw
+
+    def read_python_module_index(
+        self, commit_sha: str, *, deadline_monotonic: float,
+    ) -> Any:
+        self._check_deadline(deadline_monotonic)
+        if not isinstance(commit_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", commit_sha):
+            raise PromotionError("release closure M module-index commit is malformed")
+        assert self._store is not None
+        try:
+            with self._store.bounded_deadline(self.deadline_monotonic):
+                index = self._store.read_python_module_index(
+                    commit_sha,
+                    deadline_monotonic=self.deadline_monotonic,
+                )
+        except Exception as exc:  # noqa: BLE001 - native errors may contain repository details
+            raise PromotionError("release closure M module-index read failed") from exc
+        self._check_deadline(deadline_monotonic)
+        if type(index) is not self._index_type:
+            raise PromotionError("release closure M module index differs from the current native singleton")
+        return index
+
+    def close(self) -> None:
+        store, self._store = self._store, None
+        if store is not None:
+            try:
+                store.close()
+            except Exception as exc:  # noqa: BLE001 - cleanup failure blocks acknowledgment
+                raise PromotionError("release closure M Git store cleanup failed") from exc
+
+def verify_release_closure_publication_evidence(
+    root: pathlib.Path,
+    receipt: Mapping[str, Any],
+    *,
+    source_sha: str,
+    deadline_monotonic: float | None = None,
+    control_modules: _CurrentControlAckModules | None = None,
+) -> None:
+    """Verify purpose evidence from the exact merged candidate tree before ACK."""
+    candidate = receipt.get("candidate")
+    if not isinstance(candidate, Mapping):
+        raise PromotionError("publication journal candidate is malformed")
+    if not any(
+        field in candidate
+        for field in ("purpose", "release_closure_reference", "release_closure_evidence")
+    ):
+        return
+    deadline = time.monotonic() + 120.0 if deadline_monotonic is None else deadline_monotonic
+    _check_absolute_deadline(deadline, label="release closure ACK verification")
+    control_root = pathlib.Path(__file__).absolute().parent.parent
+    loaded_control = (
+        load_current_control_ack_modules(control_root, deadline_monotonic=deadline)
+        if control_modules is None
+        else _require_current_control_ack_modules(
+            control_modules, deadline_monotonic=deadline,
+        )
+    )
+    _require_current_control_ack_modules(loaded_control, deadline_monotonic=deadline)
+    helper = loaded_control.canonical_update_pr
+    try:
+        identity = helper.release_closure_identity(candidate)
+    except Exception as exc:  # noqa: BLE001 - unknown or partial purpose must fail closed
+        raise PromotionError("publication candidate has malformed release closure identity") from exc
+    if identity is None:
+        raise PromotionError("purpose-bearing candidate has no exact current CONTROL identity")
+    reference, evidence_pointer = identity
+    try:
+        member_paths = loaded_control.closure.generator_consumer_membership_paths()
+    except Exception as exc:  # noqa: BLE001 - the authenticated current CONTROL table owns this bound
+        raise PromotionError("current CONTROL generator/consumer membership is unavailable") from exc
+    if (
+        not isinstance(member_paths, Sequence)
+        or isinstance(member_paths, (str, bytes))
+        or not 1 <= len(member_paths) <= MAX_RELEASE_CLOSURE_MEMBER_PATHS
+        or any(not isinstance(path, str) or not path for path in member_paths)
+    ):
+        raise PromotionError("current CONTROL generator/consumer membership has an unsupported command budget")
+    reader = _AuthenticatedLocalMReader(
+        root,
+        control_root=control_root,
+        state_module=loaded_control.state,
+        deadline_monotonic=deadline,
+        member_path_count=len(member_paths),
+    )
+    try:
+        _verify_release_closure_publication_evidence_with_reader(
+            root,
+            candidate,
+            reference=reference,
+            evidence_pointer=evidence_pointer,
+            source_sha=source_sha,
+            reader=reader,
+            projection=loaded_control.projection,
+            deadline_monotonic=deadline,
+        )
+        _require_current_control_ack_modules(loaded_control, deadline_monotonic=deadline)
+    finally:
+        reader.close()
+
+def _verify_release_closure_publication_evidence_with_reader(
+    root: pathlib.Path,
+    candidate: Mapping[str, Any],
+    *,
+    reference: Mapping[str, Any],
+    evidence_pointer: Mapping[str, Any],
+    source_sha: str,
+    reader: _AuthenticatedLocalMReader,
+    projection: Any,
+    deadline_monotonic: float,
+) -> None:
+    key = reference.get("refresh_key")
+    expected_path = f"reports/data-go-kr/upstream-catalogue-review/release-closure/{key}/comparison.json"
+    if evidence_pointer.get("path") != expected_path:
+        raise PromotionError("release closure publication evidence path differs from the full-key reference")
+    raw = reader.read_blob(
+        source_sha,
+        expected_path,
+        max_bytes=MAX_NATIVE_RELEASE_CLOSURE_COMPARISON_BLOB_BYTES,
+        deadline_monotonic=deadline_monotonic,
+    )
+    if (
+        len(raw) != evidence_pointer.get("bytes")
+        or hashlib.sha256(raw).hexdigest() != evidence_pointer.get("sha256")
+    ):
+        raise PromotionError("release closure publication evidence differs from its committed candidate identity")
+    try:
+        document = json.loads(
+            raw.decode("utf-8"), object_pairs_hook=_strict_json_pairs,
+            parse_constant=_reject_nonfinite_comparison_value,
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PromotionError("release closure comparison is not strict UTF-8 JSON") from exc
+    if (
+        not isinstance(document, Mapping)
+        or document.get("purpose") != "release-closure-refresh"
+        or document.get("release_closure_reference") != reference
+        or not isinstance(document.get("original_generation"), Mapping)
+        or not isinstance(document.get("source_eligibility_evidence"), Mapping)
+    ):
+        raise PromotionError("release closure comparison does not match its candidate purpose reference")
+    try:
+        parent_generation_id, parent_canonical_sha, parent_projection_sha, parent_ref_sha = (
+            _validate_release_closure_comparison_parent(candidate, reference, document, projection)
+        )
+    except Exception as exc:  # noqa: BLE001 - both native reference versions are exact and closed
+        if isinstance(exc, PromotionError):
+            raise
+        raise PromotionError("release closure comparison parent is not a supported exact native reference") from exc
+    generation = document["original_generation"]
+    comparison = document.get("comparison")
+    modern_comparison = reference.get("schema_version") == "datapan.canonical-release-closure-refresh-reference.v2"
+    expected_comparison_fields = (
+        RELEASE_CLOSURE_COMPARISON_FIELDS if modern_comparison
+        else RELEASE_CLOSURE_COMPARISON_LEGACY_FIELDS
+    )
+    if not isinstance(comparison, Mapping) or set(comparison) != expected_comparison_fields:
+        raise PromotionError("release closure comparison has an incomplete or open projection record")
+    if (
+        candidate.get("generation_id") != generation.get("generation_id")
+        or generation.get("generation_id") != parent_generation_id
+        or candidate.get("registry_sha256") != parent_canonical_sha
+        or reference.get("generation_id") != generation.get("generation_id")
+        or reference.get("canonical_sha256") != parent_canonical_sha
+        or comparison.get("canonical_sha256") != parent_canonical_sha
+        or comparison.get("admitted_parent_ref_sha256") != parent_ref_sha
+        or comparison.get("legacy_baseline_id") != reference.get("legacy_baseline_id")
+        or comparison.get(
+            "admitted_parent_projection_sha256" if modern_comparison else "legacy_parent_projection_sha256",
+        ) != parent_projection_sha
+        or comparison.get(
+            "regenerated_projection_sha256" if modern_comparison else "generated_projection_sha256",
+        ) != reference.get("generated_projection_sha256")
+        or comparison.get("source_eligibility_evidence_sha256") != hashlib.sha256(
+            canonical_json(dict(document["source_eligibility_evidence"]))
+        ).hexdigest()
+        or comparison.get("original_generation_sha256") != hashlib.sha256(
+            canonical_json(dict(generation))
+        ).hexdigest()
+        or comparison.get("original_generation_epoch") != generation.get("epoch")
+        or comparison.get("original_epoch_origin") != generation.get("epoch_origin")
+        or comparison.get("original_observed_at") != projection.BASE._observation_from_generation(dict(generation))
+        or comparison.get("current_base_delta_sha256") != reference.get("current_base_delta_sha256")
+    ):
+        raise PromotionError("release closure comparison changed its parent, generation, eligibility, or delta identity")
+    try:
+        if parent_ref_sha is not None:
+            projection._validate_generation(dict(generation), document["admitted_parent_ref"])
+        elif projection.BASE._observation_from_generation(dict(generation)) != comparison.get("original_observed_at"):
+            raise ValueError("legacy original observation differs from its comparison")
+    except Exception as exc:  # noqa: BLE001 - original observation/epoch provenance stays exact
+        raise PromotionError("release closure comparison original generation is not explicitly normalized") from exc
+    digest_fields = (
+        (
+            "ruleset_sha256", "canonical_sha256", "admitted_parent_ref_sha256",
+            "admitted_parent_projection_sha256", "current_base_projection_sha256",
+            "regenerated_projection_sha256", "current_base_delta_sha256",
+            "source_eligibility_evidence_sha256", "original_generation_sha256",
+        )
+        if modern_comparison else (
+            "ruleset_sha256", "canonical_sha256", "legacy_parent_projection_sha256",
+            "current_base_projection_sha256", "generated_projection_sha256",
+            "current_base_delta_sha256", "source_eligibility_evidence_sha256",
+            "original_generation_sha256",
+        )
+    )
+    for name in digest_fields:
+        digest = comparison.get(name)
+        if not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise PromotionError(f"release closure comparison {name} is not a full SHA-256")
+    if not isinstance(document.get("source_refresh_evidence_sha256"), str) or not re.fullmatch(
+        r"[a-f0-9]{64}", document["source_refresh_evidence_sha256"],
+    ):
+        raise PromotionError("release closure comparison source-refresh evidence digest is malformed")
+    for name in ("generator_consumer_closure_sha256",):
+        digest = document.get(name)
+        if not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest):
+            raise PromotionError(f"release closure comparison {name} is not a full SHA-256")
+    dependencies = document.get("provenance_dependency_digests")
+    if not isinstance(dependencies, Mapping) or any(
+        not isinstance(name, str) or not name
+        or not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest)
+        for name, digest in dependencies.items()
+    ):
+        raise PromotionError("release closure comparison provenance dependencies are malformed")
+    try:
+        base_identity = projection.BASE._validate_base_identity(comparison.get("current_preparation_base"))
+        if base_identity["commit_sha"] != candidate.get("base_sha"):
+            raise PromotionError("release closure M differs from the exact candidate base")
+        actual_closure = projection.BASE.validate_generator_consumer_dependencies_at_m(
+            dependencies,
+            reader=reader,
+            preparation_base=base_identity,
+            deadline_monotonic=deadline_monotonic,
+        )
+    except PromotionError:
+        raise
+    except Exception as exc:  # noqa: BLE001 - exact M closure failure blocks publication acknowledgment
+        raise PromotionError("release closure dependency map failed exact M authentication") from exc
+    if actual_closure != document.get("generator_consumer_closure_sha256"):
+        raise PromotionError("release closure digest differs from its authenticated M dependency closure")
+    for name in ("parent_delta_paths", "current_base_delta_paths", "captured_changed_paths"):
+        paths = comparison.get(name)
+        if not isinstance(paths, list) or any(not isinstance(path, str) or not path for path in paths):
+            raise PromotionError(f"release closure comparison {name} is malformed")
+    if not comparison["parent_delta_paths"] or not comparison["current_base_delta_paths"]:
+        raise PromotionError("release closure publication has no positive two-sided substantive comparison")
+    for name, path_field in (("parent_delta_records", "parent_delta_paths"), ("current_base_delta_records", "current_base_delta_paths")):
+        records = comparison.get(name)
+        if not isinstance(records, list) or any(not isinstance(row, Mapping) for row in records):
+            raise PromotionError(f"release closure comparison {name} is malformed")
+        record_paths = [row.get("path") for row in records]
+        if set(record_paths) != set(comparison[path_field]):
+            raise PromotionError(f"release closure comparison {name} does not cover its exact path set")
+
+def resolve_verified_source_target(
+    root: pathlib.Path,
+    state_root: pathlib.Path,
+    repository: str,
+    current_head_sha: str,
+    *,
+    evaluation: Mapping[str, Any],
+) -> ResolvedSourceTarget | dict[str, Any]:
+    """Resolve immutable original-A plus target identity before any new C parent.
+
+    Non-C actions remain closed locator dictionaries. A C action returns a
+    private capability only after the exact committed state, admitted original
+    observation, classified Git target and a second state read all agree.
+    """
+    root = root.resolve()
+    state_root = state_root.resolve()
+    eligibility = load_module(
+        root / "scripts/upstream_catalogue_source_eligibility.py",
+        "trusted_c_source_target_eligibility",
+    )
+    evaluated = eligibility.validate_evaluation(evaluation)
+    if evaluated["source_sha"] != current_head_sha:
+        raise PromotionError("source target evaluation is not pinned to current main")
+    actual_tree = command(("git", "rev-parse", f"{current_head_sha}^{{tree}}"), root).stdout.strip()
+    if evaluated["source_tree_sha"] != actual_tree:
+        raise PromotionError("source target evaluation tree differs from current main")
+    selection_state_sha = _source_eligibility_selection_state_revision(state_root, repository)
+    request = eligibility.source_work_request_from_state(
+        root=root,
+        state_dir=state_root,
+        repository=repository,
+        source_id="data_go_kr",
+        source_scope="aggregate_supported_catalog",
+        evaluation=evaluated,
+        selection_state_sha=selection_state_sha,
+    )
+    if request.get("selection_state_sha") != selection_state_sha:
+        raise PromotionError("source target request does not bind the preselection state revision")
+    if request.get("action") != "revalidate_c":
+        if _source_eligibility_selection_state_revision(state_root, repository) != selection_state_sha:
+            raise PromotionError("source target selection state changed during locator resolution")
+        return request
+    if selection_state_sha is None:
+        raise PromotionError("source target selection has no authenticated processor-state revision")
+    generation_id = str(request.get("selected_generation_id") or "")
+    schema_path = root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    first = _source_eligibility_state_snapshot(
+        state_root, repository, generation_id, schema_path,
+        eligibility_module=eligibility,
+    )
+    if first["state_commit"] != selection_state_sha:
+        raise PromotionError("source target selection state changed before immutable target snapshot")
+    checkpoint = first["checkpoint"]
+    handoff = load_module(root / "scripts/upstream_catalogue_handoff.py", "trusted_c_target_handoff")
+    derivation = load_module(root / "scripts/upstream_catalogue_derivation.py", "trusted_c_target_derivation")
+    preparer = load_module(
+        root / "scripts/prepare-upstream-catalogue-derivation.py",
+        "trusted_c_target_preparer",
+    )
+    admission = preparer.admission_for_checkpoint(checkpoint, first["index"], handoff)
+    original = derivation.original_observation_from_checkpoint(checkpoint, admission)
+    target_contract, target_inventory = eligibility.target_contract_from_predecessor(
+        root, current_head_sha, checkpoint, original,
+    )
+    if target_contract != request.get("target_contract"):
+        raise PromotionError("source target classification differs from its bounded locator")
+    if target_inventory != eligibility.validate_inventory(request.get("target_inventory")):
+        raise PromotionError("source target inventory differs from its bounded locator")
+    selection_key = eligibility.selection_key(admission, target_contract)
+    original_generation = eligibility.normalize_original_generation(checkpoint)
+
+    second = _source_eligibility_state_snapshot(
+        state_root, repository, generation_id, schema_path,
+        eligibility_module=eligibility,
+    )
+    if any(
+        first[field] != second[field]
+        for field in ("state_commit", "index_bytes", "checkpoint_bytes")
+    ):
+        raise PromotionError("source target state changed during immutable resolution")
+    second_admission = preparer.admission_for_checkpoint(
+        second["checkpoint"], second["index"], handoff,
+    )
+    second_original = derivation.original_observation_from_checkpoint(
+        second["checkpoint"], second_admission,
+    )
+    if second_admission != admission or second_original != original:
+        raise PromotionError("source target admitted observation changed during immutable resolution")
+    state_refs = [
+        {
+            "role": "admission_index", "repository": repository, "kind": "git",
+            "commit_sha": first["state_commit"], "path": first["index_relative"],
+            "bytes": len(first["index_bytes"]),
+            "sha256": hashlib.sha256(first["index_bytes"]).hexdigest(),
+        },
+        {
+            "role": "processor_checkpoint", "repository": repository, "kind": "git",
+            "commit_sha": first["state_commit"], "path": first["checkpoint_relative"],
+            "bytes": len(first["checkpoint_bytes"]),
+            "sha256": hashlib.sha256(first["checkpoint_bytes"]).hexdigest(),
+        },
+    ]
+    return ResolvedSourceTarget(
+        _RESOLVED_SOURCE_TARGET,
+        selection_key=selection_key,
+        reason_code=str(request.get("reason_code") or ""),
+        evaluation=evaluated,
+        original_admission=admission,
+        original_observation=original,
+        original_generation=original_generation,
+        target_contract=target_contract,
+        target_inventory=target_inventory,
+        generation_id=generation_id,
+        state_refs=state_refs,
+        state_snapshot=first,
+    )
 
 if __name__ == "__main__":
     raise SystemExit(main())

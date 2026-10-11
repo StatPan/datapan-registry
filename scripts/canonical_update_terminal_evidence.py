@@ -22,10 +22,13 @@ from typing import Any
 
 
 SCHEMA_VERSION = "datapan.canonical-update-promotion-terminal-outcome.v1"
+SCHEMA_VERSION_V2 = "datapan.canonical-update-promotion-terminal-outcome.v2"
 WORKFLOW_PATH = ".github/workflows/canonical-update-promotion.yml"
 SCHEMA_PATH = "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json"
+SCHEMA_PATH_V2 = "schemas/datapan.canonical-update-promotion-terminal-outcome.v2.schema.json"
 RUNNER_PATH = "scripts/run-canonical-update-promotion.py"
 SCHEMA_ID = "https://schemas.datapan.dev/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json"
+SCHEMA_ID_V2 = "https://schemas.datapan.dev/datapan.canonical-update-promotion-terminal-outcome.v2.schema.json"
 REPOSITORY_RE = re.compile(r"^[^\s/]+/[^\s/]+$")
 REVISION_RE = re.compile(r"^[a-f0-9]{40}$")
 DIGEST_RE = re.compile(r"^[a-f0-9]{64}$")
@@ -54,7 +57,37 @@ MODE_STEPS: dict[str, dict[str, str]] = {
     },
 }
 
-EVALUATOR_SOURCE_PATHS = frozenset({
+HISTORICAL_V1_EVALUATOR_SOURCE_PATHS = frozenset({
+    WORKFLOW_PATH,
+    "policy/upstream-catalogue-health.json",
+    "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+    "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    SCHEMA_PATH,
+    "schemas/datapan.catalog-diff.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "schemas/datapan.provider-index.v1.schema.json",
+    "schemas/datapan.specs.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "scripts/canonical_update_ci.py",
+    "scripts/canonical_update_pr.py",
+    "scripts/canonical_update_terminal_evidence.py",
+    "scripts/check-upstream-catalogue-health.py",
+    "scripts/compose-upstream-catalogue-candidate.py",
+    "scripts/generate-batch-link-detail-registry-patches.py",
+    "scripts/materialize-canonical-registry.py",
+    "scripts/refresh-canonical-snapshot-evidence.py",
+    RUNNER_PATH,
+    "scripts/seoul_oa109_operation_declaration.py",
+    "scripts/upstream-catalogue-state-branch.py",
+    "scripts/upstream_catalogue_derivation.py",
+    "scripts/upstream_catalogue_handoff.py",
+})
+
+# The 8fc producer remains a v1 writer. Its authenticated literal closure adds
+# the retained stale-queue sources to the earlier 2693 v1 contract.
+LEGACY_V1_EVALUATOR_SOURCE_PATHS = frozenset({
     WORKFLOW_PATH,
     RUNNER_PATH,
     "scripts/canonical_update_pr.py",
@@ -62,6 +95,7 @@ EVALUATOR_SOURCE_PATHS = frozenset({
     "scripts/refresh-canonical-snapshot-evidence.py",
     "scripts/upstream-catalogue-state-branch.py",
     "scripts/upstream_catalogue_handoff.py",
+    "scripts/upstream_catalogue_cache_source.py",
     "scripts/compose-upstream-catalogue-candidate.py",
     "scripts/generate-batch-link-detail-registry-patches.py",
     "scripts/seoul_oa109_operation_declaration.py",
@@ -69,6 +103,10 @@ EVALUATOR_SOURCE_PATHS = frozenset({
     "scripts/materialize-canonical-registry.py",
     "scripts/check-upstream-catalogue-health.py",
     "scripts/canonical_update_terminal_evidence.py",
+    "scripts/canonical_stale_queue_recovery.py",
+    "scripts/canonical_stale_queue_recovery_gate.py",
+    "scripts/canonical_stale_queue_state.py",
+    "scripts/canonical_publication_state.py",
     SCHEMA_PATH,
     "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
@@ -79,9 +117,30 @@ EVALUATOR_SOURCE_PATHS = frozenset({
     "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
+    "schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
+    "schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
     "policy/upstream-catalogue-health.json",
+    "policy/canonical-stale-queue-recovery.v1.json",
 })
 
+CURRENT_V1_EVALUATOR_SOURCE_PATHS = LEGACY_V1_EVALUATOR_SOURCE_PATHS
+
+V2_EVALUATOR_SOURCE_PATHS = frozenset({
+    *LEGACY_V1_EVALUATOR_SOURCE_PATHS,
+    "scripts/canonical_source_target_disposition.py",
+    "scripts/prepare-upstream-catalogue-derivation.py",
+    "scripts/process-upstream-catalogue-candidate.py",
+    "scripts/upstream_catalogue_source_eligibility.py",
+    SCHEMA_PATH_V2,
+    "schemas/datapan.upstream-catalogue-source-eligibility.v1.schema.json",
+})
+
+# Keep the compatibility alias for callers that need the complete modern
+# source-target validator closure. Producer contracts are dispatched by exact
+# declared path set below; this alias alone does not assert that a producer is
+# v2-capable.
+EVALUATOR_SOURCE_PATHS = V2_EVALUATOR_SOURCE_PATHS
 
 class _EvidenceProblem(Exception):
     def __init__(self, status: str, code: str) -> None:
@@ -152,9 +211,9 @@ def _reject_constant(_value: str) -> None:
     raise ValueError("invalid_json_constant")
 
 
-def _walk_schema_refs(value: Any, *, root: bool = False) -> None:
+def _walk_schema_refs(value: Any, *, root: bool = False, schema_id: str = SCHEMA_ID) -> None:
     if isinstance(value, Mapping):
-        if "$id" in value and (not root or value.get("$id") != SCHEMA_ID):
+        if "$id" in value and (not root or value.get("$id") != schema_id):
             _fail("rejected", "schema_external_reference_forbidden")
         for key in ("$ref", "$dynamicRef", "$recursiveRef"):
             if key in value:
@@ -162,10 +221,10 @@ def _walk_schema_refs(value: Any, *, root: bool = False) -> None:
                 if not isinstance(ref, str) or not ref.startswith("#/"):
                     _fail("rejected", "schema_external_reference_forbidden")
         for child in value.values():
-            _walk_schema_refs(child)
+            _walk_schema_refs(child, schema_id=schema_id)
     elif isinstance(value, list):
         for child in value:
-            _walk_schema_refs(child)
+            _walk_schema_refs(child, schema_id=schema_id)
 
 
 def _deny_external_schema_resource(uri: str) -> Any:
@@ -196,7 +255,7 @@ def _offline_schema_validator(schema: Mapping[str, Any], jsonschema: Any) -> Any
 
 def _validate_source_contract(
     context: Mapping[str, Any], source_contract: Mapping[str, Any],
-) -> tuple[dict[str, Any], str]:
+) -> tuple[dict[str, dict[str, Any]], str, str]:
     repository = context.get("repository")
     workflow_id = context.get("workflow_id")
     source_sha = context.get("head_sha")
@@ -214,50 +273,123 @@ def _validate_source_contract(
         or source_contract.get("workflow_id") != workflow_id
         or source_contract.get("workflow_path") != WORKFLOW_PATH
         or source_contract.get("source_sha") != source_sha
-        or source_contract.get("schema_path") != SCHEMA_PATH
         or source_contract.get("mode_steps") != MODE_STEPS
     ):
         _fail("unavailable", "source_contract_identity_mismatch")
     source_files = source_contract.get("source_files")
-    if not isinstance(source_files, Mapping) or not EVALUATOR_SOURCE_PATHS.issubset(source_files.keys()):
+    if not isinstance(source_files, Mapping):
         _fail("unavailable", "source_contract_files_incomplete")
-    for path in EVALUATOR_SOURCE_PATHS:
+    observed_paths = frozenset(source_files)
+    if observed_paths == HISTORICAL_V1_EVALUATOR_SOURCE_PATHS:
+        closure_version = "terminal-evaluator/v1-historical"
+    elif observed_paths == CURRENT_V1_EVALUATOR_SOURCE_PATHS:
+        closure_version = "terminal-evaluator/v1-legacy"
+    elif observed_paths == V2_EVALUATOR_SOURCE_PATHS:
+        closure_version = "terminal-evaluator/v2-source-target"
+    else:
+        _fail("unavailable", "source_contract_files_incomplete")
+    if source_contract.get("closure_version", closure_version) != closure_version:
+        _fail("unavailable", "source_contract_closure_version_mismatch")
+    producer_schema = (
+        (SCHEMA_VERSION_V2, SCHEMA_PATH_V2)
+        if closure_version == "terminal-evaluator/v2-source-target"
+        else (SCHEMA_VERSION, SCHEMA_PATH)
+    )
+    declared_schema_version = source_contract.get("producer_schema_version")
+    declared_schema_path = source_contract.get("producer_schema_path")
+    if closure_version == "terminal-evaluator/v2-source-target" and (
+        declared_schema_version is None or declared_schema_path is None
+    ):
+        _fail("unavailable", "source_contract_producer_schema_declaration_unavailable")
+    if (
+        (declared_schema_version is not None and declared_schema_version != producer_schema[0])
+        or (declared_schema_path is not None and declared_schema_path != producer_schema[1])
+    ):
+        _fail("rejected", "source_contract_producer_schema_declaration_mismatch")
+    for path in observed_paths:
         digest = source_files.get(path)
         if not isinstance(digest, str) or DIGEST_RE.fullmatch(digest) is None:
             _fail("unavailable", "source_contract_file_digest_invalid")
-    schema_bytes = source_contract.get("schema_bytes")
-    schema_sha = source_contract.get("schema_sha256")
-    if not isinstance(schema_bytes, bytes) or not isinstance(schema_sha, str) or DIGEST_RE.fullmatch(schema_sha) is None:
+    contracts = source_contract.get("schemas")
+    raw_contracts: dict[str, Mapping[str, Any]] = {}
+    if isinstance(contracts, Mapping):
+        raw_contracts = {
+            str(version): value for version, value in contracts.items()
+            if isinstance(value, Mapping)
+        }
+    elif source_contract.get("schema_path") == SCHEMA_PATH:
+        raw_contracts = {SCHEMA_VERSION: {
+            "path": SCHEMA_PATH,
+            "bytes": source_contract.get("schema_bytes"),
+            "sha256": source_contract.get("schema_sha256"),
+        }}
+    if isinstance(contracts, Mapping) and SCHEMA_VERSION in raw_contracts:
+        legacy = raw_contracts[SCHEMA_VERSION]
+        if any(
+            source_contract.get(field) != legacy.get(nested)
+            for field, nested in (
+                ("schema_path", "path"),
+                ("schema_bytes", "bytes"),
+                ("schema_sha256", "sha256"),
+            )
+        ):
+            _fail("rejected", "source_contract_schema_digest_mismatch")
+    required_versions = (
+        {SCHEMA_VERSION, SCHEMA_VERSION_V2}
+        if closure_version == "terminal-evaluator/v2-source-target"
+        else {SCHEMA_VERSION}
+    )
+    if set(raw_contracts) != required_versions:
+        _fail("unavailable", "source_contract_schema_version_set_mismatch")
+    if not required_versions.issubset(raw_contracts):
         _fail("unavailable", "source_contract_schema_unavailable")
-    if hashlib.sha256(schema_bytes).hexdigest() != schema_sha or source_files.get(SCHEMA_PATH) != schema_sha:
-        _fail("rejected", "source_contract_schema_digest_mismatch")
-    if not schema_bytes or len(schema_bytes) > MAX_JSON_BYTES:
-        _fail("unavailable", "source_contract_schema_size_invalid")
-    try:
-        schema = json.loads(
-            schema_bytes.decode("utf-8"),
-            object_pairs_hook=_unique_object,
-            parse_constant=_reject_constant,
-        )
-    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
-        _fail("rejected", "source_contract_schema_invalid")
-    if (
-        not isinstance(schema, dict)
-        or schema.get("$id") != SCHEMA_ID
-        or schema.get("$schema") != "https://json-schema.org/draft/2020-12/schema"
-        or schema.get("properties", {}).get("schema_version", {}).get("const") != SCHEMA_VERSION
-    ):
-        _fail("rejected", "source_contract_schema_identity_invalid")
-    _walk_schema_refs(schema, root=True)
-    try:
-        import jsonschema
+    schema_specs = {
+        SCHEMA_VERSION: (SCHEMA_PATH, SCHEMA_ID),
+        SCHEMA_VERSION_V2: (SCHEMA_PATH_V2, SCHEMA_ID_V2),
+    }
+    schemas: dict[str, dict[str, Any]] = {}
+    for version in sorted(required_versions):
+        expected_path, expected_id = schema_specs[version]
+        contract = raw_contracts[version]
+        schema_bytes = contract.get("bytes")
+        schema_sha = contract.get("sha256")
+        if (
+            contract.get("path") != expected_path
+            or not isinstance(schema_bytes, bytes)
+            or not isinstance(schema_sha, str)
+            or DIGEST_RE.fullmatch(schema_sha) is None
+        ):
+            _fail("unavailable", "source_contract_schema_unavailable")
+        if hashlib.sha256(schema_bytes).hexdigest() != schema_sha or source_files.get(expected_path) != schema_sha:
+            _fail("rejected", "source_contract_schema_digest_mismatch")
+        if not schema_bytes or len(schema_bytes) > MAX_JSON_BYTES:
+            _fail("unavailable", "source_contract_schema_size_invalid")
+        try:
+            schema = json.loads(
+                schema_bytes.decode("utf-8"),
+                object_pairs_hook=_unique_object,
+                parse_constant=_reject_constant,
+            )
+        except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+            _fail("rejected", "source_contract_schema_invalid")
+        if (
+            not isinstance(schema, dict)
+            or schema.get("$id") != expected_id
+            or schema.get("$schema") != "https://json-schema.org/draft/2020-12/schema"
+            or schema.get("properties", {}).get("schema_version", {}).get("const") != version
+        ):
+            _fail("rejected", "source_contract_schema_identity_invalid")
+        _walk_schema_refs(schema, root=True, schema_id=expected_id)
+        try:
+            import jsonschema
 
-        jsonschema.Draft202012Validator.check_schema(schema)
-    except ImportError:
-        _fail("unavailable", "jsonschema_dependency_unavailable")
-    except Exception:
-        _fail("rejected", "source_contract_schema_invalid")
-    return schema, str(mode)
+            jsonschema.Draft202012Validator.check_schema(schema)
+        except ImportError:
+            _fail("unavailable", "jsonschema_dependency_unavailable")
+        except Exception:
+            _fail("rejected", "source_contract_schema_invalid")
+        schemas[version] = schema
+    return schemas, str(mode), closure_version
 
 
 def _normalize_invocation(context: Mapping[str, Any]) -> dict[str, Any]:
@@ -616,11 +748,102 @@ def _validate_generation(row: Mapping[str, Any], evaluated_main: Mapping[str, An
                 _fail("rejected", "terminal_canonical_payload_mismatch")
 
 
-def _validate_outcome(document: Mapping[str, Any], mode: str) -> None:
+def _validate_target_disposition(outcome: Mapping[str, Any]) -> None:
+    expected = {
+        "source-target-pending": "pending",
+        "source-target-completed": "completed",
+        "source-target-blocked": "blocked",
+    }
+    status = outcome.get("status")
+    disposition = outcome.get("target_disposition")
+    if (
+        status not in expected
+        or not isinstance(disposition, Mapping)
+        or disposition.get("disposition") != expected[status]
+        or outcome.get("generation_count") != 0
+        or outcome.get("generation_results_truncated") is not False
+        or outcome.get("generations") != []
+        or outcome.get("selected_generation_id") is not None
+        or outcome.get("candidate_available") is not False
+    ):
+        _fail("rejected", "terminal_source_target_outcome_invalid")
+    for field in ("selection_key", "original_observation_sha256", "target_contract_sha256"):
+        value = disposition.get(field)
+        if not isinstance(value, str) or DIGEST_RE.fullmatch(value) is None:
+            _fail("rejected", "terminal_source_target_identity_invalid")
+    refs = disposition.get("evidence_refs")
+    if not isinstance(refs, list) or len(refs) > 64:
+        _fail("rejected", "terminal_source_target_evidence_invalid")
+    journal_commit = disposition.get("journal_commit")
+    journal_refs = [row for row in refs if isinstance(row, Mapping) and row.get("kind") == "canonical_update_state_journal"]
+    if journal_commit is None:
+        if journal_refs:
+            _fail("rejected", "terminal_source_target_journal_binding_invalid")
+    elif (
+        not isinstance(journal_commit, str)
+        or REVISION_RE.fullmatch(journal_commit) is None
+        or len(journal_refs) != 1
+        or journal_refs[0].get("commit_sha") != journal_commit
+    ):
+        _fail("rejected", "terminal_source_target_journal_binding_invalid")
+    if status == "source-target-pending":
+        reason = disposition.get("reason")
+        if reason == "source_target_noop_evaluator_pending":
+            noop = [row for row in refs if isinstance(row, Mapping) and row.get("kind") == "canonical_update_source_target_noop_v2"]
+            if (
+                disposition.get("revision_ref") is not None
+                or disposition.get("purpose_ref") is not None
+                or len(noop) != 1
+                or noop[0].get("selection_key") != disposition.get("selection_key")
+                or noop[0].get("journal_commit_sha") != journal_commit
+                or noop[0].get("native_status") not in {"queued", "in_progress"}
+                or noop[0].get("native_conclusion") is not None
+            ):
+                _fail("rejected", "terminal_source_target_pending_noop_proof_invalid")
+        elif (
+            reason != "exact_prepared_or_open_target_revision"
+            or not isinstance(disposition.get("revision_ref"), Mapping)
+        ):
+            _fail("rejected", "terminal_source_target_pending_revision_missing")
+    elif status == "source-target-completed":
+        reason = disposition.get("reason")
+        if reason == "exact_native_merged_target_revision":
+            merged = [row for row in refs if isinstance(row, Mapping) and row.get("kind") == "github_pull_request" and row.get("state") == "merged"]
+            if (
+                not isinstance(disposition.get("revision_ref"), Mapping)
+                or len(merged) != 1
+                or not isinstance(merged[0].get("merge_sha"), str)
+                or REVISION_RE.fullmatch(merged[0]["merge_sha"]) is None
+            ):
+                _fail("rejected", "terminal_source_target_merge_proof_invalid")
+        elif reason == "validated_target_noop_receipt":
+            noop = [row for row in refs if isinstance(row, Mapping) and row.get("kind") == "canonical_update_source_target_noop_v2"]
+            if (
+                disposition.get("revision_ref") is not None
+                or disposition.get("purpose_ref") is not None
+                or len(noop) != 1
+                or noop[0].get("selection_key") != disposition.get("selection_key")
+                or noop[0].get("journal_commit_sha") != journal_commit
+                or noop[0].get("native_status") != "completed"
+                or noop[0].get("native_conclusion") != "success"
+            ):
+                _fail("rejected", "terminal_source_target_noop_proof_invalid")
+        else:
+            _fail("rejected", "terminal_source_target_completion_reason_invalid")
+
+
+def _validate_outcome(document: Mapping[str, Any], mode: str, schema_version: str) -> None:
     if document.get("execution_status") != "completed":
         return
     outcome = document.get("outcome")
-    if not isinstance(outcome, Mapping) or outcome.get("kind") != mode:
+    if not isinstance(outcome, Mapping):
+        _fail("rejected", "terminal_outcome_mode_mismatch")
+    if outcome.get("kind") == "source_target_disposition":
+        if schema_version != SCHEMA_VERSION_V2 or mode != "recover-ready":
+            _fail("rejected", "terminal_outcome_mode_mismatch")
+        _validate_target_disposition(outcome)
+        return
+    if outcome.get("kind") != mode:
         _fail("rejected", "terminal_outcome_mode_mismatch")
     if mode != "recover-ready":
         if (
@@ -718,7 +941,25 @@ def _validate_outcome(document: Mapping[str, Any], mode: str) -> None:
 
 
 def _current_applicability(outcome: Any, current_subject: Any) -> dict[str, Any]:
-    if not isinstance(outcome, Mapping) or outcome.get("kind") != "recover-ready":
+    if not isinstance(outcome, Mapping):
+        return {"status": "not_applicable", "reason_code": "no_recovery_outcome", "matching_generations": []}
+    if outcome.get("kind") == "source_target_disposition":
+        disposition = outcome.get("target_disposition")
+        if not isinstance(disposition, Mapping):
+            return {"status": "unavailable", "reason_code": "source_target_disposition_invalid", "matching_generations": []}
+        if disposition.get("disposition") == "blocked":
+            return {"status": "unavailable", "reason_code": "source_target_native_proof_unavailable", "matching_generations": []}
+        if current_subject is None:
+            return {"status": "not_checked", "reason_code": "current_source_target_not_supplied", "matching_generations": []}
+        if not isinstance(current_subject, Mapping):
+            return {"status": "unavailable", "reason_code": "current_subject_invalid", "matching_generations": []}
+        current_contract = current_subject.get("source_target_contract_sha256")
+        if not isinstance(current_contract, str) or DIGEST_RE.fullmatch(current_contract) is None:
+            return {"status": "unavailable", "reason_code": "current_source_target_unavailable", "matching_generations": []}
+        if current_contract == disposition.get("target_contract_sha256"):
+            return {"status": "current", "reason_code": None, "matching_generations": []}
+        return {"status": "historical_only", "reason_code": "classified_source_target_changed", "matching_generations": []}
+    if outcome.get("kind") != "recover-ready":
         return {"status": "not_applicable", "reason_code": "no_recovery_outcome", "matching_generations": []}
     if outcome.get("generation_results_truncated") is True:
         return {
@@ -733,6 +974,8 @@ def _current_applicability(outcome: Any, current_subject: Any) -> dict[str, Any]
     current_main = current_subject.get("main_identity")
     current_generations = current_subject.get("generations")
     if not isinstance(current_main, Mapping) or not isinstance(current_generations, list):
+        if "source_target_contract_sha256" in current_subject:
+            return {"status": "not_checked", "reason_code": "current_subject_not_supplied", "matching_generations": []}
         return {"status": "unavailable", "reason_code": "current_subject_incomplete", "matching_generations": []}
     evaluated = outcome.get("evaluated_main")
     if not isinstance(evaluated, Mapping):
@@ -804,7 +1047,7 @@ def validate_terminal_evidence(
         invocation = _normalize_invocation(expected_context)
         if not _is_int(exact_attempt, minimum=1) or exact_attempt != invocation["run_attempt"]:
             _fail("rejected", "exact_attempt_argument_mismatch")
-        schema, mode = _validate_source_contract(expected_context, source_contract)
+        schemas, mode, closure_version = _validate_source_contract(expected_context, source_contract)
         run_started = _validate_native_run(run, invocation, expected_context, source_contract, as_of_dt)
         invocation_started, invocation_completed, step_conclusion, upload_started, upload_completed = _validate_jobs(
             jobs, invocation, run, source_contract, as_of_dt,
@@ -848,6 +1091,12 @@ def validate_terminal_evidence(
             _fail("rejected", "terminal_document_json_invalid")
         if not isinstance(document, Mapping) or document_bytes != _canonical_json(document) + b"\n":
             _fail("rejected", "terminal_document_not_canonical_json")
+        schema_version = document.get("schema_version")
+        schema = schemas.get(str(schema_version))
+        if not isinstance(schema, Mapping):
+            _fail("rejected", "terminal_document_schema_version_unavailable")
+        if schema_version == SCHEMA_VERSION_V2 and closure_version != "terminal-evaluator/v2-source-target":
+            _fail("rejected", "terminal_document_v2_closure_unavailable")
         try:
             import jsonschema
 
@@ -893,7 +1142,7 @@ def validate_terminal_evidence(
         if completed < started or completed > invocation_completed or completed > as_of_dt:
             _fail("rejected", "terminal_execution_time_order_invalid")
         outcome = document.get("outcome")
-        _validate_outcome(document, mode)
+        _validate_outcome(document, mode, str(schema_version))
         return {
             "status": "verified",
             "reason_code": None,

@@ -89,6 +89,11 @@ def _read_declaration() -> dict[str, Any]:
         value = json.loads(raw.decode("utf-8", errors="strict"))
     except (UnicodeError, json.JSONDecodeError) as exc:
         raise DeclarationError("pinned declaration is invalid") from exc
+    return validate_declaration_document(value)
+
+
+def validate_declaration_document(value: Any) -> dict[str, Any]:
+    """Validate a caller-supplied declaration document without reading local data."""
     if (
         not isinstance(value, dict)
         or value.get("schema_version") != "datapan.provider-operation-declaration.v1"
@@ -106,26 +111,49 @@ def _read_declaration() -> dict[str, Any]:
         or prefix.get("source_registry_rows") != 12282
     ):
         raise DeclarationError("pinned historical subject snapshot reference mismatch")
-    return value
-
-
-DECLARATION = _read_declaration()
+    return copy.deepcopy(value)
 
 
 def declaration_sha256() -> str:
     return DECLARATION_SHA256
 
 
-def native_document_sha256s() -> dict[str, str]:
+def _declaration_value(value: Mapping[str, Any] | None = None) -> Mapping[str, Any]:
+    selected = value if value is not None else _read_declaration()
+    if not isinstance(selected, Mapping) or selected.get("declaration_id") != DECLARATION_ID:
+        raise DeclarationError("pinned declaration identity mismatch")
+    return selected
+
+
+def _require_authenticated_replay_documents(
+    authenticated_snapshot: Mapping[str, Any] | None,
+    declaration_document: Mapping[str, Any] | None,
+) -> None:
+    if authenticated_snapshot is not None and declaration_document is None:
+        raise DeclarationError("authenticated_replay_declaration_document_missing")
+
+
+def __getattr__(name: str) -> Any:
+    """Keep legacy callers lazy so authenticated replay imports read no local data."""
+    if name == "DECLARATION":
+        return _read_declaration()
+    raise AttributeError(name)
+
+
+def native_document_sha256s(declaration_document: Mapping[str, Any] | None = None) -> dict[str, str]:
+    declaration = _declaration_value(declaration_document)
     return {
         name: str(value["sha256"])
-        for name, value in DECLARATION["native_documents"].items()
+        for name, value in declaration["native_documents"].items()
     }
 
 
-def native_document_acquisition_provenance() -> dict[str, dict[str, Any]]:
+def native_document_acquisition_provenance(
+    declaration_document: Mapping[str, Any] | None = None,
+) -> dict[str, dict[str, Any]]:
+    declaration = _declaration_value(declaration_document)
     result: dict[str, dict[str, Any]] = {}
-    for name, document in DECLARATION["native_documents"].items():
+    for name, document in declaration["native_documents"].items():
         acquisition = document.get("acquisition_provenance")
         if not isinstance(acquisition, Mapping):
             raise DeclarationError("declaration_document_acquisition_provenance_missing")
@@ -135,8 +163,9 @@ def native_document_acquisition_provenance() -> dict[str, dict[str, Any]]:
     return result
 
 
-def source_review_provenance() -> dict[str, Any]:
-    review = DECLARATION.get("source_review")
+def source_review_provenance(declaration_document: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    declaration = _declaration_value(declaration_document)
+    review = declaration.get("source_review")
     if not isinstance(review, Mapping):
         raise DeclarationError("declaration_source_review_provenance_missing")
     keys = (
@@ -167,9 +196,14 @@ def _source(row: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any
     return (source if isinstance(source, Mapping) else {}, raw if isinstance(raw, Mapping) else {})
 
 
-def _validate_subject_row_structure(row: Mapping[str, Any]) -> None:
+def _validate_subject_row_structure(
+    row: Mapping[str, Any],
+    *,
+    declaration_document: Mapping[str, Any] | None = None,
+) -> None:
     """Validate the fixed subject identity and exact ordered three-operation prefix."""
-    subject = DECLARATION["subject"]
+    declaration = _declaration_value(declaration_document)
+    subject = declaration["subject"]
     source, raw = _source(row)
     if (
         row.get("provider") != subject["provider"]
@@ -184,7 +218,7 @@ def _validate_subject_row_structure(row: Mapping[str, Any]) -> None:
     ):
         raise DeclarationError("portal_source_subject_mismatch")
     operations = row.get("operations")
-    prefix = DECLARATION.get("historical_operation_prefix")
+    prefix = declaration.get("historical_operation_prefix")
     if (
         not isinstance(prefix, Mapping)
         or prefix.get("schema") != "datapan.seoul-historical-operation-prefix.v1"
@@ -229,8 +263,11 @@ def _validate_subject_row_structure(row: Mapping[str, Any]) -> None:
             raise DeclarationError("portal_historical_operation_source_mismatch")
 
 
-def _snapshot_source_provenance() -> dict[str, Any]:
-    prefix = DECLARATION["historical_operation_prefix"]
+def _snapshot_source_provenance(
+    declaration_document: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    declaration = _declaration_value(declaration_document)
+    prefix = declaration["historical_operation_prefix"]
     return {
         "repository": "StatPan/datapan-registry",
         "commit": prefix["source_main_commit"],
@@ -244,9 +281,14 @@ def _snapshot_source_provenance() -> dict[str, Any]:
     }
 
 
-def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> bytes:
+def historical_subject_snapshot_bytes_from_source(
+    source_path: pathlib.Path,
+    *,
+    declaration_document: Mapping[str, Any] | None = None,
+) -> bytes:
     """Rebuild the pinned compact subject artifact from the exact authenticated 0085 LFS bytes."""
-    prefix = DECLARATION["historical_operation_prefix"]
+    declaration = _declaration_value(declaration_document)
+    prefix = declaration["historical_operation_prefix"]
     try:
         source_bytes = source_path.read_bytes()
     except OSError as exc:
@@ -262,7 +304,7 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
         raise DeclarationError("portal_historical_source_payload_invalid") from exc
     if not isinstance(registry, list) or len(registry) != prefix.get("source_registry_rows"):
         raise DeclarationError("portal_historical_source_row_inventory_mismatch")
-    subject = DECLARATION["subject"]
+    subject = declaration["subject"]
     matches = [
         (index, row) for index, row in enumerate(registry)
         if isinstance(row, Mapping)
@@ -272,7 +314,7 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
     if len(matches) != 1 or matches[0][0] != prefix.get("subject_snapshot_row_index"):
         raise DeclarationError("portal_historical_source_subject_identity_mismatch")
     row = copy.deepcopy(dict(matches[0][1]))
-    _validate_subject_row_structure(row)
+    _validate_subject_row_structure(row, declaration_document=declaration)
     row_bytes = canonical_json(row)
     operations = row.get("operations")
     if not isinstance(operations, list):
@@ -287,7 +329,7 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
         raise DeclarationError("portal_historical_subject_snapshot_content_mismatch")
     snapshot = {
         "schema_version": "datapan.provider-operation-historical-subject-snapshot.v1",
-        "source": _snapshot_source_provenance(),
+        "source": _snapshot_source_provenance(declaration),
         "subject_identity": {
             "provider": subject["provider"],
             "id": subject["portal_dataset_id"],
@@ -301,24 +343,36 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
     return (json.dumps(snapshot, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
 
-def load_historical_subject_snapshot(root: pathlib.Path = ROOT) -> dict[str, Any]:
+def load_historical_subject_snapshot(
+    root: pathlib.Path = ROOT,
+    *,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Load the independently source-pinned historical row without consulting current canonical data."""
-    path = root / HISTORICAL_SUBJECT_SNAPSHOT_PATH
-    try:
-        resolved_root = root.resolve(strict=True)
-        resolved_path = path.resolve(strict=True)
-        resolved_path.relative_to(resolved_root)
-        if path.is_symlink() or not path.is_file():
-            raise OSError("snapshot path is not a regular file")
-        raw = path.read_bytes()
-    except (OSError, ValueError) as exc:
-        raise DeclarationError("portal_historical_subject_snapshot_unavailable") from exc
-    if len(raw) != HISTORICAL_SUBJECT_SNAPSHOT_BYTES or sha256_bytes(raw) != HISTORICAL_SUBJECT_SNAPSHOT_SHA256:
-        raise DeclarationError("portal_historical_subject_snapshot_digest_mismatch")
-    try:
-        snapshot = json.loads(raw.decode("utf-8", errors="strict"))
-    except (UnicodeError, json.JSONDecodeError) as exc:
-        raise DeclarationError("portal_historical_subject_snapshot_invalid") from exc
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
+    if authenticated_snapshot is not None:
+        if not isinstance(authenticated_snapshot, Mapping):
+            raise DeclarationError("portal_historical_subject_snapshot_invalid")
+        snapshot = copy.deepcopy(dict(authenticated_snapshot))
+    else:
+        path = root / HISTORICAL_SUBJECT_SNAPSHOT_PATH
+        try:
+            resolved_root = root.resolve(strict=True)
+            resolved_path = path.resolve(strict=True)
+            resolved_path.relative_to(resolved_root)
+            if path.is_symlink() or not path.is_file():
+                raise OSError("snapshot path is not a regular file")
+            raw = path.read_bytes()
+        except (OSError, ValueError) as exc:
+            raise DeclarationError("portal_historical_subject_snapshot_unavailable") from exc
+        if len(raw) != HISTORICAL_SUBJECT_SNAPSHOT_BYTES or sha256_bytes(raw) != HISTORICAL_SUBJECT_SNAPSHOT_SHA256:
+            raise DeclarationError("portal_historical_subject_snapshot_digest_mismatch")
+        try:
+            snapshot = json.loads(raw.decode("utf-8", errors="strict"))
+        except (UnicodeError, json.JSONDecodeError) as exc:
+            raise DeclarationError("portal_historical_subject_snapshot_invalid") from exc
     required = {
         "schema_version", "source", "subject_identity", "row_bytes_canonical_json",
         "row_sha256_canonical_json", "ordered_operations_count",
@@ -326,12 +380,12 @@ def load_historical_subject_snapshot(root: pathlib.Path = ROOT) -> dict[str, Any
     }
     if not isinstance(snapshot, dict) or set(snapshot) != required:
         raise DeclarationError("portal_historical_subject_snapshot_shape_invalid")
-    prefix = DECLARATION["historical_operation_prefix"]
-    subject = DECLARATION["subject"]
+    prefix = declaration["historical_operation_prefix"]
+    subject = declaration["subject"]
     row = snapshot.get("subject_row")
     if (
         snapshot.get("schema_version") != "datapan.provider-operation-historical-subject-snapshot.v1"
-        or snapshot.get("source") != _snapshot_source_provenance()
+        or snapshot.get("source") != _snapshot_source_provenance(declaration)
         or snapshot.get("subject_identity") != {
             "provider": subject["provider"], "id": subject["portal_dataset_id"],
         }
@@ -351,16 +405,27 @@ def load_historical_subject_snapshot(root: pathlib.Path = ROOT) -> dict[str, Any
     ):
         raise DeclarationError("portal_historical_subject_snapshot_content_mismatch")
     try:
-        _validate_subject_row_structure(row)
+        _validate_subject_row_structure(row, declaration_document=declaration)
     except (TypeError, ValueError) as exc:
         raise DeclarationError("portal_historical_subject_snapshot_subject_invalid") from exc
     return copy.deepcopy(snapshot)
 
 
-def validate_subject_row(row: Mapping[str, Any], *, root: pathlib.Path = ROOT) -> None:
+def validate_subject_row(
+    row: Mapping[str, Any],
+    *,
+    root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
+) -> None:
     """Require an exact original source row, allowing only volatile request count changes."""
-    _validate_subject_row_structure(row)
-    snapshot = load_historical_subject_snapshot(root)
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
+    _validate_subject_row_structure(row, declaration_document=declaration)
+    snapshot = load_historical_subject_snapshot(
+        root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
     actual = copy.deepcopy(dict(row))
     expected = copy.deepcopy(snapshot["subject_row"])
     for candidate in (actual, expected):
@@ -372,10 +437,19 @@ def validate_subject_row(row: Mapping[str, Any], *, root: pathlib.Path = ROOT) -
 
 
 def validate_stored_subject_row(
-    row: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    row: Mapping[str, Any],
+    *,
+    root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Require the pinned source row plus exactly its reviewed declaration operation."""
-    snapshot = load_historical_subject_snapshot(root)
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
+    snapshot = load_historical_subject_snapshot(
+        root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
     original = copy.deepcopy(snapshot["subject_row"])
     operations = row.get("operations")
     if not isinstance(operations, list) or len(operations) != len(original["operations"]) + 1:
@@ -383,7 +457,7 @@ def validate_stored_subject_row(
     declared = [
         operation for operation in operations
         if isinstance(operation, Mapping)
-        and _source(operation)[1].get("operation_declaration_id") == DECLARATION_ID
+        and _source(operation)[1].get("operation_declaration_id") == declaration.get("declaration_id")
     ]
     if len(declared) != 1 or operations[-1] != declared[0]:
         raise DeclarationError("portal_stored_declaration_operation_missing_or_misordered")
@@ -410,7 +484,10 @@ def validate_stored_subject_row(
     else:
         expected_source_raw["guide_url"] = observed_guide
     expected["operations"] = [
-        *copy.deepcopy(original["operations"]), build_operation(original, observed_guide, root=root),
+        *copy.deepcopy(original["operations"]), build_operation(
+            original, observed_guide, root=root,
+            authenticated_snapshot=snapshot, declaration_document=declaration,
+        ),
     ]
     actual = copy.deepcopy(dict(row))
     for candidate in (actual, expected):
@@ -424,7 +501,10 @@ def validate_stored_subject_row(
 
 
 def validate_committed_prefix_snapshot(
-    root: pathlib.Path = ROOT, *, verify_materialized_row: bool = True,
+    root: pathlib.Path = ROOT,
+    *,
+    verify_materialized_row: bool = True,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Verify the reviewed commit, manifest, Git LFS pointer, and hydrated bytes when available.
 
@@ -433,7 +513,8 @@ def validate_committed_prefix_snapshot(
     authenticate the committed LFS object identity without claiming that its payload
     was materialized in that checkout.
     """
-    prefix = DECLARATION.get("historical_operation_prefix")
+    declaration = _declaration_value(declaration_document)
+    prefix = declaration.get("historical_operation_prefix")
     if not isinstance(prefix, Mapping):
         raise DeclarationError("portal_historical_operation_pin_missing")
     commit = str(prefix.get("source_main_commit") or "")
@@ -502,7 +583,7 @@ def validate_committed_prefix_snapshot(
         raise DeclarationError("portal_historical_materialized_source_invalid") from exc
     if not isinstance(registry, list):
         raise DeclarationError("portal_historical_materialized_source_invalid")
-    subject = DECLARATION["subject"]
+    subject = declaration["subject"]
     matches = [
         item for item in registry
         if isinstance(item, Mapping)
@@ -511,7 +592,7 @@ def validate_committed_prefix_snapshot(
     ]
     if len(matches) != 1:
         raise DeclarationError("portal_historical_materialized_source_identity_mismatch")
-    validate_subject_row(matches[0])
+    validate_subject_row(matches[0], declaration_document=declaration)
     result["materialized_registry_verified"] = True
     return result
 
@@ -519,9 +600,13 @@ def validate_committed_prefix_snapshot(
 def validate_historical_operation(
     row: Mapping[str, Any], operation: Mapping[str, Any], *, observed_guide_url: str | None,
     root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> None:
     """Accept only one exact historical operation from the pinned prefix."""
-    subject = DECLARATION["subject"]
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
+    subject = declaration["subject"]
     _current_source, current_raw = _source(row)
     current_guide = current_raw.get("guide_url")
     if observed_guide_url is None:
@@ -529,7 +614,10 @@ def validate_historical_operation(
             raise DeclarationError("portal_source_guide_observation_mismatch")
     elif current_guide != observed_guide_url:
         raise DeclarationError("portal_source_guide_observation_mismatch")
-    validate_stored_subject_row(row, root=root)
+    validate_stored_subject_row(
+        row, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
     original = copy.deepcopy(dict(row))
     original_source = original.get("source")
     original_source = copy.deepcopy(dict(original_source)) if isinstance(original_source, Mapping) else {}
@@ -544,7 +632,7 @@ def validate_historical_operation(
     declared = [
         item for item in all_operations
         if isinstance(item, Mapping)
-        and _source(item)[1].get("operation_declaration_id") == DECLARATION_ID
+        and _source(item)[1].get("operation_declaration_id") == declaration.get("declaration_id")
     ]
     if declared:
         if len(declared) != 1:
@@ -552,7 +640,10 @@ def validate_historical_operation(
         all_operations = list(all_operations)
         all_operations.remove(declared[0])
     original["operations"] = all_operations
-    validate_subject_row(original, root=root)
+    validate_subject_row(
+        original, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
     if not any(isinstance(item, Mapping) and dict(item) == dict(operation) for item in all_operations):
         raise DeclarationError("portal_historical_operation_not_in_pinned_prefix")
 
@@ -571,9 +662,16 @@ def _timestamp(value: Any) -> datetime:
 
 def _safe_exact_resolver_context(
     row: Mapping[str, Any], link_metadata: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> None:
-    validate_subject_row(row, root=root)
-    subject = DECLARATION["subject"]
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
+    validate_subject_row(
+        row, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
+    subject = declaration["subject"]
     page = link_metadata.get("page")
     resolver = link_metadata.get("resolver")
     if not isinstance(page, Mapping) or not isinstance(resolver, Mapping):
@@ -604,11 +702,14 @@ def _safe_exact_resolver_context(
         raise DeclarationError("declaration_observation_order_invalid")
 
 
-def request_parameters() -> list[dict[str, Any]]:
+def request_parameters(
+    declaration_document: Mapping[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     """Project only the exact named request facts; no sample values/defaults."""
+    declaration = _declaration_value(declaration_document)
     out: list[dict[str, Any]] = []
-    enums = DECLARATION["enums"]
-    for item in DECLARATION["request_parameters"]:
+    enums = declaration["enums"]
+    for item in declaration["request_parameters"]:
         value: dict[str, Any] = {
             "name": item["name"],
             "label": item["label"],
@@ -617,7 +718,7 @@ def request_parameters() -> list[dict[str, Any]]:
             "location": item["location"],
         }
         if item["name"] == "TYPE":
-            value["enum_values"] = list(DECLARATION["transport"]["format_selectors"])
+            value["enum_values"] = list(declaration["transport"]["format_selectors"])
         elif item["name"] in enums:
             value["enum_values"] = list(enums[item["name"]])
             value["enum_labels"] = copy.deepcopy(enums[item["name"]])
@@ -627,20 +728,29 @@ def request_parameters() -> list[dict[str, Any]]:
     return out
 
 
-def response_parameters() -> list[dict[str, str]]:
+def response_parameters(
+    declaration_document: Mapping[str, Any] | None = None,
+) -> list[dict[str, str]]:
     # The reviewed documents declare names and labels only.  Do not add guessed
     # response types, requiredness, nullability, envelope, or media types.
     return [
         {"name": item["name"], "label": item["label"]}
-        for item in DECLARATION["response_parameters"]
+        for item in _declaration_value(declaration_document)["response_parameters"]
     ]
 
 
 def build_operation(
     row: Mapping[str, Any], observed_guide_url: str | None, *, root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    validate_subject_row(row, root=root)
-    subject = DECLARATION["subject"]
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
+    validate_subject_row(
+        row, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
+    subject = declaration["subject"]
     raw: dict[str, Any] = {
         "api_type": "REST",
         "operation_declaration_id": DECLARATION_ID,
@@ -648,20 +758,20 @@ def build_operation(
         "operation_declaration_sha256": DECLARATION_SHA256,
         "provider_dataset_id": subject["provider_dataset_id"],
         "service_name": subject["service_name"],
-        "operation_url": DECLARATION["transport"]["endpoint_template"],
-        "method_evidence": DECLARATION["transport"]["method_evidence"],
-        "method_evidence_classification": DECLARATION["transport"]["method_evidence_classification"],
-        "native_document_sha256s": native_document_sha256s(),
+        "operation_url": declaration["transport"]["endpoint_template"],
+        "method_evidence": declaration["transport"]["method_evidence"],
+        "method_evidence_classification": declaration["transport"]["method_evidence_classification"],
+        "native_document_sha256s": native_document_sha256s(declaration),
     }
     if observed_guide_url:
         raw["guide_url"] = observed_guide_url
     return {
         "name": subject["service_name"],
-        "endpoint": DECLARATION["transport"]["endpoint_template"],
-        "http_method": DECLARATION["transport"]["method"],
-        "method_evidence": DECLARATION["transport"]["method_evidence"],
-        "request_params": request_parameters(),
-        "response_params": response_parameters(),
+        "endpoint": declaration["transport"]["endpoint_template"],
+        "http_method": declaration["transport"]["method"],
+        "method_evidence": declaration["transport"]["method_evidence"],
+        "request_params": request_parameters(declaration),
+        "response_params": response_parameters(declaration),
         "source": {
             "system": "data.go.kr",
             "url": PAGE_URL,
@@ -680,8 +790,15 @@ def build_provenance(
     link_metadata: Mapping[str, Any],
     operation: Mapping[str, Any],
     root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    _safe_exact_resolver_context(row, link_metadata, root=root)
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
+    _safe_exact_resolver_context(
+        row, link_metadata, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
     if not re.fullmatch(r"[a-f0-9]{64}", source_sha256):
         raise DeclarationError("declaration_source_fingerprint_invalid")
     if guide_sha256 is not None and not re.fullmatch(r"[a-f0-9]{64}", guide_sha256):
@@ -691,16 +808,16 @@ def build_provenance(
         raise DeclarationError("declaration_observed_guide_binding_invalid")
     return {
         "method": PROVENANCE_METHOD,
-        "declaration_id": DECLARATION_ID,
+        "declaration_id": declaration["declaration_id"],
         "declaration_sha256": DECLARATION_SHA256,
-        "subject": copy.deepcopy(DECLARATION["subject"]),
-        "native_document_sha256s": native_document_sha256s(),
-        "native_document_acquisition": native_document_acquisition_provenance(),
-        "source_review_record": source_review_provenance(),
-        "historical_operation_prefix": copy.deepcopy(DECLARATION["historical_operation_prefix"]),
+        "subject": copy.deepcopy(declaration["subject"]),
+        "native_document_sha256s": native_document_sha256s(declaration),
+        "native_document_acquisition": native_document_acquisition_provenance(declaration),
+        "source_review_record": source_review_provenance(declaration),
+        "historical_operation_prefix": copy.deepcopy(declaration["historical_operation_prefix"]),
         "method_derivation": {
-            "id": DECLARATION["transport"]["method_evidence"],
-            "classification": DECLARATION["transport"]["method_evidence_classification"],
+            "id": declaration["transport"]["method_evidence"],
+            "classification": declaration["transport"]["method_evidence_classification"],
             "execution_verified": False,
             "exclusive_method_claim": False,
         },
@@ -717,25 +834,37 @@ def build_provenance(
 
 def validate_enriched_record(
     row: Mapping[str, Any], record: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> None:
     """Validate exact declaration, live metadata chain, and additive operation."""
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
     provenance = record.get("declaration_provenance")
     operations = record.get("operations")
     if not isinstance(provenance, Mapping) or not isinstance(operations, list):
         raise DeclarationError("declaration_enrichment_provenance_missing")
-    validate_subject_row(row, root=root)
+    validate_subject_row(
+        row, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration_document,
+    )
     if record.get("source_sha256") != source_fingerprint(row) or record.get("guide_sha256") != guide_fingerprint(row):
         raise DeclarationError("declaration_source_binding_invalid")
     expected_count = len(row["operations"]) + 1
     if len(operations) != expected_count or operations[:len(row["operations"])] != row["operations"]:
         raise DeclarationError("declaration_historical_operations_not_preserved")
-    expected_operation = build_operation(row, record.get("observed_guide_url"), root=root)
+    expected_operation = build_operation(
+        row, record.get("observed_guide_url"), root=root,
+        authenticated_snapshot=authenticated_snapshot, declaration_document=declaration_document,
+    )
     if operations[-1] != expected_operation:
         raise DeclarationError("declaration_generated_operation_mismatch")
     context = provenance.get("page_resolver")
     if not isinstance(context, Mapping):
         raise DeclarationError("declaration_page_resolver_provenance_missing")
-    _safe_exact_resolver_context(row, context, root=root)
+    _safe_exact_resolver_context(
+        row, context, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration_document,
+    )
     source_provenance = record.get("source_provenance")
     page = context.get("page")
     if (
@@ -756,7 +885,8 @@ def validate_enriched_record(
         observed_guide_url_sha256=record.get("observed_guide_url_sha256"),
         link_metadata=context,
         operation=expected_operation,
-        root=root,
+        root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration_document,
     )
     if dict(provenance) != expected:
         raise DeclarationError("declaration_enrichment_provenance_mismatch")
@@ -764,8 +894,12 @@ def validate_enriched_record(
 
 def validate_declared_operation(
     row: Mapping[str, Any], operation: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    authenticated_snapshot: Mapping[str, Any] | None = None,
+    declaration_document: Mapping[str, Any] | None = None,
 ) -> None:
     """Validate a registry operation against the pinned declaration bytes."""
+    _require_authenticated_replay_documents(authenticated_snapshot, declaration_document)
+    declaration = _declaration_value(declaration_document)
     subject_row = dict(row)
     source = subject_row.get("source")
     source = dict(source) if isinstance(source, Mapping) else {}
@@ -774,7 +908,7 @@ def validate_declared_operation(
     operation_source = operation.get("source")
     operation_raw = operation_source.get("raw") if isinstance(operation_source, Mapping) else None
     operation_guide = operation_raw.get("guide_url") if isinstance(operation_raw, Mapping) else None
-    expected_source_guide = DECLARATION["subject"]["source_guide_url"]
+    expected_source_guide = declaration["subject"]["source_guide_url"]
     current_source_guide = raw.get("guide_url")
     # Applying a valid page observation can remove the source row's empty
     # guide_url or replace it with the observed one. The record-level validator
@@ -797,10 +931,13 @@ def validate_declared_operation(
         remaining = list(operations)
         if any(
             isinstance(item, Mapping)
-            and _source(item)[1].get("operation_declaration_id") == DECLARATION_ID
+            and _source(item)[1].get("operation_declaration_id") == declaration["declaration_id"]
             for item in operations
         ):
-            validate_stored_subject_row(row, root=root)
+            validate_stored_subject_row(
+                row, root=root, authenticated_snapshot=authenticated_snapshot,
+                declaration_document=declaration,
+            )
         try:
             remaining.remove(dict(operation))
         except ValueError:
@@ -809,6 +946,9 @@ def validate_declared_operation(
     source = operation.get("source")
     raw = source.get("raw") if isinstance(source, Mapping) else None
     observed_guide = raw.get("guide_url") if isinstance(raw, Mapping) else None
-    expected = build_operation(subject_row, observed_guide, root=root)
+    expected = build_operation(
+        subject_row, observed_guide, root=root, authenticated_snapshot=authenticated_snapshot,
+        declaration_document=declaration,
+    )
     if dict(operation) != expected:
         raise DeclarationError("registry_declared_operation_mismatch")

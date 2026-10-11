@@ -58,6 +58,459 @@ class AdmissionError(ValueError):
     pass
 
 
+SOURCE_TARGET_BINDING_SCHEMA = "datapan.canonical-update-source-target-binding.v1"
+
+SOURCE_TARGET_BINDING_FIELDS = frozenset({
+    "schema_version", "selection_key", "original_observation_sha256",
+    "target_contract_sha256", "original_admission_ref",
+})
+
+SOURCE_TARGET_ADMISSION_REF_SCHEMA = "datapan.upstream-catalogue-admission-reference.v1"
+
+SOURCE_TARGET_ADMISSION_REF_FIELDS = frozenset({
+    "schema_version", "generation_id", "producer_run_id", "run_attempt", "head_sha",
+    "artifact_id", "artifact_digest_sha256", "refresh_evidence_sha256",
+})
+
+SOURCE_TARGET_NOOP_SCHEMA = "datapan.canonical-update-source-target-noop.v1"
+
+SOURCE_TARGET_NOOP_FIELDS = frozenset({
+    "schema_version", "record_type", "source_target", "evaluated_base_sha",
+    "evaluator_source_sha", "evaluator_run_id", "evaluator_run_attempt",
+    "terminal_evaluator_sha256", "terminal_projection_sha256", "reason_code",
+    "evidence_refs", "evidence_sha256", "recorded_at",
+})
+
+SOURCE_TARGET_NOOP_V2_SCHEMA = "datapan.canonical-update-source-target-noop.v2"
+
+SOURCE_TARGET_NOOP_V2_FIELDS = SOURCE_TARGET_NOOP_FIELDS | frozenset({
+    "evaluator_repository", "evaluator_workflow_path", "evaluator_event",
+    "retained_evaluation",
+})
+
+SOURCE_TARGET_NOOP_V2_MEMBER_NAMES = (
+    "terminal_outcome", "projection", "target_inventory",
+)
+
+SOURCE_TARGET_NOOP_V2_MEMBER_PATHS = (
+    "retained_evaluation/terminal_outcome",
+    "retained_evaluation/projection",
+    "retained_evaluation/target_inventory",
+)
+
+SOURCE_TARGET_NOOP_MEMBER_MAX_BYTES = 768 * 1024
+
+SOURCE_TARGET_NOOP_TOTAL_MAX_BYTES = 8 * 1024 * 1024
+
+SOURCE_TARGET_PROJECTION_SCHEMA = "datapan.canonical-update-source-target-projection.v1"
+
+SOURCE_TARGET_PROJECTION_FIELDS = frozenset({"source_revalidation", "target_contract"})
+
+SOURCE_TARGET_REVALIDATION_FIELDS = frozenset({
+    "action", "reason_code", "original_generation_id", "original_epoch",
+    "target_contract_sha256", "source_sha", "source_tree_sha",
+})
+
+SOURCE_TARGET_CONTRACT_FIELDS = frozenset({
+    "schema_version", "source_sha", "source_tree_sha", "inventory_sha256",
+    "contract_sha256", "changed_classes",
+})
+
+SOURCE_TARGET_NOOP_WORKFLOW_PATH = ".github/workflows/canonical-update-promotion.yml"
+
+SOURCE_TARGET_NOOP_EVENTS = frozenset({"schedule", "workflow_run", "workflow_dispatch"})
+
+def canonical_object_sha256(value: Any) -> str:
+    """Hash a JSON value with the repository's stable compact encoding."""
+    try:
+        encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    except (TypeError, ValueError) as exc:
+        raise AdmissionError("source-target evidence is not canonical JSON") from exc
+    return digest_bytes(encoded)
+
+def validate_source_target_binding(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != SOURCE_TARGET_BINDING_FIELDS:
+        raise AdmissionError("source-target binding has an unexpected field set")
+    if value.get("schema_version") != SOURCE_TARGET_BINDING_SCHEMA:
+        raise AdmissionError("source-target binding schema is unsupported")
+    valid_sha(value.get("selection_key"), SHA256_RE, "source-target selection key")
+    valid_sha(value.get("original_observation_sha256"), SHA256_RE, "source-target original observation digest")
+    valid_sha(value.get("target_contract_sha256"), SHA256_RE, "source-target contract digest")
+    admission = value.get("original_admission_ref")
+    if not isinstance(admission, Mapping) or set(admission) != SOURCE_TARGET_ADMISSION_REF_FIELDS:
+        raise AdmissionError("source-target original admission reference has an unexpected field set")
+    if admission.get("schema_version") != SOURCE_TARGET_ADMISSION_REF_SCHEMA:
+        raise AdmissionError("source-target original admission reference schema is unsupported")
+    valid_sha(admission.get("generation_id"), SHA256_RE, "source-target original generation id")
+    if not isinstance(admission.get("producer_run_id"), str) or not re.fullmatch(r"[0-9]{6,20}", admission["producer_run_id"]):
+        raise AdmissionError("source-target producer run id is invalid")
+    for name in ("run_attempt", "artifact_id"):
+        number = admission.get(name)
+        if isinstance(number, bool) or not isinstance(number, int) or number < 1:
+            raise AdmissionError(f"source-target {name} is invalid")
+    valid_sha(admission.get("head_sha"), SHA1_RE, "source-target producer head")
+    valid_sha(admission.get("artifact_digest_sha256"), SHA256_RE, "source-target artifact digest")
+    valid_sha(admission.get("refresh_evidence_sha256"), SHA256_RE, "source-target refresh evidence digest")
+    return json.loads(json.dumps(dict(value)))
+
+def source_target_binding_from_capability(source_target: Any, producer_module: Any) -> dict[str, Any]:
+    """Bind only the private #743 runner capability, never caller-shaped JSON."""
+    capability_type = getattr(producer_module, "ResolvedSourceTarget", None)
+    if capability_type is None or type(source_target) is not capability_type:
+        raise AdmissionError("source-target binding requires the exact runner-owned source target capability")
+    admission = getattr(source_target, "original_admission", None)
+    observation = getattr(source_target, "original_observation", None)
+    generation = getattr(source_target, "original_generation", None)
+    contract = getattr(source_target, "target_contract", None)
+    selection_key = getattr(source_target, "selection_key", None)
+    if not all(isinstance(item, Mapping) for item in (admission, observation, generation, contract)):
+        raise AdmissionError("runner source target capability is incomplete")
+    recompute = getattr(producer_module, "source_target_selection_key", None)
+    if not callable(recompute) or recompute(admission, contract) != selection_key:
+        raise AdmissionError("runner source target capability selection key does not recompute")
+    generation_id = generation.get("generation_id")
+    if not isinstance(generation_id, str) or not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+        raise AdmissionError("runner source target original generation is invalid")
+    contract_sha = contract.get("contract_sha256")
+    valid_sha(contract_sha, SHA256_RE, "source-target contract digest")
+    artifact_id = admission.get("artifact_id")
+    if isinstance(artifact_id, bool) or not str(artifact_id or "").isdigit():
+        raise AdmissionError("source-target original artifact id is invalid")
+    admission_ref = {
+        "schema_version": SOURCE_TARGET_ADMISSION_REF_SCHEMA,
+        "generation_id": generation_id,
+        "producer_run_id": str(admission.get("producer_run_id", "")),
+        "run_attempt": admission.get("run_attempt"),
+        "head_sha": admission.get("head_sha"),
+        "artifact_id": int(artifact_id),
+        "artifact_digest_sha256": admission.get("artifact_digest_sha256"),
+        "refresh_evidence_sha256": admission.get("refresh_evidence_sha256"),
+    }
+    binding = {
+        "schema_version": SOURCE_TARGET_BINDING_SCHEMA,
+        "selection_key": selection_key,
+        "original_observation_sha256": canonical_object_sha256(dict(observation)),
+        "target_contract_sha256": contract_sha,
+        "original_admission_ref": admission_ref,
+    }
+    return validate_source_target_binding(binding)
+
+def _source_target_noop_digest(value: Mapping[str, Any]) -> str:
+    return canonical_object_sha256({key: item for key, item in value.items() if key not in {"evidence_sha256", "recorded_at"}})
+
+def _source_target_member(value: Any, *, label: str) -> dict[str, Any]:
+    if not isinstance(value, (Mapping, list)):
+        raise AdmissionError(f"source-target retained {label} must be a JSON object or array")
+    encoded = json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False,
+    ).encode("utf-8")
+    if not encoded or len(encoded) > SOURCE_TARGET_NOOP_MEMBER_MAX_BYTES:
+        raise AdmissionError(f"source-target retained {label} exceeds its byte bound")
+    return {"document": json.loads(encoded), "bytes": len(encoded), "sha256": digest_bytes(encoded)}
+
+def _source_target_inventory_document(value: Any) -> list[dict[str, Any]]:
+    if not isinstance(value, list) or not value or len(value) > 256:
+        raise AdmissionError("source-target retained inventory has an invalid shape")
+    rows: list[dict[str, Any]] = []
+    previous_path = ""
+    for position, row in enumerate(value):
+        if not isinstance(row, Mapping) or set(row) != {"position", "path", "class", "bytes", "sha256"}:
+            raise AdmissionError("source-target retained inventory row has an unexpected field set")
+        path = row.get("path")
+        if (
+            type(row.get("position")) is not int or row["position"] != position
+            or not isinstance(path, str) or not path or path.startswith("/") or "\\" in path
+            or ".." in pathlib.PurePosixPath(path).parts or path <= previous_path
+            or row.get("class") not in {"same_a_processing", "c_only_revalidation", "requires_new_a"}
+        ):
+            raise AdmissionError("source-target retained inventory order or path is invalid")
+        size = row.get("bytes")
+        if type(size) is not int or size < 0:
+            raise AdmissionError("source-target retained inventory byte count is invalid")
+        valid_sha(row.get("sha256"), SHA256_RE, "source-target retained inventory blob digest")
+        rows.append(dict(row))
+        previous_path = path
+    return rows
+
+def _validate_source_target_projection_v2(
+    value: Any, *, binding: Mapping[str, Any], evaluated_base_sha: str,
+    target_inventory: list[dict[str, Any]],
+) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != SOURCE_TARGET_PROJECTION_FIELDS:
+        raise AdmissionError("source-target retained projection has an unexpected field set")
+    revalidation = value.get("source_revalidation")
+    contract = value.get("target_contract")
+    if not isinstance(revalidation, Mapping) or set(revalidation) != SOURCE_TARGET_REVALIDATION_FIELDS:
+        raise AdmissionError("source-target retained source revalidation has an unexpected field set")
+    if not isinstance(contract, Mapping) or set(contract) != SOURCE_TARGET_CONTRACT_FIELDS:
+        raise AdmissionError("source-target retained target contract has an unexpected field set")
+    if (
+        revalidation.get("action") != "revalidate_c"
+        or revalidation.get("reason_code") != "c_only_contract_changed"
+        or revalidation.get("original_generation_id") != binding["original_admission_ref"]["generation_id"]
+        or type(revalidation.get("original_epoch")) is not int or revalidation["original_epoch"] < 1
+        or revalidation.get("source_sha") != evaluated_base_sha
+        or contract.get("schema_version") != "datapan.upstream-catalogue-target-contract.v1"
+        or contract.get("source_sha") != evaluated_base_sha
+        or revalidation.get("target_contract_sha256") != contract.get("contract_sha256")
+        or contract.get("changed_classes") != ["c_only_revalidation"]
+    ):
+        raise AdmissionError("source-target retained projection does not prove the exact C-only target")
+    valid_sha(revalidation.get("source_sha"), SHA1_RE, "source-target projection source")
+    valid_sha(revalidation.get("source_tree_sha"), SHA1_RE, "source-target projection source tree")
+    valid_sha(contract.get("source_sha"), SHA1_RE, "source-target contract source")
+    valid_sha(contract.get("source_tree_sha"), SHA1_RE, "source-target contract source tree")
+    inventory_sha = valid_sha(contract.get("inventory_sha256"), SHA256_RE, "source-target contract inventory digest")
+    contract_sha = valid_sha(contract.get("contract_sha256"), SHA256_RE, "source-target contract digest")
+    if revalidation.get("source_tree_sha") != contract.get("source_tree_sha"):
+        raise AdmissionError("source-target projection tree identity differs")
+    expected_contract_sha = hashlib.sha256(
+        b"datapan/upstream-catalogue-target-contract/v1\0"
+        + json.dumps(
+            {"schema_version": contract["schema_version"], "inventory_sha256": inventory_sha},
+            ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False,
+        ).encode("utf-8")
+    ).hexdigest()
+    if contract_sha != expected_contract_sha:
+        raise AdmissionError("source-target retained target contract digest does not recompute")
+    if canonical_object_sha256(target_inventory) != inventory_sha:
+        raise AdmissionError("source-target retained inventory does not match its target contract digest")
+    return json.loads(json.dumps(dict(value)))
+
+def _validate_source_target_noop_terminal_v2(
+    value: Any, *, binding: Mapping[str, Any], evaluated_base_sha: str,
+) -> dict[str, Any]:
+    required = {
+        "kind", "status", "candidate_available", "evaluated_main", "selected_generation_id",
+        "preparation_returned", "generation_count", "generation_results_truncated", "generations",
+    }
+    if not isinstance(value, Mapping) or set(value) != required:
+        raise AdmissionError("source-target retained terminal outcome has an unexpected field set")
+    try:
+        terminal_schema = _source_target_terminal_schema()
+        import jsonschema
+        outcome_schema = {
+            "$schema": terminal_schema["$schema"],
+            "$defs": terminal_schema["$defs"],
+            "$ref": "#/$defs/outcome",
+        }
+        jsonschema.Draft202012Validator(
+            outcome_schema, format_checker=jsonschema.FormatChecker(),
+        ).validate(value)
+    except Exception as exc:
+        raise AdmissionError("source-target retained terminal outcome fails the exact recover-ready schema") from exc
+    rows = value.get("generations")
+    generation_id = binding["original_admission_ref"]["generation_id"]
+    if (
+        value.get("kind") != "recover-ready"
+        or value.get("status") != "already-canonical-payload"
+        or value.get("candidate_available") is not False
+        or value.get("preparation_returned") is not False
+        or value.get("selected_generation_id") is not None
+        or value.get("generation_results_truncated") is not False
+        or type(value.get("generation_count")) is not int
+        or not isinstance(rows, list) or value["generation_count"] != len(rows)
+        or not rows or len(rows) > 64
+        or not isinstance(value.get("evaluated_main"), Mapping)
+    ):
+        raise AdmissionError("source-target retained terminal outcome is not a completed no-change evaluation")
+    main = value["evaluated_main"]
+    if valid_sha(main.get("revision"), SHA1_RE, "source-target terminal evaluated main") != evaluated_base_sha:
+        raise AdmissionError("source-target terminal evaluated main differs from the evaluator source")
+    valid_sha(main.get("manifest_sha256"), SHA256_RE, "source-target terminal manifest digest")
+    valid_sha(main.get("registry_sha256"), SHA256_RE, "source-target terminal canonical digest")
+    registry_path = main.get("registry_path")
+    if (
+        not isinstance(registry_path, str) or not registry_path or registry_path.startswith("/")
+        or "\\" in registry_path or ".." in pathlib.PurePosixPath(registry_path).parts
+        or type(main.get("registry_bytes")) is not int or main["registry_bytes"] < 1
+    ):
+        raise AdmissionError("source-target terminal evaluated main is invalid")
+    matches: list[Mapping[str, Any]] = []
+    seen: set[str] = set()
+    for row in rows:
+        if not isinstance(row, Mapping) or row.get("status") not in {"blocked", "already_canonical", "already_represented"}:
+            raise AdmissionError("source-target terminal generation row is invalid")
+        row_id = row.get("generation_id")
+        if not isinstance(row_id, str) or row_id in seen:
+            raise AdmissionError("source-target terminal generation identity is duplicate or invalid")
+        seen.add(row_id)
+        if row_id == generation_id:
+            matches.append(row)
+    if len(matches) != 1:
+        raise AdmissionError("source-target terminal result does not contain its exact admitted generation")
+    target = matches[0]
+    composition = target.get("composition")
+    if (
+        target.get("status") != "already_canonical"
+        or target.get("reason_code") != "source_contract_revalidated"
+        or not isinstance(composition, Mapping)
+        or any(composition.get(field) != main.get(field) for field in ("registry_path", "registry_bytes", "registry_sha256"))
+    ):
+        raise AdmissionError("source-target terminal target row is not the exact screened no-change result")
+    valid_sha(target.get("checkpoint_sha256"), SHA256_RE, "source-target terminal checkpoint digest")
+    producer = target.get("producer")
+    if not isinstance(producer, Mapping) or set(producer) != {
+        "run_id", "run_attempt", "head_sha", "artifact_id", "artifact_name", "artifact_expires_at", "bundle_manifest_sha256",
+    }:
+        raise AdmissionError("source-target terminal processor provenance is incomplete")
+    if (
+        not isinstance(producer.get("run_id"), str) or not producer["run_id"].isdigit()
+        or type(producer.get("run_attempt")) is not int or producer["run_attempt"] < 1
+        or not isinstance(producer.get("artifact_id"), str) or not producer["artifact_id"].isdigit()
+    ):
+        raise AdmissionError("source-target terminal processor identity is invalid")
+    valid_sha(producer.get("head_sha"), SHA1_RE, "source-target terminal processor head")
+    valid_sha(producer.get("bundle_manifest_sha256"), SHA256_RE, "source-target terminal processor manifest")
+    for field in ("baseline_sha256", "composition_receipt_sha256"):
+        valid_sha(composition.get(field), SHA256_RE, f"source-target terminal composition {field}")
+    return json.loads(json.dumps(dict(value)))
+
+def _source_target_terminal_schema() -> dict[str, Any]:
+    terminal_schema_path = pathlib.Path(__file__).resolve().parents[1] / "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json"
+    value = json.loads(terminal_schema_path.read_text(encoding="utf-8"))
+    if not isinstance(value, Mapping) or not isinstance(value.get("$defs"), Mapping) or "outcome" not in value["$defs"]:
+        raise AdmissionError("source-target retained terminal schema is unavailable")
+    return dict(value)
+
+def _source_target_noop_member_document(value: Any, *, name: str) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != {"document", "bytes", "sha256"}:
+        raise AdmissionError(f"source-target retained {name} member has an unexpected field set")
+    checked = _source_target_member(value["document"], label=name)
+    if value.get("bytes") != checked["bytes"] or value.get("sha256") != checked["sha256"]:
+        raise AdmissionError(f"source-target retained {name} member digest does not bind its document")
+    return checked
+
+def _validate_source_target_noop_v2(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != SOURCE_TARGET_NOOP_V2_FIELDS:
+        raise AdmissionError("source-target no-op v2 record has an unexpected field set")
+    if value.get("schema_version") != SOURCE_TARGET_NOOP_V2_SCHEMA or value.get("record_type") != "source-target-noop":
+        raise AdmissionError("source-target no-op v2 schema or type is unsupported")
+    binding = validate_source_target_binding(value.get("source_target"))
+    evaluated_base_sha = valid_sha(value.get("evaluated_base_sha"), SHA1_RE, "source-target no-op evaluated base")
+    evaluator_source_sha = valid_sha(value.get("evaluator_source_sha"), SHA1_RE, "source-target no-op evaluator source")
+    if evaluated_base_sha != evaluator_source_sha:
+        raise AdmissionError("source-target no-op evaluation base differs from its exact evaluator source")
+    repository = value.get("evaluator_repository")
+    if not isinstance(repository, str) or not re.fullmatch(r"[^/]+/[^/]+", repository):
+        raise AdmissionError("source-target no-op evaluator repository is invalid")
+    if value.get("evaluator_workflow_path") != SOURCE_TARGET_NOOP_WORKFLOW_PATH:
+        raise AdmissionError("source-target no-op evaluator workflow is unsupported")
+    if value.get("evaluator_event") not in SOURCE_TARGET_NOOP_EVENTS:
+        raise AdmissionError("source-target no-op evaluator event is unsupported")
+    if not isinstance(value.get("evaluator_run_id"), str) or not re.fullmatch(r"[0-9]{6,20}", value["evaluator_run_id"]):
+        raise AdmissionError("source-target no-op evaluator run id is invalid")
+    attempt = value.get("evaluator_run_attempt")
+    if isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+        raise AdmissionError("source-target no-op evaluator run attempt is invalid")
+    terminal_digest = valid_sha(value.get("terminal_evaluator_sha256"), SHA256_RE, "source-target no-op evaluator digest")
+    projection_digest = valid_sha(value.get("terminal_projection_sha256"), SHA256_RE, "source-target no-op projection digest")
+    if value.get("reason_code") != "validated_target_has_no_semantic_delta":
+        raise AdmissionError("source-target no-op reason is not the fixed validated no-change reason")
+
+    retained = value.get("retained_evaluation")
+    if not isinstance(retained, Mapping) or set(retained) != set(SOURCE_TARGET_NOOP_V2_MEMBER_NAMES):
+        raise AdmissionError("source-target no-op retained evaluation has an unexpected field set")
+    members = {
+        name: _source_target_noop_member_document(retained[name], name=name)
+        for name in SOURCE_TARGET_NOOP_V2_MEMBER_NAMES
+    }
+    total_bytes = sum(member["bytes"] for member in members.values())
+    if total_bytes > SOURCE_TARGET_NOOP_TOTAL_MAX_BYTES:
+        raise AdmissionError("source-target retained evaluation exceeds its aggregate byte bound")
+    terminal = members["terminal_outcome"]["document"]
+    projection = members["projection"]["document"]
+    inventory = _source_target_inventory_document(members["target_inventory"]["document"])
+    if terminal_digest != members["terminal_outcome"]["sha256"] or projection_digest != members["projection"]["sha256"]:
+        raise AdmissionError("source-target no-op member digests do not match the retained documents")
+    _validate_source_target_noop_terminal_v2(
+        terminal, binding=binding, evaluated_base_sha=evaluated_base_sha,
+    )
+    _validate_source_target_projection_v2(
+        projection, binding=binding, evaluated_base_sha=evaluated_base_sha,
+        target_inventory=inventory,
+    )
+    refs = value.get("evidence_refs")
+    expected_refs = [
+        {"path": path, "bytes": members[name]["bytes"], "sha256": members[name]["sha256"]}
+        for name, path in zip(SOURCE_TARGET_NOOP_V2_MEMBER_NAMES, SOURCE_TARGET_NOOP_V2_MEMBER_PATHS, strict=True)
+    ]
+    if refs != expected_refs:
+        raise AdmissionError("source-target no-op v2 evidence references are not the exact retained members")
+    timestamp = value.get("recorded_at")
+    try:
+        parsed = dt.datetime.fromisoformat(str(timestamp).replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise AdmissionError("source-target no-op timestamp is invalid") from exc
+    if parsed.tzinfo is None:
+        raise AdmissionError("source-target no-op timestamp lacks a timezone")
+    valid_sha(value.get("evidence_sha256"), SHA256_RE, "source-target no-op evidence digest")
+    if value["evidence_sha256"] != _source_target_noop_digest(value):
+        raise AdmissionError("source-target no-op evidence digest does not bind its exact record")
+    return json.loads(json.dumps(dict(value)))
+
+def validate_source_target_noop(value: Any) -> dict[str, Any]:
+    if isinstance(value, Mapping) and value.get("schema_version") == SOURCE_TARGET_NOOP_V2_SCHEMA:
+        return _validate_source_target_noop_v2(value)
+    if not isinstance(value, Mapping) or set(value) != SOURCE_TARGET_NOOP_FIELDS:
+        raise AdmissionError("source-target no-op record has an unexpected field set")
+    if value.get("schema_version") != SOURCE_TARGET_NOOP_SCHEMA or value.get("record_type") != "source-target-noop":
+        raise AdmissionError("source-target no-op record schema or type is unsupported")
+    binding = validate_source_target_binding(value.get("source_target"))
+    valid_sha(value.get("evaluated_base_sha"), SHA1_RE, "source-target no-op evaluated base")
+    valid_sha(value.get("evaluator_source_sha"), SHA1_RE, "source-target no-op evaluator source")
+    if value.get("evaluated_base_sha") != value.get("evaluator_source_sha"):
+        raise AdmissionError("source-target no-op evaluation base differs from its exact evaluator source")
+    if not isinstance(value.get("evaluator_run_id"), str) or not re.fullmatch(r"[0-9]{6,20}", value["evaluator_run_id"]):
+        raise AdmissionError("source-target no-op evaluator run id is invalid")
+    attempt = value.get("evaluator_run_attempt")
+    if isinstance(attempt, bool) or not isinstance(attempt, int) or attempt < 1:
+        raise AdmissionError("source-target no-op evaluator run attempt is invalid")
+    valid_sha(value.get("terminal_evaluator_sha256"), SHA256_RE, "source-target no-op evaluator digest")
+    valid_sha(value.get("terminal_projection_sha256"), SHA256_RE, "source-target no-op projection digest")
+    if value.get("reason_code") != "validated_target_has_no_semantic_delta":
+        raise AdmissionError("source-target no-op reason is not the fixed validated no-change reason")
+    refs = value.get("evidence_refs")
+    if not isinstance(refs, list) or not refs or len(refs) > 64:
+        raise AdmissionError("source-target no-op evidence references are missing or unbounded")
+    seen: set[str] = set()
+    for item in refs:
+        if not isinstance(item, Mapping) or set(item) != {"path", "bytes", "sha256"}:
+            raise AdmissionError("source-target no-op evidence reference is malformed")
+        path = item.get("path")
+        if not isinstance(path, str) or not path or path.startswith("/") or ".." in pathlib.PurePosixPath(path).parts or "\\" in path:
+            raise AdmissionError("source-target no-op evidence path is unsafe")
+        if path in seen:
+            raise AdmissionError("source-target no-op evidence references contain a duplicate path")
+        seen.add(path)
+        size = item.get("bytes")
+        if isinstance(size, bool) or not isinstance(size, int) or size < 1:
+            raise AdmissionError("source-target no-op evidence byte count is invalid")
+        valid_sha(item.get("sha256"), SHA256_RE, "source-target no-op evidence digest")
+    timestamp = value.get("recorded_at")
+    try:
+        parsed = dt.datetime.fromisoformat(str(timestamp).replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise AdmissionError("source-target no-op timestamp is invalid") from exc
+    if parsed.tzinfo is None:
+        raise AdmissionError("source-target no-op timestamp lacks a timezone")
+    valid_sha(value.get("evidence_sha256"), SHA256_RE, "source-target no-op evidence digest")
+    if value["evidence_sha256"] != _source_target_noop_digest(value):
+        raise AdmissionError("source-target no-op evidence digest does not bind its exact record")
+    return json.loads(json.dumps(dict(value)))
+
+def release_closure_identity(candidate: Mapping[str, Any]) -> None:
+    """Reject purpose-bearing candidates until the full #749 join is present."""
+    if not isinstance(candidate, Mapping):
+        raise AdmissionError("source-target disposition candidate must be an object")
+    present = {
+        "purpose", "release_closure_reference", "release_closure_evidence",
+    } & set(candidate)
+    if not present:
+        return None
+    raise AdmissionError("unsupported purpose-bearing candidate in source-target disposition")
+
+
 def load_object(path: pathlib.Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
@@ -322,6 +775,8 @@ def validate_candidate(
     valid_sha(observed_base_sha, SHA1_RE, "observed main sha")
     if candidate["base_sha"] != observed_base_sha:
         raise AdmissionError("stale_base: recompose and revalidate against the observed main sha")
+    if "source_target" in candidate:
+        validate_source_target_binding(candidate["source_target"])
     composition = candidate.get("composition_receipt")
     if not isinstance(composition, dict):
         raise AdmissionError("candidate is missing the composition receipt summary")
@@ -992,7 +1447,7 @@ def build_receipt(
             "repository", "source_id", "scope", "base_sha", "head_sha", "manifest_sha256",
             "registry_path", "registry_bytes", "registry_sha256", "composition_receipt_sha256", "generation_id",
             "payload_readback", "manual_review_acceptance_status",
-        )},
+        )} | ({"source_target": validate_source_target_binding(candidate["source_target"])} if "source_target" in candidate else {}),
         "checks": checks,
         "validation_evidence": json.loads(json.dumps(validation_evidence)),
         "ownership": {
@@ -1023,10 +1478,15 @@ def payload_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str, str]:
     )
 
 
-def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, str, str, str, str, str]:
+def candidate_key(receipt: Mapping[str, Any]) -> tuple[str, ...]:
     """Identify one source revision, including the reviewed preparation head."""
     candidate = receipt.get("candidate", {})
-    return (*payload_key(receipt), str(candidate.get("head_sha", "")))
+    legacy = (*payload_key(receipt), str(candidate.get("head_sha", "")))
+    source_target = candidate.get("source_target") if isinstance(candidate, Mapping) else None
+    if source_target is None:
+        return legacy
+    binding = validate_source_target_binding(source_target)
+    return (*legacy, "source-target-v1", str(binding["selection_key"]))
 
 
 REVISION_REFERENCE_FIELDS = (
@@ -1040,7 +1500,7 @@ def revision_reference(receipt: Mapping[str, Any]) -> dict[str, Any]:
     candidate = receipt.get("candidate", {})
     ownership = receipt.get("ownership", {})
     pr = receipt.get("pr", {})
-    return {
+    reference = {
         "repository": str(candidate.get("repository", "")).lower(),
         "source_id": str(candidate.get("source_id", "")),
         "scope": str(candidate.get("scope", "")),
@@ -1053,18 +1513,23 @@ def revision_reference(receipt: Mapping[str, Any]) -> dict[str, Any]:
         "branch": str(ownership.get("branch", "")),
         "body_sha256": str(ownership.get("body_sha256", "")),
     }
+    if isinstance(candidate, Mapping) and candidate.get("source_target") is not None:
+        reference["source_target"] = validate_source_target_binding(candidate["source_target"])
+    return reference
 
 
 def _reference_matches_receipt(reference: Mapping[str, Any], receipt: Mapping[str, Any]) -> bool:
     expected = revision_reference(receipt)
     if not all(reference.get(field) == expected.get(field) for field in REVISION_REFERENCE_FIELDS):
         return False
+    if expected.get("source_target") != reference.get("source_target"):
+        return False
     # Historical references predate the optional manifest discriminator.
     return "manifest_sha256" not in reference or reference.get("manifest_sha256") == expected.get("manifest_sha256")
 
 
-def _reference_key(reference: Mapping[str, Any]) -> tuple[str, str, str, str, str, str]:
-    return (
+def _reference_key(reference: Mapping[str, Any]) -> tuple[str, ...]:
+    legacy = (
         str(reference.get("repository", "")).lower(),
         str(reference.get("source_id", "")),
         str(reference.get("scope", "")),
@@ -1072,6 +1537,11 @@ def _reference_key(reference: Mapping[str, Any]) -> tuple[str, str, str, str, st
         str(reference.get("registry_sha256", "")),
         str(reference.get("head_sha", "")),
     )
+    source_target = reference.get("source_target")
+    if source_target is None:
+        return legacy
+    binding = validate_source_target_binding(source_target)
+    return (*legacy, "source-target-v1", str(binding["selection_key"]))
 
 
 def exact_pending_review_witness(receipt: Mapping[str, Any]) -> bool:
@@ -1151,6 +1621,33 @@ def validate_journal(journal: Mapping[str, Any], schema: Mapping[str, Any]) -> N
     import jsonschema
 
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(journal)
+    dispositions = journal.get("source_target_dispositions", [])
+    if not isinstance(dispositions, list):
+        raise AdmissionError("source-target dispositions must be an array")
+    noop_keys: set[str] = set()
+    for item in dispositions:
+        checked = validate_source_target_noop(item)
+        key = checked["source_target"]["selection_key"]
+        if key in noop_keys:
+            raise AdmissionError("promotion journal has duplicate terminal source-target no-op records")
+        noop_keys.add(key)
+    target_rows: dict[str, list[Mapping[str, Any]]] = {}
+    for row in journal.get("records", []):
+        candidate = row.get("candidate", {})
+        binding = candidate.get("source_target") if isinstance(candidate, Mapping) else None
+        if binding is not None:
+            checked = validate_source_target_binding(binding)
+            key = checked["selection_key"]
+            if key in noop_keys:
+                raise AdmissionError("promotion journal has conflicting no-op and candidate source-target records")
+            target_rows.setdefault(key, []).append(row)
+    for rows in target_rows.values():
+        bindings = [validate_source_target_binding(row.get("candidate", {}).get("source_target")) for row in rows]
+        if any(binding != bindings[0] for binding in bindings[1:]):
+            raise AdmissionError("promotion journal changed an immutable source-target binding across revisions")
+        active = [row for row in rows if row.get("superseded_by") is None and row.get("status") in {"prepared", "pending-review"}]
+        if len(active) > 1:
+            raise AdmissionError("promotion journal has duplicate active revisions for one source-target selection")
     for row in journal.get("records", []):
         timestamps = [item["observed_at"] for item in row.get("acknowledgements", [])]
         parsed = [dt.datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(dt.timezone.utc) for value in timestamps]
@@ -1365,6 +1862,8 @@ def append_journal_record(
         )
         if any(previous["candidate"].get(field) != value for field, value in immutable_fields):
             raise AdmissionError("a generation id was reused for different immutable candidate identity")
+        if previous["candidate"].get("source_target") != receipt["candidate"].get("source_target"):
+            raise AdmissionError("a candidate revision changed its immutable source-target binding")
         old_ack = previous.get("acknowledgements", [])
         new_ack = receipt.get("acknowledgements", [])
         if not isinstance(old_ack, list) or not isinstance(new_ack, list):
