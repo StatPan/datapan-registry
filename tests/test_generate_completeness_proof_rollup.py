@@ -5750,6 +5750,18 @@ class CompletenessProofRollupTest(unittest.TestCase):
         base_main = subprocess.check_output(
             ["git", "rev-parse", "refs/remotes/origin/main"], cwd=ROOT, text=True,
         ).strip()
+        input_index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        catalog_input = next(
+            item for item in input_index["inputs"] if item.get("role") == "source_catalog_snapshot"
+        )
+        pinned_catalog_revision = catalog_input["subject"]["source_revision"]
+        pinned_catalog_manifest_raw = subprocess.check_output(
+            ["git", "show", f"{pinned_catalog_revision}:manifest.json"], cwd=ROOT,
+        )
+        subprocess.run(
+            ["git", "merge-base", "--is-ancestor", pinned_catalog_revision, base_main],
+            cwd=ROOT, check=True,
+        )
         common_dir = pathlib.Path(subprocess.check_output(
             ["git", "rev-parse", "--git-common-dir"], cwd=ROOT, text=True,
         ).strip()).resolve()
@@ -5817,8 +5829,11 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertIsNone(details["current_release_manifest_sha256"])
         self.assertFalse(details["current_release_applicable"])
         self.assertFalse(details["current_release_subject_applicable"])
-        self.assertEqual(details["catalog_binding_witness"]["release_manifest_sha256"], MODULE.sha256_bytes(base_manifest_raw))
-        self.assertEqual(details["catalog_binding_witness"]["source_revision"], base_main)
+        self.assertEqual(
+            details["catalog_binding_witness"]["release_manifest_sha256"],
+            MODULE.sha256_bytes(pinned_catalog_manifest_raw),
+        )
+        self.assertEqual(details["catalog_binding_witness"]["source_revision"], pinned_catalog_revision)
         self.assertTrue(details["catalog_binding_witness"]["main_ancestry_verified"])
         self.assertEqual(before_delivery["details"]["catalog_binding_witness"], details["catalog_binding_witness"])
         self.assertTrue(details["payload_equivalent_to_current_registry"])
