@@ -181,6 +181,212 @@ def _materialize_exact_fixture_file(
 
 
 class CompletenessProofRollupTest(unittest.TestCase):
+    @staticmethod
+    def _git_output(root: pathlib.Path, *args: str) -> str:
+        result = subprocess.run(
+            ["git", *args], cwd=root, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True, check=False,
+        )
+        if result.returncode != 0:
+            raise AssertionError(
+                f"git {' '.join(args)} failed in fixture setup: {result.stderr[-1000:]}"
+            )
+        return result.stdout.rstrip("\n")
+
+    def _inherit_native_borrowed_shallow_boundary(
+        self, donor_root: pathlib.Path, child_root: pathlib.Path,
+    ) -> tuple[pathlib.Path, str, str, bytes | None, bytes]:
+        """Keep borrowed fixture ancestry aligned with its native Git boundary."""
+        donor_root = donor_root.resolve()
+        common_dir = pathlib.Path(self._git_output(
+            donor_root, "rev-parse", "--path-format=absolute", "--git-common-dir",
+        )).resolve()
+        self.assertTrue(common_dir.is_absolute())
+        donor_shallow_path = pathlib.Path(self._git_output(
+            donor_root, "rev-parse", "--path-format=absolute", "--git-path", "shallow",
+        )).resolve()
+        self.assertEqual(donor_shallow_path, common_dir / "shallow")
+        donor_main = self._git_output(
+            donor_root, "rev-parse", "--verify", "refs/remotes/origin/main^{commit}",
+        )
+        donor_refs = self._git_output(donor_root, "for-each-ref", "--format=%(refname) %(objectname)").encode()
+        shallow_state = self._git_output(donor_root, "rev-parse", "--is-shallow-repository")
+        self.assertIn(shallow_state, {"true", "false"})
+        shallow_path = common_dir / "shallow"
+        child_refs = self._git_output(
+            child_root, "for-each-ref", "--format=%(refname) %(objectname)",
+        ).encode()
+        child_git_dir = pathlib.Path(self._git_output(
+            child_root, "rev-parse", "--path-format=absolute", "--git-dir",
+        )).resolve()
+        self.assertEqual(child_git_dir, (child_root / ".git").resolve())
+        child_shallow = child_git_dir / "shallow"
+        self.assertFalse(child_shallow.exists() or child_shallow.is_symlink())
+        alternate = child_git_dir / "objects/info/alternates"
+        self.assertTrue(stat.S_ISREG(alternate.lstat().st_mode))
+        self.assertFalse(alternate.is_symlink())
+        self.assertEqual(
+            alternate.read_bytes(), str(common_dir / "objects").encode() + b"\n",
+            "borrowed child alternate must point to the donor's exact common object directory",
+        )
+
+        shallow_bytes: bytes | None
+        if shallow_state == "true":
+            metadata = shallow_path.lstat()
+            self.assertTrue(stat.S_ISREG(metadata.st_mode), "native shallow boundary must be a regular file")
+            shallow_bytes = shallow_path.read_bytes()
+            object_format = self._git_output(donor_root, "rev-parse", "--show-object-format")
+            oid_bytes = {"sha1": 40, "sha256": 64}.get(object_format)
+            self.assertIsNotNone(oid_bytes, "fixture Git object format must be recognized")
+            lines = shallow_bytes.splitlines()
+            self.assertTrue(lines, "native shallow boundary must be nonempty")
+            self.assertTrue(shallow_bytes.endswith(b"\n"), "native shallow boundary must end on an OID line")
+            self.assertEqual(len(set(lines)), len(lines), "native shallow boundary contains duplicate OIDs")
+            for line in lines:
+                self.assertEqual(len(line), oid_bytes)
+                self.assertTrue(all(byte in b"0123456789abcdef" for byte in line))
+                boundary_oid = line.decode("ascii")
+                self.assertEqual(
+                    self._git_output(donor_root, "cat-file", "-t", boundary_oid), "commit",
+                    f"native shallow boundary commit {boundary_oid} must be available in the donor",
+                )
+
+            with child_shallow.open("xb") as stream:
+                stream.write(shallow_bytes)
+            self.assertEqual(child_shallow.read_bytes(), shallow_bytes)
+            self.assertEqual(
+                self._git_output(child_root, "rev-parse", "--is-shallow-repository"), "true",
+            )
+            self.assertEqual(
+                pathlib.Path(self._git_output(
+                    child_root, "rev-parse", "--path-format=absolute", "--git-path", "shallow",
+                )).resolve(),
+                child_shallow.resolve(),
+            )
+        else:
+            self.assertFalse(shallow_path.exists() or shallow_path.is_symlink())
+            shallow_bytes = None
+            self.assertEqual(
+                self._git_output(child_root, "rev-parse", "--is-shallow-repository"), "false",
+            )
+            self.assertFalse(child_shallow.exists())
+
+        self.assertEqual(
+            self._git_output(donor_root, "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"),
+            donor_main,
+        )
+        self.assertEqual(
+            self._git_output(donor_root, "for-each-ref", "--format=%(refname) %(objectname)").encode(),
+            donor_refs,
+        )
+        self.assertEqual(
+            shallow_path.read_bytes() if shallow_bytes is not None else None,
+            shallow_bytes,
+        )
+        self.assertEqual(
+            self._git_output(child_root, "for-each-ref", "--format=%(refname) %(objectname)").encode(),
+            child_refs,
+            "installing native shallow metadata must not alter the child refs",
+        )
+        return common_dir, donor_main, shallow_state, shallow_bytes, donor_refs
+
+    def _assert_native_borrowed_donor_unchanged(
+        self,
+        donor_root: pathlib.Path,
+        snapshot: tuple[pathlib.Path, str, str, bytes | None, bytes],
+    ) -> None:
+        common_dir, donor_main, shallow_state, shallow_bytes, donor_refs = snapshot
+        self.assertEqual(
+            pathlib.Path(self._git_output(
+                donor_root, "rev-parse", "--path-format=absolute", "--git-common-dir",
+            )).resolve(),
+            common_dir,
+        )
+        self.assertEqual(
+            self._git_output(donor_root, "rev-parse", "--is-shallow-repository"), shallow_state,
+        )
+        self.assertEqual(
+            self._git_output(donor_root, "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"),
+            donor_main,
+        )
+        self.assertEqual(
+            self._git_output(donor_root, "for-each-ref", "--format=%(refname) %(objectname)").encode(),
+            donor_refs,
+        )
+        shallow_path = common_dir / "shallow"
+        if shallow_bytes is None:
+            self.assertFalse(shallow_path.exists() or shallow_path.is_symlink())
+        else:
+            metadata = shallow_path.lstat()
+            self.assertTrue(stat.S_ISREG(metadata.st_mode))
+            self.assertFalse(shallow_path.is_symlink())
+            self.assertEqual(shallow_path.read_bytes(), shallow_bytes)
+
+    def test_borrowed_shallow_boundary_rejects_wrong_object_alternate(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="completeness-wrong-borrowed-alternate-") as name:
+            root = pathlib.Path(name)
+            remote = root / "remote.git"
+            seed = root / "seed"
+            donor_root = root / "donor"
+            subprocess.run(
+                ["git", "init", "--quiet", "--bare", "--initial-branch=main", str(remote)], check=True,
+            )
+            seed.mkdir()
+            subprocess.run(
+                ["git", "init", "--quiet", "--initial-branch=main"], cwd=seed, check=True,
+            )
+            for key, value in (("user.name", "Shallow donor fixture"), ("user.email", "shallow@example.invalid")):
+                subprocess.run(["git", "config", key, value], cwd=seed, check=True)
+            (seed / "history.txt").write_text("first\n")
+            subprocess.run(["git", "add", "history.txt"], cwd=seed, check=True)
+            subprocess.run(["git", "commit", "--quiet", "-m", "first donor commit"], cwd=seed, check=True)
+            with (seed / "history.txt").open("a") as stream:
+                stream.write("second\n")
+            subprocess.run(["git", "commit", "--quiet", "-am", "second donor commit"], cwd=seed, check=True)
+            subprocess.run(["git", "remote", "add", "origin", str(remote)], cwd=seed, check=True)
+            subprocess.run(["git", "push", "--quiet", "origin", "HEAD:refs/heads/main"], cwd=seed, check=True)
+            subprocess.run(
+                ["git", "clone", "--quiet", "--no-tags", "--depth=1", "--branch", "main",
+                 f"file://{remote}", str(donor_root)],
+                check=True,
+                env={**os.environ, "GIT_ALLOW_PROTOCOL": "file"},
+            )
+            self.assertEqual(self._git_output(donor_root, "rev-parse", "--is-shallow-repository"), "true")
+            donor_common = pathlib.Path(self._git_output(
+                donor_root, "rev-parse", "--path-format=absolute", "--git-common-dir",
+            )).resolve()
+            donor_main = self._git_output(
+                donor_root, "rev-parse", "--verify", "refs/remotes/origin/main^{commit}",
+            )
+            donor_refs = self._git_output(
+                donor_root, "for-each-ref", "--format=%(refname) %(objectname)",
+            ).encode()
+            donor_shallow = donor_common / "shallow"
+            donor_shallow_bytes = donor_shallow.read_bytes()
+            child_root = root / "child"
+            child_root.mkdir()
+            subprocess.run(
+                ["git", "init", "--quiet", "--initial-branch=main"], cwd=child_root, check=True,
+            )
+            alternate = child_root / ".git/objects/info/alternates"
+            alternate.parent.mkdir(parents=True, exist_ok=True)
+            alternate.write_text(str(child_root / ".git/objects") + "\n")
+            with self.assertRaisesRegex(
+                AssertionError, "borrowed child alternate must point to the donor's exact common object directory",
+            ):
+                self._inherit_native_borrowed_shallow_boundary(donor_root, child_root)
+            self.assertFalse((child_root / ".git/shallow").exists())
+            self.assertEqual(self._git_output(child_root, "rev-parse", "--is-shallow-repository"), "false")
+            self.assertEqual(
+                self._git_output(donor_root, "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"),
+                donor_main,
+            )
+            self.assertEqual(
+                self._git_output(donor_root, "for-each-ref", "--format=%(refname) %(objectname)").encode(),
+                donor_refs,
+            )
+            self.assertEqual(donor_shallow.read_bytes(), donor_shallow_bytes)
+
     def test_exact_fixture_file_keeps_same_filesystem_hardlink(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
@@ -3599,8 +3805,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
             ["git", "rev-parse", "refs/remotes/origin/main"], cwd=ROOT, text=True,
         ).strip()
         common_dir = pathlib.Path(subprocess.check_output(
-            ["git", "rev-parse", "--git-common-dir"], cwd=ROOT, text=True,
+            ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], cwd=ROOT, text=True,
         ).strip()).resolve()
+        donor_snapshot: tuple[pathlib.Path, str, str, bytes | None, bytes] | None = None
 
         with tempfile.TemporaryDirectory(prefix="completeness-proof-rollup-e2e-", dir=ROOT.parent) as name:
             temp_root = pathlib.Path(name)
@@ -3616,6 +3823,8 @@ class CompletenessProofRollupTest(unittest.TestCase):
             alternate = temp_root / ".git/objects/info/alternates"
             alternate.parent.mkdir(parents=True, exist_ok=True)
             alternate.write_text(str(common_dir / "objects") + "\n")
+            donor_snapshot = self._inherit_native_borrowed_shallow_boundary(ROOT, temp_root)
+            self.assertEqual(donor_snapshot[0], common_dir)
             subprocess.run(["git", "config", "user.name", "Completeness rollup test"], cwd=temp_root, check=True)
             subprocess.run(["git", "config", "user.email", "completeness-test@example.invalid"], cwd=temp_root, check=True)
             subprocess.run(["git", "update-ref", "refs/remotes/origin/main", base_main], cwd=temp_root, check=True)
@@ -4068,6 +4277,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
             index_path.write_text(json.dumps(input_index, ensure_ascii=False, indent=2) + "\n")
             with self.assertRaisesRegex(ValueError, "no registered semantic subject adapter"):
                 MODULE.build_report(root=temp_root, input_root=source_input_root, input_index_path=index_path)
+
+        assert donor_snapshot is not None
+        self._assert_native_borrowed_donor_unchanged(ROOT, donor_snapshot)
 
     def test_retained_633_import_receipt_matches_admitted_counts(self) -> None:
         admission = json.loads((ROOT / "reports/runtime-freshness-import-admissions/35798122454.json").read_text())
@@ -5750,23 +5962,42 @@ class CompletenessProofRollupTest(unittest.TestCase):
         base_main = subprocess.check_output(
             ["git", "rev-parse", "refs/remotes/origin/main"], cwd=ROOT, text=True,
         ).strip()
-        input_index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
-        catalog_input = next(
-            item for item in input_index["inputs"] if item.get("role") == "source_catalog_snapshot"
-        )
-        pinned_catalog_revision = catalog_input["subject"]["source_revision"]
-        pinned_catalog_manifest_raw = subprocess.check_output(
-            ["git", "show", f"{pinned_catalog_revision}:manifest.json"], cwd=ROOT,
-        )
-        subprocess.run(
-            ["git", "merge-base", "--is-ancestor", pinned_catalog_revision, base_main],
-            cwd=ROOT, check=True,
-        )
         common_dir = pathlib.Path(subprocess.check_output(
-            ["git", "rev-parse", "--git-common-dir"], cwd=ROOT, text=True,
+            ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], cwd=ROOT, text=True,
         ).strip()).resolve()
+        donor_snapshot: tuple[pathlib.Path, str, str, bytes | None, bytes] | None = None
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        source_index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        source_manifest_rows = [
+            item for item in source_index["inputs"]
+            if item.get("input_id") == "data-go-kr.api-catalog.source_catalog_snapshot"
+            and item.get("scope_id") == "data-go-kr.api-catalog"
+            and item.get("role") == "source_catalog_snapshot"
+            and item.get("path") == "data/data-go-kr.registry.json"
+        ]
+        self.assertEqual(len(source_manifest_rows), 1)
+        source_manifest_row = source_manifest_rows[0]
+        source_revision = source_manifest_row.get("subject", {}).get("source_revision")
+        self.assertIsInstance(source_revision, str)
+        self.assertEqual(len(source_revision), 40)
+        self.assertTrue(all(character in "0123456789abcdef" for character in source_revision))
+        self.assertEqual(
+            subprocess.run(
+                ["git", "merge-base", "--is-ancestor", source_revision, base_main],
+                cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+            ).returncode,
+            0,
+            "the indexed source-manifest revision must be an ancestor of the fixture's base main",
+        )
         base_manifest_raw = subprocess.check_output(
             ["git", "show", f"{base_main}:manifest.json"], cwd=ROOT,
+        )
+        source_manifest_raw = subprocess.check_output(
+            ["git", "show", f"{source_revision}:manifest.json"], cwd=ROOT,
         )
         base_manifest = json.loads(base_manifest_raw)
         changed_generated_at = "2026-07-11T10:28:36Z"
@@ -5777,11 +6008,6 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(changed_manifest["artifacts"], base_manifest["artifacts"])
         self.assertEqual(changed_manifest["artifact_count"], base_manifest["artifact_count"])
 
-        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
-        operation_id = next(
-            scope["scope_id"] for scope in registry["scopes"]
-            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
-        )
         with tempfile.TemporaryDirectory(prefix="completeness-native-publisher-metadata-manifest-") as name:
             repository = pathlib.Path(name) / "repo"
             repository.mkdir()
@@ -5793,6 +6019,8 @@ class CompletenessProofRollupTest(unittest.TestCase):
             alternates = repository / ".git/objects/info/alternates"
             alternates.parent.mkdir(parents=True, exist_ok=True)
             alternates.write_text(str(common_dir / "objects") + "\n")
+            donor_snapshot = self._inherit_native_borrowed_shallow_boundary(ROOT, repository)
+            self.assertEqual(donor_snapshot[0], common_dir)
             subprocess.run(["git", "config", "user.name", "Completeness metadata fixture"], cwd=repository, check=True)
             subprocess.run(["git", "config", "user.email", "completeness-test@example.invalid"], cwd=repository, check=True)
             subprocess.run(["git", "update-ref", "refs/remotes/origin/main", base_main], cwd=repository, check=True)
@@ -5805,12 +6033,29 @@ class CompletenessProofRollupTest(unittest.TestCase):
             index_path, _source = self._build_synthetic_native_ack_packet(
                 input_root, outcome="already_acknowledged", publisher_identity=(99972280001, 2),
             )
+            fixture_index = json.loads(index_path.read_bytes())
+            fixture_source_manifest_rows = [
+                item for item in fixture_index["inputs"]
+                if item.get("input_id") == source_manifest_row["input_id"]
+                and item.get("scope_id") == source_manifest_row["scope_id"]
+                and item.get("role") == source_manifest_row["role"]
+                and item.get("path") == source_manifest_row["path"]
+            ]
+            self.assertEqual(fixture_source_manifest_rows, [source_manifest_row])
             report_before = MODULE.build_report(root=repository, input_root=input_root, input_index_path=index_path)
 
             subprocess.run(["git", "add", "manifest.json"], cwd=repository, check=True)
             subprocess.run(["git", "commit", "--quiet", "-m", "metadata-only manifest fixture"], cwd=repository, check=True)
             metadata_main = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
             subprocess.run(["git", "update-ref", "refs/remotes/origin/main", metadata_main], cwd=repository, check=True)
+            self.assertEqual(
+                subprocess.run(
+                    ["git", "merge-base", "--is-ancestor", source_revision, metadata_main],
+                    cwd=repository, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                ).returncode,
+                0,
+                "the indexed source-manifest revision must remain an ancestor after the metadata-only main advance",
+            )
             self.assertEqual(
                 subprocess.check_output(["git", "show", f"{metadata_main}:manifest.json"], cwd=repository),
                 changed_manifest_raw,
@@ -5831,13 +6076,15 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertFalse(details["current_release_subject_applicable"])
         self.assertEqual(
             details["catalog_binding_witness"]["release_manifest_sha256"],
-            MODULE.sha256_bytes(pinned_catalog_manifest_raw),
+            MODULE.sha256_bytes(source_manifest_raw),
         )
-        self.assertEqual(details["catalog_binding_witness"]["source_revision"], pinned_catalog_revision)
+        self.assertEqual(details["catalog_binding_witness"]["source_revision"], source_revision)
         self.assertTrue(details["catalog_binding_witness"]["main_ancestry_verified"])
         self.assertEqual(before_delivery["details"]["catalog_binding_witness"], details["catalog_binding_witness"])
         self.assertTrue(details["payload_equivalent_to_current_registry"])
         self.assertEqual(delivery["state"], "historical")
+        assert donor_snapshot is not None
+        self._assert_native_borrowed_donor_unchanged(ROOT, donor_snapshot)
 
     def test_build_report_rejects_nonlegacy_ack_replay_mutations_and_preserves_outputs(self) -> None:
         """Rebound bytes cannot turn replay into a write, another subject, or another state ref."""

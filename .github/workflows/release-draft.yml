@@ -74,6 +74,12 @@ jobs:
           git cat-file -e "${source_revision}^{commit}"
           git merge-base --is-ancestor "${source_revision}" HEAD
 
+      - name: Fetch historical observation-plan schema test fixture
+        working-directory: datapan-registry
+        run: |
+          # Test-fixture history only; this commit is not a source-revision candidate.
+          git fetch --no-tags --depth=1 origin b0ff9e7cb3ec5cdcecb35a8fc416123a525b286d
+
       - name: Materialize manifest-bound canonical registry
         working-directory: datapan-registry
         run: |

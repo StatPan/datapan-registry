@@ -116,6 +116,12 @@ jobs:
         working-directory: datapan-registry
         run: git fetch --no-tags --depth=64 origin +refs/heads/main:refs/remotes/origin/main
 
+      - name: Fetch historical observation-plan schema test fixture
+        working-directory: datapan-registry
+        run: |
+          # Test-fixture history only; this commit is not a source-revision candidate.
+          git fetch --no-tags --depth=1 origin b0ff9e7cb3ec5cdcecb35a8fc416123a525b286d
+
       - name: Validate external CLI checkout identity
         working-directory: datapan-registry
         run: |

@@ -611,6 +611,21 @@ class CanonicalUpdateCITests(unittest.TestCase):
                 self.assertIn("--depth=1 origin \"${source_revision}\"", source_step["run"])
                 self.assertIn("--depth=128 origin \"${RELEASE_HEAD_SHA}\"", source_step["run"])
                 self.assertIn("git merge-base --is-ancestor \"${source_revision}\" HEAD", source_step["run"])
+                fixture_step = next(
+                    step for step in steps
+                    if step.get("name") == "Fetch historical observation-plan schema test fixture"
+                )
+                self.assertEqual(fixture_step["working-directory"], "datapan-registry")
+                self.assertIn(
+                    "git fetch --no-tags --depth=1 origin b0ff9e7cb3ec5cdcecb35a8fc416123a525b286d",
+                    fixture_step["run"],
+                )
+                self.assertIn("Test-fixture history only", fixture_step["run"])
+                policy_index = next(
+                    index for index, step in enumerate(steps)
+                    if step.get("name") == "Validate registry policy artifacts"
+                )
+                self.assertLess(steps.index(fixture_step), policy_index)
 
     def test_verify_release_runs_terminal_evidence_intake_tests_and_compiles_sources(self) -> None:
         import yaml
