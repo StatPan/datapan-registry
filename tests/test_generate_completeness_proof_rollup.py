@@ -5753,8 +5753,38 @@ class CompletenessProofRollupTest(unittest.TestCase):
         common_dir = pathlib.Path(subprocess.check_output(
             ["git", "rev-parse", "--git-common-dir"], cwd=ROOT, text=True,
         ).strip()).resolve()
+        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
+        operation_id = next(
+            scope["scope_id"] for scope in registry["scopes"]
+            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
+        )
+        source_index = json.loads((ROOT / MODULE.INPUT_INDEX_PATH).read_bytes())
+        source_manifest_rows = [
+            item for item in source_index["inputs"]
+            if item.get("input_id") == "data-go-kr.api-catalog.source_catalog_snapshot"
+            and item.get("scope_id") == "data-go-kr.api-catalog"
+            and item.get("role") == "source_catalog_snapshot"
+            and item.get("path") == "data/data-go-kr.registry.json"
+        ]
+        self.assertEqual(len(source_manifest_rows), 1)
+        source_manifest_row = source_manifest_rows[0]
+        source_revision = source_manifest_row.get("subject", {}).get("source_revision")
+        self.assertIsInstance(source_revision, str)
+        self.assertEqual(len(source_revision), 40)
+        self.assertTrue(all(character in "0123456789abcdef" for character in source_revision))
+        self.assertEqual(
+            subprocess.run(
+                ["git", "merge-base", "--is-ancestor", source_revision, base_main],
+                cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+            ).returncode,
+            0,
+            "the indexed source-manifest revision must be an ancestor of the fixture's base main",
+        )
         base_manifest_raw = subprocess.check_output(
             ["git", "show", f"{base_main}:manifest.json"], cwd=ROOT,
+        )
+        source_manifest_raw = subprocess.check_output(
+            ["git", "show", f"{source_revision}:manifest.json"], cwd=ROOT,
         )
         base_manifest = json.loads(base_manifest_raw)
         changed_generated_at = "2026-07-11T10:28:36Z"
@@ -5765,11 +5795,6 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(changed_manifest["artifacts"], base_manifest["artifacts"])
         self.assertEqual(changed_manifest["artifact_count"], base_manifest["artifact_count"])
 
-        registry, _policy, _scope_by_id = MODULE.load_and_validate_registry(ROOT)
-        operation_id = next(
-            scope["scope_id"] for scope in registry["scopes"]
-            if scope["resource_kind"] == "api_operation_manifest" and scope["source_id"] == "data_go_kr"
-        )
         with tempfile.TemporaryDirectory(prefix="completeness-native-publisher-metadata-manifest-") as name:
             repository = pathlib.Path(name) / "repo"
             repository.mkdir()
@@ -5793,12 +5818,29 @@ class CompletenessProofRollupTest(unittest.TestCase):
             index_path, _source = self._build_synthetic_native_ack_packet(
                 input_root, outcome="already_acknowledged", publisher_identity=(99972280001, 2),
             )
+            fixture_index = json.loads(index_path.read_bytes())
+            fixture_source_manifest_rows = [
+                item for item in fixture_index["inputs"]
+                if item.get("input_id") == source_manifest_row["input_id"]
+                and item.get("scope_id") == source_manifest_row["scope_id"]
+                and item.get("role") == source_manifest_row["role"]
+                and item.get("path") == source_manifest_row["path"]
+            ]
+            self.assertEqual(fixture_source_manifest_rows, [source_manifest_row])
             report_before = MODULE.build_report(root=repository, input_root=input_root, input_index_path=index_path)
 
             subprocess.run(["git", "add", "manifest.json"], cwd=repository, check=True)
             subprocess.run(["git", "commit", "--quiet", "-m", "metadata-only manifest fixture"], cwd=repository, check=True)
             metadata_main = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repository, text=True).strip()
             subprocess.run(["git", "update-ref", "refs/remotes/origin/main", metadata_main], cwd=repository, check=True)
+            self.assertEqual(
+                subprocess.run(
+                    ["git", "merge-base", "--is-ancestor", source_revision, metadata_main],
+                    cwd=repository, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                ).returncode,
+                0,
+                "the indexed source-manifest revision must remain an ancestor after the metadata-only main advance",
+            )
             self.assertEqual(
                 subprocess.check_output(["git", "show", f"{metadata_main}:manifest.json"], cwd=repository),
                 changed_manifest_raw,
@@ -5817,8 +5859,11 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertIsNone(details["current_release_manifest_sha256"])
         self.assertFalse(details["current_release_applicable"])
         self.assertFalse(details["current_release_subject_applicable"])
-        self.assertEqual(details["catalog_binding_witness"]["release_manifest_sha256"], MODULE.sha256_bytes(base_manifest_raw))
-        self.assertEqual(details["catalog_binding_witness"]["source_revision"], base_main)
+        self.assertEqual(
+            details["catalog_binding_witness"]["release_manifest_sha256"],
+            MODULE.sha256_bytes(source_manifest_raw),
+        )
+        self.assertEqual(details["catalog_binding_witness"]["source_revision"], source_revision)
         self.assertTrue(details["catalog_binding_witness"]["main_ancestry_verified"])
         self.assertEqual(before_delivery["details"]["catalog_binding_witness"], details["catalog_binding_witness"])
         self.assertTrue(details["payload_equivalent_to_current_registry"])
