@@ -1646,7 +1646,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(replay["observation_count"], 1)
         self.assertEqual(replay["last_progress_at"], first["last_progress_at"])
         self.assertNotEqual(replay["last_heartbeat_at"], first["last_heartbeat_at"])
-    def test_exact_delivery_replay_has_an_explicit_idle_result_without_rebinding_old_artifact(self) -> None:
+    def test_fixture_replay_does_not_claim_authenticated_exact_delivery(self) -> None:
         code, first = self.invoke()
         self.assertEqual(code, 0)
         prior_locator = copy.deepcopy(first["output_artifact"])
@@ -1657,26 +1657,14 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         )
         code, replay = MODULE.process(replay_args, fetcher=lambda *_args: self.fail("exact replay must not fetch"))
         self.assertEqual(code, 0)
-        self.assertTrue(replay_args.exact_delivery_replay)
-        self.assertEqual(
-            MODULE.processing_result(
-                replay,
-                exact_delivery_replay=True,
-                producer_run_id="101",
-                processor_run_id="102",
-                processor_artifact_run_id="102",
-            ),
-            {
-                "status": "idle",
-                "reason": "exact_producer_delivery_replay",
-                "processing_replay": True,
-                "candidate_available": False,
-                "source_id": "data_go_kr",
-                "producer_run_id": "101",
-                "processor_run_id": "102",
-                "processor_artifact_run_id": "102",
-            },
-        )
+        self.assertFalse(getattr(replay_args, "exact_delivery_replay", False))
+        self.assertEqual(replay["status"], "ready")
+        self.assertFalse(MODULE.processing_result(
+            replay,
+            producer_run_id="101",
+            processor_run_id="102",
+            processor_artifact_run_id="102",
+        )["processing_replay"])
         self.assertEqual(replay["output_artifact"], prior_locator)
         self.assertFalse((self.output_dir / "upstream-catalogue-checkpoint-receipt.json").exists())
         self.assertFalse((self.output_dir / "composed-candidate.registry.json").exists())
