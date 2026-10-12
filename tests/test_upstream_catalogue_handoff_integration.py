@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import contextlib
+import copy
 import hashlib
 import importlib.util
 import io
@@ -22,6 +23,39 @@ EXPIRES = "2026-11-03T00:00:00Z"
 REPOSITORY = "StatPan/datapan-registry"
 STATE_BRANCH = "automation/upstream-catalogue-state"
 STATE_ROOT = ".datapan/upstream-catalogue-state"
+
+
+def committed_state_head(test_case: unittest.TestCase, fixture, label: str) -> str:
+    """Commit the exact selected processor State snapshot and return its Git head."""
+    state_repo = fixture.root / f"replay-state-{label}"
+    state_repo.mkdir()
+    tracked_state = state_repo / STATE_ROOT
+    shutil.copytree(fixture.state_dir, tracked_state)
+
+    def run_git(*args: str) -> str:
+        completed = subprocess.run(
+            ["git", "-C", str(state_repo), *args],
+            text=True, capture_output=True, check=False,
+        )
+        test_case.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
+        return completed.stdout.strip()
+
+    run_git("init", "-b", "state")
+    run_git("config", "user.name", "fixture")
+    run_git("config", "user.email", "fixture@example.test")
+    run_git("add", STATE_ROOT)
+    run_git("commit", "-m", "snapshot selected processor State")
+    expected_paths = sorted(
+        f"{STATE_ROOT}/{path.relative_to(fixture.state_dir).as_posix()}"
+        for path in fixture.state_dir.rglob("*")
+        if path.is_file()
+    )
+    actual_paths = run_git("ls-tree", "-r", "--name-only", "HEAD").splitlines()
+    test_case.assertEqual(actual_paths, expected_paths)
+    test_case.assertEqual(run_git("status", "--porcelain=v1"), "")
+    state_head_sha = run_git("rev-parse", "HEAD")
+    test_case.assertRegex(state_head_sha, r"^[a-f0-9]{40}$")
+    return state_head_sha
 
 
 def load_module(path: pathlib.Path, name: str):
@@ -127,7 +161,8 @@ def write_admission_bundle(
 
 
 def admission_args(fixture, *, run_id: str, admission_path: pathlib.Path,
-                   archive: pathlib.Path, artifact_id: str, claim_only: bool):
+                   archive: pathlib.Path, artifact_id: str, claim_only: bool,
+                   replay_state_head_sha: str | None = None):
     overrides = {
         "--producer-head-sha": SOURCE_HEAD,
         "--collector-admission-file": admission_path,
@@ -142,6 +177,8 @@ def admission_args(fixture, *, run_id: str, admission_path: pathlib.Path,
     }
     if claim_only:
         overrides["--claim-only"] = None
+    if replay_state_head_sha is not None:
+        overrides["--replay-state-head-sha"] = replay_state_head_sha
     args = fixture.args(run_id=run_id, **overrides)
     args.claim_only = claim_only
     args.producer_head_sha = SOURCE_HEAD
@@ -750,20 +787,138 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(code, 0, newer.get("outcome"))
         self.assertEqual(newer["observation_count"], 2)
+        before_older_replay = copy.deepcopy(newer)
+        before_older_index = json.loads(
+            (fixture.state_dir / "sources/data_go_kr/index.json").read_text(encoding="utf-8"),
+        )
+        replay_state_head_sha = committed_state_head(self, fixture, "older-after-newer")
 
         fixture.candidate_path.write_bytes(original_candidate)
         fixture.diff_path.write_bytes(original_diff)
         fixture.evidence_path.write_bytes(original_evidence)
         fixture.now = "2026-10-03T10:15:00Z"
+        older_replay_args = admission_args(
+            fixture, run_id="801001", admission_path=old_env, archive=old_zip,
+            artifact_id=old_artifact, claim_only=True,
+            replay_state_head_sha=replay_state_head_sha,
+        )
         code, replay = processor.process(
-            admission_args(fixture, run_id="801001", admission_path=old_env, archive=old_zip,
-                           artifact_id=old_artifact, claim_only=True),
+            older_replay_args,
             fetcher=lambda *_: self.fail("older replay must not issue detail requests"),
         )
         self.assertEqual(code, 0, replay.get("outcome"))
         self.assertEqual(replay["observation_count"], 2)
         self.assertEqual(replay["last_observation"]["producer_run_id"], "801002")
         self.assertEqual(replay["last_observation"]["observed_at"], newer_at)
+        self.assertEqual(replay["input_artifacts"], before_older_replay["input_artifacts"])
+        self.assertEqual(replay["last_observation"], before_older_replay["last_observation"])
+        replay_context = older_replay_args.exact_delivery_replay_context
+        self.assertEqual(replay_context["variant"], "older_admitted_v2")
+        self.assertEqual(replay_context["expected_delivery"]["producer_run_id"], "801001")
+        replay_result = processor.processing_result(
+            replay,
+            exact_delivery_replay=True,
+            producer_run_id="801001",
+            processor_run_id=older_replay_args.processor_run_id or "801001",
+            processor_artifact_run_id=older_replay_args.processor_artifact_run_id or "801001",
+        )
+        v2_context = {
+            key: value for key, value in replay_context.items()
+            if key not in {"variant", "delivered_admission_id", "expected_delivery"}
+        }
+        replay_receipt = processor.build_older_admitted_replay_persistence_receipt(
+            result=replay_result,
+            delivered_admission_id=replay_context["delivered_admission_id"],
+            expected_delivery=replay_context["expected_delivery"],
+            **v2_context,
+        )
+        self.assertEqual(replay_receipt["disposition"], "older_admitted")
+        self.assertEqual(replay_receipt["producer_run_id"], "801001")
+        latest_admission = processor._replay_admission(
+            replay_context["prior_checkpoint"], replay_context["prior_index"],
+        )
+        self.assertEqual(replay_receipt["latest_admission_id"], latest_admission["admission_id"])
+        self.assertEqual(replay_receipt["delivered_admission_id"], replay_context["delivered_admission_id"])
+        self.assertEqual(
+            processor.verify_replay_persistence_receipt(
+                replay_receipt,
+                result=replay_result,
+                expected_delivery=replay_context["expected_delivery"],
+                **v2_context,
+            ),
+            replay_receipt,
+        )
+        integer_producer_result = copy.deepcopy(replay_result)
+        integer_producer_result["producer_run_id"] = 801001
+        with self.assertRaisesRegex(ValueError, "replay_processing_result_identity_invalid"):
+            processor.build_older_admitted_replay_persistence_receipt(
+                result=integer_producer_result,
+                delivered_admission_id=replay_context["delivered_admission_id"],
+                expected_delivery=replay_context["expected_delivery"],
+                **v2_context,
+            )
+        bool_attempt_receipt = copy.deepcopy(replay_receipt)
+        bool_attempt_receipt["producer_run_attempt"] = True
+        unsigned_attempt = dict(bool_attempt_receipt)
+        unsigned_attempt.pop("receipt_sha256")
+        bool_attempt_receipt["receipt_sha256"] = processor._object_sha256(unsigned_attempt)
+        with self.assertRaisesRegex(ValueError, "replay_persistence_receipt_identity_invalid"):
+            processor.verify_replay_persistence_receipt(
+                bool_attempt_receipt,
+                result=replay_result,
+                expected_delivery=replay_context["expected_delivery"],
+                **v2_context,
+            )
+        for field, malformed_value in (
+            ("name", "upstream-catalog-refresh-forged"),
+            ("expires_at", "2026-11-04T00:00:00Z"),
+        ):
+            malformed_prior = copy.deepcopy(replay_context["prior_checkpoint"])
+            observation_run = malformed_prior["last_observation"]["producer_run_id"]
+            reference = next(
+                row for row in malformed_prior["input_artifacts"]
+                if row["run_id"] == observation_run
+            )
+            reference[field] = malformed_value
+            processor.seal_checkpoint(malformed_prior)
+            malformed_current = copy.deepcopy(malformed_prior)
+            malformed_current["last_heartbeat_at"] = replay_context["current_checkpoint"]["last_heartbeat_at"]
+            processor.seal_checkpoint(malformed_current)
+            malformed_args = {
+                **v2_context,
+                "result": replay_result,
+                "delivered_admission_id": replay_context["delivered_admission_id"],
+                "expected_delivery": replay_context["expected_delivery"],
+                "prior_checkpoint": malformed_prior,
+                "current_checkpoint": malformed_current,
+            }
+            with self.subTest(latest_artifact_reference=field), self.assertRaisesRegex(
+                ValueError, "replay_latest_input_artifact_binding_mismatch",
+            ):
+                processor.build_older_admitted_replay_persistence_receipt(**malformed_args)
+
+        actionable_prior = copy.deepcopy(replay_context["prior_checkpoint"])
+        actionable_prior["outcome"]["detail_retry_count"] = 1
+        processor.seal_checkpoint(actionable_prior)
+        actionable_current = copy.deepcopy(actionable_prior)
+        actionable_current["last_heartbeat_at"] = replay_context["current_checkpoint"]["last_heartbeat_at"]
+        processor.seal_checkpoint(actionable_current)
+        with self.assertRaisesRegex(ValueError, "replay_older_delivery_generation_not_terminal"):
+            processor.build_older_admitted_replay_persistence_receipt(
+                **{
+                    **v2_context,
+                    "result": replay_result,
+                    "delivered_admission_id": replay_context["delivered_admission_id"],
+                    "expected_delivery": replay_context["expected_delivery"],
+                    "prior_checkpoint": actionable_prior,
+                    "current_checkpoint": actionable_current,
+                },
+            )
+        after_older_index = json.loads(
+            (fixture.state_dir / "sources/data_go_kr/index.json").read_text(encoding="utf-8"),
+        )
+        self.assertEqual(after_older_index["collector_handoff"], before_older_index["collector_handoff"])
+        self.assertEqual(after_older_index["detail_retry_state"], before_older_index["detail_retry_state"])
 
     def test_equal_time_replay_across_generator_revision_keeps_admitted_timeline(self):
         _support, fixture, processor = processor_fixture(self)
@@ -824,10 +979,35 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             self.assertEqual(current["observation_count"], 1)
 
             fixture.now = "2026-10-03T10:09:00Z"
+            revised_index_path = fixture.state_dir / "sources/data_go_kr/index.json"
+            revised_index = json.loads(revised_index_path.read_text(encoding="utf-8"))
+            self.assertNotEqual(first_generation, current["generation_id"])
+            first_generation_path = (
+                fixture.state_dir / "sources/data_go_kr/generations" / f"{first_generation}.json"
+            )
+            first_generation_path.unlink(missing_ok=True)
+            revised_index["generations"] = [
+                row for row in revised_index["generations"]
+                if row.get("generation_id") != first_generation
+            ]
+            revised_index_path.write_text(
+                json.dumps(revised_index, sort_keys=True) + "\n", encoding="utf-8",
+            )
+            self.assertFalse(first_generation_path.exists())
+            self.assertNotIn(
+                first_generation,
+                {row["generation_id"] for row in revised_index["generations"]},
+            )
+            first_admission_before = next(
+                row for row in revised_index["collector_handoff"]["admitted_observations"]
+                if row["producer_run_id"] == "731001"
+            )
+            replay_state_head_sha = committed_state_head(self, fixture, "equal-time-revision")
             admission_path, archive, artifact_id = bundles["731001"]
             older_claim = admission_args(
                 fixture, run_id="731001", admission_path=admission_path,
                 archive=archive, artifact_id=artifact_id, claim_only=True,
+                replay_state_head_sha=replay_state_head_sha,
             )
             code, replay = processor.process(
                 older_claim, fetcher=lambda *_: self.fail("older exact replay must not make provider requests"),
@@ -842,6 +1022,87 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         ledger_rows = index["collector_handoff"]["admitted_observations"]
         self.assertEqual([row["producer_run_id"] for row in ledger_rows], ["731001", "731002"])
         self.assertEqual({row["generation_id"] for row in ledger_rows}, {first_generation})
+        self.assertEqual(ledger_rows[0], first_admission_before)
+        self.assertNotIn(first_generation, {row["generation_id"] for row in index["generations"]})
+        replay_context = older_claim.exact_delivery_replay_context
+        self.assertEqual(replay_context["variant"], "older_admitted_v2")
+        self.assertEqual(replay_context["expected_delivery"]["producer_run_id"], "731001")
+        replay_result = processor.processing_result(
+            replay,
+            exact_delivery_replay=True,
+            producer_run_id="731001",
+            processor_run_id=older_claim.processor_run_id or "731001",
+            processor_artifact_run_id=older_claim.processor_artifact_run_id or "731001",
+        )
+        v2_context = {
+            key: value for key, value in replay_context.items()
+            if key not in {"variant", "delivered_admission_id", "expected_delivery"}
+        }
+        receipt_args = {
+            **v2_context,
+            "result": replay_result,
+            "delivered_admission_id": replay_context["delivered_admission_id"],
+            "expected_delivery": replay_context["expected_delivery"],
+        }
+        receipt = processor.build_older_admitted_replay_persistence_receipt(**receipt_args)
+        self.assertIs(
+            processor.verify_replay_persistence_receipt(
+                receipt,
+                result=replay_result,
+                expected_delivery=replay_context["expected_delivery"],
+                **v2_context,
+            ),
+            receipt,
+        )
+
+        # A target-to-tail reorder is accepted by the legacy v1 index helper,
+        # but v2 only permits the exact target-row heartbeat update.
+        prior_index = copy.deepcopy(replay_context["prior_index"])
+        current_index = copy.deepcopy(replay_context["current_index"])
+        unrelated = {
+            "generation_id": "0" * 64,
+            "status": "ready",
+            "checkpoint": f"{'0' * 64}.json",
+            "updated_at": observed_at,
+            "candidate_sha256": "c" * 64,
+        }
+        prior_index["generations"].append(copy.deepcopy(unrelated))
+        current_index["generations"].append(copy.deepcopy(unrelated))
+        reordered = copy.deepcopy(current_index)
+        target_id = replay_context["current_checkpoint"]["generation_id"]
+        target_rows = [
+            row for row in reordered["generations"]
+            if row["generation_id"] == target_id
+        ]
+        self.assertEqual(len(target_rows), 1)
+        reordered["generations"] = [
+            row for row in reordered["generations"] if row["generation_id"] != target_id
+        ] + target_rows
+        reordered_args = {**receipt_args, "prior_index": prior_index, "current_index": reordered}
+        with self.assertRaisesRegex(ValueError, "replay_generation_index_nonadmission_change"):
+            processor.build_older_admitted_replay_persistence_receipt(**reordered_args)
+        resealed_reorder = copy.deepcopy(receipt)
+        resealed_reorder["generation_index_before_sha256"] = processor._object_sha256(prior_index)
+        resealed_reorder["generation_index_sha256"] = processor._object_sha256(reordered)
+        resealed_reorder["state_changes"] = sorted([
+            *resealed_reorder["state_changes"],
+            f"sources/data_go_kr/index.json#/generations/{target_id}/order",
+        ])
+        unsigned_reorder = dict(resealed_reorder)
+        unsigned_reorder.pop("receipt_sha256")
+        resealed_reorder["receipt_sha256"] = processor._object_sha256(unsigned_reorder)
+        with self.assertRaisesRegex(ValueError, "replay_generation_index_nonadmission_change"):
+            processor.verify_replay_persistence_receipt(
+                resealed_reorder,
+                result=replay_result,
+                expected_delivery=replay_context["expected_delivery"],
+                **{
+                    **v2_context,
+                    "prior_index": prior_index,
+                    "current_index": reordered,
+                },
+            )
+
 
     def test_handoff_cli_catches_missed_observation_ahead_of_old_ready_details(self):
         support, fixture, processor = processor_fixture(self)

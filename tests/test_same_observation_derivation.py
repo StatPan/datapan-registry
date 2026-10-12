@@ -1560,7 +1560,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         fetcher: Any | None = None,
         resolver_fetcher: Any | None = None,
         expected_worker_code: int = 0,
-        expected_worker_status: str = "ready",
+        expected_worker_status: str | tuple[str, ...] = "ready",
         expected_claim_code: int = 0,
         expected_claim_status: str = "enriching",
         current_main_sha: str | None = None,
@@ -1642,7 +1642,10 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                     sleeper=lambda _delay: None, clock=fixed_clock,
                 )
         self.assertEqual(worker_code, expected_worker_code, worker.get("outcome"))
-        self.assertEqual(worker["status"], expected_worker_status)
+        if isinstance(expected_worker_status, tuple):
+            self.assertIn(worker["status"], expected_worker_status)
+        else:
+            self.assertEqual(worker["status"], expected_worker_status)
         self.assertEqual(worker["observation_count"], 1)
         self.assertEqual(worker["observed_at"], self.now_text)
         checkpoint_path = self.helper.state_dir / "sources/data_go_kr/generations" / f"{worker['generation_id']}.json"
@@ -3146,21 +3149,163 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertEqual(snapshot_state_bytes(), state_before_builder_rejection)
         self.assertEqual(len(self.detail_calls), details_before_builder_rejection)
 
-        # Exercise the processor entry point, exact workflow Claim/CAS body,
-        # and post-CAS bundle body against the produced ordinary B1 and
-        # derived B3 State trees. The CLI replay runs with a fail-fast provider
-        # boundary; no real provider, remote service, or production State is
-        # involved.
-        b1_cli_args = self._args(
-            6, generator_revision=b1["generation_inputs"]["generator_revision"],
+        # B1 is ready but still has queued detail work. Preserve its exact
+        # State and bundle, then finish an isolated copy through real bounded
+        # claim/worker cycles before testing idle replay. The seed fetcher is
+        # the deterministic local fixture fetcher; the subsequent CLI replay
+        # still uses the fail-fast no-provider boundary.
+        self.assertEqual(b1["status"], "ready")
+        self.assertEqual(b1["outcome"]["detail_retry_count"], 2)
+        b1_generation_id = b1["generation_id"]
+        b1_state_bytes = dict(self.state_snapshots[b1_generation_id])
+        b1_bundle = self.output_by_generation[b1_generation_id]
+
+        def bundle_fingerprint(bundle_root: pathlib.Path) -> tuple[tuple[str, int, str], ...]:
+            return tuple(
+                (
+                    path.relative_to(bundle_root).as_posix(), path.stat().st_size,
+                    hashlib.sha256(path.read_bytes()).hexdigest(),
+                )
+                for path in sorted(bundle_root.rglob("*")) if path.is_file()
+            )
+
+        preserved_generation_ids = {
+            b0["generation_id"], b1_generation_id, b3["generation_id"],
+        }
+        preserved_state_snapshots = {
+            generation_id: dict(self.state_snapshots[generation_id])
+            for generation_id in preserved_generation_ids
+        }
+        preserved_bundle_fingerprints = {
+            generation_id: bundle_fingerprint(self.output_by_generation[generation_id])
+            for generation_id in preserved_generation_ids
+        }
+        b1_bundle_fingerprint = preserved_bundle_fingerprints[b1_generation_id]
+
+        seed_root = self.helper.root / "ordinary-b1-terminal-seed"
+        seed_state_dir = seed_root / "state"
+        seed_output_dir = seed_root / "output"
+        seed_root.mkdir()
+        for relative_path, content in b1_state_bytes.items():
+            destination = seed_state_dir / relative_path
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(content)
+        seed_bundle = seed_root / "bundle-b1"
+        shutil.copytree(b1_bundle, seed_bundle)
+        self.assertEqual(self._state_tree_bytes(seed_state_dir), b1_state_bytes)
+        self.assertEqual(
+            tuple(
+                (
+                    path.relative_to(seed_bundle).as_posix(), path.stat().st_size,
+                    hashlib.sha256(path.read_bytes()).hexdigest(),
+                )
+                for path in sorted(seed_bundle.rglob("*")) if path.is_file()
+            ),
+            b1_bundle_fingerprint,
         )
-        b1_cli_args.expected_generation_id = b1["generation_id"]
-        self._assert_connected_workflow_replay(
-            "ordinary-b1", template=b1_cli_args,
-            state_bytes=self.state_snapshots[b1["generation_id"]],
-            generation_id=b1["generation_id"],
+
+        # Reuse the existing processor claim/worker helper, but give this
+        # seed separate State, output, bundle, and accounting directories.
+        # Its immutable A inputs and recorded clock remain those of this test.
+        seed_runner = copy.copy(self)
+        seed_runner.helper = copy.copy(self.helper)
+        seed_runner.helper.root = seed_root
+        seed_runner.helper.state_dir = seed_state_dir
+        seed_runner.helper.output_dir = seed_output_dir
+        seed_runner.output_by_generation = {}
+        seed_runner.checkpoints = {}
+        seed_runner.state_snapshots = {}
+        seed_runner.current_manifests = {}
+        seed_runner.claim_runs = []
+        seed_runner.detail_calls = []
+        seed_runner.operation_endpoint_overrides = copy.deepcopy(self.operation_endpoint_overrides)
+
+        original_state_tree = self._state_tree_bytes(self.helper.state_dir)
+        seed_requests_before = len(seed_runner.detail_calls)
+        seed_attempts_before = b1["attempts_consumed"]
+        resume_bundle = seed_bundle
+        terminal_seed = None
+        terminal_seed_attempt = None
+        for attempt in range(7, 11):
+            terminal_seed = seed_runner._run_claim_and_worker(
+                attempt,
+                resume=resume_bundle / "upstream-catalogue-enrichment-evidence.json",
+                generator_revision=b1["generation_inputs"]["generator_revision"],
+                expected_worker_status=("ready", "no-change"),
+            )
+            self.assertEqual(terminal_seed["generation_id"], b1_generation_id)
+            self.assertEqual(terminal_seed["observed_at"], b1["observed_at"])
+            self.assertEqual(terminal_seed["observation_count"], b1["observation_count"])
+            self.assertEqual(terminal_seed["last_observation"], b1["last_observation"])
+            self.assertEqual(
+                terminal_seed["output_artifact"]["artifact_id"],
+                str(99000000020 + attempt),
+            )
+            resume_bundle = seed_runner.output_by_generation[b1_generation_id]
+            if (
+                terminal_seed["status"] in {"ready", "no-change"}
+                and terminal_seed["outcome"]["detail_retry_count"] == 0
+            ):
+                terminal_seed_attempt = attempt
+                break
+        self.assertIsNotNone(terminal_seed)
+        self.assertIsNotNone(terminal_seed_attempt)
+        assert terminal_seed is not None and terminal_seed_attempt is not None
+        seed_callbacks = seed_runner.detail_calls[seed_requests_before:]
+        seed_attempts = terminal_seed["attempts_consumed"] - seed_attempts_before
+        self.assertGreater(len(seed_callbacks), 0)
+        self.assertLessEqual(len(seed_callbacks), 4)
+        self.assertLessEqual(len(seed_runner.claim_runs), 4)
+        self.assertEqual(seed_attempts, len(seed_callbacks))
+        self.assertEqual(terminal_seed["outcome"]["detail_retry_count"], 0)
+
+        terminal_seed_index = PROCESSOR.load_json(
+            seed_state_dir / "sources/data_go_kr/index.json",
+        )
+        terminal_seed_admissions = HANDOFF.validate_ledger(
+            terminal_seed_index["collector_handoff"],
+        )["admitted_observations"]
+        self.assertEqual(terminal_seed_admissions, [b0_admission])
+        retained_seed_generations = {
+            row.get("generation_id") for row in terminal_seed_index["generations"]
+            if isinstance(row, dict)
+        }
+        self.assertIn(b0["generation_id"], retained_seed_generations)
+        self.assertIn(b1_generation_id, retained_seed_generations)
+        terminal_seed_state = seed_runner.state_snapshots[b1_generation_id]
+        self.assertEqual(self._state_tree_bytes(seed_state_dir), terminal_seed_state)
+
+        # The bounded seed must not rewrite the original B0/B1/B3 observations,
+        # snapshots, bundles, or State tree. The new terminal State tip is the
+        # only input to the subsequent local Git Claim/CAS/bundle replay.
+        self.assertEqual(
+            {generation_id: self.state_snapshots[generation_id]
+             for generation_id in preserved_generation_ids},
+            preserved_state_snapshots,
+        )
+        self.assertEqual(self._state_tree_bytes(self.helper.state_dir), original_state_tree)
+        self.assertEqual(
+            {generation_id: bundle_fingerprint(self.output_by_generation[generation_id])
+             for generation_id in preserved_generation_ids},
+            preserved_bundle_fingerprints,
+        )
+
+        # The replay receives the newly sealed terminal checkpoint and its
+        # bound artifact locator. Seed requests above are accounted separately;
+        # this exact CLI/Claim/CAS/bundle path must make zero provider calls.
+        terminal_seed_cli_args = seed_runner._args(
+            terminal_seed_attempt + 1,
             generator_revision=b1["generation_inputs"]["generator_revision"],
         )
+        terminal_seed_cli_args.expected_generation_id = b1_generation_id
+        replay_seed_calls_before = len(seed_runner.detail_calls)
+        seed_runner._assert_connected_workflow_replay(
+            "ordinary-b1-terminal-seed", template=terminal_seed_cli_args,
+            state_bytes=terminal_seed_state,
+            generation_id=b1_generation_id,
+            generator_revision=b1["generation_inputs"]["generator_revision"],
+        )
+        self.assertEqual(len(seed_runner.detail_calls), replay_seed_calls_before)
 
         b3_cli_args = copy.deepcopy(replay_args)
         b3_cli_args.expected_generation_id = b3["generation_id"]
