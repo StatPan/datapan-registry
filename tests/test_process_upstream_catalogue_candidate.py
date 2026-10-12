@@ -1497,6 +1497,75 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                 now=MODULE.parse_timestamp(self.now),
             )
 
+    def test_unbound_resume_cache_persists_typed_quarantine_before_reservation(self) -> None:
+        resume_dir = self.root / "unbound-resume"
+        resume_dir.mkdir()
+        resume_path = resume_dir / "upstream-catalogue-enrichment-evidence.json"
+        resume_path.write_text(json.dumps({"records": []}), encoding="utf-8")
+        provider_calls: list[str] = []
+
+        def unexpected_provider_call(url: str, _timeout: float):
+            provider_calls.append(url)
+            self.fail("resume-cache validation must finish before provider requests")
+
+        code, checkpoint = self.invoke(
+            fetcher=unexpected_provider_call,
+            **{"--resume-enrichment-evidence": resume_path},
+        )
+        diagnostic = {
+            "version": 1,
+            "phase": "resume_parent_cache",
+            "code": "resume_artifact_unbound",
+        }
+        self.assertEqual(code, 3)
+        self.assertEqual(checkpoint["status"], "quarantined")
+        self.assertEqual(checkpoint["outcome"]["reason"], "valueerror")
+        self.assertEqual(checkpoint["outcome"]["resume_validation_diagnostic"], diagnostic)
+        self.assertIsNone(checkpoint["request_reservation"])
+        self.assertEqual(checkpoint["attempts_consumed"], 0)
+        self.assertEqual(checkpoint["attempts_by_id"], {})
+        self.assertEqual(provider_calls, [])
+
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        checkpoint_path = self.checkpoint_path(checkpoint)
+        persisted_bytes = checkpoint_path.read_bytes()
+        persisted = json.loads(persisted_bytes)
+        self.assertEqual(persisted, checkpoint)
+        self.assertIs(MODULE.verify_checkpoint(persisted, schema), persisted)
+        self.assertEqual(checkpoint_path.read_bytes(), persisted_bytes)
+        self.assertNotIn("SECRET", persisted_bytes.decode("utf-8"))
+
+        invalid_diagnostics = (
+            {"version": 1, "phase": "resume_parent_cache", "code": "secret-path"},
+            {"version": 1, "phase": "parent_cache_merge", "code": "resume_artifact_unbound"},
+            {**diagnostic, "message": "secret-path"},
+        )
+        for invalid in invalid_diagnostics:
+            with self.subTest(invalid=invalid):
+                tampered = copy.deepcopy(checkpoint)
+                tampered["outcome"]["resume_validation_diagnostic"] = invalid
+                MODULE.seal_checkpoint(tampered)
+                with self.assertRaises(jsonschema.ValidationError):
+                    MODULE.verify_checkpoint(tampered, schema)
+
+    def test_legacy_quarantine_checkpoint_remains_sealed_without_diagnostic_backfill(self) -> None:
+        code, checkpoint = self.invoke(**{"--artifact-expires-at": "2026-09-30T00:00:00Z"})
+        self.assertEqual(code, 3)
+        self.assertEqual(checkpoint["status"], "quarantined")
+        self.assertEqual(checkpoint["outcome"]["reason"], "input_expired")
+        self.assertNotIn("resume_validation_diagnostic", checkpoint["outcome"])
+
+        checkpoint_path = self.checkpoint_path(checkpoint)
+        before = checkpoint_path.read_bytes()
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        persisted = json.loads(before)
+        self.assertIs(MODULE.verify_checkpoint(persisted, schema), persisted)
+        self.assertEqual(checkpoint_path.read_bytes(), before)
+        replay_code, replay = self.invoke(**{"--artifact-expires-at": "2026-09-30T00:00:00Z"})
+        self.assertEqual(replay_code, 3)
+        self.assertNotIn("resume_validation_diagnostic", replay["outcome"])
+        self.assertEqual(checkpoint_path.read_bytes(), before)
+
     def test_wrong_current_template_button_cannot_fall_back_to_legacy_anchor(self) -> None:
         page_url = "https://www.data.go.kr/data/2/openapi.do"
         body = (
@@ -1566,6 +1635,595 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
 
     def checkpoint_path(self, checkpoint: dict) -> pathlib.Path:
         return self.state_dir / "sources/data_go_kr/generations" / f"{checkpoint['generation_id']}.json"
+
+    def _bound_derivation_parent(
+        self, checkpoint: dict[str, Any], evidence_path: pathlib.Path, evidence_bytes: bytes,
+        *, artifact_id: str,
+    ) -> dict[str, Any]:
+        evidence_path.write_bytes(evidence_bytes)
+        checkpoint = copy.deepcopy(checkpoint)
+        output = next(
+            item for item in checkpoint["output_digests"]
+            if item["path"] == evidence_path.name
+        )
+        output.update({"sha256": MODULE.sha256_bytes(evidence_bytes), "bytes": len(evidence_bytes)})
+        checkpoint["output_artifact"].update({
+            "artifact_id": artifact_id,
+            "name": f"upstream-catalogue-processing-{checkpoint['output_artifact']['run_id']}-1",
+        })
+        checkpoint["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+            MODULE.canonical_json(checkpoint["output_digests"]),
+        )
+        checkpoint = MODULE.seal_checkpoint(checkpoint)
+        self.checkpoint_path(checkpoint).write_bytes(MODULE.canonical_json(checkpoint) + b"\n")
+        return checkpoint
+
+    def _derivation_parent_fixture(
+        self, *, resume_mutator=None, canonical_mutator=None,
+        first_endpoint: str = "https://api.example.gov/detail-a",
+        second_endpoint: str = "https://api.example.gov/detail-b",
+    ) -> dict[str, Any]:
+        """Build one real fixture B0 and one explicitly synthetic same-A B1.
+
+        B1 is a sealed test graph node, not a claim that a second processor run
+        or live collector observation occurred. Only the external derivation
+        preflight is mocked by the persistence tests; source, checkpoint,
+        lineage-graph, retention, cache, outcome, and merge validation stay real.
+        """
+        first_code, first = self.invoke(
+            fetcher=lambda _url, _timeout: (
+                f'<a href="{first_endpoint}" onclick="fn_LinkApiRequest()">API</a>'
+            ),
+        )
+        self.assertEqual(first_code, 0, first)
+        first_bytes = (self.output_dir / "upstream-catalogue-enrichment-evidence.json").read_bytes()
+
+        resume_dir = self.root / "resume-parent-bundle"
+        canonical_dir = self.root / "canonical-parent-bundle"
+        resume_dir.mkdir()
+        canonical_dir.mkdir()
+        resume_path = resume_dir / "upstream-catalogue-enrichment-evidence.json"
+        canonical_path = canonical_dir / "upstream-catalogue-enrichment-evidence.json"
+
+        def changed_bytes(raw: bytes, mutator) -> bytes:
+            value = json.loads(raw)
+            if mutator is not None:
+                mutator(value)
+            return MODULE.canonical_json(value) + b"\n"
+
+        def alternate_contribution(evidence: dict[str, Any]) -> None:
+            operation_record = evidence["records"][0]
+            operation = operation_record["operations"][0]
+            operation["endpoint"] = second_endpoint
+            operation["source"]["raw"]["operation_url"] = second_endpoint
+            operation_record["operations_sha256"] = MODULE.sha256_bytes(
+                MODULE.canonical_json(operation_record["operations"]),
+            )
+
+        def synthetic_canonical(evidence: dict[str, Any]) -> None:
+            alternate_contribution(evidence)
+            if canonical_mutator is not None:
+                canonical_mutator(evidence)
+
+        resume_bytes = changed_bytes(first_bytes, resume_mutator)
+        canonical_bytes = changed_bytes(first_bytes, synthetic_canonical)
+        first = self._bound_derivation_parent(
+            first, resume_path, resume_bytes, artifact_id="9001",
+        )
+
+        checkpoint_schema = json.loads(
+            (ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"),
+        )
+
+        def persist_checkpoint(checkpoint: dict[str, Any]) -> dict[str, Any]:
+            sealed = MODULE.seal_checkpoint(checkpoint)
+            MODULE.verify_checkpoint(sealed, checkpoint_schema)
+            self.checkpoint_path(sealed).write_bytes(MODULE.canonical_json(sealed) + b"\n")
+            return sealed
+
+        # The fixture processor has no Actions artifact response. Bind one
+        # tiny synthetic A artifact row to its real fixture checkpoint so the
+        # production admission validator can resolve the immutable subject.
+        producer_id = str(first["last_observation"]["producer_run_id"])
+        input_artifact = first["input_artifacts"][0]
+        input_artifact.update({
+            "run_id": producer_id,
+            "name": f"upstream-catalog-refresh-{producer_id}",
+            "artifact_id": "654321",
+        })
+        first = persist_checkpoint(first)
+
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        index = json.loads(index_path.read_text(encoding="utf-8"))
+        attempt = 1
+        observed_at = first["last_observation"]["observed_at"]
+        admission = MODULE.validate_admission_row({
+            "admission_id": MODULE.admission_id(
+                producer_id, attempt, first["last_observation"]["refresh_evidence_sha256"],
+            ),
+            "producer_run_id": producer_id,
+            "run_attempt": attempt,
+            "head_sha": "a" * 40,
+            "run_started_at": "2026-10-01T09:59:00Z",
+            "artifact_id": input_artifact["artifact_id"],
+            "artifact_name": input_artifact["name"],
+            "artifact_expires_at": input_artifact["expires_at"],
+            "artifact_digest_sha256": "d" * 64,
+            "artifact_size_bytes": 64,
+            "refresh_evidence_sha256": first["last_observation"]["refresh_evidence_sha256"],
+            "observed_at": observed_at,
+            "generation_id": first["generation_id"],
+            "candidate_sha256": first["generation_inputs"]["candidate_sha256"],
+            "admitted_at": self.now,
+        })
+        MODULE.add_admission(index, admission, now=self.now)
+        index["collector_handoff"] = MODULE.validate_ledger(index["collector_handoff"])
+        self.assertEqual(index["collector_handoff"]["admitted_observations"], [admission])
+        self.assertEqual(admission["generation_id"], first["generation_id"])
+        self.assertEqual(admission["observed_at"], first["observed_at"])
+        self.assertEqual(admission["refresh_evidence_sha256"], input_artifact["evidence_sha256"])
+        self.assertEqual(admission["candidate_sha256"], input_artifact["candidate_sha256"])
+
+        original_observation = MODULE.DERIVATION.original_observation_from_checkpoint(first, admission)
+        first_evidence = json.loads(resume_bytes)
+        resume_reference = MODULE.DERIVATION.processor_parent_reference(
+            first, repository="StatPan/datapan-registry",
+            original_observation=original_observation,
+            enrichment_evidence=first_evidence, enrichment_evidence_bytes=resume_bytes,
+        )
+
+        def parent_readback(parent: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+            composed = next(
+                row for row in parent["output_digests"]
+                if row["path"] == "composed-candidate.registry.json"
+            )
+            manifest_sha256 = "e" * 64
+            readback = {
+                "repository": "StatPan/datapan-registry",
+                "journal_ref_sha": "a" * 40,
+                "journal_sha256": "b" * 64,
+                "journal_record_index": 0,
+                "journal_record_sha256": "c" * 64,
+                "canonical_producer_generation_id": parent["generation_id"],
+                "source_id": parent["source_id"],
+                "source_scope": parent["source_scope"],
+                "registry_path": "data/data-go-kr.registry.json",
+                "registry_bytes": composed["bytes"],
+                "registry_sha256": composed["sha256"],
+                "manifest_sha256": manifest_sha256,
+                "pr_number": 1,
+                "pr_branch": "fixture/777",
+                "pr_body_sha256": "f" * 64,
+                "pr_head_sha": "1" * 40,
+                "merge_sha": "2" * 40,
+                "merge_ack_run_id": 37548691738,
+                "merge_ack_run_attempt": 1,
+                "merge_ack_run_url": "https://github.com/StatPan/datapan-registry/actions/runs/37548691738/attempts/1",
+                "merge_ack_observed_at": self.now,
+                "merge_ack_manifest_sha256": manifest_sha256,
+                "merge_ack_source_sha": "2" * 40,
+            }
+            baseline = {
+                "main_sha": "3" * 40,
+                "manifest_sha256": manifest_sha256,
+                "registry_path": readback["registry_path"],
+                "registry_sha256": composed["sha256"],
+                "registry_bytes": composed["bytes"],
+            }
+            return readback, baseline
+
+        b0_readback, b0_baseline = parent_readback(first)
+        b0_reference = MODULE.DERIVATION.processor_parent_reference(
+            first, repository="StatPan/datapan-registry",
+            original_observation=original_observation,
+            enrichment_evidence=first_evidence, enrichment_evidence_bytes=resume_bytes,
+        )
+        b1_envelope = MODULE.DERIVATION.build_derivation_envelope(
+            original_observation=original_observation,
+            resume_parent_processor=b0_reference,
+            canonical_parent_processor=b0_reference,
+            canonical_parent_readback=b0_readback,
+            composition_baseline=b0_baseline,
+            derivation_processor_revision_sha256="4" * 64,
+        )
+        self.assertEqual(
+            b1_envelope["ancestor_generation_ids"],
+            [first["generation_id"]],
+        )
+        self.assertEqual(
+            b1_envelope["resume_parent_processor"]["generation_id"],
+            first["generation_id"],
+        )
+        self.assertEqual(
+            b1_envelope["canonical_parent_processor"]["generation_id"],
+            first["generation_id"],
+        )
+        self.assertEqual(b1_envelope["original_observation"], original_observation)
+
+        b0_inputs = first["generation_inputs"]
+        b1_generation_id, b1_inputs = MODULE.generation_identity(
+            first["source_id"], first["source_scope"],
+            b0_inputs["baseline_sha256"], b0_inputs["candidate_sha256"],
+            b0_inputs["observation_failure_sha256"], b0_inputs["policy_sha256"],
+            b0_inputs["adapter_revision"], same_observation_derivation=b1_envelope,
+        )
+        self.assertNotEqual(b1_generation_id, first["generation_id"])
+        self.assertEqual(b1_generation_id, MODULE.sha256_bytes(MODULE.canonical_json(b1_inputs)))
+        second = copy.deepcopy(first)
+        second["generation_id"] = b1_generation_id
+        second["generation_inputs"] = b1_inputs
+        second["last_observation"] = {
+            **first["last_observation"],
+            # Required by the real derived-parent validator; this provenance
+            # is synthetic and does not change B0's fixture execution mode.
+            "collection_status": "success",
+            "execution_mode": "live",
+        }
+        second["output_artifact"].update({
+            "run_id": "102",
+            "name": "upstream-catalogue-processing-102-1",
+            "artifact_id": "9002",
+        })
+        second["outcome"] = {
+            "reason": "synthetic_fixture_parent",
+            "provenance": "B1 is a sealed same-A test node, not an executed processor result.",
+        }
+        canonical_bytes = MODULE.canonical_json(json.loads(canonical_bytes)) + b"\n"
+        canonical_path.write_bytes(canonical_bytes)
+        evidence_digest = next(
+            item for item in second["output_digests"]
+            if item["path"] == canonical_path.name
+        )
+        evidence_digest.update({
+            "sha256": MODULE.sha256_bytes(canonical_bytes),
+            "bytes": len(canonical_bytes),
+        })
+        second["output_artifact"]["bundle_manifest_sha256"] = MODULE.sha256_bytes(
+            MODULE.canonical_json(second["output_digests"]),
+        )
+        second = persist_checkpoint(second)
+        self.assertEqual(second["observed_at"], first["observed_at"])
+        self.assertEqual(second["observation_count"], first["observation_count"])
+        self.assertEqual(second["input_artifacts"], first["input_artifacts"])
+        for field in (
+            "baseline_sha256", "candidate_sha256", "observation_failure_sha256",
+            "policy_sha256", "adapter_revision",
+        ):
+            self.assertEqual(second["generation_inputs"][field], first["generation_inputs"][field])
+        self.assertEqual(second["last_observation"]["observed_at"], admission["observed_at"])
+        self.assertEqual(second["last_observation"]["producer_run_id"], admission["producer_run_id"])
+        self.assertEqual(
+            second["last_observation"]["refresh_evidence_sha256"],
+            admission["refresh_evidence_sha256"],
+        )
+        self.assertEqual(second["outcome"]["provenance"], "B1 is a sealed same-A test node, not an executed processor result.")
+        second_evidence = json.loads(canonical_bytes)
+        canonical_reference = MODULE.DERIVATION.processor_parent_reference(
+            second, repository="StatPan/datapan-registry",
+            original_observation=original_observation,
+            enrichment_evidence=second_evidence, enrichment_evidence_bytes=canonical_bytes,
+        )
+        MODULE.DERIVATION.validate_processor_parent_checkpoint(
+            b0_reference, first, original_observation=original_observation,
+        )
+        MODULE.DERIVATION.validate_processor_parent_checkpoint(
+            canonical_reference, second, original_observation=original_observation,
+        )
+        b1_readback, b1_baseline = parent_readback(second)
+        envelope = MODULE.DERIVATION.build_derivation_envelope(
+            original_observation=original_observation,
+            resume_parent_processor=b0_reference,
+            canonical_parent_processor=canonical_reference,
+            canonical_parent_readback=b1_readback,
+            composition_baseline=b1_baseline,
+            derivation_processor_revision_sha256="4" * 64,
+            canonical_parent_ancestors=[first["generation_id"]],
+        )
+        self.assertEqual(
+            envelope["ancestor_generation_ids"],
+            sorted({first["generation_id"], second["generation_id"]}),
+        )
+
+        # Persist B1 beside B0 in the disposable fixture index without
+        # rewriting its cursor/retry state or the one original-A admission.
+        b0_row = next(
+            row for row in index["generations"]
+            if row.get("generation_id") == first["generation_id"]
+        )
+        b1_row = copy.deepcopy(b0_row)
+        b1_row.update({
+            "generation_id": second["generation_id"],
+            "status": second["status"],
+            "checkpoint": f"{second['generation_id']}.json",
+            "updated_at": second["last_heartbeat_at"],
+            "candidate_sha256": second["generation_inputs"]["candidate_sha256"],
+        })
+        index["generations"].append(b1_row)
+        MODULE.atomic_write_json(index_path, index)
+
+        ledger = MODULE.validate_ledger(index["collector_handoff"])
+        self.assertEqual(len(ledger["admitted_observations"]), 1)
+        ledger_snapshot = copy.deepcopy(ledger)
+        checkpoints_by_id = {
+            first["generation_id"]: first,
+            second["generation_id"]: second,
+        }
+
+        def load_checkpoint(generation_id: str) -> dict[str, Any]:
+            path = self.checkpoint_path(checkpoints_by_id[generation_id])
+            return MODULE.verify_checkpoint(
+                json.loads(path.read_text(encoding="utf-8")), checkpoint_schema,
+            )
+
+        def admission_for(checkpoint: dict[str, Any]) -> dict[str, Any]:
+            observation = checkpoint["last_observation"]
+            refs = checkpoint["input_artifacts"]
+            matches = [
+                row for row in ledger["admitted_observations"]
+                if row["producer_run_id"] == str(observation.get("producer_run_id") or "")
+                and row["refresh_evidence_sha256"] == observation.get("refresh_evidence_sha256")
+                and any(
+                    ref.get("run_id") == row["producer_run_id"]
+                    and str(ref.get("artifact_id")) == row["artifact_id"]
+                    and ref.get("evidence_sha256") == row["refresh_evidence_sha256"]
+                    for ref in refs if isinstance(ref, dict)
+                )
+            ]
+            self.assertEqual(len(matches), 1)
+            return matches[0]
+
+        protected_ids = MODULE.DERIVATION.validate_processor_parent_graph(
+            [first["generation_id"], second["generation_id"]],
+            load_checkpoint=load_checkpoint,
+            admission_for=admission_for,
+            original_observation=original_observation,
+            expected_ancestor_generation_ids=envelope["ancestor_generation_ids"],
+        )
+        self.assertEqual(protected_ids, {first["generation_id"], second["generation_id"]})
+
+        derivation_path = self.root / "same-observation-derivation.json"
+        derivation_path.write_bytes(MODULE.canonical_json(envelope) + b"\n")
+        outer_generation_id, outer_generation_inputs = MODULE.generation_identity(
+            first["source_id"], first["source_scope"],
+            b0_inputs["baseline_sha256"], b0_inputs["candidate_sha256"],
+            b0_inputs["observation_failure_sha256"], b0_inputs["policy_sha256"],
+            b0_inputs["adapter_revision"], same_observation_derivation=envelope,
+        )
+        prospective = copy.deepcopy(second)
+        prospective.update({
+            "generation_id": outer_generation_id,
+            "generation_inputs": outer_generation_inputs,
+            "status": "queued",
+            "output_digests": [],
+            "outcome": {"reason": "synthetic_prospective_only"},
+        })
+        prospective["output_artifact"].update({
+            "run_id": "103", "name": "upstream-catalogue-processing-103",
+            "artifact_id": None, "bundle_manifest_sha256": None,
+        })
+        prospective = MODULE.seal_checkpoint(prospective)
+        MODULE.verify_checkpoint(prospective, checkpoint_schema)
+        index_before_plan = index_path.read_bytes()
+        parent_files_before_plan = {
+            generation_id: self.checkpoint_path(checkpoint).read_bytes()
+            for generation_id, checkpoint in checkpoints_by_id.items()
+        }
+        retained_ids = MODULE.plan_generation_retention(
+            index, self.checkpoint_path(first).parent, prospective,
+        )
+        self.assertEqual(
+            retained_ids,
+            {first["generation_id"], second["generation_id"], outer_generation_id},
+        )
+        self.assertEqual(index["collector_handoff"], ledger_snapshot)
+        self.assertEqual(index_path.read_bytes(), index_before_plan)
+        self.assertEqual(
+            parent_files_before_plan,
+            {
+                generation_id: self.checkpoint_path(checkpoint).read_bytes()
+                for generation_id, checkpoint in checkpoints_by_id.items()
+            },
+        )
+
+        main_root = self.root / "fixture-main"
+        main_root.mkdir()
+        args = self.args(run_id="101", **{
+            "--processor-run-id": "103",
+            "--resume-enrichment-evidence": resume_path,
+            "--composition-baseline": self.baseline_path,
+            "--same-observation-derivation": derivation_path,
+            "--current-main-root": main_root,
+            "--resume-parent-bundle-dir": resume_dir,
+            "--canonical-parent-bundle-dir": canonical_dir,
+        })
+        return {
+            "args": args, "resume_parent": first, "canonical_parent": second,
+            "resume_path": resume_path, "canonical_path": canonical_path,
+            "envelope": envelope, "admission": admission, "ledger": ledger_snapshot,
+            "protected_ids": protected_ids, "retained_ids": retained_ids,
+        }
+
+    def _assert_derivation_quarantine(
+        self, fixture: dict[str, Any], *, expected_phase: str, expected_code: str,
+    ) -> dict[str, Any]:
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        index_before = json.loads(index_path.read_text(encoding="utf-8"))
+        cursor_before = index_before["detail_queue_cursor"]
+        provider_calls: list[str] = []
+
+        def forbidden_provider(url: str, _timeout: float):
+            provider_calls.append(url)
+            raise AssertionError("parent-cache quarantine must precede provider calls")
+
+        with mock.patch.object(MODULE, "validate_derivation_before_claim", return_value=None):
+            code, checkpoint = MODULE.process(
+                fixture["args"], fetcher=forbidden_provider,
+                resolver_fetcher=forbidden_provider, sleeper=lambda _delay: None,
+            )
+        self.assertEqual(code, 3)
+        self.assertEqual(checkpoint["status"], "quarantined")
+        self.assertEqual(checkpoint["outcome"]["reason"], "valueerror")
+        self.assertEqual(checkpoint["outcome"]["resume_validation_diagnostic"], {
+            "version": 1, "phase": expected_phase, "code": expected_code,
+        })
+        self.assertEqual(
+            checkpoint["generation_id"],
+            MODULE.sha256_bytes(MODULE.canonical_json(checkpoint["generation_inputs"])),
+        )
+        self.assertEqual(checkpoint["observed_at"], fixture["resume_parent"]["observed_at"])
+        self.assertEqual(checkpoint["last_observation"], fixture["resume_parent"]["last_observation"])
+        self.assertEqual(checkpoint["observation_count"], fixture["resume_parent"]["observation_count"])
+        self.assertEqual(fixture["admission"]["generation_id"], fixture["resume_parent"]["generation_id"])
+        self.assertEqual(
+            fixture["admission"]["observed_at"],
+            fixture["envelope"]["original_observation"]["observed_at"],
+        )
+        self.assertEqual(
+            fixture["envelope"]["original_observation"]["observation_count"],
+            fixture["resume_parent"]["observation_count"],
+        )
+        self.assertEqual(
+            fixture["admission"]["producer_run_id"],
+            fixture["resume_parent"]["input_artifacts"][0]["run_id"],
+        )
+        self.assertEqual(
+            fixture["admission"]["artifact_id"],
+            fixture["resume_parent"]["input_artifacts"][0]["artifact_id"],
+        )
+        self.assertEqual(
+            fixture["admission"]["refresh_evidence_sha256"],
+            fixture["resume_parent"]["input_artifacts"][0]["evidence_sha256"],
+        )
+        self.assertEqual(fixture["ledger"]["admitted_observations"], [fixture["admission"]])
+        self.assertEqual(checkpoint["attempts_consumed"], 0)
+        self.assertEqual(checkpoint["attempts_by_id"], {})
+        self.assertIsNone(checkpoint["request_reservation"])
+        self.assertEqual(provider_calls, [])
+
+        schema = json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text())
+        checkpoint_path = self.checkpoint_path(checkpoint)
+        persisted_bytes = checkpoint_path.read_bytes()
+        persisted = json.loads(persisted_bytes)
+        self.assertEqual(persisted, checkpoint)
+        self.assertIs(MODULE.verify_checkpoint(persisted, schema), persisted)
+        self.assertEqual(checkpoint_path.read_bytes(), persisted_bytes)
+        index_after = json.loads(index_path.read_text(encoding="utf-8"))
+        self.assertEqual(index_after["detail_queue_cursor"], cursor_before)
+        self.assertEqual(index_after["collector_handoff"], fixture["ledger"])
+        return checkpoint
+
+    def test_bound_source_identity_mismatch_is_typed_and_tampered_digest_is_unbound(self) -> None:
+        def corrupt_source_and_guide(evidence: dict[str, Any]) -> None:
+            evidence["records"][0]["source_sha256"] = "f" * 64
+            evidence["records"][0]["guide_sha256"] = "f" * 64
+
+        fixture = self._derivation_parent_fixture(resume_mutator=corrupt_source_and_guide)
+        parent = fixture["resume_parent"]
+        validator_args = {
+            "checkpoint": parent,
+            "state_dir": self.state_dir,
+            "source_id": "data_go_kr",
+            "checkpoint_schema": json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text()),
+            "provider_index_sha256": parent["generation_inputs"]["adapter_revision"],
+            "candidate_by_id": {"1": self.old_link, "2": self.new_link},
+            "registered_hosts": {"api.example.gov"},
+            "now": MODULE.parse_timestamp(self.now),
+            "expected_owner_generation_id": parent["generation_id"],
+            "reject_stale_source_or_guide_contract": True,
+        }
+        with self.assertRaises(MODULE.ResumeCacheValidationError) as caught:
+            MODULE.validated_resume_records(fixture["resume_path"], **validator_args)
+        self.assertEqual(caught.exception.diagnostic_code, "resume_enrichment_source_or_guide_identity_mismatch")
+
+        tampered_dir = self.root / "tampered-parent-cache"
+        tampered_dir.mkdir()
+        tampered_path = tampered_dir / fixture["resume_path"].name
+        tampered_path.write_bytes(fixture["resume_path"].read_bytes() + b" ")
+        with self.assertRaises(MODULE.ResumeCacheValidationError) as unbound:
+            MODULE.validated_resume_records(tampered_path, **validator_args)
+        self.assertEqual(unbound.exception.diagnostic_code, "resume_artifact_unbound")
+        self._assert_derivation_quarantine(
+            fixture, expected_phase="resume_parent_cache",
+            expected_code="resume_enrichment_source_or_guide_identity_mismatch",
+        )
+
+    def test_malformed_bound_canonical_outcome_persists_actual_canonical_cache_phase(self) -> None:
+        def corrupt_outcome(evidence: dict[str, Any]) -> None:
+            evidence["worker_outcomes"] = [{
+                "api_key": {"provider": "data.go.kr", "id": "1"},
+                "status": "retry",
+                "source_sha256": MODULE.source_fingerprint(self.old_link),
+                "guide_sha256": MODULE.guide_fingerprint(self.old_link),
+                "failure_diagnostic": {"code": "unregistered-test-code"},
+            }]
+
+        fixture = self._derivation_parent_fixture(canonical_mutator=corrupt_outcome)
+        parent = fixture["canonical_parent"]
+        with self.assertRaises(MODULE.ResumeCacheValidationError) as caught:
+            MODULE.validated_resume_records(
+                fixture["canonical_path"],
+                checkpoint=parent,
+                state_dir=self.state_dir,
+                source_id="data_go_kr",
+                checkpoint_schema=json.loads((ROOT / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text()),
+                provider_index_sha256=parent["generation_inputs"]["adapter_revision"],
+                candidate_by_id={"1": self.old_link, "2": self.new_link},
+                registered_hosts={"api.example.gov"},
+                now=MODULE.parse_timestamp(self.now),
+                expected_owner_generation_id=parent["generation_id"],
+                reject_stale_source_or_guide_contract=True,
+            )
+        self.assertEqual(caught.exception.diagnostic_code, "resume_worker_outcome_invalid")
+        self.assertIsInstance(caught.exception.__cause__, ValueError)
+        self._assert_derivation_quarantine(
+            fixture, expected_phase="canonical_parent_cache",
+            expected_code="resume_worker_outcome_invalid",
+        )
+
+    def test_valid_bound_parent_conflict_persists_actual_merge_phase(self) -> None:
+        fixture = self._derivation_parent_fixture()
+        resume_evidence = json.loads(fixture["resume_path"].read_text(encoding="utf-8"))
+        canonical_evidence = json.loads(fixture["canonical_path"].read_text(encoding="utf-8"))
+        self.assertEqual(len(resume_evidence["records"]), 1)
+        self.assertEqual(len(canonical_evidence["records"]), 1)
+        self.assertNotEqual(
+            resume_evidence["records"][0]["operations"],
+            canonical_evidence["records"][0]["operations"],
+        )
+        self._assert_derivation_quarantine(
+            fixture, expected_phase="parent_cache_merge",
+            expected_code="derivation_parent_enrichment_contribution_conflict",
+        )
+
+    def test_real_retention_planner_rejects_missing_admission_without_mutation(self) -> None:
+        fixture = self._derivation_parent_fixture()
+        index_path = self.state_dir / "sources/data_go_kr/index.json"
+        generation_dir = self.state_dir / "sources/data_go_kr/generations"
+        index_before = index_path.read_bytes()
+        parent_ids = {
+            fixture["resume_parent"]["generation_id"],
+            fixture["canonical_parent"]["generation_id"],
+        }
+        parents_before = {
+            generation_id: (generation_dir / f"{generation_id}.json").read_bytes()
+            for generation_id in parent_ids
+        }
+        missing_ledger_index = json.loads(index_before)
+        missing_ledger_index.pop("collector_handoff")
+
+        with self.assertRaisesRegex(ValueError, "derivation_lineage_admission_ledger_missing"):
+            MODULE.plan_generation_retention(
+                missing_ledger_index, generation_dir, fixture["canonical_parent"],
+            )
+
+        self.assertEqual(index_path.read_bytes(), index_before)
+        self.assertEqual(
+            parents_before,
+            {
+                generation_id: (generation_dir / f"{generation_id}.json").read_bytes()
+                for generation_id in parent_ids
+            },
+        )
 
     def test_ready_scoped_candidate_has_exact_composer_evidence_and_durable_artifact_digests(self) -> None:
         code, checkpoint = self.invoke()

@@ -1713,6 +1713,41 @@ class UpstreamCatalogueHealthTest(unittest.TestCase):
             self.assertEqual(selected["generation_id"], "e" * 64)
             self.assertIsNone(error)
 
+    def test_resume_validation_diagnostic_does_not_change_health_faults_or_last_good(self) -> None:
+        legacy = checkpoint(status="quarantined", outcome_reason="valueerror")
+        diagnosed = copy.deepcopy(legacy)
+        diagnosed["outcome"]["resume_validation_diagnostic"] = {
+            "version": 1,
+            "phase": "resume_parent_cache",
+            "code": "resume_artifact_unbound",
+        }
+        diagnosed.pop("checkpoint_sha256", None)
+        diagnosed["checkpoint_sha256"] = HEALTH.sha256_bytes(HEALTH.canonical_json(diagnosed))
+
+        with tempfile.TemporaryDirectory() as directory:
+            legacy_report = self.run_health(pathlib.Path(directory), cp=[legacy])
+        with tempfile.TemporaryDirectory() as directory:
+            diagnosed_report = self.run_health(pathlib.Path(directory), cp=[diagnosed])
+
+        def stable_health_projection(report: dict) -> dict:
+            source = report["sources"][0]
+            fault_fields = (
+                "fault_key", "source_id", "stage", "reason", "owner_ticket", "recommended_action",
+            )
+            return {
+                "faults": [
+                    {key: row.get(key) for key in fault_fields}
+                    for row in source["faults"]
+                ],
+                "processor_state": source["processor"]["state"],
+                "last_good": source["canonical"]["last_good"],
+                "overall": source["overall"],
+            }
+
+        self.assertEqual(stable_health_projection(legacy_report), stable_health_projection(diagnosed_report))
+        HEALTH.validate_schema(legacy_report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "legacy checkpoint")
+        HEALTH.validate_schema(diagnosed_report, ROOT / "schemas/datapan.upstream-catalogue-health.v1.schema.json", "diagnosed checkpoint")
+
     def test_invalid_future_terminal_progress_is_a_health_fault(self) -> None:
         future = checkpoint(
             status="no-change", last_progress_at=(AS_OF + dt.timedelta(hours=1)).isoformat(),

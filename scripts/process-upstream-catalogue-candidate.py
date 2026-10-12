@@ -59,6 +59,58 @@ DETAIL_FAILURE_CODES = frozenset({
     "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven",
 })
 DETAIL_FAILURE_PHASES = frozenset({"page", "resolver"})
+RESUME_VALIDATION_PHASES = frozenset({
+    "resume_parent_cache", "canonical_parent_cache", "parent_cache_merge",
+})
+RESUME_VALIDATION_ERROR_CODES = frozenset({
+    "corrupt_generation_index",
+    "derivation_parent_enrichment_contribution_conflict",
+    "resume_artifact_unbound",
+    "resume_checkpoint_detail_identity_invalid",
+    "resume_enrichment_binding_mismatch",
+    "resume_enrichment_guide_binding_mismatch",
+    "resume_enrichment_identity_invalid",
+    "resume_enrichment_identity_mismatch",
+    "resume_enrichment_observation_in_future",
+    "resume_enrichment_operation_binding_mismatch",
+    "resume_enrichment_record_invalid",
+    "resume_enrichment_source_binding_mismatch",
+    "resume_enrichment_source_or_guide_identity_mismatch",
+    "resume_seoul_declaration_binding_invalid",
+    "resume_seoul_declaration_provenance_missing",
+    "resume_seoul_declared_operation_invalid",
+    "resume_worker_contract_failure_binding_mismatch",
+    "resume_worker_contract_failure_outcome_missing",
+    "resume_worker_link_metadata_binding_invalid",
+    "resume_worker_link_metadata_invalid",
+    "resume_worker_link_metadata_missing",
+    "resume_worker_outcome_binding_mismatch",
+    "resume_worker_outcome_identity_invalid",
+    "resume_worker_outcome_invalid",
+    "resume_worker_outcomes_invalid",
+})
+RESUME_VALIDATION_FALLBACK_CODES = frozenset({
+    "validation_error", "json_decode_error", "io_error",
+})
+RESUME_VALIDATION_MERGE_CODE = "derivation_parent_enrichment_contribution_conflict"
+
+
+class ResumeCacheValidationError(ValueError):
+    """A finite, text-free code for a rejected resume-cache contribution."""
+
+    __slots__ = ("_diagnostic_code",)
+
+    def __init__(self, code: str) -> None:
+        if type(code) is not str or code not in RESUME_VALIDATION_ERROR_CODES:
+            raise ValueError("invalid_resume_validation_error_code")
+        super().__init__(code)
+        self._diagnostic_code = code
+
+    @property
+    def diagnostic_code(self) -> str:
+        return self._diagnostic_code
+
+
 CONTRACT_FAILURES = {
     "no_reviewed_declaration": {
         "unresolved_requirements": ["reviewed_operation_declaration"],
@@ -1579,6 +1631,8 @@ def ensure_fence(checkpoint: dict[str, Any], run_id: str, token: int, now: dt.da
 
 
 def safe_error_class(exc: BaseException) -> str:
+    if type(exc) is ResumeCacheValidationError:
+        return "valueerror"
     name = type(exc).__name__.lower()
     text_value = str(exc).lower()
     if "too_large" in text_value:
@@ -1588,6 +1642,32 @@ def safe_error_class(exc: BaseException) -> str:
     if isinstance(exc, (TimeoutError, urllib.error.URLError)):
         return "network_timeout_or_error"
     return name[:64]
+
+
+def resume_validation_diagnostic(exc: BaseException, phase: str) -> dict[str, Any] | None:
+    """Return only a known phase and an allowlisted resume-validation code."""
+    if phase not in RESUME_VALIDATION_PHASES:
+        return None
+    if type(exc) is ResumeCacheValidationError:
+        code = exc.diagnostic_code
+        if type(code) is not str or code not in RESUME_VALIDATION_ERROR_CODES:
+            return None
+        if code == RESUME_VALIDATION_MERGE_CODE:
+            if phase != "parent_cache_merge":
+                return None
+        elif phase == "parent_cache_merge":
+            return None
+    elif isinstance(exc, json.JSONDecodeError):
+        code = "json_decode_error"
+    elif isinstance(exc, OSError):
+        code = "io_error"
+    elif isinstance(exc, ValueError):
+        code = "validation_error"
+    else:
+        return None
+    if code not in RESUME_VALIDATION_ERROR_CODES | RESUME_VALIDATION_FALLBACK_CODES:
+        return None
+    return {"version": 1, "phase": phase, "code": code}
 
 
 def validate_failure_diagnostic(value: Any, *, identity: str | None = None) -> dict[str, Any]:
@@ -1888,7 +1968,7 @@ def validated_resume_records(
     if index_path.is_file():
         index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
         if not isinstance(index, dict) or index.get("schema_version") != CHECKPOINT_SCHEMA or not isinstance(index.get("generations"), list):
-            raise ValueError("corrupt_generation_index")
+            raise ResumeCacheValidationError("corrupt_generation_index")
         for entry in reversed(index["generations"]):
             if not isinstance(entry, dict) or entry.get("generation_id") == checkpoint["generation_id"]:
                 continue
@@ -1920,7 +2000,7 @@ def validated_resume_records(
             owner, evidence_digest = old, digest
             break
     if owner is None or evidence_digest is None:
-        raise ValueError("resume_artifact_unbound")
+        raise ResumeCacheValidationError("resume_artifact_unbound")
     evidence = load_json(path, maximum_bytes=MAX_INPUT_BYTES)
     expected_top = {
         "schema_version", "original_candidate_sha256", "provider_index_sha256",
@@ -1934,7 +2014,7 @@ def validated_resume_records(
         or evidence.get("provider_index_sha256") != owner.get("generation_inputs", {}).get("adapter_revision")
         or not isinstance(evidence.get("records"), list)
     ):
-        raise ValueError("resume_enrichment_binding_mismatch")
+        raise ResumeCacheValidationError("resume_enrichment_binding_mismatch")
     owner_detail_by_id: dict[str, dict[str, Any]] = {}
     for owner_detail in owner.get("detail_records", []):
         if not isinstance(owner_detail, dict):
@@ -1942,7 +2022,7 @@ def validated_resume_records(
         owner_identity = str(owner_detail.get("id") or "")
         if owner_identity:
             if owner_identity in owner_detail_by_id:
-                raise ValueError("resume_checkpoint_detail_identity_invalid")
+                raise ResumeCacheValidationError("resume_checkpoint_detail_identity_invalid")
             owner_detail_by_id[owner_identity] = owner_detail
     owner_contract_failure_ids = {
         identity for identity, detail in owner_detail_by_id.items()
@@ -1954,7 +2034,7 @@ def validated_resume_records(
     if "worker_outcomes" in evidence:
         outcomes = evidence["worker_outcomes"]
         if not isinstance(outcomes, list):
-            raise ValueError("resume_worker_outcomes_invalid")
+            raise ResumeCacheValidationError("resume_worker_outcomes_invalid")
         successful_ids = {
             str(record.get("api_key", {}).get("id") or "")
             for record in evidence["records"] if isinstance(record, dict) and isinstance(record.get("api_key"), dict)
@@ -1974,13 +2054,13 @@ def validated_resume_records(
                 or not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("source_sha256") or ""))
                 or (outcome.get("guide_sha256") is not None and not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("guide_sha256"))))
             ):
-                raise ValueError("resume_worker_outcome_invalid")
+                raise ResumeCacheValidationError("resume_worker_outcome_invalid")
             identity = str(outcome["api_key"].get("id") or "")
             if "failure_diagnostic" in outcome:
                 try:
                     diagnostic = validate_failure_diagnostic(outcome["failure_diagnostic"], identity=identity)
                 except ValueError as exc:
-                    raise ValueError("resume_worker_outcome_invalid") from exc
+                    raise ResumeCacheValidationError("resume_worker_outcome_invalid") from exc
             else:
                 diagnostic = None
             if "link_metadata" in outcome:
@@ -1989,28 +2069,28 @@ def validated_resume_records(
                         outcome["link_metadata"], str(outcome["api_key"].get("id") or ""), registered_hosts,
                     )
                 except (ValueError, TypeError) as exc:
-                    raise ValueError("resume_worker_link_metadata_invalid") from exc
+                    raise ResumeCacheValidationError("resume_worker_link_metadata_invalid") from exc
                 if (
                     outcome.get("status") != "quarantined"
                     or not isinstance(diagnostic, dict)
                     or diagnostic.get("code") != "resolved_link_operation_contract_unproven"
                     or diagnostic.get("phase") != "resolver"
                 ):
-                    raise ValueError("resume_worker_link_metadata_binding_invalid")
+                    raise ResumeCacheValidationError("resume_worker_link_metadata_binding_invalid")
             elif (
                 isinstance(diagnostic, dict)
                 and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
             ):
-                raise ValueError("resume_worker_link_metadata_missing")
+                raise ResumeCacheValidationError("resume_worker_link_metadata_missing")
             if not identity or identity in outcome_ids or identity in successful_ids:
-                raise ValueError("resume_worker_outcome_identity_invalid")
+                raise ResumeCacheValidationError("resume_worker_outcome_identity_invalid")
             row = candidate_by_id.get(identity)
             if (
                 row is None or not row_is_link(row)
                 or outcome["source_sha256"] != source_fingerprint(row)
                 or outcome["guide_sha256"] != guide_fingerprint(row)
             ):
-                raise ValueError("resume_worker_outcome_binding_mismatch")
+                raise ResumeCacheValidationError("resume_worker_outcome_binding_mismatch")
             outcome_ids.add(identity)
             owner_detail = owner_detail_by_id.get(identity)
             owner_diagnostic = owner_detail.get("failure_diagnostic") if owner_detail else None
@@ -2032,7 +2112,7 @@ def validated_resume_records(
                     or owner_has_metadata != outcome_has_metadata
                     or owner_has_metadata and owner_detail.get("link_metadata") != outcome.get("link_metadata")
                 ):
-                    raise ValueError("resume_worker_contract_failure_binding_mismatch")
+                    raise ResumeCacheValidationError("resume_worker_contract_failure_binding_mismatch")
             if (
                 isinstance(diagnostic, dict)
                 and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
@@ -2044,7 +2124,7 @@ def validated_resume_records(
                 if materialized is not None:
                     locally_materialized_declarations[identity] = materialized
     if owner_contract_failure_ids - outcome_ids:
-        raise ValueError("resume_worker_contract_failure_outcome_missing")
+        raise ResumeCacheValidationError("resume_worker_contract_failure_outcome_missing")
     owner_inputs = owner.get("generation_inputs", {}) if isinstance(owner, dict) else {}
     expected_extractor_revision = (
         owner_inputs.get("extractor_revision") if allow_parent_extractor_revision
@@ -2068,13 +2148,13 @@ def validated_resume_records(
             or set(record) not in (expected_record_fields, expected_record_fields | {"declaration_provenance"})
             or record.get("status") != "enriched"
         ):
-            raise ValueError("resume_enrichment_record_invalid")
+            raise ResumeCacheValidationError("resume_enrichment_record_invalid")
         api_key = record.get("api_key")
         if not isinstance(api_key, dict) or api_key.get("provider") != "data.go.kr":
-            raise ValueError("resume_enrichment_identity_invalid")
+            raise ResumeCacheValidationError("resume_enrichment_identity_invalid")
         identity = str(api_key.get("id") or "")
         if identity in resumed or identity not in candidate_by_id or not row_is_link(candidate_by_id[identity]):
-            raise ValueError("resume_enrichment_identity_mismatch")
+            raise ResumeCacheValidationError("resume_enrichment_identity_mismatch")
         row = candidate_by_id[identity]
         expected_url = safe_public_page_url(identity)
         provenance = record.get("source_provenance")
@@ -2083,7 +2163,7 @@ def validated_resume_records(
         observed_guide_digest = record.get("observed_guide_url_sha256")
         if record.get("source_sha256") != source_fingerprint(row) or record.get("guide_sha256") != guide_fingerprint(row):
             if reject_stale_source_or_guide_contract:
-                raise ValueError("resume_enrichment_source_or_guide_identity_mismatch")
+                raise ResumeCacheValidationError("resume_enrichment_source_or_guide_identity_mismatch")
             continue
         if (
             not isinstance(provenance, dict)
@@ -2095,20 +2175,20 @@ def validated_resume_records(
             or not isinstance(operations, list) or not operations
             or record.get("operations_sha256") != sha256_bytes(canonical_json(operations))
         ):
-            raise ValueError("resume_enrichment_source_binding_mismatch")
+            raise ResumeCacheValidationError("resume_enrichment_source_binding_mismatch")
         observed_at = parse_timestamp(str(provenance.get("observed_at")))
         if observed_at > now + dt.timedelta(minutes=5):
-            raise ValueError("resume_enrichment_observation_in_future")
+            raise ResumeCacheValidationError("resume_enrichment_observation_in_future")
         if now - observed_at >= dt.timedelta(days=DETAIL_OBSERVATION_TTL_DAYS):
             continue
         if observed_guide is None:
             if observed_guide_digest is not None or guide_fingerprint(row) is not None:
-                raise ValueError("resume_enrichment_guide_binding_mismatch")
+                raise ResumeCacheValidationError("resume_enrichment_guide_binding_mismatch")
         elif (
             not isinstance(observed_guide, str)
             or observed_guide_digest != sha256_bytes(observed_guide.encode("utf-8"))
         ):
-            raise ValueError("resume_enrichment_guide_binding_mismatch")
+            raise ResumeCacheValidationError("resume_enrichment_guide_binding_mismatch")
         declaration_provenance = record.get("declaration_provenance")
         has_declared_operation = any(
             isinstance(operation, dict)
@@ -2119,13 +2199,13 @@ def validated_resume_records(
         )
         if declaration_provenance is not None or has_declared_operation:
             if declaration_provenance is None:
-                raise ValueError("resume_seoul_declaration_provenance_missing")
+                raise ResumeCacheValidationError("resume_seoul_declaration_provenance_missing")
             try:
                 SEOUL_DECLARATION.validate_enriched_record(row, record)
                 link_metadata = declaration_provenance.get("page_resolver")
                 DETAIL_HELPERS.validate_link_metadata(link_metadata, identity, registered_hosts)
             except (AttributeError, KeyError, TypeError, ValueError) as exc:
-                raise ValueError("resume_seoul_declaration_binding_invalid") from exc
+                raise ResumeCacheValidationError("resume_seoul_declaration_binding_invalid") from exc
         historical_operations = row.get("operations", [])
         operations_to_validate = operations
         if declaration_provenance is not None:
@@ -2147,12 +2227,12 @@ def validated_resume_records(
                 or (observed_guide is None and "guide_url" in raw)
                 or (observed_guide is not None and raw.get("guide_url") != observed_guide)
             ):
-                raise ValueError("resume_enrichment_operation_binding_mismatch")
+                raise ResumeCacheValidationError("resume_enrichment_operation_binding_mismatch")
             if raw.get("operation_declaration_id") is not None:
                 try:
                     SEOUL_DECLARATION.validate_declared_operation(row, operation)
                 except (TypeError, ValueError) as exc:
-                    raise ValueError("resume_seoul_declared_operation_invalid") from exc
+                    raise ResumeCacheValidationError("resume_seoul_declared_operation_invalid") from exc
         resumed[identity] = record
     for identity, record in locally_materialized_declarations.items():
         if identity not in resumed:
@@ -2177,7 +2257,7 @@ def merge_derivation_enrichment_records(
             or prior.get("operations_sha256") != candidate.get("operations_sha256")
             or prior.get("operations") != candidate.get("operations")
         ):
-            raise ValueError("derivation_parent_enrichment_contribution_conflict")
+            raise ResumeCacheValidationError("derivation_parent_enrichment_contribution_conflict")
         prior_time = parse_timestamp(str((prior.get("source_provenance") or {}).get("observed_at") or ""))
         candidate_time = parse_timestamp(str((candidate.get("source_provenance") or {}).get("observed_at") or ""))
         if candidate_time > prior_time:
@@ -3754,6 +3834,7 @@ def process(
     baseline_asset = unique_rows(baseline_rows, "baseline")
     candidate_asset = unique_rows(candidate_rows, "candidate")
     registered_hosts = DETAIL_HELPERS.registered_hosts(load_json(args.provider_index))
+    diagnostic_phase = "resume_parent_cache"
     try:
         all_cached_records = validated_resume_records(
             args.resume_enrichment_evidence,
@@ -3773,6 +3854,7 @@ def process(
         )
         if derivation is not None:
             canonical_evidence_path = args.canonical_parent_bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            diagnostic_phase = "canonical_parent_cache"
             canonical_records = validated_resume_records(
                 canonical_evidence_path,
                 checkpoint=checkpoint,
@@ -3787,9 +3869,14 @@ def process(
                 expected_owner_generation_id=derivation["canonical_parent_processor"]["generation_id"],
                 reject_stale_source_or_guide_contract=True,
             )
+            diagnostic_phase = "parent_cache_merge"
             all_cached_records = merge_derivation_enrichment_records(all_cached_records, canonical_records)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
-        checkpoint.update({"status": "quarantined", "outcome": {"reason": safe_error_class(exc)}, "lease": None})
+        outcome = {"reason": safe_error_class(exc)}
+        diagnostic = resume_validation_diagnostic(exc, diagnostic_phase)
+        if diagnostic is not None:
+            outcome["resume_validation_diagnostic"] = diagnostic
+        checkpoint.update({"status": "quarantined", "outcome": outcome, "lease": None})
         checkpoint["last_heartbeat_at"] = timestamp(now)
         atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
         append_generation_index(index_path, checkpoint_path, checkpoint)
