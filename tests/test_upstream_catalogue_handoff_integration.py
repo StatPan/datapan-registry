@@ -218,6 +218,26 @@ def reserved_worker_args(fixture, *, run_id: str, artifact_id: str):
     return args
 
 
+def live_processor_args(support, args, *, processor_artifact_run_id: str):
+    # Use authenticated live processing and the actual production composer.
+    args.execution_mode = "live"
+    args.composer = support.ACTUAL_COMPOSER
+    args.fixture_composer = None
+    args.allow_fixture_composer = False
+    args.now = None
+    args.processor_run_id = f"{processor_artifact_run_id}-1"
+    args.processor_artifact_run_id = processor_artifact_run_id
+    return args
+
+
+def process_live(processor, fixture, args, *, fetcher):
+    return processor.process(
+        args,
+        fetcher=fetcher,
+        clock=lambda: processor.parse_timestamp(fixture.now),
+    )
+
+
 class FakeProducerActionsApi:
     workflow_id = 88
     repo = REPOSITORY
@@ -754,14 +774,24 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         fixture.write_real_composer_inputs([], [rest_row()], old_at)
         fixture.now = "2026-10-03T10:05:00Z"
         old_env, old_zip, old_artifact = write_admission_bundle(fixture, processor, run_id="801001", observed_at=old_at)
-        code, first = processor.process(
+        first_claim = live_processor_args(
+            _support,
             admission_args(fixture, run_id="801001", admission_path=old_env, archive=old_zip,
                            artifact_id=old_artifact, claim_only=True),
+            processor_artifact_run_id="921001",
+        )
+        code, first = process_live(
+            processor, fixture, first_claim,
             fetcher=lambda *_: self.fail("REST-only fixture has no detail requests"),
         )
         self.assertEqual(code, 0, first.get("outcome"))
-        code, first = processor.process(
+        first_worker = live_processor_args(
+            _support,
             reserved_worker_args(fixture, run_id="801001", artifact_id=old_artifact),
+            processor_artifact_run_id="921001",
+        )
+        code, first = process_live(
+            processor, fixture, first_worker,
             fetcher=lambda *_: self.fail("REST-only fixture has no detail requests"),
         )
         self.assertEqual(code, 0, first.get("outcome"))
@@ -775,14 +805,24 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             fixture, processor, run_id="801002", observed_at=newer_at,
             started_at="2026-10-03T09:30:00Z",
         )
-        code, newer = processor.process(
+        newer_claim = live_processor_args(
+            _support,
             admission_args(fixture, run_id="801002", admission_path=new_env, archive=new_zip,
                            artifact_id=new_artifact, claim_only=True),
+            processor_artifact_run_id="921002",
+        )
+        code, newer = process_live(
+            processor, fixture, newer_claim,
             fetcher=lambda *_: self.fail("REST-only fixture has no detail requests"),
         )
         self.assertEqual(code, 0, newer.get("outcome"))
-        code, newer = processor.process(
+        newer_worker = live_processor_args(
+            _support,
             reserved_worker_args(fixture, run_id="801002", artifact_id=new_artifact),
+            processor_artifact_run_id="921002",
+        )
+        code, newer = process_live(
+            processor, fixture, newer_worker,
             fetcher=lambda *_: self.fail("REST-only fixture has no detail requests"),
         )
         self.assertEqual(code, 0, newer.get("outcome"))
@@ -797,13 +837,17 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         fixture.diff_path.write_bytes(original_diff)
         fixture.evidence_path.write_bytes(original_evidence)
         fixture.now = "2026-10-03T10:15:00Z"
-        older_replay_args = admission_args(
-            fixture, run_id="801001", admission_path=old_env, archive=old_zip,
-            artifact_id=old_artifact, claim_only=True,
-            replay_state_head_sha=replay_state_head_sha,
+        older_replay_args = live_processor_args(
+            _support,
+            admission_args(
+                fixture, run_id="801001", admission_path=old_env, archive=old_zip,
+                artifact_id=old_artifact, claim_only=True,
+                replay_state_head_sha=replay_state_head_sha,
+            ),
+            processor_artifact_run_id="921003",
         )
-        code, replay = processor.process(
-            older_replay_args,
+        code, replay = process_live(
+            processor, fixture, older_replay_args,
             fetcher=lambda *_: self.fail("older replay must not issue detail requests"),
         )
         self.assertEqual(code, 0, replay.get("outcome"))
@@ -936,17 +980,28 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
                 fixture, processor, run_id=run_id, observed_at=observed_at, started_at=started_at,
             )
             bundles[run_id] = (admission_path, archive, artifact_id)
-            claim = admission_args(
-                fixture, run_id=run_id, admission_path=admission_path,
-                archive=archive, artifact_id=artifact_id, claim_only=True,
+            processor_artifact_run_id = "922001" if run_id == "731001" else "922002"
+            claim = live_processor_args(
+                _support,
+                admission_args(
+                    fixture, run_id=run_id, admission_path=admission_path,
+                    archive=archive, artifact_id=artifact_id, claim_only=True,
+                ),
+                processor_artifact_run_id=processor_artifact_run_id,
             )
-            code, checkpoint = processor.process(
-                claim, fetcher=lambda *_: self.fail("claim must not make provider requests"),
+            code, checkpoint = process_live(
+                processor, fixture, claim,
+                fetcher=lambda *_: self.fail("claim must not make provider requests"),
             )
             self.assertEqual(code, 0, checkpoint.get("outcome"))
-            worker = reserved_worker_args(fixture, run_id=run_id, artifact_id=artifact_id)
-            code, checkpoint = processor.process(
-                worker, fetcher=lambda *_: self.fail("REST-only worker must not make provider requests"),
+            worker = live_processor_args(
+                _support,
+                reserved_worker_args(fixture, run_id=run_id, artifact_id=artifact_id),
+                processor_artifact_run_id=processor_artifact_run_id,
+            )
+            code, checkpoint = process_live(
+                processor, fixture, worker,
+                fetcher=lambda *_: self.fail("REST-only worker must not make provider requests"),
             )
             self.assertEqual(code, 0, checkpoint.get("outcome"))
             first_generation = first_generation or checkpoint["generation_id"]
@@ -959,21 +1014,31 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
         fixture.now = "2026-10-03T10:08:00Z"
         admission_path, archive, artifact_id = bundles["731002"]
         with mock.patch.object(processor, "generator_revision", return_value=revised_generation):
-            current_claim = admission_args(
-                fixture, run_id="731002", admission_path=admission_path,
-                archive=archive, artifact_id=artifact_id, claim_only=True,
+            current_claim = live_processor_args(
+                _support,
+                admission_args(
+                    fixture, run_id="731002", admission_path=admission_path,
+                    archive=archive, artifact_id=artifact_id, claim_only=True,
+                ),
+                processor_artifact_run_id="922003",
             )
-            code, current = processor.process(
-                current_claim, fetcher=lambda *_: self.fail("migration replay must not make provider requests"),
+            code, current = process_live(
+                processor, fixture, current_claim,
+                fetcher=lambda *_: self.fail("migration replay must not make provider requests"),
             )
             self.assertEqual(code, 0, current.get("outcome"))
             self.assertNotEqual(current["generation_id"], first_generation)
             self.assertEqual(current["generation_inputs"]["generator_revision"], revised_generation)
             self.assertEqual(current["observation_count"], 1)
             self.assertEqual(current["last_observation"]["producer_run_id"], "731002")
-            worker = reserved_worker_args(fixture, run_id="731002", artifact_id=artifact_id)
-            code, current = processor.process(
-                worker, fetcher=lambda *_: self.fail("REST-only worker must not make provider requests"),
+            worker = live_processor_args(
+                _support,
+                reserved_worker_args(fixture, run_id="731002", artifact_id=artifact_id),
+                processor_artifact_run_id="922003",
+            )
+            code, current = process_live(
+                processor, fixture, worker,
+                fetcher=lambda *_: self.fail("REST-only worker must not make provider requests"),
             )
             self.assertEqual(code, 0, current.get("outcome"))
             self.assertEqual(current["observation_count"], 1)
@@ -1004,13 +1069,18 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             )
             replay_state_head_sha = committed_state_head(self, fixture, "equal-time-revision")
             admission_path, archive, artifact_id = bundles["731001"]
-            older_claim = admission_args(
-                fixture, run_id="731001", admission_path=admission_path,
-                archive=archive, artifact_id=artifact_id, claim_only=True,
-                replay_state_head_sha=replay_state_head_sha,
+            older_claim = live_processor_args(
+                _support,
+                admission_args(
+                    fixture, run_id="731001", admission_path=admission_path,
+                    archive=archive, artifact_id=artifact_id, claim_only=True,
+                    replay_state_head_sha=replay_state_head_sha,
+                ),
+                processor_artifact_run_id="922004",
             )
-            code, replay = processor.process(
-                older_claim, fetcher=lambda *_: self.fail("older exact replay must not make provider requests"),
+            code, replay = process_live(
+                processor, fixture, older_claim,
+                fetcher=lambda *_: self.fail("older exact replay must not make provider requests"),
             )
 
         self.assertEqual(code, 0, replay.get("outcome"))
