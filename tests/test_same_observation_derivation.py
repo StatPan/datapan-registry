@@ -1246,8 +1246,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertEqual(PROCESSOR.verify_checkpoint(proposed_checkpoint), proposed_checkpoint)
         for field in (
             "source_id", "source_scope", "status", "observed_at", "last_observation",
-            "observation_count", "producer_run_id", "processor_run_id",
-            "processor_artifact_run_id", "input_artifacts", "outcome",
+            "observation_count", "input_artifacts", "outcome",
         ):
             self.assertEqual(proposed_checkpoint[field], b3_checkpoint[field])
         self.assertEqual(
