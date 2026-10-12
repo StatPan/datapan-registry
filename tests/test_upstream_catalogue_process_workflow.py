@@ -1132,6 +1132,9 @@ class WorkflowContractTests(unittest.TestCase):
             result_path = pathlib.Path(fixture["output_root"]) / "upstream-catalogue-processing-result.json"
 
             def run_bundle(label: str, *, selected_claim_sha: str, **override: str) -> dict[str, str]:
+                result_path.write_text(
+                    json.dumps(fixture["result"], sort_keys=True) + "\n", encoding="utf-8",
+                )
                 output = repo / f"bundle-output-{label}"
                 env = {
                     **os.environ,
@@ -1164,6 +1167,10 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertEqual(valid_bundle["verified"], "true")
             self.assertEqual(valid_bundle["replay"], "true")
             self.assertEqual(valid_bundle["generation_id"], "")
+            self.assertTrue(result_path.is_file())
+            self.assertEqual(
+                json.loads(result_path.read_text(encoding="utf-8")), fixture["result"],
+            )
             for field, override in selector_tampering.items():
                 with self.subTest(bundle_delivery_field=field):
                     self.assertEqual(
@@ -1184,7 +1191,8 @@ class WorkflowContractTests(unittest.TestCase):
             )
             self.assertTrue(result_path.is_file())
             self.assertEqual(
-                json.loads(result_path.read_text(encoding="utf-8")), fixture["result"],
+                json.loads(result_path.read_text(encoding="utf-8")),
+                {"status": "retry", "reason": "processor_noop_verification_failed"},
             )
 
     def test_missing_continuation_artifact_targets_its_existing_generation(self) -> None:
