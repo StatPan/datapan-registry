@@ -218,6 +218,20 @@ def reserved_worker_args(fixture, *, run_id: str, artifact_id: str):
     return args
 
 
+def live_reserved_worker_args(
+    support, fixture, *, run_id: str, admission_path: pathlib.Path,
+    archive: pathlib.Path, artifact_id: str, processor_artifact_run_id: str,
+):
+    args = admission_args(
+        fixture, run_id=run_id, admission_path=admission_path,
+        archive=archive, artifact_id=artifact_id, claim_only=False,
+    )
+    args.require_durable_reservation = True
+    return live_processor_args(
+        support, args, processor_artifact_run_id=processor_artifact_run_id,
+    )
+
+
 def live_processor_args(support, args, *, processor_artifact_run_id: str):
     # Use authenticated live processing and the actual production composer.
     args.execution_mode = "live"
@@ -785,9 +799,9 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             fetcher=lambda *_: self.fail("REST-only fixture has no detail requests"),
         )
         self.assertEqual(code, 0, first.get("outcome"))
-        first_worker = live_processor_args(
-            _support,
-            reserved_worker_args(fixture, run_id="801001", artifact_id=old_artifact),
+        first_worker = live_reserved_worker_args(
+            _support, fixture, run_id="801001", admission_path=old_env,
+            archive=old_zip, artifact_id=old_artifact,
             processor_artifact_run_id="921001",
         )
         code, first = process_live(
@@ -816,9 +830,9 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             fetcher=lambda *_: self.fail("REST-only fixture has no detail requests"),
         )
         self.assertEqual(code, 0, newer.get("outcome"))
-        newer_worker = live_processor_args(
-            _support,
-            reserved_worker_args(fixture, run_id="801002", artifact_id=new_artifact),
+        newer_worker = live_reserved_worker_args(
+            _support, fixture, run_id="801002", admission_path=new_env,
+            archive=new_zip, artifact_id=new_artifact,
             processor_artifact_run_id="921002",
         )
         code, newer = process_live(
@@ -994,9 +1008,9 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
                 fetcher=lambda *_: self.fail("claim must not make provider requests"),
             )
             self.assertEqual(code, 0, checkpoint.get("outcome"))
-            worker = live_processor_args(
-                _support,
-                reserved_worker_args(fixture, run_id=run_id, artifact_id=artifact_id),
+            worker = live_reserved_worker_args(
+                _support, fixture, run_id=run_id, admission_path=admission_path,
+                archive=archive, artifact_id=artifact_id,
                 processor_artifact_run_id=processor_artifact_run_id,
             )
             code, checkpoint = process_live(
@@ -1031,9 +1045,9 @@ class UpstreamCatalogueHandoffIntegrationTests(unittest.TestCase):
             self.assertEqual(current["generation_inputs"]["generator_revision"], revised_generation)
             self.assertEqual(current["observation_count"], 1)
             self.assertEqual(current["last_observation"]["producer_run_id"], "731002")
-            worker = live_processor_args(
-                _support,
-                reserved_worker_args(fixture, run_id="731002", artifact_id=artifact_id),
+            worker = live_reserved_worker_args(
+                _support, fixture, run_id="731002", admission_path=admission_path,
+                archive=archive, artifact_id=artifact_id,
                 processor_artifact_run_id="922003",
             )
             code, current = process_live(
