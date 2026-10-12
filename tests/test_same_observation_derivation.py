@@ -1350,8 +1350,12 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.assertEqual(self._state_tree_bytes(state_dir), proposed_state)
         self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), old_sha)
         self.assertEqual(WORKFLOW_REPLAY_TESTS.git(bare_repo, "rev-parse", bare_ref), old_bare_sha)
+        state_porcelain = subprocess.run(
+            ["git", "-C", str(state_repo), "status", "--porcelain=v1"],
+            check=True, text=True, capture_output=True,
+        ).stdout
         self.assertEqual(
-            set(WORKFLOW_REPLAY_TESTS.git(state_repo, "status", "--porcelain=v1").splitlines()),
+            set(state_porcelain.splitlines()),
             {f" M {b3_git_path}", f" M {index_git_path}"},
         )
 
