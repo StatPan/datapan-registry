@@ -41,23 +41,37 @@ def git(path: pathlib.Path, *args: str, check: bool = True) -> subprocess.Comple
     return result
 
 
-def write_exact_replay_fixture(repo: pathlib.Path) -> dict[str, object]:
+def write_exact_replay_fixture(
+    repo: pathlib.Path, *, older_admitted: bool = False,
+) -> dict[str, object]:
     """Create two real state commits and the exact receipt consumed by bundle_check."""
     state_repo = repo / "state-repo"
     state_repo.mkdir()
     git(state_repo, "init", "-b", BRANCH)
     git(state_repo, "config", "user.name", "fixture")
     git(state_repo, "config", "user.email", "fixture@example.test")
-    generation_id = "1" * 64
     candidate_sha = "2" * 64
     evidence_sha = "3" * 64
     artifact_sha = "4" * 64
     observed_at = "2026-10-01T10:00:00Z"
     prior_heartbeat = "2026-10-07T01:00:00Z"
     current_heartbeat = "2026-10-07T01:01:00Z"
-    producer_run_id = "37548691738"
+    producer_run_id = "37548691739" if older_admitted else "37548691738"
+    delivered_run_id = "37548691738"
     processor_run_id = "777-2"
     processor_artifact_run_id = "777"
+    generation_inputs = {
+        "source_id": "data_go_kr",
+        "source_scope": "aggregate_supported_catalog",
+        "baseline_sha256": "6" * 64,
+        "candidate_sha256": candidate_sha,
+        "observation_failure_sha256": None,
+        "policy_sha256": "7" * 64,
+        "adapter_revision": "8" * 64,
+        "generator_revision": "9" * 64,
+        "extractor_revision": "a" * 64,
+    }
+    generation_id = PROCESSOR._object_sha256(generation_inputs) if older_admitted else "1" * 64
     admission = {
         "admission_id": PROCESSOR.admission_id(producer_run_id, 1, evidence_sha),
         "producer_run_id": producer_run_id,
@@ -75,22 +89,27 @@ def write_exact_replay_fixture(repo: pathlib.Path) -> dict[str, object]:
         "candidate_sha256": candidate_sha,
         "admitted_at": observed_at,
     }
+    delivered_admission = None
+    if older_admitted:
+        delivered_admission = copy.deepcopy(admission)
+        delivered_admission.update({
+            "admission_id": PROCESSOR.admission_id(delivered_run_id, 1, "e" * 64),
+            "producer_run_id": delivered_run_id,
+            "run_started_at": "2026-10-01T09:50:00Z",
+            "artifact_id": "654320",
+            "artifact_name": f"upstream-catalog-refresh-{delivered_run_id}",
+            "artifact_expires_at": "2026-11-02T00:00:00Z",
+            "artifact_digest_sha256": "f" * 64,
+            "artifact_size_bytes": 1233,
+            "refresh_evidence_sha256": "e" * 64,
+            "admitted_at": "2026-10-01T09:58:00Z",
+        })
     prior = PROCESSOR.seal_checkpoint({
         "schema_version": PROCESSOR.CHECKPOINT_SCHEMA,
         "source_id": "data_go_kr",
         "source_scope": "aggregate_supported_catalog",
         "generation_id": generation_id,
-        "generation_inputs": {
-            "source_id": "data_go_kr",
-            "source_scope": "aggregate_supported_catalog",
-            "baseline_sha256": "6" * 64,
-            "candidate_sha256": candidate_sha,
-            "observation_failure_sha256": None,
-            "policy_sha256": "7" * 64,
-            "adapter_revision": "8" * 64,
-            "generator_revision": "9" * 64,
-            "extractor_revision": "a" * 64,
-        },
+        "generation_inputs": generation_inputs,
         "observed_at": observed_at,
         "last_observation": {
             "observed_at": observed_at,
@@ -145,6 +164,16 @@ def write_exact_replay_fixture(repo: pathlib.Path) -> dict[str, object]:
         "detail_queue_cursor": 17,
         "detail_retry_state": {},
     }
+    if older_admitted:
+        prior_index["generations"].append({
+            "generation_id": "0" * 64,
+            "status": "ready",
+            "checkpoint": f"{'0' * 64}.json",
+            "updated_at": prior_heartbeat,
+            "candidate_sha256": "c" * 64,
+        })
+    if delivered_admission is not None:
+        PROCESSOR.add_admission(prior_index, delivered_admission, now=observed_at)
     PROCESSOR.add_admission(prior_index, admission, now=observed_at)
     generation_rel = pathlib.Path(STATE_ROOT) / "sources/data_go_kr/generations" / f"{generation_id}.json"
     index_rel = pathlib.Path(STATE_ROOT) / "sources/data_go_kr/index.json"
@@ -174,19 +203,40 @@ def write_exact_replay_fixture(repo: pathlib.Path) -> dict[str, object]:
         "processing_replay": True,
         "candidate_available": False,
         "source_id": "data_go_kr",
-        "producer_run_id": producer_run_id,
+        "producer_run_id": delivered_run_id if older_admitted else producer_run_id,
         "processor_run_id": processor_run_id,
         "processor_artifact_run_id": processor_artifact_run_id,
     }
-    receipt = PROCESSOR.build_replay_persistence_receipt(
-        prior_checkpoint=prior,
-        current_checkpoint=current,
-        prior_index=prior_index,
-        current_index=current_index,
-        result=result,
-        state_head_sha=old_sha,
-        checkpoint_schema=schema,
-    )
+    expected_delivery = None
+    if delivered_admission is None:
+        receipt = PROCESSOR.build_replay_persistence_receipt(
+            prior_checkpoint=prior,
+            current_checkpoint=current,
+            prior_index=prior_index,
+            current_index=current_index,
+            result=result,
+            state_head_sha=old_sha,
+            checkpoint_schema=schema,
+        )
+    else:
+        expected_delivery = {
+            "producer_run_id": delivered_admission["producer_run_id"],
+            "run_attempt": delivered_admission["run_attempt"],
+            "artifact_id": delivered_admission["artifact_id"],
+            "head_sha": delivered_admission["head_sha"],
+            "artifact_digest_sha256": delivered_admission["artifact_digest_sha256"],
+        }
+        receipt = PROCESSOR.build_older_admitted_replay_persistence_receipt(
+            prior_checkpoint=prior,
+            current_checkpoint=current,
+            prior_index=prior_index,
+            current_index=current_index,
+            result=result,
+            state_head_sha=old_sha,
+            delivered_admission_id=delivered_admission["admission_id"],
+            expected_delivery=expected_delivery,
+            checkpoint_schema=schema,
+        )
     output_root = repo / "datapan-registry/.datapan/ci/upstream-catalogue-processing"
     output_root.mkdir(parents=True)
     (output_root / "upstream-catalogue-processing-result.json").write_text(
@@ -229,7 +279,10 @@ def write_exact_replay_fixture(repo: pathlib.Path) -> dict[str, object]:
         "output_root": output_root,
         "processor_run_id": processor_run_id,
         "processor_artifact_run_id": processor_artifact_run_id,
-        "producer_run_id": producer_run_id,
+        "producer_run_id": delivered_run_id if older_admitted else producer_run_id,
+        "latest_producer_run_id": producer_run_id,
+        "delivered_run_id": delivered_run_id if older_admitted else producer_run_id,
+        "expected_delivery": expected_delivery,
     }
 
 
@@ -958,6 +1011,176 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertEqual(ensure.returncode, 0, ensure.stderr or ensure.stdout)
             self.assertEqual(json.loads(result_path.read_text(encoding="utf-8")), fixture["result"])
             self.assertIn("steps.bundle_check.outputs.replay != 'true'", bind["if"])
+
+    def test_older_admitted_v2_replay_is_bound_at_claim_and_bundle_cas(self) -> None:
+        steps = self.workflow["jobs"]["process"]["steps"]
+        claim_step = next(step for step in steps if step.get("id") == "claim")
+        bundle_step = next(step for step in steps if step.get("id") == "bundle_check")
+        state_fixture = StateBranchWorkflowFixture(
+            "test_first_bootstrap_and_archive_paths_use_only_owned_state_root",
+        )
+        state_fixture.setUp()
+        self.addCleanup(state_fixture.tearDown)
+        with tempfile.TemporaryDirectory(prefix="catalogue-older-v2-workflow-") as temp:
+            repo = pathlib.Path(temp)
+            fixture = write_exact_replay_fixture(repo, older_admitted=True)
+            state_repo = repo / "state-repo"
+            old_sha = str(fixture["old_sha"])
+            generation_id = str(fixture["receipt"]["generation_id"])
+            checkpoint_rel = f"{STATE_ROOT}/sources/data_go_kr/generations/{generation_id}.json"
+            index_rel = f"{STATE_ROOT}/sources/data_go_kr/index.json"
+
+            def committed_json(commit: str, relative: str) -> dict[str, object]:
+                return json.loads(git(state_repo, "show", f"{commit}:{relative}").stdout)
+
+            git(state_repo, "reset", "--hard", old_sha)
+            current_checkpoint = committed_json(str(fixture["claim_sha"]), checkpoint_rel)
+            current_index = committed_json(str(fixture["claim_sha"]), index_rel)
+            target_id = str(fixture["receipt"]["generation_id"])
+            target_rows = [row for row in current_index["generations"] if row["generation_id"] == target_id]
+            self.assertEqual(len(target_rows), 1)
+            current_ids = [row["generation_id"] for row in current_index["generations"]]
+            self.assertGreater(len(current_ids), 1)
+            reordered_index = copy.deepcopy(current_index)
+            reordered_index["generations"] = [
+                row for row in reordered_index["generations"] if row["generation_id"] != target_id
+            ] + [copy.deepcopy(target_rows[0])]
+            self.assertNotEqual(reordered_index["generations"], current_index["generations"])
+            self.assertCountEqual(
+                [row["generation_id"] for row in reordered_index["generations"]],
+                current_ids,
+            )
+            expected_delivery = fixture["expected_delivery"]
+            assert isinstance(expected_delivery, dict)
+
+            def write_pending(index_value: dict[str, object]) -> None:
+                (state_repo / checkpoint_rel).write_text(
+                    json.dumps(current_checkpoint, sort_keys=True) + "\n", encoding="utf-8",
+                )
+                (state_repo / index_rel).write_text(
+                    json.dumps(index_value, sort_keys=True) + "\n", encoding="utf-8",
+                )
+
+            git(state_repo, "remote", "add", "origin", str(state_fixture.remote))
+            git(state_repo, "push", "-u", "origin", BRANCH)
+            marker = 'python3 - <<\'PY\' >> "${GITHUB_OUTPUT}"\n'
+            embedded_claim = claim_step["run"].split(marker, 1)[1].split("\nPY\n", 1)[0]
+
+            def run_claim(label: str, *, index_value: dict[str, object], **override: str) -> dict[str, str]:
+                write_pending(index_value)
+                output = repo / f"claim-output-{label}"
+                env = {
+                    **os.environ,
+                    "PROCESS_EXIT_CODE": "0",
+                    "EXPECTED_STATE_HEAD_SHA": old_sha,
+                    "PRODUCER_RUN_ID": str(expected_delivery["producer_run_id"]),
+                    "V2_DELIVERY_RUN_ID": str(expected_delivery["producer_run_id"]),
+                    "V2_DELIVERY_RUN_ATTEMPT": str(expected_delivery["run_attempt"]),
+                    "V2_DELIVERY_ARTIFACT_ID": str(expected_delivery["artifact_id"]),
+                    "V2_DELIVERY_HEAD_SHA": str(expected_delivery["head_sha"]),
+                    "V2_DELIVERY_ARTIFACT_DIGEST": str(expected_delivery["artifact_digest_sha256"]),
+                    "GITHUB_OUTPUT": str(output),
+                    "PYTHONDONTWRITEBYTECODE": "1",
+                    **override,
+                }
+                completed = subprocess.run(
+                    [sys.executable, "-c", embedded_claim], cwd=repo / "datapan-registry",
+                    env=env, text=True, capture_output=True,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
+                return dict(line.split("=", 1) for line in completed.stdout.splitlines())
+
+            self.assertEqual(
+                run_claim("reordered-index", index_value=reordered_index)["replay_authenticated"],
+                "false",
+            )
+            selector_tampering = {
+                "run": {"V2_DELIVERY_RUN_ID": str(fixture["latest_producer_run_id"])},
+                "attempt": {"V2_DELIVERY_RUN_ATTEMPT": str(int(expected_delivery["run_attempt"]) + 1)},
+                "artifact": {"V2_DELIVERY_ARTIFACT_ID": str(int(expected_delivery["artifact_id"]) + 1)},
+                "head": {"V2_DELIVERY_HEAD_SHA": "6" * 40},
+                "digest": {"V2_DELIVERY_ARTIFACT_DIGEST": "d" * 64},
+            }
+            for field, override in selector_tampering.items():
+                with self.subTest(claim_delivery_field=field):
+                    self.assertEqual(
+                        run_claim(field, index_value=current_index, **override)["replay_authenticated"],
+                        "false",
+                    )
+            positive_claim = run_claim("valid", index_value=current_index)
+            self.assertEqual(positive_claim, {
+                "checkpoint_persisted": "true",
+                "replay_candidate": "true",
+                "replay_authenticated": "true",
+            })
+
+            pushed = state_fixture.push(state_repo, old_sha)
+            self.assertEqual(pushed["changed"], "true")
+            claim_sha = pushed["new_sha"]
+            readback = state_fixture.root / "older-v2-readback"
+            readback_sha, _ = state_fixture.prepare(readback)
+            self.assertEqual(readback_sha, claim_sha)
+            self.assertEqual(
+                json.loads((readback / index_rel).read_text(encoding="utf-8")), current_index,
+            )
+
+            result_path = pathlib.Path(fixture["output_root"]) / "upstream-catalogue-processing-result.json"
+
+            def run_bundle(label: str, *, selected_claim_sha: str, **override: str) -> dict[str, str]:
+                output = repo / f"bundle-output-{label}"
+                env = {
+                    **os.environ,
+                    "DECISION": "process",
+                    "PROCESSOR_RUN_ID": str(fixture["processor_run_id"]),
+                    "PROCESSOR_ARTIFACT_RUN_ID": str(fixture["processor_artifact_run_id"]),
+                    "PRODUCER_RUN_ID": str(expected_delivery["producer_run_id"]),
+                    "REPOSITORY": REPOSITORY,
+                    "STATE_HEAD_SHA": old_sha,
+                    "CLAIM_SHA": selected_claim_sha,
+                    "CLAIM_CHANGED": "true",
+                    "CLAIM_OUTCOME": "success",
+                    "V2_DELIVERY_RUN_ID": str(expected_delivery["producer_run_id"]),
+                    "V2_DELIVERY_RUN_ATTEMPT": str(expected_delivery["run_attempt"]),
+                    "V2_DELIVERY_ARTIFACT_ID": str(expected_delivery["artifact_id"]),
+                    "V2_DELIVERY_HEAD_SHA": str(expected_delivery["head_sha"]),
+                    "V2_DELIVERY_ARTIFACT_DIGEST": str(expected_delivery["artifact_digest_sha256"]),
+                    "GITHUB_OUTPUT": str(output),
+                    "PYTHONDONTWRITEBYTECODE": "1",
+                    **override,
+                }
+                completed = subprocess.run(
+                    ["bash", "-c", bundle_step["run"]], cwd=repo,
+                    env=env, text=True, capture_output=True,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr or completed.stdout)
+                return dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines())
+
+            valid_bundle = run_bundle("valid", selected_claim_sha=claim_sha)
+            self.assertEqual(valid_bundle["verified"], "true")
+            self.assertEqual(valid_bundle["replay"], "true")
+            self.assertEqual(valid_bundle["generation_id"], "")
+            for field, override in selector_tampering.items():
+                with self.subTest(bundle_delivery_field=field):
+                    self.assertEqual(
+                        run_bundle(field, selected_claim_sha=claim_sha, **override)["verified"],
+                        "false",
+                    )
+
+            git(state_repo, "reset", "--hard", claim_sha)
+            (state_repo / index_rel).write_text(
+                json.dumps(reordered_index, sort_keys=True) + "\n", encoding="utf-8",
+            )
+            git(state_repo, "add", index_rel)
+            git(state_repo, "commit", "-m", "propose reordered replay generation index")
+            reordered_claim_sha = git(state_repo, "rev-parse", "HEAD").stdout.strip()
+            self.assertEqual(
+                run_bundle("reordered-index", selected_claim_sha=reordered_claim_sha)["verified"],
+                "false",
+            )
+            self.assertTrue(result_path.is_file())
+            self.assertEqual(
+                json.loads(result_path.read_text(encoding="utf-8")), fixture["result"],
+            )
 
     def test_missing_continuation_artifact_targets_its_existing_generation(self) -> None:
         steps = self.workflow["jobs"]["process"]["steps"]
