@@ -182,7 +182,12 @@ def write_exact_replay_fixture(
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value, sort_keys=True) + "\n", encoding="utf-8")
     marker = state_repo / STATE_ROOT / "state-root.json"
-    marker.write_text(json.dumps({"repository": REPOSITORY}) + "\n", encoding="utf-8")
+    marker.write_text(json.dumps({
+        "schema_version": "datapan.upstream-catalogue-state-root.v1",
+        "repository": REPOSITORY,
+        "source_id": "data_go_kr",
+        "state_root": STATE_ROOT,
+    }) + "\n", encoding="utf-8")
     git(state_repo, "add", STATE_ROOT)
     git(state_repo, "commit", "-m", "seed exact replay state")
     old_sha = git(state_repo, "rev-parse", "HEAD").stdout.strip()
