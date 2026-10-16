@@ -7,11 +7,21 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import pathlib
 import sys
+import types
 from typing import Any
 
 import jsonschema
+
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
+_NATIVE_CONTROL_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -28,12 +38,54 @@ def load(path: pathlib.Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _read_current_bytes(path: pathlib.Path, current_input_reader: Any | None) -> bytes:
+    if current_input_reader is None:
+        if _SOURCE_CONTROL_ORIGIN or any(
+            name in os.environ for name in _NATIVE_CONTROL_MARKERS
+        ):
+            raise RuntimeError("Native manifest validation requires its exact current-M reader")
+        return path.read_bytes()
+    try:
+        relative = path.relative_to(ROOT).as_posix()
+    except ValueError as exc:
+        raise ValueError("current-M operation-manifest read escaped its authenticated root") from exc
+    value = current_input_reader.read_bytes(relative)
+    if type(value) is not bytes:
+        raise TypeError("current_input_reader.read_bytes must return exact bytes")
+    return value
+
+
 def fail(condition: bool, message: str) -> None:
     if not condition:
         raise ValueError(message)
 
 
-def generator_module():
+def generator_module(
+    current_input_reader: Any | None = None, *, source_control_reader: Any | None = None,
+):
+    effective_reader = current_input_reader
+    if effective_reader is not None:
+        source = _read_current_bytes(GENERATOR_PATH, effective_reader)
+        relative = "scripts/generate-data-go-kr-operation-manifest.py"
+        try:
+            expected_relative = GENERATOR_PATH.absolute().relative_to(pathlib.Path(effective_reader.root)).as_posix()
+        except (AttributeError, ValueError) as exc:
+            raise ValueError("operation manifest generator escaped the authenticated current-M root") from exc
+        if expected_relative != relative:
+            raise ValueError("operation manifest generator differs from its fixed CONTROL member")
+        load_control = getattr(source_control_reader, "load_module", None)
+        if not callable(load_control):
+            raise RuntimeError("Native manifest validation requires its exact source_control_reader")
+        module = load_control(relative, m_baseline_bytes=source)
+        if (
+            not isinstance(module, types.ModuleType)
+            or not isinstance(getattr(module, "__name__", None), str)
+            or sys.modules.get(module.__name__) is not module
+        ):
+            raise RuntimeError("source_control_reader did not return the canonical adapted manifest generator")
+        return module
+    if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_CONTROL_MARKERS):
+        raise RuntimeError("Native manifest validation requires current-M and source-control readers")
     spec = importlib.util.spec_from_file_location("data_go_kr_operation_manifest", GENERATOR_PATH)
     if spec is None or spec.loader is None:
         raise ValueError("cannot load operation manifest generator")
@@ -58,20 +110,22 @@ def validate(
     *,
     registry_path: pathlib.Path = REGISTRY,
     expectation_schema: dict[str, Any] | None = None,
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
 ) -> None:
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(manifest)
     expectation = expectation if expectation is not None else load(EXPECTATION)
     expectation_schema = expectation_schema if expectation_schema is not None else load(EXPECTATION_SCHEMA)
     jsonschema.Draft202012Validator(expectation_schema, format_checker=jsonschema.FormatChecker()).validate(expectation)
-    source_bytes = registry_path.read_bytes()
+    source_bytes = _read_current_bytes(registry_path, current_input_reader)
     snapshot = {"path": registry_path.relative_to(ROOT).as_posix(), "bytes": len(source_bytes), "sha256": hashlib.sha256(source_bytes).hexdigest()}
     fail(manifest["source_snapshot"] == snapshot, "source snapshot binding drift")
     fail(expectation["source_snapshot"] == snapshot, "denominator expectation is stale for the source snapshot")
-    generator = generator_module()
+    generator = generator_module(current_input_reader, source_control_reader=source_control_reader)
     previous_registry = generator.REGISTRY
     generator.REGISTRY = registry_path
     try:
-        expected = generator.build(registry)
+        expected = generator.build(registry, current_input_reader=current_input_reader)
     finally:
         generator.REGISTRY = previous_registry
     fail(manifest == expected, "operation manifest does not deterministically match source snapshot")
@@ -87,7 +141,7 @@ def validate(
         (EXPECTATION_SCHEMA, "schema", None),
     ):
         artifact = artifact_by_path(release_manifest, path)
-        data = path.read_bytes()
+        data = _read_current_bytes(path, current_input_reader)
         fail((artifact.get("bytes"), artifact.get("sha256")) == (len(data), hashlib.sha256(data).hexdigest()), f"release manifest digest drift: {path.relative_to(ROOT)}")
         if expected_schema is not None:
             fail(artifact.get("kind") == kind and artifact.get("schema") == expected_schema, "operation manifest release artifact contract drift")

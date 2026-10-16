@@ -9,15 +9,19 @@ promotion journal, or make a currentness or release-readiness claim.
 from __future__ import annotations
 
 import datetime as dt
+import contextlib
 import hashlib
 import importlib.util
 import json
+import os
 import pathlib
 import re
 import subprocess
+import sys
 import zipfile
 from collections.abc import Mapping
 from io import BytesIO
+from types import ModuleType
 from typing import Any
 
 
@@ -43,6 +47,58 @@ MAX_JSON_BYTES = 2 * 1024 * 1024
 SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 LFS_VERSION = "version https://git-lfs.github.com/spec/v1"
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
+_NATIVE_GIT_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
+
+
+def _load_canonical_source_git(source_runtime_reader: Any | None = None) -> Any:
+    name = "canonical_source_git"
+    runtime_reader = source_runtime_reader
+    if runtime_reader is not None:
+        module = runtime_reader.load_module(name)
+        if (
+            not isinstance(module, ModuleType)
+            or module.__name__ != name
+            or sys.modules.get(name) is not module
+        ):
+            raise RuntimeError("source_runtime_reader did not return the exact canonical_source_git singleton")
+        return module
+    if any(marker in os.environ for marker in _NATIVE_GIT_MARKERS):
+        raise RuntimeError("Native publication validation requires its exact source_runtime_reader")
+    expected = pathlib.Path(__file__).resolve(strict=True).with_name("canonical_source_git.py")
+    module = sys.modules.get(name)
+    if module is not None:
+        actual = getattr(module, "__file__", None)
+        if not isinstance(actual, str) or pathlib.Path(actual).resolve(strict=True) != expected:
+            raise RuntimeError("canonical_source_git is already loaded outside the exact legacy Source runtime")
+        return module
+    for loaded_name, loaded_module in tuple(sys.modules.items()):
+        loaded_path = getattr(loaded_module, "__file__", None)
+        if loaded_name != name and isinstance(loaded_path, str):
+            try:
+                if pathlib.Path(loaded_path).resolve(strict=True) == expected:
+                    raise RuntimeError("canonical_source_git is already loaded under a noncanonical module name")
+            except OSError:
+                continue
+    spec = importlib.util.spec_from_file_location(name, expected)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("exact legacy canonical_source_git module is unavailable")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        if sys.modules.get(name) is module:
+            del sys.modules[name]
+        raise
+    if sys.modules.get(name) is not module:
+        raise RuntimeError("canonical_source_git legacy singleton changed during import")
+    return module
 
 
 REQUIRED_INPUTS = frozenset({
@@ -130,20 +186,52 @@ def _time_text(value: dt.datetime) -> str:
     return value.astimezone(dt.timezone.utc).isoformat().replace("+00:00", "Z")
 
 
-def _load_ack_validator(repo_root: pathlib.Path):
+def _load_ack_validator(
+    repo_root: pathlib.Path, current_input_reader: Any | None = None, *,
+    source_control_reader: Any | None = None,
+):
     path = repo_root / "scripts" / "recover-canonical-publication-ack.py"
-    if not path.is_file():
+    if current_input_reader is not None:
+        try:
+            relative = path.absolute().relative_to(pathlib.Path(current_input_reader.root)).as_posix()
+        except (AttributeError, ValueError) as exc:
+            raise PublicationEvidenceError("ack_validator_outside_current_m_view") from exc
+        if relative != "scripts/recover-canonical-publication-ack.py":
+            raise PublicationEvidenceError("ack_validator_outside_fixed_control_mapping")
+        baseline = current_input_reader.read_bytes(relative)
+        if type(baseline) is not bytes:
+            raise TypeError("current_input_reader.read_bytes must return exact bytes")
+        load_control = getattr(source_control_reader, "load_module", None)
+        if not callable(load_control):
+            raise PublicationEvidenceError("source_control_reader_unavailable")
+        module = load_control(relative, m_baseline_bytes=baseline)
+        if (
+            not isinstance(module, ModuleType)
+            or not isinstance(getattr(module, "__name__", None), str)
+            or sys.modules.get(module.__name__) is not module
+            or getattr(module, "_SOURCE_CONTROL_ORIGIN", False) is not True
+        ):
+            raise PublicationEvidenceError("ack_validator_control_singleton_invalid")
+        return module
+    if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_GIT_MARKERS):
+        raise PublicationEvidenceError("native_ack_validator_requires_current_m_and_source_control_readers")
+    if current_input_reader is None and not path.is_file():
         raise PublicationEvidenceError("ack_validator_unavailable")
     name = "_completeness_publication_ack_validator"
-    spec = importlib.util.spec_from_file_location(name, path)
-    if spec is None or spec.loader is None:
+    if current_input_reader is None:
+        spec = importlib.util.spec_from_file_location(name, path)
+    else:
+        spec = importlib.util.spec_from_loader(name, loader=None, origin=str(path))
+    if spec is None or (current_input_reader is None and spec.loader is None):
         raise PublicationEvidenceError("ack_validator_unavailable")
     module = importlib.util.module_from_spec(spec)
     # dataclasses resolves the class module during import.
-    import sys
     sys.modules[name] = module
     try:
-        spec.loader.exec_module(module)
+        if current_input_reader is None:
+            spec.loader.exec_module(module)
+        else:  # pragma: no cover - Native paths return through the CONTROL loader above.
+            raise PublicationEvidenceError("current-M ACK validator cannot be compiled as executable code")
     except Exception as exc:
         sys.modules.pop(name, None)
         raise PublicationEvidenceError("ack_validator_load_failed") from exc
@@ -462,6 +550,9 @@ def validate_historical_publication_facet(
     expected_registry_bytes: int,
     repo_root: pathlib.Path,
     evaluation_epoch: str,
+    current_input_reader: Any | None = None,
+    source_runtime_reader: Any | None = None,
+    source_control_reader: Any | None = None,
 ) -> dict[str, object]:
     """Admit the exact retained native publication and same-subject read-back.
 
@@ -508,7 +599,11 @@ def validate_historical_publication_facet(
     if source_sha != "6a5138c792f4b7402da0c5ab439646bd752a307f":
         raise PublicationEvidenceError("unexpected_historical_source_identity")
     root = pathlib.Path(repo_root).resolve()
-    validator = _load_ack_validator(root)
+    if current_input_reader is not None and pathlib.Path(current_input_reader.root) != root:
+        raise PublicationEvidenceError("current_input_reader_root_mismatch")
+    validator = _load_ack_validator(
+        root, current_input_reader, source_control_reader=source_control_reader,
+    )
 
     receipt_raw = _json_bytes(inputs["publication_receipt"], "publication_receipt")
     binding_raw = _json_bytes(inputs["source_binding"], "source_binding")
@@ -588,6 +683,8 @@ def validate_historical_publication_facet(
         raise PublicationEvidenceError("publication_archive_member_bytes_mismatch")
     publication_identity = validator.verify_receipt(
         receipt_raw, binding_raw, repository=REPOSITORY, workflow_head_sha=publisher_head, root=root,
+        current_input_reader=current_input_reader,
+        source_runtime_reader=source_runtime_reader,
     )
     if (
         publication_identity["source_sha"] != source_sha
@@ -619,16 +716,24 @@ def validate_historical_publication_facet(
     if (pointer_oid, pointer_size) != (registry_sha, registry_bytes):
         raise PublicationEvidenceError("source_commit_lfs_identity_mismatch")
     try:
-        committed_pointer = subprocess.run(
-            ("git", "show", f"{source_sha}:{REGISTRY_PATH}"),
-            cwd=root, capture_output=True, check=False, timeout=30,
-        )
-    except (OSError, subprocess.TimeoutExpired) as exc:
+        source_git = _load_canonical_source_git(source_runtime_reader)
+        if source_runtime_reader is None:
+            source_scope = contextlib.nullcontext()
+        else:
+            scope = getattr(source_git, "_source_runtime_scope", None)
+            if not callable(scope):
+                raise PublicationEvidenceError("source_runtime_scope_unavailable")
+            source_scope = scope(source_runtime_reader)
+        with source_scope:
+            committed_pointer = source_git.read_blob(
+                root, source_sha, REGISTRY_PATH, check=False, timeout=30,
+            )
+    except (OSError, RuntimeError, subprocess.TimeoutExpired) as exc:
         raise PublicationEvidenceError("source_registry_pointer_unavailable") from exc
     expected_pointer_bytes = (
         f"{LFS_VERSION}\noid sha256:{registry_sha}\nsize {registry_bytes}\n".encode("ascii")
     )
-    if committed_pointer.returncode != 0 or committed_pointer.stdout != expected_pointer_bytes:
+    if committed_pointer != expected_pointer_bytes:
         raise PublicationEvidenceError("source_tree_lfs_pointer_mismatch")
     snapshot = _mapping(inputs["source_catalog_snapshot"], "source_catalog_snapshot")
     if (

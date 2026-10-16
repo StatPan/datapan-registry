@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import contextlib
 import datetime as dt
 import hashlib
 import importlib.util
@@ -29,7 +30,62 @@ import zipfile
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from io import BytesIO
+from types import ModuleType
 from typing import Any
+
+
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
+_NATIVE_GIT_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
+
+
+def _load_canonical_source_git(source_runtime_reader: Any | None = None) -> Any:
+    name = "canonical_source_git"
+    runtime_reader = source_runtime_reader
+    if runtime_reader is not None:
+        module = runtime_reader.load_module(name)
+        if (
+            not isinstance(module, ModuleType)
+            or module.__name__ != name
+            or sys.modules.get(name) is not module
+        ):
+            raise RuntimeError("source_runtime_reader did not return the exact canonical_source_git singleton")
+        return module
+    if any(marker in os.environ for marker in _NATIVE_GIT_MARKERS):
+        raise RuntimeError("Native acknowledgement requires its exact source_runtime_reader")
+    expected = pathlib.Path(__file__).resolve(strict=True).with_name("canonical_source_git.py")
+    module = sys.modules.get(name)
+    if module is not None:
+        actual = getattr(module, "__file__", None)
+        if not isinstance(actual, str) or pathlib.Path(actual).resolve(strict=True) != expected:
+            raise RuntimeError("canonical_source_git is already loaded outside the exact legacy Source runtime")
+        return module
+    for loaded_name, loaded_module in tuple(sys.modules.items()):
+        loaded_path = getattr(loaded_module, "__file__", None)
+        if loaded_name != name and isinstance(loaded_path, str):
+            try:
+                if pathlib.Path(loaded_path).resolve(strict=True) == expected:
+                    raise RuntimeError("canonical_source_git is already loaded under a noncanonical module name")
+            except OSError:
+                continue
+    spec = importlib.util.spec_from_file_location(name, expected)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("exact legacy canonical_source_git module is unavailable")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        if sys.modules.get(name) is module:
+            del sys.modules[name]
+        raise
+    if sys.modules.get(name) is not module:
+        raise RuntimeError("canonical_source_git legacy singleton changed during import")
+    return module
 
 
 PUBLISHER_WORKFLOW_PATH = ".github/workflows/huggingface-distribution.yml"
@@ -387,6 +443,8 @@ def verify_receipt(
     repository: str,
     workflow_head_sha: str,
     root: pathlib.Path,
+    current_input_reader: Any | None = None,
+    source_runtime_reader: Any | None = None,
 ) -> dict[str, Any]:
     receipt = parse_json(receipt_raw, label="publication_receipt")
     source_binding_file = parse_json(source_binding_raw, label="publication_source_binding")
@@ -421,28 +479,34 @@ def verify_receipt(
     if verification.get("revision") != payload_revision:
         raise RecoveryError("publication_anonymous_revision_mismatch")
     try:
-        source_manifest = subprocess.run(
-            ("git", "show", f"{source_sha}:manifest.json"),
-            cwd=root, capture_output=True, check=False, timeout=30,
-        )
-        workflow_ancestor = subprocess.run(
-            ("git", "merge-base", "--is-ancestor", source_sha, workflow_head_sha),
-            cwd=root, capture_output=True, check=False, timeout=30,
-        )
-    except (OSError, subprocess.TimeoutExpired) as exc:
+        source_git = _load_canonical_source_git(source_runtime_reader)
+        if source_runtime_reader is None:
+            source_scope = contextlib.nullcontext()
+        else:
+            scope = getattr(source_git, "_source_runtime_scope", None)
+            if not callable(scope):
+                raise RecoveryError("source_runtime_scope_unavailable")
+            source_scope = scope(source_runtime_reader)
+        with source_scope:
+            source_manifest = source_git.read_blob(
+                root, source_sha, "manifest.json", check=False, timeout=30,
+            )
+            workflow_ancestor = source_git.is_ancestor(
+                root, source_sha, workflow_head_sha, timeout=30,
+            )
+    except (OSError, RuntimeError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
         raise RecoveryError("publication_source_history_unavailable") from exc
-    if source_manifest.returncode != 0 or hashlib.sha256(source_manifest.stdout).hexdigest() != manifest_sha:
+    if hashlib.sha256(source_manifest).hexdigest() != manifest_sha:
         raise RecoveryError("publication_source_manifest_mismatch")
-    if workflow_ancestor.returncode != 0:
+    if not workflow_ancestor:
         raise RecoveryError("publication_source_not_ancestor_of_publisher")
     source_tree = source.get("source_tree_sha")
     if source_tree is not None:
         exact_sha(source_tree, SHA1, "publication_source_tree_sha")
-        tree = subprocess.run(
-            ("git", "rev-parse", f"{source_sha}^{{tree}}"),
-            cwd=root, capture_output=True, text=True, check=False, timeout=30,
+        tree = source_git.read_tree_oid(
+            root, source_sha, check=False, timeout=30,
         )
-        if tree.returncode != 0 or tree.stdout.strip() != source_tree:
+        if tree != source_tree:
             raise RecoveryError("publication_source_tree_mismatch")
     return {
         "source_sha": source_sha,
@@ -524,12 +588,14 @@ class PublicationAckRecovery:
         runner: Any,
         *,
         now: Callable[[], dt.datetime] = lambda: dt.datetime.now(dt.timezone.utc),
+        source_runtime_reader: Any | None = None,
     ) -> None:
         self.root = root.resolve()
         self.repository = repository
         self.api = api
         self.runner = runner
         self.now = now
+        self.source_runtime_reader = source_runtime_reader
         self.repository_id: int | None = None
         self.default_branch: str | None = None
         self.controller_sha: str | None = None
@@ -566,13 +632,20 @@ class PublicationAckRecovery:
         if not isinstance(branch, str) or branch != "main":
             raise RecoveryError("default_branch_not_main")
         self.default_branch = branch
-        head = subprocess.run(
-            ("git", "rev-parse", "HEAD"), cwd=self.root, capture_output=True,
-            text=True, check=False, timeout=30,
-        )
-        if head.returncode != 0:
+        source_git = _load_canonical_source_git(self.source_runtime_reader)
+        try:
+            if self.source_runtime_reader is None:
+                source_scope = contextlib.nullcontext()
+            else:
+                scope = getattr(source_git, "_source_runtime_scope", None)
+                if not callable(scope):
+                    raise RecoveryError("source_runtime_scope_unavailable")
+                source_scope = scope(self.source_runtime_reader)
+            with source_scope:
+                head_sha = source_git.read_head_oid(self.root)
+        except (subprocess.CalledProcessError, source_git.SourceGitError) as exc:
             raise RecoveryError("controller_head_unavailable")
-        self.controller_sha = exact_sha(head.stdout.strip(), SHA1, "controller_head_sha")
+        self.controller_sha = exact_sha(head_sha, SHA1, "controller_head_sha")
         self.summary["controller_sha"] = self.controller_sha
         self.publisher_workflow_id = workflow_id_for(self.api, self.repository, PUBLISHER_WORKFLOW_PATH)
         self.promotion_workflow_id = workflow_id_for(self.api, self.repository, PROMOTION_WORKFLOW_PATH)
@@ -892,6 +965,7 @@ class PublicationAckRecovery:
         publication = verify_receipt(
             receipt_raw, binding_raw, repository=self.repository,
             workflow_head_sha=head_sha, root=self.root,
+            source_runtime_reader=self.source_runtime_reader,
         )
         after = self._api_payload(f"actions/runs/{run_id}")
         after_identity = validate_workflow_run(
@@ -1489,8 +1563,36 @@ class PublicationAckRecovery:
         return self.summary
 
 
-def load_runner(root: pathlib.Path) -> Any:
+def load_runner(
+    root: pathlib.Path, *, current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
+) -> Any:
     runner_path = root / "scripts/run-canonical-update-promotion.py"
+    current_reader = current_input_reader
+    if current_reader is not None:
+        try:
+            relative = runner_path.absolute().relative_to(pathlib.Path(current_reader.root)).as_posix()
+        except (AttributeError, ValueError) as exc:
+            raise RecoveryError("promotion_runner_outside_current_m_view") from exc
+        if relative != "scripts/run-canonical-update-promotion.py":
+            raise RecoveryError("promotion_runner_outside_fixed_control_mapping")
+        baseline = current_reader.read_bytes(relative)
+        if type(baseline) is not bytes:
+            raise TypeError("current_input_reader.read_bytes must return exact bytes")
+        load_control = getattr(source_control_reader, "load_module", None)
+        if not callable(load_control):
+            raise RecoveryError("source_control_reader_unavailable")
+        module = load_control(relative, m_baseline_bytes=baseline)
+        if (
+            not isinstance(module, ModuleType)
+            or not isinstance(getattr(module, "__name__", None), str)
+            or sys.modules.get(module.__name__) is not module
+            or getattr(module, "_SOURCE_CONTROL_ORIGIN", False) is not True
+        ):
+            raise RecoveryError("promotion_runner_control_singleton_invalid")
+        return module
+    if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_GIT_MARKERS):
+        raise RecoveryError("Native ACK execution requires current-M and source-control readers")
     spec = importlib.util.spec_from_file_location("canonical_publication_ack_runner", runner_path)
     if spec is None or spec.loader is None:
         raise RecoveryError("promotion_runner_unavailable")

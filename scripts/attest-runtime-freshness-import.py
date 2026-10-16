@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -24,6 +25,13 @@ DEFAULT_SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-import-attestat
 
 ADMISSION_SCHEMA = pathlib.Path("schemas/datapan.runtime-freshness-import-admission.v1.schema.json")
 COUNT_KEYS = ("total", "verified", "failed", "skipped", "unknown")
+_NATIVE_CONTROL_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
 
 def load(path: pathlib.Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
@@ -262,8 +270,25 @@ def build(
     }
 
 
-def validate_schema(value: dict[str, Any], schema_path: pathlib.Path) -> None:
-    jsonschema.Draft202012Validator(load(schema_path), format_checker=jsonschema.FormatChecker()).validate(value)
+def validate_schema(
+    value: dict[str, Any], schema_path: pathlib.Path, *, current_input_reader: Any | None = None,
+) -> None:
+    if current_input_reader is None:
+        if _SOURCE_CONTROL_ORIGIN or any(
+            name in os.environ for name in _NATIVE_CONTROL_MARKERS
+        ):
+            raise RuntimeError("Native import validation requires its exact current-M reader")
+        schema = load(schema_path)
+    else:
+        try:
+            relative = schema_path.relative_to(ROOT).as_posix()
+        except ValueError as exc:
+            raise ValueError("current-M import schema read escaped its authenticated root") from exc
+        raw = current_input_reader.read_bytes(relative)
+        if type(raw) is not bytes:
+            raise TypeError("current_input_reader.read_bytes must return exact bytes")
+        schema = json.loads(raw.decode("utf-8"))
+    jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(value)
 
 
 def validate_current(

@@ -7,6 +7,7 @@ import argparse
 import copy
 import hashlib
 import json
+import os
 import pathlib
 import sys
 from datetime import datetime, timezone
@@ -16,6 +17,13 @@ import jsonschema
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
+_NATIVE_CONTROL_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
 POLICY = ROOT / "policy/completeness-proof.json"
 POLICY_SCHEMA = ROOT / "schemas/datapan.completeness-proof-policy.v1.schema.json"
 PROOF_SCHEMA = ROOT / "schemas/datapan.completeness-proof.v1.schema.json"
@@ -60,19 +68,38 @@ EXPECTED_DEPENDENCIES = {
 }
 
 
-def load_object(path: pathlib.Path) -> dict[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
+def _read_bytes(path: pathlib.Path, current_input_reader: Any | None = None) -> bytes:
+    if current_input_reader is None:
+        if _SOURCE_CONTROL_ORIGIN or any(
+            name in os.environ for name in _NATIVE_CONTROL_MARKERS
+        ):
+            raise RuntimeError("Native completeness validation requires its exact current-M reader")
+        return path.read_bytes()
+    try:
+        relative = path.relative_to(ROOT).as_posix()
+    except ValueError as exc:
+        raise ValueError("current completeness input read escaped its authenticated root") from exc
+    value = current_input_reader.read_bytes(relative)
+    if type(value) is not bytes:
+        raise TypeError("current_input_reader.read_bytes must return exact bytes")
+    return value
+
+
+def load_object(path: pathlib.Path, *, current_input_reader: Any | None = None) -> dict[str, Any]:
+    value = json.loads(_read_bytes(path, current_input_reader).decode("utf-8"))
     if not isinstance(value, dict):
         raise ValueError(f"{path} must contain a JSON object")
     return value
 
 
-def sha256(path: pathlib.Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def sha256(path: pathlib.Path, *, current_input_reader: Any | None = None) -> str:
+    return hashlib.sha256(_read_bytes(path, current_input_reader)).hexdigest()
 
 
-def validate_schema(value: dict[str, Any], schema_path: pathlib.Path) -> None:
-    schema = load_object(schema_path)
+def validate_schema(
+    value: dict[str, Any], schema_path: pathlib.Path, *, current_input_reader: Any | None = None,
+) -> None:
+    schema = load_object(schema_path, current_input_reader=current_input_reader)
     errors = sorted(
         jsonschema.Draft202012Validator(
             schema, format_checker=jsonschema.FormatChecker()
@@ -97,8 +124,10 @@ def parse_time(value: str, label: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def validate_policy(policy: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    validate_schema(policy, POLICY_SCHEMA)
+def validate_policy(
+    policy: dict[str, Any], *, current_input_reader: Any | None = None,
+) -> dict[str, dict[str, Any]]:
+    validate_schema(policy, POLICY_SCHEMA, current_input_reader=current_input_reader)
 
     scope_items = policy["scope_kinds"]
     scope_by_kind = {item["kind"]: item for item in scope_items}
@@ -128,15 +157,17 @@ def validate_policy(policy: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return scope_by_kind
 
 
-def validate_proof(proof: dict[str, Any], policy: dict[str, Any]) -> None:
-    validate_schema(proof, PROOF_SCHEMA)
-    scope_by_kind = validate_policy(policy)
+def validate_proof(
+    proof: dict[str, Any], policy: dict[str, Any], *, current_input_reader: Any | None = None,
+) -> None:
+    validate_schema(proof, PROOF_SCHEMA, current_input_reader=current_input_reader)
+    scope_by_kind = validate_policy(policy, current_input_reader=current_input_reader)
 
     policy_binding = proof["policy"]
     if policy_binding != {
         "id": policy["policy_id"],
         "schema_version": policy["schema_version"],
-        "sha256": sha256(POLICY),
+        "sha256": sha256(POLICY, current_input_reader=current_input_reader),
     }:
         raise ValueError("proof policy binding does not match the checked-in policy")
 
