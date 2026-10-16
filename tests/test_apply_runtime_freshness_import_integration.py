@@ -546,9 +546,14 @@ class ApplyRuntimeFreshnessImportIntegrationTest(unittest.TestCase):
         # reachable from main and the FETCH_HEAD-only control stops testing its
         # intended boundary.
         for commit, depth in history_pins:
+            # A materialized nested source is itself a CI-like shallow checkout;
+            # its object database may not contain an unrelated historical pin.
+            # Fetch exact pins from the authenticated full checkout, matching the
+            # workflow's separate full-depth main checkout rather than assuming
+            # the shallow source can serve objects it does not have.
             fetched_pin = run(
                 ["git", "--git-dir", str(source_git), "fetch", "--no-tags", f"--depth={depth}",
-                 str(source_root), commit],
+                 str(authenticated_main_root), commit],
                 cwd=cls.temp_root,
             )
             if fetched_pin.returncode:
