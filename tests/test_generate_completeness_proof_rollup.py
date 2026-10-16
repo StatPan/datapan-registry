@@ -50,6 +50,7 @@ COMPLETENESS_VALIDATOR_CODE_DEPENDENCIES = frozenset({
     "scripts/refresh-canonical-snapshot-evidence.py",
     "scripts/persist-upstream-catalogue-health.py",
     "scripts/recover-canonical-publication-ack.py",
+    "scripts/canonical_source_git.py",
     "scripts/completeness_publication_evidence.py",
 })
 COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES = frozenset({
