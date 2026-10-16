@@ -715,7 +715,13 @@ def validate_historical_publication_facet(
     pointer_oid, pointer_size = _parse_lfs_pointer_patch(source_commit)
     if (pointer_oid, pointer_size) != (registry_sha, registry_bytes):
         raise PublicationEvidenceError("source_commit_lfs_identity_mismatch")
+    previous_source_git = sys.modules.get("canonical_source_git")
     try:
+        if source_runtime_reader is None and previous_source_git is not None:
+            expected = pathlib.Path(__file__).resolve(strict=True).with_name("canonical_source_git.py")
+            loaded_path = getattr(previous_source_git, "__file__", None)
+            if not isinstance(loaded_path, str) or pathlib.Path(loaded_path).resolve(strict=True) != expected:
+                del sys.modules["canonical_source_git"]
         source_git = _load_canonical_source_git(source_runtime_reader)
         if source_runtime_reader is None:
             source_scope = contextlib.nullcontext()
@@ -730,6 +736,12 @@ def validate_historical_publication_facet(
             )
     except (OSError, RuntimeError, subprocess.TimeoutExpired) as exc:
         raise PublicationEvidenceError("source_registry_pointer_unavailable") from exc
+    finally:
+        if source_runtime_reader is None:
+            if previous_source_git is None:
+                sys.modules.pop("canonical_source_git", None)
+            else:
+                sys.modules["canonical_source_git"] = previous_source_git
     expected_pointer_bytes = (
         f"{LFS_VERSION}\noid sha256:{registry_sha}\nsize {registry_bytes}\n".encode("ascii")
     )

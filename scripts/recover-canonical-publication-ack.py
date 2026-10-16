@@ -478,7 +478,16 @@ def verify_receipt(
     pointer_revision = exact_sha(publication.get("pointer_revision"), SHA1, "publication_pointer_revision")
     if verification.get("revision") != payload_revision:
         raise RecoveryError("publication_anonymous_revision_mismatch")
+    previous_source_git = sys.modules.get("canonical_source_git")
     try:
+        # Legacy validators can be loaded repeatedly from independent temporary
+        # repositories in one process.  Give each validator its exact local
+        # canonical_source_git singleton, then restore the caller's module.
+        if source_runtime_reader is None and previous_source_git is not None:
+            expected = pathlib.Path(__file__).resolve(strict=True).with_name("canonical_source_git.py")
+            loaded_path = getattr(previous_source_git, "__file__", None)
+            if not isinstance(loaded_path, str) or pathlib.Path(loaded_path).resolve(strict=True) != expected:
+                del sys.modules["canonical_source_git"]
         source_git = _load_canonical_source_git(source_runtime_reader)
         if source_runtime_reader is None:
             source_scope = contextlib.nullcontext()
@@ -496,6 +505,12 @@ def verify_receipt(
             )
     except (OSError, RuntimeError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
         raise RecoveryError("publication_source_history_unavailable") from exc
+    finally:
+        if source_runtime_reader is None:
+            if previous_source_git is None:
+                sys.modules.pop("canonical_source_git", None)
+            else:
+                sys.modules["canonical_source_git"] = previous_source_git
     if hashlib.sha256(source_manifest).hexdigest() != manifest_sha:
         raise RecoveryError("publication_source_manifest_mismatch")
     if not workflow_ancestor:
