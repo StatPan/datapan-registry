@@ -2376,9 +2376,15 @@ class CompletenessProofRollupTest(unittest.TestCase):
 
             original_verify_checkpoint = loaded.verify_processor_checkpoint
 
-            def verify_with_execution_schema(value: dict[str, object], schema_path: pathlib.Path):
+            def verify_with_execution_schema(
+                value: dict[str, object], schema_path: pathlib.Path, *,
+                current_input_reader: object | None = None,
+            ):
                 observations["execution_schema_requests"].append(schema_path.resolve())
-                return original_verify_checkpoint(value, execution_checkpoint_schema_path)
+                return original_verify_checkpoint(
+                    value, execution_checkpoint_schema_path,
+                    current_input_reader=current_input_reader,
+                )
 
             loaded.verify_processor_checkpoint = verify_with_execution_schema
             original_validate = loaded.validate_processor_bundle
