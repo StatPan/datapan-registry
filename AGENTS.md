@@ -35,3 +35,12 @@ Gira workflow:
 - PR bodies must contain Closes #N, Fixes #N, or Resolves #N.
 - Keep changes bounded to the ticket.
 <!-- gira:end -->
+
+## Agent runbook
+- Run CI-compatible checks with Python 3.12, `jsonschema`, and `PyYAML==6.0.2`; direct test: `uv run --no-project --python 3.12 --with jsonschema --with pyyaml python -m unittest tests/test_prepared_input_operation_scope.py`.
+- Record the direct test's passing result in the PR body. Completeness modules can take 15–19 minutes: select an individual test name and run long tests in the background.
+- Delegate one issue and one branch per agent with explicit scope. No unauthorized live calls, Hugging Face publication, secrets, or destructive operations.
+- Evidence must state: command, exit code, actual output, interpretation, and unverified items.
+- R1 restores reproducible specification/evidence generation and separates API observations from LINK denominators.
+- R2 verifies producer receipts before immutable release consumption; #592 is blocked on producer receipts and #593 on consumer proof.
+- R3 preserves API/file/LINK provenance while diffing source changes; completeness and runtime freshness remain separate, and partial observation is not deletion.
