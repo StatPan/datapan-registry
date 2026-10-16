@@ -37,8 +37,8 @@ Gira workflow:
 <!-- gira:end -->
 
 ## Agent runbook
-- Run CI-compatible checks with Python 3.12, `jsonschema`, and `PyYAML==6.0.2`; direct test: `uv run --no-project --python 3.12 --with jsonschema --with pyyaml python -m unittest tests/test_prepared_input_operation_scope.py`.
-- Record the direct test's passing result in the PR body. Completeness modules can take 15–19 minutes: select an individual test name and run long tests in the background.
+- Run CI-compatible checks with Python 3.12, `jsonschema`, and `PyYAML==6.0.2`; direct test: `uv run --no-project --python 3.12 --with jsonschema --with pyyaml python -m unittest tests/test_apply_runtime_freshness_import.py`.
+- Record the direct test's passing result (5 tests, OK) in the PR body. Completeness modules can take 15–19 minutes: select an individual test name and run long tests in the background.
 - Delegate one issue and one branch per agent with explicit scope. No unauthorized live calls, Hugging Face publication, secrets, or destructive operations.
 - Evidence must state: command, exit code, actual output, interpretation, and unverified items.
 - R1 restores reproducible specification/evidence generation and separates API observations from LINK denominators.
