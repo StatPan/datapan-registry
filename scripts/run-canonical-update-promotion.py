@@ -2299,10 +2299,6 @@ TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "scripts/materialize-canonical-registry.py",
     "scripts/check-upstream-catalogue-health.py",
     "scripts/canonical_update_terminal_evidence.py",
-    "scripts/canonical_stale_queue_recovery.py",
-    "scripts/canonical_stale_queue_recovery_gate.py",
-    "scripts/canonical_stale_queue_state.py",
-    "scripts/canonical_publication_state.py",
     "schemas/datapan.canonical-update-promotion-terminal-outcome.v1.schema.json",
     "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
     "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
@@ -2313,11 +2309,7 @@ TERMINAL_EVALUATOR_SOURCE_PATHS = (
     "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
     "schemas/datapan.canonical-update-promotion-receipt.v1.schema.json",
-    "schemas/datapan.canonical-stale-c-queue-recovery-receipt.v1.schema.json",
-    "schemas/datapan.canonical-stale-c-queue-recovery.v1.schema.json",
-    "schemas/datapan.canonical-stale-queue-recovery-policy.v1.schema.json",
     "policy/upstream-catalogue-health.json",
-    "policy/canonical-stale-queue-recovery.v1.json",
 )
 
 
