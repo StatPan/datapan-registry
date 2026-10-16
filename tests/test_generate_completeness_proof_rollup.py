@@ -1975,7 +1975,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
     ) -> tuple[pathlib.Path, str, str, str]:
         """Create a local depth-1 PR checkout and separately fetch its trusted main."""
         source_root = source_root.resolve()
-        pr_head = subprocess.check_output(
+        source_head = subprocess.check_output(
             ["git", "rev-parse", "--verify", "HEAD^{commit}"], cwd=source_root, text=True,
         ).strip()
         trusted_main = subprocess.check_output(
@@ -2016,8 +2016,23 @@ class CompletenessProofRollupTest(unittest.TestCase):
         subprocess.run(
             ["git", "--git-dir", str(remote), "update-ref", "refs/heads/main", trusted_main], check=True,
         )
+        fixture_pr_head = source_head
+        if fixture_pr_head == trusted_main:
+            environment = {
+                **os.environ,
+                "GIT_AUTHOR_NAME": "Completeness rollup test",
+                "GIT_AUTHOR_EMAIL": "completeness-test@example.invalid",
+                "GIT_COMMITTER_NAME": "Completeness rollup test",
+                "GIT_COMMITTER_EMAIL": "completeness-test@example.invalid",
+                "GIT_AUTHOR_DATE": "2026-10-04T13:00:00Z",
+                "GIT_COMMITTER_DATE": "2026-10-04T13:00:00Z",
+            }
+            fixture_pr_head = subprocess.check_output(
+                ["git", "--git-dir", str(remote), "commit-tree", trusted_tree, "-p", trusted_main],
+                cwd=source_root, input="fixture PR head\n", text=True, env=environment,
+            ).strip()
         subprocess.run(
-            ["git", "--git-dir", str(remote), "update-ref", "refs/heads/fixture-pr", pr_head], check=True,
+            ["git", "--git-dir", str(remote), "update-ref", "refs/heads/fixture-pr", fixture_pr_head], check=True,
         )
 
         checkout = directory / "shallow-pr-checkout"
@@ -2035,9 +2050,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
             "true",
         )
         self.assertEqual(
-            subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip(), pr_head,
+            subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip(), fixture_pr_head,
         )
-        self.assertNotEqual(pr_head, trusted_main)
+        self.assertNotEqual(fixture_pr_head, trusted_main)
         with self.assertRaises(subprocess.CalledProcessError):
             subprocess.run(
                 ["git", "rev-parse", "refs/remotes/origin/main"],
@@ -2072,7 +2087,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         )
         self.assertEqual(
             subprocess.check_output(["git", "rev-parse", "HEAD^{commit}"], cwd=source_root, text=True).strip(),
-            pr_head,
+            source_head,
         )
         self.assertEqual(
             subprocess.check_output(
@@ -2104,7 +2119,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             os.link(source_registry, materialized_registry)
         except OSError:
             shutil.copy2(source_registry, materialized_registry)
-        return checkout, pr_head, trusted_main, trusted_tree
+        return checkout, fixture_pr_head, trusted_main, trusted_tree
 
     def _rebind_synthetic_processor_history(
         self, *, index: dict[str, object], input_root: pathlib.Path, repository: pathlib.Path,
