@@ -1570,6 +1570,7 @@ def processor_seoul_unchanged_baseline_rows(
     composition_baseline_bytes: int | None,
     canonical_context: Mapping[str, Any] | None,
     allow_terminal_noop: bool,
+    current_input_reader: Any | None = None,
 ) -> tuple[list[Any], str]:
     """Return rows backed by the exact C composition baseline or safe no-op output."""
     if not isinstance(composition_baseline_sha256, str) or not re.fullmatch(
