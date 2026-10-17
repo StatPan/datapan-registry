@@ -2066,7 +2066,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             )
         subprocess.run(
             [
-                "git", "fetch", "--no-tags", "--unshallow", "origin",
+                "git", "fetch", "--no-tags", "origin",
                 "+refs/heads/main:refs/remotes/origin/main",
             ],
             cwd=checkout,
