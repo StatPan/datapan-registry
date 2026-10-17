@@ -5,9 +5,9 @@
 - APIs: `12282`
 - Operations: `21533`
 - Runtime evidence: `0` (`0.0%`)
-- Historical rows unbound to a current operation contract: `7180`
+- Historical rows unbound to a current operation contract: `7978`
 - Historical rows with changed contracts: `0`
-- Ambiguous historical rows: `1`
+- Ambiguous historical rows: `3`
 - Historical rows with no current operation: `0`
 - External endpoint operations: `9646`
 - Registered adapter operations: `9636`
