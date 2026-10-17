@@ -1646,7 +1646,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         self.assertEqual(replay["observation_count"], 1)
         self.assertEqual(replay["last_progress_at"], first["last_progress_at"])
         self.assertNotEqual(replay["last_heartbeat_at"], first["last_heartbeat_at"])
-    def test_exact_delivery_replay_has_an_explicit_idle_result_without_rebinding_old_artifact(self) -> None:
+    def test_fixture_replay_does_not_claim_authenticated_exact_delivery(self) -> None:
         code, first = self.invoke()
         self.assertEqual(code, 0)
         prior_locator = copy.deepcopy(first["output_artifact"])
@@ -1657,26 +1657,14 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         )
         code, replay = MODULE.process(replay_args, fetcher=lambda *_args: self.fail("exact replay must not fetch"))
         self.assertEqual(code, 0)
-        self.assertTrue(replay_args.exact_delivery_replay)
-        self.assertEqual(
-            MODULE.processing_result(
-                replay,
-                exact_delivery_replay=True,
-                producer_run_id="101",
-                processor_run_id="102",
-                processor_artifact_run_id="102",
-            ),
-            {
-                "status": "idle",
-                "reason": "exact_producer_delivery_replay",
-                "processing_replay": True,
-                "candidate_available": False,
-                "source_id": "data_go_kr",
-                "producer_run_id": "101",
-                "processor_run_id": "102",
-                "processor_artifact_run_id": "102",
-            },
-        )
+        self.assertFalse(getattr(replay_args, "exact_delivery_replay", False))
+        self.assertEqual(replay["status"], "ready")
+        self.assertFalse(MODULE.processing_result(
+            replay,
+            producer_run_id="101",
+            processor_run_id="102",
+            processor_artifact_run_id="102",
+        )["processing_replay"])
         self.assertEqual(replay["output_artifact"], prior_locator)
         self.assertFalse((self.output_dir / "upstream-catalogue-checkpoint-receipt.json").exists())
         self.assertFalse((self.output_dir / "composed-candidate.registry.json").exists())
@@ -1969,6 +1957,130 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             checkpoint_schema=schema,
         )
         self.assertEqual(no_change_receipt["terminal_status"], "no-change")
+
+        # The public receipt API intentionally supports checkpoint_schema=None.
+        # Ordinary generation inputs therefore need their own strict value
+        # validation after a caller recomputes both the generation and
+        # checkpoint seals; stale hashes must not be the reason malformed
+        # revision values are rejected.
+        ordinary_template = {
+            key: prior["generation_inputs"].get(key)
+            for key in MODULE._GENERATION_IDENTITY_INPUT_KEYS
+        }
+
+        def ordinary_epoch_pair(
+            baseline_sha256: Any,
+        ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+            inputs = copy.deepcopy(ordinary_template)
+            inputs["baseline_sha256"] = baseline_sha256
+            inputs["observation_failure_sha256"] = None
+            epoch_id = MODULE._object_sha256(inputs)
+            epoch_prior = copy.deepcopy(prior)
+            epoch_prior["generation_inputs"] = inputs
+            epoch_prior["generation_id"] = epoch_id
+            MODULE.seal_checkpoint(epoch_prior)
+            epoch_current = copy.deepcopy(epoch_prior)
+            epoch_current["last_heartbeat_at"] = MODULE.timestamp(
+                MODULE.parse_timestamp(epoch_prior["last_heartbeat_at"]) + timedelta(seconds=1)
+            )
+            MODULE.seal_checkpoint(epoch_current)
+
+            def rebind_index(value: dict[str, Any], checkpoint_value: dict[str, Any]) -> dict[str, Any]:
+                rebound = copy.deepcopy(value)
+                old_position = next(
+                    position for position, row in enumerate(rebound["generations"])
+                    if row["generation_id"] == prior["generation_id"]
+                )
+                rebound["generations"][old_position] = {
+                    "generation_id": checkpoint_value["generation_id"],
+                    "status": checkpoint_value["status"],
+                    "checkpoint": f"{checkpoint_value['generation_id']}.json",
+                    "updated_at": checkpoint_value["last_heartbeat_at"],
+                    "candidate_sha256": checkpoint_value["generation_inputs"]["candidate_sha256"],
+                }
+                return rebound
+
+            return (
+                epoch_prior,
+                epoch_current,
+                rebind_index(prior_index, epoch_prior),
+                rebind_index(current_index, epoch_current),
+            )
+
+        for baseline_sha256 in (None, "c" * 64):
+            with self.subTest(checkpoint_schema_none_baseline=baseline_sha256):
+                epoch_prior, epoch_current, epoch_prior_index, epoch_current_index = ordinary_epoch_pair(
+                    baseline_sha256
+                )
+                epoch_kwargs = {
+                    "prior_checkpoint": epoch_prior,
+                    "current_checkpoint": epoch_current,
+                    "prior_index": epoch_prior_index,
+                    "current_index": epoch_current_index,
+                    "result": result,
+                    "state_head_sha": old_sha,
+                    "checkpoint_schema": None,
+                }
+                epoch_receipt = MODULE.build_replay_persistence_receipt(**epoch_kwargs)
+                self.assertIs(
+                    MODULE.verify_replay_persistence_receipt(epoch_receipt, **epoch_kwargs),
+                    epoch_receipt,
+                )
+
+        valid_none_epoch = ordinary_epoch_pair(None)
+        valid_epoch_kwargs = {
+            "prior_checkpoint": valid_none_epoch[0],
+            "current_checkpoint": valid_none_epoch[1],
+            "prior_index": valid_none_epoch[2],
+            "current_index": valid_none_epoch[3],
+            "result": result,
+            "state_head_sha": old_sha,
+            "checkpoint_schema": None,
+        }
+        valid_epoch_receipt = MODULE.build_replay_persistence_receipt(**valid_epoch_kwargs)
+        for field, invalid_value in (("generator_revision", 17), ("baseline_sha256", True)):
+            with self.subTest(checkpoint_schema_none_invalid_ordinary_value=field):
+                bad_prior, _bad_current, _bad_prior_index, _bad_current_index = ordinary_epoch_pair(None)
+                bad_inputs = copy.deepcopy(bad_prior["generation_inputs"])
+                bad_inputs[field] = invalid_value
+                bad_generation_id = MODULE._object_sha256(bad_inputs)
+                bad_prior["generation_inputs"] = bad_inputs
+                bad_prior["generation_id"] = bad_generation_id
+                MODULE.seal_checkpoint(bad_prior)
+                bad_current = copy.deepcopy(bad_prior)
+                bad_current["last_heartbeat_at"] = MODULE.timestamp(
+                    MODULE.parse_timestamp(bad_prior["last_heartbeat_at"]) + timedelta(seconds=1)
+                )
+                MODULE.seal_checkpoint(bad_current)
+                bad_prior_index = copy.deepcopy(prior_index)
+                bad_current_index = copy.deepcopy(current_index)
+                for index_value, checkpoint_value in (
+                    (bad_prior_index, bad_prior), (bad_current_index, bad_current),
+                ):
+                    old_position = next(
+                        position for position, row in enumerate(index_value["generations"])
+                        if row["generation_id"] == prior["generation_id"]
+                    )
+                    index_value["generations"][old_position] = {
+                        "generation_id": checkpoint_value["generation_id"],
+                        "status": checkpoint_value["status"],
+                        "checkpoint": f"{checkpoint_value['generation_id']}.json",
+                        "updated_at": checkpoint_value["last_heartbeat_at"],
+                        "candidate_sha256": checkpoint_value["generation_inputs"]["candidate_sha256"],
+                    }
+                bad_kwargs = {
+                    "prior_checkpoint": bad_prior,
+                    "current_checkpoint": bad_current,
+                    "prior_index": bad_prior_index,
+                    "current_index": bad_current_index,
+                    "result": result,
+                    "state_head_sha": old_sha,
+                    "checkpoint_schema": None,
+                }
+                with self.assertRaisesRegex(ValueError, "replay_ordinary_generation_inputs_invalid"):
+                    MODULE.build_replay_persistence_receipt(**bad_kwargs)
+                with self.assertRaisesRegex(ValueError, "replay_ordinary_generation_inputs_invalid"):
+                    MODULE.verify_replay_persistence_receipt(valid_epoch_receipt, **bad_kwargs)
 
     def test_successful_observation_replay_requires_real_valid_producer_timestamp(self) -> None:
         code, checkpoint = self.invoke()
