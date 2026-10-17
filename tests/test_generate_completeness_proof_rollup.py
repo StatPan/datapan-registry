@@ -3170,7 +3170,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 is_command = isinstance(command, list)
                 if (
                     is_command
-                    and command[:4] == ["git", "fetch", "--no-tags", "--depth=64"]
+                    and command[:3] == ["git", "fetch", "--no-tags"]
                     and pathlib.Path(kwargs.get("cwd", "")).resolve() == destination.resolve()
                 ):
                     destination_shallow = pathlib.Path(native_output(
