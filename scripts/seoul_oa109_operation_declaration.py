@@ -11,6 +11,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -19,8 +20,16 @@ from typing import Any, Mapping
 from urllib.parse import urlsplit
 
 
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
+_NATIVE_CONTROL_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DECLARATION_PATH = ROOT / "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
+DECLARATION_RELATIVE_PATH = "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json"
 DECLARATION_SHA256 = "06e8bc790be4c2511bda454f2adae8bc1c45746e2dfee0eb19a5ed4fb999328b"
 DECLARATION_ID = "data-go-kr:OA-109:SearchLastTrainTimeByIDService:v1"
 PROVENANCE_METHOD = "data_go_kr_seoul_target_navigation_declaration_v1"
@@ -42,6 +51,47 @@ RESOLVER_URL = "https://www.data.go.kr/tcs/dss/selectApiLinkUrl.do?publicDataPk=
 
 class DeclarationError(ValueError):
     """A fixed, safe rejection of the pinned declaration contract."""
+
+
+def _effective_root(
+    root: pathlib.Path | None, current_input_reader: Any | None,
+) -> pathlib.Path:
+    if current_input_reader is None:
+        return ROOT if root is None else pathlib.Path(root)
+    authenticated_root = pathlib.Path(current_input_reader.root)
+    if root is not None and pathlib.Path(root).resolve() != authenticated_root.resolve():
+        raise DeclarationError("current_input_root_mismatch")
+    return authenticated_root
+
+
+def _read_current_bytes(
+    path: pathlib.Path,
+    current_input_reader: Any | None = None,
+    *,
+    relative_path: str | None = None,
+) -> bytes:
+    if current_input_reader is None:
+        if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_CONTROL_MARKERS):
+            raise DeclarationError("explicit_current_input_reader_required")
+        return path.read_bytes()
+    try:
+        root = pathlib.Path(current_input_reader.root)
+        relative = relative_path or pathlib.Path(path).relative_to(root).as_posix()
+        normalized = pathlib.PurePosixPath(relative)
+        if (
+            not isinstance(relative, str)
+            or not relative
+            or normalized.is_absolute()
+            or any(part in {"", ".", ".."} for part in normalized.parts)
+            or normalized.as_posix() != relative
+        ):
+            raise ValueError("non-canonical current-input path")
+    except (AttributeError, ValueError) as exc:
+        raise DeclarationError("current_input_read_escaped_authenticated_root") from exc
+    value = current_input_reader.read_bytes(relative)
+    if type(value) is not bytes:
+        raise TypeError("current_input_reader.read_bytes must return exact bytes")
+    return value
 
 
 def canonical_json(value: Any) -> bytes:
@@ -78,9 +128,17 @@ def guide_fingerprint(row: Mapping[str, Any]) -> str | None:
     return sha256_bytes(value.encode("utf-8"))
 
 
-def _read_declaration() -> dict[str, Any]:
+def _read_declaration(current_input_reader: Any | None = None) -> dict[str, Any]:
     try:
-        raw = DECLARATION_PATH.read_bytes()
+        if current_input_reader is None:
+            if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_CONTROL_MARKERS):
+                raise DeclarationError("explicit_current_input_reader_required")
+            raw = DECLARATION_PATH.read_bytes()
+        else:
+            raw = _read_current_bytes(
+                DECLARATION_PATH, current_input_reader,
+                relative_path=DECLARATION_RELATIVE_PATH,
+            )
     except OSError as exc:
         raise DeclarationError("pinned declaration is unavailable") from exc
     if sha256_bytes(raw) != DECLARATION_SHA256:
@@ -109,23 +167,37 @@ def _read_declaration() -> dict[str, Any]:
     return value
 
 
-DECLARATION = _read_declaration()
+DECLARATION = (
+    _read_declaration()
+    if not _SOURCE_CONTROL_ORIGIN and not any(name in os.environ for name in _NATIVE_CONTROL_MARKERS)
+    else None
+)
+
+
+def _declaration(current_input_reader: Any | None = None) -> dict[str, Any]:
+    if current_input_reader is not None:
+        return _read_declaration(current_input_reader)
+    if isinstance(DECLARATION, dict):
+        return DECLARATION
+    raise DeclarationError("explicit_current_input_reader_required")
 
 
 def declaration_sha256() -> str:
     return DECLARATION_SHA256
 
 
-def native_document_sha256s() -> dict[str, str]:
+def native_document_sha256s(*, current_input_reader: Any | None = None) -> dict[str, str]:
+    declaration = _declaration(current_input_reader)
     return {
         name: str(value["sha256"])
-        for name, value in DECLARATION["native_documents"].items()
+        for name, value in declaration["native_documents"].items()
     }
 
 
-def native_document_acquisition_provenance() -> dict[str, dict[str, Any]]:
+def native_document_acquisition_provenance(*, current_input_reader: Any | None = None) -> dict[str, dict[str, Any]]:
+    declaration = _declaration(current_input_reader)
     result: dict[str, dict[str, Any]] = {}
-    for name, document in DECLARATION["native_documents"].items():
+    for name, document in declaration["native_documents"].items():
         acquisition = document.get("acquisition_provenance")
         if not isinstance(acquisition, Mapping):
             raise DeclarationError("declaration_document_acquisition_provenance_missing")
@@ -135,8 +207,8 @@ def native_document_acquisition_provenance() -> dict[str, dict[str, Any]]:
     return result
 
 
-def source_review_provenance() -> dict[str, Any]:
-    review = DECLARATION.get("source_review")
+def source_review_provenance(*, current_input_reader: Any | None = None) -> dict[str, Any]:
+    review = _declaration(current_input_reader).get("source_review")
     if not isinstance(review, Mapping):
         raise DeclarationError("declaration_source_review_provenance_missing")
     keys = (
@@ -167,9 +239,12 @@ def _source(row: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any
     return (source if isinstance(source, Mapping) else {}, raw if isinstance(raw, Mapping) else {})
 
 
-def _validate_subject_row_structure(row: Mapping[str, Any]) -> None:
+def _validate_subject_row_structure(
+    row: Mapping[str, Any], *, current_input_reader: Any | None = None,
+) -> None:
     """Validate the fixed subject identity and exact ordered three-operation prefix."""
-    subject = DECLARATION["subject"]
+    declaration = _declaration(current_input_reader)
+    subject = declaration["subject"]
     source, raw = _source(row)
     if (
         row.get("provider") != subject["provider"]
@@ -184,7 +259,7 @@ def _validate_subject_row_structure(row: Mapping[str, Any]) -> None:
     ):
         raise DeclarationError("portal_source_subject_mismatch")
     operations = row.get("operations")
-    prefix = DECLARATION.get("historical_operation_prefix")
+    prefix = declaration.get("historical_operation_prefix")
     if (
         not isinstance(prefix, Mapping)
         or prefix.get("schema") != "datapan.seoul-historical-operation-prefix.v1"
@@ -229,8 +304,8 @@ def _validate_subject_row_structure(row: Mapping[str, Any]) -> None:
             raise DeclarationError("portal_historical_operation_source_mismatch")
 
 
-def _snapshot_source_provenance() -> dict[str, Any]:
-    prefix = DECLARATION["historical_operation_prefix"]
+def _snapshot_source_provenance(*, current_input_reader: Any | None = None) -> dict[str, Any]:
+    prefix = _declaration(current_input_reader)["historical_operation_prefix"]
     return {
         "repository": "StatPan/datapan-registry",
         "commit": prefix["source_main_commit"],
@@ -244,11 +319,14 @@ def _snapshot_source_provenance() -> dict[str, Any]:
     }
 
 
-def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> bytes:
+def historical_subject_snapshot_bytes_from_source(
+    source_path: pathlib.Path, *, current_input_reader: Any | None = None,
+) -> bytes:
     """Rebuild the pinned compact subject artifact from the exact authenticated 0085 LFS bytes."""
-    prefix = DECLARATION["historical_operation_prefix"]
+    declaration = _declaration(current_input_reader)
+    prefix = declaration["historical_operation_prefix"]
     try:
-        source_bytes = source_path.read_bytes()
+        source_bytes = _read_current_bytes(source_path, current_input_reader)
     except OSError as exc:
         raise DeclarationError("portal_historical_source_payload_unavailable") from exc
     if (
@@ -262,7 +340,7 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
         raise DeclarationError("portal_historical_source_payload_invalid") from exc
     if not isinstance(registry, list) or len(registry) != prefix.get("source_registry_rows"):
         raise DeclarationError("portal_historical_source_row_inventory_mismatch")
-    subject = DECLARATION["subject"]
+    subject = declaration["subject"]
     matches = [
         (index, row) for index, row in enumerate(registry)
         if isinstance(row, Mapping)
@@ -272,7 +350,7 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
     if len(matches) != 1 or matches[0][0] != prefix.get("subject_snapshot_row_index"):
         raise DeclarationError("portal_historical_source_subject_identity_mismatch")
     row = copy.deepcopy(dict(matches[0][1]))
-    _validate_subject_row_structure(row)
+    _validate_subject_row_structure(row, current_input_reader=current_input_reader)
     row_bytes = canonical_json(row)
     operations = row.get("operations")
     if not isinstance(operations, list):
@@ -287,7 +365,7 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
         raise DeclarationError("portal_historical_subject_snapshot_content_mismatch")
     snapshot = {
         "schema_version": "datapan.provider-operation-historical-subject-snapshot.v1",
-        "source": _snapshot_source_provenance(),
+        "source": _snapshot_source_provenance(current_input_reader=current_input_reader),
         "subject_identity": {
             "provider": subject["provider"],
             "id": subject["portal_dataset_id"],
@@ -301,18 +379,30 @@ def historical_subject_snapshot_bytes_from_source(source_path: pathlib.Path) -> 
     return (json.dumps(snapshot, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
 
-def load_historical_subject_snapshot(root: pathlib.Path = ROOT) -> dict[str, Any]:
+def load_historical_subject_snapshot(
+    root: pathlib.Path | None = None, *, current_input_reader: Any | None = None,
+) -> dict[str, Any]:
     """Load the independently source-pinned historical row without consulting current canonical data."""
+    root = _effective_root(root, current_input_reader)
+    declaration = _declaration(current_input_reader)
     path = root / HISTORICAL_SUBJECT_SNAPSHOT_PATH
-    try:
-        resolved_root = root.resolve(strict=True)
-        resolved_path = path.resolve(strict=True)
-        resolved_path.relative_to(resolved_root)
-        if path.is_symlink() or not path.is_file():
-            raise OSError("snapshot path is not a regular file")
-        raw = path.read_bytes()
-    except (OSError, ValueError) as exc:
-        raise DeclarationError("portal_historical_subject_snapshot_unavailable") from exc
+    if current_input_reader is None:
+        try:
+            resolved_root = root.resolve(strict=True)
+            resolved_path = path.resolve(strict=True)
+            resolved_path.relative_to(resolved_root)
+            if path.is_symlink() or not path.is_file():
+                raise OSError("snapshot path is not a regular file")
+            raw = path.read_bytes()
+        except (OSError, ValueError) as exc:
+            raise DeclarationError("portal_historical_subject_snapshot_unavailable") from exc
+    else:
+        if pathlib.Path(current_input_reader.root) != root:
+            raise DeclarationError("portal_historical_snapshot_current_input_root_mismatch")
+        try:
+            raw = _read_current_bytes(path, current_input_reader)
+        except (OSError, ValueError) as exc:
+            raise DeclarationError("portal_historical_subject_snapshot_unavailable") from exc
     if len(raw) != HISTORICAL_SUBJECT_SNAPSHOT_BYTES or sha256_bytes(raw) != HISTORICAL_SUBJECT_SNAPSHOT_SHA256:
         raise DeclarationError("portal_historical_subject_snapshot_digest_mismatch")
     try:
@@ -326,12 +416,12 @@ def load_historical_subject_snapshot(root: pathlib.Path = ROOT) -> dict[str, Any
     }
     if not isinstance(snapshot, dict) or set(snapshot) != required:
         raise DeclarationError("portal_historical_subject_snapshot_shape_invalid")
-    prefix = DECLARATION["historical_operation_prefix"]
-    subject = DECLARATION["subject"]
+    prefix = declaration["historical_operation_prefix"]
+    subject = declaration["subject"]
     row = snapshot.get("subject_row")
     if (
         snapshot.get("schema_version") != "datapan.provider-operation-historical-subject-snapshot.v1"
-        or snapshot.get("source") != _snapshot_source_provenance()
+        or snapshot.get("source") != _snapshot_source_provenance(current_input_reader=current_input_reader)
         or snapshot.get("subject_identity") != {
             "provider": subject["provider"], "id": subject["portal_dataset_id"],
         }
@@ -351,16 +441,20 @@ def load_historical_subject_snapshot(root: pathlib.Path = ROOT) -> dict[str, Any
     ):
         raise DeclarationError("portal_historical_subject_snapshot_content_mismatch")
     try:
-        _validate_subject_row_structure(row)
+        _validate_subject_row_structure(row, current_input_reader=current_input_reader)
     except (TypeError, ValueError) as exc:
         raise DeclarationError("portal_historical_subject_snapshot_subject_invalid") from exc
     return copy.deepcopy(snapshot)
 
 
-def validate_subject_row(row: Mapping[str, Any], *, root: pathlib.Path = ROOT) -> None:
+def validate_subject_row(
+    row: Mapping[str, Any], *, root: pathlib.Path | None = None,
+    current_input_reader: Any | None = None,
+) -> None:
     """Require an exact original source row, allowing only volatile request count changes."""
-    _validate_subject_row_structure(row)
-    snapshot = load_historical_subject_snapshot(root)
+    root = _effective_root(root, current_input_reader)
+    _validate_subject_row_structure(row, current_input_reader=current_input_reader)
+    snapshot = load_historical_subject_snapshot(root, current_input_reader=current_input_reader)
     actual = copy.deepcopy(dict(row))
     expected = copy.deepcopy(snapshot["subject_row"])
     for candidate in (actual, expected):
@@ -372,10 +466,12 @@ def validate_subject_row(row: Mapping[str, Any], *, root: pathlib.Path = ROOT) -
 
 
 def validate_stored_subject_row(
-    row: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    row: Mapping[str, Any], *, root: pathlib.Path | None = None,
+    current_input_reader: Any | None = None,
 ) -> dict[str, Any]:
     """Require the pinned source row plus exactly its reviewed declaration operation."""
-    snapshot = load_historical_subject_snapshot(root)
+    root = _effective_root(root, current_input_reader)
+    snapshot = load_historical_subject_snapshot(root, current_input_reader=current_input_reader)
     original = copy.deepcopy(snapshot["subject_row"])
     operations = row.get("operations")
     if not isinstance(operations, list) or len(operations) != len(original["operations"]) + 1:
@@ -410,7 +506,8 @@ def validate_stored_subject_row(
     else:
         expected_source_raw["guide_url"] = observed_guide
     expected["operations"] = [
-        *copy.deepcopy(original["operations"]), build_operation(original, observed_guide, root=root),
+        *copy.deepcopy(original["operations"]),
+        build_operation(original, observed_guide, root=root, current_input_reader=current_input_reader),
     ]
     actual = copy.deepcopy(dict(row))
     for candidate in (actual, expected):
@@ -424,7 +521,8 @@ def validate_stored_subject_row(
 
 
 def validate_committed_prefix_snapshot(
-    root: pathlib.Path = ROOT, *, verify_materialized_row: bool = True,
+    root: pathlib.Path | None = None, *, verify_materialized_row: bool = True,
+    current_input_reader: Any | None = None,
 ) -> dict[str, Any]:
     """Verify the reviewed commit, manifest, Git LFS pointer, and hydrated bytes when available.
 
@@ -433,7 +531,9 @@ def validate_committed_prefix_snapshot(
     authenticate the committed LFS object identity without claiming that its payload
     was materialized in that checkout.
     """
-    prefix = DECLARATION.get("historical_operation_prefix")
+    root = _effective_root(root, current_input_reader)
+    declaration = _declaration(current_input_reader)
+    prefix = declaration.get("historical_operation_prefix")
     if not isinstance(prefix, Mapping):
         raise DeclarationError("portal_historical_operation_pin_missing")
     commit = str(prefix.get("source_main_commit") or "")
@@ -482,7 +582,7 @@ def validate_committed_prefix_snapshot(
     }
     materialized_path = root / source_path
     try:
-        materialized = materialized_path.read_bytes()
+        materialized = _read_current_bytes(materialized_path, current_input_reader)
     except OSError as exc:
         raise DeclarationError("portal_historical_materialized_source_unavailable") from exc
     if materialized == pointer:
@@ -502,7 +602,7 @@ def validate_committed_prefix_snapshot(
         raise DeclarationError("portal_historical_materialized_source_invalid") from exc
     if not isinstance(registry, list):
         raise DeclarationError("portal_historical_materialized_source_invalid")
-    subject = DECLARATION["subject"]
+    subject = declaration["subject"]
     matches = [
         item for item in registry
         if isinstance(item, Mapping)
@@ -511,17 +611,18 @@ def validate_committed_prefix_snapshot(
     ]
     if len(matches) != 1:
         raise DeclarationError("portal_historical_materialized_source_identity_mismatch")
-    validate_subject_row(matches[0])
+    validate_subject_row(matches[0], root=root, current_input_reader=current_input_reader)
     result["materialized_registry_verified"] = True
     return result
 
 
 def validate_historical_operation(
     row: Mapping[str, Any], operation: Mapping[str, Any], *, observed_guide_url: str | None,
-    root: pathlib.Path = ROOT,
+    root: pathlib.Path | None = None, current_input_reader: Any | None = None,
 ) -> None:
     """Accept only one exact historical operation from the pinned prefix."""
-    subject = DECLARATION["subject"]
+    root = _effective_root(root, current_input_reader)
+    subject = _declaration(current_input_reader)["subject"]
     _current_source, current_raw = _source(row)
     current_guide = current_raw.get("guide_url")
     if observed_guide_url is None:
@@ -529,7 +630,7 @@ def validate_historical_operation(
             raise DeclarationError("portal_source_guide_observation_mismatch")
     elif current_guide != observed_guide_url:
         raise DeclarationError("portal_source_guide_observation_mismatch")
-    validate_stored_subject_row(row, root=root)
+    validate_stored_subject_row(row, root=root, current_input_reader=current_input_reader)
     original = copy.deepcopy(dict(row))
     original_source = original.get("source")
     original_source = copy.deepcopy(dict(original_source)) if isinstance(original_source, Mapping) else {}
@@ -552,7 +653,7 @@ def validate_historical_operation(
         all_operations = list(all_operations)
         all_operations.remove(declared[0])
     original["operations"] = all_operations
-    validate_subject_row(original, root=root)
+    validate_subject_row(original, root=root, current_input_reader=current_input_reader)
     if not any(isinstance(item, Mapping) and dict(item) == dict(operation) for item in all_operations):
         raise DeclarationError("portal_historical_operation_not_in_pinned_prefix")
 
@@ -570,10 +671,12 @@ def _timestamp(value: Any) -> datetime:
 
 
 def _safe_exact_resolver_context(
-    row: Mapping[str, Any], link_metadata: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    row: Mapping[str, Any], link_metadata: Mapping[str, Any], *, root: pathlib.Path | None = None,
+    current_input_reader: Any | None = None,
 ) -> None:
-    validate_subject_row(row, root=root)
-    subject = DECLARATION["subject"]
+    root = _effective_root(root, current_input_reader)
+    validate_subject_row(row, root=root, current_input_reader=current_input_reader)
+    subject = _declaration(current_input_reader)["subject"]
     page = link_metadata.get("page")
     resolver = link_metadata.get("resolver")
     if not isinstance(page, Mapping) or not isinstance(resolver, Mapping):
@@ -604,11 +707,12 @@ def _safe_exact_resolver_context(
         raise DeclarationError("declaration_observation_order_invalid")
 
 
-def request_parameters() -> list[dict[str, Any]]:
+def request_parameters(*, current_input_reader: Any | None = None) -> list[dict[str, Any]]:
     """Project only the exact named request facts; no sample values/defaults."""
     out: list[dict[str, Any]] = []
-    enums = DECLARATION["enums"]
-    for item in DECLARATION["request_parameters"]:
+    declaration = _declaration(current_input_reader)
+    enums = declaration["enums"]
+    for item in declaration["request_parameters"]:
         value: dict[str, Any] = {
             "name": item["name"],
             "label": item["label"],
@@ -617,7 +721,7 @@ def request_parameters() -> list[dict[str, Any]]:
             "location": item["location"],
         }
         if item["name"] == "TYPE":
-            value["enum_values"] = list(DECLARATION["transport"]["format_selectors"])
+            value["enum_values"] = list(declaration["transport"]["format_selectors"])
         elif item["name"] in enums:
             value["enum_values"] = list(enums[item["name"]])
             value["enum_labels"] = copy.deepcopy(enums[item["name"]])
@@ -627,20 +731,23 @@ def request_parameters() -> list[dict[str, Any]]:
     return out
 
 
-def response_parameters() -> list[dict[str, str]]:
+def response_parameters(*, current_input_reader: Any | None = None) -> list[dict[str, str]]:
     # The reviewed documents declare names and labels only.  Do not add guessed
     # response types, requiredness, nullability, envelope, or media types.
     return [
         {"name": item["name"], "label": item["label"]}
-        for item in DECLARATION["response_parameters"]
+        for item in _declaration(current_input_reader)["response_parameters"]
     ]
 
 
 def build_operation(
-    row: Mapping[str, Any], observed_guide_url: str | None, *, root: pathlib.Path = ROOT,
+    row: Mapping[str, Any], observed_guide_url: str | None, *, root: pathlib.Path | None = None,
+    current_input_reader: Any | None = None,
 ) -> dict[str, Any]:
-    validate_subject_row(row, root=root)
-    subject = DECLARATION["subject"]
+    declaration = _declaration(current_input_reader)
+    root = _effective_root(root, current_input_reader)
+    validate_subject_row(row, root=root, current_input_reader=current_input_reader)
+    subject = declaration["subject"]
     raw: dict[str, Any] = {
         "api_type": "REST",
         "operation_declaration_id": DECLARATION_ID,
@@ -648,20 +755,20 @@ def build_operation(
         "operation_declaration_sha256": DECLARATION_SHA256,
         "provider_dataset_id": subject["provider_dataset_id"],
         "service_name": subject["service_name"],
-        "operation_url": DECLARATION["transport"]["endpoint_template"],
-        "method_evidence": DECLARATION["transport"]["method_evidence"],
-        "method_evidence_classification": DECLARATION["transport"]["method_evidence_classification"],
-        "native_document_sha256s": native_document_sha256s(),
+        "operation_url": declaration["transport"]["endpoint_template"],
+        "method_evidence": declaration["transport"]["method_evidence"],
+        "method_evidence_classification": declaration["transport"]["method_evidence_classification"],
+        "native_document_sha256s": native_document_sha256s(current_input_reader=current_input_reader),
     }
     if observed_guide_url:
         raw["guide_url"] = observed_guide_url
     return {
         "name": subject["service_name"],
-        "endpoint": DECLARATION["transport"]["endpoint_template"],
-        "http_method": DECLARATION["transport"]["method"],
-        "method_evidence": DECLARATION["transport"]["method_evidence"],
-        "request_params": request_parameters(),
-        "response_params": response_parameters(),
+        "endpoint": declaration["transport"]["endpoint_template"],
+        "http_method": declaration["transport"]["method"],
+        "method_evidence": declaration["transport"]["method_evidence"],
+        "request_params": request_parameters(current_input_reader=current_input_reader),
+        "response_params": response_parameters(current_input_reader=current_input_reader),
         "source": {
             "system": "data.go.kr",
             "url": PAGE_URL,
@@ -679,9 +786,14 @@ def build_provenance(
     observed_guide_url_sha256: str | None,
     link_metadata: Mapping[str, Any],
     operation: Mapping[str, Any],
-    root: pathlib.Path = ROOT,
+    root: pathlib.Path | None = None,
+    current_input_reader: Any | None = None,
 ) -> dict[str, Any]:
-    _safe_exact_resolver_context(row, link_metadata, root=root)
+    root = _effective_root(root, current_input_reader)
+    declaration = _declaration(current_input_reader)
+    _safe_exact_resolver_context(
+        row, link_metadata, root=root, current_input_reader=current_input_reader,
+    )
     if not re.fullmatch(r"[a-f0-9]{64}", source_sha256):
         raise DeclarationError("declaration_source_fingerprint_invalid")
     if guide_sha256 is not None and not re.fullmatch(r"[a-f0-9]{64}", guide_sha256):
@@ -693,14 +805,14 @@ def build_provenance(
         "method": PROVENANCE_METHOD,
         "declaration_id": DECLARATION_ID,
         "declaration_sha256": DECLARATION_SHA256,
-        "subject": copy.deepcopy(DECLARATION["subject"]),
-        "native_document_sha256s": native_document_sha256s(),
-        "native_document_acquisition": native_document_acquisition_provenance(),
-        "source_review_record": source_review_provenance(),
-        "historical_operation_prefix": copy.deepcopy(DECLARATION["historical_operation_prefix"]),
+        "subject": copy.deepcopy(declaration["subject"]),
+        "native_document_sha256s": native_document_sha256s(current_input_reader=current_input_reader),
+        "native_document_acquisition": native_document_acquisition_provenance(current_input_reader=current_input_reader),
+        "source_review_record": source_review_provenance(current_input_reader=current_input_reader),
+        "historical_operation_prefix": copy.deepcopy(declaration["historical_operation_prefix"]),
         "method_derivation": {
-            "id": DECLARATION["transport"]["method_evidence"],
-            "classification": DECLARATION["transport"]["method_evidence_classification"],
+            "id": declaration["transport"]["method_evidence"],
+            "classification": declaration["transport"]["method_evidence_classification"],
             "execution_verified": False,
             "exclusive_method_claim": False,
         },
@@ -716,26 +828,32 @@ def build_provenance(
 
 
 def validate_enriched_record(
-    row: Mapping[str, Any], record: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    row: Mapping[str, Any], record: Mapping[str, Any], *, root: pathlib.Path | None = None,
+    current_input_reader: Any | None = None,
 ) -> None:
     """Validate exact declaration, live metadata chain, and additive operation."""
     provenance = record.get("declaration_provenance")
     operations = record.get("operations")
     if not isinstance(provenance, Mapping) or not isinstance(operations, list):
         raise DeclarationError("declaration_enrichment_provenance_missing")
-    validate_subject_row(row, root=root)
+    validate_subject_row(row, root=root, current_input_reader=current_input_reader)
     if record.get("source_sha256") != source_fingerprint(row) or record.get("guide_sha256") != guide_fingerprint(row):
         raise DeclarationError("declaration_source_binding_invalid")
     expected_count = len(row["operations"]) + 1
     if len(operations) != expected_count or operations[:len(row["operations"])] != row["operations"]:
         raise DeclarationError("declaration_historical_operations_not_preserved")
-    expected_operation = build_operation(row, record.get("observed_guide_url"), root=root)
+    expected_operation = build_operation(
+        row, record.get("observed_guide_url"), root=root,
+        current_input_reader=current_input_reader,
+    )
     if operations[-1] != expected_operation:
         raise DeclarationError("declaration_generated_operation_mismatch")
     context = provenance.get("page_resolver")
     if not isinstance(context, Mapping):
         raise DeclarationError("declaration_page_resolver_provenance_missing")
-    _safe_exact_resolver_context(row, context, root=root)
+    _safe_exact_resolver_context(
+        row, context, root=root, current_input_reader=current_input_reader,
+    )
     source_provenance = record.get("source_provenance")
     page = context.get("page")
     if (
@@ -757,15 +875,19 @@ def validate_enriched_record(
         link_metadata=context,
         operation=expected_operation,
         root=root,
+        current_input_reader=current_input_reader,
     )
     if dict(provenance) != expected:
         raise DeclarationError("declaration_enrichment_provenance_mismatch")
 
 
 def validate_declared_operation(
-    row: Mapping[str, Any], operation: Mapping[str, Any], *, root: pathlib.Path = ROOT,
+    row: Mapping[str, Any], operation: Mapping[str, Any], *, root: pathlib.Path | None = None,
+    current_input_reader: Any | None = None,
 ) -> None:
     """Validate a registry operation against the pinned declaration bytes."""
+    root = _effective_root(root, current_input_reader)
+    declaration = _declaration(current_input_reader)
     subject_row = dict(row)
     source = subject_row.get("source")
     source = dict(source) if isinstance(source, Mapping) else {}
@@ -774,7 +896,7 @@ def validate_declared_operation(
     operation_source = operation.get("source")
     operation_raw = operation_source.get("raw") if isinstance(operation_source, Mapping) else None
     operation_guide = operation_raw.get("guide_url") if isinstance(operation_raw, Mapping) else None
-    expected_source_guide = DECLARATION["subject"]["source_guide_url"]
+    expected_source_guide = declaration["subject"]["source_guide_url"]
     current_source_guide = raw.get("guide_url")
     # Applying a valid page observation can remove the source row's empty
     # guide_url or replace it with the observed one. The record-level validator
@@ -800,7 +922,7 @@ def validate_declared_operation(
             and _source(item)[1].get("operation_declaration_id") == DECLARATION_ID
             for item in operations
         ):
-            validate_stored_subject_row(row, root=root)
+            validate_stored_subject_row(row, root=root, current_input_reader=current_input_reader)
         try:
             remaining.remove(dict(operation))
         except ValueError:
@@ -809,6 +931,9 @@ def validate_declared_operation(
     source = operation.get("source")
     raw = source.get("raw") if isinstance(source, Mapping) else None
     observed_guide = raw.get("guide_url") if isinstance(raw, Mapping) else None
-    expected = build_operation(subject_row, observed_guide, root=root)
+    expected = build_operation(
+        subject_row, observed_guide, root=root,
+        current_input_reader=current_input_reader,
+    )
     if dict(operation) != expected:
         raise DeclarationError("registry_declared_operation_mismatch")
