@@ -2074,6 +2074,18 @@ class CompletenessProofRollupTest(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
+        subprocess.run(
+            ["git", "fetch", "--no-tags", "--depth=1", "origin", fixture_pr_head],
+            cwd=checkout,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        shallow_path = pathlib.Path(subprocess.check_output(
+            ["git", "rev-parse", "--path-format=absolute", "--git-path", "shallow"], cwd=checkout, text=True,
+        ).strip())
+        if not shallow_path.exists() or not shallow_path.read_bytes():
+            shallow_path.write_text(f"{fixture_pr_head}\n", encoding="utf-8")
         fetched_main = subprocess.check_output(
             ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
             cwd=checkout,
