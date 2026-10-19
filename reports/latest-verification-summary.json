@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-17T11:36:15.800003Z",
+  "generated_at": "2026-10-18T23:12:32.540022Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 7981,
-    "verified": 3630,
-    "failed": 983,
-    "skipped": 3368,
+    "total": 8781,
+    "verified": 3662,
+    "failed": 984,
+    "skipped": 4135,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
-        "key": "verified",
-        "count": 3630,
-        "status": "verified"
-      },
-      {
         "key": "skipped",
-        "count": 3368,
+        "count": 4135,
         "status": "skipped"
       },
       {
+        "key": "verified",
+        "count": 3662,
+        "status": "verified"
+      },
+      {
         "key": "failed",
-        "count": 983,
+        "count": 984,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 1594,
+        "count": 2057,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 661,
+        "count": 965,
         "reason": "approval_required"
       },
       {
@@ -362,6 +362,11 @@
         "reason": "ulsan_service_key_not_registered"
       },
       {
+        "key": "HTTP 400",
+        "count": 2,
+        "reason": "HTTP 400"
+      },
+      {
         "key": "daejeon_http_404",
         "count": 2,
         "reason": "daejeon_http_404"
@@ -627,11 +632,6 @@
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
       },
       {
-        "key": "HTTP 400",
-        "count": 1,
-        "reason": "HTTP 400"
-      },
-      {
         "key": "car365_http_400",
         "count": 1,
         "reason": "car365_http_400"
@@ -705,7 +705,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 2598,
+        "count": 3398,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1372,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 2477,
+        "count": 3274,
         "host": "apis.data.go.kr"
       },
       {
@@ -1941,6 +1941,11 @@
         "host": "www.rda.go.kr"
       },
       {
+        "key": "api.odcloud.kr",
+        "count": 3,
+        "host": "api.odcloud.kr"
+      },
+      {
         "key": "dgfca.or.kr",
         "count": 3,
         "host": "dgfca.or.kr"
@@ -2239,7 +2244,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 2477,
+        "count": 3277,
         "kind": "data_go_kr_gateway"
       },
       {
