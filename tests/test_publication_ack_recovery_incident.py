@@ -69,6 +69,7 @@ class IncidentGitHub:
         self.requests: list[tuple[str, str]] = []
         self.pr_reads: list[int] = []
         self.publisher_runs = [copy.deepcopy(self.publisher)]
+        self.active_promotion_runs: list[dict] = []
         self.run_objects = {self.publisher["id"]: copy.deepcopy(self.publisher)}
         self.job_objects = {self.publisher["id"]: copy.deepcopy(self.jobs)}
         self.artifact_objects = {self.publisher["id"]: copy.deepcopy(self.artifacts)}
@@ -131,6 +132,8 @@ class IncidentGitHub:
         if path.startswith(prefix + "/actions/workflows/") and path.endswith("/runs"):
             if query.get("event") == ["workflow_dispatch"]:
                 return self.response({"total_count": len(self.publisher_runs), "workflow_runs": self.publisher_runs}, {"Link": ""})
+            if str(self.workflow_ids[RECOVERY.PROMOTION_WORKFLOW_PATH]) == pathlib.PurePosixPath(path).parts[-2]:
+                return self.response({"total_count": len(self.active_promotion_runs), "workflow_runs": self.active_promotion_runs}, {"Link": ""})
             return self.response({"total_count": 0, "workflow_runs": []}, {"Link": ""})
         if path == prefix + "/contents/reports/canonical-update-promotion-receipt.json":
             raw = json.dumps(self.journal, ensure_ascii=False, indent=2).encode() + b"\n"
@@ -489,6 +492,27 @@ class PublicationAckRecoveryIncidentTests(unittest.TestCase):
             recovered["acknowledgements"][-1]["evidence_reference"].startswith(RECOVERY.RECOVERY_REFERENCE_PREFIX)
         )
         self.assertLessEqual(result["github_requests"], RECOVERY.MAX_GITHUB_REQUESTS)
+
+    def test_permanently_queued_already_acknowledged_is_read_only_noop(self) -> None:
+        self.execute()
+        self.writes.clear()
+        self.github.active_promotion_runs = [{"id": 37655513428, "run_attempt": 1, "status": "queued"}]
+        original = copy.deepcopy(self.github.journal)
+        result = self.execute()
+        self.assertEqual(result["outcome"], "already_acknowledged")
+        self.assertEqual(result["already_acknowledged"], 1)
+        self.assertEqual(result["git_cas_transactions"], 0)
+        self.assertEqual(self.writes, [])
+        self.assertEqual(self.github.journal, original)
+        self.assertIsNotNone(result["observed_publisher"])
+        self.assertIsNone(result["observed_blocker"])
+
+    def test_permanently_queued_unacknowledged_remains_fail_closed(self) -> None:
+        self.github.active_promotion_runs = [{"id": 37655513428, "run_attempt": 1, "status": "queued"}]
+        with mock.patch.object(RECOVERY.PublicationAckRecovery, "already_acknowledged", return_value=False):
+            with self.assertRaisesRegex(RECOVERY.RecoveryError, "active_promotion_run_present"):
+                self.execute()
+        self.assertEqual(self.writes, [])
 
     def test_repeated_actual_incident_is_an_exact_zero_write_noop(self) -> None:
         first = self.execute()

@@ -554,6 +554,8 @@ class PublicationAckRecovery:
             "outside_c_publications": [],
             "unresolved_candidates": [],
             "selected_publisher": None,
+            "observed_publisher": None,
+            "observed_blocker": None,
         }
 
     def _api_json(self, endpoint: str) -> tuple[dict[str, Any], Mapping[str, str]]:
@@ -1386,7 +1388,6 @@ class PublicationAckRecovery:
             raise RecoveryError("workflow_event_unsupported")
         self.summary["mode"] = mode
         self.initialize()
-        self.assert_idle(current_ack_run_id, current_ack_attempt)
         candidates = (
             [(row, None) for row in self.discover()]
             if mode == "schedule"
@@ -1426,6 +1427,13 @@ class PublicationAckRecovery:
                 continue
             try:
                 source_claims = self._source_claim_rows(verified["publication"], snapshot[0])
+                self.summary["observed_publisher"] = {
+                    "run_id": verified["run_id"],
+                    "run_attempt": verified["attempt"],
+                    "head_sha": verified["head_sha"],
+                    "artifact_id": verified["artifact_id"],
+                    "receipt_sha256": verified["receipt_sha256"],
+                }
                 if self.already_acknowledged(verified["publication"], snapshot[0]):
                     self.summary["already_acknowledged"] += 1
                     self.summary["selected_publisher"] = None
@@ -1458,6 +1466,11 @@ class PublicationAckRecovery:
                 "artifact_id": verified["artifact_id"],
                 "receipt_sha256": verified["receipt_sha256"],
             }
+            try:
+                self.assert_idle(current_ack_run_id, current_ack_attempt)
+            except RecoveryError as exc:
+                self.summary["observed_blocker"] = str(exc)
+                raise
             result = self.recover_one(
                 verified,
                 expected_pr_number=association["number"],
