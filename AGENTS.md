@@ -1,5 +1,34 @@
 # Repository Instructions
 
+## Purpose and source of truth (Datapan Core)
+
+**Core objective** (statpan_docs `projects/datapan/STRATEGY_CONTROL.md`):
+공공데이터 전반을 파악하고, 필요한 데이터를 지속적으로 확보·갱신·검증하여 여러 사업에서 재사용할 수 있게 유지·공급한다.
+This repo is one part of the Datapan Core product (Registry, Data, CLI, Health, Web, Infra). The product is a maintainable public-data foundation, not a single business model, procurement product, or sample cohort.
+
+**Read order for agents** (private repo `StatPan/statpan_docs`, read `origin/main`, not a stale local checkout; reviewed at `578aebc`, 2026-10-17):
+1. `projects/datapan/README.md` — source precedence.
+2. `projects/datapan/REPO_CONTRACTS.md` — this repo's goal and standing feature IDs (see "Repository development goals" and its own section).
+3. `projects/datapan/PM_DECISION_POLICY.md` — how requirements become Goals/issues; acceptance and escalation.
+4. `projects/datapan/core/OPERATING_MODEL.md` — production vs delivery, reuse/isolation, cost, CTR/NFR/FLEX requirements.
+Precedence: accepted strategy > REPO_CONTRACTS > OPERATING_MODEL > business/ research (hypotheses, not decisions) > historical docs. Implementation truth is default-branch code/tests; operational claims need dated runtime evidence; execution state lives in GitHub Goals/issues/PRs.
+
+**Principles that bind every change**
+- Production, publication, delivery, consumer receipt and customer acceptance are separate facts. Never report one as another.
+- Failed/partial/unknown/not-measured are distinct states; unmeasured cost or coverage is not zero or complete. A failed refresh must not overwrite the last good version.
+- Identity, provenance, observation time, and rights stay explicit. Name similarity or model inference alone is not a fact.
+- Open/DIY local use stays genuinely useful; do not weaken it to push paid use. Paid value = recurring responsibility (collect, validate, refresh, source-change response, history/recovery, delivery).
+- Customer-private/specific work is isolated from shared Core; reuse needs named evidence, rights, and bounded maintenance cost.
+- Do not adopt a business model, price, offer, or market from an engineering ticket. Business research is not a decision; a Core release does not prove demand.
+- Opening an issue/PR does not mean it is approved or prioritized. Deployment, publication, commercial activation, secrets, and ownership changes need their own explicit approval.
+- Record gaps honestly: when code, docs, or runtime disagree, open/refresh an issue rather than silently changing one side.
+
+### Registry contract
+
+`StatPan/datapan-registry` makes changing public sources discoverable and usable without each consumer rebuilding the source catalog: it maintains source/resource identity and discovery (REG-01), portable specifications and access-policy metadata (REG-02), observation reconciliation and change management (REG-03), evidence admission and separate coverage/readiness views (REG-04), and immutable contract release and distribution with manifests, digests, compatibility, and rollback-or-hold references (REG-05). Registry completion means tracking additions, changes, deprecations, and omissions for the declared source set, publishing verified revisions, and enabling consumers to reproduce and read the exact artifact; implementation must produce consumable artifacts, preserve the prior catalog on failed refresh, remain idempotent for repeated admitted input, and identify affected consumers for changed contracts.
+
+Registry does not own private credentials, customer state, mutable runtime coordination, bulk provider-payload collection, domain data marts, billing, product UI, or arbitrary provider execution. It is not the collector of all payloads: current specification-workflow ownership remains until an explicit migration, while Data owns acquisition and dataset outputs and consuming repositories own their compatibility/read-back evidence.
+
 <!-- gira:start -->
 Gira workflow:
 - Canonical rules: run `gira guide agent` from the installed Gira CLI.
@@ -41,6 +70,5 @@ Gira workflow:
 - Record the direct test's passing result (5 tests, OK) in the PR body. Completeness modules can take 15–19 minutes: select an individual test name and run long tests in the background.
 - Delegate one issue and one branch per agent with explicit scope. No unauthorized live calls, Hugging Face publication, secrets, or destructive operations.
 - Evidence must state: command, exit code, actual output, interpretation, and unverified items.
-- R1 restores reproducible specification/evidence generation and separates API observations from LINK denominators.
-- R2 verifies producer receipts before immutable release consumption; #592 is blocked on producer receipts and #593 on consumer proof.
-- R3 preserves API/file/LINK provenance while diffing source changes; completeness and runtime freshness remain separate, and partial observation is not deletion.
+- R1/R2/R3 milestones and next actions are execution state, not durable contract; use the current GitHub issues and PRs as the source of truth (for example, #655/#659, #760, #768, #791, #592, and #593).
+- Operational caution: publication ACK recovery must preserve the guards and read-only-first behavior tracked in [#791](https://github.com/StatPan/datapan-registry/issues/791).
