@@ -68,7 +68,7 @@ COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES = frozenset({
     "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
     "schemas/datapan.completeness-proof.v1.schema.json",
     "schemas/datapan.completeness-proof-policy.v1.schema.json",
-    "schemas/datapan.completeness-proof-rollup.v1.schema.json",
+    "schemas/datapan.completeness-proof-rollup.v2.schema.json",
     "schemas/datapan.completeness-proof-scopes.v1.schema.json",
     "schemas/datapan.completeness-proof-inputs.v1.schema.json",
     "schemas/datapan.completeness-proof-identities.v1.schema.json",
@@ -4184,16 +4184,16 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertIsNotNone(candidate_operations["proof"])
             self.assertEqual(candidate_operations["proof"]["claims"], {"complete": True, "current": True, "updated": True})
             self.assertEqual(candidate_operations["proof_state"], "blocked")
-            self.assertEqual(candidate_report["evaluation_context"]["mode"], "candidate")
+            self.assertEqual(candidate_report["evaluation_context"]["mode"], "candidate_evidence_snapshot")
             candidate_facets = {facet["facet_id"]: facet for facet in candidate_operations["facets"]}
             self.assertEqual(candidate_facets["candidate_inventory"]["state"], "blocked")
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_proof_validated"])
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_claims_suppressed"])
             self.assertEqual(candidate_facets["specification_pipeline"]["state"], "historical")
-            self.assertFalse(candidate_facets["specification_pipeline"]["details"]["current_release_applicable"])
+            self.assertNotIn("current_release_applicable", candidate_facets["specification_pipeline"]["details"])
             self.assertEqual(candidate_facets["immutable_publication_read_back"]["state"], "historical")
             candidate_publication = candidate_facets["immutable_publication_read_back"]["details"]
-            self.assertIsNone(candidate_publication["current_release_manifest_sha256"])
+            self.assertNotIn("current_release_manifest_sha256", candidate_publication)
             self.assertNotIn("current_release_subject_applicable", candidate_publication)
             self.assertNotIn("current_release_applicable", candidate_publication)
             self.assertTrue(candidate_publication["candidate_release_publication_unproven"])
@@ -6732,6 +6732,120 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     path=pathlib.Path(tampered.name),
                     label="test evidence",
                 )
+
+    def test_generated_snapshot_is_unchanged_across_two_main_roundtrips(self) -> None:
+        """The repository writer is byte-stable once its output is the trusted main.
+
+        A disposable repository borrows this checkout's committed object store,
+        so admission commits stay reachable, and treats the checked-out HEAD as
+        fetched origin/main. Generating the v2 snapshot twice from that main
+        must reproduce identical bytes, and the snapshot must not claim a
+        current release.
+        """
+        environment = {
+            key: value for key, value in os.environ.items() if not key.startswith("GIT_")
+        }
+        environment.update({
+            "GIT_LFS_SKIP_SMUDGE": "1", "GIT_NO_LAZY_FETCH": "1",
+            "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_TERMINAL_PROMPT": "0", "GIT_ALLOW_PROTOCOL": "file",
+            "PYTHONDONTWRITEBYTECODE": "1",
+        })
+        source_main = subprocess.check_output(
+            ["git", "rev-parse", "HEAD^{commit}"], cwd=ROOT, text=True, env=environment,
+        ).strip()
+        source_objects = subprocess.check_output(
+            ["git", "rev-parse", "--path-format=absolute", "--git-path", "objects"],
+            cwd=ROOT, text=True, env=environment,
+        ).strip()
+
+        def git(repository: pathlib.Path, *args: str) -> str:
+            result = subprocess.run(
+                ["git", *args], cwd=repository, env=environment,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, f"git {' '.join(args)} failed: {result.stderr!r}")
+            return result.stdout.strip()
+
+        with tempfile.TemporaryDirectory(prefix="completeness-main-roundtrip-") as name:
+            repository = pathlib.Path(name) / "repo"
+            repository.mkdir()
+            subprocess.run(
+                ["git", "init", "--quiet", "--initial-branch=main"],
+                cwd=repository, env=environment, check=True,
+            )
+            for key, value in (
+                ("user.name", "Completeness roundtrip test"),
+                ("user.email", "completeness-roundtrip@example.invalid"),
+                ("core.hooksPath", os.devnull),
+            ):
+                subprocess.run(["git", "config", "--local", key, value], cwd=repository, env=environment, check=True)
+            alternates = repository / ".git/objects/info/alternates"
+            alternates.parent.mkdir(parents=True, exist_ok=True)
+            alternates.write_text(source_objects + "\n", encoding="ascii")
+            git(repository, "fetch", "--no-tags", str(ROOT.resolve()), source_main)
+            git(repository, "checkout", "--quiet", "--detach", "FETCH_HEAD")
+            # The committed tree stores the Registry as an LFS pointer. The
+            # writer reads the materialized payload, so copy the checkout's bytes.
+            registry = repository / "data/data-go-kr.registry.json"
+            if registry.read_bytes().startswith(b"version https://git-lfs.github.com/spec/v1"):
+                shutil.copy2(ROOT / "data/data-go-kr.registry.json", registry)
+            git(repository, "update-ref", "refs/remotes/origin/main", source_main)
+            self.assertEqual(git(repository, "rev-parse", "HEAD^{commit}"), source_main)
+
+            generator = [sys.executable, "scripts/generate-completeness-proof-rollup.py"]
+
+            def generate() -> tuple[bytes, bytes]:
+                result = subprocess.run(
+                    [*generator, "--repo-root", str(repository), "--write"],
+                    cwd=repository, env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+                )
+                self.assertEqual(
+                    result.returncode, 0,
+                    f"generator failed: {result.stderr[-2000:]!r}",
+                )
+                return (
+                    (repository / MODULE.OUTPUT_JSON_PATH).read_bytes(),
+                    (repository / MODULE.OUTPUT_MARKDOWN_PATH).read_bytes(),
+                )
+
+            first_json, first_markdown = generate()
+            report = json.loads(first_json)
+            self.assertEqual(report["schema_version"], "datapan.completeness-proof-rollup.v2")
+            self.assertEqual(report["evaluation_context"]["mode"], "repository_evidence_snapshot")
+            self.assertEqual(report["evaluation_context"]["claim_scope"], "evaluated_inputs_only")
+            self.assertNotIn("current_release_manifest_sha256", first_json.decode("utf-8"))
+            self.assertEqual(report["summary"]["evaluated_claims"]["current"], 0)
+            self.assertEqual(report["summary"]["evaluated_claims"]["updated"], 0)
+
+            # The generated snapshot becomes the trusted main, then the same
+            # writer runs again and must reproduce it exactly.
+            subprocess.run(["git", "add", "--", MODULE.OUTPUT_JSON_PATH, MODULE.OUTPUT_MARKDOWN_PATH], cwd=repository, env=environment, check=True)
+            tree = git(repository, "write-tree")
+            commit_environment = {
+                **environment,
+                "GIT_AUTHOR_NAME": "Completeness roundtrip test",
+                "GIT_AUTHOR_EMAIL": "completeness-roundtrip@example.invalid",
+                "GIT_COMMITTER_NAME": "Completeness roundtrip test",
+                "GIT_COMMITTER_EMAIL": "completeness-roundtrip@example.invalid",
+            }
+            generated_main = subprocess.check_output(
+                ["git", "commit-tree", tree, "-p", source_main], cwd=repository,
+                input=b"test: commit generated completeness snapshot\n", env=commit_environment,
+            ).decode("ascii").strip()
+            git(repository, "checkout", "--quiet", "--detach", generated_main)
+            git(repository, "update-ref", "refs/remotes/origin/main", generated_main)
+            self.assertEqual(git(repository, "rev-parse", "HEAD^{commit}"), generated_main)
+
+            second_json, second_markdown = generate()
+            self.assertEqual(second_json, first_json)
+            self.assertEqual(second_markdown, first_markdown)
+
+            check = subprocess.run(
+                [*generator, "--repo-root", str(repository), "--check"],
+                cwd=repository, env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            self.assertEqual(check.returncode, 0, f"check drifted: {check.stderr[-2000:]!r}")
 
 
 if __name__ == "__main__":
