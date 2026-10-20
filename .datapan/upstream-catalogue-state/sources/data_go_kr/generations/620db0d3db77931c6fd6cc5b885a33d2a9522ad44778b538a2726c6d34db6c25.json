@@ -1,0 +1,66 @@
+{
+  "attempts_by_id": {},
+  "attempts_consumed": 0,
+  "checkpoint_sha256": "5ae947561e6fc9c3138e1add863fd89ea9410550dc27dbd9459fa1e6b97042cf",
+  "detail_queue_cursor": 264,
+  "detail_records": [],
+  "detail_retry_reset_ids": [],
+  "fencing_token": 1,
+  "generation_id": "620db0d3db77931c6fd6cc5b885a33d2a9522ad44778b538a2726c6d34db6c25",
+  "generation_inputs": {
+    "adapter_revision": "b235d6f053bd8ec1f87d6a889a07912dfde1a944353eb640da8713fdf640e4d6",
+    "baseline_sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0",
+    "candidate_sha256": "fe8941a7fefbf40d467eba9f12f51d9e9dc28979e874b1244f056e0ab24c28c6",
+    "extractor_revision": "884815d693ed8de1b98d2fb3ec16f3be62a5f426a31da6797633517039cb52ef",
+    "generator_revision": "10440a280c9cf4bc66b2dd78e436550222154026e849aa0546e60c7e389318f6",
+    "observation_failure_sha256": null,
+    "policy_sha256": "61dfb817f743085918c9f613fcd4a2dcf0d2f3de9df31b005cae1cd0250d5cfc",
+    "source_id": "data_go_kr",
+    "source_scope": "aggregate_supported_catalog"
+  },
+  "input_artifacts": [
+    {
+      "artifact_id": "12307426175",
+      "candidate_sha256": "fe8941a7fefbf40d467eba9f12f51d9e9dc28979e874b1244f056e0ab24c28c6",
+      "diff_sha256": "894ddc7de972a9b1df7a849e60ae3fe40f3b177db1a9614b939c79896eedd065",
+      "evidence_sha256": "7e4fc60f615782222d816d798a88808401098c3ef604afe7c04a9981ac0d117f",
+      "expires_at": "2026-11-19T23:17:01Z",
+      "name": "upstream-catalog-refresh-39513391763",
+      "run_id": "39513391763"
+    }
+  ],
+  "last_heartbeat_at": "2026-10-20T23:17:50Z",
+  "last_observation": {
+    "collection_status": "success",
+    "execution_mode": "live",
+    "observed_at": "2026-10-20T23:12:48Z",
+    "producer_run_id": "39513391763",
+    "refresh_evidence_sha256": "7e4fc60f615782222d816d798a88808401098c3ef604afe7c04a9981ac0d117f"
+  },
+  "last_progress_at": "2026-10-20T23:17:50Z",
+  "lease": null,
+  "observation_count": 1,
+  "observed_at": "2026-10-20T23:12:48Z",
+  "outcome": {
+    "reason": "valueerror",
+    "resume_validation_diagnostic": {
+      "code": "resume_worker_outcome_binding_mismatch",
+      "phase": "resume_parent_cache",
+      "version": 1
+    }
+  },
+  "output_artifact": {
+    "artifact_id": null,
+    "bundle_manifest_sha256": null,
+    "expires_at": "2026-11-19T23:17:48Z",
+    "name": "upstream-catalogue-processing-39513990436-1",
+    "repository": "StatPan/datapan-registry",
+    "run_id": "39513990436"
+  },
+  "output_digests": [],
+  "request_reservation": null,
+  "schema_version": "datapan.upstream-catalogue-checkpoint.v1",
+  "source_id": "data_go_kr",
+  "source_scope": "aggregate_supported_catalog",
+  "status": "quarantined"
+}
