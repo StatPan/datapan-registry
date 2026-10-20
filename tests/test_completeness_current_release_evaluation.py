@@ -1,57 +1,46 @@
-import json
 import pathlib
+import subprocess
+import tempfile
 import unittest
 
-import importlib.util
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location("rollup", ROOT / "scripts/generate-completeness-proof-rollup.py")
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
-
+SCRIPT = ROOT / "scripts/generate-completeness-proof-rollup.py"
 
 
 class CurrentReleaseEvaluationTest(unittest.TestCase):
-    def _evaluation(self, target_kind="historical", status="historical"):
-        claims = {"complete": True, "current": False, "updated": False}
-        return {
-            "schema_version": "datapan.completeness-current-release-evaluation.v1",
-            "evaluation_as_of": "2026-10-20T00:00:00Z",
-            "evaluator_source": {"revision": "a" * 40, "path": "scripts/generate-completeness-proof-rollup.py", "bytes": 1, "sha256": "b" * 64},
-            "trusted_main_sha": "c" * 40,
-            "target_kind": target_kind,
-            "target": {"source_sha": "a" * 40, "tree_sha": "d" * 40, "release_manifest": {"path": "manifest.json", "bytes": 1, "sha256": "b" * 64}, "canonical_registry": {"path": "manifest.json", "bytes": 1, "sha256": "b" * 64}, "operation_manifest": {"path": "manifest.json", "bytes": 1, "sha256": "b" * 64}},
-            "snapshot": {"path": "reports/completeness-proof-rollup.json", "bytes": 1, "sha256": "b" * 64},
-            "target_applicability": {"schema_version": "datapan.completeness-current-target-applicability.v1", "status": "unavailable", "reason_code": "current_release_evaluation_evidence_unavailable", "disposition": None, "context": {"repository": "StatPan/datapan-registry", "release_source_sha": "a" * 40, "trusted_main_sha": "c" * 40, "evaluation_as_of": "2026-10-20T00:00:00Z"}, "source_target": None, "target_contract": None, "evidence_index": None},
-            "summary": {"registered_scopes": 1, "statuses": {"applicable": 0, "historical": 1 if status == "historical" else 0, "missing": 0, "unavailable": 0 if status == "historical" else 1, "rejected": 0}, "claims": {"complete": 1, "current": 0, "updated": 0}},
-            "scopes": [{"scope_id": "scope", "relation": target_kind, "status": status, "claims": claims, "missing_evidence": [{"code": "current_release_evaluation_evidence_unavailable", "owner": "StatPan/datapan-registry", "ticket": "#754"}]}],
-        }
+    def _run(self, *args):
+        return subprocess.run(["uv", "run", "--no-project", "--python", "3.12", "--with", "jsonschema", "--with", "PyYAML==6.0.2", "python", str(SCRIPT), *args], cwd=ROOT, text=True, capture_output=True)
 
-    def test_historical_and_candidate_cannot_claim_current(self):
-        for kind in ("historical", "candidate"):
-            value = self._evaluation(kind)
-            self.assertFalse(value["scopes"][0]["claims"]["current"])
-            self.assertFalse(value["scopes"][0]["claims"]["updated"])
+    def test_cli_rejects_output_outside_manifest(self):
+        result = self._run("--repo-root", str(ROOT), "--evaluate-current-release", "--release-source-sha", "a" * 40, "--evaluation-as-of", "2026-10-20T00:00:00Z", "--evaluation-output", "reports/evaluation.json", "--check")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("outside the release manifest", result.stderr)
 
-    def test_missing_evidence_is_unavailable(self):
-        value = self._evaluation("current_main", "unavailable")
-        self.assertEqual(value["scopes"][0]["status"], "unavailable")
-        self.assertFalse(value["scopes"][0]["claims"]["current"])
+    def test_cli_rejects_snapshot_require_claim_without_evaluator(self):
+        result = self._run("--repo-root", str(ROOT), "--require-claim", "scope:current", "--check")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("authenticated current-release evaluation", result.stderr)
 
-    def test_borrowed_historical_claim_is_not_promoted(self):
-        value = self._evaluation("historical")
-        value["scopes"][0]["claims"]["current"] = True
-        self.assertRaises(ValueError, module.require_claims, value, ["scope:current"])
+    def test_function_rejects_head_trusted_main_mismatch(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("rollup", SCRIPT)
+        module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        with self.assertRaisesRegex(ValueError, "target or trusted main"):
+            module.evaluate_current_release(root=ROOT, input_root=ROOT, input_index_path=ROOT / "reports/completeness-proof-inputs.json", release_source_sha=head, trusted_main_sha="0" * 40, evaluation_as_of="2026-10-20T00:00:00Z")
 
-    def test_evaluator_schema_and_manifest_exclusion(self):
-        value = self._evaluation()
-        module.validate_schema(value, ROOT / module.CURRENT_EVALUATION_SCHEMA_PATH, "test evaluation")
-        manifest = json.loads((ROOT / "manifest.json").read_text())
-        self.assertNotIn(".datapan/ci/current-release-evaluation.json", {row["path"] for row in manifest["artifacts"]})
+    def test_function_rejects_borrowed_target_identity(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("rollup", SCRIPT)
+        module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+        head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        with self.assertRaisesRegex(ValueError, "target or trusted main"):
+            module.evaluate_current_release(root=ROOT, input_root=ROOT, input_index_path=ROOT / "reports/completeness-proof-inputs.json", release_source_sha="1" * 40, trusted_main_sha=head, evaluation_as_of="2026-10-20T00:00:00Z")
 
-    def test_require_claims_accepts_only_evaluator_discriminator(self):
-        value = self._evaluation()
-        with self.assertRaisesRegex(ValueError, "authenticated current-release"):
-            module.require_claims({"schema_version": "datapan.completeness-proof-rollup.v2"}, ["scope:current"])
+    def test_cli_requires_evaluation_arguments(self):
+        result = self._run("--repo-root", str(ROOT), "--evaluate-current-release", "--check")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("current evaluation requires", result.stderr)
 
 
 if __name__ == "__main__":
