@@ -46,6 +46,7 @@ import upstream_catalogue_derivation as DERIVATION  # noqa: E402
 CHECKPOINT_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
 ENRICHMENT_SCHEMA = "datapan.catalogue-enrichment-evidence.v1"
 REPLAY_PERSISTENCE_SCHEMA = "datapan.upstream-catalogue-replay-persistence.v1"
+REPLAY_PERSISTENCE_SCHEMA_V2 = "datapan.upstream-catalogue-replay-persistence.v2"
 REPLAY_PERSISTENCE_RECEIPT = "upstream-catalogue-replay-persistence-receipt.json"
 STATE_FILE_LIMIT = 256 * 1024
 MAX_INPUT_BYTES = 256 * 1024 * 1024
@@ -58,6 +59,58 @@ DETAIL_FAILURE_CODES = frozenset({
     "insufficient_budget_for_link_resolver", "resolved_link_operation_contract_unproven",
 })
 DETAIL_FAILURE_PHASES = frozenset({"page", "resolver"})
+RESUME_VALIDATION_PHASES = frozenset({
+    "resume_parent_cache", "canonical_parent_cache", "parent_cache_merge",
+})
+RESUME_VALIDATION_ERROR_CODES = frozenset({
+    "corrupt_generation_index",
+    "derivation_parent_enrichment_contribution_conflict",
+    "resume_artifact_unbound",
+    "resume_checkpoint_detail_identity_invalid",
+    "resume_enrichment_binding_mismatch",
+    "resume_enrichment_guide_binding_mismatch",
+    "resume_enrichment_identity_invalid",
+    "resume_enrichment_identity_mismatch",
+    "resume_enrichment_observation_in_future",
+    "resume_enrichment_operation_binding_mismatch",
+    "resume_enrichment_record_invalid",
+    "resume_enrichment_source_binding_mismatch",
+    "resume_enrichment_source_or_guide_identity_mismatch",
+    "resume_seoul_declaration_binding_invalid",
+    "resume_seoul_declaration_provenance_missing",
+    "resume_seoul_declared_operation_invalid",
+    "resume_worker_contract_failure_binding_mismatch",
+    "resume_worker_contract_failure_outcome_missing",
+    "resume_worker_link_metadata_binding_invalid",
+    "resume_worker_link_metadata_invalid",
+    "resume_worker_link_metadata_missing",
+    "resume_worker_outcome_binding_mismatch",
+    "resume_worker_outcome_identity_invalid",
+    "resume_worker_outcome_invalid",
+    "resume_worker_outcomes_invalid",
+})
+RESUME_VALIDATION_FALLBACK_CODES = frozenset({
+    "validation_error", "json_decode_error", "io_error",
+})
+RESUME_VALIDATION_MERGE_CODE = "derivation_parent_enrichment_contribution_conflict"
+
+
+class ResumeCacheValidationError(ValueError):
+    """A finite, text-free code for a rejected resume-cache contribution."""
+
+    __slots__ = ("_diagnostic_code",)
+
+    def __init__(self, code: str) -> None:
+        if type(code) is not str or code not in RESUME_VALIDATION_ERROR_CODES:
+            raise ValueError("invalid_resume_validation_error_code")
+        super().__init__(code)
+        self._diagnostic_code = code
+
+    @property
+    def diagnostic_code(self) -> str:
+        return self._diagnostic_code
+
+
 CONTRACT_FAILURES = {
     "no_reviewed_declaration": {
         "unresolved_requirements": ["reviewed_operation_declaration"],
@@ -766,6 +819,13 @@ def _object_sha256(value: Any) -> str:
     return sha256_bytes(canonical_json(value))
 
 
+_GENERATION_IDENTITY_INPUT_KEYS = frozenset({
+    "source_id", "source_scope", "baseline_sha256", "candidate_sha256",
+    "observation_failure_sha256", "policy_sha256", "adapter_revision",
+    "generator_revision", "extractor_revision",
+})
+
+
 def _replay_admission(
     checkpoint: Mapping[str, Any], index: Mapping[str, Any],
 ) -> dict[str, Any]:
@@ -795,7 +855,6 @@ def _replay_admission(
         if item["producer_run_id"] == str(observation.get("producer_run_id") or "")
         and item["refresh_evidence_sha256"] == observation.get("refresh_evidence_sha256")
         and item["artifact_id"] == str(reference.get("artifact_id") or "")
-        and item["generation_id"] == checkpoint.get("generation_id")
     ]
     if len(matches) != 1:
         raise ValueError("replay_original_admission_not_unique")
@@ -808,7 +867,104 @@ def _replay_admission(
         or reference.get("candidate_sha256") != admission["candidate_sha256"]
     ):
         raise ValueError("replay_original_admission_binding_mismatch")
+    if admission["generation_id"] != checkpoint.get("generation_id"):
+        if not isinstance(generation_inputs, Mapping):
+            raise ValueError("replay_derived_generation_inputs_invalid")
+        if "same_observation_derivation" in generation_inputs:
+            if set(generation_inputs) != _GENERATION_IDENTITY_INPUT_KEYS | {"same_observation_derivation"}:
+                raise ValueError("replay_derived_generation_inputs_invalid")
+            raw_derivation = generation_inputs.get("same_observation_derivation")
+            if not isinstance(raw_derivation, Mapping):
+                raise ValueError("replay_derived_generation_missing")
+            try:
+                envelope = DERIVATION.validate_derivation_envelope(raw_derivation)
+            except (DERIVATION.DerivationError, TypeError) as exc:
+                raise ValueError("replay_derived_generation_invalid") from exc
+            if dict(raw_derivation) != envelope:
+                raise ValueError("replay_derived_generation_not_canonical")
+            # Hash the checkpoint's complete recorded inputs. Recomputing them
+            # through generation_identity would substitute this worker revision.
+            if _object_sha256(dict(generation_inputs)) != checkpoint.get("generation_id"):
+                raise ValueError("replay_derived_generation_identity_mismatch")
+            first_generation_id = admission["generation_id"]
+            if (
+                first_generation_id == checkpoint.get("generation_id")
+                or first_generation_id not in envelope["ancestor_generation_ids"]
+            ):
+                raise ValueError("replay_original_generation_not_ancestor")
+            try:
+                DERIVATION.original_observation_from_checkpoint(checkpoint, admission)
+            except DERIVATION.DerivationError as exc:
+                raise ValueError("replay_derived_admission_binding_mismatch") from exc
+        else:
+            # A later processor epoch can have a new generation identity while
+            # retaining the same latest A observation and its first durable
+            # admission row. This branch is deliberately limited to the exact
+            # ordinary input shape; it does not create derivation ancestry.
+            if set(generation_inputs) != _GENERATION_IDENTITY_INPUT_KEYS:
+                raise ValueError("replay_ordinary_generation_inputs_invalid")
+            source_id = generation_inputs.get("source_id")
+            source_scope = generation_inputs.get("source_scope")
+            baseline_sha256 = generation_inputs.get("baseline_sha256")
+            candidate_sha256 = generation_inputs.get("candidate_sha256")
+            revision_fields = (
+                "policy_sha256", "adapter_revision", "generator_revision", "extractor_revision",
+            )
+            if (
+                type(source_id) is not str or len(source_id) < 1
+                or type(source_scope) is not str or len(source_scope) < 1
+                or baseline_sha256 is not None and (
+                    type(baseline_sha256) is not str
+                    or re.fullmatch(r"[a-f0-9]{64}", baseline_sha256) is None
+                )
+                or type(candidate_sha256) is not str
+                or re.fullmatch(r"[a-f0-9]{64}", candidate_sha256) is None
+                or generation_inputs.get("observation_failure_sha256") is not None
+                or any(
+                    type(generation_inputs.get(field)) is not str
+                    or re.fullmatch(r"[a-f0-9]{64}", generation_inputs[field]) is None
+                    for field in revision_fields
+                )
+            ):
+                raise ValueError("replay_ordinary_generation_inputs_invalid")
+            if _object_sha256(dict(generation_inputs)) != checkpoint.get("generation_id"):
+                raise ValueError("replay_ordinary_generation_identity_mismatch")
+            if (
+                checkpoint.get("status") not in {"ready", "no-change"}
+                or source_id != checkpoint.get("source_id")
+                or source_scope != checkpoint.get("source_scope")
+                or observation.get("collection_status") != "success"
+                or observation.get("execution_mode") != "live"
+                or str(observation.get("producer_run_id") or "") != admission["producer_run_id"]
+                or observation.get("refresh_evidence_sha256") != admission["refresh_evidence_sha256"]
+                or reference.get("name") != admission["artifact_name"]
+                or str(reference.get("artifact_id") or "") != admission["artifact_id"]
+                or reference.get("expires_at") != admission["artifact_expires_at"]
+                or reference.get("evidence_sha256") != admission["refresh_evidence_sha256"]
+                or reference.get("candidate_sha256") != admission["candidate_sha256"]
+            ):
+                raise ValueError("replay_ordinary_generation_binding_mismatch")
     return admission
+
+
+def _replay_incoming_admission_matches(
+    durable: Mapping[str, Any], incoming: Mapping[str, Any], *, current_generation_id: str,
+) -> bool:
+    """Compare a live row after _replay_admission authenticated the durable row."""
+    if (
+        set(durable) != set(incoming)
+        or incoming.get("generation_id") != current_generation_id
+    ):
+        return False
+    processing_provenance = {"admitted_at"}
+    if durable.get("generation_id") != current_generation_id:
+        # _replay_admission permits this only for a validated ordinary epoch
+        # or a validated same-A derivative. The first durable row is retained.
+        processing_provenance.add("generation_id")
+    return all(
+        durable.get(field) == incoming.get(field)
+        for field in set(durable) - processing_provenance
+    )
 
 
 def _replay_index_transition(
@@ -880,11 +1036,11 @@ def _replay_index_transition(
     return changes
 
 
-def _replay_transition_facts(
+def _replay_transition_base(
     *, prior_checkpoint: Any, current_checkpoint: Any,
-    prior_index: Any, current_index: Any, result: Any,
+    prior_index: Any, current_index: Any,
     state_head_sha: str, checkpoint_schema: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], dict[str, Any], str, list[str]]:
     if not isinstance(state_head_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", state_head_sha):
         raise ValueError("replay_state_head_sha_invalid")
     prior = verify_checkpoint(prior_checkpoint, checkpoint_schema)
@@ -920,6 +1076,41 @@ def _replay_transition_facts(
         prior_index, current_index, generation_id=generation_id,
         prior_checkpoint=prior, current_checkpoint=current,
     ))
+    return prior, current, generation_id, changes
+
+
+def _replay_result_identity(result: Any, *, source_id: str, producer_run_id: str) -> tuple[str, str]:
+    if not isinstance(result, Mapping) or set(result) != {
+        "status", "reason", "processing_replay", "candidate_available", "source_id",
+        "producer_run_id", "processor_run_id", "processor_artifact_run_id",
+    }:
+        raise ValueError("replay_processing_result_shape_invalid")
+    processor_run_id = result.get("processor_run_id")
+    processor_artifact_run_id = result.get("processor_artifact_run_id")
+    if (
+        result.get("status") != "idle"
+        or result.get("reason") != "exact_producer_delivery_replay"
+        or result.get("processing_replay") is not True
+        or result.get("candidate_available") is not False
+        or result.get("source_id") != source_id
+        or str(result.get("producer_run_id") or "") != producer_run_id
+        or type(processor_run_id) is not str or not processor_run_id
+        or type(processor_artifact_run_id) is not str or not processor_artifact_run_id
+    ):
+        raise ValueError("replay_processing_result_identity_invalid")
+    return processor_run_id, processor_artifact_run_id
+
+
+def _replay_transition_facts(
+    *, prior_checkpoint: Any, current_checkpoint: Any,
+    prior_index: Any, current_index: Any, result: Any,
+    state_head_sha: str, checkpoint_schema: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    prior, current, generation_id, changes = _replay_transition_base(
+        prior_checkpoint=prior_checkpoint, current_checkpoint=current_checkpoint,
+        prior_index=prior_index, current_index=current_index,
+        state_head_sha=state_head_sha, checkpoint_schema=checkpoint_schema,
+    )
     admission = _replay_admission(prior, prior_index)
     if not isinstance(result, Mapping) or set(result) != {
         "status", "reason", "processing_replay", "candidate_available", "source_id",
@@ -937,6 +1128,8 @@ def _replay_transition_facts(
         or not str(result.get("processor_artifact_run_id") or "")
     ):
         raise ValueError("replay_processing_result_identity_invalid")
+    processor_run_id = str(result["processor_run_id"])
+    processor_artifact_run_id = str(result["processor_artifact_run_id"])
     return {
         "schema_version": REPLAY_PERSISTENCE_SCHEMA,
         "state_head_sha": state_head_sha,
@@ -955,8 +1148,301 @@ def _replay_transition_facts(
         "previous_last_heartbeat_at": prior["last_heartbeat_at"],
         "last_heartbeat_at": current["last_heartbeat_at"],
         "producer_run_id": admission["producer_run_id"],
-        "processor_run_id": str(result["processor_run_id"]),
-        "processor_artifact_run_id": str(result["processor_artifact_run_id"]),
+        "processor_run_id": processor_run_id,
+        "processor_artifact_run_id": processor_artifact_run_id,
+        "processing_result_sha256": _object_sha256(result),
+        "state_changes": sorted(changes),
+    }
+
+
+_REPLAY_V1_RECEIPT_KEYS = frozenset({
+    "schema_version", "state_head_sha", "source_id", "generation_id", "terminal_status",
+    "prior_checkpoint_sha256", "checkpoint_sha256", "generation_index_before_sha256",
+    "generation_index_sha256", "collector_admission_sha256", "original_observation_sha256",
+    "input_artifacts_sha256", "output_artifact_sha256", "output_digests_sha256",
+    "previous_last_heartbeat_at", "last_heartbeat_at", "producer_run_id", "processor_run_id",
+    "processor_artifact_run_id", "processing_result_sha256", "state_changes", "receipt_sha256",
+})
+_REPLAY_V2_RECEIPT_KEYS = frozenset({
+    "schema_version", "disposition", "state_head_sha", "source_id", "generation_id",
+    "terminal_status", "prior_checkpoint_sha256", "checkpoint_sha256",
+    "generation_index_before_sha256", "generation_index_sha256", "latest_admission_id",
+    "latest_collector_admission_sha256", "delivered_admission_id",
+    "delivered_collector_admission_sha256", "latest_observation_sha256",
+    "input_artifacts_sha256", "output_artifact_sha256", "output_digests_sha256",
+    "previous_last_heartbeat_at", "last_heartbeat_at", "producer_run_id",
+    "producer_run_attempt", "producer_artifact_id", "producer_head_sha",
+    "producer_artifact_digest_sha256", "processor_run_id", "processor_artifact_run_id",
+    "processing_result_sha256", "state_changes", "receipt_sha256",
+})
+_EXPECTED_DELIVERY_KEYS = frozenset({
+    "producer_run_id", "run_attempt", "artifact_id", "head_sha", "artifact_digest_sha256",
+})
+
+
+def _validated_expected_delivery(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != _EXPECTED_DELIVERY_KEYS:
+        raise ValueError("replay_expected_delivery_shape_invalid")
+    run_id = value.get("producer_run_id")
+    attempt = value.get("run_attempt")
+    artifact_id = value.get("artifact_id")
+    head_sha = value.get("head_sha")
+    artifact_digest = value.get("artifact_digest_sha256")
+    if (
+        type(run_id) is not str or re.fullmatch(r"[1-9][0-9]*", run_id) is None
+        or type(attempt) is not int or attempt < 1
+        or type(artifact_id) is not str or re.fullmatch(r"[1-9][0-9]*", artifact_id) is None
+        or type(head_sha) is not str or re.fullmatch(r"[a-f0-9]{40}", head_sha) is None
+        or type(artifact_digest) is not str or re.fullmatch(r"[a-f0-9]{64}", artifact_digest) is None
+    ):
+        raise ValueError("replay_expected_delivery_invalid")
+    return {
+        "producer_run_id": run_id,
+        "run_attempt": attempt,
+        "artifact_id": artifact_id,
+        "head_sha": head_sha,
+        "artifact_digest_sha256": artifact_digest,
+    }
+
+
+def _validated_ordinary_replay_inputs(checkpoint: Mapping[str, Any]) -> dict[str, Any]:
+    inputs = checkpoint.get("generation_inputs")
+    if not isinstance(inputs, Mapping) or set(inputs) != _GENERATION_IDENTITY_INPUT_KEYS:
+        raise ValueError("replay_ordinary_generation_inputs_invalid")
+    source_id = inputs.get("source_id")
+    source_scope = inputs.get("source_scope")
+    baseline_sha256 = inputs.get("baseline_sha256")
+    candidate_sha256 = inputs.get("candidate_sha256")
+    revisions = ("policy_sha256", "adapter_revision", "generator_revision", "extractor_revision")
+    if (
+        type(source_id) is not str or len(source_id) < 1
+        or type(source_scope) is not str or len(source_scope) < 1
+        or baseline_sha256 is not None and (
+            type(baseline_sha256) is not str
+            or re.fullmatch(r"[a-f0-9]{64}", baseline_sha256) is None
+        )
+        or type(candidate_sha256) is not str
+        or re.fullmatch(r"[a-f0-9]{64}", candidate_sha256) is None
+        or inputs.get("observation_failure_sha256") is not None
+        or any(
+            type(inputs.get(field)) is not str
+            or re.fullmatch(r"[a-f0-9]{64}", inputs[field]) is None
+            for field in revisions
+        )
+        or _object_sha256(dict(inputs)) != checkpoint.get("generation_id")
+        or source_id != checkpoint.get("source_id")
+        or source_scope != checkpoint.get("source_scope")
+        or checkpoint.get("status") not in {"ready", "no-change"}
+        or source_id != "data_go_kr"
+    ):
+        raise ValueError("replay_ordinary_generation_identity_invalid")
+    return dict(inputs)
+
+
+def _older_replay_admissions(
+    *, prior_checkpoint: Mapping[str, Any], prior_index: Any,
+    delivered_admission_id: Any, expected_delivery: Any,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+    inputs = _validated_ordinary_replay_inputs(prior_checkpoint)
+    latest = _replay_admission(prior_checkpoint, prior_index)
+    observation = prior_checkpoint.get("last_observation")
+    references = prior_checkpoint.get("input_artifacts")
+    latest_references = [
+        item for item in references
+        if isinstance(item, Mapping)
+        and str(item.get("run_id") or "") == latest["producer_run_id"]
+        and item.get("evidence_sha256") == latest["refresh_evidence_sha256"]
+        and str(item.get("artifact_id") or "") == latest["artifact_id"]
+    ] if isinstance(references, list) else []
+    if (
+        len(latest_references) != 1
+        or latest_references[0].get("name") != latest["artifact_name"]
+        or latest_references[0].get("expires_at") != latest["artifact_expires_at"]
+        or latest_references[0].get("candidate_sha256") != latest["candidate_sha256"]
+        or latest_references[0].get("evidence_sha256") != latest["refresh_evidence_sha256"]
+        or not isinstance(observation, Mapping)
+        or observation.get("collection_status") != "success"
+        or observation.get("execution_mode") != "live"
+    ):
+        raise ValueError("replay_latest_input_artifact_binding_mismatch")
+    delivery = _validated_expected_delivery(expected_delivery)
+    if type(delivered_admission_id) is not str or re.fullmatch(r"[a-f0-9]{64}", delivered_admission_id) is None:
+        raise ValueError("replay_delivered_admission_id_invalid")
+    if not isinstance(prior_index, Mapping):
+        raise ValueError("replay_generation_index_invalid")
+    try:
+        ledger = validate_ledger(prior_index.get("collector_handoff"))
+    except HandoffError as exc:
+        raise ValueError(str(exc)) from exc
+    delivered_rows = [
+        item for item in ledger["admitted_observations"]
+        if item.get("admission_id") == delivered_admission_id
+    ]
+    if len(delivered_rows) != 1:
+        raise ValueError("replay_delivered_admission_not_unique")
+    try:
+        delivered = validate_admission_row(delivered_rows[0])
+    except HandoffError as exc:
+        raise ValueError(str(exc)) from exc
+    if delivered["admission_id"] != delivered_admission_id:
+        raise ValueError("replay_delivered_admission_id_mismatch")
+    if (
+        delivered["admission_id"] == latest["admission_id"]
+        or admission_order_key(delivered) >= admission_order_key(latest)
+    ):
+        raise ValueError("replay_delivered_admission_not_older")
+    if (
+        delivery["producer_run_id"] != delivered["producer_run_id"]
+        or delivery["run_attempt"] != delivered["run_attempt"]
+        or delivery["artifact_id"] != delivered["artifact_id"]
+        or delivery["head_sha"] != delivered["head_sha"]
+        or delivery["artifact_digest_sha256"] != delivered["artifact_digest_sha256"]
+        or delivered["candidate_sha256"] != inputs["candidate_sha256"]
+        or latest["candidate_sha256"] != inputs["candidate_sha256"]
+    ):
+        raise ValueError("replay_delivered_admission_binding_mismatch")
+    observation = prior_checkpoint.get("last_observation")
+    if (
+        not isinstance(observation, Mapping)
+        or observation.get("collection_status") != "success"
+        or observation.get("execution_mode") != "live"
+    ):
+        raise ValueError("replay_latest_observation_not_live_success")
+    return latest, delivered, delivery, inputs
+
+
+def _older_admitted_delivery_context(
+    *, prior_checkpoint: Mapping[str, Any], prior_index: Any,
+    incoming_admission: Any, current_generation_id: str,
+) -> dict[str, Any] | None:
+    """Resolve an older live delivery only through its retained FIRST ledger row."""
+    if prior_checkpoint.get("status") not in {"ready", "no-change"}:
+        return None
+    if prior_checkpoint.get("source_id") != "data_go_kr":
+        return None
+    inputs_value = prior_checkpoint.get("generation_inputs")
+    if not isinstance(inputs_value, Mapping) or set(inputs_value) != _GENERATION_IDENTITY_INPUT_KEYS:
+        return None
+    _validated_ordinary_replay_inputs(prior_checkpoint)
+    if current_generation_id != prior_checkpoint.get("generation_id"):
+        raise ValueError("replay_ordinary_generation_identity_invalid")
+    if not isinstance(prior_index, Mapping):
+        raise ValueError("replay_generation_index_invalid")
+
+    latest = _replay_admission(prior_checkpoint, prior_index)
+    incoming = validate_admission_row(incoming_admission)
+    if admission_order_key(incoming) >= admission_order_key(latest):
+        return None
+
+    expected_delivery = {
+        "producer_run_id": incoming["producer_run_id"],
+        "run_attempt": incoming["run_attempt"],
+        "artifact_id": incoming["artifact_id"],
+        "head_sha": incoming["head_sha"],
+        "artifact_digest_sha256": incoming["artifact_digest_sha256"],
+    }
+    latest, delivered, delivery, _inputs = _older_replay_admissions(
+        prior_checkpoint=prior_checkpoint,
+        prior_index=prior_index,
+        delivered_admission_id=incoming["admission_id"],
+        expected_delivery=expected_delivery,
+    )
+    prior_outcome = prior_checkpoint.get("outcome")
+    if (
+        prior_checkpoint.get("status") == "ready"
+        and isinstance(prior_outcome, Mapping)
+        and int(prior_outcome.get("detail_retry_count", 0) or 0) > 0
+    ):
+        raise ValueError("replay_older_delivery_generation_not_terminal")
+    if (
+        set(delivered) != set(incoming)
+        or incoming.get("generation_id") != current_generation_id
+        or any(
+            delivered.get(field) != incoming.get(field)
+            for field in set(delivered) - {"admitted_at", "generation_id"}
+        )
+    ):
+        raise ValueError("replay_delivered_admission_first_row_mismatch")
+    return {
+        "latest_admission_id": latest["admission_id"],
+        "delivered_admission_id": delivered["admission_id"],
+        "expected_delivery": delivery,
+    }
+
+
+def _older_admitted_transition_facts(
+    *, prior_checkpoint: Any, current_checkpoint: Any,
+    prior_index: Any, current_index: Any, result: Any,
+    state_head_sha: str, delivered_admission_id: Any, expected_delivery: Any,
+    checkpoint_schema: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    prior, current, generation_id, changes = _replay_transition_base(
+        prior_checkpoint=prior_checkpoint, current_checkpoint=current_checkpoint,
+        prior_index=prior_index, current_index=current_index,
+        state_head_sha=state_head_sha, checkpoint_schema=checkpoint_schema,
+    )
+    latest, delivered, delivery, _inputs = _older_replay_admissions(
+        prior_checkpoint=prior, prior_index=prior_index,
+        delivered_admission_id=delivered_admission_id, expected_delivery=expected_delivery,
+    )
+    if (
+        not isinstance(result, Mapping)
+        or type(result.get("producer_run_id")) is not str
+        or re.fullmatch(r"[1-9][0-9]*", result["producer_run_id"]) is None
+        or result["producer_run_id"] != delivered["producer_run_id"]
+    ):
+        raise ValueError("replay_processing_result_identity_invalid")
+    if prior["status"] == "ready":
+        outcome = prior.get("outcome")
+        retry_count = outcome.get("detail_retry_count", 0) if isinstance(outcome, Mapping) else None
+        if type(retry_count) is not int or retry_count != 0:
+            raise ValueError("replay_older_delivery_generation_not_terminal")
+
+    # The v2 transition is a heartbeat-only projection on the existing target
+    # row. The v1 helper historically permits moving that row to the end, so
+    # keep this stricter check local to the v2 schema.
+    expected_index = copy.deepcopy(dict(prior_index))
+    target_rows = [
+        row for row in expected_index.get("generations", [])
+        if isinstance(row, dict) and row.get("generation_id") == generation_id
+    ]
+    if len(target_rows) != 1:
+        raise ValueError("replay_generation_index_target_invalid")
+    target_rows[0]["updated_at"] = current["last_heartbeat_at"]
+    if canonical_json(dict(current_index)) != canonical_json(expected_index):
+        raise ValueError("replay_generation_index_nonadmission_change")
+    processor_run_id, processor_artifact_run_id = _replay_result_identity(
+        result, source_id=str(prior["source_id"]),
+        producer_run_id=delivered["producer_run_id"],
+    )
+    return {
+        "schema_version": REPLAY_PERSISTENCE_SCHEMA_V2,
+        "disposition": "older_admitted",
+        "state_head_sha": state_head_sha,
+        "source_id": prior["source_id"],
+        "generation_id": generation_id,
+        "terminal_status": prior["status"],
+        "prior_checkpoint_sha256": prior["checkpoint_sha256"],
+        "checkpoint_sha256": current["checkpoint_sha256"],
+        "generation_index_before_sha256": _object_sha256(prior_index),
+        "generation_index_sha256": _object_sha256(current_index),
+        "latest_admission_id": latest["admission_id"],
+        "latest_collector_admission_sha256": _object_sha256(latest),
+        "delivered_admission_id": delivered["admission_id"],
+        "delivered_collector_admission_sha256": _object_sha256(delivered),
+        "latest_observation_sha256": _object_sha256(prior["last_observation"]),
+        "input_artifacts_sha256": _object_sha256(prior["input_artifacts"]),
+        "output_artifact_sha256": _object_sha256(prior["output_artifact"]),
+        "output_digests_sha256": _object_sha256(prior["output_digests"]),
+        "previous_last_heartbeat_at": prior["last_heartbeat_at"],
+        "last_heartbeat_at": current["last_heartbeat_at"],
+        "producer_run_id": delivery["producer_run_id"],
+        "producer_run_attempt": delivery["run_attempt"],
+        "producer_artifact_id": delivery["artifact_id"],
+        "producer_head_sha": delivery["head_sha"],
+        "producer_artifact_digest_sha256": delivery["artifact_digest_sha256"],
+        "processor_run_id": processor_run_id,
+        "processor_artifact_run_id": processor_artifact_run_id,
         "processing_result_sha256": _object_sha256(result),
         "state_changes": sorted(changes),
     }
@@ -968,21 +1454,61 @@ def build_replay_persistence_receipt(**kwargs: Any) -> dict[str, Any]:
     return receipt
 
 
-def verify_replay_persistence_receipt(receipt: Any, **kwargs: Any) -> dict[str, Any]:
-    if not isinstance(receipt, dict) or set(receipt) != {
-        "schema_version", "state_head_sha", "source_id", "generation_id", "terminal_status",
-        "prior_checkpoint_sha256", "checkpoint_sha256", "generation_index_before_sha256",
-        "generation_index_sha256", "collector_admission_sha256", "original_observation_sha256",
-        "input_artifacts_sha256", "output_artifact_sha256", "output_digests_sha256",
-        "previous_last_heartbeat_at", "last_heartbeat_at", "producer_run_id", "processor_run_id",
-        "processor_artifact_run_id", "processing_result_sha256", "state_changes", "receipt_sha256",
-    }:
-        raise ValueError("replay_persistence_receipt_shape_invalid")
+def build_older_admitted_replay_persistence_receipt(
+    *, prior_checkpoint: Any, current_checkpoint: Any,
+    prior_index: Any, current_index: Any, result: Any,
+    state_head_sha: str, delivered_admission_id: str, expected_delivery: Any,
+    checkpoint_schema: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    receipt = _older_admitted_transition_facts(
+        prior_checkpoint=prior_checkpoint, current_checkpoint=current_checkpoint,
+        prior_index=prior_index, current_index=current_index, result=result,
+        state_head_sha=state_head_sha, delivered_admission_id=delivered_admission_id,
+        expected_delivery=expected_delivery, checkpoint_schema=checkpoint_schema,
+    )
+    receipt["receipt_sha256"] = _object_sha256(receipt)
+    return receipt
+
+
+def verify_replay_persistence_receipt(
+    receipt: Any, *, expected_delivery: Any = None, **kwargs: Any,
+) -> dict[str, Any]:
+    if not isinstance(receipt, dict) or type(receipt.get("schema_version")) is not str:
+        raise ValueError("replay_persistence_receipt_schema_invalid")
+    schema_version = receipt["schema_version"]
+    if schema_version == REPLAY_PERSISTENCE_SCHEMA:
+        if expected_delivery is not None:
+            raise ValueError("replay_v1_expected_delivery_unexpected")
+        if set(receipt) != _REPLAY_V1_RECEIPT_KEYS:
+            raise ValueError("replay_persistence_receipt_shape_invalid")
+        build = build_replay_persistence_receipt
+    elif schema_version == REPLAY_PERSISTENCE_SCHEMA_V2:
+        if set(receipt) != _REPLAY_V2_RECEIPT_KEYS:
+            raise ValueError("replay_persistence_receipt_shape_invalid")
+        if (
+            type(receipt.get("producer_run_attempt")) is not int
+            or receipt["producer_run_attempt"] < 1
+        ):
+            raise ValueError("replay_persistence_receipt_identity_invalid")
+        if expected_delivery is None:
+            raise ValueError("replay_expected_delivery_missing")
+        if receipt.get("disposition") != "older_admitted":
+            raise ValueError("replay_persistence_receipt_disposition_invalid")
+        build = None
+    else:
+        raise ValueError("replay_persistence_receipt_schema_invalid")
     unsigned = dict(receipt)
     claimed = unsigned.pop("receipt_sha256")
     if not isinstance(claimed, str) or claimed != _object_sha256(unsigned):
         raise ValueError("replay_persistence_receipt_digest_invalid")
-    expected = build_replay_persistence_receipt(**kwargs)
+    if build is not None:
+        expected = build(**kwargs)
+    else:
+        expected = build_older_admitted_replay_persistence_receipt(
+            **kwargs,
+            delivered_admission_id=receipt.get("delivered_admission_id"),
+            expected_delivery=expected_delivery,
+        )
     if receipt != expected:
         raise ValueError("replay_persistence_receipt_binding_mismatch")
     return receipt
@@ -1105,6 +1631,8 @@ def ensure_fence(checkpoint: dict[str, Any], run_id: str, token: int, now: dt.da
 
 
 def safe_error_class(exc: BaseException) -> str:
+    if type(exc) is ResumeCacheValidationError:
+        return "valueerror"
     name = type(exc).__name__.lower()
     text_value = str(exc).lower()
     if "too_large" in text_value:
@@ -1114,6 +1642,32 @@ def safe_error_class(exc: BaseException) -> str:
     if isinstance(exc, (TimeoutError, urllib.error.URLError)):
         return "network_timeout_or_error"
     return name[:64]
+
+
+def resume_validation_diagnostic(exc: BaseException, phase: str) -> dict[str, Any] | None:
+    """Return only a known phase and an allowlisted resume-validation code."""
+    if phase not in RESUME_VALIDATION_PHASES:
+        return None
+    if type(exc) is ResumeCacheValidationError:
+        code = exc.diagnostic_code
+        if type(code) is not str or code not in RESUME_VALIDATION_ERROR_CODES:
+            return None
+        if code == RESUME_VALIDATION_MERGE_CODE:
+            if phase != "parent_cache_merge":
+                return None
+        elif phase == "parent_cache_merge":
+            return None
+    elif isinstance(exc, json.JSONDecodeError):
+        code = "json_decode_error"
+    elif isinstance(exc, OSError):
+        code = "io_error"
+    elif isinstance(exc, ValueError):
+        code = "validation_error"
+    else:
+        return None
+    if code not in RESUME_VALIDATION_ERROR_CODES | RESUME_VALIDATION_FALLBACK_CODES:
+        return None
+    return {"version": 1, "phase": phase, "code": code}
 
 
 def validate_failure_diagnostic(value: Any, *, identity: str | None = None) -> dict[str, Any]:
@@ -1414,7 +1968,7 @@ def validated_resume_records(
     if index_path.is_file():
         index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
         if not isinstance(index, dict) or index.get("schema_version") != CHECKPOINT_SCHEMA or not isinstance(index.get("generations"), list):
-            raise ValueError("corrupt_generation_index")
+            raise ResumeCacheValidationError("corrupt_generation_index")
         for entry in reversed(index["generations"]):
             if not isinstance(entry, dict) or entry.get("generation_id") == checkpoint["generation_id"]:
                 continue
@@ -1446,7 +2000,7 @@ def validated_resume_records(
             owner, evidence_digest = old, digest
             break
     if owner is None or evidence_digest is None:
-        raise ValueError("resume_artifact_unbound")
+        raise ResumeCacheValidationError("resume_artifact_unbound")
     evidence = load_json(path, maximum_bytes=MAX_INPUT_BYTES)
     expected_top = {
         "schema_version", "original_candidate_sha256", "provider_index_sha256",
@@ -1460,7 +2014,7 @@ def validated_resume_records(
         or evidence.get("provider_index_sha256") != owner.get("generation_inputs", {}).get("adapter_revision")
         or not isinstance(evidence.get("records"), list)
     ):
-        raise ValueError("resume_enrichment_binding_mismatch")
+        raise ResumeCacheValidationError("resume_enrichment_binding_mismatch")
     owner_detail_by_id: dict[str, dict[str, Any]] = {}
     for owner_detail in owner.get("detail_records", []):
         if not isinstance(owner_detail, dict):
@@ -1468,7 +2022,7 @@ def validated_resume_records(
         owner_identity = str(owner_detail.get("id") or "")
         if owner_identity:
             if owner_identity in owner_detail_by_id:
-                raise ValueError("resume_checkpoint_detail_identity_invalid")
+                raise ResumeCacheValidationError("resume_checkpoint_detail_identity_invalid")
             owner_detail_by_id[owner_identity] = owner_detail
     owner_contract_failure_ids = {
         identity for identity, detail in owner_detail_by_id.items()
@@ -1480,7 +2034,7 @@ def validated_resume_records(
     if "worker_outcomes" in evidence:
         outcomes = evidence["worker_outcomes"]
         if not isinstance(outcomes, list):
-            raise ValueError("resume_worker_outcomes_invalid")
+            raise ResumeCacheValidationError("resume_worker_outcomes_invalid")
         successful_ids = {
             str(record.get("api_key", {}).get("id") or "")
             for record in evidence["records"] if isinstance(record, dict) and isinstance(record.get("api_key"), dict)
@@ -1500,13 +2054,13 @@ def validated_resume_records(
                 or not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("source_sha256") or ""))
                 or (outcome.get("guide_sha256") is not None and not re.fullmatch(r"[a-f0-9]{64}", str(outcome.get("guide_sha256"))))
             ):
-                raise ValueError("resume_worker_outcome_invalid")
+                raise ResumeCacheValidationError("resume_worker_outcome_invalid")
             identity = str(outcome["api_key"].get("id") or "")
             if "failure_diagnostic" in outcome:
                 try:
                     diagnostic = validate_failure_diagnostic(outcome["failure_diagnostic"], identity=identity)
                 except ValueError as exc:
-                    raise ValueError("resume_worker_outcome_invalid") from exc
+                    raise ResumeCacheValidationError("resume_worker_outcome_invalid") from exc
             else:
                 diagnostic = None
             if "link_metadata" in outcome:
@@ -1515,28 +2069,28 @@ def validated_resume_records(
                         outcome["link_metadata"], str(outcome["api_key"].get("id") or ""), registered_hosts,
                     )
                 except (ValueError, TypeError) as exc:
-                    raise ValueError("resume_worker_link_metadata_invalid") from exc
+                    raise ResumeCacheValidationError("resume_worker_link_metadata_invalid") from exc
                 if (
                     outcome.get("status") != "quarantined"
                     or not isinstance(diagnostic, dict)
                     or diagnostic.get("code") != "resolved_link_operation_contract_unproven"
                     or diagnostic.get("phase") != "resolver"
                 ):
-                    raise ValueError("resume_worker_link_metadata_binding_invalid")
+                    raise ResumeCacheValidationError("resume_worker_link_metadata_binding_invalid")
             elif (
                 isinstance(diagnostic, dict)
                 and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
             ):
-                raise ValueError("resume_worker_link_metadata_missing")
+                raise ResumeCacheValidationError("resume_worker_link_metadata_missing")
             if not identity or identity in outcome_ids or identity in successful_ids:
-                raise ValueError("resume_worker_outcome_identity_invalid")
+                raise ResumeCacheValidationError("resume_worker_outcome_identity_invalid")
             row = candidate_by_id.get(identity)
             if (
                 row is None or not row_is_link(row)
                 or outcome["source_sha256"] != source_fingerprint(row)
                 or outcome["guide_sha256"] != guide_fingerprint(row)
             ):
-                raise ValueError("resume_worker_outcome_binding_mismatch")
+                raise ResumeCacheValidationError("resume_worker_outcome_binding_mismatch")
             outcome_ids.add(identity)
             owner_detail = owner_detail_by_id.get(identity)
             owner_diagnostic = owner_detail.get("failure_diagnostic") if owner_detail else None
@@ -1558,7 +2112,7 @@ def validated_resume_records(
                     or owner_has_metadata != outcome_has_metadata
                     or owner_has_metadata and owner_detail.get("link_metadata") != outcome.get("link_metadata")
                 ):
-                    raise ValueError("resume_worker_contract_failure_binding_mismatch")
+                    raise ResumeCacheValidationError("resume_worker_contract_failure_binding_mismatch")
             if (
                 isinstance(diagnostic, dict)
                 and diagnostic.get("code") == "resolved_link_operation_contract_unproven"
@@ -1570,7 +2124,7 @@ def validated_resume_records(
                 if materialized is not None:
                     locally_materialized_declarations[identity] = materialized
     if owner_contract_failure_ids - outcome_ids:
-        raise ValueError("resume_worker_contract_failure_outcome_missing")
+        raise ResumeCacheValidationError("resume_worker_contract_failure_outcome_missing")
     owner_inputs = owner.get("generation_inputs", {}) if isinstance(owner, dict) else {}
     expected_extractor_revision = (
         owner_inputs.get("extractor_revision") if allow_parent_extractor_revision
@@ -1594,13 +2148,13 @@ def validated_resume_records(
             or set(record) not in (expected_record_fields, expected_record_fields | {"declaration_provenance"})
             or record.get("status") != "enriched"
         ):
-            raise ValueError("resume_enrichment_record_invalid")
+            raise ResumeCacheValidationError("resume_enrichment_record_invalid")
         api_key = record.get("api_key")
         if not isinstance(api_key, dict) or api_key.get("provider") != "data.go.kr":
-            raise ValueError("resume_enrichment_identity_invalid")
+            raise ResumeCacheValidationError("resume_enrichment_identity_invalid")
         identity = str(api_key.get("id") or "")
         if identity in resumed or identity not in candidate_by_id or not row_is_link(candidate_by_id[identity]):
-            raise ValueError("resume_enrichment_identity_mismatch")
+            raise ResumeCacheValidationError("resume_enrichment_identity_mismatch")
         row = candidate_by_id[identity]
         expected_url = safe_public_page_url(identity)
         provenance = record.get("source_provenance")
@@ -1609,7 +2163,7 @@ def validated_resume_records(
         observed_guide_digest = record.get("observed_guide_url_sha256")
         if record.get("source_sha256") != source_fingerprint(row) or record.get("guide_sha256") != guide_fingerprint(row):
             if reject_stale_source_or_guide_contract:
-                raise ValueError("resume_enrichment_source_or_guide_identity_mismatch")
+                raise ResumeCacheValidationError("resume_enrichment_source_or_guide_identity_mismatch")
             continue
         if (
             not isinstance(provenance, dict)
@@ -1621,20 +2175,20 @@ def validated_resume_records(
             or not isinstance(operations, list) or not operations
             or record.get("operations_sha256") != sha256_bytes(canonical_json(operations))
         ):
-            raise ValueError("resume_enrichment_source_binding_mismatch")
+            raise ResumeCacheValidationError("resume_enrichment_source_binding_mismatch")
         observed_at = parse_timestamp(str(provenance.get("observed_at")))
         if observed_at > now + dt.timedelta(minutes=5):
-            raise ValueError("resume_enrichment_observation_in_future")
+            raise ResumeCacheValidationError("resume_enrichment_observation_in_future")
         if now - observed_at >= dt.timedelta(days=DETAIL_OBSERVATION_TTL_DAYS):
             continue
         if observed_guide is None:
             if observed_guide_digest is not None or guide_fingerprint(row) is not None:
-                raise ValueError("resume_enrichment_guide_binding_mismatch")
+                raise ResumeCacheValidationError("resume_enrichment_guide_binding_mismatch")
         elif (
             not isinstance(observed_guide, str)
             or observed_guide_digest != sha256_bytes(observed_guide.encode("utf-8"))
         ):
-            raise ValueError("resume_enrichment_guide_binding_mismatch")
+            raise ResumeCacheValidationError("resume_enrichment_guide_binding_mismatch")
         declaration_provenance = record.get("declaration_provenance")
         has_declared_operation = any(
             isinstance(operation, dict)
@@ -1645,13 +2199,13 @@ def validated_resume_records(
         )
         if declaration_provenance is not None or has_declared_operation:
             if declaration_provenance is None:
-                raise ValueError("resume_seoul_declaration_provenance_missing")
+                raise ResumeCacheValidationError("resume_seoul_declaration_provenance_missing")
             try:
                 SEOUL_DECLARATION.validate_enriched_record(row, record)
                 link_metadata = declaration_provenance.get("page_resolver")
                 DETAIL_HELPERS.validate_link_metadata(link_metadata, identity, registered_hosts)
             except (AttributeError, KeyError, TypeError, ValueError) as exc:
-                raise ValueError("resume_seoul_declaration_binding_invalid") from exc
+                raise ResumeCacheValidationError("resume_seoul_declaration_binding_invalid") from exc
         historical_operations = row.get("operations", [])
         operations_to_validate = operations
         if declaration_provenance is not None:
@@ -1673,12 +2227,12 @@ def validated_resume_records(
                 or (observed_guide is None and "guide_url" in raw)
                 or (observed_guide is not None and raw.get("guide_url") != observed_guide)
             ):
-                raise ValueError("resume_enrichment_operation_binding_mismatch")
+                raise ResumeCacheValidationError("resume_enrichment_operation_binding_mismatch")
             if raw.get("operation_declaration_id") is not None:
                 try:
                     SEOUL_DECLARATION.validate_declared_operation(row, operation)
                 except (TypeError, ValueError) as exc:
-                    raise ValueError("resume_seoul_declared_operation_invalid") from exc
+                    raise ResumeCacheValidationError("resume_seoul_declared_operation_invalid") from exc
         resumed[identity] = record
     for identity, record in locally_materialized_declarations.items():
         if identity not in resumed:
@@ -1703,7 +2257,7 @@ def merge_derivation_enrichment_records(
             or prior.get("operations_sha256") != candidate.get("operations_sha256")
             or prior.get("operations") != candidate.get("operations")
         ):
-            raise ValueError("derivation_parent_enrichment_contribution_conflict")
+            raise ResumeCacheValidationError("derivation_parent_enrichment_contribution_conflict")
         prior_time = parse_timestamp(str((prior.get("source_provenance") or {}).get("observed_at") or ""))
         candidate_time = parse_timestamp(str((candidate.get("source_provenance") or {}).get("observed_at") or ""))
         if candidate_time > prior_time:
@@ -3009,8 +3563,16 @@ def process(
         load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
         if index_path.is_file() else None
     )
+    older_admitted_delivery = None
+    if collector_admission is not None and args.execution_mode == "live":
+        older_admitted_delivery = _older_admitted_delivery_context(
+            prior_checkpoint=replay_prior_checkpoint,
+            prior_index=replay_prior_index,
+            incoming_admission=collector_admission,
+            current_generation_id=str(checkpoint.get("generation_id") or ""),
+        )
     refs = checkpoint.setdefault("input_artifacts", [])
-    if not any(
+    if older_admitted_delivery is None and not any(
         isinstance(ref, dict)
         and ref.get("run_id") == args.producer_run_id
         and ref.get("artifact_id") == args.input_artifact_id
@@ -3034,8 +3596,8 @@ def process(
         "execution_mode": args.execution_mode,
     }
     prior_observation = checkpoint.get("last_observation")
-    observation_is_older_replay = False
-    if isinstance(prior_observation, dict) and collector_admission is not None:
+    observation_is_older_replay = older_admitted_delivery is not None
+    if not observation_is_older_replay and isinstance(prior_observation, dict) and collector_admission is not None:
         prior_artifact_id = None
         matching_prior_refs = [
             ref for ref in refs if isinstance(ref, dict)
@@ -3079,37 +3641,129 @@ def process(
         retention_candidate["status"] = "retry"
     # Plan the exact required/retained generation set before terminal replay,
     # quarantine, lease acquisition, or request reservation can write state.
-    preflight_generation_retention(index_path, generation_dir, retention_candidate)
+    retained_generation_ids = preflight_generation_retention(
+        index_path, generation_dir, retention_candidate,
+    )
+    if older_admitted_delivery is not None:
+        prior_generation_ids = {
+            str(row.get("generation_id"))
+            for row in replay_prior_index.get("generations", [])
+            if isinstance(row, Mapping)
+        } if isinstance(replay_prior_index, Mapping) else set()
+        if not prior_generation_ids or retained_generation_ids != prior_generation_ids:
+            raise ValueError("replay_generation_retention_would_prune")
     if checkpoint.get("status") in {"ready", "no-change", "quarantined"} and not new_observation_received and not ready_has_detail_work:
-        checkpoint["last_heartbeat_at"] = timestamp(now)
-        atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
-        append_generation_index(
-            index_path, checkpoint_path, checkpoint,
-            collector_admission=collector_admission, legacy_floor=legacy_floor, admitted_at=timestamp(now),
-        )
-        args.exact_delivery_replay = True
-        if checkpoint.get("status") in {"ready", "no-change"}:
+        terminal_status = checkpoint.get("status")
+        now_text = timestamp(now)
+        exact_replay = args.execution_mode == "live" and terminal_status in {"ready", "no-change"}
+        if exact_replay:
             if (
-                collector_admission is not None
-                and replay_prior_index is not None
-                and getattr(args, "replay_state_head_sha", None)
+                collector_admission is None
+                or replay_prior_index is None
+                or not getattr(args, "replay_state_head_sha", None)
             ):
+                raise ValueError("replay_authenticated_context_unavailable")
+            if older_admitted_delivery is not None:
+                current_checkpoint = copy.deepcopy(replay_prior_checkpoint)
+                current_checkpoint["last_heartbeat_at"] = now_text
+                current_checkpoint = seal_checkpoint(current_checkpoint)
+                current_index = copy.deepcopy(replay_prior_index)
+                target_rows = [
+                    row for row in current_index.get("generations", [])
+                    if isinstance(row, dict)
+                    and row.get("generation_id") == current_checkpoint["generation_id"]
+                ]
+                if len(target_rows) != 1:
+                    raise ValueError("replay_generation_index_target_invalid")
+                target_rows[0]["updated_at"] = now_text
+                replay_variant = "older_admitted_v2"
+            else:
                 durable_admission = _replay_admission(replay_prior_checkpoint, replay_prior_index)
                 incoming_admission = validate_admission_row(collector_admission)
-                if any(
-                    durable_admission.get(field) != incoming_admission.get(field)
-                    for field in set(durable_admission) - {"admitted_at"}
+                if not _replay_incoming_admission_matches(
+                    durable_admission, incoming_admission,
+                    current_generation_id=str(checkpoint.get("generation_id") or ""),
                 ):
                     raise ValueError("replay_authenticated_admission_mismatch")
-                args.exact_delivery_replay_context = {
-                    "prior_checkpoint": replay_prior_checkpoint,
-                    "current_checkpoint": copy.deepcopy(checkpoint),
-                    "prior_index": replay_prior_index,
-                    "current_index": load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT),
-                    "state_head_sha": args.replay_state_head_sha,
-                    "checkpoint_schema": schema,
+
+                # Validate the exact checkpoint/index transition before touching
+                # State. append_generation_index is run against a temporary index,
+                # while its read-only retention inputs remain the selected State.
+                current_checkpoint = copy.deepcopy(checkpoint)
+                current_checkpoint["last_heartbeat_at"] = now_text
+                current_checkpoint = seal_checkpoint(current_checkpoint)
+                with tempfile.TemporaryDirectory(prefix="upstream-catalogue-replay-index-") as temp_dir:
+                    proposed_index_path = pathlib.Path(temp_dir) / "index.json"
+                    atomic_write_json(proposed_index_path, replay_prior_index)
+                    append_generation_index(
+                        proposed_index_path, checkpoint_path, current_checkpoint,
+                        collector_admission=collector_admission,
+                        legacy_floor=legacy_floor,
+                        admitted_at=now_text,
+                    )
+                    current_index = load_json(proposed_index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+                replay_variant = "latest_v1"
+            replay_context = {
+                "prior_checkpoint": replay_prior_checkpoint,
+                "current_checkpoint": current_checkpoint,
+                "prior_index": replay_prior_index,
+                "current_index": current_index,
+                "state_head_sha": args.replay_state_head_sha,
+                "checkpoint_schema": schema,
+            }
+            if replay_variant == "older_admitted_v2":
+                replay_context["variant"] = replay_variant
+                replay_context["delivered_admission_id"] = older_admitted_delivery["delivered_admission_id"]
+                replay_context["expected_delivery"] = older_admitted_delivery["expected_delivery"]
+            replay_result = processing_result(
+                current_checkpoint,
+                exact_delivery_replay=True,
+                producer_run_id=args.producer_run_id,
+                processor_run_id=args.processor_run_id or args.producer_run_id,
+                processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+            )
+            if replay_variant == "older_admitted_v2":
+                v2_context = {
+                    key: value for key, value in replay_context.items()
+                    if key not in {"variant", "expected_delivery", "delivered_admission_id"}
                 }
-        return (0 if checkpoint.get("status") in {"ready", "no-change"} else 3), checkpoint
+                proposed_receipt = build_older_admitted_replay_persistence_receipt(
+                    result=replay_result,
+                    delivered_admission_id=replay_context["delivered_admission_id"],
+                    expected_delivery=replay_context["expected_delivery"],
+                    **v2_context,
+                )
+                verify_replay_persistence_receipt(
+                    proposed_receipt,
+                    result=replay_result,
+                    expected_delivery=replay_context["expected_delivery"],
+                    **v2_context,
+                )
+            else:
+                v1_context = {key: value for key, value in replay_context.items() if key != "variant"}
+                proposed_receipt = build_replay_persistence_receipt(result=replay_result, **v1_context)
+                verify_replay_persistence_receipt(proposed_receipt, result=replay_result, **v1_context)
+            args.exact_delivery_replay = True
+            args.exact_delivery_replay_context = replay_context
+            checkpoint = current_checkpoint
+        else:
+            checkpoint["last_heartbeat_at"] = now_text
+            checkpoint = seal_checkpoint(checkpoint)
+            args.exact_delivery_replay = False
+
+        atomic_write_json(checkpoint_path, checkpoint)
+        if exact_replay and older_admitted_delivery is not None:
+            atomic_write_json(index_path, args.exact_delivery_replay_context["current_index"])
+        else:
+            append_generation_index(
+                index_path, checkpoint_path, checkpoint,
+                collector_admission=collector_admission, legacy_floor=legacy_floor, admitted_at=now_text,
+            )
+        if exact_replay:
+            persisted_index = load_json(index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT)
+            if persisted_index != args.exact_delivery_replay_context["current_index"]:
+                raise ValueError("replay_persisted_transition_mismatch")
+        return (0 if terminal_status in {"ready", "no-change"} else 3), checkpoint
     if checkpoint.get("status") in {"ready", "no-change"} and (new_observation_received or ready_has_detail_work):
         checkpoint["status"] = "retry"
 
@@ -3180,6 +3834,7 @@ def process(
     baseline_asset = unique_rows(baseline_rows, "baseline")
     candidate_asset = unique_rows(candidate_rows, "candidate")
     registered_hosts = DETAIL_HELPERS.registered_hosts(load_json(args.provider_index))
+    diagnostic_phase = "resume_parent_cache"
     try:
         all_cached_records = validated_resume_records(
             args.resume_enrichment_evidence,
@@ -3199,6 +3854,7 @@ def process(
         )
         if derivation is not None:
             canonical_evidence_path = args.canonical_parent_bundle_dir / "upstream-catalogue-enrichment-evidence.json"
+            diagnostic_phase = "canonical_parent_cache"
             canonical_records = validated_resume_records(
                 canonical_evidence_path,
                 checkpoint=checkpoint,
@@ -3213,9 +3869,14 @@ def process(
                 expected_owner_generation_id=derivation["canonical_parent_processor"]["generation_id"],
                 reject_stale_source_or_guide_contract=True,
             )
+            diagnostic_phase = "parent_cache_merge"
             all_cached_records = merge_derivation_enrichment_records(all_cached_records, canonical_records)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
-        checkpoint.update({"status": "quarantined", "outcome": {"reason": safe_error_class(exc)}, "lease": None})
+        outcome = {"reason": safe_error_class(exc)}
+        diagnostic = resume_validation_diagnostic(exc, diagnostic_phase)
+        if diagnostic is not None:
+            outcome["resume_validation_diagnostic"] = diagnostic
+        checkpoint.update({"status": "quarantined", "outcome": outcome, "lease": None})
         checkpoint["last_heartbeat_at"] = timestamp(now)
         atomic_write_json(checkpoint_path, seal_checkpoint(checkpoint))
         append_generation_index(index_path, checkpoint_path, checkpoint)
@@ -4023,22 +4684,63 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("failed_processor_recovery_arguments_incomplete")
             status, checkpoint = process(args)
         exact_delivery_replay = bool(getattr(args, "exact_delivery_replay", False))
-        result = processing_result(
-            checkpoint,
-            exact_delivery_replay=exact_delivery_replay,
-            producer_run_id=args.producer_run_id,
-            processor_run_id=args.processor_run_id or args.producer_run_id,
-            processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+        checkpoint_is_sealed = (
+            checkpoint.get("schema_version") == CHECKPOINT_SCHEMA
+            and checkpoint.get("checkpoint_sha256") == checkpoint_digest(checkpoint)
         )
-        atomic_output(args.output_dir, "upstream-catalogue-processing-result.json", result)
-        if checkpoint.get("schema_version") == CHECKPOINT_SCHEMA and checkpoint.get("checkpoint_sha256") == checkpoint_digest(checkpoint):
-            if exact_delivery_replay:
-                replay_context = getattr(args, "exact_delivery_replay_context", None)
-                if replay_context is not None:
-                    receipt = build_replay_persistence_receipt(result=result, **replay_context)
-                    atomic_output(args.output_dir, "upstream-catalogue-checkpoint-receipt.json", checkpoint)
-                    atomic_output(args.output_dir, REPLAY_PERSISTENCE_RECEIPT, receipt)
+        if exact_delivery_replay:
+            replay_context = getattr(args, "exact_delivery_replay_context", None)
+            if not checkpoint_is_sealed or not isinstance(replay_context, dict):
+                raise ValueError("replay_authenticated_context_unavailable")
+            result = processing_result(
+                checkpoint,
+                exact_delivery_replay=True,
+                producer_run_id=args.producer_run_id,
+                processor_run_id=args.processor_run_id or args.producer_run_id,
+                processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+            )
+            variant = replay_context.get("variant", "latest_v1")
+            if variant == "older_admitted_v2":
+                v2_context = {
+                    key: value for key, value in replay_context.items()
+                    if key not in {"variant", "expected_delivery", "delivered_admission_id"}
+                }
+                expected_delivery = _validated_expected_delivery(
+                    replay_context.get("expected_delivery"),
+                )
+                receipt = build_older_admitted_replay_persistence_receipt(
+                    result=result,
+                    delivered_admission_id=replay_context.get("delivered_admission_id"),
+                    expected_delivery=expected_delivery,
+                    **v2_context,
+                )
+                verify_replay_persistence_receipt(
+                    receipt,
+                    result=result,
+                    expected_delivery=expected_delivery,
+                    **v2_context,
+                )
+            elif variant == "latest_v1":
+                v1_context = {key: value for key, value in replay_context.items() if key != "variant"}
+                receipt = build_replay_persistence_receipt(result=result, **v1_context)
+                verify_replay_persistence_receipt(receipt, result=result, **v1_context)
             else:
+                raise ValueError("replay_persistence_variant_invalid")
+            # The idle result is the success signal consumed by the workflow.
+            # Persist both verifier inputs before making that signal visible.
+            atomic_output(args.output_dir, "upstream-catalogue-checkpoint-receipt.json", checkpoint)
+            atomic_output(args.output_dir, REPLAY_PERSISTENCE_RECEIPT, receipt)
+            atomic_output(args.output_dir, "upstream-catalogue-processing-result.json", result)
+        else:
+            result = processing_result(
+                checkpoint,
+                exact_delivery_replay=False,
+                producer_run_id=args.producer_run_id,
+                processor_run_id=args.processor_run_id or args.producer_run_id,
+                processor_artifact_run_id=args.processor_artifact_run_id or args.processor_run_id or args.producer_run_id,
+            )
+            atomic_output(args.output_dir, "upstream-catalogue-processing-result.json", result)
+            if checkpoint_is_sealed:
                 atomic_output(args.output_dir, "upstream-catalogue-checkpoint-receipt.json", checkpoint)
         print(json.dumps(result, sort_keys=True))
         return status

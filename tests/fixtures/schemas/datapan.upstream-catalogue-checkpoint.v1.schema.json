@@ -77,7 +77,8 @@
           "additionalProperties": {"type": "integer", "minimum": 0}
         },
         "detail_reason_unavailable_count": {"type": "integer", "minimum": 0},
-        "detail_unattempted_count": {"type": "integer", "minimum": 0}
+        "detail_unattempted_count": {"type": "integer", "minimum": 0},
+        "resume_validation_diagnostic": {"$ref": "#/$defs/resume_validation_diagnostic"}
       },
       "additionalProperties": {"type": ["string", "integer", "number", "boolean", "null", "array", "object"]}
     },
@@ -86,6 +87,86 @@
   "$defs": {
     "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "nullable_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+    "resume_validation_diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "phase", "code"],
+      "properties": {
+        "version": {"const": 1},
+        "phase": {"enum": ["resume_parent_cache", "canonical_parent_cache", "parent_cache_merge"]},
+        "code": {"enum": [
+          "corrupt_generation_index",
+          "derivation_parent_enrichment_contribution_conflict",
+          "resume_artifact_unbound",
+          "resume_checkpoint_detail_identity_invalid",
+          "resume_enrichment_binding_mismatch",
+          "resume_enrichment_guide_binding_mismatch",
+          "resume_enrichment_identity_invalid",
+          "resume_enrichment_identity_mismatch",
+          "resume_enrichment_observation_in_future",
+          "resume_enrichment_operation_binding_mismatch",
+          "resume_enrichment_record_invalid",
+          "resume_enrichment_source_binding_mismatch",
+          "resume_enrichment_source_or_guide_identity_mismatch",
+          "resume_seoul_declaration_binding_invalid",
+          "resume_seoul_declaration_provenance_missing",
+          "resume_seoul_declared_operation_invalid",
+          "resume_worker_contract_failure_binding_mismatch",
+          "resume_worker_contract_failure_outcome_missing",
+          "resume_worker_link_metadata_binding_invalid",
+          "resume_worker_link_metadata_invalid",
+          "resume_worker_link_metadata_missing",
+          "resume_worker_outcome_binding_mismatch",
+          "resume_worker_outcome_identity_invalid",
+          "resume_worker_outcome_invalid",
+          "resume_worker_outcomes_invalid",
+          "validation_error",
+          "json_decode_error",
+          "io_error"
+        ]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"code": {"const": "derivation_parent_enrichment_contribution_conflict"}}, "required": ["code"]},
+          "then": {"properties": {"phase": {"const": "parent_cache_merge"}}}
+        },
+        {
+          "if": {"properties": {"phase": {"const": "parent_cache_merge"}}, "required": ["phase"]},
+          "then": {"properties": {"code": {"enum": [
+            "derivation_parent_enrichment_contribution_conflict", "validation_error", "json_decode_error", "io_error"
+          ]}}}
+        },
+        {
+          "if": {"properties": {"code": {"enum": [
+            "corrupt_generation_index",
+            "resume_artifact_unbound",
+            "resume_checkpoint_detail_identity_invalid",
+            "resume_enrichment_binding_mismatch",
+            "resume_enrichment_guide_binding_mismatch",
+            "resume_enrichment_identity_invalid",
+            "resume_enrichment_identity_mismatch",
+            "resume_enrichment_observation_in_future",
+            "resume_enrichment_operation_binding_mismatch",
+            "resume_enrichment_record_invalid",
+            "resume_enrichment_source_binding_mismatch",
+            "resume_enrichment_source_or_guide_identity_mismatch",
+            "resume_seoul_declaration_binding_invalid",
+            "resume_seoul_declaration_provenance_missing",
+            "resume_seoul_declared_operation_invalid",
+            "resume_worker_contract_failure_binding_mismatch",
+            "resume_worker_contract_failure_outcome_missing",
+            "resume_worker_link_metadata_binding_invalid",
+            "resume_worker_link_metadata_invalid",
+            "resume_worker_link_metadata_missing",
+            "resume_worker_outcome_binding_mismatch",
+            "resume_worker_outcome_identity_invalid",
+            "resume_worker_outcome_invalid",
+            "resume_worker_outcomes_invalid"
+          ]}}, "required": ["code"]},
+          "then": {"properties": {"phase": {"enum": ["resume_parent_cache", "canonical_parent_cache"]}}}
+        }
+      ]
+    },
     "original_observation": {
       "type": "object",
       "additionalProperties": false,

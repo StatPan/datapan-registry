@@ -604,8 +604,8 @@
     {
       "path": "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
       "kind": "schema",
-      "bytes": 25000,
-      "sha256": "8d3f4196300764d9cfdba7d4e0b8ec028b8085962949aac3117721faff0a33f3"
+      "bytes": 28885,
+      "sha256": "f2d65a52e5e136e2585faba11b55a92f5fe421756b48b3dbf5aa219e4e4bc61c"
     },
     {
       "path": "schemas/datapan.manual-review-scope.v1.schema.json",
@@ -829,7 +829,7 @@
       "path": "reports/source-runtime-remediation-map.json",
       "kind": "source_runtime_remediation_map",
       "bytes": 8075,
-      "sha256": "e1336be68cf959276cab21a9976f6113b00eeaec5b7b7e3e23fe1db61969df71",
+      "sha256": "f8dfb4dadcb358d13ebd5ddade8d107aad0eb4867ee2acadb0b44f04e2982b78",
       "schema": "https://schemas.datapan.dev/datapan.source-runtime-remediation-map.v1.schema.json"
     },
     {
@@ -968,7 +968,7 @@
       "path": "reports/registry-impact-plan.json",
       "kind": "registry_impact_plan",
       "bytes": 11519,
-      "sha256": "a21aa8ffa78a7f1cf6b2f2606c2a79b23c635503bcdc518bebb6303d663d47d1",
+      "sha256": "b2e31b461a2ae256fef408dc75caeeaf34d79a6aeec3ea292f1ea34f4fc7a683",
       "schema": "https://schemas.datapan.dev/datapan.registry-impact-plan.v1.schema.json"
     },
     {
@@ -982,7 +982,7 @@
       "path": "reports/source-report-inventory.json",
       "kind": "source_report_inventory",
       "bytes": 62609,
-      "sha256": "96f2231b6c80758d5fa473b819b19567fc9f58b97dfd9771b9282873a04f6d43",
+      "sha256": "e552629fc969694895a1591e3f8041de6797e69119aaf1ce4032aa6c67d281ce",
       "schema": "https://schemas.datapan.dev/datapan.source-report-inventory.v1.schema.json"
     },
     {
@@ -1059,21 +1059,21 @@
       "path": "reports/release-consumer-compatibility.json",
       "kind": "consumer_compatibility",
       "bytes": 26719,
-      "sha256": "cb3cf8cd825f483060b0b322adffe4ac4b8baa33f2c09d82319f702934fcf1b6",
+      "sha256": "8faf3ccb0630617cd07d3c9d1320c6d555a81ccbadcaace5ca4f53af618ffaff",
       "schema": "https://schemas.datapan.dev/datapan.release-consumer-compatibility.v1.schema.json"
     },
     {
       "path": "reports/release-version-decision.json",
       "kind": "release_version_decision",
       "bytes": 1811,
-      "sha256": "7ad5ed0210568d5ceff93cf108a026e44b6423662a02e051bb860a3c29f0e594",
+      "sha256": "e89aa507a5aa77829b2f5f71f1dd34cd962ca0c66254fb7ced504903d2a9d5e8",
       "schema": "https://schemas.datapan.dev/datapan.release-version-decision.v1.schema.json"
     },
     {
       "path": "reports/release-distribution-footprint.json",
       "kind": "release_distribution_footprint",
       "bytes": 2216,
-      "sha256": "dc0f277e35ccb58ac7f66d32faf29859d26d5e8a93649b202f225faa06bead54",
+      "sha256": "452f27f704b5ec69f0a963e15fb683003d0065deff8d4b301cdc8534b2deeb2c",
       "schema": "https://schemas.datapan.dev/datapan.release-distribution-footprint.v1.schema.json"
     },
     {
@@ -1122,7 +1122,7 @@
       "path": "reports/release-assembly-receipt.json",
       "kind": "release_assembly_receipt",
       "bytes": 37095,
-      "sha256": "3d9714b131e6d342f28a771591c611e5366f324199d47be8d23d69e354e86167",
+      "sha256": "a807f311c44305f3ca06c4f719b7e3fb9f4c84619a64e931f209d287f397c7b1",
       "schema": "https://schemas.datapan.dev/datapan.release-assembly-receipt.v1.schema.json"
     },
     {
@@ -1292,7 +1292,7 @@
       "path": "reports/health-runtime-observation-plan.v1.json",
       "kind": "verification_plan",
       "bytes": 11290,
-      "sha256": "85c00c52da61c3b5f0db8b7e23408442f54a3bdf08ad5162824e53779b40a929",
+      "sha256": "2b4010a204e6692c893564d9bf7293b2717776a0a728de4356d6a8ec3b526df9",
       "schema": "https://schemas.datapan.dev/datapan.health-runtime-observation-plan.v1.schema.json"
     },
     {
@@ -4320,7 +4320,7 @@
       "path": "schemas/index.json",
       "kind": "schema_index",
       "bytes": 52735,
-      "sha256": "339b0e6c7dbac77cef8ea9a7b0a980361549c46c171ded9e3ddba542e6a74eab",
+      "sha256": "89e129c9bef7cb4049177b09da3d24ea9de00cea214d02e61fc66a9ef4a7979b",
       "schema": "https://schemas.datapan.dev/datapan.schema-index.v1.schema.json"
     },
     {

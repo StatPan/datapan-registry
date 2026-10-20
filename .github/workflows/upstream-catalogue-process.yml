@@ -1080,6 +1080,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           STATE_DIR: ../state-repo/.datapan/upstream-catalogue-state
           PRODUCER_RUN_ID: ${{ steps.select.outputs.producer_run_id }}
+          V2_DELIVERY_RUN_ID: ${{ steps.producer_attempt.outputs.producer_run_id }}
+          V2_DELIVERY_RUN_ATTEMPT: ${{ steps.producer_attempt.outputs.run_attempt }}
+          V2_DELIVERY_ARTIFACT_ID: ${{ steps.producer_attempt.outputs.artifact_id }}
+          V2_DELIVERY_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
+          V2_DELIVERY_ARTIFACT_DIGEST: ${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}
           PRODUCER_RUN_URL: ${{ steps.producer.outputs.run_url }}
           PRODUCER_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
           PRODUCER_RUN_ATTEMPT: ${{ steps.producer_attempt.outputs.run_attempt }}
@@ -1206,6 +1211,7 @@ jobs:
           import json
           import os
           import pathlib
+          import re
           import subprocess
 
           root = pathlib.Path(".datapan/ci/upstream-catalogue-processing")
@@ -1236,8 +1242,42 @@ jobs:
                   spec.loader.exec_module(processor)
                   receipt = json.loads(replay_receipt_path.read_text(encoding="utf-8"))
                   current_checkpoint = json.loads(checkpoint_receipt_path.read_text(encoding="utf-8"))
-                  generation_id = str(receipt.get("generation_id") or "")
-                  source_id = str(receipt.get("source_id") or "")
+                  schema_version = receipt.get("schema_version") if isinstance(receipt, dict) else None
+                  if type(schema_version) is not str or schema_version not in {
+                      processor.REPLAY_PERSISTENCE_SCHEMA, processor.REPLAY_PERSISTENCE_SCHEMA_V2,
+                  }:
+                      raise ValueError("replay_persistence_receipt_schema_invalid")
+                  source_id = receipt.get("source_id")
+                  generation_id = receipt.get("generation_id")
+                  if (
+                      source_id != "data_go_kr"
+                      or type(generation_id) is not str
+                      or re.fullmatch(r"[a-f0-9]{64}", generation_id) is None
+                  ):
+                      raise ValueError("replay_persistence_receipt_path_identity_invalid")
+                  expected_delivery = None
+                  if schema_version == processor.REPLAY_PERSISTENCE_SCHEMA_V2:
+                      selected_run = os.environ.get("V2_DELIVERY_RUN_ID", "")
+                      attempt_text = os.environ.get("V2_DELIVERY_RUN_ATTEMPT", "")
+                      artifact_id = os.environ.get("V2_DELIVERY_ARTIFACT_ID", "")
+                      head_sha = os.environ.get("V2_DELIVERY_HEAD_SHA", "")
+                      artifact_digest = os.environ.get("V2_DELIVERY_ARTIFACT_DIGEST", "")
+                      if (
+                          selected_run != os.environ.get("PRODUCER_RUN_ID", "")
+                          or re.fullmatch(r"[1-9][0-9]*", selected_run) is None
+                          or re.fullmatch(r"[1-9][0-9]*", attempt_text) is None
+                          or re.fullmatch(r"[1-9][0-9]*", artifact_id) is None
+                          or re.fullmatch(r"[a-f0-9]{40}", head_sha) is None
+                          or re.fullmatch(r"[a-f0-9]{64}", artifact_digest) is None
+                      ):
+                          raise ValueError("replay_expected_delivery_unavailable")
+                      expected_delivery = {
+                          "producer_run_id": selected_run,
+                          "run_attempt": int(attempt_text),
+                          "artifact_id": artifact_id,
+                          "head_sha": head_sha,
+                          "artifact_digest_sha256": artifact_digest,
+                      }
                   old_sha = os.environ.get("EXPECTED_STATE_HEAD_SHA", "")
                   state_repo = pathlib.Path("../state-repo")
                   if subprocess.run(
@@ -1260,15 +1300,19 @@ jobs:
                   if current_checkpoint != current_state_checkpoint:
                       raise ValueError("replay_checkpoint_receipt_state_mismatch")
                   schema = json.loads(pathlib.Path("../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"))
+                  verification_kwargs = {
+                      "prior_checkpoint": old_json(checkpoint_rel),
+                      "current_checkpoint": current_state_checkpoint,
+                      "prior_index": old_json(index_rel),
+                      "current_index": current_index,
+                      "result": result,
+                      "state_head_sha": old_sha,
+                      "checkpoint_schema": schema,
+                  }
+                  if expected_delivery is not None:
+                      verification_kwargs["expected_delivery"] = expected_delivery
                   verified_receipt = processor.verify_replay_persistence_receipt(
-                      receipt,
-                      prior_checkpoint=old_json(checkpoint_rel),
-                      current_checkpoint=current_state_checkpoint,
-                      prior_index=old_json(index_rel),
-                      current_index=current_index,
-                      result=result,
-                      state_head_sha=old_sha,
-                      checkpoint_schema=schema,
+                      receipt, **verification_kwargs,
                   )
                   expected_changed_paths = set()
                   for change in verified_receipt["state_changes"]:
@@ -1526,6 +1570,11 @@ jobs:
           CLAIM_SHA: ${{ steps.claim_push.outputs.claim_sha }}
           CLAIM_CHANGED: ${{ steps.claim_push.outputs.changed }}
           CLAIM_OUTCOME: ${{ steps.claim_push.outcome }}
+          V2_DELIVERY_RUN_ID: ${{ steps.producer_attempt.outputs.producer_run_id }}
+          V2_DELIVERY_RUN_ATTEMPT: ${{ steps.producer_attempt.outputs.run_attempt }}
+          V2_DELIVERY_ARTIFACT_ID: ${{ steps.producer_attempt.outputs.artifact_id }}
+          V2_DELIVERY_HEAD_SHA: ${{ steps.producer_attempt.outputs.head_sha }}
+          V2_DELIVERY_ARTIFACT_DIGEST: ${{ steps.producer_attempt.outputs.artifact_digest_sha256 }}
         run: |
           set -euo pipefail
           python3 - <<'PY' >> "${GITHUB_OUTPUT}"
@@ -1572,8 +1621,42 @@ jobs:
                   spec.loader.exec_module(processor)
                   receipt_path = root / processor.REPLAY_PERSISTENCE_RECEIPT
                   receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-                  source_id = str(receipt.get("source_id") or "")
-                  replay_generation_id = str(receipt.get("generation_id") or "")
+                  schema_version = receipt.get("schema_version") if isinstance(receipt, dict) else None
+                  if type(schema_version) is not str or schema_version not in {
+                      processor.REPLAY_PERSISTENCE_SCHEMA, processor.REPLAY_PERSISTENCE_SCHEMA_V2,
+                  }:
+                      raise ValueError("replay_persistence_receipt_schema_invalid")
+                  source_id = receipt.get("source_id")
+                  replay_generation_id = receipt.get("generation_id")
+                  if (
+                      source_id != "data_go_kr"
+                      or type(replay_generation_id) is not str
+                      or re.fullmatch(r"[a-f0-9]{64}", replay_generation_id) is None
+                  ):
+                      raise ValueError("replay_persistence_receipt_path_identity_invalid")
+                  expected_delivery = None
+                  if schema_version == processor.REPLAY_PERSISTENCE_SCHEMA_V2:
+                      selected_run = os.environ.get("V2_DELIVERY_RUN_ID", "")
+                      attempt_text = os.environ.get("V2_DELIVERY_RUN_ATTEMPT", "")
+                      artifact_id = os.environ.get("V2_DELIVERY_ARTIFACT_ID", "")
+                      head_sha = os.environ.get("V2_DELIVERY_HEAD_SHA", "")
+                      artifact_digest = os.environ.get("V2_DELIVERY_ARTIFACT_DIGEST", "")
+                      if (
+                          selected_run != os.environ.get("PRODUCER_RUN_ID", "")
+                          or re.fullmatch(r"[1-9][0-9]*", selected_run) is None
+                          or re.fullmatch(r"[1-9][0-9]*", attempt_text) is None
+                          or re.fullmatch(r"[1-9][0-9]*", artifact_id) is None
+                          or re.fullmatch(r"[a-f0-9]{40}", head_sha) is None
+                          or re.fullmatch(r"[a-f0-9]{64}", artifact_digest) is None
+                      ):
+                          raise ValueError("replay_expected_delivery_unavailable")
+                      expected_delivery = {
+                          "producer_run_id": selected_run,
+                          "run_attempt": int(attempt_text),
+                          "artifact_id": artifact_id,
+                          "head_sha": head_sha,
+                          "artifact_digest_sha256": artifact_digest,
+                      }
                   old_sha = os.environ.get("STATE_HEAD_SHA", "")
                   claim_sha = os.environ.get("CLAIM_SHA", "")
                   claim_changed = os.environ.get("CLAIM_CHANGED", "")
@@ -1600,15 +1683,19 @@ jobs:
                           raise ValueError("replay_state_file_too_large")
                       return json.loads(completed.stdout)
                   schema = json.loads(pathlib.Path("bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"))
+                  verification_kwargs = {
+                      "prior_checkpoint": committed_json(old_sha, checkpoint_rel),
+                      "current_checkpoint": committed_json(claim_sha, checkpoint_rel),
+                      "prior_index": committed_json(old_sha, index_rel),
+                      "current_index": committed_json(claim_sha, index_rel),
+                      "result": result,
+                      "state_head_sha": old_sha,
+                      "checkpoint_schema": schema,
+                  }
+                  if expected_delivery is not None:
+                      verification_kwargs["expected_delivery"] = expected_delivery
                   verified_receipt = processor.verify_replay_persistence_receipt(
-                      receipt,
-                      prior_checkpoint=committed_json(old_sha, checkpoint_rel),
-                      current_checkpoint=committed_json(claim_sha, checkpoint_rel),
-                      prior_index=committed_json(old_sha, index_rel),
-                      current_index=committed_json(claim_sha, index_rel),
-                      result=result,
-                      state_head_sha=old_sha,
-                      checkpoint_schema=schema,
+                      receipt, **verification_kwargs,
                   )
                   changed_paths = verified_receipt["state_changes"]
                   expected_changed_paths = set()
