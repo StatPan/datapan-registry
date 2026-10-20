@@ -897,6 +897,10 @@ else:
         return {
             **os.environ,
             "DATAPAN_TEST_LOG": str(self.command_log),
+            # The nested import transaction re-runs refresh --write/--check. Keep
+            # the production default intact while avoiding duplicate completeness
+            # regression execution in this integration fixture only.
+            "REGISTRY_TEST_SKIP_COMPLETENESS_REGRESSION": "1",
             "PYTHONDONTWRITEBYTECODE": "1",
         }
 
@@ -969,7 +973,7 @@ else:
                 raise subprocess.CalledProcessError(1, command, stderr="injected projection failure")
             return real_execute(command, cwd=cwd, capture=True if not capture else capture, env=env)
 
-        with mock.patch.dict(os.environ, {"DATAPAN_TEST_LOG": str(self.command_log)}), mock.patch.object(APPLY, "execute", side_effect=fail_projection):
+        with mock.patch.dict(os.environ, {"DATAPAN_TEST_LOG": str(self.command_log), "REGISTRY_TEST_SKIP_COMPLETENESS_REGRESSION": "1"}), mock.patch.object(APPLY, "execute", side_effect=fail_projection):
             with self.assertRaises(subprocess.CalledProcessError) as failure:
                 APPLY.apply_transaction(
                     self.repo, self.report, self.receipt, self._datapan_command(),
@@ -978,6 +982,25 @@ else:
                     self._producer(),
                 )
         self.assertEqual(failure.exception.stderr, "injected projection failure")
+        self.assertEqual(self._git("status", "--porcelain").stdout.strip(), "")
+        self.assertEqual(self._git("worktree", "list", "--porcelain").stdout, worktrees_before)
+        self.assertEqual(hashlib.sha256(registry.read_bytes()).hexdigest(), registry_sha)
+        self.assertEqual({name: (self.repo / name).read_bytes() for name in historical_receipts}, historical_receipts)
+
+        def fail_artifact_check(command, *, cwd, capture=False, env=None):
+            if command[:3] == ["git", "apply", "--check"]:
+                raise subprocess.CalledProcessError(1, command, stderr="injected artifact-check failure")
+            return real_execute(command, cwd=cwd, capture=True if not capture else capture, env=env)
+
+        with mock.patch.dict(os.environ, {"DATAPAN_TEST_LOG": str(self.command_log), "REGISTRY_TEST_SKIP_COMPLETENESS_REGRESSION": "1"}), mock.patch.object(APPLY, "execute", side_effect=fail_artifact_check):
+            with self.assertRaises(subprocess.CalledProcessError) as artifact_failure:
+                APPLY.apply_transaction(
+                    self.repo, self.report, self.receipt, self._datapan_command(),
+                    pathlib.Path(f"reports/runtime-freshness-imports/{self.run_id}.json"),
+                    pathlib.Path(f"reports/runtime-freshness-import-admissions/{self.run_id}.json"),
+                    self._producer(),
+                )
+        self.assertEqual(artifact_failure.exception.stderr, "injected artifact-check failure")
         self.assertEqual(self._git("status", "--porcelain").stdout.strip(), "")
         self.assertEqual(self._git("worktree", "list", "--porcelain").stdout, worktrees_before)
         self.assertEqual(hashlib.sha256(registry.read_bytes()).hexdigest(), registry_sha)

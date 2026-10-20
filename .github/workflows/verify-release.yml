@@ -227,6 +227,7 @@ jobs:
           python -m unittest tests/test_canonical_update_pr.py
           python -m unittest tests/test_canonical_update_ci.py
           python -m unittest tests/test_refresh_canonical_snapshot_evidence.py
+          python -m unittest tests/test_verify_release_gate_structure.py
           python -m unittest tests/test_run_canonical_update_promotion.py
           python -m unittest tests/test_publication_ack_recovery_transport.py
           python -m unittest tests/test_publication_ack_recovery_incident.py

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shlex
 import subprocess
 import sys
@@ -86,6 +87,17 @@ WRITE_COMMANDS: tuple[Command, ...] = (
 )
 
 
+COMPLETENESS_REGRESSION_COMMAND = Command((
+    "python3", "-m", "unittest",
+    "tests/test_generate_completeness_proof_rollup.py",
+    "tests/test_completeness_publication_evidence.py",
+    "tests/test_completeness_scope_registration.py",
+    "tests/test_completeness_proof_rollup_cli.py",
+    "tests/test_completeness_future_observation_chain.py",
+))
+COMPLETENESS_REGRESSION_SKIP_ENV = "REGISTRY_TEST_SKIP_COMPLETENESS_REGRESSION"
+
+
 CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/sync-release-schema-artifacts.py", "--check")),
     Command(("python3", "scripts/sync-release-manifest-artifacts.py", "--check")),
@@ -104,7 +116,7 @@ CHECK_COMMANDS: tuple[Command, ...] = (
     Command(("python3", "scripts/generate-failure-recovery-rollup.py", "--check")),
     Command(("python3", "scripts/generate-operation-denominator-rollup.py", "--check")),
     Command(("python3", "scripts/generate-completeness-proof-rollup.py", "--check")),
-    Command(("python3", "-m", "unittest", "tests/test_generate_completeness_proof_rollup.py", "tests/test_completeness_publication_evidence.py", "tests/test_completeness_scope_registration.py", "tests/test_completeness_proof_rollup_cli.py", "tests/test_completeness_future_observation_chain.py")),
+    COMPLETENESS_REGRESSION_COMMAND,
     Command(("python3", "scripts/validate-data-go-kr-operation-manifest.py")),
     Command(("python3", "scripts/generate-current-runtime-evidence-projection.py", "--check")),
     Command(("python3", "scripts/generate-runtime-freshness-queue.py", "--check")),
@@ -171,6 +183,12 @@ def run_commands(commands: Sequence[Command]) -> bool:
     return ok
 
 
+def selected_check_commands() -> tuple[Command, ...]:
+    if os.environ.get(COMPLETENESS_REGRESSION_SKIP_ENV) == "1":
+        return tuple(command for command in CHECK_COMMANDS if command != COMPLETENESS_REGRESSION_COMMAND)
+    return CHECK_COMMANDS
+
+
 def run_check_commands(commands: Sequence[Command]) -> bool:
     for command in commands:
         result = subprocess.run(command.argv, check=False)
@@ -202,13 +220,13 @@ def refresh(max_iterations: int) -> int:
 
     def checks_pass(iteration: int) -> bool:
         print(f"== release ledger evidence convergence check {iteration} ==", flush=True)
-        return run_check_commands(CHECK_COMMANDS)
+        return run_check_commands(selected_check_commands())
 
     return converge(max_iterations=max_iterations, refresh_once=refresh_once, checks_pass=checks_pass)
 
 
 def check() -> None:
-    if not run_check_commands(CHECK_COMMANDS):
+    if not run_check_commands(selected_check_commands()):
         raise ConvergenceError("release ledger evidence is stale; run `python3 scripts/refresh-release-ledger-evidence.py --write`")
 
 
