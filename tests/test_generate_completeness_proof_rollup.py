@@ -4348,7 +4348,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         facets = {facet["facet_id"]: facet for facet in operations["facets"]}
         self.assertEqual(facets["specification_pipeline"]["state"], "historical")
         self.assertEqual(facets["immutable_publication_read_back"]["state"], "historical")
-        self.assertTrue(facets["immutable_publication_read_back"]["details"]["payload_equivalent_to_current_registry"])
+        self.assertTrue(facets["immutable_publication_read_back"]["details"]["payload_equivalent_to_registered_catalog_inventory"])
         self.assertFalse(facets["immutable_publication_read_back"]["details"]["current_release_subject_applicable"])
         self.assertTrue(facets["source_observation"]["details"]["observation_authenticated"])
         self.assertNotIn("new_post_repair_observation", facets["source_observation"]["details"])
