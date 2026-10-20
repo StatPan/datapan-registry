@@ -4194,8 +4194,8 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertEqual(candidate_facets["immutable_publication_read_back"]["state"], "historical")
             candidate_publication = candidate_facets["immutable_publication_read_back"]["details"]
             self.assertIsNone(candidate_publication["current_release_manifest_sha256"])
-            self.assertFalse(candidate_publication["current_release_subject_applicable"])
-            self.assertFalse(candidate_publication["current_release_applicable"])
+            self.assertNotIn("current_release_subject_applicable", candidate_publication)
+            self.assertNotIn("current_release_applicable", candidate_publication)
             self.assertTrue(candidate_publication["candidate_release_publication_unproven"])
             rebuilt_candidate_index = json.loads(canonical_index_path.read_bytes())
             _candidate_context, changed_scopes = MODULE.validate_candidate_input_index(
@@ -4349,7 +4349,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(facets["specification_pipeline"]["state"], "historical")
         self.assertEqual(facets["immutable_publication_read_back"]["state"], "historical")
         self.assertTrue(facets["immutable_publication_read_back"]["details"]["payload_equivalent_to_registered_catalog_inventory"])
-        self.assertFalse(facets["immutable_publication_read_back"]["details"]["current_release_subject_applicable"])
+        self.assertNotIn("current_release_subject_applicable", facets["immutable_publication_read_back"]["details"])
         self.assertTrue(facets["source_observation"]["details"]["observation_authenticated"])
         self.assertNotIn("new_post_repair_observation", facets["source_observation"]["details"])
         self.assertEqual(
