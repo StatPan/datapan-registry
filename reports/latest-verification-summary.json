@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-20T00:23:47.230238Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3686,
+    "failed": 993,
+    "skipped": 4902,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4902,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3686,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 993,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2436,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1353,
         "reason": "approval_required"
       },
       {
@@ -392,6 +392,11 @@
         "reason": "jeju_missing_required_params"
       },
       {
+        "key": "provider returned resultCode OK",
+        "count": 2,
+        "reason": "provider returned resultCode OK"
+      },
+      {
         "key": "seoul_bus_missing_required_params",
         "count": 2,
         "reason": "seoul_bus_missing_required_params"
@@ -587,6 +592,41 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1390802/AgriWeather/WeatherObsrInfo/GrdlInfo/getWeatherZoneCodeList?[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1390802/AgriWeather/WeatherObsrInfo/GrdlInfo/getWeatherZoneCodeList?[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/3730000/ThyroidProtectionMedicineService/getThyroidProtectionMedicineInfo?[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/3730000/ThyroidProtectionMedicineService/getThyroidProtectionMedicineInfo?[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BusanAedsService/getAedsList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BusanAedsService/getAedsList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BusanCommercialChangeService/getCommercialChangeList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BusanCommercialChangeService/getCommercialChangeList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BusanCommercialCountingService/getCommercialCountingList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BusanCommercialCountingService/getCommercialCountingList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BusanHygieneGradeService/getHygieneGradeList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BusanHygieneGradeService/getHygieneGradeList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BusanSafeRestaurantService/getSafeRestaurantList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BusanSafeRestaurantService/getSafeRestaurantList?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
@@ -705,7 +745,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1412,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2284,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
