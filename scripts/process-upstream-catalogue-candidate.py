@@ -17,6 +17,7 @@ import json
 import os
 import pathlib
 import re
+import subprocess
 import sys
 import tempfile
 import time
@@ -45,6 +46,34 @@ import upstream_catalogue_derivation as DERIVATION  # noqa: E402
 
 CHECKPOINT_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
 ENRICHMENT_SCHEMA = "datapan.catalogue-enrichment-evidence.v1"
+_REPLAY_LINEAGE_PROOF_TOKEN = object()
+
+
+class _ValidatedReplayLineage:
+    """Private proof emitted only after the bounded derivation graph check."""
+
+    __slots__ = (
+        "token", "target_generation_id", "derivation_sha256",
+        "original_observation_sha256", "ancestor_generation_ids",
+    )
+
+    def __init__(
+        self, *, token: object, target_generation_id: str,
+        derivation_sha256: str, original_observation_sha256: str,
+        ancestor_generation_ids: frozenset[str],
+    ) -> None:
+        if token is not _REPLAY_LINEAGE_PROOF_TOKEN:
+            raise ValueError("validated_replay_lineage_constructor_forbidden")
+        object.__setattr__(self, "token", token)
+        object.__setattr__(self, "target_generation_id", target_generation_id)
+        object.__setattr__(self, "derivation_sha256", derivation_sha256)
+        object.__setattr__(self, "original_observation_sha256", original_observation_sha256)
+        object.__setattr__(self, "ancestor_generation_ids", ancestor_generation_ids)
+
+    def __setattr__(self, _name: str, _value: Any) -> None:
+        raise AttributeError("validated_replay_lineage_is_immutable")
+
+
 REPLAY_PERSISTENCE_SCHEMA = "datapan.upstream-catalogue-replay-persistence.v1"
 REPLAY_PERSISTENCE_SCHEMA_V2 = "datapan.upstream-catalogue-replay-persistence.v2"
 REPLAY_PERSISTENCE_RECEIPT = "upstream-catalogue-replay-persistence-receipt.json"
@@ -1512,6 +1541,547 @@ def verify_replay_persistence_receipt(
     if receipt != expected:
         raise ValueError("replay_persistence_receipt_binding_mismatch")
     return receipt
+
+
+
+_REPLAY_VERIFY_PRE_CAS = "pre_cas_working"
+_REPLAY_VERIFY_POST_CAS = "post_cas_committed"
+_REPLAY_VERIFY_TIMEOUT_SECONDS = 60.0
+_REPLAY_VERIFY_MAX_GRAPH_NODES = 64
+_REPLAY_VERIFY_MAX_TOTAL_BYTES = (
+    STATE_INDEX_FILE_LIMIT * 2 + STATE_FILE_LIMIT * (_REPLAY_VERIFY_MAX_GRAPH_NODES + 2)
+)
+
+
+def _require_replay_verification_deadline(deadline: float) -> None:
+    if time.monotonic() >= deadline:
+        raise ValueError("replay_state_verification_deadline_exceeded")
+
+
+def _replay_verifier_git(
+    repository: pathlib.Path, arguments: tuple[str, ...], *, deadline: float,
+) -> bytes:
+    _require_replay_verification_deadline(deadline)
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise ValueError("replay_state_verification_deadline_exceeded")
+    environment = {
+        key: value for key, value in os.environ.items() if not key.startswith("GIT_")
+    }
+    environment["GIT_CONFIG_NOSYSTEM"] = "1"
+    environment["GIT_CONFIG_GLOBAL"] = os.devnull
+    environment["GIT_NO_LAZY_FETCH"] = "1"
+    environment["GIT_TERMINAL_PROMPT"] = "0"
+    environment["GIT_OPTIONAL_LOCKS"] = "0"
+    environment["GIT_NO_REPLACE_OBJECTS"] = "1"
+    try:
+        result = subprocess.run(
+            ("git", "--no-replace-objects", "-C", str(repository), *arguments),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+            timeout=remaining,
+            env=environment,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ValueError("replay_state_verification_deadline_exceeded") from exc
+    _require_replay_verification_deadline(deadline)
+    if result.returncode != 0:
+        raise ValueError("replay_committed_state_object_unavailable")
+    return result.stdout
+
+
+def _replay_committed_json(
+    repository: pathlib.Path,
+    commit_sha: str,
+    relative_path: str,
+    *,
+    maximum_bytes: int,
+    deadline: float,
+    accounting: dict[str, int],
+) -> Any:
+    if not re.fullmatch(r"[a-f0-9]{40}", commit_sha):
+        raise ValueError("replay_state_commit_sha_invalid")
+    source_id = accounting.get("source_id")
+    allowed_paths = {
+        f".datapan/upstream-catalogue-state/sources/{source_id}/index.json",
+        *(
+            f".datapan/upstream-catalogue-state/sources/{source_id}/generations/{item}.json"
+            for item in accounting.get("allowed_generation_ids", ())
+        ),
+    }
+    if relative_path not in allowed_paths:
+        raise ValueError("replay_state_path_invalid")
+    object_spec = f"{commit_sha}:{relative_path}"
+    size_bytes = _replay_verifier_git(
+        repository, ("cat-file", "-s", object_spec), deadline=deadline,
+    )
+    if len(size_bytes) > 32 or not re.fullmatch(rb"(?:0|[1-9][0-9]*)\n", size_bytes):
+        raise ValueError("replay_state_object_size_invalid")
+    size = int(size_bytes[:-1])
+    if size > maximum_bytes:
+        raise ValueError("replay_state_file_too_large")
+    if accounting["bytes"] + size > _REPLAY_VERIFY_MAX_TOTAL_BYTES:
+        raise ValueError("replay_state_verification_byte_limit_exceeded")
+    content = _replay_verifier_git(
+        repository, ("cat-file", "blob", object_spec), deadline=deadline,
+    )
+    if len(content) != size:
+        raise ValueError("replay_state_object_size_changed")
+    accounting["bytes"] += len(content)
+    try:
+        value = json.loads(content)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("replay_committed_state_json_invalid") from exc
+    _require_replay_verification_deadline(deadline)
+    return value
+
+
+def _replay_worktree_json(
+    repository: pathlib.Path, relative_path: str, *, maximum_bytes: int,
+    deadline: float, accounting: dict[str, int],
+) -> Any:
+    import stat
+
+    _require_replay_verification_deadline(deadline)
+    path = repository.joinpath(*relative_path.split("/"))
+    current = repository
+    for component in relative_path.split("/")[:-1]:
+        current = current / component
+        try:
+            metadata = current.lstat()
+        except OSError as exc:
+            raise ValueError("replay_worktree_state_unavailable") from exc
+        if not stat.S_ISDIR(metadata.st_mode) or stat.S_ISLNK(metadata.st_mode):
+            raise ValueError("replay_worktree_state_path_invalid")
+    try:
+        descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+    except OSError as exc:
+        raise ValueError("replay_worktree_state_unavailable") from exc
+    try:
+        metadata = os.fstat(descriptor)
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > maximum_bytes:
+            raise ValueError("replay_worktree_state_file_invalid")
+        if accounting["bytes"] + metadata.st_size > _REPLAY_VERIFY_MAX_TOTAL_BYTES:
+            raise ValueError("replay_state_verification_byte_limit_exceeded")
+        chunks: list[bytes] = []
+        remaining = maximum_bytes + 1
+        while remaining:
+            _require_replay_verification_deadline(deadline)
+            chunk = os.read(descriptor, min(65536, remaining))
+            if not chunk:
+                break
+            if accounting["bytes"] + len(chunk) > _REPLAY_VERIFY_MAX_TOTAL_BYTES:
+                raise ValueError("replay_state_verification_byte_limit_exceeded")
+            accounting["bytes"] += len(chunk)
+            chunks.append(chunk)
+            remaining -= len(chunk)
+        content = b"".join(chunks)
+    finally:
+        os.close(descriptor)
+    if len(content) > maximum_bytes:
+        raise ValueError("replay_worktree_state_file_too_large")
+    try:
+        value = json.loads(content)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("replay_worktree_state_json_invalid") from exc
+    _require_replay_verification_deadline(deadline)
+    return value
+
+
+def _verify_replay_index_generation_id(index: Mapping[str, Any], generation_id: str) -> None:
+    if not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+        raise ValueError("replay_generation_id_invalid")
+    rows = index.get("generations")
+    if not isinstance(rows, list):
+        raise ValueError("replay_generation_index_invalid")
+    identities: list[str] = []
+    for row in rows:
+        if not isinstance(row, Mapping):
+            raise ValueError("replay_generation_index_invalid")
+        identity = row.get("generation_id")
+        if not isinstance(identity, str) or not re.fullmatch(r"[a-f0-9]{64}", identity):
+            raise ValueError("replay_generation_index_invalid")
+        identities.append(identity)
+    if len(identities) != len(set(identities)):
+        raise ValueError("replay_generation_index_duplicate")
+    if generation_id not in identities:
+        raise ValueError("replay_parent_index_entry_missing")
+
+
+def _verify_replay_index_generation(index: Mapping[str, Any], checkpoint: Mapping[str, Any]) -> None:
+    generation_id = str(checkpoint.get("generation_id") or "")
+    _verify_replay_index_generation_id(index, generation_id)
+    rows = index.get("generations")
+    assert isinstance(rows, list)
+    matches = [row for row in rows if isinstance(row, Mapping) and row.get("generation_id") == generation_id]
+    generation_inputs = checkpoint.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping) or len(matches) != 1:
+        raise ValueError("replay_generation_index_target_invalid")
+    expected = {
+        "generation_id": generation_id,
+        "status": checkpoint.get("status"),
+        "checkpoint": f"{generation_id}.json",
+        "updated_at": checkpoint.get("last_heartbeat_at"),
+        "candidate_sha256": generation_inputs.get("candidate_sha256"),
+    }
+    if dict(matches[0]) != expected:
+        raise ValueError("replay_generation_index_checkpoint_mismatch")
+
+
+def _verify_committed_replay_lineage(
+    *, repository: pathlib.Path,
+    prior_state_commit: str,
+    target_source_id: str,
+    target_generation_id: str,
+    prior_index: Mapping[str, Any],
+    prior_checkpoint: Mapping[str, Any],
+    checkpoint_schema: Mapping[str, Any],
+    deadline: float,
+    accounting: dict[str, int],
+) -> _ValidatedReplayLineage | None:
+    """Rebuild a derived parent graph from the trusted prior commit only.
+
+    Returns None for an ordinary generation. A derivation is authenticated
+    against committed parent checkpoints and the FIRST admission ledger, then
+    reduced to a private proof the v1 verifier binding can be checked against.
+    """
+    _require_replay_verification_deadline(deadline)
+    if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", target_source_id):
+        raise ValueError("replay_source_id_invalid")
+    if not re.fullmatch(r"[a-f0-9]{64}", target_generation_id):
+        raise ValueError("replay_generation_id_invalid")
+    verified_prior = verify_checkpoint(dict(prior_checkpoint), dict(checkpoint_schema))
+    _require_replay_verification_deadline(deadline)
+    if (
+        verified_prior.get("source_id") != target_source_id
+        or verified_prior.get("generation_id") != target_generation_id
+    ):
+        raise ValueError("replay_prior_checkpoint_identity_mismatch")
+    _verify_replay_index_generation(prior_index, verified_prior)
+    generation_inputs = verified_prior.get("generation_inputs")
+    if not isinstance(generation_inputs, Mapping):
+        raise ValueError("replay_generation_inputs_invalid")
+    raw_derivation = generation_inputs.get("same_observation_derivation")
+    if raw_derivation is None:
+        return None
+    try:
+        derivation = DERIVATION.validate_derivation_envelope(raw_derivation)
+    except (DERIVATION.DerivationError, TypeError, ValueError) as exc:
+        raise ValueError("replay_derivation_envelope_invalid") from exc
+    _require_replay_verification_deadline(deadline)
+    if _object_sha256(dict(generation_inputs)) != target_generation_id:
+        raise ValueError("replay_derived_generation_identity_mismatch")
+
+    ledger_value = prior_index.get("collector_handoff")
+    if not isinstance(ledger_value, Mapping):
+        raise ValueError("replay_prior_admission_ledger_missing")
+    try:
+        admitted_rows = validate_ledger(ledger_value)["admitted_observations"]
+    except HandoffError as exc:
+        raise ValueError("replay_prior_admission_ledger_invalid") from exc
+    _require_replay_verification_deadline(deadline)
+
+    checkpoint_cache: dict[str, dict[str, Any]] = {target_generation_id: dict(verified_prior)}
+
+    def load_checkpoint(generation_id: str) -> Mapping[str, Any]:
+        _require_replay_verification_deadline(deadline)
+        cached = checkpoint_cache.get(generation_id)
+        if cached is not None:
+            return cached
+        if len(checkpoint_cache) - 1 >= _REPLAY_VERIFY_MAX_GRAPH_NODES:
+            raise ValueError("replay_parent_graph_too_large")
+        _verify_replay_index_generation_id(prior_index, generation_id)
+        relative = (
+            ".datapan/upstream-catalogue-state/sources/"
+            f"{target_source_id}/generations/{generation_id}.json"
+        )
+        value = _replay_committed_json(
+            repository, prior_state_commit, relative, maximum_bytes=STATE_FILE_LIMIT,
+            deadline=deadline, accounting=accounting,
+        )
+        if not isinstance(value, Mapping):
+            raise ValueError("replay_parent_checkpoint_invalid")
+        try:
+            checkpoint = verify_checkpoint(dict(value), dict(checkpoint_schema))
+        except Exception as exc:
+            raise ValueError("replay_parent_checkpoint_invalid") from exc
+        if checkpoint.get("source_id") != target_source_id or checkpoint.get("generation_id") != generation_id:
+            raise ValueError("replay_parent_checkpoint_identity_mismatch")
+        _verify_replay_index_generation(prior_index, checkpoint)
+        _require_replay_verification_deadline(deadline)
+        checkpoint_cache[generation_id] = dict(checkpoint)
+        return checkpoint_cache[generation_id]
+
+    def admission_for(checkpoint: Mapping[str, Any]) -> Mapping[str, Any]:
+        _require_replay_verification_deadline(deadline)
+        observation = checkpoint.get("last_observation")
+        references = checkpoint.get("input_artifacts")
+        if not isinstance(observation, Mapping) or not isinstance(references, list):
+            raise ValueError("replay_parent_admission_identity_missing")
+        matches = [
+            row for row in admitted_rows
+            if str(row.get("producer_run_id") or "") == str(observation.get("producer_run_id") or "")
+            and row.get("refresh_evidence_sha256") == observation.get("refresh_evidence_sha256")
+            and any(
+                isinstance(reference, Mapping)
+                and str(reference.get("run_id") or "") == str(row.get("producer_run_id") or "")
+                and str(reference.get("artifact_id") or "") == str(row.get("artifact_id") or "")
+                and reference.get("evidence_sha256") == row.get("refresh_evidence_sha256")
+                for reference in references
+            )
+        ]
+        if len(matches) != 1:
+            raise ValueError("replay_parent_admission_ambiguous_or_missing")
+        try:
+            admission = validate_admission_row(dict(matches[0]))
+        except HandoffError as exc:
+            raise ValueError("replay_parent_admission_invalid") from exc
+        _require_replay_verification_deadline(deadline)
+        return admission
+
+    expected_ancestors = derivation["ancestor_generation_ids"]
+    try:
+        ancestors = DERIVATION.validate_processor_parent_graph(
+            [
+                derivation["resume_parent_processor"]["generation_id"],
+                derivation["canonical_parent_processor"]["generation_id"],
+            ],
+            load_checkpoint=load_checkpoint,
+            admission_for=admission_for,
+            original_observation=derivation["original_observation"],
+            expected_ancestor_generation_ids=expected_ancestors,
+            forbidden_generation_id=target_generation_id,
+        )
+        for reference_name in ("resume_parent_processor", "canonical_parent_processor"):
+            reference = derivation[reference_name]
+            parent_checkpoint = load_checkpoint(reference["generation_id"])
+            DERIVATION.validate_processor_parent_checkpoint(
+                reference, parent_checkpoint,
+                original_observation=derivation["original_observation"],
+            )
+            _require_replay_verification_deadline(deadline)
+    except (DERIVATION.DerivationError, KeyError, OSError, TypeError, ValueError) as exc:
+        if isinstance(exc, ValueError) and str(exc) == "replay_state_verification_deadline_exceeded":
+            raise
+        raise ValueError("replay_parent_graph_invalid") from exc
+    _require_replay_verification_deadline(deadline)
+    if target_generation_id in ancestors:
+        raise ValueError("replay_parent_graph_cycle")
+    proof = _ValidatedReplayLineage(
+        token=_REPLAY_LINEAGE_PROOF_TOKEN,
+        target_generation_id=target_generation_id,
+        derivation_sha256=_object_sha256(derivation),
+        original_observation_sha256=_object_sha256(derivation["original_observation"]),
+        ancestor_generation_ids=frozenset(ancestors),
+    )
+    try:
+        selected_admission = _replay_admission(verified_prior, prior_index)
+        admission_subject = DERIVATION.original_observation_from_checkpoint(
+            verified_prior, selected_admission,
+        )
+    except (DERIVATION.DerivationError, TypeError, ValueError) as exc:
+        raise ValueError("replay_original_admission_binding_mismatch") from exc
+    if (
+        selected_admission["generation_id"] not in ancestors
+        or admission_subject != derivation["original_observation"]
+        or proof.derivation_sha256 != _object_sha256(derivation)
+        or proof.ancestor_generation_ids != frozenset(expected_ancestors)
+    ):
+        raise ValueError("replay_original_admission_binding_mismatch")
+    _require_replay_verification_deadline(deadline)
+    return proof
+
+
+def verify_replay_persistence_receipt_from_committed_state(
+    receipt: Any,
+    *,
+    state_repository: pathlib.Path,
+    prior_state_commit: str,
+    expected_current_state_commit: str,
+    phase: str,
+    result: Any,
+    checkpoint_receipt: Any = None,
+    expected_delivery: Any = None,
+) -> dict[str, Any]:
+    """Verify replay state from committed bytes in a fresh worker.
+
+    Schema and variant are identified before any key-set check, so an older
+    admitted v2 receipt is not rejected for lacking the v1 field set. Delivery
+    for that variant comes from the caller and is checked by the existing
+    dispatcher against the FIRST admission ledger, never from receipt claims.
+    """
+    if not isinstance(receipt, dict) or type(receipt.get("schema_version")) is not str:
+        raise ValueError("replay_persistence_receipt_schema_invalid")
+    schema_version = receipt["schema_version"]
+    if schema_version == REPLAY_PERSISTENCE_SCHEMA:
+        if expected_delivery is not None:
+            raise ValueError("replay_v1_expected_delivery_unexpected")
+    elif schema_version == REPLAY_PERSISTENCE_SCHEMA_V2:
+        if expected_delivery is None:
+            raise ValueError("replay_expected_delivery_missing")
+        expected_delivery = _validated_expected_delivery(expected_delivery)
+    else:
+        raise ValueError("replay_persistence_receipt_schema_invalid")
+    prior_sha = receipt.get("state_head_sha")
+    current_sha = expected_current_state_commit
+    if (
+        not isinstance(prior_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", prior_sha)
+        or prior_state_commit != prior_sha
+        or not isinstance(current_sha, str) or not re.fullmatch(r"[a-f0-9]{40}", current_sha)
+    ):
+        raise ValueError("replay_state_commit_binding_invalid")
+    if phase not in {_REPLAY_VERIFY_PRE_CAS, _REPLAY_VERIFY_POST_CAS}:
+        raise ValueError("replay_state_verification_phase_invalid")
+    if phase == _REPLAY_VERIFY_PRE_CAS and current_sha != prior_sha:
+        raise ValueError("replay_pre_cas_head_binding_invalid")
+    repository = pathlib.Path(state_repository).resolve(strict=True)
+    if not repository.is_dir():
+        raise ValueError("replay_state_repository_invalid")
+    deadline = time.monotonic() + _REPLAY_VERIFY_TIMEOUT_SECONDS
+    _require_replay_verification_deadline(deadline)
+    top = _replay_verifier_git(repository, ("rev-parse", "--show-toplevel"), deadline=deadline)
+    try:
+        if pathlib.Path(os.fsdecode(top).strip()).resolve(strict=True) != repository:
+            raise ValueError("replay_state_repository_root_mismatch")
+    except OSError as exc:
+        raise ValueError("replay_state_repository_root_mismatch") from exc
+    head = _replay_verifier_git(repository, ("rev-parse", "--verify", "HEAD^{commit}"), deadline=deadline)
+    if os.fsdecode(head).strip() != current_sha:
+        raise ValueError("replay_state_current_head_mismatch")
+    prior_verified = _replay_verifier_git(
+        repository, ("rev-parse", "--verify", f"{prior_sha}^{{commit}}"), deadline=deadline,
+    )
+    current_verified = _replay_verifier_git(
+        repository, ("rev-parse", "--verify", f"{current_sha}^{{commit}}"), deadline=deadline,
+    )
+    if os.fsdecode(prior_verified).strip() != prior_sha or os.fsdecode(current_verified).strip() != current_sha:
+        raise ValueError("replay_state_commit_unavailable")
+    if phase == _REPLAY_VERIFY_POST_CAS and current_sha != prior_sha:
+        _replay_verifier_git(
+            repository, ("merge-base", "--is-ancestor", prior_sha, current_sha), deadline=deadline,
+        )
+
+    source_id = receipt.get("source_id")
+    generation_id = receipt.get("generation_id")
+    if not isinstance(source_id, str) or not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,63}", source_id):
+        raise ValueError("replay_source_id_invalid")
+    if not isinstance(generation_id, str) or not re.fullmatch(r"[a-f0-9]{64}", generation_id):
+        raise ValueError("replay_generation_id_invalid")
+    index_path = f".datapan/upstream-catalogue-state/sources/{source_id}/index.json"
+    checkpoint_path = (
+        f".datapan/upstream-catalogue-state/sources/{source_id}/generations/{generation_id}.json"
+    )
+    accounting = {"bytes": 0, "source_id": source_id, "allowed_generation_ids": (generation_id,)}
+    prior_index = _replay_committed_json(
+        repository, prior_sha, index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT,
+        deadline=deadline, accounting=accounting,
+    )
+    if not isinstance(prior_index, Mapping) or prior_index.get("schema_version") != CHECKPOINT_SCHEMA:
+        raise ValueError("replay_prior_generation_index_invalid")
+    if not isinstance(prior_index.get("generations"), list):
+        raise ValueError("replay_prior_generation_index_invalid")
+    prior_checkpoint = _replay_committed_json(
+        repository, prior_sha, checkpoint_path, maximum_bytes=STATE_FILE_LIMIT,
+        deadline=deadline, accounting=accounting,
+    )
+    if not isinstance(prior_checkpoint, Mapping):
+        raise ValueError("replay_prior_checkpoint_invalid")
+    accounting["allowed_generation_ids"] = tuple(
+        row.get("generation_id") for row in prior_index.get("generations", [])
+        if isinstance(row, Mapping) and isinstance(row.get("generation_id"), str)
+    )
+    schema_path = SCRIPT_DIR.parent / "schemas" / "datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    try:
+        checkpoint_schema = load_json(schema_path, maximum_bytes=1024 * 1024)
+    except Exception as exc:
+        raise ValueError("replay_checkpoint_schema_unavailable") from exc
+    if not isinstance(checkpoint_schema, Mapping):
+        raise ValueError("replay_checkpoint_schema_invalid")
+
+    if phase == _REPLAY_VERIFY_POST_CAS:
+        current_index = _replay_committed_json(
+            repository, current_sha, index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT,
+            deadline=deadline, accounting=accounting,
+        )
+        current_checkpoint = _replay_committed_json(
+            repository, current_sha, checkpoint_path, maximum_bytes=STATE_FILE_LIMIT,
+            deadline=deadline, accounting=accounting,
+        )
+    else:
+        current_index = _replay_worktree_json(
+            repository, index_path, maximum_bytes=STATE_INDEX_FILE_LIMIT,
+            deadline=deadline, accounting=accounting,
+        )
+        current_checkpoint = _replay_worktree_json(
+            repository, checkpoint_path, maximum_bytes=STATE_FILE_LIMIT,
+            deadline=deadline, accounting=accounting,
+        )
+        if checkpoint_receipt != current_checkpoint:
+            raise ValueError("replay_checkpoint_receipt_state_mismatch")
+    if (
+        not isinstance(current_index, Mapping)
+        or current_index.get("schema_version") != CHECKPOINT_SCHEMA
+        or not isinstance(current_checkpoint, Mapping)
+    ):
+        raise ValueError("replay_current_state_invalid")
+    verified_current = verify_checkpoint(dict(current_checkpoint), dict(checkpoint_schema))
+    if (
+        verified_current.get("source_id") != source_id
+        or verified_current.get("generation_id") != generation_id
+    ):
+        raise ValueError("replay_current_checkpoint_identity_mismatch")
+    _require_replay_verification_deadline(deadline)
+
+    lineage = None
+    if schema_version == REPLAY_PERSISTENCE_SCHEMA:
+        try:
+            lineage = _verify_committed_replay_lineage(
+                repository=repository,
+                prior_state_commit=prior_sha,
+                target_source_id=source_id,
+                target_generation_id=generation_id,
+                prior_index=prior_index,
+                prior_checkpoint=prior_checkpoint,
+                checkpoint_schema=checkpoint_schema,
+                deadline=deadline,
+                accounting=accounting,
+            )
+        except (OSError, TypeError, ValueError) as exc:
+            if isinstance(exc, ValueError) and str(exc).startswith("replay_"):
+                raise
+            raise ValueError("replay_committed_lineage_invalid") from exc
+    variant_kwargs: dict[str, Any] = {}
+    if schema_version == REPLAY_PERSISTENCE_SCHEMA_V2:
+        # delivered_admission_id is an index only. The v2 dispatcher reads it
+        # from the receipt and re-authenticates that row against the FIRST
+        # ledger plus this caller-supplied delivery context.
+        variant_kwargs = {"expected_delivery": expected_delivery}
+    verified_receipt = verify_replay_persistence_receipt(
+        receipt,
+        prior_checkpoint=prior_checkpoint,
+        current_checkpoint=verified_current,
+        prior_index=prior_index,
+        current_index=current_index,
+        result=result,
+        state_head_sha=prior_sha,
+        checkpoint_schema=dict(checkpoint_schema),
+        **variant_kwargs,
+    )
+    if lineage is not None:
+        # The private proof never enters the receipt. It only confirms that the
+        # graph reconstructed from the prior commit is the one the v1 receipt
+        # already bound through the dispatcher.
+        if (
+            lineage.target_generation_id != verified_receipt.get("generation_id")
+            or lineage.token is not _REPLAY_LINEAGE_PROOF_TOKEN
+        ):
+            raise ValueError("replay_committed_lineage_invalid")
+    _require_replay_verification_deadline(deadline)
+    return verified_receipt
+
+
 
 
 def generation_identity(
