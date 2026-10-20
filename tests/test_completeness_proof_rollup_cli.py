@@ -175,7 +175,7 @@ subprocess.Popen = _GuardedPopen
             self.assertEqual(cells[1], row["resource_kind"])
             self.assertEqual(cells[3], row["proof_state"])
             for column, claim in zip(cells[4:7], ("complete", "current", "updated")):
-                self.assertEqual(column, str(row["claims"][claim]))
+                self.assertEqual(column, str(row["evaluated_claims"][claim]))
 
         checked = self._run_cli(action="--check", index_path=index_path, outputs=outputs)
         self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
@@ -189,7 +189,7 @@ subprocess.Popen = _GuardedPopen
         unsupported = next(
             f"{scope_id}:updated"
             for scope_id, row in scope_rows.items()
-            if row["claims"]["updated"] is False
+            if row["evaluated_claims"]["updated"] is False
         )
         rejected = self._run_cli(
             action="--write",
@@ -198,7 +198,7 @@ subprocess.Popen = _GuardedPopen
             extra_args=("--require-claim", unsupported),
         )
         self.assertEqual(rejected.returncode, 1)
-        self.assertIn("required claim is not supported", rejected.stderr)
+        self.assertIn("requires authenticated current-release evaluation", rejected.stderr)
         self.assertIn(unsupported, rejected.stderr)
         self.assertEqual(json_path.read_bytes(), json_before)
         self.assertEqual(markdown_path.read_bytes(), markdown_before)
@@ -215,7 +215,8 @@ subprocess.Popen = _GuardedPopen
             outputs=first_outputs,
             repo_root_arg=".",
         )
-        self.assertEqual(first.returncode, 0, first.stdout + first.stderr)
+        self.assertEqual(first.returncode, 1, first.stdout + first.stderr)
+        self.assertIn("requires authenticated current-release evaluation", first.stderr)
         second = self._run_cli(
             action="--write",
             index_path=second_index,
