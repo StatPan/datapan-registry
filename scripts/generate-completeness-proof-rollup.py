@@ -6532,7 +6532,7 @@ def evaluate_current_release(
     claims={"complete":False,"current":False,"updated":False}; results=[]
     for row in snapshot["scopes"]:
         complete=bool(row["evaluated_claims"]["complete"]); results.append({"scope_id":row["scope_id"],"relation":target_kind,"status":"historical" if target_kind != "current_main" else "unavailable","claims":{**claims,"complete":complete},"missing_evidence":[missing_entry("current_release_evaluation_evidence_unavailable","StatPan/datapan-registry","#754")]})
-    evaluation={"schema_version":"datapan.completeness-current-release-evaluation.v1","evaluation_as_of":as_of.isoformat().replace("+00:00","Z"),"evaluator_source":{"revision":release_source_sha,"path":"scripts/generate-completeness-proof-rollup.py","bytes":len(s),"sha256":sha256_bytes(s.encode())},"trusted_main_sha":trusted_main_sha,"target_kind":target_kind,"target":{"source_sha":release_source_sha,"tree_sha":tree,"release_manifest":artifact("manifest.json",manifest_raw),"canonical_registry":artifact("manifest.json",manifest_raw),"operation_manifest":artifact("manifest.json",manifest_raw)},"snapshot":artifact(OUTPUT_JSON_PATH,snapshot_raw),"target_applicability":{"schema_version":"datapan.completeness-current-target-applicability.v1","status":"unavailable" if target_kind=="current_main" else target_kind,"reason_code":"current_release_evaluation_evidence_unavailable","disposition":None,"context":{"repository":"StatPan/datapan-registry","release_source_sha":release_source_sha,"trusted_main_sha":trusted_main_sha,"evaluation_as_of":as_of.isoformat().replace("+00:00","Z")},"source_target":None,"target_contract":None,"evidence_index":None},"summary":{"registered_scopes":len(results),"statuses":{"applicable":0,"historical":sum(r["status"]=="historical" for r in results),"missing":0,"unavailable":sum(r["status"]=="unavailable" for r in results),"rejected":0},"claims":{"complete":sum(r["claims"]["complete"] for r in results),"current":0,"updated":0}},"scopes":results}
+    evaluation={"schema_version":"datapan.completeness-current-release-evaluation.v1","evaluation_as_of":as_of.isoformat().replace("+00:00","Z"),"evaluator_source":{"revision":release_source_sha,"path":"scripts/generate-completeness-proof-rollup.py","bytes":len(s),"sha256":sha256_bytes(s.encode())},"trusted_main_sha":trusted_main_sha,"target_kind":target_kind,"target":{"source_sha":release_source_sha,"tree_sha":tree,"release_manifest":artifact("manifest.json",manifest_raw),"canonical_registry":artifact("manifest.json",manifest_raw),"operation_manifest":artifact("manifest.json",manifest_raw)},"snapshot":artifact(OUTPUT_JSON_PATH,snapshot_raw),"target_applicability":{"schema_version":"datapan.completeness-current-target-applicability.v1","status":"unavailable" if target_kind=="current_main" else "not_applicable","reason_code":"current_release_evaluation_evidence_unavailable","disposition":None,"context":{"repository":"StatPan/datapan-registry","release_source_sha":release_source_sha,"trusted_main_sha":trusted_main_sha,"evaluation_as_of":as_of.isoformat().replace("+00:00","Z")},"source_target":None,"target_contract":None,"evidence_index":None},"summary":{"registered_scopes":len(results),"statuses":{"applicable":0,"historical":sum(r["status"]=="historical" for r in results),"missing":0,"unavailable":sum(r["status"]=="unavailable" for r in results),"rejected":0},"claims":{"complete":sum(r["claims"]["complete"] for r in results),"current":0,"updated":0}},"scopes":results}
     validate_schema(evaluation, root/CURRENT_EVALUATION_SCHEMA_PATH, "current release evaluation"); return evaluation
 
 
@@ -6640,6 +6640,8 @@ def require_claims(report: dict[str, Any], requirements: list[str]) -> None:
     if report.get("schema_version") != "datapan.completeness-current-release-evaluation.v1":
         raise ValueError("--require-claim requires authenticated current-release evaluation; snapshot claims are not current claims")
     rows = {row["scope_id"]: row for row in report["scopes"]}
+    if any(row.get("relation") != "current_main" for row in rows.values()):
+        raise ValueError("current claims require a current_main evaluator target")
     failures: list[str] = []
     for requirement in requirements:
         if ":" not in requirement:
@@ -6672,6 +6674,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     action.add_argument("--write", action="store_true")
     action.add_argument("--check", action="store_true")
     parser.add_argument("--require-claim", action="append", default=[])
+    parser.add_argument("--evaluate-current-release", action="store_true")
+    parser.add_argument("--release-source-sha")
+    parser.add_argument("--evaluation-as-of")
+    parser.add_argument("--evaluation-output")
     return parser.parse_args(argv)
 
 
@@ -6688,6 +6694,12 @@ def main(argv: list[str] | None = None) -> int:
     input_index = args.input_index or (root / INPUT_INDEX_PATH)
     json_output = output_path(root, args.output_json, "JSON output path")
     markdown_output = output_path(root, args.output_markdown, "Markdown output path")
+    evaluation_output = output_path(root, args.evaluation_output, "evaluation output path") if args.evaluation_output else None
+    if args.evaluate_current_release and (not args.release_source_sha or not args.evaluation_as_of or evaluation_output is None):
+        raise ValueError("current evaluation requires --release-source-sha, --evaluation-as-of, and --evaluation-output")
+    if evaluation_output is not None:
+        try: evaluation_output.relative_to(root / ".datapan/ci")
+        except ValueError as exc: raise ValueError("evaluation output must be outside the release manifest under .datapan/ci") from exc
     try:
         candidate_requested = args.candidate_registry is not None or args.candidate_operation_manifest is not None
         if (args.candidate_registry is None) != (args.candidate_operation_manifest is None):
@@ -6723,6 +6735,13 @@ def main(argv: list[str] | None = None) -> int:
             input_index_override=candidate_index,
             candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
         )
+        evaluation = None
+        if args.evaluate_current_release:
+            trusted_main_sha = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode().strip()
+            evaluation = evaluate_current_release(root=root, input_root=input_root, input_index_path=input_index, release_source_sha=args.release_source_sha, trusted_main_sha=trusted_main_sha, evaluation_as_of=args.evaluation_as_of)
+            require_claims(evaluation, args.require_claim)
+        elif args.require_claim:
+            require_claims(report, args.require_claim)
         if args.require_claim:
             require_claims(report, args.require_claim)
         json_bytes = render_json(report)
@@ -6730,6 +6749,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.write:
             if candidate_index is not None:
                 atomic_write(input_index, canonical_json_bytes(candidate_index))
+            if evaluation is not None:
+                atomic_write(evaluation_output, render_json(evaluation))
             atomic_write(json_output, json_bytes)
             atomic_write(markdown_output, markdown_bytes)
             print(f"ok completeness proof rollup ({report['summary']['registered_scopes']} scopes)")
