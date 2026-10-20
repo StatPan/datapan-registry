@@ -1022,6 +1022,24 @@
       "sha256": "93661b5e4eaf9e0eb9888ff977e8fc2d607f7c8eca9b67a5ded2246038f9bee1"
     },
     {
+      "path": "schemas/datapan.completeness-proof-rollup.v2.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.completeness-proof-rollup.v2.schema.json",
+      "title": "Datapan public-data completeness proof rollup v2",
+      "contract": "completeness-proof-rollup",
+      "version": "v2",
+      "bytes": 11498,
+      "sha256": "4f47ef6a6b26b8caf0dfb04c16c954e8ffdb88ada6593f77f01731fe05490e14"
+    },
+    {
+      "path": "schemas/datapan.completeness-current-release-evaluation.v1.schema.json",
+      "id": "https://schemas.datapan.dev/datapan.completeness-current-release-evaluation.v1.schema.json",
+      "title": "Datapan completeness current release evaluation v1",
+      "contract": "completeness-current-release-evaluation",
+      "version": "v1",
+      "bytes": 8677,
+      "sha256": "e01e1fdeeff090a90855c58872291f116441350848dc6d81eccbf5cdc5ffec84"
+    },
+    {
       "path": "schemas/datapan.completeness-proof-scopes.v1.schema.json",
       "id": "https://schemas.datapan.dev/datapan.completeness-proof-scopes.v1.schema.json",
       "title": "Datapan completeness proof scope registry v1",
