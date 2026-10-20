@@ -1643,10 +1643,13 @@ class CompletenessProofRollupTest(unittest.TestCase):
         # source's common object store. Transfer only the already authenticated
         # exact SHA from this local checkout; never consult its remote URL or
         # substitute HEAD.
-        fetch_args = [
-            "git", "fetch", "--no-tags", "--depth=64", str(source_root),
-            f"{trusted_main}:refs/remotes/origin/main",
-        ]
+        destination_is_shallow = subprocess.check_output(
+            ["git", "rev-parse", "--is-shallow-repository"], cwd=repository, text=True,
+        ).strip() == "true"
+        fetch_args = ["git", "fetch", "--no-tags"]
+        if destination_is_shallow:
+            fetch_args.append("--unshallow")
+        fetch_args.extend([str(source_root), f"{trusted_main}:refs/remotes/origin/main"])
         try:
             subprocess.run(
                 fetch_args,
@@ -2064,7 +2067,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             )
         subprocess.run(
             [
-                "git", "fetch", "--no-tags", "--depth=64", "origin",
+                "git", "fetch", "--no-tags", "--unshallow", "origin",
                 "+refs/heads/main:refs/remotes/origin/main",
             ],
             cwd=checkout,
@@ -2072,6 +2075,18 @@ class CompletenessProofRollupTest(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
+        subprocess.run(
+            ["git", "fetch", "--no-tags", "--depth=1", "origin", fixture_pr_head],
+            cwd=checkout,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        shallow_path = pathlib.Path(subprocess.check_output(
+            ["git", "rev-parse", "--path-format=absolute", "--git-path", "shallow"], cwd=checkout, text=True,
+        ).strip())
+        if not shallow_path.exists() or not shallow_path.read_bytes():
+            shallow_path.write_text(f"{fixture_pr_head}\n", encoding="utf-8")
         fetched_main = subprocess.check_output(
             ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"],
             cwd=checkout,
@@ -2895,12 +2910,12 @@ class CompletenessProofRollupTest(unittest.TestCase):
         index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n")
         return repository, index_path, checkpoint["generation_id"]
 
-    def test_verify_release_fetches_bounded_main_ref_for_retained_provenance(self) -> None:
+    def test_verify_release_fetches_complete_main_ref_for_retained_provenance(self) -> None:
         workflow = (ROOT / ".github/workflows/verify-release.yml").read_text(encoding="utf-8")
-        fetch_step = "git fetch --no-tags --depth=64 origin +refs/heads/main:refs/remotes/origin/main"
-        self.assertIn(fetch_step, workflow)
+        self.assertIn("git fetch --no-tags --unshallow origin +refs/heads/main:refs/remotes/origin/main", workflow)
+        self.assertIn("Fetch complete trusted main history for retained evidence checks", workflow)
         self.assertLess(
-            workflow.index("Fetch bounded trusted main history for retained evidence checks"),
+            workflow.index("Fetch complete trusted main history for retained evidence checks"),
             workflow.index("Validate registry policy artifacts"),
         )
 
@@ -2945,7 +2960,11 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     ["git", "rev-parse", "refs/remotes/origin/main"], cwd=checkout,
                     check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                 )
-            subprocess.run(fetch_step.split(), cwd=checkout, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.run(
+                ["git", "fetch", "--no-tags", "--unshallow", "origin",
+                 "+refs/heads/main:refs/remotes/origin/main"],
+                cwd=checkout, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            )
             fetched_main = subprocess.check_output(
                 ["git", "rev-parse", "--verify", "refs/remotes/origin/main^{commit}"], cwd=checkout, text=True,
             ).strip()
@@ -2954,7 +2973,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 subprocess.check_output(
                     ["git", "rev-parse", "--is-shallow-repository"], cwd=checkout, text=True,
                 ).strip(),
-                "true",
+                "false",
             )
             pr_head = subprocess.check_output(
                 ["git", "rev-parse", "--verify", "HEAD^{commit}"], cwd=checkout, text=True,
@@ -3170,7 +3189,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 is_command = isinstance(command, list)
                 if (
                     is_command
-                    and command[:4] == ["git", "fetch", "--no-tags", "--depth=64"]
+                    and command[:3] == ["git", "fetch", "--no-tags"]
                     and pathlib.Path(kwargs.get("cwd", "")).resolve() == destination.resolve()
                 ):
                     destination_shallow = pathlib.Path(native_output(

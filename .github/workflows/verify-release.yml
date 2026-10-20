@@ -112,9 +112,14 @@ jobs:
           git fetch --no-tags --depth=8 origin e34062309a48b0e0b6c0f38add32f0cdec088616
           git fetch --no-tags --depth=1 origin 1a3088f64c0ff00fbf31e0e28cb37e3fc3d7dc07
 
-      - name: Fetch bounded trusted main history for retained evidence checks
+      - name: Fetch complete trusted main history for retained evidence checks
         working-directory: datapan-registry
-        run: git fetch --no-tags --depth=64 origin +refs/heads/main:refs/remotes/origin/main
+        run: |
+          if [ "$(git rev-parse --is-shallow-repository)" = true ]; then
+            git fetch --no-tags --unshallow origin +refs/heads/main:refs/remotes/origin/main
+          else
+            git fetch --no-tags origin +refs/heads/main:refs/remotes/origin/main
+          fi
 
       - name: Fetch historical observation-plan schema test fixture
         working-directory: datapan-registry
@@ -222,6 +227,7 @@ jobs:
           python -m unittest tests/test_canonical_update_pr.py
           python -m unittest tests/test_canonical_update_ci.py
           python -m unittest tests/test_refresh_canonical_snapshot_evidence.py
+          python -m unittest tests/test_verify_release_gate_structure.py
           python -m unittest tests/test_run_canonical_update_promotion.py
           python -m unittest tests/test_publication_ack_recovery_transport.py
           python -m unittest tests/test_publication_ack_recovery_incident.py
@@ -272,7 +278,7 @@ jobs:
           python -m unittest tests/test_check_upstream_catalogue_health.py tests/test_check_upstream_catalogue_health_workflow.py tests/test_persist_upstream_catalogue_health.py
           python -m unittest tests/test_canonical_update_terminal_evidence.py tests/test_check_upstream_catalogue_terminal_intake.py
           python3 -m py_compile scripts/canonical_update_terminal_evidence.py scripts/run-canonical-update-promotion.py scripts/check-upstream-catalogue-health.py
-          python -m unittest tests/test_process_upstream_catalogue_candidate.py
+          python -m unittest tests/test_process_upstream_catalogue_candidate.py tests/test_issue_761_quarantine_replay.py tests/test_resume_validation_diagnostic.py
           python3 -m py_compile scripts/upstream_catalogue_derivation.py scripts/prepare-upstream-catalogue-derivation.py
           python -m unittest tests/test_same_observation_derivation.py
           python -m unittest tests/test_link_detail_resolver.py tests/test_process_upstream_catalogue_request_reservations.py

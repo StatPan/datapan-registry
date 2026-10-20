@@ -48,6 +48,10 @@ PROCESSOR_TESTS = load_script(
     "same_observation_processor_test_helpers",
     ROOT / "tests/test_process_upstream_catalogue_candidate.py",
 )
+WORKFLOW_REPLAY_TESTS = load_script(
+    "same_observation_workflow_replay_helpers",
+    ROOT / "tests/test_issue_761_quarantine_replay.py",
+)
 HEALTH_TESTS = load_script(
     "same_observation_health_test_helpers",
     ROOT / "tests/test_check_upstream_catalogue_health.py",
@@ -929,6 +933,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         self.output_expiry = "2026-11-05T00:00:00Z"
         self.output_by_generation: dict[str, pathlib.Path] = {}
         self.checkpoints: dict[str, dict[str, Any]] = {}
+        self.state_snapshots: dict[str, dict[str, bytes]] = {}
         self.current_manifests: dict[str, bytes] = {}
         self.claim_runs: list[str] = []
         self.detail_calls: list[str] = []
@@ -1065,6 +1070,700 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
             page_sha256=PROCESSOR.sha256_bytes(body), observed_at=self.now_text,
         )
 
+    def _state_tree_bytes(self, state_dir: pathlib.Path) -> dict[str, bytes]:
+        paths = sorted(state_dir.rglob("*"))
+        self.assertTrue(all(not path.is_symlink() for path in paths))
+        return {
+            path.relative_to(state_dir).as_posix(): path.read_bytes()
+            for path in paths if path.is_file()
+        }
+
+    def _new_workflow_state_repo(
+        self, label: str, state_bytes: Mapping[str, bytes],
+    ) -> tuple[pathlib.Path, pathlib.Path, pathlib.Path, pathlib.Path, pathlib.Path, str]:
+        flow_root = self.helper.root / f"{label}-workflow"
+        flow_root.mkdir()
+        (flow_root / "bootstrap").symlink_to(ROOT, target_is_directory=True)
+        checkout = flow_root / "datapan-registry"
+        checkout.mkdir()
+        state_repo = flow_root / "state-repo"
+        state_dir = state_repo / ".datapan/upstream-catalogue-state"
+        for relative, content in state_bytes.items():
+            path = state_dir / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+        bare_repo = flow_root / "state.git"
+        support = WORKFLOW_REPLAY_TESTS.Issue761QuarantineReplayTest
+        support.init_state_repo(self, state_repo, bare_repo)
+        selected_sha = support.commit_state(self, state_repo, f"capture {label} State")
+        support.push_state(self, state_repo)
+        self.assertRegex(selected_sha, r"^[a-f0-9]{40}$")
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(bare_repo, "rev-parse", "refs/heads/automation/upstream-catalogue-state"), selected_sha)
+        return flow_root, checkout, state_repo, bare_repo, state_dir, selected_sha
+
+    def _run_processor_cli_without_provider(self, args: argparse.Namespace) -> tuple[int, str, str]:
+        provider_calls: list[str] = []
+
+        def forbidden_provider(url: str, _timeout: float) -> Any:
+            provider_calls.append(url)
+            raise AssertionError("exact replay must not call a provider")
+
+        original_defaults = PROCESSOR.process.__kwdefaults__ or {}
+        safe_defaults = dict(original_defaults)
+        safe_defaults.update({
+            "fetcher": forbidden_provider,
+            "resolver_fetcher": forbidden_provider,
+            "sleeper": lambda _delay: None,
+        })
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+        with (
+            mock.patch.object(PROCESSOR.process, "__kwdefaults__", safe_defaults),
+            contextlib.redirect_stdout(stdout),
+            contextlib.redirect_stderr(stderr),
+        ):
+            exit_code = PROCESSOR.main(PROCESSOR_TESTS.UpstreamCatalogueProcessorTest.namespace_argv(args))
+        self.assertEqual(provider_calls, [])
+        return exit_code, stdout.getvalue(), stderr.getvalue()
+
+    def _run_workflow_body(
+        self, code: str, *, cwd: pathlib.Path, output_file: pathlib.Path, env: dict[str, str],
+    ) -> dict[str, str]:
+        return WORKFLOW_REPLAY_TESTS.Issue761QuarantineReplayTest.run_workflow_body(
+            self, code, cwd=cwd, output_file=output_file, env=env,
+        )
+
+    def _connected_replay_args(
+        self, template: argparse.Namespace, *, state_dir: pathlib.Path, output_dir: pathlib.Path,
+        state_head_sha: str, generation_id: str,
+    ) -> argparse.Namespace:
+        args = copy.deepcopy(template)
+        args.state_dir = state_dir
+        args.output_dir = output_dir
+        args.replay_state_head_sha = state_head_sha
+        args.expected_generation_id = generation_id
+        args.now = None
+        return args
+
+    def _expect_connected_cli_refusal(
+        self, label: str, *, template: argparse.Namespace, state_bytes: Mapping[str, bytes],
+        generation_id: str, generator_revision: str,
+        derivation: tuple[dict[str, Any], dict[str, Any], str] | None = None,
+        mutate_state: Any | None = None, mutate_args: Any | None = None,
+    ) -> None:
+        selected_state = dict(state_bytes)
+        if mutate_state is not None:
+            mutate_state(selected_state)
+        flow_root, _checkout, state_repo, bare_repo, state_dir, state_head_sha = (
+            self._new_workflow_state_repo(label, selected_state)
+        )
+        output_dir = flow_root / "processor-output"
+        args = self._connected_replay_args(
+            template, state_dir=state_dir, output_dir=output_dir,
+            state_head_sha=state_head_sha, generation_id=generation_id,
+        )
+        if mutate_args is not None:
+            mutate_args(args, flow_root)
+        derivation_snapshot, derivation_readback_sha, derivation_envelope = derivation or (None, None, None)
+        before_details = len(self.detail_calls)
+        with (
+            mock.patch.object(PROCESSOR, "generator_revision", return_value=generator_revision),
+            self._derivation_git(
+                snapshot=derivation_snapshot, journal_ref_sha=derivation_readback_sha,
+                derivation=derivation_envelope,
+            ),
+        ):
+            exit_code, _stdout, stderr = self._run_processor_cli_without_provider(args)
+        self.assertEqual(exit_code, 1, stderr)
+        result_path = output_dir / "upstream-catalogue-processing-result.json"
+        self.assertTrue(result_path.is_file())
+        self.assertEqual(PROCESSOR.load_json(result_path).get("status"), "retry")
+        self.assertFalse((output_dir / "upstream-catalogue-checkpoint-receipt.json").exists())
+        self.assertFalse((output_dir / PROCESSOR.REPLAY_PERSISTENCE_RECEIPT).exists())
+        self.assertEqual(self._state_tree_bytes(state_dir), selected_state)
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "status", "--porcelain"), "")
+        self.assertEqual(len(self.detail_calls), before_details)
+        self.assertEqual(
+            WORKFLOW_REPLAY_TESTS.git(
+                bare_repo, "rev-parse", "refs/heads/automation/upstream-catalogue-state",
+            ),
+            state_head_sha,
+        )
+
+    def _assert_connected_b3_ordinary_identity_mismatch_refusal(
+        self, label: str, *, template: argparse.Namespace,
+        state_bytes: Mapping[str, bytes], b0: Mapping[str, Any], b3: Mapping[str, Any],
+        generator_revision: str,
+        derivation: tuple[dict[str, Any], dict[str, Any], str],
+    ) -> None:
+        """Reject an ordinary proposal deliberately stored at the trusted B3 path."""
+        original_state = dict(state_bytes)
+        index_rel = "sources/data_go_kr/index.json"
+        b0_rel = f"sources/data_go_kr/generations/{b0['generation_id']}.json"
+        b3_rel = f"sources/data_go_kr/generations/{b3['generation_id']}.json"
+        self.assertIn(index_rel, original_state)
+        self.assertIn(b0_rel, original_state)
+        self.assertIn(b3_rel, original_state)
+        self.assertEqual(self.state_snapshots[b3["generation_id"]], original_state)
+
+        b0_checkpoint = json.loads(original_state[b0_rel])
+        b3_checkpoint = json.loads(original_state[b3_rel])
+        self.assertEqual(b0_checkpoint["generation_id"], b0["generation_id"])
+        self.assertEqual(b3_checkpoint["generation_id"], b3["generation_id"])
+        self.assertEqual(
+            b3_checkpoint["generation_inputs"]["same_observation_derivation"],
+            derivation[2],
+        )
+
+        # Removing only the derivation envelope reveals the exact ordinary B0
+        # identity. B0 itself remains byte-for-byte untouched.
+        ordinary_inputs = dict(b3_checkpoint["generation_inputs"])
+        del ordinary_inputs["same_observation_derivation"]
+        self.assertEqual(set(ordinary_inputs), PROCESSOR._GENERATION_IDENTITY_INPUT_KEYS)
+        self.assertEqual(PROCESSOR._object_sha256(ordinary_inputs), b0["generation_id"])
+        self.assertEqual(ordinary_inputs, b0_checkpoint["generation_inputs"])
+
+        # Propose one distinct, valid ordinary input. Keep the proposal at the
+        # trusted B3 filename so the unchanged CLI selects that path and must
+        # reject the checkpoint/file identity mismatch before State writes.
+        proposed_inputs = dict(ordinary_inputs)
+        proposed_candidate_sha = hashlib.sha256(
+            b"issue-761-r008-proposed-candidate\0"
+            + bytes.fromhex(str(ordinary_inputs["candidate_sha256"])),
+        ).hexdigest()
+        self.assertRegex(proposed_candidate_sha, r"^[a-f0-9]{64}$")
+        self.assertNotEqual(proposed_candidate_sha, ordinary_inputs["candidate_sha256"])
+        proposed_inputs["candidate_sha256"] = proposed_candidate_sha
+        proposed_generation_id = PROCESSOR._object_sha256(proposed_inputs)
+        self.assertRegex(proposed_generation_id, r"^[a-f0-9]{64}$")
+        self.assertNotEqual(proposed_generation_id, b0["generation_id"])
+        self.assertNotEqual(proposed_generation_id, b3["generation_id"])
+
+        proposed_checkpoint = copy.deepcopy(b3_checkpoint)
+        proposed_checkpoint["generation_inputs"] = proposed_inputs
+        proposed_checkpoint["generation_id"] = proposed_generation_id
+        PROCESSOR.seal_checkpoint(proposed_checkpoint)
+        self.assertEqual(PROCESSOR.verify_checkpoint(proposed_checkpoint), proposed_checkpoint)
+        for field in (
+            "source_id", "source_scope", "status", "observed_at", "last_observation",
+            "observation_count", "input_artifacts", "outcome",
+        ):
+            self.assertEqual(proposed_checkpoint[field], b3_checkpoint[field])
+        self.assertEqual(
+            set(proposed_checkpoint) - {"generation_id", "generation_inputs", "checkpoint_sha256"},
+            set(b3_checkpoint) - {"generation_id", "generation_inputs", "checkpoint_sha256"},
+        )
+
+        flow_root, checkout, state_repo, bare_repo, state_dir, old_sha = (
+            self._new_workflow_state_repo(label, original_state)
+        )
+        state_git_prefix = ".datapan/upstream-catalogue-state/"
+        b0_git_path = state_git_prefix + b0_rel
+        b3_git_path = state_git_prefix + b3_rel
+        index_git_path = state_git_prefix + index_rel
+        bare_ref = "refs/heads/automation/upstream-catalogue-state"
+        old_bare_sha = WORKFLOW_REPLAY_TESTS.git(bare_repo, "rev-parse", bare_ref)
+        self.assertEqual(old_bare_sha, old_sha)
+        original_index = json.loads(original_state[index_rel])
+        original_rows = copy.deepcopy(original_index["generations"])
+        b3_positions = [
+            position for position, row in enumerate(original_rows)
+            if isinstance(row, dict) and row.get("generation_id") == b3["generation_id"]
+        ]
+        self.assertEqual(len(b3_positions), 1)
+        b3_position = b3_positions[0]
+        proposal_row = {
+            "generation_id": proposed_generation_id,
+            "status": proposed_checkpoint["status"],
+            "checkpoint": f"{proposed_generation_id}.json",
+            "updated_at": proposed_checkpoint["last_heartbeat_at"],
+            "candidate_sha256": proposed_candidate_sha,
+        }
+        proposed_index = copy.deepcopy(original_index)
+        proposed_index["generations"][b3_position] = proposal_row
+        self.assertEqual(
+            [row for position, row in enumerate(proposed_index["generations"])
+             if position != b3_position],
+            [row for position, row in enumerate(original_rows) if position != b3_position],
+        )
+        self.assertEqual(
+            next(row for row in proposed_index["generations"]
+                 if row.get("generation_id") == b0["generation_id"]),
+            next(row for row in original_rows if row.get("generation_id") == b0["generation_id"]),
+        )
+
+        proposed_checkpoint_bytes = json.dumps(
+            proposed_checkpoint, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        ).encode("utf-8") + b"\n"
+        proposed_index_bytes = json.dumps(
+            proposed_index, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        ).encode("utf-8") + b"\n"
+        (state_dir / b3_rel).write_bytes(proposed_checkpoint_bytes)
+        (state_dir / index_rel).write_bytes(proposed_index_bytes)
+        proposed_state = self._state_tree_bytes(state_dir)
+        self.assertEqual(
+            {path for path in original_state if original_state[path] != proposed_state[path]},
+            {b3_rel, index_rel},
+        )
+        self.assertEqual(proposed_state[b0_rel], original_state[b0_rel])
+
+        def committed_blob(repo: pathlib.Path, revision: str, path: str) -> bytes:
+            return subprocess.run(
+                ["git", "-C", str(repo), "show", f"{revision}:{path}"],
+                check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            ).stdout
+
+        for path, expected in (
+            (b0_git_path, original_state[b0_rel]),
+            (b3_git_path, original_state[b3_rel]),
+            (index_git_path, original_state[index_rel]),
+        ):
+            self.assertEqual(committed_blob(state_repo, old_sha, path), expected)
+            self.assertEqual(committed_blob(bare_repo, bare_ref, path), expected)
+
+        output_dir = checkout / ".datapan/ci/upstream-catalogue-processing"
+        args = self._connected_replay_args(
+            template, state_dir=state_dir, output_dir=output_dir,
+            state_head_sha=old_sha, generation_id=b3["generation_id"],
+        )
+        self.assertEqual(args.expected_generation_id, b3["generation_id"])
+        self.assertEqual(args.same_observation_derivation, template.same_observation_derivation)
+        before_details = len(self.detail_calls)
+        derivation_snapshot, derivation_readback_sha, derivation_envelope = derivation
+        with (
+            mock.patch.object(PROCESSOR, "generator_revision", return_value=generator_revision),
+            self._derivation_git(
+                snapshot=derivation_snapshot, journal_ref_sha=derivation_readback_sha,
+                derivation=derivation_envelope,
+            ),
+        ):
+            exit_code, stdout, stderr = self._run_processor_cli_without_provider(args)
+        self.assertEqual(exit_code, 1, stderr or stdout)
+        self.assertEqual(len(self.detail_calls), before_details)
+        result_path = output_dir / "upstream-catalogue-processing-result.json"
+        result = PROCESSOR.load_json(result_path)
+        self.assertEqual(result.get("status"), "retry")
+        self.assertFalse(result.get("processing_replay", False))
+        self.assertFalse(result.get("candidate_available", False))
+        self.assertFalse((output_dir / "upstream-catalogue-checkpoint-receipt.json").exists())
+        self.assertFalse((output_dir / PROCESSOR.REPLAY_PERSISTENCE_RECEIPT).exists())
+        self.assertEqual(self._state_tree_bytes(state_dir), proposed_state)
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), old_sha)
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(bare_repo, "rev-parse", bare_ref), old_bare_sha)
+        state_porcelain = subprocess.run(
+            ["git", "-C", str(state_repo), "status", "--porcelain=v1"],
+            check=True, text=True, capture_output=True,
+        ).stdout
+        self.assertEqual(
+            set(state_porcelain.splitlines()),
+            {f" M {b3_git_path}", f" M {index_git_path}"},
+        )
+
+        # The real Claim body sees exit 1 and no checkpoint receipt, so its
+        # outputs cannot satisfy the workflow's State CAS condition.
+        common_claim_env = {
+            "PROCESS_EXIT_CODE": str(exit_code),
+            "PRODUCER_RUN_ID": str(args.producer_run_id),
+            "PROCESSOR_RUN_ID": str(args.processor_run_id),
+            "PROCESSOR_ARTIFACT_RUN_ID": str(args.processor_artifact_run_id),
+            "REPOSITORY": "StatPan/datapan-registry",
+            "EXPECTED_STATE_HEAD_SHA": old_sha,
+        }
+        claim_output = self._run_workflow_body(
+            WORKFLOW_REPLAY_TESTS.workflow_python("Claim bounded request budget"),
+            cwd=checkout, output_file=flow_root / "claim-identity-mismatch.outputs",
+            env=common_claim_env,
+        )
+        self.assertEqual(claim_output.get("replay_candidate"), "false")
+        self.assertEqual(claim_output.get("checkpoint_persisted"), "false")
+        self.assertEqual(claim_output.get("replay_authenticated"), "false")
+        self.assertFalse(
+            claim_output.get("checkpoint_persisted") == "true" and exit_code != 1,
+        )
+
+        bundle_output = self._run_workflow_body(
+            WORKFLOW_REPLAY_TESTS.workflow_python(
+                "Validate the processor bundle and write a failure receipt if needed",
+            ),
+            cwd=flow_root, output_file=flow_root / "bundle-identity-mismatch.outputs",
+            env={
+                "DECISION": "process",
+                "PROCESSOR_RUN_ID": str(args.processor_run_id),
+                "PROCESSOR_ARTIFACT_RUN_ID": str(args.processor_artifact_run_id),
+                "PRODUCER_RUN_ID": str(args.producer_run_id),
+                "REPOSITORY": "StatPan/datapan-registry",
+                "STATE_HEAD_SHA": old_sha,
+                "CLAIM_SHA": "",
+                "CLAIM_CHANGED": "false",
+                "CLAIM_OUTCOME": "skipped",
+            },
+        )
+        self.assertEqual(bundle_output.get("verified"), "false")
+        self.assertEqual(bundle_output.get("replay"), "false")
+        self.assertEqual(self._state_tree_bytes(state_dir), proposed_state)
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), old_sha)
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(bare_repo, "rev-parse", bare_ref), old_bare_sha)
+        for path, expected in (
+            (b0_git_path, original_state[b0_rel]),
+            (b3_git_path, original_state[b3_rel]),
+            (index_git_path, original_state[index_rel]),
+        ):
+            self.assertEqual(committed_blob(state_repo, old_sha, path), expected)
+            self.assertEqual(committed_blob(bare_repo, bare_ref, path), expected)
+
+    def _assert_connected_workflow_replay(
+        self, label: str, *, template: argparse.Namespace, state_bytes: Mapping[str, bytes],
+        generation_id: str, generator_revision: str,
+        derivation: tuple[dict[str, Any], dict[str, Any], str] | None = None,
+    ) -> None:
+        flow_root, checkout, state_repo, bare_repo, state_dir, old_sha = (
+            self._new_workflow_state_repo(label, state_bytes)
+        )
+        output_dir = checkout / ".datapan/ci/upstream-catalogue-processing"
+        args = self._connected_replay_args(
+            template, state_dir=state_dir, output_dir=output_dir,
+            state_head_sha=old_sha, generation_id=generation_id,
+        )
+        derivation_snapshot, derivation_readback_sha, derivation_envelope = derivation or (None, None, None)
+        with (
+            mock.patch.object(PROCESSOR, "generator_revision", return_value=generator_revision),
+            self._derivation_git(
+                snapshot=derivation_snapshot, journal_ref_sha=derivation_readback_sha,
+                derivation=derivation_envelope,
+            ),
+        ):
+            exit_code, stdout, stderr = self._run_processor_cli_without_provider(args)
+        self.assertEqual(exit_code, 0, stderr or stdout)
+        result_path = output_dir / "upstream-catalogue-processing-result.json"
+        checkpoint_path = output_dir / "upstream-catalogue-checkpoint-receipt.json"
+        replay_path = output_dir / PROCESSOR.REPLAY_PERSISTENCE_RECEIPT
+        result_bytes = result_path.read_bytes()
+        checkpoint_bytes = checkpoint_path.read_bytes()
+        replay_bytes = replay_path.read_bytes()
+        result = json.loads(result_bytes)
+        checkpoint = json.loads(checkpoint_bytes)
+        replay_receipt = json.loads(replay_bytes)
+        self.assertEqual(result["status"], "idle")
+        self.assertEqual(result["reason"], "exact_producer_delivery_replay")
+        self.assertTrue(result["processing_replay"])
+        self.assertEqual(checkpoint["generation_id"], generation_id)
+        self.assertEqual(replay_receipt["generation_id"], generation_id)
+        self.assertEqual(
+            PROCESSOR.load_json(state_dir / f"sources/data_go_kr/generations/{generation_id}.json"),
+            checkpoint,
+        )
+        selected_state = self._state_tree_bytes(state_dir)
+        self.assertEqual(
+            WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), old_sha,
+        )
+        self.assertEqual(
+            WORKFLOW_REPLAY_TESTS.git(
+                bare_repo, "rev-parse", "refs/heads/automation/upstream-catalogue-state",
+            ),
+            old_sha,
+        )
+
+        # The real workflow Claim body rejects a different, valid Git commit
+        # identity before it can authorize the State compare-and-swap.
+        old_tree = WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", f"{old_sha}^{{tree}}")
+        foreign_sha = subprocess.run(
+            ["git", "-C", str(state_repo), "commit-tree", old_tree, "-p", old_sha, "-m", f"foreign {label}"],
+            check=True, text=True, capture_output=True,
+        ).stdout.strip()
+        self.assertRegex(foreign_sha, r"^[a-f0-9]{40}$")
+        claim_code = WORKFLOW_REPLAY_TESTS.workflow_python("Claim bounded request budget")
+        common_claim_env = {
+            "PROCESS_EXIT_CODE": "0",
+            "PRODUCER_RUN_ID": str(args.producer_run_id),
+            "PROCESSOR_RUN_ID": str(args.processor_run_id),
+            "PROCESSOR_ARTIFACT_RUN_ID": str(args.processor_artifact_run_id),
+            "REPOSITORY": "StatPan/datapan-registry",
+        }
+
+        def claim(expected_head: str, suffix: str) -> dict[str, str]:
+            return self._run_workflow_body(
+                claim_code, cwd=checkout, output_file=flow_root / f"claim-{suffix}.outputs",
+                env={**common_claim_env, "EXPECTED_STATE_HEAD_SHA": expected_head},
+            )
+
+        wrong_head = claim(foreign_sha, "wrong-real-head")
+        self.assertEqual(wrong_head.get("replay_candidate"), "true")
+        self.assertEqual(wrong_head.get("replay_authenticated"), "false")
+        self.assertEqual(self._state_tree_bytes(state_dir), selected_state)
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), old_sha)
+        self.assertEqual(
+            WORKFLOW_REPLAY_TESTS.git(
+                bare_repo, "rev-parse", "refs/heads/automation/upstream-catalogue-state",
+            ),
+            old_sha,
+        )
+
+        # A receipt that disagrees with the selected State checkpoint is not a
+        # candidate for commit, even when its JSON remains well formed.
+        checkpoint_receipt = json.loads(checkpoint_bytes)
+        checkpoint_receipt["checkpoint_sha256"] = "f" * 64
+        checkpoint_path.write_text(json.dumps(checkpoint_receipt, sort_keys=True), encoding="utf-8")
+        tampered_receipt = claim(old_sha, "tampered-checkpoint-receipt")
+        self.assertEqual(tampered_receipt.get("replay_authenticated"), "false")
+        checkpoint_path.write_bytes(checkpoint_bytes)
+
+        # A resealed workflow copy still has to authenticate the stored
+        # checkpoint seal against the State bytes and the replay receipt.
+        state_checkpoint_path = state_dir / f"sources/data_go_kr/generations/{generation_id}.json"
+        state_checkpoint_bytes = state_checkpoint_path.read_bytes()
+        invalid_checkpoint = json.loads(state_checkpoint_bytes)
+        invalid_checkpoint["last_heartbeat_at"] = "2026-10-12T00:00:00Z"
+        invalid_checkpoint_bytes = json.dumps(invalid_checkpoint, sort_keys=True).encode("utf-8") + b"\n"
+        state_checkpoint_path.write_bytes(invalid_checkpoint_bytes)
+        checkpoint_path.write_bytes(invalid_checkpoint_bytes)
+        tampered_seal = claim(old_sha, "tampered-state-checkpoint-seal")
+        self.assertEqual(tampered_seal.get("replay_authenticated"), "false")
+        state_checkpoint_path.write_bytes(state_checkpoint_bytes)
+        checkpoint_path.write_bytes(checkpoint_bytes)
+
+        replay_receipt_value = json.loads(replay_bytes)
+        replay_receipt_value["collector_admission_sha256"] = "e" * 64
+        replay_path.write_text(json.dumps(replay_receipt_value, sort_keys=True), encoding="utf-8")
+        tampered_replay = claim(old_sha, "tampered-replay-receipt")
+        self.assertEqual(tampered_replay.get("replay_authenticated"), "false")
+        replay_path.write_bytes(replay_bytes)
+        self.assertEqual(self._state_tree_bytes(state_dir), selected_state)
+
+        successful_claim = claim(old_sha, "positive")
+        self.assertEqual(successful_claim.get("replay_candidate"), "true")
+        self.assertEqual(successful_claim.get("checkpoint_persisted"), "true")
+        self.assertEqual(successful_claim.get("replay_authenticated"), "true")
+        changed_paths = WORKFLOW_REPLAY_TESTS.git(
+            state_repo, "status", "--porcelain=v1", "--untracked-files=all",
+        ).splitlines()
+        self.assertTrue(changed_paths)
+        self.assertTrue(all(".datapan/upstream-catalogue-state/" in row for row in changed_paths))
+        claim_sha = WORKFLOW_REPLAY_TESTS.Issue761QuarantineReplayTest.commit_state(
+            self, state_repo, f"publish {label} exact replay CAS",
+        )
+        self.assertNotEqual(claim_sha, old_sha)
+        WORKFLOW_REPLAY_TESTS.Issue761QuarantineReplayTest.push_state(
+            self, state_repo, expected=old_sha,
+        )
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), claim_sha)
+        self.assertEqual(
+            WORKFLOW_REPLAY_TESTS.git(
+                bare_repo, "rev-parse", "refs/heads/automation/upstream-catalogue-state",
+            ),
+            claim_sha,
+        )
+
+        bundle_code = WORKFLOW_REPLAY_TESTS.workflow_python(
+            "Validate the processor bundle and write a failure receipt if needed",
+        )
+        bundle_env = {
+            "DECISION": "process",
+            "PROCESSOR_RUN_ID": str(args.processor_run_id),
+            "PROCESSOR_ARTIFACT_RUN_ID": str(args.processor_artifact_run_id),
+            "PRODUCER_RUN_ID": str(args.producer_run_id),
+            "REPOSITORY": "StatPan/datapan-registry",
+            "STATE_HEAD_SHA": old_sha,
+            "CLAIM_SHA": claim_sha,
+            "CLAIM_CHANGED": "true",
+            "CLAIM_OUTCOME": "success",
+        }
+
+        def verify_bundle(old_state_sha: str, published_sha: str, suffix: str) -> dict[str, str]:
+            result_path.write_bytes(result_bytes)
+            return self._run_workflow_body(
+                bundle_code, cwd=flow_root, output_file=flow_root / f"bundle-{suffix}.outputs",
+                env={**bundle_env, "STATE_HEAD_SHA": old_state_sha, "CLAIM_SHA": published_sha},
+            )
+
+        verified = verify_bundle(old_sha, claim_sha, "positive")
+        self.assertEqual(verified.get("verified"), "true")
+        self.assertEqual(verified.get("replay"), "true")
+        self.assertEqual(verified.get("status"), "idle")
+        wrong_old_pair = verify_bundle(foreign_sha, claim_sha, "wrong-old-sha")
+        self.assertEqual(wrong_old_pair.get("verified"), "false")
+        wrong_current_pair = verify_bundle(old_sha, old_sha, "wrong-current-sha")
+        self.assertEqual(wrong_current_pair.get("verified"), "false")
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), claim_sha)
+        self.assertEqual(
+            WORKFLOW_REPLAY_TESTS.git(
+                bare_repo, "rev-parse", "refs/heads/automation/upstream-catalogue-state",
+            ),
+            claim_sha,
+        )
+
+    def _assert_old_git_tree_rejects_reclassified_checkpoint(
+        self, *, state_bytes: Mapping[str, bytes], checkpoint: dict[str, Any],
+        generator_revision: str,
+    ) -> None:
+        """Keep B0 provenance and reject a reclassified proposal absent from B3 history."""
+        label = "derived-checkpoint-reclassified-as-ordinary"
+        flow_root, checkout, state_repo, bare_repo, state_dir, old_sha = (
+            self._new_workflow_state_repo(label, state_bytes)
+        )
+        rewritten = dict(state_bytes)
+        original_id = checkpoint["generation_id"]
+        old_relative = f"sources/data_go_kr/generations/{original_id}.json"
+        index_relative = "sources/data_go_kr/index.json"
+        old_index = json.loads(state_bytes[index_relative])
+        old_generation_ids = {
+            row.get("generation_id") for row in old_index.get("generations", [])
+            if isinstance(row, dict)
+        }
+        self.assertIn(original_id, old_generation_ids)
+        first_rows = HANDOFF.validate_ledger(old_index["collector_handoff"])["admitted_observations"]
+        self.assertEqual(len(first_rows), 1)
+        first_admission = first_rows[0]
+        self.assertEqual(PROCESSOR._replay_admission(checkpoint, old_index), first_admission)
+        first_admission_id = first_admission["generation_id"]
+        first_admission_relative = (
+            f"sources/data_go_kr/generations/{first_admission_id}.json"
+        )
+        self.assertIn(first_admission_id, old_generation_ids)
+        self.assertIn(first_admission_relative, state_bytes)
+        first_admission_checkpoint = json.loads(state_bytes[first_admission_relative])
+        self.assertEqual(first_admission_checkpoint["generation_id"], first_admission_id)
+        self.assertEqual(
+            PROCESSOR._object_sha256(first_admission_checkpoint["generation_inputs"]),
+            first_admission_id,
+        )
+        stripped_inputs = copy.deepcopy(checkpoint["generation_inputs"])
+        stripped_inputs.pop("same_observation_derivation")
+        stripped_only_id = PROCESSOR._object_sha256(stripped_inputs)
+        # B3's ordinary fields are the original B0 epoch. Removing only the
+        # derivation envelope therefore resolves to the first durable B0 row;
+        # it must never overwrite or evict that authentic provenance.
+        self.assertEqual(stripped_inputs, first_admission_checkpoint["generation_inputs"])
+        self.assertEqual(stripped_only_id, first_admission_id)
+        self.assertIn(stripped_only_id, old_generation_ids)
+        first_admission_git_relative = (
+            f".datapan/upstream-catalogue-state/{first_admission_relative}"
+        )
+        first_admission_git_blob = subprocess.run(
+            ["git", "-C", str(state_repo), "show", f"{old_sha}:{first_admission_git_relative}"],
+            check=True, capture_output=True,
+        ).stdout
+        self.assertEqual(first_admission_git_blob, state_bytes[first_admission_relative])
+        forged = json.loads(rewritten.pop(old_relative))
+        forged["generation_inputs"].pop("same_observation_derivation")
+        untrusted_generator_revision = hashlib.sha256(
+            b"datapan/issue-776/untrusted-reclassified-generator-revision/v1\0"
+            + generator_revision.encode("ascii")
+        ).hexdigest()
+        forged["generation_inputs"]["generator_revision"] = untrusted_generator_revision
+        ordinary_id = PROCESSOR._object_sha256(forged["generation_inputs"])
+        self.assertNotEqual(ordinary_id, original_id)
+        self.assertNotEqual(ordinary_id, first_admission_id)
+        self.assertNotIn(ordinary_id, old_generation_ids)
+        forged["generation_id"] = ordinary_id
+        PROCESSOR.seal_checkpoint(forged)
+        new_relative = f"sources/data_go_kr/generations/{ordinary_id}.json"
+        self.assertNotIn(new_relative, state_bytes)
+        self.assertEqual(rewritten[first_admission_relative], state_bytes[first_admission_relative])
+        old_git_relative = f".datapan/upstream-catalogue-state/{old_relative}"
+        new_git_relative = f".datapan/upstream-catalogue-state/{new_relative}"
+        self.assertEqual(
+            subprocess.run(
+                ["git", "-C", str(state_repo), "cat-file", "-e", f"{old_sha}:{old_git_relative}"],
+                check=False, capture_output=True,
+            ).returncode,
+            0,
+        )
+        self.assertNotEqual(
+            subprocess.run(
+                ["git", "-C", str(state_repo), "cat-file", "-e", f"{old_sha}:{new_git_relative}"],
+                check=False, capture_output=True,
+            ).returncode,
+            0,
+        )
+        rewritten[new_relative] = json.dumps(
+            forged, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        ).encode("utf-8") + b"\n"
+        index = json.loads(rewritten[index_relative])
+        matches = [row for row in index["generations"] if row.get("generation_id") == original_id]
+        self.assertEqual(len(matches), 1)
+        matches[0]["generation_id"] = ordinary_id
+        if "checkpoint" in matches[0]:
+            matches[0]["checkpoint"] = f"{ordinary_id}.json"
+        rewritten[index_relative] = json.dumps(
+            index, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        ).encode("utf-8") + b"\n"
+        changed_state_paths = {
+            path for path in set(state_bytes) | set(rewritten)
+            if state_bytes.get(path) != rewritten.get(path)
+        }
+        self.assertEqual(changed_state_paths, {old_relative, new_relative, index_relative})
+        for relative, content in rewritten.items():
+            path = state_dir / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+        (state_dir / old_relative).unlink(missing_ok=True)
+
+        args = self._args(7, generator_revision=untrusted_generator_revision)
+        args.state_dir = state_dir
+        args.output_dir = checkout / ".datapan/ci/upstream-catalogue-processing"
+        args.expected_generation_id = ordinary_id
+        args.replay_state_head_sha = old_sha
+        with mock.patch.object(
+            PROCESSOR, "generator_revision", return_value=untrusted_generator_revision,
+        ):
+            exit_code, stdout, stderr = self._run_processor_cli_without_provider(args)
+        # The CLI and checkpoint intentionally share an untrusted, altered
+        # generator revision so the proposed ordinary ID is distinct from B0.
+        # Its replay-shaped result is only a proposal: the workflow must check
+        # that ID against immutable B3 history before any State CAS.
+        self.assertEqual(exit_code, 0, stderr or stdout)
+        result_path = args.output_dir / "upstream-catalogue-processing-result.json"
+        replay_path = args.output_dir / PROCESSOR.REPLAY_PERSISTENCE_RECEIPT
+        result_value = PROCESSOR.load_json(result_path)
+        self.assertEqual(result_value.get("reason"), "exact_producer_delivery_replay")
+        self.assertTrue(replay_path.is_file())
+        proposed_state = self._state_tree_bytes(state_dir)
+        proposed_checkpoint = json.loads(proposed_state[new_relative])
+        proposed_index = json.loads(proposed_state[index_relative])
+        replay_receipt = PROCESSOR.load_json(replay_path)
+        checkpoint_receipt = PROCESSOR.load_json(
+            args.output_dir / "upstream-catalogue-checkpoint-receipt.json",
+        )
+        self.assertEqual(checkpoint_receipt, proposed_checkpoint)
+        self.assertEqual(
+            PROCESSOR.verify_replay_persistence_receipt(
+                replay_receipt,
+                prior_checkpoint=forged,
+                current_checkpoint=proposed_checkpoint,
+                prior_index=index,
+                current_index=proposed_index,
+                result=result_value,
+                state_head_sha=old_sha,
+            ),
+            replay_receipt,
+        )
+
+        # The workflow reads the old commit object by the new ordinary ID.
+        # That path was never present in the selected B3 commit, so no CAS is
+        # authorized even though the proposed current checkpoint is resealed.
+        claim = self._run_workflow_body(
+            WORKFLOW_REPLAY_TESTS.workflow_python("Claim bounded request budget"),
+            cwd=checkout, output_file=flow_root / "claim-reclassified.outputs",
+            env={
+                "EXPECTED_STATE_HEAD_SHA": old_sha,
+                "PROCESS_EXIT_CODE": "0",
+                "PRODUCER_RUN_ID": str(args.producer_run_id),
+                "PROCESSOR_RUN_ID": str(args.processor_run_id),
+                "PROCESSOR_ARTIFACT_RUN_ID": str(args.processor_artifact_run_id),
+                "REPOSITORY": "StatPan/datapan-registry",
+            },
+        )
+        self.assertEqual(claim.get("replay_candidate"), "true")
+        self.assertEqual(claim.get("replay_authenticated"), "false")
+        self.assertEqual(WORKFLOW_REPLAY_TESTS.git(state_repo, "rev-parse", "HEAD"), old_sha)
+        self.assertEqual(
+            WORKFLOW_REPLAY_TESTS.git(
+                bare_repo, "rev-parse", "refs/heads/automation/upstream-catalogue-state",
+            ),
+            old_sha,
+        )
+        self.assertEqual(self._state_tree_bytes(state_dir), proposed_state)
+
     def _run_claim_and_worker(
         self, attempt: int, *, resume: pathlib.Path | None = None,
         derivation: dict[str, Any] | None = None,
@@ -1082,7 +1781,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         fetcher: Any | None = None,
         resolver_fetcher: Any | None = None,
         expected_worker_code: int = 0,
-        expected_worker_status: str = "ready",
+        expected_worker_status: str | tuple[str, ...] = "ready",
         expected_claim_code: int = 0,
         expected_claim_status: str = "enriching",
         current_main_sha: str | None = None,
@@ -1164,7 +1863,10 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
                     sleeper=lambda _delay: None, clock=fixed_clock,
                 )
         self.assertEqual(worker_code, expected_worker_code, worker.get("outcome"))
-        self.assertEqual(worker["status"], expected_worker_status)
+        if isinstance(expected_worker_status, tuple):
+            self.assertIn(worker["status"], expected_worker_status)
+        else:
+            self.assertEqual(worker["status"], expected_worker_status)
         self.assertEqual(worker["observation_count"], 1)
         self.assertEqual(worker["observed_at"], self.now_text)
         checkpoint_path = self.helper.state_dir / "sources/data_go_kr/generations" / f"{worker['generation_id']}.json"
@@ -1182,6 +1884,7 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         shutil.copytree(self.helper.output_dir, bundle)
         self.output_by_generation[bound["generation_id"]] = bundle
         self.checkpoints[bound["generation_id"]] = bound
+        self.state_snapshots[bound["generation_id"]] = self._state_tree_bytes(self.helper.state_dir)
         return bound
 
     @contextmanager
@@ -2066,6 +2769,34 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         with mock.patch.object(PROCESSOR, "generator_revision", return_value="b" * 64):
             b1 = self._run_claim_and_worker(2, resume=self.output_by_generation[b0["generation_id"]] / "upstream-catalogue-enrichment-evidence.json")
         self.assertNotEqual(first_revision, b1["generation_inputs"]["generator_revision"])
+        # Ordinary processor epochs retain the first authenticated A row even
+        # when a later worker has a different generation identity. This is the
+        # non-derived counterpart to the B3 descendant checks below.
+        b1_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        b1_admissions = HANDOFF.validate_ledger(b1_index["collector_handoff"])["admitted_observations"]
+        self.assertEqual(len(b1_admissions), 1)
+        b0_admission = b1_admissions[0]
+        self.assertEqual(b0_admission["generation_id"], b0["generation_id"])
+        self.assertNotEqual(b0_admission["generation_id"], b1["generation_id"])
+        self.assertEqual(set(b1["generation_inputs"]), PROCESSOR._GENERATION_IDENTITY_INPUT_KEYS)
+        self.assertEqual(PROCESSOR._object_sha256(b1["generation_inputs"]), b1["generation_id"])
+        self.assertEqual(PROCESSOR._replay_admission(b1, b1_index), b0_admission)
+        incoming_b1 = copy.deepcopy(b0_admission)
+        incoming_b1["generation_id"] = b1["generation_id"]
+        incoming_b1["admitted_at"] = "2026-10-12T00:00:00Z"
+        self.assertTrue(PROCESSOR._replay_incoming_admission_matches(
+            b0_admission, incoming_b1, current_generation_id=b1["generation_id"],
+        ))
+        wrong_incoming_generation = copy.deepcopy(incoming_b1)
+        wrong_incoming_generation["generation_id"] = "f" * 64
+        self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+            b0_admission, wrong_incoming_generation, current_generation_id=b1["generation_id"],
+        ))
+        changed_incoming_a = copy.deepcopy(incoming_b1)
+        changed_incoming_a["artifact_digest_sha256"] = "f" * 64
+        self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+            b0_admission, changed_incoming_a, current_generation_id=b1["generation_id"],
+        ))
         journal1, c1 = self._synthetic_c_journal(b0, 1)
         stale_selected, stale_blocked, stale_existing, stale_pr_reads = self._select_actual_derived_candidate(
             b1, journal1, c1,
@@ -2358,21 +3089,538 @@ class SameObservationProcessorFlowTests(unittest.TestCase):
         replay_args.canonical_update_journal_schema = ROOT / "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
         replay_checkpoint_path = generation_dir / f"{b3['generation_id']}.json"
         before_checkpoint = PROCESSOR.load_json(replay_checkpoint_path)
-        before_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        index_path = self.helper.state_dir / "sources/data_go_kr/index.json"
+        before_index = PROCESSOR.load_json(index_path)
+        durable_admission = PROCESSOR._replay_admission(before_checkpoint, before_index)
+        durable_rows = HANDOFF.validate_ledger(before_index["collector_handoff"])["admitted_observations"]
+        self.assertEqual(len(durable_rows), 1)
+        self.assertEqual(durable_admission, durable_rows[0])
+        self.assertEqual(durable_admission["generation_id"], b0["generation_id"])
+        self.assertNotEqual(durable_admission["generation_id"], b3["generation_id"])
+        self.assertIn(
+            durable_admission["generation_id"],
+            before_checkpoint["generation_inputs"]["same_observation_derivation"]["ancestor_generation_ids"],
+        )
+        self.assertEqual(PROCESSOR._object_sha256(before_checkpoint["generation_inputs"]), b3["generation_id"])
+
+        # A second valid attempt sharing run/evidence/artifact is ambiguous;
+        # replay must not pick a latest row or filter by current generation.
+        duplicate_index = copy.deepcopy(before_index)
+        duplicate = copy.deepcopy(durable_admission)
+        duplicate["run_attempt"] += 1
+        duplicate["admission_id"] = HANDOFF.admission_id(
+            duplicate["producer_run_id"], duplicate["run_attempt"],
+            duplicate["refresh_evidence_sha256"],
+        )
+        duplicate_index["collector_handoff"]["admitted_observations"].append(duplicate)
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR._replay_admission(before_checkpoint, duplicate_index)
+
+        missing_index = copy.deepcopy(before_index)
+        missing_index["collector_handoff"]["admitted_observations"] = []
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR._replay_admission(before_checkpoint, missing_index)
+
+        foreign_index = copy.deepcopy(before_index)
+        foreign = foreign_index["collector_handoff"]["admitted_observations"][0]
+        foreign["refresh_evidence_sha256"] = "f" * 64
+        foreign["admission_id"] = HANDOFF.admission_id(
+            foreign["producer_run_id"], foreign["run_attempt"],
+            foreign["refresh_evidence_sha256"],
+        )
+        with self.assertRaisesRegex(ValueError, "replay_original_admission_not_unique"):
+            PROCESSOR._replay_admission(before_checkpoint, foreign_index)
+
+        for field in ("head_sha", "run_attempt", "artifact_digest_sha256"):
+            with self.subTest(replay_durable_original_a_field=field):
+                changed_index = copy.deepcopy(before_index)
+                changed = changed_index["collector_handoff"]["admitted_observations"][0]
+                if field == "head_sha":
+                    changed[field] = "f" * 40 if changed[field] != "f" * 40 else "e" * 40
+                elif field == "run_attempt":
+                    changed[field] += 1
+                    changed["admission_id"] = HANDOFF.admission_id(
+                        changed["producer_run_id"], changed[field], changed["refresh_evidence_sha256"],
+                    )
+                else:
+                    changed[field] = "f" * 64 if changed[field] != "f" * 64 else "e" * 64
+                with self.assertRaisesRegex(ValueError, "replay_derived_admission_binding_mismatch"):
+                    PROCESSOR._replay_admission(before_checkpoint, changed_index)
+
+        missing_derivation = copy.deepcopy(before_checkpoint)
+        missing_derivation["generation_inputs"].pop("same_observation_derivation")
+        PROCESSOR.seal_checkpoint(missing_derivation)
+        # Removing the envelope leaves the authentic B3 generation ID bound
+        # to its original ordinary identity fields; it cannot be reclassified
+        # as an ordinary epoch without changing that ID.
+        with self.assertRaisesRegex(ValueError, "replay_ordinary_generation_identity_mismatch"):
+            PROCESSOR._replay_admission(missing_derivation, before_index)
+        malformed_derivation = copy.deepcopy(before_checkpoint)
+        malformed_derivation["generation_inputs"]["same_observation_derivation"] = {"schema_version": "bad"}
+        PROCESSOR.seal_checkpoint(malformed_derivation)
+        with self.assertRaisesRegex(ValueError, "replay_derived_generation_invalid"):
+            PROCESSOR._replay_admission(malformed_derivation, before_index)
+        wrong_generation_inputs = copy.deepcopy(before_checkpoint)
+        wrong_generation_inputs["generation_inputs"]["generator_revision"] = "f" * 64
+        PROCESSOR.seal_checkpoint(wrong_generation_inputs)
+        with self.assertRaisesRegex(ValueError, "replay_derived_generation_identity_mismatch"):
+            PROCESSOR._replay_admission(wrong_generation_inputs, before_index)
+        outside_ancestry_index = copy.deepcopy(before_index)
+        outside_ancestry = outside_ancestry_index["collector_handoff"]["admitted_observations"][0]
+        outside_generation_id = "0" * 64
+        ancestors = before_checkpoint["generation_inputs"]["same_observation_derivation"]["ancestor_generation_ids"]
+        while outside_generation_id in ancestors or outside_generation_id == b3["generation_id"]:
+            outside_generation_id = hashlib.sha256(outside_generation_id.encode("ascii")).hexdigest()
+        outside_ancestry["generation_id"] = outside_generation_id
+        with self.assertRaisesRegex(ValueError, "replay_original_generation_not_ancestor"):
+            PROCESSOR._replay_admission(before_checkpoint, outside_ancestry_index)
+
+        # This pure comparison is downstream of _replay_admission above. The
+        # actual replay below still authenticates the incoming row and archive.
+        incoming_admission = copy.deepcopy(durable_admission)
+        incoming_admission["generation_id"] = b3["generation_id"]
+        incoming_admission["admitted_at"] = (
+            HANDOFF.parse_time(durable_admission["admitted_at"]) + dt.timedelta(seconds=1)
+        ).isoformat().replace("+00:00", "Z")
+        incoming_admission = HANDOFF.validate_admission_row(incoming_admission)
+        self.assertTrue(PROCESSOR._replay_incoming_admission_matches(
+            durable_admission, incoming_admission, current_generation_id=b3["generation_id"],
+        ))
+        same_generation_incoming = copy.deepcopy(durable_admission)
+        same_generation_incoming["admitted_at"] = (
+            HANDOFF.parse_time(durable_admission["admitted_at"]) + dt.timedelta(seconds=1)
+        ).isoformat().replace("+00:00", "Z")
+        self.assertTrue(PROCESSOR._replay_incoming_admission_matches(
+            durable_admission,
+            HANDOFF.validate_admission_row(same_generation_incoming),
+            current_generation_id=durable_admission["generation_id"],
+        ))
+        for field in set(durable_admission) - {"admitted_at", "generation_id"}:
+            with self.subTest(replay_incoming_immutable_field=field):
+                changed_incoming = dict(incoming_admission)
+                changed_incoming[field] = object()
+                self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+                    durable_admission, changed_incoming, current_generation_id=b3["generation_id"],
+                ))
+        wrong_incoming_generation = dict(incoming_admission)
+        wrong_incoming_generation["generation_id"] = durable_admission["generation_id"]
+        self.assertFalse(PROCESSOR._replay_incoming_admission_matches(
+            durable_admission, wrong_incoming_generation,
+            current_generation_id=b3["generation_id"],
+        ))
         before_calls = len(self.detail_calls)
+
+        # Give the exact replay a real, local State revision to bind. This
+        # repository contains only the selected State subtree; no source,
+        # registry, or artifact tree is copied or staged.
+        state_root = self.helper.state_dir
+        state_subtree = state_root / "sources/data_go_kr"
+        self.assertTrue(state_subtree.is_dir())
+
+        def snapshot_state_bytes() -> dict[str, bytes]:
+            files = sorted(state_subtree.rglob("*"))
+            self.assertTrue(all(not path.is_symlink() for path in files))
+            return {
+                path.relative_to(state_root).as_posix(): path.read_bytes()
+                for path in files if path.is_file()
+            }
+
+        before_state_bytes = snapshot_state_bytes()
+        self.assertIn("sources/data_go_kr/index.json", before_state_bytes)
+        self.assertLessEqual(sum(map(len, before_state_bytes.values())), 4 * 1024 * 1024)
+        self.assertFalse((state_root / ".git").exists())
+
+        subprocess.run(["git", "init", "--quiet", str(state_root)], check=True, capture_output=True)
+
+        def state_git(*argv: str) -> bytes:
+            completed = subprocess.run(
+                ["git", *argv], cwd=state_root, check=True,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            )
+            return completed.stdout
+
+        state_git("config", "user.name", "Datapan same-observation test")
+        state_git("config", "user.email", "datapan-same-observation-test@example.invalid")
+        state_git("add", "--", "sources/data_go_kr")
+        tracked_state_paths = [
+            value.decode("utf-8") for value in state_git("ls-files", "-z").split(b"\0") if value
+        ]
+        self.assertEqual(tracked_state_paths, sorted(before_state_bytes))
+        state_git("commit", "--quiet", "-m", "capture same-observation replay State")
+        replay_state_head_sha = state_git("rev-parse", "HEAD").decode("ascii").strip()
+        self.assertRegex(replay_state_head_sha, r"^[a-f0-9]{40}$")
+        self.assertEqual(state_git("status", "--porcelain"), b"")
+        for relative_path, expected_bytes in before_state_bytes.items():
+            self.assertEqual(state_git("show", f"HEAD:{relative_path}"), expected_bytes)
+        self.assertEqual(snapshot_state_bytes(), before_state_bytes)
+
+        # The live replay guard rejects a missing State revision before any
+        # State write, receipt context, or provider call. Keep this negative on
+        # a deep-copied namespace so the positive replay below remains exact.
+        missing_head_args = copy.deepcopy(replay_args)
+        delattr(missing_head_args, "replay_state_head_sha")
+        with self._derivation_git(
+            snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2,
+        ):
+            with self.assertRaisesRegex(ValueError, "replay_authenticated_context_unavailable"):
+                PROCESSOR.process(
+                    missing_head_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
+                )
+        self.assertEqual(snapshot_state_bytes(), before_state_bytes)
+        self.assertEqual(len(self.detail_calls), before_calls)
+        self.assertFalse(getattr(missing_head_args, "exact_delivery_replay", False))
+        self.assertIsNone(getattr(missing_head_args, "exact_delivery_replay_context", None))
+        self.assertIsNone(getattr(missing_head_args, "replay_persistence_receipt", None))
+
+        # A malformed revision reaches the separate strict SHA guard and has
+        # the same no-mutation/no-receipt behavior.
+        malformed_head_args = copy.deepcopy(replay_args)
+        malformed_head_args.replay_state_head_sha = "not-a-state-head"
+        with self._derivation_git(
+            snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2,
+        ):
+            with self.assertRaisesRegex(ValueError, "replay_state_head_sha_invalid"):
+                PROCESSOR.process(
+                    malformed_head_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
+                )
+        self.assertEqual(snapshot_state_bytes(), before_state_bytes)
+        self.assertEqual(len(self.detail_calls), before_calls)
+        self.assertFalse(getattr(malformed_head_args, "exact_delivery_replay", False))
+        self.assertIsNone(getattr(malformed_head_args, "exact_delivery_replay_context", None))
+
+        replay_args.replay_state_head_sha = replay_state_head_sha
         with self._derivation_git(snapshot=journal_after_b2, journal_ref_sha=c2["readback"]["journal_ref_sha"], derivation=env2):
             replay_code, replayed = PROCESSOR.process(
                 replay_args, fetcher=self._fetch, sleeper=lambda _delay: None, clock=lambda: self.now,
             )
         after_index = PROCESSOR.load_json(self.helper.state_dir / "sources/data_go_kr/index.json")
+        after_checkpoint = PROCESSOR.load_json(replay_checkpoint_path)
         self.assertEqual(replay_code, 0)
         self.assertEqual(replayed["generation_id"], b3["generation_id"])
         self.assertEqual(replayed["output_artifact"]["artifact_id"], before_checkpoint["output_artifact"]["artifact_id"])
         self.assertEqual(replayed["observation_count"], before_checkpoint["observation_count"])
         self.assertEqual(replayed["attempts_consumed"], before_checkpoint["attempts_consumed"])
+        self.assertEqual(replayed["observed_at"], before_checkpoint["observed_at"])
+        self.assertEqual(replayed["last_observation"], before_checkpoint["last_observation"])
+        self.assertEqual(replayed["input_artifacts"], before_checkpoint["input_artifacts"])
+        self.assertEqual(replayed["output_artifact"], before_checkpoint["output_artifact"])
+        self.assertEqual(replayed["output_digests"], before_checkpoint["output_digests"])
+        before_immutable_checkpoint = copy.deepcopy(before_checkpoint)
+        after_immutable_checkpoint = copy.deepcopy(after_checkpoint)
+        for value in (before_immutable_checkpoint, after_immutable_checkpoint):
+            value.pop("last_heartbeat_at")
+            value.pop("checkpoint_sha256")
+        self.assertEqual(after_immutable_checkpoint, before_immutable_checkpoint)
         self.assertEqual(after_index["detail_queue_cursor"], before_index["detail_queue_cursor"])
         self.assertEqual(after_index["detail_retry_state"], before_index["detail_retry_state"])
+        self.assertEqual(after_index["collector_handoff"], before_index["collector_handoff"])
         self.assertEqual(len(self.detail_calls), before_calls)
+        self.assertTrue(getattr(replay_args, "exact_delivery_replay", False))
+        replay_context = getattr(replay_args, "exact_delivery_replay_context", None)
+        self.assertIsInstance(replay_context, dict)
+        self.assertEqual(replay_context["state_head_sha"], replay_state_head_sha)
+        replay_result = PROCESSOR.processing_result(
+            replayed,
+            exact_delivery_replay=True,
+            producer_run_id=replay_args.producer_run_id,
+            processor_run_id=replay_args.processor_run_id or replay_args.producer_run_id,
+            processor_artifact_run_id=(
+                replay_args.processor_artifact_run_id
+                or replay_args.processor_run_id
+                or replay_args.producer_run_id
+            ),
+        )
+        replay_receipt = PROCESSOR.build_replay_persistence_receipt(
+            result=replay_result, **replay_context,
+        )
+        self.assertEqual(
+            PROCESSOR.verify_replay_persistence_receipt(
+                replay_receipt, result=replay_result, **replay_context,
+            ),
+            replay_receipt,
+        )
+        self.assertEqual(replay_receipt["state_head_sha"], replay_state_head_sha)
+        self.assertEqual(replay_receipt["generation_id"], b3["generation_id"])
+        self.assertEqual(
+            replay_receipt["collector_admission_sha256"],
+            PROCESSOR._object_sha256(durable_admission),
+        )
+
+        # The production receipt builder must reject a forged current ordinary
+        # identity when the authentic prior checkpoint is B3. Keep the real
+        # prior checkpoint, current State index, result, and State HEAD; only
+        # the proposed current checkpoint is changed and resealed.
+        forged_current = copy.deepcopy(after_checkpoint)
+        forged_current["generation_inputs"].pop("same_observation_derivation")
+        forged_ordinary_id = PROCESSOR._object_sha256(forged_current["generation_inputs"])
+        self.assertNotEqual(forged_ordinary_id, b3["generation_id"])
+        forged_current["generation_id"] = forged_ordinary_id
+        PROCESSOR.seal_checkpoint(forged_current)
+        state_before_builder_rejection = snapshot_state_bytes()
+        details_before_builder_rejection = len(self.detail_calls)
+        with self.assertRaisesRegex(ValueError, "replay_terminal_checkpoint_identity_mismatch"):
+            PROCESSOR.build_replay_persistence_receipt(
+                prior_checkpoint=after_checkpoint,
+                current_checkpoint=forged_current,
+                prior_index=after_index,
+                current_index=after_index,
+                result=replay_result,
+                state_head_sha=replay_state_head_sha,
+            )
+        self.assertEqual(snapshot_state_bytes(), state_before_builder_rejection)
+        self.assertEqual(len(self.detail_calls), details_before_builder_rejection)
+
+        # B1 is ready but still has queued detail work. Preserve its exact
+        # State and bundle, then finish an isolated copy through real bounded
+        # claim/worker cycles before testing idle replay. The seed fetcher is
+        # the deterministic local fixture fetcher; the subsequent CLI replay
+        # still uses the fail-fast no-provider boundary.
+        self.assertEqual(b1["status"], "ready")
+        self.assertEqual(b1["outcome"]["detail_retry_count"], 2)
+        b1_generation_id = b1["generation_id"]
+        b1_state_bytes = dict(self.state_snapshots[b1_generation_id])
+        b1_bundle = self.output_by_generation[b1_generation_id]
+
+        def bundle_fingerprint(bundle_root: pathlib.Path) -> tuple[tuple[str, int, str], ...]:
+            return tuple(
+                (
+                    path.relative_to(bundle_root).as_posix(), path.stat().st_size,
+                    hashlib.sha256(path.read_bytes()).hexdigest(),
+                )
+                for path in sorted(bundle_root.rglob("*")) if path.is_file()
+            )
+
+        preserved_generation_ids = {
+            b0["generation_id"], b1_generation_id, b3["generation_id"],
+        }
+        preserved_state_snapshots = {
+            generation_id: dict(self.state_snapshots[generation_id])
+            for generation_id in preserved_generation_ids
+        }
+        preserved_bundle_fingerprints = {
+            generation_id: bundle_fingerprint(self.output_by_generation[generation_id])
+            for generation_id in preserved_generation_ids
+        }
+        b1_bundle_fingerprint = preserved_bundle_fingerprints[b1_generation_id]
+
+        seed_root = self.helper.root / "ordinary-b1-terminal-seed"
+        seed_state_dir = seed_root / "state"
+        seed_output_dir = seed_root / "output"
+        seed_root.mkdir()
+        for relative_path, content in b1_state_bytes.items():
+            destination = seed_state_dir / relative_path
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(content)
+        seed_bundle = seed_root / "bundle-b1"
+        shutil.copytree(b1_bundle, seed_bundle)
+        self.assertEqual(self._state_tree_bytes(seed_state_dir), b1_state_bytes)
+        self.assertEqual(
+            tuple(
+                (
+                    path.relative_to(seed_bundle).as_posix(), path.stat().st_size,
+                    hashlib.sha256(path.read_bytes()).hexdigest(),
+                )
+                for path in sorted(seed_bundle.rglob("*")) if path.is_file()
+            ),
+            b1_bundle_fingerprint,
+        )
+
+        # Reuse the existing processor claim/worker helper, but give this
+        # seed separate State, output, bundle, and accounting directories.
+        # Its immutable A inputs and recorded clock remain those of this test.
+        seed_runner = copy.copy(self)
+        seed_runner.helper = copy.copy(self.helper)
+        seed_runner.helper.root = seed_root
+        seed_runner.helper.state_dir = seed_state_dir
+        seed_runner.helper.output_dir = seed_output_dir
+        seed_runner.output_by_generation = {}
+        seed_runner.checkpoints = {}
+        seed_runner.state_snapshots = {}
+        seed_runner.current_manifests = {}
+        seed_runner.claim_runs = []
+        seed_runner.detail_calls = []
+        seed_runner.operation_endpoint_overrides = copy.deepcopy(self.operation_endpoint_overrides)
+
+        original_state_tree = self._state_tree_bytes(self.helper.state_dir)
+        seed_requests_before = len(seed_runner.detail_calls)
+        seed_attempts_before = b1["attempts_consumed"]
+        resume_bundle = seed_bundle
+        terminal_seed = None
+        terminal_seed_attempt = None
+        for attempt in range(7, 11):
+            terminal_seed = seed_runner._run_claim_and_worker(
+                attempt,
+                resume=resume_bundle / "upstream-catalogue-enrichment-evidence.json",
+                generator_revision=b1["generation_inputs"]["generator_revision"],
+                expected_worker_status=("ready", "no-change"),
+            )
+            self.assertEqual(terminal_seed["generation_id"], b1_generation_id)
+            self.assertEqual(terminal_seed["observed_at"], b1["observed_at"])
+            self.assertEqual(terminal_seed["observation_count"], b1["observation_count"])
+            self.assertEqual(terminal_seed["last_observation"], b1["last_observation"])
+            self.assertEqual(
+                terminal_seed["output_artifact"]["artifact_id"],
+                str(99000000020 + attempt),
+            )
+            resume_bundle = seed_runner.output_by_generation[b1_generation_id]
+            if (
+                terminal_seed["status"] in {"ready", "no-change"}
+                and terminal_seed["outcome"]["detail_retry_count"] == 0
+            ):
+                terminal_seed_attempt = attempt
+                break
+        self.assertIsNotNone(terminal_seed)
+        self.assertIsNotNone(terminal_seed_attempt)
+        assert terminal_seed is not None and terminal_seed_attempt is not None
+        seed_callbacks = seed_runner.detail_calls[seed_requests_before:]
+        seed_attempts = terminal_seed["attempts_consumed"] - seed_attempts_before
+        self.assertGreater(len(seed_callbacks), 0)
+        self.assertLessEqual(len(seed_callbacks), 4)
+        self.assertLessEqual(len(seed_runner.claim_runs), 4)
+        self.assertEqual(seed_attempts, len(seed_callbacks))
+        self.assertEqual(terminal_seed["outcome"]["detail_retry_count"], 0)
+
+        terminal_seed_index = PROCESSOR.load_json(
+            seed_state_dir / "sources/data_go_kr/index.json",
+        )
+        terminal_seed_admissions = HANDOFF.validate_ledger(
+            terminal_seed_index["collector_handoff"],
+        )["admitted_observations"]
+        self.assertEqual(terminal_seed_admissions, [b0_admission])
+        retained_seed_generations = {
+            row.get("generation_id") for row in terminal_seed_index["generations"]
+            if isinstance(row, dict)
+        }
+        self.assertIn(b0["generation_id"], retained_seed_generations)
+        self.assertIn(b1_generation_id, retained_seed_generations)
+        terminal_seed_state = seed_runner.state_snapshots[b1_generation_id]
+        self.assertEqual(self._state_tree_bytes(seed_state_dir), terminal_seed_state)
+
+        # The bounded seed must not rewrite the original B0/B1/B3 observations,
+        # snapshots, bundles, or State tree. The new terminal State tip is the
+        # only input to the subsequent local Git Claim/CAS/bundle replay.
+        self.assertEqual(
+            {generation_id: self.state_snapshots[generation_id]
+             for generation_id in preserved_generation_ids},
+            preserved_state_snapshots,
+        )
+        self.assertEqual(self._state_tree_bytes(self.helper.state_dir), original_state_tree)
+        self.assertEqual(
+            {generation_id: bundle_fingerprint(self.output_by_generation[generation_id])
+             for generation_id in preserved_generation_ids},
+            preserved_bundle_fingerprints,
+        )
+
+        # The replay receives the newly sealed terminal checkpoint and its
+        # bound artifact locator. Seed requests above are accounted separately;
+        # this exact CLI/Claim/CAS/bundle path must make zero provider calls.
+        terminal_seed_cli_args = seed_runner._args(
+            terminal_seed_attempt + 1,
+            generator_revision=b1["generation_inputs"]["generator_revision"],
+        )
+        terminal_seed_cli_args.expected_generation_id = b1_generation_id
+        replay_seed_calls_before = len(seed_runner.detail_calls)
+        seed_runner._assert_connected_workflow_replay(
+            "ordinary-b1-terminal-seed", template=terminal_seed_cli_args,
+            state_bytes=terminal_seed_state,
+            generation_id=b1_generation_id,
+            generator_revision=b1["generation_inputs"]["generator_revision"],
+        )
+        self.assertEqual(len(seed_runner.detail_calls), replay_seed_calls_before)
+
+        b3_cli_args = copy.deepcopy(replay_args)
+        b3_cli_args.expected_generation_id = b3["generation_id"]
+        b3_derivation = (journal_after_b2, c2["readback"]["journal_ref_sha"], env2)
+
+        def mutate_index(label: str, mutation: Any) -> Any:
+            def apply(state: dict[str, bytes]) -> None:
+                path = "sources/data_go_kr/index.json"
+                index = json.loads(state[path])
+                mutation(index)
+                state[path] = json.dumps(
+                    index, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+                ).encode("utf-8") + b"\n"
+            apply.__name__ = f"mutate_{label}"
+            return apply
+
+        def remove_admission(index: dict[str, Any]) -> None:
+            index["collector_handoff"]["admitted_observations"] = []
+
+        def alter_admission_head(index: dict[str, Any]) -> None:
+            index["collector_handoff"]["admitted_observations"][0]["head_sha"] = "d" * 40
+
+        def duplicate_admission(index: dict[str, Any]) -> None:
+            rows = index["collector_handoff"]["admitted_observations"]
+            duplicate = copy.deepcopy(rows[0])
+            duplicate["run_attempt"] += 1
+            duplicate["admission_id"] = HANDOFF.admission_id(
+                duplicate["producer_run_id"], duplicate["run_attempt"],
+                duplicate["refresh_evidence_sha256"],
+            )
+            rows.append(duplicate)
+
+        def invalidate_b3_checkpoint(state: dict[str, bytes]) -> None:
+            path = f"sources/data_go_kr/generations/{b3['generation_id']}.json"
+            value = json.loads(state[path])
+            value["last_heartbeat_at"] = "2026-10-12T00:00:00Z"
+            state[path] = json.dumps(value, sort_keys=True).encode("utf-8") + b"\n"
+
+        def corrupt_archive(args: argparse.Namespace, flow_root: pathlib.Path) -> None:
+            original = pathlib.Path(args.collector_archive).read_bytes()
+            self.assertGreater(len(original), 0)
+            corrupted = bytearray(original)
+            corrupted[0] ^= 1
+            bad_path = flow_root / "corrupted-collector-archive.zip"
+            bad_path.write_bytes(corrupted)
+            args.collector_archive = bad_path
+
+        b3_refusal_cases = (
+            ("derived-b3-wrong-producer", None,
+             lambda args, _root: setattr(args, "producer_head_sha", "d" * 40)),
+            ("derived-b3-corrupt-archive", None, corrupt_archive),
+            ("derived-b3-missing-ledger-row", mutate_index("missing_admission", remove_admission), None),
+            ("derived-b3-foreign-ledger-head", mutate_index("foreign_admission_head", alter_admission_head), None),
+            ("derived-b3-duplicate-ledger-row", mutate_index("duplicate_admission", duplicate_admission), None),
+            ("derived-b3-checkpoint-seal", invalidate_b3_checkpoint, None),
+        )
+        for label, mutate_state, mutate_args in b3_refusal_cases:
+            with self.subTest(connected_b3_cli_refusal=label):
+                self._expect_connected_cli_refusal(
+                    label, template=b3_cli_args,
+                    state_bytes=self.state_snapshots[b3["generation_id"]],
+                    generation_id=b3["generation_id"],
+                    generator_revision=b3["generation_inputs"]["generator_revision"],
+                    derivation=b3_derivation, mutate_state=mutate_state,
+                    mutate_args=mutate_args,
+                )
+
+        self._assert_connected_workflow_replay(
+            "derived-b3", template=b3_cli_args,
+            state_bytes=self.state_snapshots[b3["generation_id"]],
+            generation_id=b3["generation_id"],
+            generator_revision=b3["generation_inputs"]["generator_revision"],
+            derivation=b3_derivation,
+        )
+        self._assert_connected_b3_ordinary_identity_mismatch_refusal(
+            "derived-b3-ordinary-identity-mismatch", template=b3_cli_args,
+            state_bytes=self.state_snapshots[b3["generation_id"]], b0=b0, b3=b3,
+            generator_revision=b3["generation_inputs"]["generator_revision"],
+            derivation=b3_derivation,
+        )
+        self.assertEqual(
+            {generation_id: self.state_snapshots[generation_id]
+             for generation_id in preserved_generation_ids},
+            preserved_state_snapshots,
+        )
+        for generation_id in (b0["generation_id"], b3["generation_id"]):
+            self.assertEqual(
+                bundle_fingerprint(self.output_by_generation[generation_id]),
+                preserved_bundle_fingerprints[generation_id],
+            )
+        self._assert_old_git_tree_rejects_reclassified_checkpoint(
+            state_bytes=self.state_snapshots[b3["generation_id"]],
+            checkpoint=b3, generator_revision=b3["generation_inputs"]["generator_revision"],
+        )
 
         # A pure same-observation recomposition can have no newly eligible
         # detail requests. It must still compose accumulated parent evidence,
