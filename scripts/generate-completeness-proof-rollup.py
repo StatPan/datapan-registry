@@ -6585,7 +6585,8 @@ def main(argv: list[str] | None = None) -> int:
             input_index_override=candidate_index,
             candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
         )
-        require_claims(report, args.require_claim)
+        if args.require_claim:
+            require_claims(report, args.require_claim)
         json_bytes = render_json(report)
         markdown_bytes = render_markdown(report)
         if args.write:

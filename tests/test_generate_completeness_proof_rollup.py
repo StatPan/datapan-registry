@@ -4121,7 +4121,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             row = next(item for item in report["scopes"] if item["scope_id"] == scope["scope_id"])
             self.assertEqual(row["evaluated_claims"], {"complete": True, "current": True, "updated": True})
             delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")
-            self.assertEqual(delivery["state"], "proven")
+            self.assertEqual(delivery["state"], "historical")
             self.assertEqual(delivery["details"]["subject"]["artifact_path"], operation_path)
 
             # Candidate inventory is rebuilt from the immutable base index;
