@@ -1,0 +1,479 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.completeness-proof-rollup.v2.schema.json",
+  "title": "Datapan public-data completeness proof snapshot v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evaluation_epoch",
+    "policy",
+    "scope_registry",
+    "input_index",
+    "summary",
+    "scopes",
+    "evaluation_context"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "datapan.completeness-proof-rollup.v2"
+    },
+    "evaluation_epoch": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "policy": {
+      "$ref": "#/$defs/artifact"
+    },
+    "scope_registry": {
+      "$ref": "#/$defs/artifact"
+    },
+    "input_index": {
+      "$ref": "#/$defs/artifact"
+    },
+    "evaluation_context": {
+      "$ref": "#/$defs/evaluation_context"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registered_scopes",
+        "states",
+        "evaluated_claims"
+      ],
+      "properties": {
+        "registered_scopes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "states": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "complete",
+            "partial",
+            "unknown",
+            "blocked"
+          ],
+          "properties": {
+            "complete": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "partial": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unknown": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "blocked": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "evaluated_claims": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "complete",
+            "current",
+            "updated"
+          ],
+          "properties": {
+            "complete": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "current": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "updated": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "scopes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scope"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "evaluation_context": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "claim_scope",
+            "inventory_subject"
+          ],
+          "properties": {
+            "mode": {
+              "const": "repository_evidence_snapshot"
+            },
+            "claim_scope": {
+              "const": "evaluated_inputs_only"
+            },
+            "inventory_subject": {
+              "$ref": "#/$defs/inventory_subject"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "claim_scope",
+            "inventory_subject",
+            "baseline_main_sha",
+            "baseline_input_index",
+            "baseline_registry",
+            "baseline_operation_manifest",
+            "baseline_release_manifest",
+            "baseline_policy",
+            "baseline_scope_registry",
+            "candidate_registry",
+            "candidate_operation_manifest"
+          ],
+          "properties": {
+            "mode": {
+              "const": "candidate_evidence_snapshot"
+            },
+            "claim_scope": {
+              "const": "evaluated_inputs_only"
+            },
+            "inventory_subject": {
+              "$ref": "#/$defs/inventory_subject"
+            },
+            "baseline_main_sha": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            "baseline_input_index": {
+              "$ref": "#/$defs/artifact"
+            },
+            "baseline_registry": {
+              "$ref": "#/$defs/artifact"
+            },
+            "baseline_operation_manifest": {
+              "$ref": "#/$defs/artifact"
+            },
+            "baseline_release_manifest": {
+              "$ref": "#/$defs/artifact"
+            },
+            "baseline_policy": {
+              "$ref": "#/$defs/artifact"
+            },
+            "baseline_scope_registry": {
+              "$ref": "#/$defs/artifact"
+            },
+            "candidate_registry": {
+              "$ref": "#/$defs/artifact"
+            },
+            "candidate_operation_manifest": {
+              "$ref": "#/$defs/artifact"
+            }
+          }
+        }
+      ]
+    },
+    "missing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "owner",
+        "ticket"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "owner": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "ticket": {
+          "type": "string",
+          "pattern": "^(#[1-9][0-9]*|[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[1-9][0-9]*)$"
+        }
+      }
+    },
+    "facet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facet_id",
+        "state",
+        "evidence",
+        "details",
+        "missing_evidence"
+      ],
+      "properties": {
+        "facet_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "state": {
+          "enum": [
+            "proven",
+            "historical",
+            "missing",
+            "unknown",
+            "blocked"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          }
+        },
+        "details": {
+          "type": "object",
+          "patternProperties": {
+            "^current_release_": false,
+            "^health_main_": false,
+            "^current_subject_applicable$": false,
+            "^currentness_established$": false,
+            "^payload_equivalent_to_current_registry$": false,
+            "^current_input_contract_": false
+          }
+        },
+        "missing_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing"
+          }
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_id",
+        "source_id",
+        "provider",
+        "resource_kind",
+        "selector",
+        "identity_algorithm",
+        "identity_owner",
+        "evidence_owner",
+        "authority_state",
+        "inventory_context",
+        "proof",
+        "proof_state",
+        "evaluated_claims",
+        "facets",
+        "missing_evidence",
+        "release_relation"
+      ],
+      "properties": {
+        "scope_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resource_kind": {
+          "enum": [
+            "api_catalog_metadata",
+            "api_operation_manifest",
+            "file_dataset",
+            "curated_payload_snapshot",
+            "payload_rows"
+          ]
+        },
+        "selector": {
+          "type": "object"
+        },
+        "identity_algorithm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity_owner": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "evidence_owner": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "authority_state": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "inventory_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "authoritative",
+            "local_identity_count",
+            "identity_algorithm",
+            "evidence"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "observed",
+                "missing"
+              ]
+            },
+            "authoritative": {
+              "const": false
+            },
+            "local_identity_count": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "identity_algorithm": {
+              "type": "string",
+              "minLength": 1
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/artifact"
+              }
+            }
+          }
+        },
+        "proof": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "proof_state": {
+          "enum": [
+            "complete",
+            "partial",
+            "unknown",
+            "blocked"
+          ]
+        },
+        "facets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/facet"
+          }
+        },
+        "missing_evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing"
+          }
+        },
+        "evaluated_claims": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "complete",
+            "current",
+            "updated"
+          ],
+          "properties": {
+            "complete": {
+              "type": "boolean"
+            },
+            "current": {
+              "type": "boolean"
+            },
+            "updated": {
+              "type": "boolean"
+            }
+          }
+        },
+        "release_relation": {
+          "$ref": "#/$defs/release_relation"
+        }
+      }
+    },
+    "inventory_subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "catalog",
+        "operation_manifest"
+      ],
+      "properties": {
+        "catalog": {
+          "$ref": "#/$defs/artifact"
+        },
+        "operation_manifest": {
+          "$ref": "#/$defs/artifact"
+        }
+      }
+    },
+    "release_relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "current_release_evaluation_required"
+      ],
+      "properties": {
+        "mode": {
+          "const": "retained_evidence_subject"
+        },
+        "current_release_evaluation_required": {
+          "const": true
+        }
+      }
+    }
+  }
+}

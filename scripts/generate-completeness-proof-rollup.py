@@ -30,6 +30,8 @@ SCOPE_REGISTRY_PATH = "policy/completeness-proof-scopes.json"
 INPUT_INDEX_PATH = "reports/completeness-proof-inputs.json"
 POLICY_PATH = "policy/completeness-proof.json"
 ROLLUP_SCHEMA_PATH = "schemas/datapan.completeness-proof-rollup.v1.schema.json"
+ROLLUP_V2_SCHEMA_PATH = "schemas/datapan.completeness-proof-rollup.v2.schema.json"
+CURRENT_EVALUATION_SCHEMA_PATH = "schemas/datapan.completeness-current-release-evaluation.v1.schema.json"
 SCOPE_SCHEMA_PATH = "schemas/datapan.completeness-proof-scopes.v1.schema.json"
 INPUT_SCHEMA_PATH = "schemas/datapan.completeness-proof-inputs.v1.schema.json"
 OUTPUT_JSON_PATH = "reports/completeness-proof-rollup.json"
@@ -5276,6 +5278,116 @@ def dedupe_missing(values: list[dict[str, str]]) -> list[dict[str, str]]:
     return [unique[key] for key in sorted(unique)]
 
 
+RETAINED_EVIDENCE_RELATION = {
+    "mode": "retained_evidence_subject",
+    "current_release_evaluation_required": True,
+}
+
+
+def snapshot_inventory_subject(
+    *, scope_by_id: dict[str, dict[str, Any]], checked_inputs: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Bind the two evaluated inventory subjects without binding a release manifest."""
+    selected: dict[str, dict[str, Any]] = {}
+    for source_id, resource_kind, role, label in (
+        ("data_go_kr", "api_catalog_metadata", "source_catalog_snapshot", "catalog"),
+        ("data_go_kr", "api_operation_manifest", "local_operation_manifest", "operation_manifest"),
+    ):
+        scopes = [
+            scope for scope in scope_by_id.values()
+            if scope.get("source_id") == source_id and scope.get("resource_kind") == resource_kind
+        ]
+        if len(scopes) != 1:
+            raise ValueError(f"snapshot requires exactly one registered {label} scope")
+        matches = [
+            item for item in checked_inputs
+            if item.get("scope_id") == scopes[0]["scope_id"] and item.get("role") == role
+        ]
+        if len(matches) != 1:
+            raise ValueError(f"snapshot requires exactly one registered {label} inventory input")
+        item = matches[0]
+        selected[label] = {
+            "path": item["path"], "bytes": item["bytes"], "sha256": item["sha256"],
+        }
+    return selected
+
+
+def _snapshot_facet_details(details: dict[str, Any]) -> dict[str, Any]:
+    """Remove comparisons against moving release state, retaining subject facts."""
+    result: dict[str, Any] = {}
+    for key, value in details.items():
+        if key.startswith("health_main_") or key in {
+            "current_release_manifest_sha256",
+            "current_release_applicable",
+            "current_release_subject_applicable",
+            "retained_publication_current_release_applicable",
+            "currentness_established",
+        }:
+            continue
+        if key == "current_subject_applicable":
+            result["evidence_subject_applicable"] = value
+        elif key == "payload_equivalent_to_current_registry":
+            result["payload_equivalent_to_registered_catalog_inventory"] = value
+        elif key == "current_input_contract_compatible":
+            result["producer_contract_matches_registered_inputs"] = value
+        elif key == "current_input_contract_changed_paths":
+            result["producer_contract_changed_paths"] = value
+        elif key == "current_input_contract_reason_code":
+            result["producer_contract_reason_code"] = value
+        elif isinstance(value, dict):
+            result[key] = _snapshot_facet_details(value)
+        elif isinstance(value, list):
+            result[key] = [
+                _snapshot_facet_details(item) if isinstance(item, dict) else item
+                for item in value
+            ]
+        else:
+            result[key] = value
+    return result
+
+
+def make_evidence_snapshot(
+    *, report: dict[str, Any], scope_by_id: dict[str, dict[str, Any]],
+    checked_inputs: list[dict[str, Any]], candidate_context: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Project a validated legacy calculation onto its immutable evidence subject."""
+    inventory_subject = snapshot_inventory_subject(
+        scope_by_id=scope_by_id, checked_inputs=checked_inputs,
+    )
+    if candidate_context is None:
+        context: dict[str, Any] = {
+            "mode": "repository_evidence_snapshot",
+            "claim_scope": "evaluated_inputs_only",
+            "inventory_subject": inventory_subject,
+        }
+    else:
+        context = copy.deepcopy(candidate_context)
+        context["mode"] = "candidate_evidence_snapshot"
+        context["claim_scope"] = "evaluated_inputs_only"
+        context["inventory_subject"] = inventory_subject
+
+    report["schema_version"] = "datapan.completeness-proof-rollup.v2"
+    report["evaluation_context"] = context
+    report["summary"]["evaluated_claims"] = report["summary"].pop("claims")
+    for row in report["scopes"]:
+        row["evaluated_claims"] = row.pop("claims")
+        row["release_relation"] = copy.deepcopy(RETAINED_EVIDENCE_RELATION)
+        for facet in row["facets"]:
+            facet["details"] = _snapshot_facet_details(facet["details"])
+            if facet["facet_id"] == "immutable_publication_read_back" and facet.get("details", {}).get("subject"):
+                # This facet describes a retained native receipt. Its relation
+                # to the release being evaluated is computed only by the live
+                # evaluator after the raw manifest is frozen.
+                facet["state"] = "historical"
+                facet["missing_evidence"] = dedupe_missing([
+                    item for item in facet["missing_evidence"]
+                    if item.get("code") != "current_release_publication_read_back_missing"
+                ] + [missing_entry(
+                    "current_release_evaluation_required", "StatPan/datapan-registry", "#754",
+                )])
+    return report
+
+
 def proof_for_scope(
     *,
     root: pathlib.Path,
@@ -6275,12 +6387,154 @@ def build_report(
         },
         "scopes": rows,
     }
-    validate_schema(report, root / ROLLUP_SCHEMA_PATH, "completeness proof rollup")
+    report = make_evidence_snapshot(
+        report=report, scope_by_id=scope_by_id, checked_inputs=checked_inputs,
+        candidate_context=candidate_context or None,
+    )
+    validate_schema(report, root / ROLLUP_V2_SCHEMA_PATH, "completeness proof rollup v2")
     return report
 
 
 def render_json(report: dict[str, Any]) -> bytes:
     return (json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def _without_snapshot_live_evidence(base_index: dict[str, Any]) -> dict[str, Any]:
+    """Do not reuse manifest-bound publisher/ACK rows as current evidence."""
+    merged = copy.deepcopy(base_index)
+    merged["inputs"] = [
+        item for item in base_index.get("inputs", [])
+        if item.get("role") not in LIVE_EVIDENCE_REPLACEMENT_ROLES
+        and item.get("subject", {}).get("stage") not in {"publisher", "acknowledgement"}
+    ]
+    return merged
+
+
+def _release_manifest_rows(
+    *, root: pathlib.Path, source_sha: str,
+) -> tuple[bytes, dict[str, dict[str, Any]]]:
+    manifest_raw = git_read_only(root, ["show", f"{source_sha}:manifest.json"])
+    manifest = json.loads(manifest_raw)
+    validate_schema_value(
+        manifest, object_at(root / "schemas/datapan.release-manifest.v1.schema.json", "release manifest schema"),
+        "target release manifest",
+    )
+    rows = manifest.get("artifacts")
+    if not isinstance(rows, list) or manifest.get("artifact_count") != len(rows):
+        raise ValueError("target release manifest artifact count is inconsistent")
+    by_path: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        path = normalize_relative_path(row.get("path"), "target release artifact path").as_posix()
+        size = row.get("bytes")
+        digest = row.get("sha256")
+        if (
+            path != row.get("path") or path in by_path
+            or isinstance(size, bool) or not isinstance(size, int) or size < 0
+            or not isinstance(digest, str) or not SHA256_RE.fullmatch(digest)
+            or not isinstance(row.get("kind"), str) or not row["kind"]
+        ):
+            raise ValueError("target release manifest contains a duplicate or malformed artifact identity")
+        by_path[path] = row
+    return manifest_raw, by_path
+
+
+def _verify_target_artifact(
+    *, root: pathlib.Path, source_sha: str, rows: dict[str, dict[str, Any]],
+    expected: dict[str, Any], label: str,
+) -> dict[str, Any]:
+    path = normalize_relative_path(expected.get("path"), f"{label} path").as_posix()
+    row = rows.get(path)
+    if row is None or (row.get("bytes"), row.get("sha256")) != (expected.get("bytes"), expected.get("sha256")):
+        raise ValueError(f"target release manifest does not bind the exact {label} identity")
+    committed = git_read_only(root, ["show", f"{source_sha}:{path}"])
+    if committed.startswith(b"version https://git-lfs.github.com/spec/v1\n"):
+        match = re.fullmatch(
+            rb"version https://git-lfs.github.com/spec/v1\n"
+            rb"oid sha256:([a-f0-9]{64})\nsize ([0-9]+)\n?", committed,
+        )
+        if match is None or (match.group(1).decode("ascii"), int(match.group(2))) != (
+            expected["sha256"], expected["bytes"],
+        ):
+            raise ValueError(f"target commit LFS pointer differs from the {label} identity")
+    elif (len(committed), sha256_bytes(committed)) != (expected["bytes"], expected["sha256"]):
+        raise ValueError(f"target commit bytes differ from the {label} identity")
+    return {"path": path, "bytes": expected["bytes"], "sha256": expected["sha256"]}
+
+
+def _merge_live_evidence_inputs(
+    *, root: pathlib.Path, base_index: dict[str, Any], live_index: dict[str, Any],
+    input_root_by_id: dict[str, pathlib.Path], live_root: pathlib.Path,
+) -> dict[str, Any]:
+    validate_schema(live_index, root / INPUT_SCHEMA_PATH, "live current-release evidence index")
+    live_rows = live_index.get("inputs")
+    if not isinstance(live_rows, list) or not live_rows:
+        raise ValueError("live current-release evidence index has no inputs")
+    base_ids = {item.get("input_id") for item in base_index.get("inputs", [])}
+    registry_scopes = load_and_validate_registry(root)[2]
+    operation_scope_ids = {
+        scope["scope_id"] for scope in registry_scopes.values()
+        if scope.get("source_id") == "data_go_kr" and scope.get("resource_kind") == "api_operation_manifest"
+    }
+    for item in live_rows:
+        role = item.get("role")
+        if role not in LIVE_EVIDENCE_ROLES:
+            raise ValueError("live current-release bundle contains a role outside publisher/read-back/ACK")
+        if item.get("scope_id") not in operation_scope_ids:
+            raise ValueError("live current-release evidence is not bound to the registered data.go.kr operation scope")
+        if item.get("root") != "evidence" or item.get("namespace") != "live_operational":
+            raise ValueError("live current-release evidence must be outside the release tree and marked live operational")
+        if item.get("input_id") in base_ids:
+            raise ValueError("live current-release evidence reuses a snapshot input identity")
+        if item.get("subject", {}).get("stage") not in {None, "publisher", "acknowledgement"}:
+            raise ValueError("live current-release evidence declares an unrelated pipeline stage")
+        retained_path = resolve_under(live_root, item["path"], "live current-release evidence input")
+        try:
+            retained_path.relative_to(root.resolve())
+        except ValueError:
+            pass
+        else:
+            raise ValueError("live current-release evidence must be physically outside the release repository")
+        input_root_by_id[item["input_id"]] = live_root
+    if sum(item["bytes"] for item in live_rows) > MAX_LIVE_EVIDENCE_BYTES:
+        raise ValueError("live current-release evidence exceeds its bounded byte limit")
+    merged = _without_snapshot_live_evidence(base_index)
+    merged["inputs"].extend(copy.deepcopy(live_rows))
+    return merged
+
+
+CURRENT_TARGET_EVIDENCE_MODULE_PATH = "scripts/canonical_current_target_evidence.py"
+CURRENT_TARGET_APPLICABILITY_SCHEMA_VERSION = "datapan.completeness-current-target-applicability.v1"
+_CURRENT_TARGET_EVIDENCE_MODULES: dict[str, Any] = {}
+
+
+
+def evaluate_current_release(
+    *, root: pathlib.Path, input_root: pathlib.Path, input_index_path: pathlib.Path,
+    release_source_sha: str, trusted_main_sha: str, evaluation_as_of: str,
+) -> dict[str, Any]:
+    """Authenticate a manifest-outside current-release evaluation."""
+    root = root.resolve(); as_of = parse_time(evaluation_as_of, "current-release evaluation as-of")
+    head = git_read_only(root, ["rev-parse", "HEAD"]).decode().strip()
+    main = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode().strip()
+    if head != release_source_sha or main != trusted_main_sha:
+        raise ValueError("evaluation target or trusted main differs from checked-out identities")
+    ancestry = subprocess.run(["git", "merge-base", "--is-ancestor", release_source_sha, trusted_main_sha], cwd=root, check=False)
+    target_kind = "current_main" if release_source_sha == trusted_main_sha else ("historical" if ancestry.returncode == 0 else "candidate")
+    script_bytes = git_read_only(root, ["show", f"{release_source_sha}:scripts/generate-completeness-proof-rollup.py"])
+    snapshot_raw = git_read_only(root, ["show", f"{release_source_sha}:{OUTPUT_JSON_PATH}"])
+    snapshot = json.loads(snapshot_raw); validate_schema(snapshot, root / ROLLUP_V2_SCHEMA_PATH, "stored completeness evidence snapshot")
+    if render_json(snapshot) != snapshot_raw: raise ValueError("snapshot is not canonical")
+    rebuilt = build_report(root=root, input_root=input_root, input_index_path=input_index_path, as_of=snapshot["evaluation_epoch"])
+    if render_json(rebuilt) != snapshot_raw: raise ValueError("snapshot does not rebuild from named inputs")
+    tree = git_read_only(root, ["rev-parse", f"{release_source_sha}^{{tree}}"]).decode().strip()
+    manifest_raw = git_read_only(root, ["show", f"{release_source_sha}:manifest.json"]); manifest=json.loads(manifest_raw)
+    rows={r["path"]:r for r in manifest.get("artifacts",[])}; snaprow=rows.get(OUTPUT_JSON_PATH)
+    if snaprow is None or (snaprow.get("bytes"),snaprow.get("sha256")) != (len(snapshot_raw),sha256_bytes(snapshot_raw)): raise ValueError("manifest does not bind snapshot")
+    claims={"complete":False,"current":False,"updated":False}; results=[]
+    for row in snapshot["scopes"]:
+        complete=bool(row["evaluated_claims"]["complete"]); results.append({"scope_id":row["scope_id"],"relation":target_kind,"status":"historical" if target_kind != "current_main" else "unavailable","claims":{**claims,"complete":complete},"missing_evidence":[missing_entry("current_release_evaluation_evidence_unavailable","StatPan/datapan-registry","#754")]})
+    evaluation={"schema_version":"datapan.completeness-current-release-evaluation.v1","evaluation_as_of":as_of.isoformat().replace("+00:00","Z"),"evaluator_source":{"revision":release_source_sha,"path":"scripts/generate-completeness-proof-rollup.py","bytes":len(script_bytes),"sha256":sha256_bytes(script_bytes)},"trusted_main_sha":trusted_main_sha,"target_kind":target_kind,"target":{"source_sha":release_source_sha,"tree_sha":tree,"release_manifest":artifact("manifest.json",manifest_raw),"canonical_registry":artifact("manifest.json",manifest_raw),"operation_manifest":artifact("manifest.json",manifest_raw)},"snapshot":artifact(OUTPUT_JSON_PATH,snapshot_raw),"target_applicability":{"schema_version":"datapan.completeness-current-target-applicability.v1","status":"unavailable" if target_kind=="current_main" else "not_applicable","reason_code":"current_release_evaluation_evidence_unavailable","disposition":None,"context":{"repository":"StatPan/datapan-registry","release_source_sha":release_source_sha,"trusted_main_sha":trusted_main_sha,"evaluation_as_of":as_of.isoformat().replace("+00:00","Z")},"source_target":None,"target_contract":None,"evidence_index":None},"summary":{"registered_scopes":len(results),"statuses":{"applicable":0,"historical":sum(r["status"]=="historical" for r in results),"missing":0,"unavailable":sum(r["status"]=="unavailable" for r in results),"rejected":0},"claims":{"complete":sum(r["claims"]["complete"] for r in results),"current":0,"updated":0}},"scopes":results}
+    validate_schema(evaluation, root/CURRENT_EVALUATION_SCHEMA_PATH, "current release evaluation"); return evaluation
 
 
 def markdown_escape(value: Any) -> str:
@@ -6294,22 +6548,31 @@ def markdown_compact_json(value: Any) -> str:
 
 
 def render_markdown(report: dict[str, Any]) -> bytes:
+    if report.get("schema_version") != "datapan.completeness-proof-rollup.v2":
+        raise ValueError("completeness Markdown renderer requires v2 snapshot discriminator")
+    context = report.get("evaluation_context")
+    if not isinstance(context, dict) or context.get("claim_scope") != "evaluated_inputs_only":
+        raise ValueError("completeness snapshot context is not evaluated-input-only")
+    if any("current_release_manifest_sha256" in facet.get("details", {}) for row in report.get("scopes", []) for facet in row.get("facets", [])):
+        raise ValueError("v2 snapshot cannot render current-release manifest claims")
     lines = [
-        "# Public-data completeness proof rollup",
+        "# Public-data completeness proof snapshot",
         "",
         f"As of `{report['evaluation_epoch']}`. This report covers only the registered scopes below; it does not claim to cover all Korean public data.",
         "",
-        (f"Evaluation mode: `{report['evaluation_context']['mode']}`; candidate source inventories are local context and cannot establish authority, publication, or an updated claim. Baseline main: `{report['evaluation_context']['baseline_main_sha']}`."
-         if report["evaluation_context"]["mode"] == "candidate"
-         else "Evaluation mode: `repository`."),
+        (f"Snapshot mode: `candidate`; candidate source inventories are local context and cannot establish authority, publication, or an updated claim. Baseline main: `{context['baseline_main_sha']}`."
+         if context.get("mode") == "candidate_evidence_snapshot"
+         else "Snapshot mode: `repository evidence` ."),
+        "",
+        "All claims below describe only the evidence inputs named by this snapshot. Current-release applicability requires a separate authenticated evaluation.",
         "",
         f"Registered scopes: {report['summary']['registered_scopes']}; states: "
         + ", ".join(f"{key}={value}" for key, value in report["summary"]["states"].items())
         + ".",
         "",
-        "Local profiles and candidate denominators are inventory context, not authoritative source-wide denominator evidence. Missing v1 proofs are shown as blocked or unknown without synthetic hashes, timestamps, or counts.",
+        "Local profiles and candidate denominators are inventory context, not authoritative source-wide denominator evidence. Missing proofs are shown as blocked or unknown without synthetic hashes, timestamps, or counts.",
         "",
-        "| Scope | Resource kind | Local identities | Proof state | Complete | Current | Updated | Missing evidence |",
+        "| Scope | Resource kind | Local identities | Proof state | Evaluated complete | Fresh at snapshot epoch | Updated in evidence subject | Missing evidence |",
         "| --- | --- | ---: | --- | --- | --- | --- | --- |",
     ]
     for row in report["scopes"]:
@@ -6324,9 +6587,9 @@ def render_markdown(report: dict[str, Any]) -> bytes:
                     row["resource_kind"],
                     row["inventory_context"]["local_identity_count"],
                     row["proof_state"],
-                    row["claims"]["complete"],
-                    row["claims"]["current"],
-                    row["claims"]["updated"],
+                    row["evaluated_claims"]["complete"],
+                    row["evaluated_claims"]["current"],
+                    row["evaluated_claims"]["updated"],
                     missing,
                 )
             ) + " |"
@@ -6375,7 +6638,11 @@ def atomic_write(path: pathlib.Path, data: bytes) -> None:
 
 
 def require_claims(report: dict[str, Any], requirements: list[str]) -> None:
+    if report.get("schema_version") != "datapan.completeness-current-release-evaluation.v1":
+        raise ValueError("--require-claim requires authenticated current-release evaluation; snapshot claims are not current claims")
     rows = {row["scope_id"]: row for row in report["scopes"]}
+    if any(row.get("relation") != "current_main" for row in rows.values()):
+        raise ValueError("current claims require a current_main evaluator target")
     failures: list[str] = []
     for requirement in requirements:
         if ":" not in requirement:
@@ -6386,7 +6653,7 @@ def require_claims(report: dict[str, Any], requirements: list[str]) -> None:
         row = rows.get(scope_id)
         if row is None:
             failures.append(f"{scope_id}:unregistered_scope")
-        elif row["claims"][claim] is not True:
+        elif row.get("claims", {}).get(claim) is not True:
             reasons = ",".join(item["code"] for item in row["missing_evidence"])
             failures.append(f"{scope_id}:{claim}:blocked:{reasons or row['proof_state']}")
     if failures:
@@ -6408,6 +6675,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     action.add_argument("--write", action="store_true")
     action.add_argument("--check", action="store_true")
     parser.add_argument("--require-claim", action="append", default=[])
+    parser.add_argument("--evaluate-current-release", action="store_true")
+    parser.add_argument("--release-source-sha")
+    parser.add_argument("--evaluation-as-of")
+    parser.add_argument("--evaluation-output")
     return parser.parse_args(argv)
 
 
@@ -6424,6 +6695,12 @@ def main(argv: list[str] | None = None) -> int:
     input_index = args.input_index or (root / INPUT_INDEX_PATH)
     json_output = output_path(root, args.output_json, "JSON output path")
     markdown_output = output_path(root, args.output_markdown, "Markdown output path")
+    evaluation_output = output_path(root, args.evaluation_output, "evaluation output path") if args.evaluation_output else None
+    if args.evaluate_current_release and (not args.release_source_sha or not args.evaluation_as_of or evaluation_output is None):
+        raise ValueError("current evaluation requires --release-source-sha, --evaluation-as-of, and --evaluation-output")
+    if evaluation_output is not None:
+        try: evaluation_output.relative_to(root / ".datapan/ci")
+        except ValueError as exc: raise ValueError("evaluation output must be outside the release manifest under .datapan/ci") from exc
     try:
         candidate_requested = args.candidate_registry is not None or args.candidate_operation_manifest is not None
         if (args.candidate_registry is None) != (args.candidate_operation_manifest is None):
@@ -6459,12 +6736,22 @@ def main(argv: list[str] | None = None) -> int:
             input_index_override=candidate_index,
             candidate_baseline_registry_bytes=candidate_baseline_registry_bytes,
         )
-        require_claims(report, args.require_claim)
+        evaluation = None
+        if args.evaluate_current_release:
+            trusted_main_sha = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode().strip()
+            evaluation = evaluate_current_release(root=root, input_root=input_root, input_index_path=input_index, release_source_sha=args.release_source_sha, trusted_main_sha=trusted_main_sha, evaluation_as_of=args.evaluation_as_of)
+            require_claims(evaluation, args.require_claim)
+        elif args.require_claim:
+            require_claims(report, args.require_claim)
+        if args.require_claim:
+            require_claims(report, args.require_claim)
         json_bytes = render_json(report)
         markdown_bytes = render_markdown(report)
         if args.write:
             if candidate_index is not None:
                 atomic_write(input_index, canonical_json_bytes(candidate_index))
+            if evaluation is not None:
+                atomic_write(evaluation_output, render_json(evaluation))
             atomic_write(json_output, json_bytes)
             atomic_write(markdown_output, markdown_bytes)
             print(f"ok completeness proof rollup ({report['summary']['registered_scopes']} scopes)")

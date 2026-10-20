@@ -68,7 +68,7 @@ COMPLETENESS_VALIDATOR_SCHEMA_DEPENDENCIES = frozenset({
     "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
     "schemas/datapan.completeness-proof.v1.schema.json",
     "schemas/datapan.completeness-proof-policy.v1.schema.json",
-    "schemas/datapan.completeness-proof-rollup.v1.schema.json",
+    "schemas/datapan.completeness-proof-rollup.v2.schema.json",
     "schemas/datapan.completeness-proof-scopes.v1.schema.json",
     "schemas/datapan.completeness-proof-inputs.v1.schema.json",
     "schemas/datapan.completeness-proof-identities.v1.schema.json",
@@ -4119,9 +4119,9 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 root=temp_root, input_root=source_input_root, input_index_path=index_path,
             )
             row = next(item for item in report["scopes"] if item["scope_id"] == scope["scope_id"])
-            self.assertEqual(row["claims"], {"complete": True, "current": True, "updated": True})
+            self.assertEqual(row["evaluated_claims"], {"complete": True, "current": True, "updated": True})
             delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")
-            self.assertEqual(delivery["state"], "proven")
+            self.assertEqual(delivery["state"], "historical")
             self.assertEqual(delivery["details"]["subject"]["artifact_path"], operation_path)
 
             # Candidate inventory is rebuilt from the immutable base index;
@@ -4180,22 +4180,22 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertEqual(MODULE.main([*candidate_args, "--write"]), 0)
             candidate_report = json.loads((temp_root / MODULE.OUTPUT_JSON_PATH).read_bytes())
             candidate_operations = next(row for row in candidate_report["scopes"] if row["scope_id"] == scope["scope_id"])
-            self.assertEqual(candidate_operations["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(candidate_operations["evaluated_claims"], {"complete": False, "current": False, "updated": False})
             self.assertIsNotNone(candidate_operations["proof"])
             self.assertEqual(candidate_operations["proof"]["claims"], {"complete": True, "current": True, "updated": True})
             self.assertEqual(candidate_operations["proof_state"], "blocked")
-            self.assertEqual(candidate_report["evaluation_context"]["mode"], "candidate")
+            self.assertEqual(candidate_report["evaluation_context"]["mode"], "candidate_evidence_snapshot")
             candidate_facets = {facet["facet_id"]: facet for facet in candidate_operations["facets"]}
             self.assertEqual(candidate_facets["candidate_inventory"]["state"], "blocked")
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_proof_validated"])
             self.assertTrue(candidate_facets["candidate_inventory"]["details"]["historical_claims_suppressed"])
             self.assertEqual(candidate_facets["specification_pipeline"]["state"], "historical")
-            self.assertFalse(candidate_facets["specification_pipeline"]["details"]["current_release_applicable"])
+            self.assertNotIn("current_release_applicable", candidate_facets["specification_pipeline"]["details"])
             self.assertEqual(candidate_facets["immutable_publication_read_back"]["state"], "historical")
             candidate_publication = candidate_facets["immutable_publication_read_back"]["details"]
-            self.assertIsNone(candidate_publication["current_release_manifest_sha256"])
-            self.assertFalse(candidate_publication["current_release_subject_applicable"])
-            self.assertFalse(candidate_publication["current_release_applicable"])
+            self.assertNotIn("current_release_manifest_sha256", candidate_publication)
+            self.assertNotIn("current_release_subject_applicable", candidate_publication)
+            self.assertNotIn("current_release_applicable", candidate_publication)
             self.assertTrue(candidate_publication["candidate_release_publication_unproven"])
             rebuilt_candidate_index = json.loads(canonical_index_path.read_bytes())
             _candidate_context, changed_scopes = MODULE.validate_candidate_input_index(
@@ -4340,16 +4340,16 @@ class CompletenessProofRollupTest(unittest.TestCase):
         import_facet = next(facet for facet in operations["facets"] if facet["facet_id"] == "import_durability")
 
         self.assertEqual(import_facet["state"], "historical")
-        self.assertFalse(import_facet["details"]["current_subject_applicable"])
+        self.assertFalse(import_facet["details"].get("evidence_subject_applicable"))
         self.assertIsNone(operations["proof"])
-        self.assertEqual(operations["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(operations["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(report["summary"]["registered_scopes"], 9)
         self.assertEqual(report["input_index"]["path"], "canonical-semantic-json:reports/completeness-proof-inputs.json")
         facets = {facet["facet_id"]: facet for facet in operations["facets"]}
         self.assertEqual(facets["specification_pipeline"]["state"], "historical")
         self.assertEqual(facets["immutable_publication_read_back"]["state"], "historical")
-        self.assertTrue(facets["immutable_publication_read_back"]["details"]["payload_equivalent_to_current_registry"])
-        self.assertFalse(facets["immutable_publication_read_back"]["details"]["current_release_subject_applicable"])
+        self.assertTrue(facets["immutable_publication_read_back"]["details"]["payload_equivalent_to_registered_catalog_inventory"])
+        self.assertNotIn("current_release_subject_applicable", facets["immutable_publication_read_back"]["details"])
         self.assertTrue(facets["source_observation"]["details"]["observation_authenticated"])
         self.assertNotIn("new_post_repair_observation", facets["source_observation"]["details"])
         self.assertEqual(
@@ -4649,8 +4649,8 @@ class CompletenessProofRollupTest(unittest.TestCase):
             report = MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
             row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
             pipeline = next(item for item in row["facets"] if item["facet_id"] == "specification_pipeline")
-            self.assertEqual(report["evaluation_context"]["mode"], "repository")
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(report["evaluation_context"]["mode"], "repository_evidence_snapshot")
+            self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
             self.assertEqual(pipeline["state"], "missing")
             self.assertEqual(set(pipeline["details"]["missing_stages"]), {"processor", "promotion", "health"})
             self.assertTrue(any(item["path"].endswith("source-no-change.zip") for item in pipeline["evidence"]))
@@ -4696,7 +4696,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     root=ROOT, input_root=input_root, input_index_path=index_path,
                 )
                 row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
-                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                 pipeline = next(item for item in row["facets"] if item["facet_id"] == "specification_pipeline")
                 self.assertEqual(pipeline["state"], "missing")
                 self.assertEqual(set(pipeline["details"]["missing_stages"]), {"source", "processor", "promotion"})
@@ -4819,8 +4819,8 @@ class CompletenessProofRollupTest(unittest.TestCase):
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
         delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")
-        self.assertEqual(report["evaluation_context"]["mode"], "repository")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(report["evaluation_context"]["mode"], "repository_evidence_snapshot")
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(pipeline["state"], "historical")
         self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
         self.assertTrue(pipeline["details"]["promotion_candidate_available"])
@@ -4828,7 +4828,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(pipeline["details"]["promotion_candidate_key"][3], expected_generation)
         self.assertTrue(pipeline["details"]["health_processor_observation_matches"])
         self.assertEqual(delivery["state"], "historical")
-        self.assertFalse(delivery["details"]["current_release_subject_applicable"])
+        self.assertFalse(delivery["details"].get("current_release_subject_applicable"))
         self.assertEqual(
             delivery["details"]["subject"]["source_sha"],
             "6a5138c792f4b7402da0c5ab439646bd752a307f",
@@ -4885,7 +4885,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 facets = {facet["facet_id"]: facet for facet in row["facets"]}
                 pipeline = facets["specification_pipeline"]
                 delivery = facets["immutable_publication_read_back"]
-                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                 self.assertEqual(pipeline["state"], "historical")
                 self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
                 self.assertTrue(pipeline["details"]["promotion_candidate_available"])
@@ -4925,7 +4925,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     )
                 row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
                 pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
-                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                 self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
                 self.assertFalse(pipeline["details"]["promotion_candidate_available"])
                 self.assertFalse(pipeline["details"]["promotion_processor_generation_matches"])
@@ -4996,7 +4996,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             checkpoint = json.loads(MODULE.base64.b64decode(checkpoint_api["content"]))
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(pipeline["state"], "missing")
         self.assertEqual(set(pipeline["details"]["missing_stages"]), {"promotion", "health"})
         self.assertEqual(checkpoint["observation_count"], 2)
@@ -5180,7 +5180,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 "publication_acknowledgement_missing",
                 {item["code"] for item in publication_facet["missing_evidence"]},
             )
-            self.assertFalse(publication_facet["details"]["current_release_subject_applicable"])
+            self.assertFalse(publication_facet["details"].get("current_release_subject_applicable"))
 
             tampered = b'{"tampered_pointer": true}\n'
             (input_root / "tampered-pointer.json").write_bytes(tampered)
@@ -5295,7 +5295,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 root=ROOT, input_root=input_root, input_index_path=index_path,
             )
             operation = next(row for row in report["scopes"] if row["scope_id"] == operation_id)
-            self.assertEqual(operation["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(operation["evaluated_claims"], {"complete": False, "current": False, "updated": False})
 
             malformed = b"not-a-zip"
             (input_root / "malformed-source.zip").write_bytes(malformed)
@@ -5586,7 +5586,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             report = MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
         facet = next(item for item in row["facets"] if item["facet_id"] == "specification_pipeline")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(facet["state"], "missing")
         self.assertEqual(set(facet["details"]["missing_stages"]), {"processor", "promotion"})
 
@@ -5611,13 +5611,13 @@ class CompletenessProofRollupTest(unittest.TestCase):
         operation = next(row for row in report["scopes"] if row["scope_id"] == operation_id)
         pipeline = next(facet for facet in operation["facets"] if facet["facet_id"] == "specification_pipeline")
         delivery = next(facet for facet in operation["facets"] if facet["facet_id"] == "immutable_publication_read_back")
-        self.assertEqual(operation["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(operation["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(pipeline["state"], "missing")
         self.assertEqual(set(pipeline["details"]["missing_stages"]), {"promotion", "health"})
         self.assertEqual(delivery["details"]["subject"]["publisher_run_id"], "37199628001")
         self.assertEqual(delivery["details"]["subject"]["registry_sha256"], "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0")
         self.assertTrue(delivery["details"]["acknowledgement_present"])
-        self.assertFalse(delivery["details"]["current_release_subject_applicable"])
+        self.assertFalse(delivery["details"].get("current_release_subject_applicable"))
         self.assertTrue(pipeline["details"]["validated_present_stage_evidence"])
 
     def test_build_report_admits_nonlegacy_native_ack_and_zero_write_replay(self) -> None:
@@ -5649,7 +5649,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             facets = {item["facet_id"]: item for item in row["facets"]}
             pipeline = facets["specification_pipeline"]
             delivery = facets["immutable_publication_read_back"]
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
             self.assertEqual(pipeline["state"], "missing")
             self.assertEqual(
                 set(pipeline["details"]["missing_stages"]),
@@ -5659,7 +5659,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             self.assertEqual(delivery["details"]["delivery_status"], "publisher_readback_acknowledged")
             self.assertEqual(delivery["details"]["verified_artifact_count"], 196)
             self.assertEqual(delivery["details"]["subject"]["source_sha"], expected_source)
-            self.assertFalse(delivery["details"]["current_release_subject_applicable"])
+            self.assertFalse(delivery["details"].get("current_release_subject_applicable"))
             if publisher_identity is not None:
                 self.assertEqual(delivery["details"]["subject"]["publisher_run_id"], str(publisher_identity[0]))
                 self.assertEqual(delivery["details"]["subject"]["publisher_attempt"], publisher_identity[1])
@@ -5737,7 +5737,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                         root=ROOT, input_root=input_root, input_index_path=index_path,
                     )
                     row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
-                    self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                    self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                     delivery = next(
                         facet for facet in row["facets"]
                         if facet["facet_id"] == "immutable_publication_read_back"
@@ -5777,7 +5777,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             delivery = next(
                 facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back"
             )
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
             self.assertEqual(delivery["details"]["delivery_status"], "publisher_readback_acknowledged")
             self.assertEqual(delivery["details"]["acknowledgement_run_id"], str(current_ack_run))
             self.assertEqual(delivery["details"]["acknowledgement_attempt"], 1)
@@ -5798,7 +5798,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         delivery = next(
             facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back"
         )
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(delivery["details"]["subject"]["source_sha"], source_sha)
         self.assertEqual(delivery["details"]["acknowledgement_run_id"], "37199709258")
         self.assertEqual(delivery["details"]["acknowledgement_attempt"], 2)
@@ -6102,12 +6102,12 @@ class CompletenessProofRollupTest(unittest.TestCase):
         before_row = next(item for item in report_before["scopes"] if item["scope_id"] == operation_id)
         before_delivery = next(item for item in before_row["facets"] if item["facet_id"] == "immutable_publication_read_back")
         self.assertEqual(report, report_before, "advancing trusted main metadata alone must not alter the completeness report")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(details["subject"]["publisher_run_id"], "99972280001")
         self.assertEqual(details["subject"]["publisher_attempt"], 2)
-        self.assertIsNone(details["current_release_manifest_sha256"])
-        self.assertFalse(details["current_release_applicable"])
-        self.assertFalse(details["current_release_subject_applicable"])
+        self.assertIsNone(details.get("current_release_manifest_sha256"))
+        self.assertFalse(details.get("current_release_applicable"))
+        self.assertFalse(details.get("current_release_subject_applicable"))
         self.assertEqual(
             details["catalog_binding_witness"]["release_manifest_sha256"],
             MODULE.sha256_bytes(source_manifest_raw),
@@ -6115,7 +6115,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         self.assertEqual(details["catalog_binding_witness"]["source_revision"], source_revision)
         self.assertTrue(details["catalog_binding_witness"]["main_ancestry_verified"])
         self.assertEqual(before_delivery["details"]["catalog_binding_witness"], details["catalog_binding_witness"])
-        self.assertTrue(details["payload_equivalent_to_current_registry"])
+        self.assertTrue(details["payload_equivalent_to_registered_catalog_inventory"])
         self.assertEqual(delivery["state"], "historical")
         assert donor_snapshot is not None
         self._assert_native_borrowed_donor_unchanged(ROOT, donor_snapshot)
@@ -6732,6 +6732,120 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     path=pathlib.Path(tampered.name),
                     label="test evidence",
                 )
+
+    def test_generated_snapshot_is_unchanged_across_two_main_roundtrips(self) -> None:
+        """The repository writer is byte-stable once its output is the trusted main.
+
+        A disposable repository borrows this checkout's committed object store,
+        so admission commits stay reachable, and treats the checked-out HEAD as
+        fetched origin/main. Generating the v2 snapshot twice from that main
+        must reproduce identical bytes, and the snapshot must not claim a
+        current release.
+        """
+        environment = {
+            key: value for key, value in os.environ.items() if not key.startswith("GIT_")
+        }
+        environment.update({
+            "GIT_LFS_SKIP_SMUDGE": "1", "GIT_NO_LAZY_FETCH": "1",
+            "GIT_CONFIG_NOSYSTEM": "1", "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_TERMINAL_PROMPT": "0", "GIT_ALLOW_PROTOCOL": "file",
+            "PYTHONDONTWRITEBYTECODE": "1",
+        })
+        source_main = subprocess.check_output(
+            ["git", "rev-parse", "HEAD^{commit}"], cwd=ROOT, text=True, env=environment,
+        ).strip()
+        source_objects = subprocess.check_output(
+            ["git", "rev-parse", "--path-format=absolute", "--git-path", "objects"],
+            cwd=ROOT, text=True, env=environment,
+        ).strip()
+
+        def git(repository: pathlib.Path, *args: str) -> str:
+            result = subprocess.run(
+                ["git", *args], cwd=repository, env=environment,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, f"git {' '.join(args)} failed: {result.stderr!r}")
+            return result.stdout.strip()
+
+        with tempfile.TemporaryDirectory(prefix="completeness-main-roundtrip-") as name:
+            repository = pathlib.Path(name) / "repo"
+            repository.mkdir()
+            subprocess.run(
+                ["git", "init", "--quiet", "--initial-branch=main"],
+                cwd=repository, env=environment, check=True,
+            )
+            for key, value in (
+                ("user.name", "Completeness roundtrip test"),
+                ("user.email", "completeness-roundtrip@example.invalid"),
+                ("core.hooksPath", os.devnull),
+            ):
+                subprocess.run(["git", "config", "--local", key, value], cwd=repository, env=environment, check=True)
+            alternates = repository / ".git/objects/info/alternates"
+            alternates.parent.mkdir(parents=True, exist_ok=True)
+            alternates.write_text(source_objects + "\n", encoding="ascii")
+            git(repository, "fetch", "--no-tags", str(ROOT.resolve()), source_main)
+            git(repository, "checkout", "--quiet", "--detach", "FETCH_HEAD")
+            # The committed tree stores the Registry as an LFS pointer. The
+            # writer reads the materialized payload, so copy the checkout's bytes.
+            registry = repository / "data/data-go-kr.registry.json"
+            if registry.read_bytes().startswith(b"version https://git-lfs.github.com/spec/v1"):
+                shutil.copy2(ROOT / "data/data-go-kr.registry.json", registry)
+            git(repository, "update-ref", "refs/remotes/origin/main", source_main)
+            self.assertEqual(git(repository, "rev-parse", "HEAD^{commit}"), source_main)
+
+            generator = [sys.executable, "scripts/generate-completeness-proof-rollup.py"]
+
+            def generate() -> tuple[bytes, bytes]:
+                result = subprocess.run(
+                    [*generator, "--repo-root", str(repository), "--write"],
+                    cwd=repository, env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+                )
+                self.assertEqual(
+                    result.returncode, 0,
+                    f"generator failed: {result.stderr[-2000:]!r}",
+                )
+                return (
+                    (repository / MODULE.OUTPUT_JSON_PATH).read_bytes(),
+                    (repository / MODULE.OUTPUT_MARKDOWN_PATH).read_bytes(),
+                )
+
+            first_json, first_markdown = generate()
+            report = json.loads(first_json)
+            self.assertEqual(report["schema_version"], "datapan.completeness-proof-rollup.v2")
+            self.assertEqual(report["evaluation_context"]["mode"], "repository_evidence_snapshot")
+            self.assertEqual(report["evaluation_context"]["claim_scope"], "evaluated_inputs_only")
+            self.assertNotIn("current_release_manifest_sha256", first_json.decode("utf-8"))
+            self.assertEqual(report["summary"]["evaluated_claims"]["current"], 0)
+            self.assertEqual(report["summary"]["evaluated_claims"]["updated"], 0)
+
+            # The generated snapshot becomes the trusted main, then the same
+            # writer runs again and must reproduce it exactly.
+            subprocess.run(["git", "add", "--", MODULE.OUTPUT_JSON_PATH, MODULE.OUTPUT_MARKDOWN_PATH], cwd=repository, env=environment, check=True)
+            tree = git(repository, "write-tree")
+            commit_environment = {
+                **environment,
+                "GIT_AUTHOR_NAME": "Completeness roundtrip test",
+                "GIT_AUTHOR_EMAIL": "completeness-roundtrip@example.invalid",
+                "GIT_COMMITTER_NAME": "Completeness roundtrip test",
+                "GIT_COMMITTER_EMAIL": "completeness-roundtrip@example.invalid",
+            }
+            generated_main = subprocess.check_output(
+                ["git", "commit-tree", tree, "-p", source_main], cwd=repository,
+                input=b"test: commit generated completeness snapshot\n", env=commit_environment,
+            ).decode("ascii").strip()
+            git(repository, "checkout", "--quiet", "--detach", generated_main)
+            git(repository, "update-ref", "refs/remotes/origin/main", generated_main)
+            self.assertEqual(git(repository, "rev-parse", "HEAD^{commit}"), generated_main)
+
+            second_json, second_markdown = generate()
+            self.assertEqual(second_json, first_json)
+            self.assertEqual(second_markdown, first_markdown)
+
+            check = subprocess.run(
+                [*generator, "--repo-root", str(repository), "--check"],
+                cwd=repository, env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+            )
+            self.assertEqual(check.returncode, 0, f"check drifted: {check.stderr[-2000:]!r}")
 
 
 if __name__ == "__main__":

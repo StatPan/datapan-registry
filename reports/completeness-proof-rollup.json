@@ -1,6 +1,19 @@
 {
   "evaluation_context": {
-    "mode": "repository"
+    "claim_scope": "evaluated_inputs_only",
+    "inventory_subject": {
+      "catalog": {
+        "bytes": 139155499,
+        "path": "data/data-go-kr.registry.json",
+        "sha256": "0520d0db0d9ee07b7cbccce0c08439d0b02be901bf10e8491187d96e59d7a0d0"
+      },
+      "operation_manifest": {
+        "bytes": 24366827,
+        "path": "reports/data-go-kr/operation-manifest.json",
+        "sha256": "b68601aee31acdb90b0a655dcb079c185af2c7fdd107333712c9b84e6a2700be"
+      }
+    },
+    "mode": "repository_evidence_snapshot"
   },
   "evaluation_epoch": "2026-10-04T13:23:00Z",
   "input_index": {
@@ -13,7 +26,7 @@
     "path": "policy/completeness-proof.json",
     "sha256": "f1199f36335bf0eb16a59279c30d03b819acfa8e1f833431d9a0c674adf896b6"
   },
-  "schema_version": "datapan.completeness-proof-rollup.v1",
+  "schema_version": "datapan.completeness-proof-rollup.v2",
   "scope_registry": {
     "bytes": 8035,
     "path": "policy/completeness-proof-scopes.json",
@@ -22,7 +35,7 @@
   "scopes": [
     {
       "authority_state": "unavailable",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -80,6 +93,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "StatPan/datapan-data",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "payload_rows",
       "scope_id": "curated-payload.rows",
       "selector": {
@@ -90,7 +107,7 @@
     },
     {
       "authority_state": "unavailable",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -148,6 +165,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "StatPan/datapan-data",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "curated_payload_snapshot",
       "scope_id": "curated-payload.snapshot-portfolio",
       "selector": {
@@ -158,7 +179,7 @@
     },
     {
       "authority_state": "unknown",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -227,6 +248,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "data.go.kr",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "api_catalog_metadata",
       "scope_id": "data-go-kr.api-catalog",
       "selector": {
@@ -237,7 +262,7 @@
     },
     {
       "authority_state": "unknown",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -247,7 +272,7 @@
         {
           "details": {
             "attempt": null,
-            "current_subject_applicable": false,
+            "evidence_subject_applicable": false,
             "historical_manifest_sha256": "3507d67912a40106c8e48dfd19bb978d3d37b2a9e9a10e571e5fb42734e395d3",
             "historical_operation_manifest_sha256": "931be9cfcc4aa2ce0b444221de2044b624e6dbdcff8af1288be295b7d202f04a",
             "merge_commit": "47a0f6e71d4d73734670bc3da9b64d94f0339f1d",
@@ -337,7 +362,22 @@
               "release_manifest_sha256": "8b2a4ec07d102b268a7e2b76a1c9a94a743d8d7022124913641ad01e3f57bb81",
               "source_revision": "2693e4de28e601555b998a457816f2ad18321699"
             },
-            "current_input_contract_changed_paths": [
+            "detail_retry_count": 908,
+            "detail_unattempted_count": 884,
+            "full_scope_fresh": null,
+            "health_candidate_relation_valid": true,
+            "health_last_good_source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
+            "health_observation_count": 1,
+            "health_processor_observation_matches": true,
+            "health_promotion_execution_matches": true,
+            "health_receipt_sha256": "37a79f569435549f9315336c59a06fad165aff7954fd5f4ef5a2ce86a7ef95be",
+            "health_run_id": "37205341388",
+            "health_source_observation_matches": true,
+            "pending_count": 4382,
+            "processor_generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
+            "processor_run_attempt": 1,
+            "processor_run_id": "37204681028",
+            "producer_contract_changed_paths": [
               ".github/workflows/upstream-catalog-refresh.yml",
               ".github/workflows/upstream-catalogue-process.yml",
               "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
@@ -353,28 +393,7 @@
               "scripts/seoul_oa109_operation_declaration.py",
               "scripts/upstream_catalogue_handoff.py"
             ],
-            "current_input_contract_compatible": false,
-            "current_release_applicable": false,
-            "detail_retry_count": 908,
-            "detail_unattempted_count": 884,
-            "full_scope_fresh": null,
-            "health_candidate_relation_valid": true,
-            "health_last_good_source_sha": "6a5138c792f4b7402da0c5ab439646bd752a307f",
-            "health_main_manifest_sha256": "c0e3708881fb39815205b7358d70ef9c7c0b712422d073589d8edff95f16d54e",
-            "health_main_matches_current_subject": false,
-            "health_main_payload_matches_current": true,
-            "health_main_release_manifest_matches_current": false,
-            "health_main_revision": "01148419bef5d7f212e92ab96d0ba1c3da6c298c",
-            "health_observation_count": 1,
-            "health_processor_observation_matches": true,
-            "health_promotion_execution_matches": true,
-            "health_receipt_sha256": "37a79f569435549f9315336c59a06fad165aff7954fd5f4ef5a2ce86a7ef95be",
-            "health_run_id": "37205341388",
-            "health_source_observation_matches": true,
-            "pending_count": 4382,
-            "processor_generation_id": "8c56b9ad08719bcf99ed9a99d488c26e4bfdf517023a9ca01a548b5d2167e8f9",
-            "processor_run_attempt": 1,
-            "processor_run_id": "37204681028",
+            "producer_contract_matches_registered_inputs": false,
             "promotion_candidate_acknowledgement_statuses": [],
             "promotion_candidate_available": false,
             "promotion_candidate_key": null,
@@ -629,13 +648,9 @@
             },
             "classification": "historical_delivery_only",
             "consumer_read_back_required_for_updated": true,
-            "current_release_applicable": false,
-            "current_release_manifest_sha256": null,
-            "current_release_subject_applicable": false,
-            "currentness_established": false,
             "cutover_established": false,
             "evaluation_epoch": "2026-10-04T13:23:00Z",
-            "payload_equivalent_to_current_registry": true,
+            "payload_equivalent_to_registered_catalog_inventory": true,
             "publisher_anonymous_verify_step_completed_at": "2026-10-04T11:43:34Z",
             "publisher_artifact_available_at_evaluation": true,
             "publisher_artifact_expires_at": "2026-11-03T11:43:34Z",
@@ -777,9 +792,9 @@
           "facet_id": "immutable_publication_read_back",
           "missing_evidence": [
             {
-              "code": "current_release_publication_read_back_missing",
+              "code": "current_release_evaluation_required",
               "owner": "StatPan/datapan-registry",
-              "ticket": "#659"
+              "ticket": "#754"
             }
           ],
           "state": "historical"
@@ -831,6 +846,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "data.go.kr",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "api_operation_manifest",
       "scope_id": "data-go-kr.api-operations",
       "selector": {
@@ -841,7 +860,7 @@
     },
     {
       "authority_state": "unavailable",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -905,6 +924,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "data.go.kr",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "file_dataset",
       "scope_id": "data-go-kr.file-datasets",
       "selector": {
@@ -915,7 +938,7 @@
     },
     {
       "authority_state": "unknown",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -1061,6 +1084,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "ECOS",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "api_operation_manifest",
       "scope_id": "ecos.api-operations",
       "selector": {
@@ -1071,7 +1098,7 @@
     },
     {
       "authority_state": "unknown",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -1217,6 +1244,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "KOSIS",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "api_operation_manifest",
       "scope_id": "kosis.api-operations",
       "selector": {
@@ -1227,7 +1258,7 @@
     },
     {
       "authority_state": "unknown",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -1373,6 +1404,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "open.assembly.go.kr",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "api_operation_manifest",
       "scope_id": "open-assembly.api-operations",
       "selector": {
@@ -1383,7 +1418,7 @@
     },
     {
       "authority_state": "unknown",
-      "claims": {
+      "evaluated_claims": {
         "complete": false,
         "current": false,
         "updated": false
@@ -1529,6 +1564,10 @@
       "proof": null,
       "proof_state": "blocked",
       "provider": "data.seoul.go.kr",
+      "release_relation": {
+        "current_release_evaluation_required": true,
+        "mode": "retained_evidence_subject"
+      },
       "resource_kind": "api_operation_manifest",
       "scope_id": "seoul-open-data.api-operations",
       "selector": {
@@ -1539,7 +1578,7 @@
     }
   ],
   "summary": {
-    "claims": {
+    "evaluated_claims": {
       "complete": 0,
       "current": 0,
       "updated": 0

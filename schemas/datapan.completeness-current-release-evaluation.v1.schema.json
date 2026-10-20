@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.datapan.dev/datapan.completeness-current-release-evaluation.v1.schema.json",
+  "title": "Datapan completeness current-release evaluation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evaluation_as_of", "evaluator_source", "trusted_main_sha", "target_kind", "target", "snapshot", "target_applicability", "summary", "scopes"],
+  "properties": {
+    "schema_version": {"const": "datapan.completeness-current-release-evaluation.v1"},
+    "evaluation_as_of": {"type": "string", "format": "date-time"},
+    "evaluator_source": {"$ref": "#/$defs/source"},
+    "trusted_main_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "target_kind": {"enum": ["current_main", "candidate", "historical"]},
+    "target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_sha", "tree_sha", "release_manifest", "canonical_registry", "operation_manifest"],
+      "properties": {
+        "source_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "tree_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "release_manifest": {"$ref": "#/$defs/artifact"},
+        "canonical_registry": {"$ref": "#/$defs/artifact"},
+        "operation_manifest": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "snapshot": {"$ref": "#/$defs/artifact"},
+    "target_applicability": {"$ref": "#/$defs/target_applicability"},
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["registered_scopes", "statuses", "claims"],
+      "properties": {
+        "registered_scopes": {"type": "integer", "minimum": 1},
+        "statuses": {
+          "type": "object", "additionalProperties": false,
+          "required": ["applicable", "historical", "missing", "unavailable", "rejected"],
+          "properties": {
+            "applicable": {"type": "integer", "minimum": 0},
+            "historical": {"type": "integer", "minimum": 0},
+            "missing": {"type": "integer", "minimum": 0},
+            "unavailable": {"type": "integer", "minimum": 0},
+            "rejected": {"type": "integer", "minimum": 0}
+          }
+        },
+        "claims": {
+          "type": "object", "additionalProperties": false,
+          "required": ["complete", "current", "updated"],
+          "properties": {
+            "complete": {"type": "integer", "minimum": 0},
+            "current": {"type": "integer", "minimum": 0},
+            "updated": {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    },
+    "scopes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/scope"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["revision", "path", "bytes", "sha256"],
+      "properties": {
+        "revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "selection_key", "original_observation_sha256", "target_contract_sha256", "original_admission_ref"],
+      "properties": {
+        "schema_version": {"const": "datapan.canonical-update-source-target-binding.v1"},
+        "selection_key": {"$ref": "#/$defs/sha256"},
+        "original_observation_sha256": {"$ref": "#/$defs/sha256"},
+        "target_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "original_admission_ref": {
+          "type": "object", "additionalProperties": false,
+          "required": ["schema_version", "generation_id", "producer_run_id", "run_attempt", "head_sha", "artifact_id", "artifact_digest_sha256", "refresh_evidence_sha256"],
+          "properties": {
+            "schema_version": {"const": "datapan.upstream-catalogue-admission-reference.v1"},
+            "generation_id": {"$ref": "#/$defs/sha256"},
+            "producer_run_id": {"type": "string", "pattern": "^[0-9]{6,20}$"},
+            "run_attempt": {"type": "integer", "minimum": 1},
+            "head_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+            "artifact_id": {"type": "integer", "minimum": 1},
+            "artifact_digest_sha256": {"$ref": "#/$defs/sha256"},
+            "refresh_evidence_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      }
+    },
+    "target_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "source_sha", "source_tree_sha", "inventory_sha256", "contract_sha256", "changed_classes"],
+      "properties": {
+        "schema_version": {"const": "datapan.upstream-catalogue-target-contract.v1"},
+        "source_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "source_tree_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "inventory_sha256": {"$ref": "#/$defs/sha256"},
+        "contract_sha256": {"$ref": "#/$defs/sha256"},
+        "changed_classes": {
+          "type": "array", "uniqueItems": true, "maxItems": 3,
+          "items": {"enum": ["same_a_processing", "c_only_revalidation", "requires_new_a"]}
+        }
+      }
+    },
+    "target_applicability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "status", "reason_code", "disposition", "context", "source_target", "target_contract", "evidence_index"],
+      "properties": {
+        "schema_version": {"const": "datapan.completeness-current-target-applicability.v1"},
+        "status": {"enum": ["current", "historical", "unavailable", "rejected", "not_applicable"]},
+        "reason_code": {"type": ["string", "null"], "pattern": "^[a-z0-9_]{1,96}$"},
+        "disposition": {"type": ["string", "null"], "enum": ["unseen", "pending", "completed", "blocked", null]},
+        "context": {
+          "type": "object", "additionalProperties": false,
+          "required": ["repository", "release_source_sha", "trusted_main_sha", "evaluation_as_of"],
+          "properties": {
+            "repository": {"const": "StatPan/datapan-registry"},
+            "release_source_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+            "trusted_main_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+            "evaluation_as_of": {"type": "string", "format": "date-time"}
+          }
+        },
+        "source_target": {"anyOf": [{"$ref": "#/$defs/source_target"}, {"type": "null"}]},
+        "target_contract": {"anyOf": [{"$ref": "#/$defs/target_contract"}, {"type": "null"}]},
+        "evidence_index": {
+          "anyOf": [
+            {"type": "object", "additionalProperties": false, "required": ["path", "bytes", "sha256"], "properties": {
+              "path": {"const": "current-target-evidence-index.json"},
+              "bytes": {"type": "integer", "minimum": 1},
+              "sha256": {"$ref": "#/$defs/sha256"}
+            }},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "missing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["code", "owner", "ticket"],
+      "properties": {
+        "code": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "owner": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "ticket": {"type": "string", "pattern": "^(#[1-9][0-9]*|[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+#[1-9][0-9]*)$"}
+      }
+    },
+    "claims": {
+      "type": "object", "additionalProperties": false,
+      "required": ["complete", "current", "updated"],
+      "properties": {
+        "complete": {"type": "boolean"},
+        "current": {"type": "boolean"},
+        "updated": {"type": "boolean"}
+      }
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope_id", "relation", "status", "claims", "missing_evidence"],
+      "properties": {
+        "scope_id": {"type": "string", "minLength": 1},
+        "relation": {"enum": ["current_main", "candidate", "historical"]},
+        "status": {"enum": ["applicable", "historical", "missing", "unavailable", "rejected"]},
+        "claims": {"$ref": "#/$defs/claims"},
+        "missing_evidence": {"type": "array", "items": {"$ref": "#/$defs/missing"}}
+      }
+    }
+  }
+}

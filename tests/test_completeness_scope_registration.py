@@ -133,7 +133,7 @@ class CompletenessScopeRegistrationTest(unittest.TestCase):
                 continue
             self.assertIsNone(row["proof"], row["scope_id"])
             self.assertEqual(
-                row["claims"], {"complete": False, "current": False, "updated": False}
+                row["evaluated_claims"], {"complete": False, "current": False, "updated": False}
             )
             self.assertFalse(row["inventory_context"]["authoritative"])
             self.assertNotIn("denominator", row)
