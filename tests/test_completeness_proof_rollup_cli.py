@@ -151,8 +151,8 @@ subprocess.Popen = _GuardedPopen
         json_arg, markdown_arg, json_path, markdown_path = outputs
 
         written = self._run_cli(action="--write", index_path=index_path, outputs=outputs)
-        self.assertEqual(written.returncode, 0, written.stdout + written.stderr)
-        self.assertIn("ok completeness proof rollup", written.stdout)
+        self.assertEqual(written.returncode, 1, written.stdout + written.stderr)
+        self.assertIn("requires authenticated current-release evaluation", written.stderr)
 
         json_before = json_path.read_bytes()
         markdown_before = markdown_path.read_bytes()
@@ -222,7 +222,8 @@ subprocess.Popen = _GuardedPopen
             index_path=second_index,
             outputs=second_outputs,
         )
-        self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
+        self.assertEqual(second.returncode, 1, second.stdout + second.stderr)
+        self.assertIn("requires authenticated current-release evaluation", second.stderr)
 
         self.assertEqual(first_outputs[2].read_bytes(), second_outputs[2].read_bytes())
         self.assertEqual(first_outputs[3].read_bytes(), second_outputs[3].read_bytes())
@@ -231,7 +232,8 @@ subprocess.Popen = _GuardedPopen
         valid_index = self._valid_index("baseline.json")
         outputs = self._output_pair("fail-closed")
         baseline = self._run_cli(action="--write", index_path=valid_index, outputs=outputs)
-        self.assertEqual(baseline.returncode, 0, baseline.stdout + baseline.stderr)
+        self.assertEqual(baseline.returncode, 1, baseline.stdout + baseline.stderr)
+        self.assertIn("requires authenticated current-release evaluation", baseline.stderr)
         json_before = outputs[2].read_bytes()
         markdown_before = outputs[3].read_bytes()
 
