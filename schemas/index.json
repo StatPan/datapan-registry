@@ -2,7 +2,7 @@
   "schema_version": "datapan.schema-index.v1",
   "generated_at": "2026-10-07T00:00:00Z",
   "datapan_version": "0.1.0-dev",
-  "count": 127,
+  "count": 129,
   "schemas": [
     {
       "path": "schemas/datapan.adapter-targets.v1.schema.json",
@@ -1024,7 +1024,7 @@
     {
       "path": "schemas/datapan.completeness-proof-rollup.v2.schema.json",
       "id": "https://schemas.datapan.dev/datapan.completeness-proof-rollup.v2.schema.json",
-      "title": "Datapan public-data completeness proof rollup v2",
+      "title": "Datapan public-data completeness proof snapshot v2",
       "contract": "completeness-proof-rollup",
       "version": "v2",
       "bytes": 11498,
@@ -1033,7 +1033,7 @@
     {
       "path": "schemas/datapan.completeness-current-release-evaluation.v1.schema.json",
       "id": "https://schemas.datapan.dev/datapan.completeness-current-release-evaluation.v1.schema.json",
-      "title": "Datapan completeness current release evaluation v1",
+      "title": "Datapan completeness current-release evaluation v1",
       "contract": "completeness-current-release-evaluation",
       "version": "v1",
       "bytes": 8677,
