@@ -4,6 +4,14 @@
 This tool never calls a registered provider operation. It reads only the
 official catalogue/detail/guide routes, stores raw captures in a private
 directory, and emits redacted digest-bound evidence for offline review.
+
+Each bounded capture batch may use its own private root. To resume status
+without resetting earlier outcomes, pass earlier roots with repeated
+--prior-capture-root in oldest-to-newest order, followed by the current
+--capture-root for --reconcile. A missing operation folder in a newer root
+preserves its earlier receipt, and the newest present receipt wins. Capture
+and offline parsing each operate on one batch root at a time. --resume-pending
+selects the next bounded data_go_kr_v1 batch from the current queue checkpoint.
 """
 
 from __future__ import annotations
@@ -113,6 +121,21 @@ def _strict_read_json(path: pathlib.Path) -> Any:
         raise EvidenceError("json_input_invalid") from exc
 
 
+def _strict_read_jsonl(path: pathlib.Path) -> list[Any]:
+    def pairs_no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+        result: dict[str, Any] = {}
+        for key, value in pairs:
+            if key in result:
+                raise EvidenceError("json_duplicate_key")
+            result[key] = value
+        return result
+
+    try:
+        return [json.loads(line, object_pairs_hook=pairs_no_duplicates) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise EvidenceError("json_input_invalid") from exc
+
+
 def _safe_operation_identity(operation: dict[str, Any]) -> dict[str, Any]:
     provenance = operation.get("provenance")
     if not isinstance(provenance, dict):
@@ -180,6 +203,47 @@ def select_queue_batch(queue: list[dict[str, Any]], *, offset: int, limit: int) 
     if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= MAX_BATCH_OPERATIONS:
         raise EvidenceError("queue_batch_limit_invalid")
     return queue[offset : offset + limit]
+
+
+def select_pending_queue_batch(
+    registered_queue: list[dict[str, Any]],
+    prior_work_items: list[dict[str, Any]],
+    *,
+    source_profile_id: str,
+    limit: int,
+) -> list[dict[str, Any]]:
+    """Select a bounded batch from the latest reconciled pending checkpoint."""
+    if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= MAX_BATCH_OPERATIONS:
+        raise EvidenceError("queue_batch_limit_invalid")
+    if not isinstance(source_profile_id, str) or source_profile_id not in {"data_go_kr_v1"}:
+        raise EvidenceError("source_profile_not_acquirable")
+    registered_by_id = {item["operation_identity"]["operation_id"]: item for item in registered_queue}
+    prior_by_id: dict[str, dict[str, Any]] = {}
+    valid_statuses = {"pending", "retryable", "acquired", "parsed_with_unknowns", "parsed_complete", "missing", "ambiguous", "unsupported", "invalid"}
+    for item in prior_work_items:
+        if not isinstance(item, dict) or not isinstance(item.get("operation_identity"), dict):
+            raise EvidenceError("queue_resume_checkpoint_invalid")
+        identity = item["operation_identity"]
+        operation_id = identity.get("operation_id")
+        registered = registered_by_id.get(operation_id) if isinstance(operation_id, str) else None
+        if (
+            registered is None
+            or identity != registered["operation_identity"]
+            or operation_id in prior_by_id
+            or item.get("status") not in valid_statuses
+            or item.get("source_profile_id") != registered["source_profile_id"]
+        ):
+            raise EvidenceError("queue_resume_checkpoint_invalid")
+        prior_by_id[operation_id] = item
+    if len(prior_by_id) != len(registered_by_id):
+        raise EvidenceError("queue_resume_checkpoint_incomplete")
+    selected = [
+        prior_by_id[item["operation_identity"]["operation_id"]]
+        for item in registered_queue
+        if prior_by_id[item["operation_identity"]["operation_id"]]["status"] == "pending"
+        and prior_by_id[item["operation_identity"]["operation_id"]]["source_profile_id"] == source_profile_id
+    ]
+    return selected[:limit]
 
 
 class _DocumentHtml(HTMLParser):
@@ -3033,7 +3097,7 @@ def _capture_one(
 def reconcile(
     queue: list[dict[str, Any]],
     evidence_dir: pathlib.Path,
-    capture_root: pathlib.Path | None = None,
+    capture_root: pathlib.Path | list[pathlib.Path] | tuple[pathlib.Path, ...] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     statuses = ("pending", "retryable", "acquired", "parsed_with_unknowns", "parsed_complete", "missing", "ambiguous", "unsupported", "invalid")
     counts = {status: 0 for status in statuses}
@@ -3127,7 +3191,17 @@ def reconcile(
     return report, work_items
 
 
-def _capture_work_status(identity: dict[str, Any], capture_root: pathlib.Path | None) -> dict[str, Any] | None:
+def _capture_work_status(
+    identity: dict[str, Any],
+    capture_root: pathlib.Path | list[pathlib.Path] | tuple[pathlib.Path, ...] | None,
+) -> dict[str, Any] | None:
+    if isinstance(capture_root, (list, tuple)):
+        latest_status: dict[str, Any] | None = None
+        for root in capture_root:
+            current_status = _capture_work_status(identity, root)
+            if current_status is not None:
+                latest_status = current_status
+        return latest_status
     if capture_root is None:
         return None
     folder = capture_root / identity["dataset_id"] / identity["upstream_operation_key"]
@@ -3342,7 +3416,22 @@ def _main() -> int:
     parser.add_argument("--build-queue", action="store_true")
     parser.add_argument("--reconcile", action="store_true")
     parser.add_argument("--capture", action="store_true", help="Fetch official documentation only; never calls provider operation endpoints")
-    parser.add_argument("--capture-root", type=pathlib.Path, help="Private raw capture directory; created mode 0700")
+    parser.add_argument("--resume-pending", action="store_true", help="Select the next bounded pending batch from the current reconciled queue checkpoint")
+    parser.add_argument("--source-profile", choices=("data_go_kr_v1",), default="data_go_kr_v1", help="Acquirable official-document source profile for --resume-pending")
+    parser.add_argument(
+        "--capture-root",
+        dest="capture_roots",
+        action="append",
+        type=pathlib.Path,
+        help="Private root for the current capture batch (created mode 0700)",
+    )
+    parser.add_argument(
+        "--prior-capture-root",
+        action="append",
+        type=pathlib.Path,
+        default=[],
+        help="Earlier private capture root to preserve during reconciliation; repeat in oldest-to-newest order",
+    )
     parser.add_argument("--limit", type=int, default=1, help=f"Bounded operation count (maximum {MAX_BATCH_OPERATIONS})")
     parser.add_argument("--offset", type=int, default=0, help="Stable zero-based work-queue offset for bounded resumable batches")
     parser.add_argument("--operation-id", action="append", default=[], help="Select an exact registered operation identity; repeat up to the bounded batch limit")
@@ -3354,10 +3443,16 @@ def _main() -> int:
     try:
         manifest = _strict_read_json(args.manifest)
         queue = build_queue(manifest)
+        capture_roots = args.capture_roots or []
         if args.capture:
-            if args.capture_root is None:
+            if len(capture_roots) != 1:
                 raise EvidenceError("capture_bounds_or_private_root_missing")
-            if args.operation_id:
+            if args.resume_pending:
+                if args.operation_id or args.offset != 0:
+                    raise EvidenceError("resume_pending_selection_conflict")
+                prior_work_items = _strict_read_jsonl(args.queue)
+                selected = select_pending_queue_batch(queue, prior_work_items, source_profile_id=args.source_profile, limit=args.limit)
+            elif args.operation_id:
                 if not 1 <= args.limit <= MAX_BATCH_OPERATIONS or len(args.operation_id) > args.limit or len(set(args.operation_id)) != len(args.operation_id):
                     raise EvidenceError("operation_id_selection_invalid")
                 by_id = {item["operation_identity"]["operation_id"]: item for item in queue}
@@ -3366,17 +3461,18 @@ def _main() -> int:
                 selected = [by_id[operation_id] for operation_id in args.operation_id]
             else:
                 selected = select_queue_batch(queue, offset=args.offset, limit=args.limit)
-            args.capture_root = prepare_private_capture_root(args.capture_root)
+            capture_roots[0] = prepare_private_capture_root(capture_roots[0])
+            capture_root = capture_roots[0]
             operations = {op["operation_id"]: op for op in manifest["operations"]}
             receipts = []
             request_pacer = _OfficialDocumentRequestPacer()
             for item in selected:
                 try:
-                    receipts.append(_capture_one(operations[item["operation_identity"]["operation_id"]], args.capture_root, request_pacer))
+                    receipts.append(_capture_one(operations[item["operation_identity"]["operation_id"]], capture_root, request_pacer))
                 except EvidenceError as exc:
                     operation = operations[item["operation_identity"]["operation_id"]]
                     identity = _safe_operation_identity(operation)
-                    folder = args.capture_root / identity["dataset_id"] / identity["upstream_operation_key"]
+                    folder = capture_root / identity["dataset_id"] / identity["upstream_operation_key"]
                     folder.mkdir(parents=True, exist_ok=True, mode=0o700)
                     try:
                         folder.chmod(0o700)
@@ -3387,12 +3483,13 @@ def _main() -> int:
                     receipts.append({"operation_id": item["operation_identity"]["operation_id"], "status": status, "reason_code": str(exc)})
             print(json.dumps({"attempted": len(receipts), "statuses": {s: sum(1 for r in receipts if r["status"] == s) for s in sorted({r["status"] for r in receipts})}, "private_capture_root": True}, sort_keys=True))
         if args.parse_captures:
-            if args.capture_root is None:
+            if len(capture_roots) != 1:
                 raise EvidenceError("capture_root_required")
-            count = _parse_existing_captures(manifest, args.capture_root, args.evidence_dir)
+            count = _parse_existing_captures(manifest, capture_roots[0], args.evidence_dir)
             print(f"parsed evidence artifacts: {count}")
         if args.build_queue or args.reconcile:
-            value, work_items = reconcile(queue, args.evidence_dir, args.capture_root)
+            reconciliation_roots = [*args.prior_capture_root, *capture_roots]
+            value, work_items = reconcile(queue, args.evidence_dir, reconciliation_roots or None)
             args.queue.parent.mkdir(parents=True, exist_ok=True)
             args.queue.write_bytes(b"".join(_json_line(item) for item in work_items))
         if args.reconcile:
