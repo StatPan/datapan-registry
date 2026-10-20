@@ -33,7 +33,7 @@ EXPECTED_INDEPENDENT_ADDITIONS = [
     },
     {"path": "schemas/datapan.completeness-proof-identities.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#722"},
     {"path": "schemas/datapan.completeness-proof-inputs.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#722"},
-    {"path": "schemas/datapan.completeness-proof-rollup.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#722"},
+    {"path": "schemas/datapan.completeness-proof-rollup.v2.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#722"},
     {"path": "schemas/datapan.completeness-proof-scopes.v1.schema.json", "kind": "schema", "authority_ticket": "StatPan/datapan-registry#722"},
     {
         "path": "policy/completeness-proof-scopes.json",

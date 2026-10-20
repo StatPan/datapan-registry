@@ -4650,7 +4650,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
             pipeline = next(item for item in row["facets"] if item["facet_id"] == "specification_pipeline")
             self.assertEqual(report["evaluation_context"]["mode"], "repository")
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
             self.assertEqual(pipeline["state"], "missing")
             self.assertEqual(set(pipeline["details"]["missing_stages"]), {"processor", "promotion", "health"})
             self.assertTrue(any(item["path"].endswith("source-no-change.zip") for item in pipeline["evidence"]))
@@ -4696,7 +4696,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     root=ROOT, input_root=input_root, input_index_path=index_path,
                 )
                 row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
-                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                 pipeline = next(item for item in row["facets"] if item["facet_id"] == "specification_pipeline")
                 self.assertEqual(pipeline["state"], "missing")
                 self.assertEqual(set(pipeline["details"]["missing_stages"]), {"source", "processor", "promotion"})
@@ -4820,7 +4820,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
         delivery = next(facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back")
         self.assertEqual(report["evaluation_context"]["mode"], "repository")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(pipeline["state"], "historical")
         self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
         self.assertTrue(pipeline["details"]["promotion_candidate_available"])
@@ -4885,7 +4885,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                 facets = {facet["facet_id"]: facet for facet in row["facets"]}
                 pipeline = facets["specification_pipeline"]
                 delivery = facets["immutable_publication_read_back"]
-                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                 self.assertEqual(pipeline["state"], "historical")
                 self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
                 self.assertTrue(pipeline["details"]["promotion_candidate_available"])
@@ -4925,7 +4925,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                     )
                 row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
                 pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
-                self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                 self.assertEqual(pipeline["details"]["processor_generation_id"], expected_generation)
                 self.assertFalse(pipeline["details"]["promotion_candidate_available"])
                 self.assertFalse(pipeline["details"]["promotion_processor_generation_matches"])
@@ -4996,7 +4996,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             checkpoint = json.loads(MODULE.base64.b64decode(checkpoint_api["content"]))
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_scope["scope_id"])
         pipeline = next(facet for facet in row["facets"] if facet["facet_id"] == "specification_pipeline")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(pipeline["state"], "missing")
         self.assertEqual(set(pipeline["details"]["missing_stages"]), {"promotion", "health"})
         self.assertEqual(checkpoint["observation_count"], 2)
@@ -5586,7 +5586,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             report = MODULE.build_report(root=ROOT, input_root=input_root, input_index_path=index_path)
         row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
         facet = next(item for item in row["facets"] if item["facet_id"] == "specification_pipeline")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(facet["state"], "missing")
         self.assertEqual(set(facet["details"]["missing_stages"]), {"processor", "promotion"})
 
@@ -5649,7 +5649,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             facets = {item["facet_id"]: item for item in row["facets"]}
             pipeline = facets["specification_pipeline"]
             delivery = facets["immutable_publication_read_back"]
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
             self.assertEqual(pipeline["state"], "missing")
             self.assertEqual(
                 set(pipeline["details"]["missing_stages"]),
@@ -5737,7 +5737,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
                         root=ROOT, input_root=input_root, input_index_path=index_path,
                     )
                     row = next(item for item in report["scopes"] if item["scope_id"] == operation_id)
-                    self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+                    self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
                     delivery = next(
                         facet for facet in row["facets"]
                         if facet["facet_id"] == "immutable_publication_read_back"
@@ -5777,7 +5777,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
             delivery = next(
                 facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back"
             )
-            self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+            self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
             self.assertEqual(delivery["details"]["delivery_status"], "publisher_readback_acknowledged")
             self.assertEqual(delivery["details"]["acknowledgement_run_id"], str(current_ack_run))
             self.assertEqual(delivery["details"]["acknowledgement_attempt"], 1)
@@ -5798,7 +5798,7 @@ class CompletenessProofRollupTest(unittest.TestCase):
         delivery = next(
             facet for facet in row["facets"] if facet["facet_id"] == "immutable_publication_read_back"
         )
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(delivery["details"]["subject"]["source_sha"], source_sha)
         self.assertEqual(delivery["details"]["acknowledgement_run_id"], "37199709258")
         self.assertEqual(delivery["details"]["acknowledgement_attempt"], 2)
@@ -6102,10 +6102,10 @@ class CompletenessProofRollupTest(unittest.TestCase):
         before_row = next(item for item in report_before["scopes"] if item["scope_id"] == operation_id)
         before_delivery = next(item for item in before_row["facets"] if item["facet_id"] == "immutable_publication_read_back")
         self.assertEqual(report, report_before, "advancing trusted main metadata alone must not alter the completeness report")
-        self.assertEqual(row["claims"], {"complete": False, "current": False, "updated": False})
+        self.assertEqual(row["evaluated_claims"], {"complete": False, "current": False, "updated": False})
         self.assertEqual(details["subject"]["publisher_run_id"], "99972280001")
         self.assertEqual(details["subject"]["publisher_attempt"], 2)
-        self.assertIsNone(details["current_release_manifest_sha256"])
+        self.assertIsNone(details.get("current_release_manifest_sha256"))
         self.assertFalse(details["current_release_applicable"])
         self.assertFalse(details["current_release_subject_applicable"])
         self.assertEqual(

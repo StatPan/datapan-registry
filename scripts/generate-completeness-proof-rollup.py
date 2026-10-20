@@ -6409,22 +6409,31 @@ def markdown_compact_json(value: Any) -> str:
 
 
 def render_markdown(report: dict[str, Any]) -> bytes:
+    if report.get("schema_version") != "datapan.completeness-proof-rollup.v2":
+        raise ValueError("completeness Markdown renderer requires v2 snapshot discriminator")
+    context = report.get("evaluation_context")
+    if not isinstance(context, dict) or context.get("claim_scope") != "evaluated_inputs_only":
+        raise ValueError("completeness snapshot context is not evaluated-input-only")
+    if any("current_release_manifest_sha256" in facet.get("details", {}) for row in report.get("scopes", []) for facet in row.get("facets", [])):
+        raise ValueError("v2 snapshot cannot render current-release manifest claims")
     lines = [
-        "# Public-data completeness proof rollup",
+        "# Public-data completeness proof snapshot",
         "",
         f"As of `{report['evaluation_epoch']}`. This report covers only the registered scopes below; it does not claim to cover all Korean public data.",
         "",
-        (f"Evaluation mode: `{report['evaluation_context']['mode']}`; candidate source inventories are local context and cannot establish authority, publication, or an updated claim. Baseline main: `{report['evaluation_context']['baseline_main_sha']}`."
-         if report["evaluation_context"]["mode"] == "candidate"
-         else "Evaluation mode: `repository`."),
+        (f"Snapshot mode: `candidate`; candidate source inventories are local context and cannot establish authority, publication, or an updated claim. Baseline main: `{context['baseline_main_sha']}`."
+         if context.get("mode") == "candidate_evidence_snapshot"
+         else "Snapshot mode: `repository evidence` ."),
+        "",
+        "All claims below describe only the evidence inputs named by this snapshot. Current-release applicability requires a separate authenticated evaluation.",
         "",
         f"Registered scopes: {report['summary']['registered_scopes']}; states: "
         + ", ".join(f"{key}={value}" for key, value in report["summary"]["states"].items())
         + ".",
         "",
-        "Local profiles and candidate denominators are inventory context, not authoritative source-wide denominator evidence. Missing v1 proofs are shown as blocked or unknown without synthetic hashes, timestamps, or counts.",
+        "Local profiles and candidate denominators are inventory context, not authoritative source-wide denominator evidence. Missing proofs are shown as blocked or unknown without synthetic hashes, timestamps, or counts.",
         "",
-        "| Scope | Resource kind | Local identities | Proof state | Complete | Current | Updated | Missing evidence |",
+        "| Scope | Resource kind | Local identities | Proof state | Evaluated complete | Fresh at snapshot epoch | Updated in evidence subject | Missing evidence |",
         "| --- | --- | ---: | --- | --- | --- | --- | --- |",
     ]
     for row in report["scopes"]:
@@ -6439,9 +6448,9 @@ def render_markdown(report: dict[str, Any]) -> bytes:
                     row["resource_kind"],
                     row["inventory_context"]["local_identity_count"],
                     row["proof_state"],
-                    row["claims"]["complete"],
-                    row["claims"]["current"],
-                    row["claims"]["updated"],
+                    row["evaluated_claims"]["complete"],
+                    row["evaluated_claims"]["current"],
+                    row["evaluated_claims"]["updated"],
                     missing,
                 )
             ) + " |"
@@ -6490,6 +6499,8 @@ def atomic_write(path: pathlib.Path, data: bytes) -> None:
 
 
 def require_claims(report: dict[str, Any], requirements: list[str]) -> None:
+    if report.get("schema_version") != "datapan.completeness-current-release-evaluation.v1":
+        raise ValueError("--require-claim requires authenticated current-release evaluation; snapshot claims are not current claims")
     rows = {row["scope_id"]: row for row in report["scopes"]}
     failures: list[str] = []
     for requirement in requirements:
@@ -6501,7 +6512,7 @@ def require_claims(report: dict[str, Any], requirements: list[str]) -> None:
         row = rows.get(scope_id)
         if row is None:
             failures.append(f"{scope_id}:unregistered_scope")
-        elif row["claims"][claim] is not True:
+        elif row.get("claims", {}).get(claim) is not True:
             reasons = ",".join(item["code"] for item in row["missing_evidence"])
             failures.append(f"{scope_id}:{claim}:blocked:{reasons or row['proof_state']}")
     if failures:
