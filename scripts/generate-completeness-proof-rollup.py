@@ -30,6 +30,7 @@ SCOPE_REGISTRY_PATH = "policy/completeness-proof-scopes.json"
 INPUT_INDEX_PATH = "reports/completeness-proof-inputs.json"
 POLICY_PATH = "policy/completeness-proof.json"
 ROLLUP_SCHEMA_PATH = "schemas/datapan.completeness-proof-rollup.v1.schema.json"
+ROLLUP_V2_SCHEMA_PATH = "schemas/datapan.completeness-proof-rollup.v2.schema.json"
 SCOPE_SCHEMA_PATH = "schemas/datapan.completeness-proof-scopes.v1.schema.json"
 INPUT_SCHEMA_PATH = "schemas/datapan.completeness-proof-inputs.v1.schema.json"
 OUTPUT_JSON_PATH = "reports/completeness-proof-rollup.json"
@@ -5276,6 +5277,116 @@ def dedupe_missing(values: list[dict[str, str]]) -> list[dict[str, str]]:
     return [unique[key] for key in sorted(unique)]
 
 
+RETAINED_EVIDENCE_RELATION = {
+    "mode": "retained_evidence_subject",
+    "current_release_evaluation_required": True,
+}
+
+
+def snapshot_inventory_subject(
+    *, scope_by_id: dict[str, dict[str, Any]], checked_inputs: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Bind the two evaluated inventory subjects without binding a release manifest."""
+    selected: dict[str, dict[str, Any]] = {}
+    for source_id, resource_kind, role, label in (
+        ("data_go_kr", "api_catalog_metadata", "source_catalog_snapshot", "catalog"),
+        ("data_go_kr", "api_operation_manifest", "local_operation_manifest", "operation_manifest"),
+    ):
+        scopes = [
+            scope for scope in scope_by_id.values()
+            if scope.get("source_id") == source_id and scope.get("resource_kind") == resource_kind
+        ]
+        if len(scopes) != 1:
+            raise ValueError(f"snapshot requires exactly one registered {label} scope")
+        matches = [
+            item for item in checked_inputs
+            if item.get("scope_id") == scopes[0]["scope_id"] and item.get("role") == role
+        ]
+        if len(matches) != 1:
+            raise ValueError(f"snapshot requires exactly one registered {label} inventory input")
+        item = matches[0]
+        selected[label] = {
+            "path": item["path"], "bytes": item["bytes"], "sha256": item["sha256"],
+        }
+    return selected
+
+
+def _snapshot_facet_details(details: dict[str, Any]) -> dict[str, Any]:
+    """Remove comparisons against moving release state, retaining subject facts."""
+    result: dict[str, Any] = {}
+    for key, value in details.items():
+        if key.startswith("health_main_") or key in {
+            "current_release_manifest_sha256",
+            "current_release_applicable",
+            "current_release_subject_applicable",
+            "retained_publication_current_release_applicable",
+            "currentness_established",
+        }:
+            continue
+        if key == "current_subject_applicable":
+            result["evidence_subject_applicable"] = value
+        elif key == "payload_equivalent_to_current_registry":
+            result["payload_equivalent_to_registered_catalog_inventory"] = value
+        elif key == "current_input_contract_compatible":
+            result["producer_contract_matches_registered_inputs"] = value
+        elif key == "current_input_contract_changed_paths":
+            result["producer_contract_changed_paths"] = value
+        elif key == "current_input_contract_reason_code":
+            result["producer_contract_reason_code"] = value
+        elif isinstance(value, dict):
+            result[key] = _snapshot_facet_details(value)
+        elif isinstance(value, list):
+            result[key] = [
+                _snapshot_facet_details(item) if isinstance(item, dict) else item
+                for item in value
+            ]
+        else:
+            result[key] = value
+    return result
+
+
+def make_evidence_snapshot(
+    *, report: dict[str, Any], scope_by_id: dict[str, dict[str, Any]],
+    checked_inputs: list[dict[str, Any]], candidate_context: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Project a validated legacy calculation onto its immutable evidence subject."""
+    inventory_subject = snapshot_inventory_subject(
+        scope_by_id=scope_by_id, checked_inputs=checked_inputs,
+    )
+    if candidate_context is None:
+        context: dict[str, Any] = {
+            "mode": "repository_evidence_snapshot",
+            "claim_scope": "evaluated_inputs_only",
+            "inventory_subject": inventory_subject,
+        }
+    else:
+        context = copy.deepcopy(candidate_context)
+        context["mode"] = "candidate_evidence_snapshot"
+        context["claim_scope"] = "evaluated_inputs_only"
+        context["inventory_subject"] = inventory_subject
+
+    report["schema_version"] = "datapan.completeness-proof-rollup.v2"
+    report["evaluation_context"] = context
+    report["summary"]["evaluated_claims"] = report["summary"].pop("claims")
+    for row in report["scopes"]:
+        row["evaluated_claims"] = row.pop("claims")
+        row["release_relation"] = copy.deepcopy(RETAINED_EVIDENCE_RELATION)
+        for facet in row["facets"]:
+            facet["details"] = _snapshot_facet_details(facet["details"])
+            if facet["facet_id"] == "immutable_publication_read_back" and facet.get("details", {}).get("subject"):
+                # This facet describes a retained native receipt. Its relation
+                # to the release being evaluated is computed only by the live
+                # evaluator after the raw manifest is frozen.
+                facet["state"] = "historical"
+                facet["missing_evidence"] = dedupe_missing([
+                    item for item in facet["missing_evidence"]
+                    if item.get("code") != "current_release_publication_read_back_missing"
+                ] + [missing_entry(
+                    "current_release_evaluation_required", "StatPan/datapan-registry", "#754",
+                )])
+    return report
+
+
 def proof_for_scope(
     *,
     root: pathlib.Path,
@@ -6275,7 +6386,11 @@ def build_report(
         },
         "scopes": rows,
     }
-    validate_schema(report, root / ROLLUP_SCHEMA_PATH, "completeness proof rollup")
+    report = make_evidence_snapshot(
+        report=report, scope_by_id=scope_by_id, checked_inputs=checked_inputs,
+        candidate_context=candidate_context or None,
+    )
+    validate_schema(report, root / ROLLUP_V2_SCHEMA_PATH, "completeness proof rollup v2")
     return report
 
 
