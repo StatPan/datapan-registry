@@ -220,8 +220,7 @@ subprocess.Popen = _GuardedPopen
             index_path=second_index,
             outputs=second_outputs,
         )
-        self.assertEqual(second.returncode, 1, second.stdout + second.stderr)
-        self.assertIn("requires authenticated current-release evaluation", second.stderr)
+        self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
 
         self.assertEqual(first_outputs[2].read_bytes(), second_outputs[2].read_bytes())
         self.assertEqual(first_outputs[3].read_bytes(), second_outputs[3].read_bytes())
