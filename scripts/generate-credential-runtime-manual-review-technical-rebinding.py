@@ -50,7 +50,7 @@ EXPECTED_INDEPENDENT_ADDITIONS = [
     {
         "path": "reports/completeness-proof-rollup.json",
         "kind": "completeness_proof_rollup",
-        "schema": "https://schemas.datapan.dev/datapan.completeness-proof-rollup.v1.schema.json",
+        "schema": "https://schemas.datapan.dev/datapan.completeness-proof-rollup.v2.schema.json",
         "authority_ticket": "StatPan/datapan-registry#722",
     },
     {
