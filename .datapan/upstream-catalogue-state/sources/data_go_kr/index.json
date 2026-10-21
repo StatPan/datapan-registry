@@ -51,6 +51,23 @@
         "refresh_evidence_sha256": "7f36e618db3fe91d4534c4352ceb3a3cc2d5bb0c18b2cf00b9a3db4128ec352b",
         "run_attempt": 1,
         "run_started_at": "2026-10-13T23:44:10Z"
+      },
+      {
+        "admission_id": "8b332d9b3e71afbe837da1bdfa42d9cfa62e9b3a56143a4ceebda85af71e418f",
+        "admitted_at": "2026-10-21T00:40:01Z",
+        "artifact_digest_sha256": "b97548ce43352ad8f6a8660b8e21a6a8550e79002a2040d71e0a5e435bbb4942",
+        "artifact_expires_at": "2026-11-19T23:17:01Z",
+        "artifact_id": "12307426175",
+        "artifact_name": "upstream-catalog-refresh-39513391763",
+        "artifact_size_bytes": 9862875,
+        "candidate_sha256": "fe8941a7fefbf40d467eba9f12f51d9e9dc28979e874b1244f056e0ab24c28c6",
+        "generation_id": "620db0d3db77931c6fd6cc5b885a33d2a9522ad44778b538a2726c6d34db6c25",
+        "head_sha": "3c3b1ddee11623270621f455525d1027690c7a79",
+        "observed_at": "2026-10-20T23:12:48Z",
+        "producer_run_id": "39513391763",
+        "refresh_evidence_sha256": "7e4fc60f615782222d816d798a88808401098c3ef604afe7c04a9981ac0d117f",
+        "run_attempt": 1,
+        "run_started_at": "2026-10-20T23:11:51Z"
       }
     ],
     "legacy_discovery_floor": {
@@ -2332,7 +2349,7 @@
       "checkpoint": "620db0d3db77931c6fd6cc5b885a33d2a9522ad44778b538a2726c6d34db6c25.json",
       "generation_id": "620db0d3db77931c6fd6cc5b885a33d2a9522ad44778b538a2726c6d34db6c25",
       "status": "quarantined",
-      "updated_at": "2026-10-20T23:17:50Z"
+      "updated_at": "2026-10-21T00:40:01Z"
     }
   ],
   "schema_version": "datapan.upstream-catalogue-checkpoint.v1"
