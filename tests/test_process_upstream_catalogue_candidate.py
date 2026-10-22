@@ -626,9 +626,11 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
         composer_spec.loader.exec_module(composer)
         provider_index = json.loads(self.provider_index_path.read_text(encoding="utf-8"))
         diagnostic_evidence_row = composer.apply_enrichment_record(candidate, record)
-        composer.SEOUL_OPERATION_DECLARATION.validate_enriched_record(candidate, record)
-        composer.SEOUL_OPERATION_DECLARATION.validate_declared_operation(candidate, declared)
-        composer.LINK_DETAIL_HELPERS.validate_link_metadata(
+        seoul_declaration = composer.load_seoul_operation_declaration()
+        seoul_declaration.validate_enriched_record(candidate, record)
+        seoul_declaration.validate_declared_operation(candidate, declared)
+        link_detail_helpers = composer.load_link_detail_helpers()
+        link_detail_helpers.validate_link_metadata(
             record["declaration_provenance"]["page_resolver"],
             candidate["id"],
             composer.registered_hosts(provider_index),
@@ -830,7 +832,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                             payload["records"][0]["operations"],
                         )
                         payload["records"][0]["declaration_provenance"]["operation_sha256"] = (
-                            composer.SEOUL_OPERATION_DECLARATION.digest_json(operation)
+                            composer.load_seoul_operation_declaration().digest_json(operation)
                         )
                     else:
                         target = next(row for row in payload if row.get("id") == "15056854")
@@ -853,7 +855,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
                         payload["records"][0]["operations"],
                     )
                     payload["records"][0]["declaration_provenance"]["operation_sha256"] = (
-                        composer.SEOUL_OPERATION_DECLARATION.digest_json(operation)
+                        composer.load_seoul_operation_declaration().digest_json(operation)
                     )
                 else:
                     target = next(row for row in payload if row.get("id") == "15056854")
@@ -883,6 +885,7 @@ receipt={"status":status,"inputs":{"baseline_sha256":digest(pathlib.Path(a.basel
             other_operation,
             composer.registered_hosts(provider_index),
             source_page_url="https://www.data.go.kr/data/2/openapi.do",
+            declaration_helper=composer.load_seoul_operation_declaration(),
         )
         self.assertIn("operation_source_url_differs_from_api", other_errors)
 
