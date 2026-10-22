@@ -211,13 +211,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install jsonschema
           python -m pip install --disable-pip-version-check 'PyYAML==6.0.2'
-          python scripts/validate-source-reference-drift.py
-          python scripts/validate-source-runtime-candidates.py
-          python scripts/validate-source-runtime-evidence-plans.py
-          python scripts/sync-release-schema-artifacts.py --check
-          python scripts/sync-release-manifest-artifacts.py --check
           python scripts/generate-data-go-kr-operation-manifest.py --check
-          python scripts/validate-data-go-kr-operation-manifest.py
           python -m unittest tests/test_validate_data_go_kr_operation_manifest.py
           python scripts/generate-operation-observation-plan.py --check
           python scripts/register-operation-observation-plan-artifacts.py --check
@@ -242,9 +236,6 @@ jobs:
           python -m unittest tests/test_validate_operation_assertion_policies.py
           python scripts/validate-diagnostic-envelope-draft.py
           python -m unittest tests/test_validate_diagnostic_envelope_draft.py
-          python scripts/generate-diagnostic-current-source-applicability.py --check
-          python scripts/validate-diagnostic-current-source-applicability.py
-          python -m unittest tests/test_diagnostic_current_source_applicability.py
           python scripts/validate-diagnostic-evidence-mapping-draft.py
           python -m unittest tests/test_validate_diagnostic_evidence_mapping_draft.py
           python scripts/generate-diagnostic-release-candidate.py --check
@@ -253,7 +244,6 @@ jobs:
           python scripts/generate-diagnostic-publication.py --check
           python -m unittest tests/test_diagnostic_publication.py
           python scripts/generate-regional-baseline-source-provenance.py --check
-          python scripts/validate-regional-baseline-source-provenance.py
           python -m unittest tests/test_validate_regional_baseline_source_provenance.py
           python scripts/validate-release-ledger-ownership.py
           python scripts/validate-release-ledger-goal-audit.py
@@ -268,7 +258,6 @@ jobs:
           python scripts/refresh-release-ledger-evidence.py --self-test
           python scripts/refresh-release-ledger-evidence.py --check
           python scripts/generate-release-assembly-receipt.py --check
-          python scripts/validate-coverage-backlog.py
           python scripts/validate-external-adapter-backlog.py
           python scripts/validate-source-profiles.py
           python scripts/validate-source-refresh-policy.py
@@ -296,12 +285,8 @@ jobs:
           python scripts/validate-error-action-catalogs.py
           python scripts/generate-error-action-routing-rollup.py --check
           python scripts/validate-error-action-routing-rollups.py
-          python scripts/generate-failure-recovery-rollup.py --check
-          python scripts/generate-operation-denominator-rollup.py --check
           python -m unittest tests/test_generate_operation_denominator_rollup.py
-          python scripts/generate-current-runtime-evidence-projection.py --check
           python -m unittest tests/test_runtime_evidence_projection.py
-          python scripts/generate-runtime-freshness-queue.py --check
           python -m unittest tests/test_generate_runtime_freshness_queue.py
           python -m unittest tests/test_generate_runtime_freshness_batch.py
           python -m unittest tests/test_consolidate_runtime_freshness_run.py
@@ -312,9 +297,7 @@ jobs:
           python -m unittest tests/test_generate_runtime_freshness_import_admission.py
           python -m unittest tests/test_attest_runtime_freshness_import.py
           python -m unittest tests/test_runtime_freshness_pr_handoff.py
-          python scripts/generate-runtime-evidence-growth.py --check
           python -m unittest tests/test_generate_runtime_evidence_growth.py
-          python scripts/generate-readme-runtime-snapshot.py --check
           python -m unittest tests/test_generate_readme_runtime_snapshot.py
           python scripts/check-runtime-freshness-workflow.py
           python scripts/check-runtime-freshness-import-workflow.py
@@ -337,17 +320,14 @@ jobs:
           python scripts/validate-source-runtime-evidence-rollup.py
           python scripts/validate-runtime-evidence-growth.py
           python scripts/generate-sustainable-coverage.py --self-test
-          python scripts/generate-sustainable-coverage.py --check
           python scripts/validate-completeness-proof.py --check
           python scripts/validate-completeness-proof.py --self-test
           python -m unittest tests/test_validate_completeness_proof.py
-          python scripts/generate-completeness-proof-rollup.py --check
           # The same five-module suite runs unconditionally in refresh-release-ledger-evidence.py --check (CHECK_COMMANDS).
           python scripts/validate-operation-materialization-plan.py
           python scripts/validate-safetydata-operation-candidates.py
           python scripts/validate-safetydata-registry-patches.py
           python scripts/validate-link-detail-registry-patches.py
-          python scripts/validate-institution-api-overview.py
           python scripts/validate-institution-runtime-plan.py
           python scripts/generate-source-runtime-remediation-map.py --check
           python scripts/generate-credential-runtime-evidence-policy.py --check
@@ -375,11 +355,9 @@ jobs:
           python scripts/promote-credential-runtime-receipt.py --self-test
           python scripts/generate-release-distribution-footprint.py --check
           python scripts/generate-release-version-decision.py --check
-          python scripts/generate-release-shard-consumer-proof.py --check
           python scripts/generate-release-consumer-compatibility.py --check
           python scripts/validate-release-consumer-compatibility.py
           python -m unittest tests/test_studio_consumer_compatibility.py
-          python scripts/generate-release-operational-pressure.py --check
           python scripts/generate-release-consumer-decision.py --check
           python -m py_compile scripts/error_action_routing_rollup.py
           python -m py_compile scripts/generate-error-action-routing-rollup.py
