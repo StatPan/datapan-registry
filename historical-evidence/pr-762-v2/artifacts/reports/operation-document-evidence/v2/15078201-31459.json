@@ -1,0 +1,2023 @@
+{
+  "authentication": {
+    "mechanism": "service_key",
+    "parameter_names": [
+      "ServiceKey",
+      "serviceKey"
+    ],
+    "placement": null,
+    "requirement": "required",
+    "source_refs": [
+      {
+        "evidence_kind": "document_cell",
+        "locator": {
+          "cell_index": 3,
+          "column_label": "항목구분",
+          "kind": "html_table_cell",
+          "row_index": 1,
+          "source_id": "operation_detail_html",
+          "table_index": 0
+        }
+      }
+    ],
+    "status": "documented"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_level_http_method_not_declared",
+    "request_data_types_not_established",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15078201",
+    "operation_id": "05ba0204dafa4574d3e553cb2ff709ae95e797dbb61923a6d11c2865fcfd7c29",
+    "operation_name": "한반도고표본 정보 조회",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "operation_selector_identity",
+        "locator": {
+          "kind": "html_select_option",
+          "option_index": 0,
+          "select_id": "open_api_detail_select",
+          "source_id": "catalogue_detail_page",
+          "text": "한반도고표본 정보 조회",
+          "value": "31459"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "cell_index": 4,
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 0,
+          "source_id": "reference_guide_docx",
+          "table_index": 5
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "31459"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_selector_identity",
+          "locator": {
+            "kind": "html_select_option",
+            "option_index": 0,
+            "select_id": "open_api_detail_select",
+            "source_id": "catalogue_detail_page",
+            "text": "한반도고표본 정보 조회",
+            "value": "31459"
+          }
+        },
+        {
+          "evidence_kind": "operation_name",
+          "locator": {
+            "cell_index": 4,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 0,
+            "source_id": "reference_guide_docx",
+            "table_index": 5
+          }
+        }
+      ],
+      "status": "registered_manifest",
+      "value": "한반도고표본 정보 조회"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 7,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 4,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "name": "dateFrom",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 7,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 4,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown",
+        "value": null
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 7,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 4,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "8"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 7,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 4,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "8"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 7,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 4,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 6,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 3,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "name": "dateGbn",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 6,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 3,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown",
+        "value": null
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 6,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 3,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "1"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 6,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 3,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "1"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 6,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 3,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 8,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 5,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "name": "dateTo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 8,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 5,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown",
+        "value": null
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 8,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 5,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "8"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 8,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 5,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "8"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 8,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 5,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 3,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 7,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "example_request_query_key",
+            "locator": {
+              "cell_index": 0,
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 8
+            }
+          }
+        ],
+        "status": "demonstrated_by_example",
+        "value": "query"
+      },
+      "name": "numOfRows",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 3,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 7,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 3,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 7,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "4"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 3,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 7,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "4"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 3,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 7,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 8,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "example_request_query_key",
+            "locator": {
+              "cell_index": 0,
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 8
+            }
+          }
+        ],
+        "status": "demonstrated_by_example",
+        "value": "query"
+      },
+      "name": "pageNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 8,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 8,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "4"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 2,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 8,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "4"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 2,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 8,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "name": "ServiceKey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "100"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 1,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "100"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 1,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 6,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "example_request_query_key",
+            "locator": {
+              "cell_index": 0,
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 8
+            }
+          }
+        ],
+        "status": "demonstrated_by_example",
+        "value": "query"
+      },
+      "name": "serviceKey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 6,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown",
+        "value": null
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 6,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "100"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 6,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "100"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 6,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 4,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "example_request_query_key",
+            "locator": {
+              "cell_index": 0,
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 8
+            }
+          }
+        ],
+        "status": "demonstrated_by_example",
+        "value": "query"
+      },
+      "name": "st",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 4,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 4,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "1"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 4,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "1"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 4,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": null,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 5,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "unknown"
+      },
+      "data_type": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "example_request_query_key",
+            "locator": {
+              "cell_index": 0,
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 1,
+              "source_id": "reference_guide_docx",
+              "table_index": 8
+            }
+          }
+        ],
+        "status": "demonstrated_by_example",
+        "value": "query"
+      },
+      "name": "sw",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "html_table_cell",
+              "row_index": 5,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 3,
+              "column_label": "항목구분",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": true,
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "html_table_cell",
+              "row_index": 5,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 4,
+              "column_label": "샘플데이터",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [
+          "200"
+        ],
+        "source_refs": [
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "html_table_cell",
+              "row_index": 5,
+              "source_id": "operation_detail_html",
+              "table_index": 0
+            }
+          },
+          {
+            "evidence_kind": "document_cell",
+            "locator": {
+              "cell_index": 2,
+              "column_label": "항목크기",
+              "kind": "docx_table_cell",
+              "part": "word/document.xml",
+              "row_index": 2,
+              "source_id": "reference_guide_docx",
+              "table_index": 6
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "200"
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 1,
+            "column_label": "항목명(영문)",
+            "kind": "html_table_cell",
+            "row_index": 5,
+            "source_id": "operation_detail_html",
+            "table_index": 0
+          }
+        },
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "cell_index": 0,
+            "column_label": "항목명(영문)",
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 2,
+            "source_id": "reference_guide_docx",
+            "table_index": 6
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "resultCode",
+      "resultMsg",
+      "cprtCtnt",
+      "famlKorNm",
+      "famlNm",
+      "frstRgstnDtm",
+      "imgUrl",
+      "lastUpdtDtm",
+      "plantGnrlNm",
+      "plantOldSmplNo",
+      "plantSpecsScnm",
+      "numOfRows",
+      "pageNo",
+      "totalCount"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 1,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 2,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 3,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 4,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 5,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 6,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 7,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 8,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 9,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 10,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 11,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 12,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 13,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      },
+      {
+        "evidence_kind": "response_field_name",
+        "locator": {
+          "cell_index": 0,
+          "column_label": "항목명(영문)",
+          "kind": "docx_table_cell",
+          "part": "word/document.xml",
+          "row_index": 14,
+          "source_id": "reference_guide_docx",
+          "table_index": 7
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [],
+      "status": "unknown",
+      "values": []
+    },
+    "coded_result_field_inventory": {
+      "candidates": [],
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "unknown",
+      "media_types": [],
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": null
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "success_branches": []
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 205556,
+      "capture_role": "operation_selector_and_guide_index",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15078201/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:36:18Z",
+      "sha256": "5a3fce886887cfaaa4397e5d10a7b7810dcc5c1be9496e56d9b153966e12f8e5",
+      "source_id": "catalogue_detail_page"
+    },
+    {
+      "bytes": 13232,
+      "capture_role": "operation_detail",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "POST",
+        "path": "/tcs/dss/selectApiDetailFunction.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:36:18Z",
+      "sha256": "4b4b4f3ad321326469f4a89f4b17b8d1103f4cbcb39e79c793b694781804a147",
+      "source_id": "operation_detail_html"
+    },
+    {
+      "bytes": 567828,
+      "capture_role": "service_and_operation_guide",
+      "media_type": "application/octet-stream; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/cmm/cmm/fileDownload.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:36:19Z",
+      "sha256": "95119cfb7968c6a38dca6b4d68806b59ee7dee4d6ead8b6da694e942b2be6295",
+      "source_id": "reference_guide_docx"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_endpoint",
+          "locator": {
+            "cell_index": 0,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 8
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "service_level_only",
+      "source_refs": [
+        {
+          "evidence_kind": "service_level_interface_methods",
+          "locator": {
+            "cell_index": 2,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 9,
+            "source_id": "reference_guide_docx",
+            "table_index": 3
+          }
+        }
+      ],
+      "status": "unknown",
+      "value": null
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_endpoint",
+          "locator": {
+            "cell_index": 0,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 8
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/1400119/OldPlantService/oldSpcmSearch"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "operation_endpoint",
+          "locator": {
+            "cell_index": 0,
+            "kind": "docx_table_cell",
+            "part": "word/document.xml",
+            "row_index": 1,
+            "source_id": "reference_guide_docx",
+            "table_index": 8
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "http"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

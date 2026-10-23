@@ -1,0 +1,37 @@
+{
+  "attempted_at": "2026-10-07T08:50:53Z",
+  "documents": [
+    {
+      "bytes": 209993,
+      "encoding": "utf-8",
+      "media_type": "text/html; charset=UTF-8",
+      "present": true,
+      "retrieved_at": "2026-10-07T08:43:00Z",
+      "role": "catalogue",
+      "sha256": "45870a7f935a367439b077b7a308fbc70a983966c9709fca23896d7717d9112a"
+    },
+    {
+      "bytes": 0,
+      "encoding": null,
+      "media_type": null,
+      "present": false,
+      "retrieved_at": null,
+      "role": "operation_detail",
+      "sha256": null
+    },
+    {
+      "bytes": 0,
+      "encoding": null,
+      "media_type": null,
+      "present": false,
+      "retrieved_at": null,
+      "role": "reference_guide",
+      "sha256": null
+    }
+  ],
+  "evidence_sha256": "9358e1c6f5be86e6189dd6b29008e4730cbaac54bf0160b3094ac90c2fb3d8dd",
+  "operation_id": "089cb7e5efd33f7e6f7c74fc636a5f8aa37af98ed1c03acdfe36ad175f6ae112",
+  "reason_code": null,
+  "schema_version": "datapan.operation-document-capture-receipt.v2",
+  "status": "acquired"
+}

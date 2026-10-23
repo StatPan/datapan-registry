@@ -1,0 +1,3202 @@
+{
+  "authentication": {
+    "mechanism": "service_key",
+    "parameter_names": [
+      "serviceKey"
+    ],
+    "placement": "query",
+    "requirement": "required",
+    "source_refs": [
+      {
+        "evidence_kind": "authentication_credential_description",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/description",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_name",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/name",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_placement",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/in",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_requiredness",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/required",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "status": "documented"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_effect_not_established_by_openapi",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15127040",
+    "operation_id": "062611de71ede163959a38a7eca9f4a9c08632fce72a0abe6f30bef8117ed730",
+    "operation_name": "지역별 수신 허용거부 통계 현황 조회",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "catalogue_dataset_identity",
+        "locator": {
+          "input_id": "publicDataPk",
+          "kind": "html_hidden_input",
+          "source_id": "catalogue_detail_page",
+          "value": "15127040"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/summary",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_endpoint_path",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_id",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/operationId",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "56996"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "지역별 수신 허용거부 통계 현황을 조회하는 서비스"
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_title",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/summary",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "지역별 수신 허용거부 통계 현황 조회"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "numOfRows",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "pageNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "resultType",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "serviceKey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "resultCode",
+      "resultMsg",
+      "numOfRows",
+      "pageNo",
+      "totalCount",
+      "items",
+      "item",
+      "rcptnPermCntc",
+      "rcptnPermRate",
+      "crtraYm",
+      "areaNm",
+      "rcreBzmnCnt",
+      "rcptnPermBzmnCnt"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultMsg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultMsg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/numOfRows",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/numOfRows/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/pageNo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/pageNo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/totalCount",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/totalCount/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermCntc",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermCntc/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermRate",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermRate/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/crtraYm",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/crtraYm/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/areaNm",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/areaNm/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcreBzmnCnt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcreBzmnCnt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermBzmnCnt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 180163,
+          "byte_start": 173106,
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermBzmnCnt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [
+        {
+          "evidence_kind": "accepted_http_success_status",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "values": [
+        200
+      ]
+    },
+    "coded_result_field_inventory": {
+      "candidates": [
+        {
+          "classification": "recognized_result_code_name",
+          "http_status_code": 200,
+          "name": "resultCode",
+          "path": null,
+          "schema_variant": {
+            "index": null,
+            "kind": "single"
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "value_type": "string"
+        }
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultCode",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultMsg",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultMsg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultMsg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "numOfRows",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/numOfRows",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/numOfRows/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "pageNo",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/pageNo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/pageNo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "totalCount",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/totalCount",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/totalCount/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "items",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "item",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "rcptnPermCntc",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermCntc",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermCntc/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "rcptnPermRate",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermRate",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermRate/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "crtraYm",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/crtraYm",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/crtraYm/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "areaNm",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/areaNm",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/areaNm/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "rcreBzmnCnt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcreBzmnCnt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcreBzmnCnt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "rcptnPermBzmnCnt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermBzmnCnt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermBzmnCnt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "number"
+      }
+    ],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "unknown",
+      "media_types": [
+        "application/json",
+        "application/xml"
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/produces/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/produces/1",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "conflict"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_error_values_not_declared",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_success_values_not_declared",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": "string"
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "success_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [
+            {
+              "classification": "recognized_result_code_name",
+              "http_status_code": 200,
+              "name": "resultCode",
+              "path": null,
+              "schema_variant": {
+                "index": null,
+                "kind": "single"
+              },
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_schema",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_type",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "value_type": "string"
+            }
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultCode",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultMsg",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultMsg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultMsg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "numOfRows",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/numOfRows",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/numOfRows/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "pageNo",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/pageNo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/pageNo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "totalCount",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/totalCount",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/totalCount/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "items",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "item",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "rcptnPermCntc",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermCntc",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermCntc/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "rcptnPermRate",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermRate",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermRate/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "crtraYm",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/crtraYm",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/crtraYm/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "areaNm",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/areaNm",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/areaNm/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "rcreBzmnCnt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcreBzmnCnt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcreBzmnCnt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 180163,
+                    "byte_start": 173106,
+                    "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "rcptnPermBzmnCnt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermBzmnCnt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/items/properties/item/properties/rcptnPermBzmnCnt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "number"
+          }
+        ],
+        "http_status_code": 200,
+        "payload": {
+          "kind": "unknown",
+          "media_types": [
+            "application/json",
+            "application/xml"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/produces/1",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "conflict"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_error_values_not_declared",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_success_values_not_declared",
+                "locator": {
+                  "byte_end": 180163,
+                  "byte_start": 173106,
+                  "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": "string"
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "object",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_object_type",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 180163,
+                "byte_start": 173106,
+                "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "accepted_http_success_status",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "success_response_branch",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_schema_variant_root",
+            "locator": {
+              "byte_end": 180163,
+              "byte_start": 173106,
+              "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get/responses/200/schema",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 202810,
+      "capture_role": "catalogue_identity_and_inline_openapi_operation",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15127040/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:36:53Z",
+      "sha256": "cf04a2da66d4cbae9e8384c69ed5794865e6c73dcb365f18860af2f327dc863a",
+      "source_id": "catalogue_detail_page"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_host",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/host",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "operation_specific",
+      "source_refs": [
+        {
+          "evidence_kind": "operation_http_method",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2/get",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "GET"
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_path",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/paths/~1getAreaclsRcptnPermRejectStats_2",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/1130000/TelidsalRcptnRejectAreaclsRcptnPermRejectStats_2Service/getAreaclsRcptnPermRejectStats_2"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_scheme",
+          "locator": {
+            "byte_end": 180163,
+            "byte_start": 173106,
+            "json_pointer": "#/schemes/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "https"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

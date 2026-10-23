@@ -1,0 +1,22 @@
+{
+  "archive_kind": "historical_pr762_v2_operation_document_evidence",
+  "archive_prefix": "historical-evidence/pr-762-v2/",
+  "automatic_consumption": false,
+  "counts": {
+    "overlap_evidence": 167,
+    "overlap_receipts": 167,
+    "pr_only_evidence": 233,
+    "pr_only_receipts": 233,
+    "pr_only_total": 466
+  },
+  "main_commit": "151da89679e34e3d7c034077c3a45a7c648b9de5",
+  "path_list_sha256": "08c74ef34d2c88d2fc1540094a61d701db123ca38232c536bc8c7dbd3f330e25",
+  "pr762_head_commit": "fabbeb5e33354ab4fb86905c0db282029bdd5f07",
+  "production_path_effect": false,
+  "refs": [
+    "#760",
+    "#762"
+  ],
+  "source_prefix": "reports/operation-document-evidence/v2/",
+  "status": "inactive_archive_only"
+}

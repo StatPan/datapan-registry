@@ -1,0 +1,4621 @@
+{
+  "authentication": {
+    "mechanism": "service_key",
+    "parameter_names": [
+      "serviceKey"
+    ],
+    "placement": "query",
+    "requirement": "required",
+    "source_refs": [
+      {
+        "evidence_kind": "authentication_credential_description",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/description",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_name",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/name",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_placement",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/in",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "authentication_parameter_requiredness",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/required",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "status": "documented"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_effect_not_established_by_openapi",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15108956",
+    "operation_id": "075ba54c29ed1836580a7ca726979677aa1f9301242eed5176b33f05fbfa41f4",
+    "operation_name": "승마체험강습과정 정보 조회 서비스",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "catalogue_dataset_identity",
+        "locator": {
+          "input_id": "publicDataPk",
+          "kind": "html_hidden_input",
+          "source_id": "catalogue_detail_page",
+          "value": "15108956"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/summary",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_endpoint_path",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_id",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/operationId",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "46740"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "한국마사회의 승마체험강습과정에 대해 강습과정명, 신청자 정보, 수료기준일수, 참가관련 내용, 비용, 차수, 강습과정 구분등을 표출합니다."
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_title",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/summary",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "승마체험강습과정 정보 조회 서비스"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "_type",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/3/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "numOfRows",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "pageNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "serviceKey",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "header",
+      "resultMsg",
+      "resultCode",
+      "body",
+      "items",
+      "item",
+      "rn",
+      "lsnCrseNm",
+      "aplrLimMinAg",
+      "aplrLimMaxAg",
+      "limGenNm",
+      "aplrLimCmplTcnt",
+      "cmplStdrDyCnt",
+      "partQlfcTxt",
+      "partGbCd",
+      "partCtTxt",
+      "hillLsnCt",
+      "maxLsnOdr",
+      "stuMaxLimCnt",
+      "lsnCrseGbCd",
+      "lsnLvlCd",
+      "numOfRows",
+      "pageNo",
+      "totalCount"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultMsg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultMsg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/rn",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/rn/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseNm",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseNm/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMinAg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMinAg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMaxAg",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMaxAg/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/limGenNm",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/limGenNm/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimCmplTcnt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimCmplTcnt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/cmplStdrDyCnt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/cmplStdrDyCnt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partQlfcTxt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partQlfcTxt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partGbCd",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partGbCd/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partCtTxt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partCtTxt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/hillLsnCt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/hillLsnCt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/maxLsnOdr",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/maxLsnOdr/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/stuMaxLimCnt",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/stuMaxLimCnt/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseGbCd",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseGbCd/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnLvlCd",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnLvlCd/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/numOfRows",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/numOfRows/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/pageNo",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/pageNo/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/totalCount",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 181941,
+          "byte_start": 173548,
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/totalCount/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [
+        {
+          "evidence_kind": "accepted_http_success_status",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "values": [
+        200
+      ]
+    },
+    "coded_result_field_inventory": {
+      "candidates": [
+        {
+          "classification": "recognized_result_code_name",
+          "http_status_code": 200,
+          "name": "resultCode",
+          "path": null,
+          "schema_variant": {
+            "index": null,
+            "kind": "single"
+          },
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "value_type": "string"
+        }
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "header",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultMsg",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultMsg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultMsg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "resultCode",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "body",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "items",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "item",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "object"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "rn",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/rn",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/rn/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "lsnCrseNm",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseNm",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseNm/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "aplrLimMinAg",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMinAg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMinAg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "aplrLimMaxAg",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMaxAg",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMaxAg/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "limGenNm",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/limGenNm",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/limGenNm/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "aplrLimCmplTcnt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimCmplTcnt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimCmplTcnt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "cmplStdrDyCnt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/cmplStdrDyCnt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/cmplStdrDyCnt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "partQlfcTxt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partQlfcTxt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partQlfcTxt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "partGbCd",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partGbCd",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partGbCd/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "partCtTxt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partCtTxt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partCtTxt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "hillLsnCt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/hillLsnCt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/hillLsnCt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "maxLsnOdr",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/maxLsnOdr",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/maxLsnOdr/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "stuMaxLimCnt",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/stuMaxLimCnt",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/stuMaxLimCnt/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "lsnCrseGbCd",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseGbCd",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseGbCd/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "lsnLvlCd",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnLvlCd",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnLvlCd/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "numOfRows",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/numOfRows",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/numOfRows/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "pageNo",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/pageNo",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/pageNo/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "totalCount",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/totalCount",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/totalCount/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      }
+    ],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "unknown",
+      "media_types": [
+        "application/json",
+        "application/xml"
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/produces/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/produces/1",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "conflict"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_error_values_not_declared",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [
+        {
+          "evidence_kind": "response_field_schema",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_type",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_field_optional_by_schema_default",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [
+          {
+            "evidence_kind": "provider_result_code_success_values_not_declared",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": "string"
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "success_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [
+            {
+              "classification": "recognized_result_code_name",
+              "http_status_code": 200,
+              "name": "resultCode",
+              "path": null,
+              "schema_variant": {
+                "index": null,
+                "kind": "single"
+              },
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_schema",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_type",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                },
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "value_type": "string"
+            }
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "header",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultMsg",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultMsg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultMsg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "resultCode",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "body",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "items",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "item",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "object"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "rn",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/rn",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/rn/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "lsnCrseNm",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseNm",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseNm/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "aplrLimMinAg",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMinAg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMinAg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "aplrLimMaxAg",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMaxAg",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimMaxAg/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "limGenNm",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/limGenNm",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/limGenNm/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "aplrLimCmplTcnt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimCmplTcnt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/aplrLimCmplTcnt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "cmplStdrDyCnt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/cmplStdrDyCnt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/cmplStdrDyCnt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "partQlfcTxt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partQlfcTxt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partQlfcTxt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "partGbCd",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partGbCd",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partGbCd/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "partCtTxt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partCtTxt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/partCtTxt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "hillLsnCt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/hillLsnCt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/hillLsnCt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "maxLsnOdr",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/maxLsnOdr",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/maxLsnOdr/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "stuMaxLimCnt",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/stuMaxLimCnt",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/stuMaxLimCnt/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "lsnCrseGbCd",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseGbCd",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnCrseGbCd/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "lsnLvlCd",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnLvlCd",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/items/properties/item/properties/lsnLvlCd/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "numOfRows",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/numOfRows",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/numOfRows/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "pageNo",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/pageNo",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/pageNo/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 181941,
+                    "byte_start": 173548,
+                    "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "totalCount",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/totalCount",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/body/properties/totalCount/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          }
+        ],
+        "http_status_code": 200,
+        "payload": {
+          "kind": "unknown",
+          "media_types": [
+            "application/json",
+            "application/xml"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/produces/1",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "conflict"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_error_values_not_declared",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_schema",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_type",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [
+              {
+                "evidence_kind": "provider_result_code_success_values_not_declared",
+                "locator": {
+                  "byte_end": 181941,
+                  "byte_start": 173548,
+                  "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/properties/header/properties/resultCode",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": "string"
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "object",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_object_type",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 181941,
+                "byte_start": 173548,
+                "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "accepted_http_success_status",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "success_response_branch",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_schema_variant_root",
+            "locator": {
+              "byte_end": 181941,
+              "byte_start": 173548,
+              "json_pointer": "#/paths/~1HorseRidingLessonCourse/get/responses/200/schema",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 204533,
+      "capture_role": "catalogue_identity_and_inline_openapi_operation",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15108956/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:40:59Z",
+      "sha256": "54fbbd007ab9be1bba58b00ab24a27645b8d388e56c82a177624281adc23fc95",
+      "source_id": "catalogue_detail_page"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_host",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/host",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "operation_specific",
+      "source_refs": [
+        {
+          "evidence_kind": "operation_http_method",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse/get",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "GET"
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_path",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/paths/~1HorseRidingLessonCourse",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/B551015/API277/HorseRidingLessonCourse"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_scheme",
+          "locator": {
+            "byte_end": 181941,
+            "byte_start": 173548,
+            "json_pointer": "#/schemes/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "https"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}

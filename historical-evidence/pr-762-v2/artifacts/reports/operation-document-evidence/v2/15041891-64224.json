@@ -1,0 +1,2214 @@
+{
+  "authentication": {
+    "mechanism": null,
+    "parameter_names": [],
+    "placement": null,
+    "requirement": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "effect": {
+    "authority": "operation_document",
+    "classification": null,
+    "source_refs": [],
+    "status": "unknown"
+  },
+  "explicit_unknowns": [
+    "operation_effect_not_established_by_openapi",
+    "authentication_security_requirement_not_established",
+    "enum_values_not_established",
+    "defaults_not_established",
+    "provider_quota_not_declared_or_parseable",
+    "provider_quota_scope_not_established",
+    "provider_quota_account_tier_not_established",
+    "response_empty_result_semantics_not_declared",
+    "response_error_contract_not_established"
+  ],
+  "identity": {
+    "dataset_id": "15041891",
+    "operation_id": "0a1b7d8b0203443e745255ba86ca03515a02485a2951d70f06922f6bd965b53f",
+    "operation_name": "지반침하위험도평가 안전조치내용 조회",
+    "protocol": "REST",
+    "provider": "data.go.kr",
+    "source_id": "data_go_kr",
+    "source_refs": [
+      {
+        "evidence_kind": "catalogue_dataset_identity",
+        "locator": {
+          "input_id": "publicDataPk",
+          "kind": "html_hidden_input",
+          "source_id": "catalogue_detail_page",
+          "value": "15041891"
+        }
+      },
+      {
+        "evidence_kind": "operation_name",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/summary",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_endpoint_path",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "operation_id",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/operationId",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ],
+    "source_system": "data.go.kr",
+    "upstream_operation_key": "64224"
+  },
+  "limits": {
+    "provider_quota": {
+      "account_tier": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "scope": {
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [],
+      "status": "not_parsed",
+      "unit": null,
+      "value": null
+    },
+    "request_budget": {
+      "source_refs": [],
+      "status": "not_a_provider_fact",
+      "value": null
+    }
+  },
+  "operation_document": {
+    "purpose": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_purpose",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get/description",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "지반침하위험도평가 평가번호를 통해 조치방법, 명령사유 등의 지반침하위험도평가 안전조치내용 정보를 조회"
+    },
+    "title": {
+      "source_refs": [
+        {
+          "evidence_kind": "official_operation_title",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get/summary",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "지반침하위험도평가 안전조치내용 조회"
+    }
+  },
+  "parameters": [
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 1,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "evalNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "required"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/0/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "numOfRows",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/1/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    },
+    {
+      "cardinality": {
+        "maximum": 1,
+        "minimum": 0,
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented"
+      },
+      "data_type": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_data_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "string"
+      },
+      "default": {
+        "source_refs": [],
+        "status": "not_established",
+        "value": null
+      },
+      "enum": {
+        "source_refs": [],
+        "status": "not_established",
+        "values": []
+      },
+      "location": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_location",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/in",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "query"
+      },
+      "name": "pageNo",
+      "requiredness": {
+        "source_refs": [
+          {
+            "evidence_kind": "parameter_requiredness",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/required",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "documented",
+        "value": "optional"
+      },
+      "sample": {
+        "present": false,
+        "source_refs": [],
+        "value_stored": false
+      },
+      "size": {
+        "observed_values": [],
+        "source_refs": [],
+        "status": "unknown",
+        "value": null
+      },
+      "source_refs": [
+        {
+          "evidence_kind": "parameter_name",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/name",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_location",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/in",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_data_type",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/type",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "parameter_requiredness",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/parameters/2/required",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ]
+    }
+  ],
+  "parse_status": "parsed_with_unknowns",
+  "parser": {
+    "id": "registered-operation-document-parser",
+    "version": "2.1.2"
+  },
+  "response_assertion": {
+    "empty_result_semantics": {
+      "source_refs": [],
+      "status": "unknown",
+      "value": null
+    },
+    "fields": [
+      "orderSeq",
+      "orderDate",
+      "orderReason",
+      "actDetail",
+      "actMethod",
+      "actLimitYmd",
+      "actResult",
+      "notiDate",
+      "no"
+    ],
+    "kind": "documented_response_fields",
+    "source_refs": [
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderSeq",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderSeq/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderDate",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderDate/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderReason",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderReason/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actDetail",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actDetail/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actMethod",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actMethod/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actLimitYmd",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actLimitYmd/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actResult",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actResult/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/notiDate",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/notiDate/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_schema",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/no",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      },
+      {
+        "evidence_kind": "response_field_type",
+        "locator": {
+          "byte_end": 217156,
+          "byte_start": 173328,
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/no/type",
+          "kind": "html_inline_json",
+          "source_id": "catalogue_detail_page",
+          "variable_name": "swaggerJson"
+        }
+      }
+    ]
+  },
+  "response_contract": {
+    "accepted_http_status_codes": {
+      "source_refs": [
+        {
+          "evidence_kind": "accepted_http_success_status",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "values": [
+        200
+      ]
+    },
+    "coded_result_field_inventory": {
+      "candidates": [],
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "declared_output_fields": [],
+    "documented_error_contract": {
+      "code_path": null,
+      "codes": [],
+      "format": "unknown",
+      "message_path": null,
+      "source_refs": [],
+      "status": "unknown"
+    },
+    "documented_fields": [
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "orderSeq",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderSeq",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderSeq/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "orderDate",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderDate",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderDate/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "orderReason",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderReason",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderReason/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "actDetail",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actDetail",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actDetail/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "actMethod",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actMethod",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actMethod/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "actLimitYmd",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actLimitYmd",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actLimitYmd/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "actResult",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actResult",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actResult/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "notiDate",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/notiDate",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/notiDate/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      },
+      {
+        "cardinality": {
+          "maximum": 1,
+          "minimum": 0,
+          "source_refs": [
+            {
+              "evidence_kind": "response_field_optional_by_schema_default",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "http_status_code": 200,
+        "name": "no",
+        "path": null,
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "response_field_schema",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/no",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_field_type",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/no/type",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ],
+        "status": "unknown",
+        "value_type": "string"
+      }
+    ],
+    "documented_http_error_branches": [],
+    "payload": {
+      "kind": "unknown",
+      "media_types": [
+        "application/json",
+        "application/xml"
+      ],
+      "source_refs": [
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get/produces/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        },
+        {
+          "evidence_kind": "response_media_type",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get/produces/1",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "conflict"
+    },
+    "provider_result_codes": {
+      "error_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "evidence_strength": "unknown",
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "success_values": {
+        "source_refs": [],
+        "status": "unknown",
+        "values": []
+      },
+      "value_type": null
+    },
+    "required_fields": [],
+    "result_collection": {
+      "container_cardinality": {
+        "maximum": null,
+        "minimum": null,
+        "source_refs": [],
+        "status": "unknown"
+      },
+      "container_path": null,
+      "item_path": null,
+      "path": null,
+      "source_refs": [],
+      "status": "unknown",
+      "value_type": null
+    },
+    "schema_shape": {
+      "source_refs": [
+        {
+          "evidence_kind": "response_schema_shape_root",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "incomplete"
+    },
+    "success_branches": [
+      {
+        "coded_result_field_inventory": {
+          "candidates": [],
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "documented_fields": [
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "orderSeq",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderSeq",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderSeq/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "orderDate",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderDate",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderDate/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "orderReason",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderReason",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/orderReason/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "actDetail",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actDetail",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actDetail/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "actMethod",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actMethod",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actMethod/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "actLimitYmd",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actLimitYmd",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actLimitYmd/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "actResult",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actResult",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/actResult/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "notiDate",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/notiDate",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/notiDate/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          },
+          {
+            "cardinality": {
+              "maximum": 1,
+              "minimum": 0,
+              "source_refs": [
+                {
+                  "evidence_kind": "response_field_optional_by_schema_default",
+                  "locator": {
+                    "byte_end": 217156,
+                    "byte_start": 173328,
+                    "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                    "kind": "html_inline_json",
+                    "source_id": "catalogue_detail_page",
+                    "variable_name": "swaggerJson"
+                  }
+                }
+              ],
+              "status": "documented"
+            },
+            "http_status_code": 200,
+            "name": "no",
+            "path": null,
+            "schema_variant": {
+              "index": null,
+              "kind": "single"
+            },
+            "source_refs": [
+              {
+                "evidence_kind": "response_field_schema",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/no",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              },
+              {
+                "evidence_kind": "response_field_type",
+                "locator": {
+                  "byte_end": 217156,
+                  "byte_start": 173328,
+                  "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/properties/no/type",
+                  "kind": "html_inline_json",
+                  "source_id": "catalogue_detail_page",
+                  "variable_name": "swaggerJson"
+                }
+              }
+            ],
+            "status": "unknown",
+            "value_type": "string"
+          }
+        ],
+        "http_status_code": 200,
+        "payload": {
+          "kind": "unknown",
+          "media_types": [
+            "application/json",
+            "application/xml"
+          ],
+          "source_refs": [
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/produces/0",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_media_type",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/produces/1",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "conflict"
+        },
+        "provider_result_codes": {
+          "error_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "evidence_strength": "unknown",
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "success_values": {
+            "source_refs": [],
+            "status": "unknown",
+            "values": []
+          },
+          "value_type": null
+        },
+        "required_fields": [],
+        "result_collection": {
+          "container_cardinality": {
+            "maximum": null,
+            "minimum": null,
+            "source_refs": [],
+            "status": "unknown"
+          },
+          "container_path": null,
+          "item_path": null,
+          "path": null,
+          "source_refs": [],
+          "status": "unknown",
+          "value_type": null
+        },
+        "root_shape": {
+          "kind": "object",
+          "qname": null,
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            },
+            {
+              "evidence_kind": "response_root_object_type",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema/type",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_shape": {
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_shape_root",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "incomplete"
+        },
+        "schema_source": {
+          "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+          "source_refs": [
+            {
+              "evidence_kind": "response_schema_variant_root",
+              "locator": {
+                "byte_end": 217156,
+                "byte_start": 173328,
+                "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+                "kind": "html_inline_json",
+                "source_id": "catalogue_detail_page",
+                "variable_name": "swaggerJson"
+              }
+            }
+          ],
+          "status": "documented"
+        },
+        "schema_variant": {
+          "index": null,
+          "kind": "single"
+        },
+        "source_refs": [
+          {
+            "evidence_kind": "accepted_http_success_status",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "success_response_branch",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          },
+          {
+            "evidence_kind": "response_schema_variant_root",
+            "locator": {
+              "byte_end": 217156,
+              "byte_start": 173328,
+              "json_pointer": "#/paths/~1getSubsidenceResult01/get/responses/200/schema",
+              "kind": "html_inline_json",
+              "source_id": "catalogue_detail_page",
+              "variable_name": "swaggerJson"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "schema_version": "datapan.operation-document-evidence.v2",
+  "source_bindings": [
+    {
+      "bytes": 239736,
+      "capture_role": "catalogue_identity_and_inline_openapi_operation",
+      "media_type": "text/html; charset=UTF-8",
+      "origin": {
+        "body_values_stored": false,
+        "host": "www.data.go.kr",
+        "method": "GET",
+        "path": "/data/15041891/openapi.do",
+        "query_values_stored": false,
+        "scheme": "https"
+      },
+      "parser": {
+        "id": "registered-operation-document-parser",
+        "version": "2.1.2"
+      },
+      "retrieved_at": "2026-10-07T08:44:43Z",
+      "sha256": "58cb7c2e393d4ab7309faa97875fd2e85888cb5313bb93ec514786adad322f31",
+      "source_id": "catalogue_detail_page"
+    }
+  ],
+  "transport": {
+    "body_encoding": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "envelope_namespace": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "fixed_query_selectors": [],
+    "host": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_host",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/host",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "apis.data.go.kr"
+    },
+    "http_method": {
+      "authority_scope": "operation_specific",
+      "source_refs": [
+        {
+          "evidence_kind": "operation_http_method",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01/get",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "GET"
+    },
+    "operation_qname": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "path": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_path",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/paths/~1getSubsidenceResult01",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "/1613000/undergroundsafetyinfo01/getSubsidenceResult01"
+    },
+    "protocol": {
+      "source_refs": [],
+      "status": "registered_manifest",
+      "value": "REST"
+    },
+    "scheme": {
+      "source_refs": [
+        {
+          "evidence_kind": "transport_scheme",
+          "locator": {
+            "byte_end": 217156,
+            "byte_start": 173328,
+            "json_pointer": "#/schemes/0",
+            "kind": "html_inline_json",
+            "source_id": "catalogue_detail_page",
+            "variable_name": "swaggerJson"
+          }
+        }
+      ],
+      "status": "documented",
+      "value": "https"
+    },
+    "soap_action": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    },
+    "soap_version": {
+      "source_refs": [],
+      "status": "not_applicable",
+      "value": null
+    }
+  }
+}
