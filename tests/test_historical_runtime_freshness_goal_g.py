@@ -5,6 +5,7 @@ import json
 import os
 import pathlib
 import shutil
+import subprocess
 import tempfile
 import unittest
 
@@ -67,7 +68,55 @@ class HistoricalRuntimeFreshnessGoalGTest(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         path = archive / "deltas/pr-747/verification.json"
         value = json.loads(path.read_text(encoding="utf-8"))
-        value["rows"].pop()
+        parent = json.loads(
+            subprocess.check_output(
+                ["git", "-C", str(ROOT), "show", f"{VERIFY.SPECS[747][1]}:reports/latest-verification.json"]
+            )
+        )["results"]
+        duplicate = next(row for row in value["rows"] if row in parent)
+        duplicate_key = json.dumps(duplicate, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        self.assertEqual(
+            sum(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) == duplicate_key for row in value["rows"]),
+            1,
+        )
+        value["rows"].remove(duplicate)
+        path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+        self.assert_rejected(archive)
+
+    def test_original_source_commit_tampering_fails_closed(self) -> None:
+        temp, archive = self.copy_archive()
+        self.addCleanup(temp.cleanup)
+        path = archive / "inventory.json"
+        value = json.loads(path.read_text(encoding="utf-8"))
+        item = next(item for item in value["original_files"] if item["pr"] == 642 and item["kind"] == "admission")
+        item["source_commit"] = VERIFY.MAIN_BASE
+        path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+        self.assert_rejected(archive)
+
+    def test_delta_source_parent_tampering_fails_closed(self) -> None:
+        temp, archive = self.copy_archive()
+        self.addCleanup(temp.cleanup)
+        path = archive / "deltas/pr-642/verification.json"
+        value = json.loads(path.read_text(encoding="utf-8"))
+        value["source"]["parent"] = VERIFY.MAIN_BASE
+        path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+        self.assert_rejected(archive)
+
+    def test_delta_source_head_tampering_fails_closed(self) -> None:
+        temp, archive = self.copy_archive()
+        self.addCleanup(temp.cleanup)
+        path = archive / "deltas/pr-642/verification.json"
+        value = json.loads(path.read_text(encoding="utf-8"))
+        value["source"]["head"] = VERIFY.MAIN_BASE
+        path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+        self.assert_rejected(archive)
+
+    def test_delta_source_path_tampering_fails_closed(self) -> None:
+        temp, archive = self.copy_archive()
+        self.addCleanup(temp.cleanup)
+        path = archive / "deltas/pr-642/verification.json"
+        value = json.loads(path.read_text(encoding="utf-8"))
+        value["source"]["path"] = "reports/failure-observations.json"
         path.write_text(json.dumps(value, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
         self.assert_rejected(archive)
 

@@ -186,7 +186,16 @@ def verify(repo: pathlib.Path, archive: pathlib.Path) -> dict[str, Any]:
             fail(f"PR {number}: inventory first-parent proof is false")
         for kind in ("admission", "receipt") if number != 650 else ():
             item = original_by_key[(kind, number)]
-            raw = git_bytes(repo, head, item["source_path"])
+            expected_source_path = (
+                f"reports/runtime-freshness-import-admissions/{run_id}.json"
+                if kind == "admission"
+                else f"reports/runtime-freshness-imports/{run_id}.json"
+            )
+            if item.get("source_commit") != head:
+                fail(f"PR {number} {kind}: source commit is not the fixed PR head")
+            if item.get("source_path") != expected_source_path:
+                fail(f"PR {number} {kind}: source path is not the fixed evidence path")
+            raw = git_bytes(repo, head, expected_source_path)
             local = (archive / item["archive_path"]).read_bytes()
             if raw != local:
                 fail(f"PR {number} {kind}: archive bytes differ from fixed source head")
@@ -215,7 +224,12 @@ def verify(repo: pathlib.Path, archive: pathlib.Path) -> dict[str, Any]:
                 )
         if number == 650:
             item = original_by_key[("attestation", number)]
-            raw = git_bytes(repo, head, item["source_path"])
+            expected_source_path = f"reports/runtime-freshness-import-attestations/{run_id}.json"
+            if item.get("source_commit") != head:
+                fail("PR 650 attestation: source commit is not the fixed PR head")
+            if item.get("source_path") != expected_source_path:
+                fail("PR 650 attestation: source path is not the fixed evidence path")
+            raw = git_bytes(repo, head, expected_source_path)
             local = (archive / item["archive_path"]).read_bytes()
             if raw != local or sha(local) != item["sha256"] or item.get("bytes") != len(local):
                 fail("PR 650: attestation bytes/digest mismatch")
@@ -244,13 +258,20 @@ def verify(repo: pathlib.Path, archive: pathlib.Path) -> dict[str, Any]:
                     fail(f"PR 650: {name} digest does not match #649 merge bytes")
             continue
         for kind, source_path, key, archive_key in (("verification", "reports/latest-verification.json", "results", "verification_delta_path"), ("failure", "reports/failure-observations.json", "observations", "failure_delta_path")):
-            parent_obj = load_json(git_bytes(repo, parent, source_path), f"PR {number} parent {source_path}")
-            head_obj = load_json(git_bytes(repo, head, source_path), f"PR {number} head {source_path}")
+            expected_source_path = source_path
+            delta_path = record[archive_key]
+            delta_obj = load_json((archive / delta_path).read_bytes(), delta_path)
+            source_meta = delta_obj.get("source")
+            if not isinstance(source_meta, dict):
+                fail(f"PR {number} {kind}: source metadata is missing")
+            if source_meta.get("parent") != parent or source_meta.get("head") != head or source_meta.get("path") != expected_source_path:
+                fail(f"PR {number} {kind}: source identity/path is not the fixed PR comparison")
+            parent_obj = load_json(git_bytes(repo, parent, expected_source_path), f"PR {number} parent {expected_source_path}")
+            head_obj = load_json(git_bytes(repo, head, expected_source_path), f"PR {number} head {expected_source_path}")
             parent_rows, head_rows = parent_obj[key], head_obj[key]
             if head_rows[:len(parent_rows)] != parent_rows:
                 fail(f"PR {number} {kind}: source is not append-only")
             expected = head_rows[len(parent_rows):]
-            delta_obj = load_json((archive / record[archive_key]).read_bytes(), record[archive_key])
             rows = delta_obj.get("rows")
             if counter(rows) != counter(expected):
                 fail(f"PR {number} {kind}: archive multiset differs from fixed source delta")
@@ -259,7 +280,7 @@ def verify(repo: pathlib.Path, archive: pathlib.Path) -> dict[str, Any]:
             delta_bytes = (archive / record[archive_key]).read_bytes()
             if sha(delta_bytes) != record[f"{kind}_delta_sha256"]:
                 fail(f"PR {number} {kind}: delta digest mismatch")
-            if delta_obj.get("source", {}).get("parent_sha256") != sha(git_bytes(repo, parent, source_path)) or delta_obj.get("source", {}).get("head_sha256") != sha(git_bytes(repo, head, source_path)):
+            if delta_obj.get("source", {}).get("parent_sha256") != sha(git_bytes(repo, parent, expected_source_path)) or delta_obj.get("source", {}).get("head_sha256") != sha(git_bytes(repo, head, expected_source_path)):
                 fail(f"PR {number} {kind}: source blob digest mismatch")
             if kind == "verification":
                 present = sum(1 for row in expected if canon(row) in main_counter)
