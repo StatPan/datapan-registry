@@ -11,6 +11,12 @@ from typing import Any
 
 MAIN_BASE = "151da89679e34e3d7c034077c3a45a7c648b9de5"
 MERGE_649 = "15fbb113e23c146fc61337b251077ced38b82375"
+SOURCE_AUDIT = {
+    "path": "/tmp/claude-1000/-home-statpan-workspace-datapan-data/f2c8d7af-fe46-41f9-b184-1b089acc9def/scratchpad/runtime-audit/audit-data.json",
+    "sha256": "d793e1b412fb2157b502496d87034c831598ed69bcaa95a67a850c4bebdbe0eb",
+    "bytes": 623997,
+    "unchanged": True,
+}
 SPECS = {
     642: ("35934661938", "44aaf067056c6ba231685ca9284a3cfbcd861ca5", "81fe0c21e83eee6f0a5a7704ca47f6f4a44d73a5"),
     643: ("36074831711", "44aaf067056c6ba231685ca9284a3cfbcd861ca5", "96c2ca037e7a949a9e8fc0e251ee46368bd857d4"),
@@ -146,14 +152,11 @@ def verify(repo: pathlib.Path, archive: pathlib.Path) -> dict[str, Any]:
         fail("main baseline mismatch")
     if inventory.get("pr_649_merge") != MERGE_649:
         fail("#649 merge mismatch")
-    source_audit = inventory.get("source_audit")
-    if source_audit != {
-        "path": "/tmp/claude-1000/-home-statpan-workspace-datapan-data/f2c8d7af-fe46-41f9-b184-1b089acc9def/scratchpad/runtime-audit/audit-data.json",
-        "sha256": "d793e1b412fb2157b502496d87034c831598ed69bcaa95a67a850c4bebdbe0eb",
-        "bytes": 623997,
-        "unchanged": True,
-    }:
+    if inventory.get("source_audit") != SOURCE_AUDIT:
         fail("supplied audit source digest/size/unchanged marker mismatch")
+    consumer_scan = inventory.get("consumer_scan")
+    if not isinstance(consumer_scan, dict) or consumer_scan.get("automatic_consumers") != []:
+        fail("archive consumer scan does not prove zero automatic consumers")
     if inventory.get("original_file_counts") != {"admissions": 9, "attestations": 1, "receipts": 9}:
         fail("original file count mismatch")
     records = {item["number"]: item for item in inventory.get("pr_records", [])}

@@ -11,6 +11,36 @@ REPO = pathlib.Path(sys.argv[1]).resolve()
 ARCHIVE = REPO / "historical-evidence" / "runtime-freshness-goal-g"
 MAIN_BASE = "151da89679e34e3d7c034077c3a45a7c648b9de5"
 MERGE_649 = "15fbb113e23c146fc61337b251077ced38b82375"
+SOURCE_AUDIT = {
+    "path": "/tmp/claude-1000/-home-statpan-workspace-datapan-data/f2c8d7af-fe46-41f9-b184-1b089acc9def/scratchpad/runtime-audit/audit-data.json",
+    "sha256": "d793e1b412fb2157b502496d87034c831598ed69bcaa95a67a850c4bebdbe0eb",
+    "bytes": 623997,
+    "unchanged": True,
+}
+CONSUMER_SCAN = {
+    "automatic_consumers": [],
+    "archive_path_references": [
+        "scripts/build-historical-runtime-freshness-goal-g.py",
+        "scripts/verify-historical-runtime-freshness-goal-g.py",
+    ],
+    "scoped_discovery_roots_checked": [
+        "reports",
+        "sources",
+        "fixtures",
+        "schemas",
+        "contracts",
+        "provenance",
+        ".datapan",
+    ],
+    "workflow_packaging_paths_checked": [
+        ".datapan/draft/",
+        ".datapan/ci/",
+        ".datapan/release-assets/",
+        ".datapan/runtime-freshness/import",
+        "datapan-registry/.datapan/runtime-freshness/",
+    ],
+    "conclusion": "historical-evidence/runtime-freshness-goal-g is not an automatic freshness, import, release, manifest, queue, admission, or workflow-artifact input",
+}
 SPECS = [
     (642, "35934661938", "44aaf067056c6ba231685ca9284a3cfbcd861ca5", "81fe0c21e83eee6f0a5a7704ca47f6f4a44d73a5", "automation/runtime-freshness-35934661938"),
     (643, "36074831711", "44aaf067056c6ba231685ca9284a3cfbcd861ca5", "96c2ca037e7a949a9e8fc0e251ee46368bd857d4", "automation/runtime-freshness-36074831711"),
@@ -177,6 +207,8 @@ def main():
         "active_claims": {"current_freshness": False, "import_complete": False, "release_approved": False, "admission_state": False},
         "offline_only": True,
         "source_audit_json_is_external_and_unchanged": True,
+        "source_audit": SOURCE_AUDIT,
+        "consumer_scan": CONSUMER_SCAN,
         "main_baseline": MAIN_BASE,
         "pr_649_merge": MERGE_649,
         "parent_to_head_verification_rows": verification_total,
