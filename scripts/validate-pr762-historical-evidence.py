@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import pathlib
+import re
 import subprocess
 import sys
 from typing import Any
@@ -81,6 +82,17 @@ def _git_blob(root: pathlib.Path, ref: str, source_path: str) -> bytes:
         raise ArchiveError(f"git_blob_missing:{ref}:{source_path}") from exc
 
 
+def _resolve_commit(root: pathlib.Path, ref: str) -> str:
+    """Resolve a ref to a full commit SHA and reject non-commit objects."""
+    resolved = _git_text(root, "rev-parse", "--verify", f"{ref}^{{commit}}").strip()
+    if not re.fullmatch(r"[0-9a-f]{40}", resolved):
+        raise ArchiveError(f"commit_sha_invalid:{ref}")
+    object_type = _git_text(root, "cat-file", "-t", resolved).strip()
+    if object_type != "commit":
+        raise ArchiveError(f"ref_not_commit:{ref}:{object_type}")
+    return resolved
+
+
 def _tree_paths(root: pathlib.Path, ref: str) -> set[str]:
     output = _git_text(root, "ls-tree", "-r", "--name-only", ref, "--", SOURCE_PREFIX)
     return {line for line in output.splitlines() if line}
@@ -100,9 +112,15 @@ def _validate_tree_binding(
     *,
     source_ref: str,
     main_ref: str,
+    git_root: pathlib.Path | None = None,
 ) -> tuple[int, int, int, int]:
-    source_paths = _tree_paths(root, source_ref)
-    main_paths = _tree_paths(root, main_ref)
+    git_root = git_root or root
+    source_commit = _resolve_commit(git_root, source_ref)
+    main_commit = _resolve_commit(git_root, main_ref)
+    if source_commit == main_commit:
+        raise ArchiveError("source_and_main_commits_must_differ")
+    source_paths = _tree_paths(git_root, source_commit)
+    main_paths = _tree_paths(git_root, main_commit)
     source_evidence = {path for path in source_paths if _is_evidence(path)}
     source_receipts = {path for path in source_paths if _is_receipt(path)}
     main_evidence = {path for path in main_paths if _is_evidence(path)}
@@ -116,17 +134,35 @@ def _validate_tree_binding(
     if expected_overlap != recorded_overlap:
         raise ArchiveError("source_tree_overlap_set_mismatch")
     for path in sorted(expected_pr_only):
-        source_raw = _git_blob(root, source_ref, path)
+        source_raw = _git_blob(git_root, source_commit, path)
         record = next(record for record in inventory["files"] if record["source_path"] == path)
-        if record["git_blob_sha1"] != _git_text(root, "rev-parse", f"{source_ref}:{path}").strip():
+        if record["git_blob_sha1"] != _git_text(git_root, "rev-parse", f"{source_commit}:{path}").strip():
             raise ArchiveError(f"source_git_blob_sha_mismatch:{path}")
         if record["sha256"] != _sha256(source_raw):
             raise ArchiveError(f"source_sha256_mismatch:{path}")
+    overlap_records = {record["source_path"]: record for record in inventory["overlap"]}
     for path in sorted(expected_overlap):
-        source_raw = _git_blob(root, source_ref, path)
-        main_raw = _git_blob(root, main_ref, path)
+        source_raw = _git_blob(git_root, source_commit, path)
+        main_raw = _git_blob(git_root, main_commit, path)
         if source_raw != main_raw:
             raise ArchiveError(f"overlap_source_bytes_changed:{path}")
+        record = overlap_records.get(path)
+        if record is None:
+            raise ArchiveError(f"overlap_record_missing:{path}")
+        source_sha256 = _sha256(source_raw)
+        main_sha256 = _sha256(main_raw)
+        source_blob_sha1 = _git_text(git_root, "rev-parse", f"{source_commit}:{path}").strip()
+        main_blob_sha1 = _git_text(git_root, "rev-parse", f"{main_commit}:{path}").strip()
+        if record.get("bytes") != len(source_raw):
+            raise ArchiveError(f"overlap_bytes_mismatch:{path}")
+        if record.get("main_sha256") != main_sha256:
+            raise ArchiveError(f"overlap_main_sha256_mismatch:{path}")
+        if record.get("pr_sha256") != source_sha256:
+            raise ArchiveError(f"overlap_pr_sha256_mismatch:{path}")
+        if record.get("git_blob_sha1") != main_blob_sha1:
+            raise ArchiveError(f"overlap_main_blob_sha1_mismatch:{path}")
+        if record.get("pr_git_blob_sha1") != source_blob_sha1:
+            raise ArchiveError(f"overlap_pr_blob_sha1_mismatch:{path}")
     return len(source_evidence - main_evidence), len(source_receipts - main_receipts), len(source_evidence & main_evidence), len(source_receipts & main_receipts)
 
 
@@ -135,11 +171,21 @@ def validate_archive(
     *,
     source_ref: str | None = None,
     main_ref: str | None = None,
+    git_root: pathlib.Path | None = None,
 ) -> dict[str, Any]:
+    git_root = git_root or root
     archive_root = root / ARCHIVE_ROOT.relative_to(ROOT)
     artifact_root = root / ARTIFACT_ROOT.relative_to(ROOT)
     metadata = _load_json(archive_root / "metadata.json")
     inventory = _load_json(archive_root / "inventory.json")
+    if not source_ref or not main_ref:
+        raise ArchiveError("git_refs_required")
+    source_commit = _resolve_commit(git_root, source_ref)
+    main_commit = _resolve_commit(git_root, main_ref)
+    if source_commit != metadata.get("pr762_head_commit") or main_commit != metadata.get("main_commit"):
+        raise ArchiveError("commit_provenance_mismatch")
+    if inventory.get("pr762_head_commit") != source_commit or inventory.get("main_commit") != main_commit:
+        raise ArchiveError("inventory_commit_provenance_mismatch")
     if metadata.get("archive_kind") != "historical_pr762_v2_operation_document_evidence":
         raise ArchiveError("archive_kind_invalid")
     if metadata.get("status") != "inactive_archive_only" or metadata.get("automatic_consumption") is not False:
@@ -215,12 +261,7 @@ def validate_archive(
     manifest_paths = {item.get("path") for item in manifest.get("artifacts", []) if isinstance(item, dict)}
     if any(path.startswith(ARCHIVE_PREFIX) for path in manifest_paths):
         raise ArchiveError("archive_registered_in_active_manifest")
-    if source_ref and main_ref:
-        counts = _validate_tree_binding(root, inventory, source_ref=source_ref, main_ref=main_ref)
-    elif source_ref or main_ref:
-        raise ArchiveError("both_source_and_main_refs_required")
-    else:
-        counts = (233, 233, 167, 167)
+    counts = _validate_tree_binding(root, inventory, source_ref=source_commit, main_ref=main_commit, git_root=git_root)
     return {
         "archive_files": len(records),
         "archive_evidence": len(evidence_records),
@@ -237,8 +278,8 @@ def validate_archive(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-ref", help="PR #762 source ref for optional Git-tree byte verification")
-    parser.add_argument("--main-ref", help="main source ref for optional overlap verification")
+    parser.add_argument("--source-ref", required=True, help="PR #762 source commit/ref for Git-tree byte verification")
+    parser.add_argument("--main-ref", required=True, help="main source commit/ref for overlap verification")
     args = parser.parse_args()
     try:
         result = validate_archive(source_ref=args.source_ref, main_ref=args.main_ref)
