@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-23T00:03:14.737150Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3705,
+    "failed": 1006,
+    "skipped": 4870,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4870,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3705,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1006,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2501,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1250,
         "reason": "approval_required"
       },
       {
@@ -68,7 +68,7 @@
       },
       {
         "key": "NORMAL SERVICE",
-        "count": 74,
+        "count": 75,
         "reason": "NORMAL SERVICE"
       },
       {
@@ -227,6 +227,11 @@
         "reason": "qnet_wadl_metadata_only"
       },
       {
+        "key": "success",
+        "count": 9,
+        "reason": "success"
+      },
+      {
         "key": "epost_missing_required_params",
         "count": 8,
         "reason": "epost_missing_required_params"
@@ -235,6 +240,16 @@
         "key": "pqis_service_key_not_registered",
         "count": 8,
         "reason": "pqis_service_key_not_registered"
+      },
+      {
+        "key": "HTTP 503",
+        "count": 7,
+        "reason": "HTTP 503"
+      },
+      {
+        "key": "HTTP 에러",
+        "count": 7,
+        "reason": "HTTP 에러"
       },
       {
         "key": "andong_missing_required_params",
@@ -277,6 +292,11 @@
         "reason": "uiryeong_service_key_not_registered"
       },
       {
+        "key": "unsupported_protocol_wms",
+        "count": 6,
+        "reason": "unsupported_protocol_wms"
+      },
+      {
         "key": "airport_service_key_not_registered",
         "count": 5,
         "reason": "airport_service_key_not_registered"
@@ -315,11 +335,6 @@
         "key": "seoul_bus_service_key_not_registered",
         "count": 4,
         "reason": "seoul_bus_service_key_not_registered"
-      },
-      {
-        "key": "HTTP 에러",
-        "count": 3,
-        "reason": "HTTP 에러"
       },
       {
         "key": "airport_missing_required_params",
@@ -700,12 +715,17 @@
         "key": "qnet_connection_validation_failed",
         "count": 1,
         "reason": "qnet_connection_validation_failed"
+      },
+      {
+        "key": "정상",
+        "count": 1,
+        "reason": "정상"
       }
     ],
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1392,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2264,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4071,
         "kind": "data_go_kr_gateway"
       },
       {
@@ -2261,6 +2281,11 @@
         "key": "malformed_endpoint",
         "count": 14,
         "kind": "malformed_endpoint"
+      },
+      {
+        "key": "wms",
+        "count": 6,
+        "kind": "wms"
       }
     ]
   }
