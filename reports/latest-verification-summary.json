@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-23T23:56:28.951755Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3697,
+    "failed": 1088,
+    "skipped": 4796,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4796,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3697,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1088,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2421,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1261,
         "reason": "approval_required"
       },
       {
@@ -55,6 +55,11 @@
         "key": "calspia_request_timeout",
         "count": 122,
         "reason": "calspia_request_timeout"
+      },
+      {
+        "key": "provider returned HTML instead of data",
+        "count": 101,
+        "reason": "provider returned HTML instead of data"
       },
       {
         "key": "jeonju_missing_required_params",
@@ -277,6 +282,11 @@
         "reason": "uiryeong_service_key_not_registered"
       },
       {
+        "key": "HTTP 403",
+        "count": 5,
+        "reason": "HTTP 403"
+      },
+      {
         "key": "airport_service_key_not_registered",
         "count": 5,
         "reason": "airport_service_key_not_registered"
@@ -290,11 +300,6 @@
         "key": "lh_ebid_service_key_not_registered",
         "count": 5,
         "reason": "lh_ebid_service_key_not_registered"
-      },
-      {
-        "key": "HTTP 403",
-        "count": 4,
-        "reason": "HTTP 403"
       },
       {
         "key": "ekape_service_key_not_registered",
@@ -587,6 +592,11 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1390802/FarmSafeMovie/farmSafeMovieList?Page_No=1&Page_Size=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1390802/FarmSafeMovie/farmSafeMovieList?Page_No=1&Page_Size=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
@@ -630,6 +640,11 @@
         "key": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552729/kcaApiService_cq1/getCqNotice?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552729/kcaApiService_cq1/getCqNotice?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "car365_http_400",
@@ -700,12 +715,17 @@
         "key": "qnet_connection_validation_failed",
         "count": 1,
         "reason": "qnet_connection_validation_failed"
+      },
+      {
+        "key": "unsupported_protocol_wms",
+        "count": 1,
+        "reason": "unsupported_protocol_wms"
       }
     ],
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1392,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2264,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4076,
         "kind": "data_go_kr_gateway"
       },
       {
@@ -2261,6 +2281,11 @@
         "key": "malformed_endpoint",
         "count": 14,
         "kind": "malformed_endpoint"
+      },
+      {
+        "key": "wms",
+        "count": 1,
+        "kind": "wms"
       }
     ]
   }

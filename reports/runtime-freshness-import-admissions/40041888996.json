@@ -1,0 +1,52 @@
+{
+  "schema_version": "datapan.runtime-freshness-import-admission.v1",
+  "admitted_at": "2026-10-23T23:56:28.951755Z",
+  "run_id": "40041888996",
+  "producer": {
+    "repository": "StatPan/datapan-registry",
+    "revision": "151da89679e34e3d7c034077c3a45a7c648b9de5",
+    "run_id": "40041888996",
+    "run_url": "https://github.com/StatPan/datapan-registry/actions/runs/40041888996"
+  },
+  "inputs": {
+    "sanitized_report_sha256": "fa87b2c2c74801f53c6fd8a6433a307d5c95c71ab46455c9e4e2e4a2538ccef6",
+    "run_receipt_sha256": "388d4e4bfa593d19dfc2e0b9877b79fee6cd73d6456acd6e8bed5833396d1167",
+    "import_receipt": {
+      "path": "reports/runtime-freshness-imports/40041888996.json",
+      "sha256": "03b91e8443077fae844b0302d27f9d410a1d1c5d5263b98d7499c993f2ff8092"
+    },
+    "planned_identity_set": {
+      "count": 800,
+      "sha256": "a4da7c2a3c3669faa1caff7839fd4ae20a9c73d26ec91716d9e3ffe7c26d80f6"
+    }
+  },
+  "outcome": "imported",
+  "arithmetic": {
+    "before": {
+      "total": 8781,
+      "verified": 3662,
+      "failed": 984,
+      "skipped": 4135,
+      "unknown": 0
+    },
+    "selected": {
+      "total": 800,
+      "verified": 35,
+      "failed": 104,
+      "skipped": 661,
+      "unknown": 0
+    },
+    "after": {
+      "total": 9581,
+      "verified": 3697,
+      "failed": 1088,
+      "skipped": 4796,
+      "unknown": 0
+    },
+    "selected_new_results": 800
+  },
+  "selected_identity_set": {
+    "count": 800,
+    "sha256": "a4da7c2a3c3669faa1caff7839fd4ae20a9c73d26ec91716d9e3ffe7c26d80f6"
+  }
+}
