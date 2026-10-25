@@ -1280,40 +1280,20 @@ jobs:
                       }
                   old_sha = os.environ.get("EXPECTED_STATE_HEAD_SHA", "")
                   state_repo = pathlib.Path("../state-repo")
-                  if subprocess.run(
-                      ["git", "-C", str(state_repo), "rev-parse", "HEAD"],
-                      check=True, text=True, capture_output=True,
-                  ).stdout.strip() != old_sha:
-                      raise ValueError("replay_selected_state_head_mismatch")
+                  verified_receipt = processor.verify_replay_persistence_receipt_from_committed_state(
+                      receipt,
+                      state_repository=state_repo,
+                      prior_state_commit=old_sha,
+                      expected_current_state_commit=old_sha,
+                      phase=processor._REPLAY_VERIFY_PRE_CAS,
+                      result=result,
+                      checkpoint_receipt=current_checkpoint,
+                      expected_delivery=expected_delivery,
+                  )
+                  generation_id = verified_receipt["generation_id"]
+                  source_id = verified_receipt["source_id"]
                   checkpoint_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/generations/{generation_id}.json"
                   index_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/index.json"
-                  def old_json(relative: str):
-                      completed = subprocess.run(
-                          ["git", "-C", str(state_repo), "show", f"{old_sha}:{relative}"],
-                          check=True, capture_output=True,
-                      )
-                      if len(completed.stdout) > processor.STATE_INDEX_FILE_LIMIT:
-                          raise ValueError("replay_selected_state_file_too_large")
-                      return json.loads(completed.stdout)
-                  current_state_checkpoint = json.loads((state_repo / checkpoint_rel).read_text(encoding="utf-8"))
-                  current_index = json.loads((state_repo / index_rel).read_text(encoding="utf-8"))
-                  if current_checkpoint != current_state_checkpoint:
-                      raise ValueError("replay_checkpoint_receipt_state_mismatch")
-                  schema = json.loads(pathlib.Path("../bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"))
-                  verification_kwargs = {
-                      "prior_checkpoint": old_json(checkpoint_rel),
-                      "current_checkpoint": current_state_checkpoint,
-                      "prior_index": old_json(index_rel),
-                      "current_index": current_index,
-                      "result": result,
-                      "state_head_sha": old_sha,
-                      "checkpoint_schema": schema,
-                  }
-                  if expected_delivery is not None:
-                      verification_kwargs["expected_delivery"] = expected_delivery
-                  verified_receipt = processor.verify_replay_persistence_receipt(
-                      receipt, **verification_kwargs,
-                  )
                   expected_changed_paths = set()
                   for change in verified_receipt["state_changes"]:
                       if change.startswith(f"sources/{source_id}/generations/{generation_id}.json#/"):
@@ -1667,36 +1647,19 @@ jobs:
                   ):
                       raise ValueError("replay_state_cas_missing")
                   state_repo = pathlib.Path("state-repo")
-                  if subprocess.run(
-                      ["git", "-C", str(state_repo), "rev-parse", "HEAD"],
-                      check=True, text=True, capture_output=True,
-                  ).stdout.strip() != claim_sha:
-                      raise ValueError("replay_state_cas_head_mismatch")
+                  verified_receipt = processor.verify_replay_persistence_receipt_from_committed_state(
+                      receipt,
+                      state_repository=state_repo,
+                      prior_state_commit=old_sha,
+                      expected_current_state_commit=claim_sha,
+                      phase=processor._REPLAY_VERIFY_POST_CAS,
+                      result=result,
+                      expected_delivery=expected_delivery,
+                  )
+                  source_id = verified_receipt["source_id"]
+                  replay_generation_id = verified_receipt["generation_id"]
                   checkpoint_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/generations/{replay_generation_id}.json"
                   index_rel = f".datapan/upstream-catalogue-state/sources/{source_id}/index.json"
-                  def committed_json(commit: str, relative: str):
-                      completed = subprocess.run(
-                          ["git", "-C", str(state_repo), "show", f"{commit}:{relative}"],
-                          check=True, capture_output=True,
-                      )
-                      if len(completed.stdout) > processor.STATE_INDEX_FILE_LIMIT:
-                          raise ValueError("replay_state_file_too_large")
-                      return json.loads(completed.stdout)
-                  schema = json.loads(pathlib.Path("bootstrap/schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json").read_text(encoding="utf-8"))
-                  verification_kwargs = {
-                      "prior_checkpoint": committed_json(old_sha, checkpoint_rel),
-                      "current_checkpoint": committed_json(claim_sha, checkpoint_rel),
-                      "prior_index": committed_json(old_sha, index_rel),
-                      "current_index": committed_json(claim_sha, index_rel),
-                      "result": result,
-                      "state_head_sha": old_sha,
-                      "checkpoint_schema": schema,
-                  }
-                  if expected_delivery is not None:
-                      verification_kwargs["expected_delivery"] = expected_delivery
-                  verified_receipt = processor.verify_replay_persistence_receipt(
-                      receipt, **verification_kwargs,
-                  )
                   changed_paths = verified_receipt["state_changes"]
                   expected_changed_paths = set()
                   for change in changed_paths:
