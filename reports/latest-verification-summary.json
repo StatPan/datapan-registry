@@ -1,50 +1,55 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-20T23:58:04.575590Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3694,
+    "failed": 1260,
+    "skipped": 4627,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4627,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3694,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1260,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2217,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1297,
         "reason": "approval_required"
       },
       {
         "key": "missing_auth",
         "count": 583,
         "reason": "missing_auth"
+      },
+      {
+        "key": "HTTP 에러",
+        "count": 274,
+        "reason": "HTTP 에러"
       },
       {
         "key": "data_gg_request_timeout",
@@ -317,9 +322,9 @@
         "reason": "seoul_bus_service_key_not_registered"
       },
       {
-        "key": "HTTP 에러",
+        "key": "OK",
         "count": 3,
-        "reason": "HTTP 에러"
+        "reason": "OK"
       },
       {
         "key": "airport_missing_required_params",
@@ -390,6 +395,11 @@
         "key": "jeju_missing_required_params",
         "count": 2,
         "reason": "jeju_missing_required_params"
+      },
+      {
+        "key": "provider returned resultCode OK",
+        "count": 2,
+        "reason": "provider returned resultCode OK"
       },
       {
         "key": "seoul_bus_missing_required_params",
@@ -705,7 +715,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1382,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2254,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
