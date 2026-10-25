@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-24T23:17:03.794143Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3705,
+    "failed": 999,
+    "skipped": 4877,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4877,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3705,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 999,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2434,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1330,
         "reason": "approval_required"
       },
       {
@@ -362,6 +362,11 @@
         "reason": "ulsan_service_key_not_registered"
       },
       {
+        "key": "정상조회",
+        "count": 3,
+        "reason": "정상조회"
+      },
+      {
         "key": "HTTP 400",
         "count": 2,
         "reason": "HTTP 400"
@@ -390,6 +395,11 @@
         "key": "jeju_missing_required_params",
         "count": 2,
         "reason": "jeju_missing_required_params"
+      },
+      {
+        "key": "provider returned HTML instead of data",
+        "count": 2,
+        "reason": "provider returned HTML instead of data"
       },
       {
         "key": "seoul_bus_missing_required_params",
@@ -587,9 +597,44 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1383000/yhis/YouthSurveyTotalService/getYouthSurveyTotalPartcpStatsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1383000/yhis/YouthSurveyTotalService/getYouthSurveyTotalPartcpStatsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1613000/PublicTransportationCardType/getPublicTransportationCardType?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1613000/PublicTransportationCardType/getPublicTransportationCardType?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1613000/PublicTransportationFareSettlementOperator/getPublicTransportationFareSettlementOperator?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1613000/PublicTransportationFareSettlementOperator/getPublicTransportationFareSettlementOperator?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1613000/PublicTransportationMode/getPublicTransportationMode?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1613000/PublicTransportationMode/getPublicTransportationMode?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1613000/PublicTransportationUserType/getPublicTransportationUserType?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1613000/PublicTransportationUserType/getPublicTransportationUserType?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1721301/TbPoInfoListApi/getEpsotData?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1721301/TbPoInfoListApi/getEpsotData?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/DrglQuizAplyTotService/getDrglQuizAplyTot?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/DrglQuizAplyTotService/getDrglQuizAplyTot?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "Get \"https://apis.data.go.kr/6260000/PublicArt/getPublicArtInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
@@ -630,6 +675,21 @@
         "key": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "HTTP 503",
+        "count": 1,
+        "reason": "HTTP 503"
+      },
+      {
+        "key": "NO_DATA",
+        "count": 1,
+        "reason": "NO_DATA"
+      },
+      {
+        "key": "Success",
+        "count": 1,
+        "reason": "Success"
       },
       {
         "key": "car365_http_400",
@@ -705,7 +765,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1432,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2304,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
