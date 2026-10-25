@@ -28,6 +28,7 @@ import sys
 import tarfile
 import tempfile
 import time
+import types
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -38,6 +39,14 @@ from typing import Any
 import yaml
 
 os.environ.setdefault("PYTHONDONTWRITEBYTECODE", "1")
+
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
+_NATIVE_CONTROL_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
 
 PROCESSOR_SCHEMA = "datapan.upstream-catalogue-checkpoint.v1"
 JOURNAL_SCHEMA = "datapan.canonical-update-promotion-journal.v1"
@@ -178,7 +187,42 @@ def canonical_json(value: Any) -> bytes:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
-def file_sha256(path: pathlib.Path) -> str:
+def _current_input_bytes(path: pathlib.Path, current_input_reader: Any | None) -> bytes | None:
+    """Read an M member through the exact owner view when one is supplied.
+
+    Bundle and temporary files are intentionally outside that view and retain
+    their ordinary local-file behavior. A path that is under the authenticated
+    root is always delegated to the reader; it never falls back to disk.
+    """
+    if current_input_reader is None:
+        return None
+    root = getattr(current_input_reader, "root", None)
+    if not isinstance(root, pathlib.Path) or not root.is_absolute():
+        raise PromotionError("current-input reader has no absolute repository root")
+    candidate = pathlib.Path(path)
+    if not candidate.is_absolute():
+        candidate = root / candidate
+    try:
+        relative = candidate.relative_to(root)
+    except ValueError:
+        return None
+    relative_text = relative.as_posix()
+    normalized = pathlib.PurePosixPath(relative_text)
+    if (
+        normalized.is_absolute() or not relative_text or "\\" in relative_text
+        or any(part in {"", ".", ".."} for part in normalized.parts)
+    ):
+        raise PromotionError("current-input path is not a normalized repository member")
+    data = current_input_reader.read_bytes(relative_text)
+    if type(data) is not bytes:
+        raise PromotionError("current-input reader must return exact bytes")
+    return data
+
+
+def file_sha256(path: pathlib.Path, *, current_input_reader: Any | None = None) -> str:
+    current = _current_input_bytes(path, current_input_reader)
+    if current is not None:
+        return hashlib.sha256(current).hexdigest()
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
@@ -186,9 +230,11 @@ def file_sha256(path: pathlib.Path) -> str:
     return digest.hexdigest()
 
 
-def load_object(path: pathlib.Path) -> dict[str, Any]:
+def load_object(path: pathlib.Path, *, current_input_reader: Any | None = None) -> dict[str, Any]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
+        current = _current_input_bytes(path, current_input_reader)
+        raw = current if current is not None else path.read_bytes()
+        value = json.loads(raw.decode("utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise PromotionError(f"invalid required JSON input: {path}") from exc
     if not isinstance(value, dict):
@@ -196,15 +242,59 @@ def load_object(path: pathlib.Path) -> dict[str, Any]:
     return value
 
 
-def load_json_value(path: pathlib.Path) -> Any:
+def load_json_value(path: pathlib.Path, *, current_input_reader: Any | None = None) -> Any:
     """Load one required JSON document without imposing an object root."""
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        current = _current_input_bytes(path, current_input_reader)
+        raw = current if current is not None else path.read_bytes()
+        return json.loads(raw.decode("utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise PromotionError(f"invalid required JSON input: {path}") from exc
 
 
-def load_module(path: pathlib.Path, name: str) -> Any:
+def load_module(
+    path: pathlib.Path, name: str, *, current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
+) -> Any:
+    effective_reader = current_input_reader
+    current = _current_input_bytes(path, effective_reader)
+    if effective_reader is not None:
+        if current is None:
+            raise PromotionError("current-M helper is outside the authenticated Source CONTROL path set")
+        try:
+            relative = pathlib.Path(path).absolute().relative_to(pathlib.Path(effective_reader.root)).as_posix()
+        except (AttributeError, ValueError) as exc:
+            raise PromotionError("current-M helper escaped the authenticated current-M root") from exc
+        if relative not in {
+            "scripts/generate-completeness-proof-rollup.py",
+            "scripts/validate-completeness-proof.py",
+            "scripts/validate-data-go-kr-operation-manifest.py",
+            "scripts/generate-data-go-kr-operation-manifest.py",
+            "scripts/seoul_oa109_operation_declaration.py",
+            "scripts/attest-runtime-freshness-import.py",
+            "scripts/run-canonical-update-promotion.py",
+            "scripts/canonical_update_pr.py",
+            "scripts/compose-upstream-catalogue-candidate.py",
+            "scripts/upstream_catalogue_derivation.py",
+            "scripts/generate-batch-link-detail-registry-patches.py",
+            "scripts/completeness_publication_evidence.py",
+            "scripts/recover-canonical-publication-ack.py",
+        }:
+            raise PromotionError("current-M helper is outside the fixed CONTROL mapping")
+        load_control = getattr(source_control_reader, "load_module", None)
+        if not callable(load_control):
+            raise PromotionError("Native promotion import requires its exact source_control_reader")
+        module = load_control(relative, m_baseline_bytes=current)
+        if (
+            not isinstance(module, types.ModuleType)
+            or not isinstance(getattr(module, "__name__", None), str)
+            or sys.modules.get(module.__name__) is not module
+            or getattr(module, "_SOURCE_CONTROL_ORIGIN", False) is not True
+        ):
+            raise PromotionError("source_control_reader did not return the canonical adapted promotion helper")
+        return module
+    if _SOURCE_CONTROL_ORIGIN or any(marker in os.environ for marker in _NATIVE_CONTROL_MARKERS):
+        raise PromotionError("Native promotion import requires its exact current-M and source-control readers")
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
         raise PromotionError(f"cannot load required helper: {path}")
@@ -227,9 +317,16 @@ def load_module(path: pathlib.Path, name: str) -> Any:
     return module
 
 
-def load_canonical_update_pr(root: pathlib.Path) -> Any:
+def load_canonical_update_pr(
+    root: pathlib.Path, *, current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
+) -> Any:
     """Load the shared canonical composition and promotion validator."""
-    return load_module(root / "scripts/canonical_update_pr.py", "canonical_update_pr")
+    return load_module(
+        root / "scripts/canonical_update_pr.py", "canonical_update_pr",
+        current_input_reader=current_input_reader,
+        source_control_reader=source_control_reader,
+    )
 
 
 def command(
@@ -398,12 +495,15 @@ def export_processor_state_pin(
     return destination, provenance
 
 
-def verify_processor_checkpoint(value: dict[str, Any], schema_path: pathlib.Path) -> dict[str, Any]:
+def verify_processor_checkpoint(
+    value: dict[str, Any], schema_path: pathlib.Path, *,
+    current_input_reader: Any | None = None,
+) -> dict[str, Any]:
     import jsonschema
 
     if value.get("schema_version") != PROCESSOR_SCHEMA:
         raise PromotionError("processor state uses an unsupported checkpoint schema")
-    schema = load_object(schema_path)
+    schema = load_object(schema_path, current_input_reader=current_input_reader)
     jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(value)
     unsigned = dict(value)
     claimed = unsigned.pop("checkpoint_sha256", None)
@@ -996,6 +1096,8 @@ def validate_processor_link_metadata(
     canonical_context: Mapping[str, Any] | None = None,
     allow_terminal_noop: bool = False,
     validate_seoul: bool = True,
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
 ) -> list[dict[str, Any]]:
     """Semantically bind unresolved resolver metadata to its checkpoint row."""
     evidence_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
@@ -1020,7 +1122,10 @@ def validate_processor_link_metadata(
     except ImportError as exc:
         raise PromotionError("processor enrichment schema validator is unavailable") from exc
     try:
-        enrichment_schema = load_object(root / "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json")
+        enrichment_schema = load_object(
+            root / "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+            current_input_reader=current_input_reader,
+        )
         jsonschema.Draft202012Validator(
             enrichment_schema, format_checker=jsonschema.FormatChecker(),
         ).validate(evidence)
@@ -1033,6 +1138,8 @@ def validate_processor_link_metadata(
             composition_baseline_bytes=composition_baseline_bytes,
             canonical_context=canonical_context,
             allow_terminal_noop=allow_terminal_noop,
+            current_input_reader=current_input_reader,
+            source_control_reader=source_control_reader,
         )
     outcomes = evidence.get("worker_outcomes", [])
     if not isinstance(outcomes, list):
@@ -1068,14 +1175,17 @@ def validate_processor_link_metadata(
         composer = load_module(
             root / "scripts/compose-upstream-catalogue-candidate.py",
             "processor_catalogue_composer_for_bundle_validation",
+            current_input_reader=current_input_reader,
+            source_control_reader=source_control_reader,
         )
     except (OSError, PromotionError) as exc:
         raise PromotionError("trusted processor composer is unavailable for link metadata") from exc
-    helper = getattr(composer, "LINK_DETAIL_HELPERS", None)
+    helper_loader = getattr(composer, "load_link_detail_helpers", None)
+    helper = helper_loader(current_input_reader, source_control_reader=source_control_reader) if callable(helper_loader) else None
     if helper is None or not callable(getattr(helper, "validate_link_metadata", None)):
         raise PromotionError("processor link metadata validator is unavailable")
     try:
-        provider_index = load_object(root / "data/provider-index.json")
+        provider_index = load_object(root / "data/provider-index.json", current_input_reader=current_input_reader)
         registered = helper.registered_hosts(provider_index)
     except (OSError, PromotionError, AttributeError, TypeError) as exc:
         raise PromotionError("trusted provider host index is unavailable for link metadata") from exc
@@ -1120,7 +1230,9 @@ def validate_processor_link_metadata(
         except (ValueError, TypeError) as exc:
             raise PromotionError("processor link metadata provenance is invalid") from exc
         try:
-            projection = composer.worker_contract_projection(dict(item))
+            projection = composer.worker_contract_projection(
+                dict(item), declaration_helper=composer.load_seoul_operation_declaration(current_input_reader),
+            )
         except (AttributeError, TypeError, ValueError) as exc:
             raise PromotionError("processor resolver contract diagnostic is invalid") from exc
         if not isinstance(projection, Mapping) or not projection:
@@ -1179,11 +1291,23 @@ def _terminate_and_reap_processor_composer_read(process: subprocess.Popen[bytes]
 def processor_composer_source_identity(
     root: pathlib.Path,
     producer_head_sha: str,
+    *,
+    history_git_reader: Any | None = None,
 ) -> dict[str, Any] | None:
     """Hash one bounded local composer blob from an authenticated B source commit."""
     if not re.fullmatch(r"[a-f0-9]{40}", producer_head_sha):
         return None
     composer_path = PROCESSOR_COMPOSITION_INPUTS["composer"]
+    if history_git_reader is not None:
+        try:
+            raw = history_git_reader(
+                root, ["show", f"{producer_head_sha}:{composer_path}"],
+            )
+        except (OSError, ValueError, subprocess.CalledProcessError):
+            return None
+        if type(raw) is not bytes or len(raw) > MAX_PROCESSOR_COMPOSER_BYTES:
+            return None
+        return {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()}
     argv = ("git", "--no-pager", "show", f"{producer_head_sha}:{composer_path}")
     print(f"+ [{root}] {shlex.join(argv)}", flush=True)
     environment = dict(os.environ)
@@ -1446,6 +1570,7 @@ def processor_seoul_unchanged_baseline_rows(
     composition_baseline_bytes: int | None,
     canonical_context: Mapping[str, Any] | None,
     allow_terminal_noop: bool,
+    current_input_reader: Any | None = None,
 ) -> tuple[list[Any], str]:
     """Return rows backed by the exact C composition baseline or safe no-op output."""
     if not isinstance(composition_baseline_sha256, str) or not re.fullmatch(
@@ -1497,20 +1622,27 @@ def validate_processor_seoul_declaration(
     composition_baseline_bytes: int | None,
     canonical_context: Mapping[str, Any] | None,
     allow_terminal_noop: bool = False,
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
 ) -> None:
     """Revalidate a successful pinned declaration against the trusted source and C outputs."""
     try:
         composer = load_module(
             root / "scripts/compose-upstream-catalogue-candidate.py",
             "processor_catalogue_composer_for_declaration_validation",
+            current_input_reader=current_input_reader,
+            source_control_reader=source_control_reader,
         )
     except (OSError, PromotionError) as exc:
         raise PromotionError("trusted processor composer is unavailable for declaration validation") from exc
-    declaration = getattr(composer, "SEOUL_OPERATION_DECLARATION", None)
+    declaration_loader = getattr(composer, "load_seoul_operation_declaration", None)
+    declaration = declaration_loader(
+        current_input_reader, source_control_reader=source_control_reader,
+    ) if callable(declaration_loader) else None
     declaration_id = getattr(declaration, "DECLARATION_ID", None)
     if not isinstance(declaration_id, str) or not declaration_id:
         raise PromotionError("trusted Seoul operation declaration validator is unavailable")
-    target_id = str(declaration.DECLARATION["subject"]["portal_dataset_id"])
+    target_id = str(declaration._declaration(current_input_reader)["subject"]["portal_dataset_id"])
     records = evidence.get("records")
     if not isinstance(records, list):
         raise PromotionError("processor enrichment records are invalid for declaration validation")
@@ -1567,9 +1699,13 @@ def validate_processor_seoul_declaration(
         # authenticated 0085 payload and pinned by both declaration and helper.
         # It remains independent of current canonical bytes and works in the
         # processor's intentional pointer-only checkout.
-        historical_snapshot = declaration.load_historical_subject_snapshot(root)
+        historical_snapshot = declaration.load_historical_subject_snapshot(
+            root, current_input_reader=current_input_reader,
+        )
         pinned_source_row = copy.deepcopy(dict(historical_snapshot["subject_row"]))
-        declaration.validate_subject_row(pinned_source_row)
+        declaration.validate_subject_row(
+            pinned_source_row, current_input_reader=current_input_reader,
+        )
     except (AttributeError, OSError, TypeError, ValueError) as exc:
         raise PromotionError("processor Seoul historical subject snapshot is unavailable or invalid") from exc
     composed_path = bundle_dir / "composed-candidate.registry.json"
@@ -1651,6 +1787,7 @@ def validate_processor_seoul_declaration(
             composition_baseline_bytes=composition_baseline_bytes,
             canonical_context=canonical_context,
             allow_terminal_noop=allow_terminal_noop,
+            current_input_reader=current_input_reader,
         )
         baseline_row = find_unique_target(baseline_rows, "authenticated generation baseline")
         try:
@@ -1697,11 +1834,13 @@ def validate_processor_seoul_declaration(
     # transform plus the one declaration operation.
     original_row = copy.deepcopy(pinned_source_row)
     try:
-        declaration.validate_enriched_record(original_row, record, root=root)
+        declaration.validate_enriched_record(
+            original_row, record, root=root, current_input_reader=current_input_reader,
+        )
         generation_inputs = checkpoint.get("generation_inputs")
         candidate_sha256 = generation_inputs.get("candidate_sha256") if isinstance(generation_inputs, Mapping) else None
-        provider_index = load_object(root / "data/provider-index.json")
-        provider_index_sha256 = file_sha256(root / "data/provider-index.json")
+        provider_index = load_object(root / "data/provider-index.json", current_input_reader=current_input_reader)
+        provider_index_sha256 = file_sha256(root / "data/provider-index.json", current_input_reader=current_input_reader)
         composition = load_object(bundle_dir / "composition-receipt.json")
         input_digests = composition.get("input_digests") if isinstance(composition, Mapping) else None
         if (
@@ -1713,7 +1852,7 @@ def validate_processor_seoul_declaration(
             or input_digests["provider_index"].get("sha256") != provider_index_sha256
         ):
             raise PromotionError("processor declaration evidence is not bound to trusted candidate and provider inputs")
-        schema = load_object(root / "schemas/datapan.specs.v1.schema.json")
+        schema = load_object(root / "schemas/datapan.specs.v1.schema.json", current_input_reader=current_input_reader)
         filtered_evidence = copy.deepcopy(dict(evidence))
         filtered_evidence["records"] = [copy.deepcopy(dict(record))]
         filtered_evidence.pop("worker_outcomes", None)
@@ -1725,12 +1864,15 @@ def validate_processor_seoul_declaration(
             provider_index_sha256=provider_index_sha256,
             hosts=composer.registered_hosts(provider_index),
             registry_schema=schema,
+            current_input_reader=current_input_reader,
         )
         validated_record = validated.get(("data.go.kr", target_id))
         if not isinstance(validated_record, Mapping) or validated_record.get("_binding_error"):
             raise PromotionError("processor Seoul declaration semantic binding was rejected")
-        declaration.validate_declared_operation(original_row, record_op, root=root)
-        composer.LINK_DETAIL_HELPERS.validate_link_metadata(
+        declaration.validate_declared_operation(
+            original_row, record_op, root=root, current_input_reader=current_input_reader,
+        )
+        composer.load_link_detail_helpers(current_input_reader).validate_link_metadata(
             record["declaration_provenance"]["page_resolver"],
             target_id,
             composer.registered_hosts(provider_index),
@@ -1756,6 +1898,8 @@ def validate_processor_seoul_bundle(
     root: pathlib.Path,
     canonical_context: Mapping[str, Any] | None,
     allow_terminal_noop: bool,
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
 ) -> None:
     """Apply the Seoul semantic gate after producer lineage and bundle checks."""
     enrichment_path = bundle_dir / "upstream-catalogue-enrichment-evidence.json"
@@ -1767,6 +1911,8 @@ def validate_processor_seoul_bundle(
             composition_baseline_bytes=bundle.get("composition_baseline_bytes"),
             canonical_context=canonical_context,
             allow_terminal_noop=allow_terminal_noop,
+            current_input_reader=current_input_reader,
+            source_control_reader=source_control_reader,
         )
         return
     target_id = "15056854"
@@ -1791,6 +1937,9 @@ def validate_processor_bundle(
     canonical_context: Mapping[str, Any] | None = None,
     allow_terminal_noop: bool = False,
     defer_seoul_declaration: bool = False,
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
+    history_git_reader: Any | None = None,
 ) -> dict[str, Any]:
     digests = checkpoint.get("output_digests")
     locator = checkpoint.get("output_artifact")
@@ -1873,6 +2022,8 @@ def validate_processor_bundle(
         # composition-baseline identity below.
         contract_diagnostics = validate_processor_link_metadata(
             checkpoint, bundle_dir, root=root, validate_seoul=False,
+            current_input_reader=current_input_reader,
+            source_control_reader=source_control_reader,
         )
     result = load_object(bundle_dir / "upstream-catalogue-processing-result.json")
     if result.get("generation_id") != checkpoint.get("generation_id") or result.get("status") != processor_status:
@@ -1912,6 +2063,8 @@ def validate_processor_bundle(
             (root / "scripts/upstream_catalogue_derivation.py") if root is not None
             else pathlib.Path(__file__).with_name("upstream_catalogue_derivation.py"),
             "promotion_same_observation_derivation",
+            current_input_reader=current_input_reader,
+            source_control_reader=source_control_reader,
         )
         try:
             derivation_value = derivation_helper.validate_derivation_envelope(derivation_value)
@@ -1979,7 +2132,9 @@ def validate_processor_bundle(
         raise PromotionError(f"composer did not admit a valid {expected_composition_status} candidate receipt") from exc
     diagnostic_encoding = "projected"
     if contract_diagnostics and root is not None and producer_head_sha is not None:
-        producer_composer = processor_composer_source_identity(root, producer_head_sha)
+        producer_composer = processor_composer_source_identity(
+            root, producer_head_sha, history_git_reader=history_git_reader,
+        )
         diagnostic_encoding = authenticate_contract_diagnostic_encoding(composition, producer_composer)
     if root is not None or contract_diagnostics:
         validate_processor_contract_diagnostic_outputs(
@@ -2012,6 +2167,8 @@ def validate_processor_bundle(
             checkpoint, bundle_dir, result, root=root,
             canonical_context=canonical_context,
             allow_terminal_noop=allow_terminal_noop,
+            current_input_reader=current_input_reader,
+            source_control_reader=source_control_reader,
         )
     return result
 

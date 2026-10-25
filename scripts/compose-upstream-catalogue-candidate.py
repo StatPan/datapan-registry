@@ -22,6 +22,7 @@ import shutil
 import sys
 import tempfile
 import unicodedata
+import types
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -31,6 +32,13 @@ except ImportError as exc:  # pragma: no cover - environment guard
     raise SystemExit("missing dependency: install jsonschema before composing catalogue candidates") from exc
 
 
+_SOURCE_CONTROL_ORIGIN = globals().get("__datapan_source_control_origin__") == "datapan.source-control.v1"
+_NATIVE_CONTROL_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD", "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID", "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID", "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEFAULT_REFRESH_POLICY = ROOT / "policy/source-refresh.json"
 REGISTRY_SCHEMA = ROOT / "schemas/datapan.specs.v1.schema.json"
@@ -66,30 +74,140 @@ class CompositionError(ValueError):
     """Input or policy could not be safely composed."""
 
 
-def load_link_detail_helpers() -> Any:
-    helper_path = pathlib.Path(__file__).with_name("generate-batch-link-detail-registry-patches.py")
-    spec = importlib.util.spec_from_file_location("catalogue_link_detail_helpers", helper_path)
-    if spec is None or spec.loader is None:
-        raise CompositionError("link detail contract helper is unavailable")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+def _current_input_bytes(
+    path: pathlib.Path, current_input_reader: Any | None = None,
+) -> bytes | None:
+    reader = current_input_reader
+    if reader is None:
+        if _SOURCE_CONTROL_ORIGIN or any(
+            marker in os.environ for marker in _NATIVE_CONTROL_MARKERS
+        ):
+            raise CompositionError("Native composition data reads require an explicit current_input_reader")
+        return None
+    reader_root = getattr(reader, "root", None)
+    if not isinstance(reader_root, pathlib.Path) or reader_root != ROOT:
+        raise CompositionError("current-input reader root differs from the composer root")
+    candidate = pathlib.Path(path)
+    if not candidate.is_absolute():
+        candidate = ROOT / candidate
+    try:
+        relative = candidate.relative_to(ROOT)
+    except ValueError:
+        return None
+    relative_text = relative.as_posix()
+    normalized = pathlib.PurePosixPath(relative_text)
+    if (
+        normalized.is_absolute() or not relative_text or "\\" in relative_text
+        or any(part in {"", ".", ".."} for part in normalized.parts)
+    ):
+        raise CompositionError("current-input path is not a normalized repository member")
+    data = reader.read_bytes(relative_text)
+    if type(data) is not bytes:
+        raise CompositionError("current-input reader must return exact bytes")
+    return data
+
+
+def _load_module(
+    path: pathlib.Path, relative: str, name: str, *,
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
+) -> Any:
+    reader = current_input_reader
+    if reader is None:
+        if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_CONTROL_MARKERS):
+            raise CompositionError("Native composition import requires its exact current-M and source-control readers")
+        spec = importlib.util.spec_from_file_location(name, path)
+        if spec is None or spec.loader is None:
+            raise CompositionError("required composition helper is unavailable")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    candidate = pathlib.Path(path)
+    current_root = pathlib.Path(reader.root)
+    if not candidate.is_absolute():
+        candidate = current_root / candidate
+    try:
+        expected_relative = candidate.relative_to(current_root).as_posix()
+    except (AttributeError, ValueError) as exc:
+        raise CompositionError("composition helper escaped the authenticated current-M root") from exc
+    if expected_relative != relative:
+        raise CompositionError("composition helper path differs from its fixed current-M selector")
+    baseline = reader.read_bytes(relative)
+    if type(baseline) is not bytes:
+        raise CompositionError("current-input reader must return exact helper baseline bytes")
+    control_reader = source_control_reader
+    load_module = getattr(control_reader, "load_module", None)
+    if not callable(load_module):
+        raise CompositionError("Native composition import requires its exact source_control_reader")
+    module = load_module(relative, m_baseline_bytes=baseline)
+    if (
+        not isinstance(module, types.ModuleType)
+        or not isinstance(getattr(module, "__name__", None), str)
+        or sys.modules.get(module.__name__) is not module
+        or getattr(module, "_SOURCE_CONTROL_ORIGIN", False) is not True
+    ):
+        raise CompositionError("source_control_reader did not return the canonical adapted composition helper")
     return module
 
 
-LINK_DETAIL_HELPERS = load_link_detail_helpers()
+def load_link_detail_helpers(
+    current_input_reader: Any | None = None, *, source_control_reader: Any | None = None,
+) -> Any:
+    helper_path = (
+        pathlib.Path(current_input_reader.root) / "scripts/generate-batch-link-detail-registry-patches.py"
+        if current_input_reader is not None
+        else pathlib.Path(__file__).with_name("generate-batch-link-detail-registry-patches.py")
+    )
+    return _load_module(
+        helper_path, "scripts/generate-batch-link-detail-registry-patches.py",
+        "catalogue_link_detail_helpers", current_input_reader=current_input_reader,
+        source_control_reader=source_control_reader,
+    )
 
 
-def load_seoul_operation_declaration() -> Any:
-    helper_path = pathlib.Path(__file__).with_name("seoul_oa109_operation_declaration.py")
-    spec = importlib.util.spec_from_file_location("catalogue_seoul_oa109_declaration", helper_path)
-    if spec is None or spec.loader is None:
-        raise CompositionError("pinned Seoul operation declaration is unavailable")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+LINK_DETAIL_HELPERS = None
 
 
-SEOUL_OPERATION_DECLARATION = load_seoul_operation_declaration()
+def load_seoul_operation_declaration(
+    current_input_reader: Any | None = None, *, source_control_reader: Any | None = None,
+) -> Any:
+    helper_path = (
+        pathlib.Path(current_input_reader.root) / "scripts/seoul_oa109_operation_declaration.py"
+        if current_input_reader is not None
+        else pathlib.Path(__file__).with_name("seoul_oa109_operation_declaration.py")
+    )
+    return _load_module(
+        helper_path, "scripts/seoul_oa109_operation_declaration.py",
+        "catalogue_seoul_oa109_declaration", current_input_reader=current_input_reader,
+        source_control_reader=source_control_reader,
+    )
+
+
+SEOUL_OPERATION_DECLARATION = None
+
+
+def _declaration_helper(
+    current_input_reader: Any | None = None, *, source_control_reader: Any | None = None,
+) -> Any:
+    if current_input_reader is not None:
+        return load_seoul_operation_declaration(
+            current_input_reader, source_control_reader=source_control_reader,
+        )
+    if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_CONTROL_MARKERS):
+        raise CompositionError("Native composition requires explicit current-input and source-control readers")
+    return load_seoul_operation_declaration()
+
+
+def _link_detail_helper(
+    current_input_reader: Any | None = None, *, source_control_reader: Any | None = None,
+) -> Any:
+    if current_input_reader is not None:
+        return load_link_detail_helpers(
+            current_input_reader, source_control_reader=source_control_reader,
+        )
+    if _SOURCE_CONTROL_ORIGIN or any(name in os.environ for name in _NATIVE_CONTROL_MARKERS):
+        raise CompositionError("Native composition requires explicit current-input and source-control readers")
+    return load_link_detail_helpers()
 
 
 def stable_json_bytes(value: Any) -> bytes:
@@ -108,15 +226,20 @@ def digest_json(value: Any) -> str:
     return sha256_bytes(canonical_json_bytes(value))
 
 
-def load_json(path: pathlib.Path) -> Any:
+def load_json(path: pathlib.Path, *, current_input_reader: Any | None = None) -> Any:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        current = _current_input_bytes(path, current_input_reader)
+        raw = current if current is not None else path.read_bytes()
+        return json.loads(raw.decode("utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise CompositionError(f"cannot read JSON {path.name}: {exc}") from exc
 
 
-def file_digest(path: pathlib.Path) -> dict[str, Any]:
-    data = path.read_bytes()
+def file_digest(
+    path: pathlib.Path, *, current_input_reader: Any | None = None,
+) -> dict[str, Any]:
+    current = _current_input_bytes(path, current_input_reader)
+    data = current if current is not None else path.read_bytes()
     return {"bytes": len(data), "sha256": sha256_bytes(data)}
 
 
@@ -362,6 +485,8 @@ def validate_enrichment_evidence(
     provider_index_sha256: str,
     hosts: set[str],
     registry_schema: dict[str, Any],
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Validate the envelope globally and bind each row to original inputs.
 
@@ -370,6 +495,13 @@ def validate_enrichment_evidence(
     """
     if evidence is None:
         return {}
+    declaration_helper = _declaration_helper(
+        current_input_reader, source_control_reader=source_control_reader,
+    )
+    link_detail_helper = _link_detail_helper(
+        current_input_reader, source_control_reader=source_control_reader,
+    )
+    helper_root = pathlib.Path(current_input_reader.root) if current_input_reader is not None else ROOT
     if not isinstance(evidence, dict) or evidence.get("schema_version") != "datapan.catalogue-enrichment-evidence.v1":
         raise CompositionError("enrichment evidence must use datapan.catalogue-enrichment-evidence.v1")
     if evidence.get("original_candidate_sha256") != candidate_sha256:
@@ -454,26 +586,38 @@ def validate_enrichment_evidence(
         ]
         declaration_subject = (
             str(candidate_row.get("id"))
-            == SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]
+            == declaration_helper._declaration(current_input_reader)["subject"]["portal_dataset_id"]
         )
         if declaration_subject or declared_operations or declaration_provenance is not None:
             try:
                 if not declaration_subject or len(declared_operations) != 1 or declaration_provenance is None:
-                    raise SEOUL_OPERATION_DECLARATION.DeclarationError("declaration_subject_or_operation_mismatch")
-                SEOUL_OPERATION_DECLARATION.validate_enriched_record(candidate_row, record)
-                SEOUL_OPERATION_DECLARATION.validate_declared_operation(candidate_row, declared_operations[0])
-                LINK_DETAIL_HELPERS.validate_link_metadata(
+                    raise declaration_helper.DeclarationError("declaration_subject_or_operation_mismatch")
+                declaration_helper.validate_enriched_record(
+                    candidate_row, record, root=helper_root,
+                    current_input_reader=current_input_reader,
+                )
+                declaration_helper.validate_declared_operation(
+                    candidate_row, declared_operations[0], root=helper_root,
+                    current_input_reader=current_input_reader,
+                )
+                link_detail_helper.validate_link_metadata(
                     declaration_provenance.get("page_resolver"), key[1], hosts,
                 )
             except (AttributeError, KeyError, TypeError, ValueError):
                 binding_errors.append("enrichment_pinned_declaration_binding_mismatch")
-        errors = [*api_provenance_errors(evidence_row, allow_missing_link_guide=True)]
+        errors = [*api_provenance_errors(
+            evidence_row, allow_missing_link_guide=True,
+            declaration_helper=declaration_helper,
+            current_input_reader=current_input_reader,
+        )]
         op_errors, _ = _validate_operation_set(
             evidence_row,
             hosts,
             source_page_url=expected_detail,
             observed_guide_url_sha256=observed_guide_digest,
             observed_guide_url=observed_guide,
+            declaration_helper=declaration_helper,
+            current_input_reader=current_input_reader,
         )
         errors.extend(op_errors)
         try:
@@ -493,6 +637,9 @@ def validate_worker_outcomes(
     candidate_by_key: dict[tuple[str, str], dict[str, Any]],
     successful_keys: set[tuple[str, str]],
     registered_adapter_hosts: set[str],
+    declaration_helper: Any,
+    link_detail_helper: Any,
+    current_input_reader: Any | None = None,
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """Validate unresolved worker rows against the immutable candidate rows."""
     if evidence is None or "worker_outcomes" not in evidence:
@@ -546,6 +693,8 @@ def validate_worker_outcomes(
             diagnostic = dict(diagnostic)
             diagnostic["contract_failure"] = validate_contract_failure(
                 diagnostic["contract_failure"], identity=key[1],
+                declaration_helper=declaration_helper,
+                current_input_reader=current_input_reader,
             )
         if key in by_key:
             raise CompositionError(f"duplicate API identity {key[0]}:{key[1]} in worker outcomes")
@@ -564,7 +713,7 @@ def validate_worker_outcomes(
             raise CompositionError(f"worker outcome guide binding mismatch for {key[0]}:{key[1]}")
         if "link_metadata" in outcome:
             try:
-                LINK_DETAIL_HELPERS.validate_link_metadata(
+                link_detail_helper.validate_link_metadata(
                     outcome["link_metadata"], key[1], registered_adapter_hosts,
                 )
             except (ValueError, TypeError) as exc:
@@ -587,7 +736,10 @@ def validate_worker_outcomes(
     return by_key
 
 
-def validate_contract_failure(value: Any, *, identity: str | None = None) -> dict[str, Any]:
+def validate_contract_failure(
+    value: Any, *, identity: str | None = None, declaration_helper: Any,
+    current_input_reader: Any | None = None,
+) -> dict[str, Any]:
     if (
         not isinstance(value, dict)
         or set(value) != {"version", "reason", "unresolved_requirements", "next_action"}
@@ -607,7 +759,7 @@ def validate_contract_failure(value: Any, *, identity: str | None = None) -> dic
     }
     if value != expected:
         raise CompositionError("worker outcome contract_failure is invalid")
-    subject_id = str(SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"])
+    subject_id = str(declaration_helper._declaration(current_input_reader)["subject"]["portal_dataset_id"])
     if identity is not None and (
         value["reason"] == "no_reviewed_declaration" and identity == subject_id
         or value["reason"] in {"subject_binding_unproven", "declaration_evidence_rejected"}
@@ -617,7 +769,10 @@ def validate_contract_failure(value: Any, *, identity: str | None = None) -> dic
     return expected
 
 
-def worker_contract_projection(outcome: dict[str, Any]) -> dict[str, Any]:
+def worker_contract_projection(
+    outcome: dict[str, Any], *, declaration_helper: Any,
+    current_input_reader: Any | None = None,
+) -> dict[str, Any]:
     diagnostic = outcome.get("failure_diagnostic")
     if (
         not isinstance(diagnostic, dict)
@@ -635,6 +790,8 @@ def worker_contract_projection(outcome: dict[str, Any]) -> dict[str, Any]:
         return result
     validated = validate_contract_failure(
         contract_failure, identity=str(outcome.get("api_key", {}).get("id") or ""),
+        declaration_helper=declaration_helper,
+        current_input_reader=current_input_reader,
     )
     result.update({
         "contract_failure": validated,
@@ -683,6 +840,8 @@ def operation_provenance_errors(
     source_page_url: str | None = None,
     observed_guide_url_sha256: str | None = None,
     observed_guide_url: str | None = None,
+    declaration_helper: Any,
+    current_input_reader: Any | None = None,
 ) -> list[str]:
     errors: list[str] = []
     source, raw = operation_source(operation)
@@ -701,7 +860,11 @@ def operation_provenance_errors(
         errors.append("operation_source_raw_missing")
     if raw.get("operation_declaration_id") is not None:
         try:
-            SEOUL_OPERATION_DECLARATION.validate_declared_operation(row, operation)
+            declaration_helper.validate_declared_operation(
+                row, operation,
+                root=pathlib.Path(current_input_reader.root) if current_input_reader is not None else ROOT,
+                current_input_reader=current_input_reader,
+            )
         except (AttributeError, KeyError, TypeError, ValueError):
             errors.append("operation_pinned_declaration_mismatch")
     try:
@@ -714,9 +877,11 @@ def operation_provenance_errors(
     exact_historical_stored_operation = False
     if not declared_operation and row.get("provider") == PROVIDER and str(row.get("id") or "") == "15056854":
         try:
-            SEOUL_OPERATION_DECLARATION.validate_historical_operation(
+            declaration_helper.validate_historical_operation(
                 row, operation,
                 observed_guide_url=api_raw.get("guide_url") if isinstance(api_raw.get("guide_url"), str) else None,
+                root=pathlib.Path(current_input_reader.root) if current_input_reader is not None else ROOT,
+                current_input_reader=current_input_reader,
             )
             exact_historical_stored_operation = True
         except (AttributeError, KeyError, TypeError, ValueError):
@@ -730,7 +895,7 @@ def operation_provenance_errors(
             except CompositionError:
                 pass
         recognized_historical_catalogue_source = (
-            source_page_url == SEOUL_OPERATION_DECLARATION.PAGE_URL
+            source_page_url == declaration_helper.PAGE_URL
             and exact_historical_stored_operation
             and source.get("url") == api_source.get("url")
         )
@@ -770,7 +935,10 @@ def operation_provenance_errors(
     return sorted(set(errors))
 
 
-def api_provenance_errors(row: dict[str, Any], *, allow_missing_link_guide: bool = False) -> list[str]:
+def api_provenance_errors(
+    row: dict[str, Any], *, allow_missing_link_guide: bool = False,
+    declaration_helper: Any, current_input_reader: Any | None = None,
+) -> list[str]:
     errors: list[str] = []
     try:
         provider, _ = api_key(row)
@@ -795,10 +963,14 @@ def api_provenance_errors(row: dict[str, Any], *, allow_missing_link_guide: bool
             exact_stored_declaration = False
             if (
                 provider == PROVIDER
-                and str(row.get("id") or "") == SEOUL_OPERATION_DECLARATION.DECLARATION["subject"]["portal_dataset_id"]
+                and str(row.get("id") or "") == declaration_helper._declaration(current_input_reader)["subject"]["portal_dataset_id"]
             ):
                 try:
-                    SEOUL_OPERATION_DECLARATION.validate_stored_subject_row(row)
+                    declaration_helper.validate_stored_subject_row(
+                        row,
+                        root=pathlib.Path(current_input_reader.root) if current_input_reader is not None else ROOT,
+                        current_input_reader=current_input_reader,
+                    )
                     exact_stored_declaration = True
                 except (AttributeError, KeyError, TypeError, ValueError):
                     pass
@@ -948,6 +1120,8 @@ def _validate_operation_set(
     source_page_url: str | None = None,
     observed_guide_url_sha256: str | None = None,
     observed_guide_url: str | None = None,
+    declaration_helper: Any,
+    current_input_reader: Any | None = None,
 ) -> tuple[list[str], dict[str, dict[str, Any]]]:
     operations = row.get("operations") or []
     if not isinstance(operations, list):
@@ -978,6 +1152,8 @@ def _validate_operation_set(
             source_page_url=source_page_url,
             observed_guide_url_sha256=observed_guide_url_sha256,
             observed_guide_url=observed_guide_url,
+            declaration_helper=declaration_helper,
+            current_input_reader=current_input_reader,
         ))
     return sorted(set(errors)), indexed
 
@@ -992,12 +1168,22 @@ def compose_registries(
     provider_index_sha256: str = "",
     enrichment_evidence: Any = None,
     registry_schema: dict[str, Any] | None = None,
+    current_input_reader: Any | None = None,
+    source_control_reader: Any | None = None,
 ) -> dict[str, Any]:
     """Return a deterministic, non-publishing composition result."""
     baseline_rows, baseline_by_key = index_registry(baseline, "baseline")
     candidate_rows, candidate_by_key = index_registry(candidate, "candidate")
     hosts = registered_hosts(provider_index)
-    registry_schema = registry_schema or load_json(REGISTRY_SCHEMA)
+    declaration_helper = _declaration_helper(
+        current_input_reader, source_control_reader=source_control_reader,
+    )
+    link_detail_helper = _link_detail_helper(
+        current_input_reader, source_control_reader=source_control_reader,
+    )
+    registry_schema = registry_schema or load_json(
+        REGISTRY_SCHEMA, current_input_reader=current_input_reader,
+    )
     enrichment_by_key = validate_enrichment_evidence(
         enrichment_evidence,
         candidate_by_key=candidate_by_key,
@@ -1006,12 +1192,17 @@ def compose_registries(
         provider_index_sha256=provider_index_sha256,
         hosts=hosts,
         registry_schema=registry_schema,
+        current_input_reader=current_input_reader,
+        source_control_reader=source_control_reader,
     )
     worker_outcomes_by_key = validate_worker_outcomes(
         enrichment_evidence,
         candidate_by_key=candidate_by_key,
         successful_keys=set(enrichment_by_key),
         registered_adapter_hosts=hosts,
+        declaration_helper=declaration_helper,
+        link_detail_helper=link_detail_helper,
+        current_input_reader=current_input_reader,
     )
     composed_by_key = dict(baseline_by_key)
     decisions: list[dict[str, Any]] = []
@@ -1042,7 +1233,10 @@ def compose_registries(
                     tags.add("worker_outcome_contract_unresolved")
             status = worker_outcome["status"]
             reason_code = "worker_detail_retry" if status == "retry" else "worker_detail_quarantined"
-            worker_projection = worker_contract_projection(worker_outcome)
+            worker_projection = worker_contract_projection(
+                worker_outcome, declaration_helper=declaration_helper,
+                current_input_reader=current_input_reader,
+            )
             required_worker_evidence = (
                 list(worker_projection["contract_failure"]["unresolved_requirements"])
                 if "contract_failure" in worker_projection
@@ -1111,8 +1305,15 @@ def compose_registries(
                 else:
                     after = apply_enrichment_record(after, evidence_record)
             validation_kwargs = enrichment_operation_validation_kwargs(after, evidence_record) if evidence_valid else {}
-            errors = api_provenance_errors(after, allow_missing_link_guide=evidence_valid)
-            op_errors, _ = _validate_operation_set(after, hosts, **validation_kwargs)
+            errors = api_provenance_errors(
+                after, allow_missing_link_guide=evidence_valid,
+                declaration_helper=declaration_helper,
+                current_input_reader=current_input_reader,
+            )
+            op_errors, _ = _validate_operation_set(
+                after, hosts, declaration_helper=declaration_helper,
+                current_input_reader=current_input_reader, **validation_kwargs,
+            )
             if reason_codes:
                 pass
             elif errors:
@@ -1166,10 +1367,20 @@ def compose_registries(
                                 after["operations"].append(copy.deepcopy(old_operation))
                                 enriched_ids.add(identity)
         validation_kwargs = enrichment_operation_validation_kwargs(after, evidence_record) if evidence_valid else {}
-        source_errors = api_provenance_errors(after, allow_missing_link_guide=evidence_valid)
-        candidate_op_errors, candidate_ops_by_id = _validate_operation_set(after, hosts, **validation_kwargs)
+        source_errors = api_provenance_errors(
+            after, allow_missing_link_guide=evidence_valid,
+            declaration_helper=declaration_helper,
+            current_input_reader=current_input_reader,
+        )
+        candidate_op_errors, candidate_ops_by_id = _validate_operation_set(
+            after, hosts, declaration_helper=declaration_helper,
+            current_input_reader=current_input_reader, **validation_kwargs,
+        )
         try:
-            base_op_errors, base_ops_by_id = _validate_operation_set(before, hosts)
+            base_op_errors, base_ops_by_id = _validate_operation_set(
+                before, hosts, declaration_helper=declaration_helper,
+                current_input_reader=current_input_reader,
+            )
             before_contract = source_fingerprint(before)
             after_contract = source_fingerprint(after)
         except CompositionError as exc:

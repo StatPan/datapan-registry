@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import base64
 import copy
+import contextlib
+import contextvars
 import gzip
 import hashlib
 import importlib.util
@@ -20,6 +22,7 @@ import sys
 import tempfile
 import zipfile
 from datetime import datetime, timezone
+from types import ModuleType
 from typing import Any, Callable
 
 import jsonschema
@@ -34,9 +37,103 @@ ROLLUP_V2_SCHEMA_PATH = "schemas/datapan.completeness-proof-rollup.v2.schema.jso
 CURRENT_EVALUATION_SCHEMA_PATH = "schemas/datapan.completeness-current-release-evaluation.v1.schema.json"
 SCOPE_SCHEMA_PATH = "schemas/datapan.completeness-proof-scopes.v1.schema.json"
 INPUT_SCHEMA_PATH = "schemas/datapan.completeness-proof-inputs.v1.schema.json"
+POLICY_SCHEMA_PATH = "schemas/datapan.completeness-proof-policy.v1.schema.json"
+SOURCE_REGISTRY_PATH = "policy/sustainable-coverage.json"
 OUTPUT_JSON_PATH = "reports/completeness-proof-rollup.json"
 OUTPUT_MARKDOWN_PATH = "reports/completeness-proof-rollup.md"
+
+# Exact seed required before a complete current-M input view can be resolved.
+# The Native owner authenticates these bytes and the complete sources/ prefix
+# metadata before calling enumerate_current_input_requirements().
+CURRENT_INPUT_REQUIREMENT_BOOTSTRAP_PATHS = (
+    INPUT_INDEX_PATH,
+    SCOPE_REGISTRY_PATH,
+    POLICY_PATH,
+    SCOPE_SCHEMA_PATH,
+    INPUT_SCHEMA_PATH,
+    POLICY_SCHEMA_PATH,
+    SOURCE_REGISTRY_PATH,
+    "scripts/validate-completeness-proof.py",
+)
+
+# Repository-owned members reached by the existing completeness/import and
+# source→processor→promotion→Health→publication/ACK validators. This is a
+# closed call-graph list; it intentionally excludes unrelated repository
+# scripts and historical scripts, whose exact revisions are requested from
+# the history reader instead.
+CURRENT_INPUT_CONTROL_MEMBER_RULES = (
+    ("scripts/generate-completeness-proof-rollup.py", "enumerator", "enumerate_historical_dependencies"),
+    ("scripts/validate-completeness-proof.py", "policy_and_proof_validator", "load_and_validate_registry"),
+    ("scripts/validate-data-go-kr-operation-manifest.py", "operation_manifest_validator", "validate_data_go_operation_manifest"),
+    ("scripts/generate-data-go-kr-operation-manifest.py", "operation_manifest_generator", "validate-data-go-kr-operation-manifest.generator_module"),
+    ("scripts/seoul_oa109_operation_declaration.py", "operation_declaration", "operation_manifest_generator"),
+    ("scripts/attest-runtime-freshness-import.py", "historical_import_validator", "validate_historical_import"),
+    ("scripts/run-canonical-update-promotion.py", "processor_and_promotion_validator", "validate_processor_stage/validate_promotion_stage"),
+    ("scripts/canonical_update_pr.py", "journal_and_composition_validator", "validate_promotion_stage/processor_composer_source_identity"),
+    ("scripts/compose-upstream-catalogue-candidate.py", "processor_composition_validator", "validate_processor_stage"),
+    ("scripts/upstream_catalogue_derivation.py", "processor_derivation_helper", "compose-upstream-catalogue-candidate"),
+    ("scripts/generate-batch-link-detail-registry-patches.py", "processor_link_enrichment", "compose-upstream-catalogue-candidate"),
+    ("scripts/completeness_publication_evidence.py", "publication_and_pointer_validator", "validate_pipeline_evidence/validate_native_publication_readback"),
+    ("scripts/recover-canonical-publication-ack.py", "acknowledgement_validator", "completeness_publication_evidence"),
+)
+CURRENT_INPUT_CONTROL_MEMBER_PATHS = tuple(
+    path for path, _rule_id, _callsite_id in CURRENT_INPUT_CONTROL_MEMBER_RULES
+)
+
+# These are executable #768 source-runtime modules. Native authenticates them
+# from its exact CONTROL package manifest; they are never looked up or
+# represented as members of current M.
+CURRENT_INPUT_SOURCE_RUNTIME_RULES = (
+    ("scripts/canonical_source_git.py", "history_git_boundary", "git_read_only"),
+    ("scripts/canonical_publication_git_owner.py", "history_git_owner", "canonical_source_git._load_native_owner"),
+)
+
+# Non-indexed current-M data/control files read by those fixed validators.
+# Indexed paths are derived from the authenticated input index separately.
+CURRENT_INPUT_CONTROL_DATA_PATHS = (
+    "data/provider-index.json",
+    "manifest.json",
+    "policy/data-go-kr-operation-denominator-expectation.json",
+    "schemas/datapan.completeness-proof-policy.v1.schema.json",
+    "schemas/datapan.completeness-proof-scopes.v1.schema.json",
+    "schemas/datapan.completeness-proof-inputs.v1.schema.json",
+    "schemas/datapan.data-go-kr-operation-manifest.v1.schema.json",
+    "schemas/datapan.data-go-kr-operation-denominator-expectation.v1.schema.json",
+    "schemas/datapan.operation-denominator.v1.schema.json",
+    "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json",
+    "schemas/datapan.catalogue-enrichment-evidence.v1.schema.json",
+    "schemas/datapan.specs.v1.schema.json",
+    "schemas/datapan.provider-index.v1.schema.json",
+    "schemas/datapan.catalog-diff.v1.schema.json",
+    "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+    "schemas/datapan.upstream-refresh-work-packet.v1.schema.json",
+    "schemas/datapan.catalogue-composition-receipt.v1.schema.json",
+    "contracts/provider-operation-declarations/data-go-kr-15056854-oa-109-search-last-train-time.v1.json",
+    "contracts/provider-operation-declarations/data-go-kr-15056854-historical-subject-0085.v1.json",
+)
 SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
+SHA1_RE = re.compile(r"^[a-f0-9]{40}$")
+_ACTIVE_PRODUCER_HISTORY: contextvars.ContextVar[Any | None] = contextvars.ContextVar(
+    "datapan_completeness_producer_history", default=None,
+)
+_ACTIVE_CURRENT_INPUT_READ_SESSION: contextvars.ContextVar[Any | None] = contextvars.ContextVar(
+    "datapan_completeness_current_input_read_session", default=None,
+)
+_ACTIVE_SOURCE_RUNTIME_READER: contextvars.ContextVar[Any | None] = contextvars.ContextVar(
+    "datapan_completeness_source_runtime_reader", default=None,
+)
+_ACTIVE_SOURCE_CONTROL_READER: contextvars.ContextVar[Any | None] = contextvars.ContextVar(
+    "datapan_completeness_source_control_reader", default=None,
+)
+_SOURCE_RUNTIME_MARKERS = (
+    "DATAPAN_NATIVE_GIT_FD",
+    "DATAPAN_NATIVE_GIT_OPERATION_ID",
+    "DATAPAN_NATIVE_GIT_CHILD_ID",
+    "DATAPAN_NATIVE_GIT_NONCE",
+    "DATAPAN_NATIVE_GIT_REPOSITORY_ID",
+    "DATAPAN_NATIVE_GIT_OWNER_PID",
+    "DATAPAN_NATIVE_GIT_DEADLINE_NS",
+)
 RESOURCE_KINDS = {
     "api_catalog_metadata",
     "api_operation_manifest",
@@ -205,7 +302,272 @@ PIPELINE_STAGE_OPTIONAL_ROLES = {
 }
 
 
+class _CurrentInputReadSession:
+    """Route one operation's current-input reads through its owner view.
+
+    The same narrow adapter supports immutable M history enumeration and a
+    separate, epoch-bound prepared-scratch command view. The owner reader
+    receives normalized repository-relative paths and remains responsible
+    for exact membership, file identity, and byte accounting.
+    """
+
+    def __init__(self, root: pathlib.Path, reader: Any) -> None:
+        read = getattr(reader, "read_bytes", None)
+        list_paths = getattr(reader, "list_paths", None)
+        reader_root = getattr(reader, "root", None)
+        if not callable(read) or not callable(list_paths) or not isinstance(reader_root, pathlib.Path):
+            raise TypeError("current_input_reader must expose a Path root, read_bytes, and list_paths")
+        if reader_root != root:
+            raise ValueError("current_input_reader root differs from the enumeration root")
+        self.root = root
+        self.reader = reader
+
+    def relative_path(self, path: pathlib.Path) -> str:
+        candidate = pathlib.Path(path)
+        if not candidate.is_absolute():
+            candidate = self.root / candidate
+        try:
+            relative = candidate.relative_to(self.root)
+        except ValueError as exc:
+            raise ValueError("current-input read path is outside its authenticated root") from exc
+        normalized = normalize_relative_path(relative.as_posix(), "current-input read path").as_posix()
+        return normalized
+
+    def read_path(self, path: pathlib.Path) -> bytes:
+        relative = self.relative_path(path)
+        value = self.reader.read_bytes(relative)
+        if type(value) is not bytes:
+            raise TypeError("current_input_reader.read_bytes must return exact bytes")
+        return value
+
+    def paths(self, *, prefix: str, suffix: str) -> set[str]:
+        rows = self.reader.list_paths(prefix=prefix, suffix=suffix)
+        if not isinstance(rows, (tuple, list, set, frozenset)):
+            raise TypeError("current_input_reader.list_paths must return a finite path collection")
+        normalized: set[str] = set()
+        for row in rows:
+            path = normalize_relative_path(row, "current-input listed path").as_posix()
+            if not path.startswith(prefix) or not path.endswith(suffix):
+                raise ValueError("current_input_reader.list_paths returned a path outside its exact selector")
+            if path in normalized:
+                raise ValueError("current_input_reader.list_paths returned duplicate paths")
+            normalized.add(path)
+        return normalized
+
+
+class _CurrentInputRequirementReader:
+    """Finite authenticated seed used only to resolve the complete M view."""
+
+    def __init__(
+        self,
+        root: pathlib.Path,
+        seed_bytes: dict[str, bytes],
+        source_profile_inventory: tuple[str, ...],
+    ) -> None:
+        self.root = root
+        self._seed_bytes = dict(seed_bytes)
+        self._source_profile_inventory = source_profile_inventory
+
+    def read_bytes(self, relative_path: str) -> bytes:
+        normalized = normalize_relative_path(relative_path, "current-M bootstrap member").as_posix()
+        try:
+            return self._seed_bytes[normalized]
+        except KeyError as exc:
+            raise FileNotFoundError(f"current-M bootstrap member is not in the exact seed: {normalized}") from exc
+
+    def list_paths(self, *, prefix: str, suffix: str) -> tuple[str, ...]:
+        if prefix != "sources/" or suffix != ".json":
+            raise ValueError("bootstrap resolver supports only the complete current-M sources/*.json inventory")
+        return self._source_profile_inventory
+
+
+def _current_input_read_session() -> _CurrentInputReadSession | None:
+    return _ACTIVE_CURRENT_INPUT_READ_SESSION.get()
+
+
+def _processor_current_input_reader_argument() -> Any | None:
+    """Keep standalone processor validation local while Native stays fail-closed."""
+    session = _current_input_read_session()
+    if session is None and _native_current_input_is_required():
+        raise RuntimeError("processor enumeration lost its exact current-input reader")
+    return session.reader if session is not None else None
+
+
+@contextlib.contextmanager
+def _current_input_operation_scope(
+    *,
+    root: pathlib.Path,
+    current_input_reader: Any,
+    source_control_reader: Any,
+):
+    """Bind one authenticated prepared-scratch input view and CONTROL loader.
+
+    Native owns and validates the prepared-input capability, including its
+    child, command, root, generation epoch, and read budget. This Source
+    boundary checks the reader shape/root, installs it only for this
+    operation, and keeps the CONTROL executable loader separate from both
+    current-input bytes and historical-read authority.
+    """
+    if _ACTIVE_PRODUCER_HISTORY.get() is not None:
+        raise RuntimeError("prepared current-input operations cannot run inside producer-history scope")
+    if not isinstance(root, pathlib.Path):
+        raise TypeError("prepared current-input scope root must be a pathlib.Path")
+    resolved_root = root.resolve(strict=True)
+    if current_input_reader is source_control_reader:
+        raise TypeError("current_input_reader and source_control_reader must be separate capabilities")
+    if not callable(getattr(source_control_reader, "load_module", None)):
+        raise TypeError("source_control_reader must expose exact load_module(path, *, m_baseline_bytes)")
+    session = _CurrentInputReadSession(resolved_root, current_input_reader)
+    current_token = _ACTIVE_CURRENT_INPUT_READ_SESSION.set(session)
+    control_token = _ACTIVE_SOURCE_CONTROL_READER.set(source_control_reader)
+    try:
+        yield
+    finally:
+        _ACTIVE_SOURCE_CONTROL_READER.reset(control_token)
+        _ACTIVE_CURRENT_INPUT_READ_SESSION.reset(current_token)
+
+
+def _native_current_input_is_required() -> bool:
+    return any(
+        value is not None
+        for value in (
+            _ACTIVE_PRODUCER_HISTORY.get(),
+            _ACTIVE_SOURCE_RUNTIME_READER.get(),
+            _ACTIVE_SOURCE_CONTROL_READER.get(),
+        )
+    ) or any(marker in os.environ for marker in _SOURCE_RUNTIME_MARKERS)
+
+
+@contextlib.contextmanager
+def _source_runtime_operation_scope(source_runtime_reader: Any):
+    """Bind one Native operation's Source-runtime package reader.
+
+    This scope is separate from producer-history enumeration. A normal
+    registered child may need typed Git reads through the same authenticated
+    source_runtime package without receiving any historical-read capability.
+    The owner supplies the exact operation-bound reader; token reset keeps it
+    from leaking into a later or nested operation.
+    """
+    if not callable(getattr(source_runtime_reader, "load_module", None)):
+        raise RuntimeError("Native source_runtime_reader lacks exact load_module capability")
+    token = _ACTIVE_SOURCE_RUNTIME_READER.set(source_runtime_reader)
+    try:
+        yield
+    finally:
+        _ACTIVE_SOURCE_RUNTIME_READER.reset(token)
+
+
+def _source_runtime_call_scope(source_git: ModuleType):
+    """Bind the current operation's exact Source-runtime loader for one Git call."""
+    reader = _ACTIVE_SOURCE_RUNTIME_READER.get()
+    if reader is None:
+        if _native_current_input_is_required():
+            raise RuntimeError("Native Source Git calls require their operation-bound source_runtime_reader")
+        return contextlib.nullcontext()
+    scope = getattr(source_git, "_source_runtime_scope", None)
+    if not callable(scope):
+        raise RuntimeError("canonical_source_git lacks its exact Source-runtime operation scope")
+    return scope(reader)
+
+
+def _source_runtime_module(name: str) -> ModuleType:
+    """Load one fixed #768 CONTROL module through Native's separate capability."""
+    if name not in {"canonical_source_git", "canonical_publication_git_owner"}:
+        raise ValueError("source-runtime module name is outside the closed #768 helper set")
+    reader = _ACTIVE_SOURCE_RUNTIME_READER.get()
+    if reader is None:
+        if _current_input_read_session() is not None or any(
+            marker in os.environ for marker in _SOURCE_RUNTIME_MARKERS
+        ):
+            raise RuntimeError("Native enumeration requires its separate source_runtime_reader")
+        filename = f"{name}.py"
+        expected = pathlib.Path(__file__).resolve().with_name(filename).resolve(strict=True)
+        module = sys.modules.get(name)
+        if module is not None:
+            actual = getattr(module, "__file__", None)
+            if not isinstance(actual, str) or pathlib.Path(actual).resolve(strict=True) != expected:
+                raise RuntimeError(f"{name} is already loaded from outside the exact legacy Source runtime")
+            return module
+        for loaded_name, loaded_module in tuple(sys.modules.items()):
+            loaded_path = getattr(loaded_module, "__file__", None)
+            if loaded_name != name and isinstance(loaded_path, str):
+                try:
+                    if pathlib.Path(loaded_path).resolve(strict=True) == expected:
+                        raise RuntimeError(f"{name} is already loaded under a noncanonical module name")
+                except OSError:
+                    continue
+        spec = importlib.util.spec_from_file_location(name, expected)
+        if spec is None or spec.loader is None:
+            raise RuntimeError(f"exact legacy Source runtime module is unavailable: {name}")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        try:
+            spec.loader.exec_module(module)
+        except BaseException:
+            if sys.modules.get(name) is module:
+                del sys.modules[name]
+            raise
+        if sys.modules.get(name) is not module:
+            raise RuntimeError(f"{name} legacy runtime singleton changed during import")
+        return module
+    load_module = getattr(reader, "load_module", None)
+    if not callable(load_module):
+        raise RuntimeError("enumeration lacks its Native-authenticated source_runtime_reader")
+    module = load_module(name)
+    if (
+        not isinstance(module, ModuleType)
+        or getattr(module, "__name__", None) != name
+        or sys.modules.get(name) is not module
+    ):
+        raise RuntimeError(f"source_runtime_reader did not return the exact {name} singleton")
+    if any(key in module.__dict__ for key in (
+        "CURRENT_SOURCE_RUNTIME_READER", "CURRENT_SOURCE_CONTROL_READER", "CURRENT_INPUT_READER",
+    )):
+        raise RuntimeError("source_runtime modules must not retain reader capabilities in module globals")
+    return module
+
+
+def _source_control_module(path: pathlib.Path) -> ModuleType:
+    """Load one exact Source executable while authenticating its separate M baseline.
+
+    The Native CONTROL package owns executable bytes; the current-M reader
+    supplies only the corresponding baseline bytes.  This deliberately does
+    not compile the M baseline as Python.
+    """
+    session = _current_input_read_session()
+    if session is None:
+        raise RuntimeError("Source CONTROL imports require an active authenticated current-M session")
+    relative = session.relative_path(path)
+    if relative not in CURRENT_INPUT_CONTROL_MEMBER_PATHS:
+        raise RuntimeError(f"Source CONTROL path is outside the fixed current-M mapping: {relative}")
+    baseline_bytes = session.read_path(path)
+    reader = _ACTIVE_SOURCE_CONTROL_READER.get()
+    if reader is None:
+        raise RuntimeError("Native current-M import requires its separate source_control_reader")
+    load_module = getattr(reader, "load_module", None)
+    if not callable(load_module):
+        raise TypeError("source_control_reader must expose the exact load_module(path, *, m_baseline_bytes) method")
+    module = load_module(relative, m_baseline_bytes=baseline_bytes)
+    if not isinstance(module, ModuleType):
+        raise TypeError("source_control_reader.load_module must return an exact module singleton")
+    module_name = getattr(module, "__name__", None)
+    if not isinstance(module_name, str) or not module_name or sys.modules.get(module_name) is not module:
+        raise RuntimeError("source_control_reader did not return its canonical cached module singleton")
+    if getattr(module, "_SOURCE_CONTROL_ORIGIN", False) is not True:
+        raise RuntimeError("source_control_reader returned a module outside the restrictive CONTROL origin")
+    if any(name in module.__dict__ for name in (
+        "CURRENT_SOURCE_CONTROL_READER", "CURRENT_INPUT_READER", "CURRENT_SOURCE_RUNTIME_READER",
+    )):
+        raise RuntimeError("Source CONTROL modules must not retain readers in module globals")
+    return module
+
+
 def read_bytes(path: pathlib.Path) -> bytes:
+    session = _current_input_read_session()
+    if session is not None:
+        return session.read_path(path)
+    if _native_current_input_is_required():
+        raise RuntimeError("Native completeness reads require the exact current_input_reader")
     return path.read_bytes()
 
 
@@ -214,6 +576,11 @@ def sha256_bytes(value: bytes) -> str:
 
 
 def sha256_file(path: pathlib.Path) -> str:
+    session = _current_input_read_session()
+    if session is not None:
+        return sha256_bytes(read_bytes(path))
+    if _native_current_input_is_required():
+        raise RuntimeError("Native completeness hashes require the exact current_input_reader")
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
@@ -223,8 +590,8 @@ def sha256_file(path: pathlib.Path) -> str:
 
 def load_json(path: pathlib.Path) -> Any:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        return json.loads(read_bytes(path).decode("utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise ValueError(f"cannot load JSON {path.name}: {exc}") from exc
 
 
@@ -286,6 +653,10 @@ def normalize_relative_path(value: str, label: str) -> pathlib.PurePosixPath:
 
 def resolve_under(root: pathlib.Path, relative: str, label: str) -> pathlib.Path:
     path = normalize_relative_path(relative, label)
+    if _current_input_read_session() is not None:
+        # A Native enumeration root is a State-owned logical view, not a host
+        # directory whose symlinks or stat results may be consulted.
+        return root / pathlib.Path(*path.parts)
     resolved_root = root.resolve()
     resolved = (resolved_root / pathlib.Path(*path.parts)).resolve()
     try:
@@ -491,6 +862,12 @@ def validate_candidate_input_index(
 
 
 def import_module(name: str, path: pathlib.Path) -> Any:
+    current_reader = _current_input_read_session()
+    if current_reader is not None:
+        # M bytes authenticate the baseline only. Executable code comes from
+        # the separately sealed #768 CONTROL package and is pair-bound by the
+        # Native reader before it returns a singleton.
+        return _source_control_module(path)
     module_name = f"{name}_{hashlib.sha256(str(path.resolve()).encode()).hexdigest()[:12]}"
     spec = importlib.util.spec_from_file_location(module_name, path)
     if spec is None or spec.loader is None:
@@ -498,6 +875,39 @@ def import_module(name: str, path: pathlib.Path) -> Any:
     module = importlib.util.module_from_spec(spec)
     sys.modules[module_name] = module
     spec.loader.exec_module(module)
+    return module
+
+
+def _module_from_source_bytes(
+    name: str,
+    path: pathlib.Path,
+    source: bytes,
+    *,
+    source_runtime_reader: object | None = None,
+) -> Any:
+    """Compile one already-authenticated Source module without reopening it."""
+    if type(source) is not bytes:
+        raise TypeError("authenticated Source module must be exact bytes")
+    spec = importlib.util.spec_from_loader(name, loader=None, origin=str(path))
+    if spec is None:
+        raise ValueError(f"cannot load local validator {path.name}")
+    module = importlib.util.module_from_spec(spec)
+    module.__file__ = str(path)
+    if source_runtime_reader is not None:
+        if not callable(getattr(source_runtime_reader, "load_module", None)):
+            raise TypeError("source_runtime_reader must expose its exact load_module method")
+        if not callable(getattr(source_runtime_reader, "load_module", None)):
+            raise TypeError("source_runtime_reader must expose its exact load_module method")
+    previous = sys.modules.get(name)
+    sys.modules[name] = module
+    try:
+        exec(compile(source, str(path), "exec"), module.__dict__)
+    except BaseException:
+        if previous is None:
+            sys.modules.pop(name, None)
+        else:
+            sys.modules[name] = previous
+        raise
     return module
 
 
@@ -517,7 +927,14 @@ def validate_registered_sources(root: pathlib.Path, scopes: list[dict[str, Any]]
             raise ValueError(f"source profile ID does not match source registry: {source_id}")
         source_by_id[source_id] = {**item, "profile_value": profile}
 
-    actual_profiles = {path.relative_to(root).as_posix() for path in (root / "sources").glob("*.json")}
+    current_reader = _current_input_read_session()
+    if current_reader is None:
+        actual_profiles = {path.relative_to(root).as_posix() for path in (root / "sources").glob("*.json")}
+    else:
+        actual_profiles = {
+            path for path in current_reader.paths(prefix="sources/", suffix=".json")
+            if pathlib.PurePosixPath(path).parent == pathlib.PurePosixPath("sources")
+        }
     registered_profiles = {item["profile"] for item in source_by_id.values()}
     if actual_profiles != registered_profiles:
         raise ValueError(
@@ -679,7 +1096,11 @@ def load_and_validate_registry(root: pathlib.Path) -> tuple[dict[str, Any], dict
     policy_bytes = read_bytes(policy_path)
     policy = object_at(policy_path, "completeness policy")
     proof_validator = import_module("completeness_proof_contract", root / "scripts/validate-completeness-proof.py")
-    kind_policy = proof_validator.validate_policy(policy)
+    current_reader = _current_input_read_session()
+    kind_policy = proof_validator.validate_policy(
+        policy,
+        current_input_reader=current_reader.reader if current_reader is not None else None,
+    )
 
     registry_path = root / SCOPE_REGISTRY_PATH
     scope_registry = object_at(registry_path, "scope registry")
@@ -711,7 +1132,10 @@ def validate_input_index(
     index_path: pathlib.Path,
     scope_by_id: dict[str, dict[str, Any]],
     index_value: dict[str, Any] | None = None,
+    resolve_members_only: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, pathlib.Path]]:
+    if resolve_members_only and _current_input_read_session() is None:
+        raise ValueError("member-only input-index resolution requires the authenticated current-M reader")
     index = index_value if index_value is not None else object_at(index_path, "input index")
     validate_schema(index, root / INPUT_SCHEMA_PATH, "input index")
     parse_time(index["evaluation_epoch"], "input index evaluation_epoch")
@@ -823,10 +1247,21 @@ def validate_input_index(
         scope_roles.add(role_key)
         path_root = root if item["root"] == "repository" else input_root
         path = resolve_under(path_root, item["path"], f"input {input_id} path")
-        if not path.is_file():
-            raise ValueError(f"evidence input {input_id} is missing: {item['root']}:{item['path']}")
-        data = read_bytes(path)
-        if len(data) != item["bytes"] or sha256_bytes(data) != item["sha256"]:
+        if resolve_members_only:
+            # This pass resolves the exact byte members required to construct
+            # the sealed view. The later full enumeration calls this function
+            # without this flag and performs every observed length/SHA check.
+            data = None
+        elif _current_input_read_session() is None:
+            if not path.is_file():
+                raise ValueError(f"evidence input {input_id} is missing: {item['root']}:{item['path']}")
+            data = read_bytes(path)
+        else:
+            try:
+                data = read_bytes(path)
+            except FileNotFoundError as exc:
+                raise ValueError(f"evidence input {input_id} is missing: {item['root']}:{item['path']}") from exc
+        if data is not None and (len(data) != item["bytes"] or sha256_bytes(data) != item["sha256"]):
             raise ValueError(f"evidence input {input_id} byte count or SHA-256 differs")
         if item["observed_at"] is not None:
             parse_time(item["observed_at"], f"input {input_id} observed_at")
@@ -864,6 +1299,201 @@ def validate_input_index(
     return index, checked_inputs, resolved
 
 
+def enumerate_current_input_requirements(
+    *,
+    root: pathlib.Path,
+    current_main_sha: str,
+    bootstrap_bytes: dict[str, bytes],
+    source_profile_inventory: tuple[str, ...],
+    source_profile_bytes: dict[str, bytes],
+    source_control_reader: object,
+) -> tuple[dict[str, Any], ...]:
+    """Resolve the exact current-M members required by the existing rollup walk.
+
+    The caller supplies only Native-authenticated bootstrap bytes and the
+    complete M ``sources/*.json`` inventory, including exact bytes for every
+    listed profile. This Source-owned path resolver validates the current
+    policy/scope/source-profile relationship, resolves every indexed input
+    with the same index validator used by the rollup, and emits finite rows
+    partitioned into ``m_repository``, ``external_evidence``, and
+    ``source_runtime`` domains. Runtime helper rows are never sent through
+    the M reader. The resolver deliberately does not read indexed payload
+    bytes: Native first materializes this finite member set, then full
+    enumeration validates every indexed length and digest through its metered
+    ``current_input_reader``.
+    """
+    root = pathlib.Path(root)
+    if not root.is_absolute():
+        raise ValueError("current-M requirement root must be an absolute owner-view path")
+    if not isinstance(current_main_sha, str) or not SHA1_RE.fullmatch(current_main_sha):
+        raise ValueError("current_main_sha must be a full lowercase Git SHA1")
+    if type(bootstrap_bytes) is not dict or set(bootstrap_bytes) != set(CURRENT_INPUT_REQUIREMENT_BOOTSTRAP_PATHS):
+        raise ValueError("bootstrap_bytes must contain the exact fixed current-M bootstrap path set")
+    for path, value in bootstrap_bytes.items():
+        normalize_relative_path(path, "current-M bootstrap path")
+        if type(value) is not bytes:
+            raise TypeError(f"current-M bootstrap member must be exact bytes: {path}")
+    if type(source_profile_inventory) is not tuple:
+        raise TypeError("source_profile_inventory must be the complete sorted tuple from the Native M view")
+    normalized_inventory = tuple(
+        normalize_relative_path(path, "current-M source-profile inventory path").as_posix()
+        for path in source_profile_inventory
+    )
+    if (
+        normalized_inventory != tuple(sorted(set(normalized_inventory)))
+        or any(not path.startswith("sources/") or not path.endswith(".json") for path in normalized_inventory)
+    ):
+        raise ValueError("source_profile_inventory must be unique, sorted, and limited to sources/*.json")
+    if type(source_profile_bytes) is not dict:
+        raise TypeError("source_profile_bytes must be an exact path-to-bytes mapping")
+    for path, value in source_profile_bytes.items():
+        normalized = normalize_relative_path(path, "current-M source-profile path").as_posix()
+        if normalized != path or type(value) is not bytes:
+            raise TypeError(f"source-profile members must map normalized paths to exact bytes: {path}")
+
+    try:
+        source_registry = json.loads(bootstrap_bytes[SOURCE_REGISTRY_PATH].decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("authenticated sustainable-coverage registry is not valid UTF-8 JSON") from exc
+    configured = source_registry.get("supported_sources") if isinstance(source_registry, dict) else None
+    if not isinstance(configured, list):
+        raise ValueError("authenticated sustainable-coverage registry has no supported_sources list")
+    registered_profile_paths: set[str] = set()
+    for row in configured:
+        if not isinstance(row, dict):
+            raise ValueError("authenticated sustainable-coverage registry has a malformed source row")
+        registered_profile_paths.add(
+            normalize_relative_path(row.get("profile"), "registered source profile").as_posix()
+        )
+    if set(source_profile_bytes) != set(normalized_inventory):
+        raise ValueError("source_profile_bytes must contain exactly the complete current-M sources inventory")
+    if not registered_profile_paths.issubset(set(normalized_inventory)):
+        raise ValueError("registered source profiles are absent from the complete current-M sources inventory")
+
+    reader_bytes = dict(bootstrap_bytes)
+    reader_bytes.update(source_profile_bytes)
+    reader = _CurrentInputRequirementReader(root, reader_bytes, normalized_inventory)
+    session = _CurrentInputReadSession(root, reader)
+    if not callable(getattr(source_control_reader, "load_module", None)):
+        raise TypeError("source_control_reader must expose exact load_module(path, *, m_baseline_bytes)")
+    token = _ACTIVE_CURRENT_INPUT_READ_SESSION.set(session)
+    control_token = _ACTIVE_SOURCE_CONTROL_READER.set(source_control_reader)
+    try:
+        scope_registry, _policy, scope_by_id = load_and_validate_registry(root)
+        index, checked_inputs, _resolved = validate_input_index(
+            root=root,
+            input_root=root,
+            index_path=root / INPUT_INDEX_PATH,
+            scope_by_id=scope_by_id,
+            resolve_members_only=True,
+        )
+    finally:
+        _ACTIVE_SOURCE_CONTROL_READER.reset(control_token)
+        _ACTIVE_CURRENT_INPUT_READ_SESSION.reset(token)
+
+    requirements: dict[tuple[str, str], dict[str, Any]] = {}
+
+    def add(path_value: str, domain: str, provenance: dict[str, Any]) -> None:
+        path = normalize_relative_path(path_value, "current-M member requirement").as_posix()
+        key = (domain, path)
+        row = requirements.setdefault(key, {"path": path, "domain": domain, "provenance": []})
+        marker = json.dumps(provenance, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        existing = {
+            json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            for item in row["provenance"]
+        }
+        if marker not in existing:
+            row["provenance"].append(provenance)
+
+    for position, path in enumerate(CURRENT_INPUT_REQUIREMENT_BOOTSTRAP_PATHS):
+        seed_row = {"path": path, "position": position}
+        add(path, "m_repository", {
+            "source_kind": "bootstrap_contract",
+            "source_path": "scripts/generate-completeness-proof-rollup.py",
+            "source_row_id": path,
+            "field_path": ("CURRENT_INPUT_REQUIREMENT_BOOTSTRAP_PATHS", position),
+            "row_sha256": _canonical_history_json_sha256(seed_row),
+        })
+
+    for position, (path, rule_id, callsite_id) in enumerate(CURRENT_INPUT_CONTROL_MEMBER_RULES):
+        rule_row = {"path": path, "rule_id": rule_id, "callsite_id": callsite_id}
+        add(path, "m_repository", {
+            "source_kind": "current_source_control",
+            "source_path": "scripts/generate-completeness-proof-rollup.py",
+            "source_row_id": rule_id,
+            "field_path": ("CURRENT_INPUT_CONTROL_MEMBER_RULES", position),
+            "row_sha256": _canonical_history_json_sha256(rule_row),
+        })
+
+    for position, (path, rule_id, callsite_id) in enumerate(CURRENT_INPUT_SOURCE_RUNTIME_RULES):
+        runtime_row = {"path": path, "rule_id": rule_id, "callsite_id": callsite_id}
+        add(path, "source_runtime", {
+            "source_kind": "source_runtime_control",
+            "source_path": "scripts/generate-completeness-proof-rollup.py",
+            "source_row_id": rule_id,
+            "field_path": ("CURRENT_INPUT_SOURCE_RUNTIME_RULES", position),
+            "row_sha256": _canonical_history_json_sha256(runtime_row),
+        })
+
+    for position, path in enumerate(CURRENT_INPUT_CONTROL_DATA_PATHS):
+        control_row = {"path": path, "position": position}
+        add(path, "m_repository", {
+            "source_kind": "current_source_control_data",
+            "source_path": "scripts/generate-completeness-proof-rollup.py",
+            "source_row_id": path,
+            "field_path": ("CURRENT_INPUT_CONTROL_DATA_PATHS", position),
+            "row_sha256": _canonical_history_json_sha256(control_row),
+        })
+
+    registry_index = {
+        row["profile"]: (position, row)
+        for position, row in enumerate(configured)
+        if isinstance(row, dict) and isinstance(row.get("profile"), str)
+    }
+    for position, path in enumerate(normalized_inventory):
+        inventory_row = {"path": path, "position": position}
+        add(path, "m_repository", {
+            "source_kind": "complete_source_profile_inventory",
+            "source_path": "scripts/generate-completeness-proof-rollup.py",
+            "source_row_id": path,
+            "field_path": ("sources_prefix_inventory", position),
+            "row_sha256": _canonical_history_json_sha256(inventory_row),
+        })
+    for path in sorted(registered_profile_paths):
+        position, profile_row = registry_index[path]
+        add(path, "m_repository", {
+            "source_kind": "sustainable_source_registry",
+            "source_path": SOURCE_REGISTRY_PATH,
+            "source_row_id": profile_row.get("source_id"),
+            "field_path": ("supported_sources", position),
+            "row_sha256": _canonical_history_json_sha256(profile_row),
+        })
+
+    for position, item in enumerate(index["inputs"]):
+        if item["root"] == "repository":
+            domain = "m_repository"
+        elif item["root"] == "evidence":
+            domain = "external_evidence"
+        else:
+            raise ValueError(f"input {item['input_id']} uses an unsupported root during member resolution")
+        add(item["path"], domain, {
+            "source_kind": "input_index",
+            "source_path": INPUT_INDEX_PATH,
+            "source_row_id": item["input_id"],
+            "field_path": ("inputs", position),
+            "row_sha256": _canonical_history_json_sha256(item),
+        })
+
+    output: list[dict[str, Any]] = []
+    for domain, path in sorted(requirements):
+        row = requirements[(domain, path)]
+        row["provenance"].sort(
+            key=lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        )
+        output.append(row)
+    return tuple(output)
+
+
 def input_path(item: dict[str, Any]) -> str:
     return item["path"] if item["root"] == "repository" else f"evidence/{item['path']}"
 
@@ -885,6 +1515,8 @@ def validate_data_go_operation_manifest(root: pathlib.Path, manifest_path: pathl
     expectation = object_at(module.EXPECTATION, "data.go.kr operation denominator expectation")
     expectation_schema = object_at(module.EXPECTATION_SCHEMA, "data.go.kr denominator expectation schema")
     release_manifest = object_at(module.RELEASE_MANIFEST, "release manifest")
+    current_reader = _current_input_read_session()
+    source_control_reader = _ACTIVE_SOURCE_CONTROL_READER.get()
     module.validate(
         manifest,
         schema,
@@ -893,6 +1525,8 @@ def validate_data_go_operation_manifest(root: pathlib.Path, manifest_path: pathl
         expectation,
         registry_path=module.REGISTRY,
         expectation_schema=expectation_schema,
+        current_input_reader=current_reader.reader if current_reader is not None else None,
+        source_control_reader=source_control_reader,
     )
     return manifest
 
@@ -989,6 +1623,70 @@ def validate_import_receipt_arithmetic(
 def git_read_only(root: pathlib.Path, args: list[str], *, check: bool = True) -> bytes:
     if not args or args[0] not in {"show", "merge-base", "rev-parse"}:
         raise ValueError("completeness evidence may use only local read-only git show/merge-base/rev-parse")
+
+    history = _ACTIVE_PRODUCER_HISTORY.get()
+    if history is not None:
+        return history.git_read_only(root, args, check=check)
+
+    source_git = _load_canonical_source_git()
+    if len(args) == 2 and args[0] == "show":
+        target = args[1]
+        revision, separator, relative_path = target.partition(":")
+        if (
+            separator
+            and re.fullmatch(r"[a-f0-9]{40}", revision)
+            and relative_path
+            and "\x00" not in relative_path
+        ):
+            try:
+                with _source_runtime_call_scope(source_git):
+                    return source_git.read_blob(root, revision, relative_path, check=check)
+            except subprocess.CalledProcessError as exc:
+                if not check:
+                    return b""
+                raise ValueError(f"local git evidence check failed: git {' '.join(args)}") from exc
+    if args == ["rev-parse", "refs/remotes/origin/main"]:
+        try:
+            with _source_runtime_call_scope(source_git):
+                value = source_git.trusted_origin_main(root, check=check)
+        except subprocess.CalledProcessError as exc:
+            if not check:
+                return b""
+            raise ValueError(f"local git evidence check failed: git {' '.join(args)}") from exc
+        return value.encode("ascii") + (b"\n" if value else b"")
+    if (
+        len(args) == 2
+        and args[0] == "rev-parse"
+        and (match := re.fullmatch(r"([a-f0-9]{40})\^\{tree\}", args[1]))
+    ):
+        try:
+            with _source_runtime_call_scope(source_git):
+                value = source_git.read_tree_oid(root, match.group(1), check=check)
+        except subprocess.CalledProcessError as exc:
+            if not check:
+                return b""
+            raise ValueError(f"local git evidence check failed: git {' '.join(args)}") from exc
+        return value.encode("ascii") + (b"\n" if value else b"")
+    if (
+        len(args) == 4
+        and args[:2] == ["merge-base", "--is-ancestor"]
+        and all(re.fullmatch(r"[a-f0-9]{40}", value) for value in args[2:])
+    ):
+        try:
+            with _source_runtime_call_scope(source_git):
+                is_ancestor = source_git.is_ancestor(root, args[2], args[3])
+        except subprocess.CalledProcessError as exc:
+            if check:
+                raise ValueError(f"local git evidence check failed: git {' '.join(args)}") from exc
+            return b""
+        if is_ancestor:
+            return b""
+        if check:
+            raise ValueError(f"local git evidence check failed: git {' '.join(args)}")
+        return b""
+
+    if not source_git.legacy_dispatch_allowed():
+        raise ValueError("Native completeness evidence may use only registered typed Git reads")
     result = subprocess.run(
         ["git", *args], cwd=root, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
@@ -998,6 +1696,2229 @@ def git_read_only(root: pathlib.Path, args: list[str], *, check: bool = True) ->
         return b""
     return result.stdout
 
+
+def _canonical_history_json_sha256(value: Any) -> str:
+    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+class _SourceStageHistoryTraversal:
+    """Resolve only reads selected by the existing source-stage validator branch."""
+
+    _SCHEMA_CALLSITES = {
+        "source refresh policy": "source.validate_source_observation.policy_schema",
+        "source refresh evidence": "source.validate_source_observation.evidence_schema",
+        "source catalog diff": "source.validate_source_observation.diff_schema",
+        "source refresh work packet": "source.validate_source_observation.work_packet_schema",
+    }
+    _SCHEMA_PATHS = {
+        "source refresh policy": "schemas/datapan.source-refresh-policy.v1.schema.json",
+        "source refresh evidence": "schemas/datapan.upstream-refresh-evidence.v1.schema.json",
+        "source catalog diff": "schemas/datapan.catalog-diff.v1.schema.json",
+        "source refresh work packet": "schemas/datapan.upstream-refresh-work-packet.v1.schema.json",
+    }
+
+    def __init__(
+        self,
+        *,
+        root: pathlib.Path,
+        current_main_sha: str,
+        history_reader: object,
+        input_id: str,
+        input_path: str,
+        input_index_row_index: int,
+        input_index_row: dict[str, Any],
+        run: dict[str, Any],
+    ) -> None:
+        self.root = root.resolve()
+        self.current_main_sha = current_main_sha
+        self.history_reader = history_reader
+        self.input_id = input_id
+        self.input_path = input_path
+        self.input_index_row_index = input_index_row_index
+        self.input_index_row_sha256 = _canonical_history_json_sha256(input_index_row)
+        self.run = run
+        self.revision = run.get("head_sha")
+        if not isinstance(self.revision, str) or not SHA1_RE.fullmatch(self.revision):
+            raise ValueError("indexed source workflow run lacks a full source revision")
+        self.run_row_sha256 = _canonical_history_json_sha256(run)
+        self.requests: list[dict[str, Any]] = []
+        self._responses: dict[str, bytes | bool | str] = {}
+        self._policy_request_id: str | None = None
+        self._manifest_request_id: str | None = None
+        self._manifest: dict[str, Any] | None = None
+
+        # The producer-history request selectors are derived from these exact
+        # checked input rows. They are populated by the top-level enumerator
+        # after the ordinary input-index validator has authenticated the full
+        # current-M packet.
+        self._input_index: dict[str, Any] | None = None
+        self._current_inputs: list[dict[str, Any]] = []
+        self._resolved_inputs: dict[str, pathlib.Path] = {}
+        self._input_positions: dict[str, int] = {}
+        self._input_rows: dict[str, dict[str, Any]] = {}
+        self._publisher_request_ids: dict[str, str] = {}
+        self._history_request_ids: dict[str, str] = {}
+        self._publisher_context: dict[str, Any] = {}
+        self._stage_lfs_selectors: dict[str, dict[str, Any]] = {}
+
+    def bind_current_inputs(
+        self,
+        *,
+        input_index: dict[str, Any],
+        current_inputs: list[dict[str, Any]],
+        resolved_inputs: dict[str, pathlib.Path],
+    ) -> None:
+        """Bind selectors to rows already checked by ``validate_input_index``."""
+        rows = input_index.get("inputs")
+        if not isinstance(rows, list):
+            raise ValueError("producer history requires the authenticated current input-index rows")
+        positions: dict[str, int] = {}
+        index_rows: dict[str, dict[str, Any]] = {}
+        for position, row in enumerate(rows):
+            if not isinstance(row, dict) or not isinstance(row.get("input_id"), str):
+                raise ValueError("producer history input-index row is malformed")
+            input_id = row["input_id"]
+            if input_id in positions:
+                raise ValueError("producer history input index repeats an input ID")
+            positions[input_id] = position
+            index_rows[input_id] = row
+        self._input_index = input_index
+        self._current_inputs = current_inputs
+        self._resolved_inputs = resolved_inputs
+        self._input_positions = positions
+        self._input_rows = index_rows
+
+    @staticmethod
+    def _at_path(value: Any, path: tuple[str | int, ...]) -> Any:
+        for component in path:
+            if isinstance(component, int):
+                if not isinstance(value, list) or component < 0 or component >= len(value):
+                    raise ValueError("producer history provenance path does not select a list member")
+                value = value[component]
+            else:
+                if not isinstance(value, dict) or component not in value:
+                    raise ValueError("producer history provenance path does not select a field")
+                value = value[component]
+        return value
+
+    def _input_item(self, role: str) -> dict[str, Any]:
+        item = single_role(self._current_inputs, role, required=False)
+        if item is None:
+            raise ValueError(f"producer history selector lacks current-M input role {role}")
+        if item["input_id"] not in self._input_rows or item["input_id"] not in self._resolved_inputs:
+            raise ValueError("producer history selector is outside the authenticated input-index binding")
+        return item
+
+    def _stage_input_item(self, stage: str, role: str) -> dict[str, Any]:
+        matches = [
+            item for item in self._current_inputs
+            if item.get("role") == role and item.get("subject", {}).get("stage") == stage
+        ]
+        if len(matches) != 1:
+            raise ValueError(f"producer history requires exactly one {stage} input role {role}")
+        item = matches[0]
+        if item["input_id"] not in self._input_rows or item["input_id"] not in self._resolved_inputs:
+            raise ValueError("producer history stage selector is outside authenticated current-M inputs")
+        return item
+
+    def _input_value(self, role: str) -> Any:
+        item = self._input_item(role)
+        return load_json(self._resolved_inputs[item["input_id"]])
+
+    def _current_provenance(
+        self,
+        *,
+        role: str,
+        evidence_parent: Any,
+        evidence_field_path: tuple[str | int, ...],
+        index_field_path: tuple[str | int, ...] | None,
+        expected_value: Any,
+    ) -> tuple[dict[str, Any], ...]:
+        item = self._input_item(role)
+        evidence_value = self._at_path(evidence_parent, evidence_field_path)
+        if evidence_value != expected_value:
+            raise ValueError(f"producer history {role} evidence no longer selects its validated value")
+        provenance: list[dict[str, Any]] = []
+        if index_field_path is not None:
+            index_row = self._input_rows[item["input_id"]]
+            if self._at_path(index_row, index_field_path) != expected_value:
+                raise ValueError(f"producer history {role} index subject does not bind its selected value")
+            position = self._input_positions[item["input_id"]]
+            provenance.append({
+                "source_request_id": None,
+                "path": INPUT_INDEX_PATH,
+                "field_path": ("inputs", position, *index_field_path),
+                "row_sha256": _canonical_history_json_sha256(index_row),
+            })
+        provenance.append({
+            "source_request_id": None,
+            "path": input_path(item),
+            "field_path": evidence_field_path,
+            "row_sha256": _canonical_history_json_sha256(evidence_parent),
+        })
+        return tuple(provenance)
+
+    def _item_provenance(
+        self,
+        *,
+        item: dict[str, Any],
+        evidence_parent: Any,
+        evidence_field_path: tuple[str | int, ...],
+        index_field_path: tuple[str | int, ...] | None,
+        expected_value: Any,
+    ) -> tuple[dict[str, Any], ...]:
+        if item["input_id"] not in self._input_rows:
+            raise ValueError("producer history provenance input is outside the authenticated index")
+        evidence_value = self._at_path(evidence_parent, evidence_field_path)
+        if evidence_value != expected_value:
+            raise ValueError("producer history evidence no longer selects its validated value")
+        provenance: list[dict[str, Any]] = []
+        if index_field_path is not None:
+            index_row = self._input_rows[item["input_id"]]
+            if self._at_path(index_row, index_field_path) != expected_value:
+                raise ValueError("producer history index subject does not bind its selected value")
+            position = self._input_positions[item["input_id"]]
+            provenance.append({
+                "source_request_id": None,
+                "path": INPUT_INDEX_PATH,
+                "field_path": ("inputs", position, *index_field_path),
+                "row_sha256": _canonical_history_json_sha256(index_row),
+            })
+        provenance.append({
+            "source_request_id": None,
+            "path": input_path(item),
+            "field_path": evidence_field_path,
+            "row_sha256": _canonical_history_json_sha256(evidence_parent),
+        })
+        return tuple(provenance)
+
+    def _index_field_provenance(
+        self, *, item: dict[str, Any], field_path: tuple[str | int, ...], expected_value: Any,
+    ) -> tuple[dict[str, Any], ...]:
+        index_row = self._input_rows.get(item.get("input_id"))
+        if not isinstance(index_row, dict) or self._at_path(index_row, field_path) != expected_value:
+            raise ValueError("producer history current-M index row does not bind the selected field")
+        return ({
+            "source_request_id": None,
+            "path": INPUT_INDEX_PATH,
+            "field_path": ("inputs", self._input_positions[item["input_id"]], *field_path),
+            "row_sha256": _canonical_history_json_sha256(index_row),
+        },)
+
+    def _history_request(
+        self,
+        *,
+        item: dict[str, Any],
+        callsite_id: str,
+        revision: str,
+        path: str,
+        provenance: tuple[dict[str, Any], ...],
+        depends_on: tuple[str, ...] = (),
+        absence_policy: str = "required",
+    ) -> bytes:
+        fields = {
+            "kind": "blob",
+            "input_id": item["input_id"],
+            "callsite_id": callsite_id,
+            "provenance": provenance,
+            "depends_on": tuple(sorted(set(depends_on))),
+            "commit_sha": revision,
+            "path": path,
+            "absence_policy": absence_policy,
+        }
+        response = self._request(fields, "read_blob")
+        self._history_request_ids[callsite_id] = _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **fields,
+        })
+        if not response and absence_policy == "required":
+            raise FileNotFoundError(f"required historical producer blob is absent: {path}")
+        if not response and absence_policy == "optional_probe":
+            raise ValueError(f"authenticated optional historical producer blob is absent: {path}")
+        return response
+
+    def _historical_import_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        """Resolve only the exact Git reads made by the retained import validator."""
+        if root.resolve() != self.root:
+            raise ValueError("historical import blob request uses a different Source root")
+        caller_name = caller_frame.f_code.co_name
+        attestation_item = self._input_item("historical_import_attestation")
+        attestation = caller_frame.f_locals.get("attestation")
+        if not isinstance(attestation, dict):
+            attestation = self._input_value("historical_import_attestation")
+        merge_commit = attestation.get("import", {}).get("merge_commit")
+        if not isinstance(merge_commit, str) or not SHA1_RE.fullmatch(merge_commit):
+            raise ValueError("historical import blob selector lacks its authenticated merge commit")
+
+        if caller_name == "validate_historical_import":
+            if not check:
+                raise ValueError("historical import evidence reads require checked Git semantics")
+            role_specs = (
+                ("historical_import_admission", "admission", "historical_import.admission.bytes"),
+                ("historical_import_receipt", "receipt", "historical_import.receipt.bytes"),
+            )
+            for role, local_name, callsite in role_specs:
+                item = self._input_item(role)
+                selected_path = normalize_relative_path(item["path"], f"{role} input path").as_posix()
+                if revision == merge_commit and path == selected_path:
+                    row_provenance = self._index_field_provenance(
+                        item=item, field_path=("path",), expected_value=item["path"],
+                    )
+                    merge_provenance = self._current_provenance(
+                        role="historical_import_attestation", evidence_parent=attestation,
+                        evidence_field_path=("import", "merge_commit"), index_field_path=None,
+                        expected_value=merge_commit,
+                    )
+                    return self._history_request(
+                        item=item,
+                        callsite_id=callsite,
+                        revision=merge_commit,
+                        path=selected_path,
+                        provenance=self._merge_provenance(row_provenance, merge_provenance),
+                        depends_on=(self._history_request_ids["historical_import.merge_commit.main_ancestor"],),
+                    )
+
+            attestation_revision = attestation_item.get("producer", {}).get("revision")
+            attestation_path = normalize_relative_path(
+                attestation_item["path"], "historical attestation path",
+            ).as_posix()
+            if revision == attestation_revision and path == attestation_path:
+                ancestry_id = self._history_request_ids.get(
+                    "historical_import.attestation.main_ancestor",
+                )
+                if ancestry_id is None:
+                    raise ValueError("historical attestation bytes preceded its exact ancestry proof")
+                return self._history_request(
+                    item=attestation_item,
+                    callsite_id="historical_import.attestation.bytes",
+                    revision=attestation_revision,
+                    path=attestation_path,
+                    provenance=self._index_field_provenance(
+                        item=attestation_item,
+                        field_path=("producer", "revision"),
+                        expected_value=attestation_revision,
+                    ),
+                    depends_on=(ancestry_id,),
+                )
+
+            binding_specs = (
+                ("registry", "manifest", "historical_import.release_manifest.bytes"),
+                ("registry", "release_ledger", "historical_import.release_ledger.bytes"),
+            )
+            for parent_key, key, callsite in binding_specs:
+                binding = attestation.get(parent_key, {}).get(key)
+                if not isinstance(binding, dict):
+                    continue
+                selected_path = normalize_relative_path(
+                    binding.get("path"), f"historical {key} path",
+                ).as_posix()
+                if revision != merge_commit or path != selected_path:
+                    continue
+                callsite_key = (
+                    "historical_import.merge_commit.main_ancestor"
+                    if key == "manifest" else "historical_import.release_manifest.bytes"
+                )
+                dependency_ids = [self._history_request_ids[callsite_key]]
+                if key == "release_ledger":
+                    manifest_id = self._history_request_ids.get(
+                        "historical_import.release_manifest.bytes",
+                    )
+                    if manifest_id is None:
+                        raise ValueError("historical release ledger preceded its selected release manifest")
+                    dependency_ids.append(manifest_id)
+                provenance = self._current_provenance(
+                    role="historical_import_attestation", evidence_parent=attestation,
+                    evidence_field_path=(parent_key, key, "path"), index_field_path=None,
+                    expected_value=binding.get("path"),
+                )
+                digest_provenance = self._current_provenance(
+                    role="historical_import_attestation", evidence_parent=attestation,
+                    evidence_field_path=(parent_key, key, "sha256"), index_field_path=None,
+                    expected_value=binding.get("sha256"),
+                )
+                return self._history_request(
+                    item=attestation_item,
+                    callsite_id=callsite,
+                    revision=merge_commit,
+                    path=selected_path,
+                    provenance=self._merge_provenance(provenance, digest_provenance),
+                    depends_on=tuple(dependency_ids),
+                )
+            raise ValueError(
+                f"historical import Git path is outside its exact current validator selector: {revision}:{path}"
+            )
+
+        if caller_name == "validate_committed_release_artifact":
+            if not check or revision != merge_commit:
+                raise ValueError("historical release artifact read differs from its checked merge-commit selector")
+            parent_frame = caller_frame.f_back
+            if parent_frame is None or parent_frame.f_code.co_name != "validate_historical_import":
+                raise ValueError("historical release artifact read lacks its exact import validator parent")
+            if path == "manifest.json":
+                binding = attestation.get("registry", {}).get("manifest")
+                if not isinstance(binding, dict) or binding.get("path") != path:
+                    raise ValueError("historical release artifact manifest differs from its attestation path")
+                provenance = self._merge_provenance(
+                    self._current_provenance(
+                        role="historical_import_attestation", evidence_parent=attestation,
+                        evidence_field_path=("registry", "manifest", "path"), index_field_path=None,
+                        expected_value=path,
+                    ),
+                    self._current_provenance(
+                        role="historical_import_attestation", evidence_parent=attestation,
+                        evidence_field_path=("registry", "manifest", "sha256"), index_field_path=None,
+                        expected_value=binding.get("sha256"),
+                    ),
+                )
+                return self._history_request(
+                    item=attestation_item,
+                    callsite_id="historical_import.validate_committed_release_artifact.manifest",
+                    revision=merge_commit,
+                    path=path,
+                    provenance=provenance,
+                    depends_on=(
+                        self._history_request_ids["historical_import.merge_commit.main_ancestor"],
+                    ),
+                )
+
+            artifact_path = parent_frame.f_locals.get("source_path")
+            manifest = parent_frame.f_locals.get("historical_manifest")
+            if not isinstance(artifact_path, str) or path != artifact_path or not isinstance(manifest, dict):
+                raise ValueError("historical release artifact path is not selected by its exact manifest")
+            rows = manifest.get("artifacts")
+            selected = [
+                (position, row) for position, row in enumerate(rows or [])
+                if isinstance(row, dict) and row.get("path") == path
+            ]
+            if len(selected) != 1:
+                raise ValueError("historical release artifact manifest does not uniquely select its path")
+            position, row = selected[0]
+            expected_sha = caller_frame.f_locals.get("expected_sha256")
+            expected_bytes = caller_frame.f_locals.get("expected_bytes")
+            if row.get("sha256") != expected_sha or row.get("bytes") != expected_bytes:
+                raise ValueError("historical release artifact request differs from its validated manifest row")
+            manifest_id = self._history_request_ids.get(
+                "historical_import.validate_committed_release_artifact.manifest",
+            )
+            if manifest_id is None:
+                raise ValueError("historical release artifact pointer preceded its exact manifest read")
+            provenance = ({
+                "source_request_id": manifest_id,
+                "path": "manifest.json",
+                "field_path": ("artifacts", position, "path"),
+                "row_sha256": _canonical_history_json_sha256(row),
+            },)
+            return self._history_request(
+                item=attestation_item,
+                callsite_id="historical_import.validate_committed_release_artifact.source_artifact",
+                revision=merge_commit,
+                path=path,
+                provenance=provenance,
+                depends_on=(manifest_id,),
+            )
+
+        raise ValueError("historical import blob read is outside an extracted validator callsite")
+
+    def _attestation_revision(self, item: dict[str, Any]) -> str:
+        revision = item.get("producer", {}).get("revision")
+        if not isinstance(revision, str) or not SHA1_RE.fullmatch(revision):
+            raise ValueError("historical attestation row lacks a full main revision")
+        return revision
+
+    def _historical_attestation_read_id(self, item: dict[str, Any]) -> str:
+        revision = self._attestation_revision(item)
+        fields = {
+            "kind": "blob",
+            "input_id": item["input_id"],
+            "callsite_id": "historical_import.attestation.bytes",
+            "provenance": self._index_field_provenance(
+                item=item, field_path=("producer", "revision"), expected_value=revision,
+            ),
+            "depends_on": (),
+            "commit_sha": revision,
+            "path": item["path"],
+            "absence_policy": "required",
+        }
+        return _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **fields,
+        })
+
+    def _historical_import_ancestry(
+        self, *, root: pathlib.Path, revision: str, label: str, caller_frame: Any,
+    ) -> str:
+        if root.resolve() != self.root or caller_frame.f_code.co_name not in {
+            "validate_historical_import", "validate_committed_release_artifact",
+        }:
+            raise ValueError("historical import ancestry is outside its exact existing validator")
+        attestation_item = self._input_item("historical_import_attestation")
+        attestation = caller_frame.f_locals.get("attestation")
+        if not isinstance(attestation, dict):
+            attestation = self._input_value("historical_import_attestation")
+        if caller_frame.f_code.co_name == "validate_historical_import" and label == "historical import merge commit":
+            selected = attestation.get("import", {}).get("merge_commit")
+            provenance = self._current_provenance(
+                role="historical_import_attestation", evidence_parent=attestation,
+                evidence_field_path=("import", "merge_commit"), index_field_path=None,
+                expected_value=selected,
+            )
+            callsite = "historical_import.merge_commit.main_ancestor"
+        elif caller_frame.f_code.co_name == "validate_historical_import" and label == "historical attestation main revision":
+            selected = self._attestation_revision(attestation_item)
+            provenance = self._index_field_provenance(
+                item=attestation_item, field_path=("producer", "revision"), expected_value=selected,
+            )
+            callsite = "historical_import.attestation.main_ancestor"
+        elif caller_frame.f_code.co_name == "validate_committed_release_artifact" and label == "historically imported scope source artifact Registry commit":
+            selected = attestation.get("import", {}).get("merge_commit")
+            if revision != selected:
+                raise ValueError("historical artifact ancestry differs from its attestation merge commit")
+            provenance = self._current_provenance(
+                role="historical_import_attestation", evidence_parent=attestation,
+                evidence_field_path=("import", "merge_commit"), index_field_path=None,
+                expected_value=selected,
+            )
+            callsite = "historical_import.validate_committed_release_artifact.main_ancestor"
+        else:
+            raise ValueError("historical import ancestry label is outside a fixed selector")
+        if revision != selected:
+            raise ValueError("historical import ancestry revision differs from its exact attestation selector")
+        fields = {
+            "kind": "ancestry",
+            "input_id": attestation_item["input_id"],
+            "callsite_id": callsite,
+            "provenance": provenance,
+            "depends_on": (),
+            "ancestor_sha": revision,
+            "descendant_sha": self.current_main_sha,
+        }
+        result = self._request(fields, "is_ancestor")
+        self._history_request_ids[callsite] = _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **fields,
+        })
+        if not result:
+            raise ValueError(f"{label} is not reachable from the selected current main revision")
+        return self.current_main_sha
+
+    def _stage_run_provenance(self, stage: str, run: dict[str, Any]) -> tuple[dict[str, Any], ...]:
+        run_role = "pipeline_run" if stage in {"source", "processor", "promotion", "health"} else {
+            "publisher": "publication_producer_run", "acknowledgement": "acknowledgement_run",
+        }[stage]
+        item = self._stage_input_item(stage, run_role)
+        head_sha = run.get("head_sha")
+        if not isinstance(head_sha, str) or not SHA1_RE.fullmatch(head_sha):
+            raise ValueError(f"{stage} stage run lacks a full selected head SHA")
+        return self._item_provenance(
+            item=item,
+            evidence_parent=run,
+            evidence_field_path=("head_sha",),
+            index_field_path=("producer", "revision"),
+            expected_value=head_sha,
+        )
+
+    @staticmethod
+    def _merge_provenance(*groups: tuple[dict[str, Any], ...]) -> tuple[dict[str, Any], ...]:
+        # Preserve caller order while removing only byte-identical provenance
+        # rows. Repeated receipt/binding selectors are meaningful only once.
+        merged: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        for group in groups:
+            for row in group:
+                key = _canonical_history_json_sha256(row)
+                if key not in seen:
+                    merged.append(row)
+                    seen.add(key)
+        return tuple(merged)
+
+    def _publisher_ids(self, *callsites: str) -> tuple[str, ...]:
+        ids = [self._publisher_request_ids[item] for item in callsites if item in self._publisher_request_ids]
+        return tuple(sorted(set(ids)))
+
+    def _record_publisher_request(
+        self,
+        fields: dict[str, Any],
+        method: str,
+        *,
+        callsite_id: str,
+    ) -> Any:
+        request_id = _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **fields,
+        })
+        response = self._request(fields, method)
+        self._publisher_request_ids[callsite_id] = request_id
+        return response
+
+    def _publisher_source_sha(self) -> str:
+        source_sha = self._publisher_context.get("source_sha")
+        if not isinstance(source_sha, str) or not SHA1_RE.fullmatch(source_sha):
+            raise ValueError("publisher history has no exact validated receipt source SHA")
+        return source_sha
+
+    def _publisher_source_provenance(self, *, include_tree: bool = False) -> tuple[dict[str, Any], ...]:
+        receipt = self._publisher_context.get("receipt")
+        binding = self._publisher_context.get("binding")
+        if not isinstance(receipt, dict) or not isinstance(binding, dict):
+            raise ValueError("publisher history lacks exact current receipt and source-binding rows")
+        receipt_source = receipt.get("source_binding")
+        if not isinstance(receipt_source, dict):
+            raise ValueError("publisher receipt lacks its source-binding object")
+        source_sha = self._publisher_source_sha()
+        groups = [
+            self._current_provenance(
+                role="publication_receipt", evidence_parent=receipt,
+                evidence_field_path=("source_binding", "source_sha"),
+                index_field_path=("subject", "source_revision"), expected_value=source_sha,
+            ),
+            self._current_provenance(
+                role="publication_source_binding", evidence_parent=binding,
+                evidence_field_path=("source_sha",),
+                index_field_path=("subject", "source_revision"), expected_value=source_sha,
+            ),
+        ]
+        if include_tree:
+            source_tree = self._publisher_context.get("source_tree_sha")
+            if not isinstance(source_tree, str) or not SHA1_RE.fullmatch(source_tree):
+                raise ValueError("publisher history has no exact selected source-tree SHA")
+            groups.extend((
+                self._current_provenance(
+                    role="publication_receipt", evidence_parent=receipt,
+                    evidence_field_path=("source_binding", "source_tree_sha"),
+                    index_field_path=None, expected_value=source_tree,
+                ),
+                self._current_provenance(
+                    role="publication_source_binding", evidence_parent=binding,
+                    evidence_field_path=("source_tree_sha",),
+                    index_field_path=None, expected_value=source_tree,
+                ),
+            ))
+        return self._merge_provenance(*groups)
+
+    def _publisher_workflow_provenance(self) -> tuple[dict[str, Any], ...]:
+        run = self._publisher_context.get("run")
+        head_sha = self._publisher_context.get("workflow_head_sha")
+        if not isinstance(run, dict) or not isinstance(head_sha, str) or not SHA1_RE.fullmatch(head_sha):
+            raise ValueError("publisher history has no exact validated workflow-head SHA")
+        return self._current_provenance(
+            role="publication_producer_run", evidence_parent=run,
+            evidence_field_path=("head_sha",), index_field_path=("producer", "revision"),
+            expected_value=head_sha,
+        )
+
+    def _ack_source_manifest(self, *, root: pathlib.Path, revision: str, path: str, check: bool) -> bytes:
+        if root.resolve() != self.root or path != "manifest.json" or check:
+            raise ValueError("ACK source-manifest read differs from its exact existing validator callsite")
+        source_sha = self._publisher_source_sha()
+        if revision != source_sha:
+            raise ValueError("ACK source-manifest read differs from its validated receipt source SHA")
+        callsite = "ack.verify_receipt.source_manifest"
+        fields = {
+            "kind": "blob",
+            "input_id": self._input_item("publication_receipt")["input_id"],
+            "callsite_id": callsite,
+            "provenance": self._publisher_source_provenance(),
+            "depends_on": (),
+            "commit_sha": source_sha,
+            "path": "manifest.json",
+            # verify_receipt deliberately calls check=False, then compares the
+            # digest. An authenticated absence therefore reaches its original
+            # manifest-mismatch branch as empty bytes.
+            "absence_policy": "optional_probe",
+        }
+        response = self._record_publisher_request(fields, "read_blob", callsite_id=callsite)
+        if not response:
+            return b""
+        return response
+
+    def _ack_source_ancestry(
+        self, *, root: pathlib.Path, ancestor: str, descendant: str,
+        caller_frame: Any,
+    ) -> bool:
+        if root.resolve() != self.root:
+            raise ValueError("ACK ancestry request uses a different repository root")
+        if caller_frame.f_code.co_name != "verify_receipt" or not self._exact_history_caller(
+            caller_frame, "scripts/recover-canonical-publication-ack.py",
+        ):
+            raise ValueError("ACK ancestry request is outside the exact verify_receipt callsite")
+        if (
+            ancestor != self._publisher_source_sha()
+            or descendant != self._publisher_context.get("workflow_head_sha")
+            or caller_frame.f_locals.get("source_sha") != ancestor
+            or caller_frame.f_locals.get("workflow_head_sha") != descendant
+        ):
+            raise ValueError("ACK ancestry request differs from its selected receipt and publisher run")
+        callsite = "ack.verify_receipt.source_ancestor"
+        manifest_id = self._publisher_request_ids.get("ack.verify_receipt.source_manifest")
+        if manifest_id is None:
+            raise ValueError("ACK ancestry request preceded its exact source-manifest request")
+        binding = self._publisher_context["binding"]
+        binding_provenance = self._current_provenance(
+            role="publication_source_binding", evidence_parent=binding,
+            evidence_field_path=("workflow_sha",), index_field_path=None,
+            expected_value=descendant,
+        )
+        fields = {
+            "kind": "ancestry",
+            "input_id": self._input_item("publication_receipt")["input_id"],
+            "callsite_id": callsite,
+            "provenance": self._merge_provenance(
+                self._publisher_source_provenance(), self._publisher_workflow_provenance(),
+                binding_provenance,
+            ),
+            "depends_on": (manifest_id,),
+            "ancestor_sha": ancestor,
+            "descendant_sha": descendant,
+        }
+        return self._record_publisher_request(fields, "is_ancestor", callsite_id=callsite)
+
+    def _ack_source_tree(
+        self, *, root: pathlib.Path, revision: str, check: bool, caller_frame: Any,
+    ) -> str:
+        if root.resolve() != self.root or check:
+            raise ValueError("ACK commit-tree request differs from its existing check=False call")
+        if caller_frame.f_code.co_name != "verify_receipt" or not self._exact_history_caller(
+            caller_frame, "scripts/recover-canonical-publication-ack.py",
+        ):
+            raise ValueError("ACK commit-tree request is outside the exact verify_receipt callsite")
+        if revision != self._publisher_source_sha() or caller_frame.f_locals.get("source_sha") != revision:
+            raise ValueError("ACK commit-tree request differs from the selected receipt source SHA")
+        if caller_frame.f_locals.get("source_tree") != self._publisher_context.get("source_tree_sha"):
+            raise ValueError("ACK commit-tree request differs from its receipt source-tree selector")
+        callsite = "ack.verify_receipt.commit_tree"
+        dependency_ids = self._publisher_ids(
+            "ack.verify_receipt.source_manifest", "ack.verify_receipt.source_ancestor",
+        )
+        fields = {
+            "kind": "commit_tree",
+            "input_id": self._input_item("publication_receipt")["input_id"],
+            "callsite_id": callsite,
+            "provenance": self._publisher_source_provenance(include_tree=True),
+            "depends_on": dependency_ids,
+            "commit_sha": revision,
+        }
+        return self._record_publisher_request(fields, "read_tree_oid", callsite_id=callsite)
+
+    def _exact_history_caller(self, frame: Any, relative_file: str) -> bool:
+        source = frame.f_globals.get("__file__")
+        if not isinstance(source, str):
+            return False
+        try:
+            expected = (self.root / relative_file).resolve(strict=True)
+            return pathlib.Path(source).resolve(strict=True) == expected
+        except OSError:
+            return False
+
+    def set_publisher_context(
+        self,
+        *,
+        run: dict[str, Any],
+        receipt: dict[str, Any],
+        binding: dict[str, Any],
+    ) -> None:
+        self.set_publisher_run_context(run)
+        source_binding = receipt.get("source_binding")
+        if not isinstance(source_binding, dict) or source_binding != binding:
+            raise ValueError("publisher current-M receipt and source binding are not the exact same row")
+        source_sha = source_binding.get("source_sha")
+        source_tree_sha = source_binding.get("source_tree_sha")
+        head_sha = run.get("head_sha")
+        if not all(isinstance(value, str) and SHA1_RE.fullmatch(value) for value in (source_sha, source_tree_sha, head_sha)):
+            raise ValueError("publisher current-M evidence has a malformed selected SHA")
+        self._publisher_context = {
+            **self._publisher_context,
+            "run": run,
+            "receipt": receipt,
+            "binding": binding,
+            "source_sha": source_sha,
+            "source_tree_sha": source_tree_sha,
+            "workflow_head_sha": head_sha,
+        }
+
+    def set_publisher_run_context(self, run: dict[str, Any]) -> None:
+        head_sha = run.get("head_sha")
+        if not isinstance(head_sha, str) or not SHA1_RE.fullmatch(head_sha):
+            raise ValueError("publisher current-M run has a malformed workflow-head SHA")
+        self._publisher_context = {
+            **self._publisher_context,
+            "run": run,
+            "workflow_head_sha": head_sha,
+        }
+
+    def _publisher_main_ancestor(
+        self, *, root: pathlib.Path, revision: str, label: str, caller_frame: Any,
+    ) -> str:
+        if root.resolve() != self.root:
+            raise ValueError("publisher main-ancestry request uses a different repository root")
+        callsite: str
+        input_role: str
+        provenance: tuple[dict[str, Any], ...]
+        dependency_ids: tuple[str, ...]
+        if caller_frame.f_code.co_name == "validate_stage_run":
+            stage = caller_frame.f_locals.get("stage")
+            if stage != "publisher" or label != "publisher workflow source commit":
+                raise ValueError("publisher stage ancestry is outside its exact current validator branch")
+            if revision != self._publisher_context.get("workflow_head_sha"):
+                raise ValueError("publisher stage ancestry differs from its indexed workflow head")
+            callsite = "pipeline.validate_stage_run.publisher.main_ancestor"
+            input_role = "publication_producer_run"
+            provenance = self._publisher_workflow_provenance()
+            dependency_ids = ()
+        elif caller_frame.f_code.co_name == "validate_native_publisher_attempt":
+            if label == "publisher workflow source commit":
+                callsite = "publisher.validate_native_publisher_attempt.workflow_main_ancestor"
+                input_role = "publication_producer_run"
+                provenance = self._publisher_workflow_provenance()
+            elif label == "published Registry source commit":
+                callsite = "publisher.validate_native_publisher_attempt.source_main_ancestor"
+                input_role = "publication_receipt"
+                provenance = self._publisher_source_provenance()
+            else:
+                raise ValueError("publisher main ancestry uses an unregistered validator label")
+            dependency_ids = self._publisher_ids(
+                "ack.verify_receipt.source_manifest",
+                "ack.verify_receipt.source_ancestor",
+                "ack.verify_receipt.commit_tree",
+            )
+            if len(dependency_ids) != 3:
+                raise ValueError("publisher main ancestry preceded the complete #716 receipt selector")
+        elif caller_frame.f_code.co_name == "validate_pipeline_evidence":
+            if label != "publisher workflow source commit":
+                raise ValueError("retained publication ancestry uses an unregistered validator label")
+            callsite = "publication.legacy_historical_facet.workflow_main_ancestor"
+            input_role = "publication_producer_run"
+            provenance = self._publisher_workflow_provenance()
+            dependency_ids = self._publisher_ids(
+                "ack.verify_receipt.source_manifest",
+                "ack.verify_receipt.source_ancestor",
+                "ack.verify_receipt.commit_tree",
+                "publication.validate_historical_publication_facet.registry_pointer",
+            )
+            if len(dependency_ids) != 4:
+                raise ValueError("retained publication ancestry preceded its exact ACK and pointer reads")
+        else:
+            raise ValueError("publisher main ancestry is outside an extracted current Source callsite")
+
+        callsite_id = callsite
+        if input_role == "publication_producer_run":
+            expected = self._publisher_context.get("workflow_head_sha")
+            if revision != expected:
+                raise ValueError("publisher main-ancestry revision differs from its selected run head")
+        else:
+            expected = self._publisher_source_sha()
+            if revision != expected:
+                raise ValueError("publisher main-ancestry revision differs from its selected receipt source")
+        fields = {
+            "kind": "ancestry",
+            "input_id": self._input_item(input_role)["input_id"],
+            "callsite_id": callsite_id,
+            "provenance": provenance,
+            "depends_on": dependency_ids,
+            "ancestor_sha": revision,
+            "descendant_sha": self.current_main_sha,
+        }
+        result = self._record_publisher_request(fields, "is_ancestor", callsite_id=callsite_id)
+        if not result:
+            raise ValueError(f"{label} is not reachable from the selected current main revision")
+        return self.current_main_sha
+
+    def canonical_source_read_blob(
+        self,
+        root: pathlib.Path,
+        revision: str,
+        path: str,
+        *,
+        check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        if (
+            caller_frame.f_code.co_name == "verify_receipt"
+            and self._exact_history_caller(caller_frame, "scripts/recover-canonical-publication-ack.py")
+        ):
+            return self._ack_source_manifest(root=root, revision=revision, path=path, check=check)
+        if (
+            caller_frame.f_code.co_name == "validate_historical_publication_facet"
+            and self._exact_history_caller(caller_frame, "scripts/completeness_publication_evidence.py")
+        ):
+            return self._legacy_publication_pointer(
+                root=root, revision=revision, path=path, check=check, caller_frame=caller_frame,
+            )
+        raise ValueError("historical publisher blob read is outside an extracted validator callsite")
+
+    def _legacy_publication_pointer(
+        self,
+        *,
+        root: pathlib.Path,
+        revision: str,
+        path: str,
+        check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        if root.resolve() != self.root or check or path != "data/data-go-kr.registry.json":
+            raise ValueError("retained publication Registry-pointer read differs from its exact Source selector")
+        if revision != self._publisher_source_sha() or caller_frame.f_locals.get("source_sha") != revision:
+            raise ValueError("retained publication Registry-pointer read differs from its validated source commit")
+        source_manifest = caller_frame.f_locals.get("source_manifest")
+        artifact_row = caller_frame.f_locals.get("manifest_artifact")
+        artifacts = source_manifest.get("artifacts") if isinstance(source_manifest, dict) else None
+        if not isinstance(artifacts, list) or not isinstance(artifact_row, dict):
+            raise ValueError("retained publication pointer read preceded its exact manifest artifact selector")
+        selected = [
+            (position, row) for position, row in enumerate(artifacts)
+            if isinstance(row, dict) and row.get("path") == path
+        ]
+        if len(selected) != 1 or selected[0][1] != artifact_row:
+            raise ValueError("retained publication pointer read is not selected by one exact manifest row")
+        manifest_id = self._publisher_request_ids.get("ack.verify_receipt.source_manifest")
+        ancestry_id = self._publisher_request_ids.get("ack.verify_receipt.source_ancestor")
+        tree_id = self._publisher_request_ids.get("ack.verify_receipt.commit_tree")
+        if not all((manifest_id, ancestry_id, tree_id)):
+            raise ValueError("retained publication pointer read preceded its exact ACK source history")
+        source_commit = self._input_value("publication_source_commit")
+        if not isinstance(source_commit, dict) or source_commit.get("sha") != revision:
+            raise ValueError("retained publication pointer read differs from its indexed source-commit row")
+        source_commit_body = source_commit.get("commit")
+        if not isinstance(source_commit_body, dict):
+            raise ValueError("retained publication source commit lacks its exact commit object")
+        source_tree = source_commit_body.get("tree")
+        if not isinstance(source_tree, dict) or source_tree.get("sha") != self._publisher_context.get("source_tree_sha"):
+            raise ValueError("retained publication source commit tree differs from its selected binding")
+        callsite = "publication.validate_historical_publication_facet.registry_pointer"
+        provenance = self._merge_provenance(
+            self._publisher_source_provenance(include_tree=True),
+            self._current_provenance(
+                role="publication_source_commit", evidence_parent=source_commit,
+                evidence_field_path=("sha",), index_field_path=("subject", "source_revision"),
+                expected_value=revision,
+            ),
+            self._current_provenance(
+                role="publication_source_commit", evidence_parent=source_commit,
+                evidence_field_path=("commit", "tree", "sha"), index_field_path=None,
+                expected_value=self._publisher_context["source_tree_sha"],
+            ),
+            ({
+                "source_request_id": manifest_id,
+                "path": "manifest.json",
+                "field_path": ("artifacts", selected[0][0], "path"),
+                "row_sha256": _canonical_history_json_sha256(selected[0][1]),
+            },),
+        )
+        fields = {
+            "kind": "blob",
+            "input_id": self._input_item("publication_source_commit")["input_id"],
+            "callsite_id": callsite,
+            "provenance": provenance,
+            "depends_on": tuple(sorted({manifest_id, ancestry_id, tree_id})),
+            "commit_sha": revision,
+            "path": path,
+            "absence_policy": "optional_probe",
+        }
+        response = self._record_publisher_request(fields, "read_blob", callsite_id=callsite)
+        return response if response else b""
+
+    def canonical_source_is_ancestor(
+        self,
+        root: pathlib.Path,
+        ancestor: str,
+        descendant: str,
+        *,
+        timeout: float | None,
+        caller_frame: Any,
+    ) -> bool:
+        del timeout
+        return self._ack_source_ancestry(
+            root=root, ancestor=ancestor, descendant=descendant, caller_frame=caller_frame,
+        )
+
+    def canonical_source_read_tree_oid(
+        self,
+        root: pathlib.Path,
+        revision: str,
+        *,
+        check: bool,
+        caller_frame: Any,
+    ) -> str:
+        return self._ack_source_tree(
+            root=root, revision=revision, check=check, caller_frame=caller_frame,
+        )
+
+    def assert_main_ancestor(
+        self, root: pathlib.Path, revision: str, label: str, *, caller_frame: Any | None = None,
+    ) -> str:
+        if root.resolve() != self.root:
+            raise ValueError("producer history ancestry request uses a different repository root")
+        if caller_frame is not None and caller_frame.f_code.co_name == "validate_stage_run":
+            stage = caller_frame.f_locals.get("stage")
+            if stage not in {"source", "processor", "promotion", "health", "publisher", "acknowledgement"}:
+                raise ValueError("pipeline ancestry selector uses an unregistered workflow stage")
+            if label != f"{stage} workflow source commit":
+                raise ValueError("pipeline ancestry label differs from its exact stage validator")
+            roles = caller_frame.f_locals.get("roles")
+            run_role = "pipeline_run" if stage in {"source", "processor", "promotion", "health"} else {
+                "publisher": "publication_producer_run", "acknowledgement": "acknowledgement_run",
+            }[stage]
+            run = caller_frame.f_locals.get("run")
+            if not isinstance(roles, dict) or not isinstance(run, dict) or run.get("head_sha") != revision:
+                raise ValueError("pipeline ancestry differs from its validated run-head selector")
+            item = self._stage_input_item(stage, run_role)
+            if roles.get(run_role) != item:
+                raise ValueError("pipeline ancestry run is not the exact authenticated current-M stage row")
+            callsite = f"pipeline.validate_stage_run.{stage}.main_ancestor"
+            fields = {
+                "kind": "ancestry",
+                "input_id": item["input_id"],
+                "callsite_id": callsite,
+                "provenance": self._stage_run_provenance(stage, run),
+                "depends_on": (),
+                "ancestor_sha": revision,
+                "descendant_sha": self.current_main_sha,
+            }
+            result = self._request(fields, "is_ancestor")
+            self._history_request_ids[callsite] = _canonical_history_json_sha256({
+                "schema_version": "datapan.producer-history-request.v1", **fields,
+            })
+            if not result:
+                raise ValueError(f"{label} is not reachable from the selected current main revision")
+            return self.current_main_sha
+        direct_stage_callers = {
+            "validate_processor_stage": "processor",
+            "validate_promotion_stage": "promotion",
+            "validate_health_stage": "health",
+        }
+        if caller_frame is not None and caller_frame.f_code.co_name in direct_stage_callers:
+            stage = direct_stage_callers[caller_frame.f_code.co_name]
+            if not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            ) or label != f"{stage} workflow source commit":
+                raise ValueError("pipeline stage ancestry differs from its exact validator callsite")
+            roles = caller_frame.f_locals.get("roles")
+            run = caller_frame.f_locals.get("run")
+            if not isinstance(roles, dict) or not isinstance(run, dict) or run.get("head_sha") != revision:
+                raise ValueError("pipeline stage ancestry differs from its selected run-head evidence")
+            item = self._stage_input_item(stage, "pipeline_run")
+            if roles.get("pipeline_run") != item:
+                raise ValueError("pipeline stage ancestry is not bound to its exact input-index row")
+            callsite = f"pipeline.{caller_frame.f_code.co_name}.main_ancestor"
+            first_stage_ancestry = self._history_request_ids.get(
+                f"pipeline.validate_stage_run.{stage}.main_ancestor",
+            )
+            if first_stage_ancestry is None:
+                raise ValueError("pipeline stage validator ancestry preceded its indexed run proof")
+            fields = {
+                "kind": "ancestry",
+                "input_id": item["input_id"],
+                "callsite_id": callsite,
+                "provenance": self._stage_run_provenance(stage, run),
+                "depends_on": (first_stage_ancestry,),
+                "ancestor_sha": revision,
+                "descendant_sha": self.current_main_sha,
+            }
+            result = self._request(fields, "is_ancestor")
+            self._history_request_ids[callsite] = _canonical_history_json_sha256({
+                "schema_version": "datapan.producer-history-request.v1", **fields,
+            })
+            if not result:
+                raise ValueError(f"{label} is not reachable from the selected current main revision")
+            return self.current_main_sha
+        if caller_frame is not None and caller_frame.f_code.co_name in {
+            "validate_historical_import", "validate_committed_release_artifact",
+        }:
+            return self._historical_import_ancestry(
+                root=root, revision=revision, label=label, caller_frame=caller_frame,
+            )
+        # The source collector branch was extracted first and retains its
+        # original fixed request. Publisher callers are selected separately
+        # from the authenticated current-M run/receipt rows.
+        if revision == self.revision and label == "source workflow source commit":
+            request = {
+                "kind": "ancestry",
+                "input_id": self.input_id,
+                "callsite_id": "source.validate_stage_run.main_ancestor",
+                "provenance": self._run_provenance(),
+                "depends_on": (),
+                "ancestor_sha": revision,
+                "descendant_sha": self.current_main_sha,
+            }
+            if not self._request(request, "is_ancestor"):
+                raise ValueError(f"{label} is not reachable from the selected current main revision")
+            return self.current_main_sha
+        if caller_frame is None:
+            raise ValueError("publisher ancestry requires its exact existing Source caller frame")
+        return self._publisher_main_ancestor(
+            root=root, revision=revision, label=label, caller_frame=caller_frame,
+        )
+
+    def _request(self, fields: dict[str, Any], method: str) -> Any:
+        body = {"schema_version": "datapan.producer-history-request.v1", **fields}
+        request_id = _canonical_history_json_sha256(body)
+        existing = self._responses.get(request_id)
+        if existing is not None:
+            return existing
+        request = {**body, "request_id": request_id}
+        reader_method = getattr(self.history_reader, method, None)
+        if not callable(reader_method):
+            raise TypeError(f"history_reader must provide {method}(request)")
+        response = reader_method(request)
+        if method in {"read_blob", "read_module"} and not isinstance(response, bytes):
+            raise TypeError(f"history_reader.{method} must return bytes")
+        if method == "is_ancestor" and not isinstance(response, bool):
+            raise TypeError("history_reader.is_ancestor must return bool")
+        if method == "read_tree_oid" and (
+            not isinstance(response, str) or not SHA1_RE.fullmatch(response)
+        ):
+            raise TypeError("history_reader.read_tree_oid must return a full Git tree SHA")
+        self._responses[request_id] = response
+        self.requests.append(request)
+        return response
+
+    def _run_provenance(self) -> tuple[dict[str, Any], ...]:
+        return (
+            {
+                "source_request_id": None,
+                "path": INPUT_INDEX_PATH,
+                "field_path": ("inputs", self.input_index_row_index, "producer", "revision"),
+                "row_sha256": self.input_index_row_sha256,
+            },
+            {
+                "source_request_id": None,
+                "path": self.input_path,
+                "field_path": ("head_sha",),
+                "row_sha256": self.run_row_sha256,
+            },
+        )
+
+    def _blob_request(
+        self,
+        *,
+        path: str,
+        callsite_id: str,
+        provenance: tuple[dict[str, Any], ...] | None = None,
+        depends_on: tuple[str, ...] = (),
+        absence_policy: str = "required",
+    ) -> tuple[dict[str, Any], bytes]:
+        if path not in {
+            "policy/source-refresh.json",
+            "manifest.json",
+            "data/data-go-kr.registry.json",
+            *self._SCHEMA_PATHS.values(),
+        }:
+            raise ValueError(f"source-stage history selected an unregistered repository path: {path}")
+        request = {
+            "kind": "blob",
+            "input_id": self.input_id,
+            "callsite_id": callsite_id,
+            "provenance": provenance or self._run_provenance(),
+            "depends_on": tuple(sorted(set(depends_on))),
+            "commit_sha": self.revision,
+            "path": path,
+            "absence_policy": absence_policy,
+        }
+        request_id = _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **request,
+        })
+        response = self._request(request, "read_blob")
+        if not response and absence_policy == "optional_probe":
+            return {**request, "request_id": request_id}, b""
+        if not response:
+            raise FileNotFoundError(f"required source-stage historical blob is empty: {path}")
+        return {**request, "request_id": request_id}, response
+
+    def _stage_source_lfs_blob(
+        self,
+        *,
+        root: pathlib.Path,
+        revision: str,
+        path: str,
+        check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        if root.resolve() != self.root or not check:
+            raise ValueError("pipeline release-manifest reads require the exact authenticated Source root and checked Git semantics")
+        parent = caller_frame.f_back
+        stage_by_caller = {
+            "validate_processor_stage": "processor",
+            "validate_promotion_stage": "promotion",
+            "validate_health_stage": "health",
+        }
+        stage = stage_by_caller.get(parent.f_code.co_name if parent is not None else "")
+        if stage is None:
+            raise ValueError("pipeline LFS pointer read is outside an extracted stage validator")
+        run = parent.f_locals.get("run")
+        roles = parent.f_locals.get("roles")
+        if not isinstance(run, dict) or run.get("head_sha") != revision:
+            raise ValueError("pipeline LFS pointer revision differs from its validated stage run")
+        run_item = self._stage_input_item(stage, "pipeline_run")
+        if not isinstance(roles, dict) or roles.get("pipeline_run") != run_item:
+            raise ValueError("pipeline LFS pointer is not bound to its exact indexed stage run")
+        stage_provenance = self._stage_run_provenance(stage, run)
+        if path == "manifest.json":
+            callsite = f"pipeline.{stage}.source_lfs_binding.manifest"
+            ancestry_id = self._history_request_ids.get(
+                f"pipeline.validate_stage_run.{stage}.main_ancestor",
+            )
+            if ancestry_id is None:
+                raise ValueError("pipeline release-manifest read preceded its exact stage ancestry proof")
+            fields = {
+                "kind": "blob",
+                "input_id": run_item["input_id"],
+                "callsite_id": callsite,
+                "provenance": stage_provenance,
+                "depends_on": (ancestry_id,),
+                "commit_sha": revision,
+                "path": path,
+                "absence_policy": "required",
+            }
+            response = self._request(fields, "read_blob")
+            self._history_request_ids[callsite] = _canonical_history_json_sha256({
+                "schema_version": "datapan.producer-history-request.v1", **fields,
+            })
+            if not response:
+                raise FileNotFoundError("required stage release manifest is empty")
+            manifest = json.loads(response)
+            artifacts = manifest.get("artifacts") if isinstance(manifest, dict) else None
+            selected = [
+                (position, row) for position, row in enumerate(artifacts or [])
+                if isinstance(row, dict) and row.get("path") == "data/data-go-kr.registry.json"
+            ]
+            if len(selected) != 1:
+                raise ValueError("stage release manifest does not uniquely select the canonical Registry pointer")
+            self._stage_lfs_selectors[stage] = {
+                "revision": revision,
+                "manifest_request_id": _canonical_history_json_sha256({
+                    "schema_version": "datapan.producer-history-request.v1", **fields,
+                }),
+                "manifest": manifest,
+                "selected_index": selected[0][0],
+                "selected_row": selected[0][1],
+                "run_item": run_item,
+                "run": run,
+                "provenance": stage_provenance,
+            }
+            return response
+        if path != "data/data-go-kr.registry.json":
+            raise ValueError("pipeline source LFS read selected an unregistered Registry pointer path")
+        selected = self._stage_lfs_selectors.get(stage)
+        if not isinstance(selected, dict) or selected.get("revision") != revision:
+            raise ValueError("pipeline Registry pointer read preceded its exact selected release manifest")
+        manifest_id = selected["manifest_request_id"]
+        row = selected["selected_row"]
+        callsite = f"pipeline.{stage}.source_lfs_binding.registry_pointer"
+        manifest_provenance = ({
+            "source_request_id": manifest_id,
+            "path": "manifest.json",
+            "field_path": ("artifacts", selected["selected_index"], "path"),
+            "row_sha256": _canonical_history_json_sha256(row),
+        },)
+        fields = {
+            "kind": "blob",
+            "input_id": selected["run_item"]["input_id"],
+            "callsite_id": callsite,
+            "provenance": self._merge_provenance(selected["provenance"], manifest_provenance),
+            "depends_on": (manifest_id,),
+            "commit_sha": revision,
+            "path": path,
+            "absence_policy": "required",
+        }
+        response = self._request(fields, "read_blob")
+        self._history_request_ids[callsite] = _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **fields,
+        })
+        if not response:
+            raise FileNotFoundError("required stage Registry pointer is empty")
+        return response
+
+    def _current_catalog_lfs_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        if root.resolve() != self.root or revision != self.current_main_sha or not check:
+            raise ValueError("current catalog LFS read differs from the authenticated current-M revision")
+        parent = caller_frame.f_back
+        if parent is None or parent.f_code.co_name != "validate_current_catalog_subject":
+            raise ValueError("current catalog LFS read is outside its exact current validator callsite")
+        item = parent.f_locals.get("item")
+        inventory = parent.f_locals.get("inventory")
+        if not isinstance(item, dict) or not isinstance(inventory, dict):
+            raise ValueError("current catalog LFS read lacks the selected registered inventory row")
+        selected_item = self._input_rows.get(item.get("input_id"))
+        if selected_item != item or item.get("role") != "source_catalog_snapshot":
+            raise ValueError("current catalog LFS read is not bound to its exact input-index row")
+        inventory_path = inventory.get("path")
+        if item.get("path") != inventory_path or not isinstance(inventory_path, str):
+            raise ValueError("current catalog inventory path differs from its indexed selector")
+        if path == "manifest.json":
+            callsite = "pipeline.current_catalog.source_lfs_binding.manifest"
+            fields = {
+                "kind": "blob", "input_id": item["input_id"], "callsite_id": callsite,
+                "provenance": self._merge_provenance(
+                    self._index_field_provenance(item=item, field_path=("path",), expected_value=item["path"]),
+                    self._index_field_provenance(item=item, field_path=("sha256",), expected_value=item["sha256"]),
+                ),
+                "depends_on": (), "commit_sha": revision, "path": path,
+                "absence_policy": "required",
+            }
+            response = self._request(fields, "read_blob")
+            if not response:
+                raise FileNotFoundError("current main release manifest is absent")
+            manifest = json.loads(response)
+            artifacts = manifest.get("artifacts") if isinstance(manifest, dict) else None
+            selected = [
+                (index, row) for index, row in enumerate(artifacts or [])
+                if isinstance(row, dict) and row.get("path") == inventory_path
+            ]
+            if len(selected) != 1:
+                raise ValueError("current main manifest does not uniquely select the registered catalog inventory")
+            self._stage_lfs_selectors["current_catalog"] = {
+                "revision": revision, "manifest": manifest,
+                "manifest_request_id": _canonical_history_json_sha256({
+                    "schema_version": "datapan.producer-history-request.v1", **fields,
+                }),
+                "selected_index": selected[0][0], "selected_row": selected[0][1],
+                "item": item,
+            }
+            self._history_request_ids[callsite] = self._stage_lfs_selectors["current_catalog"]["manifest_request_id"]
+            return response
+        if path != inventory_path:
+            raise ValueError("current catalog pointer path differs from its registered inventory")
+        selected = self._stage_lfs_selectors.get("current_catalog")
+        if not isinstance(selected, dict) or selected.get("revision") != revision or selected.get("item") != item:
+            raise ValueError("current catalog pointer read preceded its exact selected release manifest")
+        row = selected["selected_row"]
+        if row.get("sha256") != item.get("sha256") or row.get("bytes") != item.get("bytes"):
+            raise ValueError("current catalog manifest row differs from its exact indexed snapshot")
+        manifest_id = selected["manifest_request_id"]
+        callsite = "pipeline.current_catalog.source_lfs_binding.registry_pointer"
+        provenance = ({
+            "source_request_id": manifest_id,
+            "path": "manifest.json",
+            "field_path": ("artifacts", selected["selected_index"], "path"),
+            "row_sha256": _canonical_history_json_sha256(row),
+        },)
+        fields = {
+            "kind": "blob", "input_id": item["input_id"], "callsite_id": callsite,
+            "provenance": provenance, "depends_on": (manifest_id,),
+            "commit_sha": revision, "path": path, "absence_policy": "required",
+        }
+        response = self._request(fields, "read_blob")
+        if not response:
+            raise FileNotFoundError("current main catalog pointer is absent")
+        return response
+
+    def _native_publication_readback_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        if root.resolve() != self.root or not check:
+            raise ValueError("native publication readback requires the exact checked Source root")
+        if caller_frame.f_code.co_name == "validate_native_publication_readback":
+            publisher = caller_frame.f_locals.get("publisher")
+            if not isinstance(publisher, dict):
+                raise ValueError("native publication readback lacks its validated publisher attempt")
+            source_sha = publisher.get("source_sha")
+            workflow_sha = publisher.get("workflow_head_sha")
+            if not isinstance(source_sha, str) or not SHA1_RE.fullmatch(source_sha):
+                raise ValueError("native publication readback has no exact source revision")
+            source_item = self._input_item("publication_source_manifest")
+            receipt_item = self._input_item("publication_receipt")
+            source_provenance = self._publisher_source_provenance(include_tree=True)
+            source_dependencies = self._publisher_ids(
+                "ack.verify_receipt.source_manifest", "ack.verify_receipt.source_ancestor",
+                "ack.verify_receipt.commit_tree",
+                "publisher.validate_native_publisher_attempt.source_main_ancestor",
+            )
+            if path == "manifest.json" and revision == source_sha:
+                callsite = "publication.validate_native_publication_readback.source_manifest"
+                item = source_item
+                provenance = self._merge_provenance(
+                    source_provenance,
+                    self._index_field_provenance(
+                        item=source_item, field_path=("subject", "source_revision"),
+                        expected_value=source_sha,
+                    ),
+                    self._index_field_provenance(
+                        item=source_item, field_path=("sha256",), expected_value=source_item["sha256"],
+                    ),
+                )
+                dependencies = source_dependencies
+            elif path == "scripts/huggingface_registry_distribution.py" and revision == source_sha:
+                callsite = "publication.validate_native_publication_readback.distribution_script"
+                item = source_item
+                provenance = source_provenance
+                dependencies = source_dependencies
+            elif (
+                path == PIPELINE_WORKFLOWS["publisher"]["workflow_path"]
+                and revision == workflow_sha
+            ):
+                callsite = "publication.validate_native_publication_readback.publisher_workflow"
+                item = self._input_item("publication_workflow")
+                provenance = self._publisher_workflow_provenance()
+                dependencies = self._publisher_ids(
+                    "pipeline.validate_stage_run.publisher.main_ancestor",
+                    "publisher.validate_native_publisher_attempt.workflow_main_ancestor",
+                )
+            else:
+                raise ValueError("native publication readback selected an unregistered historical blob")
+            fields = {
+                "kind": "blob", "input_id": item["input_id"], "callsite_id": callsite,
+                "provenance": provenance, "depends_on": dependencies,
+                "commit_sha": revision, "path": path, "absence_policy": "required",
+            }
+            data = self._request(fields, "read_blob")
+            self._history_request_ids[callsite] = _canonical_history_json_sha256({
+                "schema_version": "datapan.producer-history-request.v1", **fields,
+            })
+            if not data:
+                raise FileNotFoundError(f"required native publication blob is absent: {path}")
+            return data
+        if caller_frame.f_code.co_name == "validate_pipeline_evidence":
+            if path != "manifest.json":
+                raise ValueError("pipeline cross-stage publication read selected an unregistered path")
+            publisher = self._publisher_context.get("run")
+            source_sha = self._publisher_source_sha()
+            if not isinstance(publisher, dict) or revision != source_sha:
+                raise ValueError("pipeline cross-stage publication read differs from the selected receipt source")
+            item = self._input_item("publication_source_manifest")
+            callsite = "publication.validate_pipeline_evidence.source_manifest"
+            fields = {
+                "kind": "blob", "input_id": item["input_id"], "callsite_id": callsite,
+                "provenance": self._merge_provenance(
+                    self._publisher_source_provenance(include_tree=True),
+                    self._index_field_provenance(
+                        item=item, field_path=("subject", "source_revision"), expected_value=source_sha,
+                    ),
+                ),
+                "depends_on": self._publisher_ids(
+                    "ack.verify_receipt.source_manifest", "ack.verify_receipt.source_ancestor",
+                    "ack.verify_receipt.commit_tree",
+                ),
+                "commit_sha": revision, "path": path, "absence_policy": "required",
+            }
+            data = self._request(fields, "read_blob")
+            self._history_request_ids[callsite] = _canonical_history_json_sha256({
+                "schema_version": "datapan.producer-history-request.v1", **fields,
+            })
+            if not data:
+                raise FileNotFoundError("native pipeline source manifest is absent")
+            return data
+        raise ValueError("native publication readback blob is outside an exact current validator callsite")
+
+    def _acknowledgement_journal_schema_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        """Select the ACK validator's journal schema from its exact indexed run."""
+        expected_path = "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
+        if (
+            root.resolve() != self.root or not check or path != expected_path
+            or caller_frame.f_code.co_name != "validate_acknowledgement_local_transition"
+            or not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("ACK journal schema read is outside its exact local-transition validator")
+        run = caller_frame.f_locals.get("ack_run")
+        roles = caller_frame.f_locals.get("roles")
+        if not isinstance(run, dict) or run.get("head_sha") != revision or not isinstance(roles, dict):
+            raise ValueError("ACK journal schema revision differs from its validated workflow run")
+        item = self._stage_input_item("acknowledgement", "acknowledgement_run")
+        if roles.get("acknowledgement_run") != item:
+            raise ValueError("ACK journal schema is not bound to its exact authenticated run row")
+        ancestry_id = self._history_request_ids.get(
+            "pipeline.validate_stage_run.acknowledgement.main_ancestor",
+        )
+        if ancestry_id is None:
+            raise ValueError("ACK journal schema read preceded its exact workflow ancestry proof")
+        return self._history_request(
+            item=item,
+            callsite_id="acknowledgement.validate_local_transition.journal_schema",
+            revision=revision,
+            path=expected_path,
+            provenance=self._stage_run_provenance("acknowledgement", run),
+            depends_on=(ancestry_id,),
+        )
+
+    def _promotion_journal_schema_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        expected_path = "schemas/datapan.canonical-update-promotion-journal.v1.schema.json"
+        if (
+            root.resolve() != self.root or not check or path != expected_path
+            or caller_frame.f_code.co_name != "validate_promotion_journal_at_revision"
+            or not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("promotion journal schema read is outside its exact validator")
+        stage_frame = caller_frame.f_back
+        if stage_frame is None or stage_frame.f_code.co_name != "validate_promotion_stage":
+            raise ValueError("promotion journal schema read lacks its exact stage-validator caller")
+        run = stage_frame.f_locals.get("run")
+        roles = stage_frame.f_locals.get("roles")
+        if not isinstance(run, dict) or run.get("head_sha") != revision or not isinstance(roles, dict):
+            raise ValueError("promotion journal schema revision differs from its validated workflow run")
+        item = self._stage_input_item("promotion", "pipeline_run")
+        if roles.get("pipeline_run") != item:
+            raise ValueError("promotion journal schema is not bound to its exact indexed run row")
+        ancestry_id = self._history_request_ids.get("pipeline.validate_stage_run.promotion.main_ancestor")
+        if ancestry_id is None:
+            raise ValueError("promotion journal schema read preceded its exact workflow ancestry proof")
+        return self._history_request(
+            item=item,
+            callsite_id="promotion.validate_journal_contract.schema",
+            revision=revision,
+            path=expected_path,
+            provenance=self._stage_run_provenance("promotion", run),
+            depends_on=(ancestry_id,),
+        )
+
+    def _canonical_update_pr_module(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        """Read the exact producer-owned journal contract module at a selected stage head."""
+        expected_path = "scripts/canonical_update_pr.py"
+        if (
+            root.resolve() != self.root or not check or path != expected_path
+            or caller_frame.f_code.co_name != "canonical_update_pr_contract_at_revision"
+            or not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("journal contract module read is outside its fixed Source loader")
+        stage_frame = caller_frame.f_back
+        if stage_frame is None:
+            raise ValueError("journal contract module read lacks its exact stage validator caller")
+        if stage_frame.f_code.co_name == "validate_acknowledgement_local_transition":
+            stage = "acknowledgement"
+            run = stage_frame.f_locals.get("ack_run")
+            roles = stage_frame.f_locals.get("roles")
+            schema_callsite = "acknowledgement.validate_local_transition.journal_schema"
+            callsite = "acknowledgement.validate_local_transition.journal_contract_module"
+            loader_id = "acknowledgement.canonical_update_pr_journal_contract"
+        elif stage_frame.f_code.co_name == "validate_promotion_journal_at_revision":
+            stage = "promotion"
+            parent = stage_frame.f_back
+            if parent is None or parent.f_code.co_name != "validate_promotion_stage":
+                raise ValueError("promotion journal module read lacks its exact stage-validator parent")
+            run = parent.f_locals.get("run")
+            roles = parent.f_locals.get("roles")
+            schema_callsite = "promotion.validate_journal_contract.schema"
+            callsite = "promotion.validate_journal_contract.module"
+            loader_id = "promotion.canonical_update_pr_journal_contract"
+        else:
+            raise ValueError("journal contract module read is outside ACK or promotion validation")
+        if not isinstance(run, dict) or run.get("head_sha") != revision or not isinstance(roles, dict):
+            raise ValueError("journal contract module revision differs from the selected stage run")
+        role_name = "acknowledgement_run" if stage == "acknowledgement" else "pipeline_run"
+        item = self._stage_input_item(stage, role_name)
+        if roles.get(role_name) != item:
+            raise ValueError("journal contract module is not bound to the exact indexed stage run")
+        schema_id = self._history_request_ids.get(schema_callsite)
+        ancestry_id = self._history_request_ids.get(f"pipeline.validate_stage_run.{stage}.main_ancestor")
+        if schema_id is None or ancestry_id is None:
+            raise ValueError("journal contract module read preceded its schema or ancestry proof")
+        fields = {
+            "kind": "module",
+            "input_id": item["input_id"],
+            "callsite_id": callsite,
+            "provenance": self._stage_run_provenance(stage, run),
+            "depends_on": tuple(sorted({schema_id, ancestry_id})),
+            "commit_sha": revision,
+            "path": expected_path,
+            "absence_policy": "required",
+            "loader_id": loader_id,
+            "allowed_functions": ("validate_journal",),
+        }
+        response = self._request(fields, "read_module")
+        self._history_request_ids[callsite] = _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **fields,
+        })
+        if not response:
+            raise FileNotFoundError("required producer-owned journal contract module is empty")
+        return response
+
+    def _processor_generation_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        """Enumerate the existing processor source-input reads from its current branch."""
+        if (
+            root.resolve() != self.root or not check
+            or caller_frame.f_code.co_name != "validate_processor_generation_inputs"
+            or not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("processor generation input read is outside its exact validator")
+        stage_frame = caller_frame.f_back
+        if stage_frame is None or stage_frame.f_code.co_name != "validate_processor_stage":
+            raise ValueError("processor generation input read lacks its exact stage validator parent")
+        run = stage_frame.f_locals.get("run")
+        roles = stage_frame.f_locals.get("roles")
+        checkpoint = caller_frame.f_locals.get("checkpoint")
+        promotion = caller_frame.f_locals.get("promotion")
+        processor_head_sha = caller_frame.f_locals.get("processor_head_sha")
+        if (
+            not isinstance(run, dict) or run.get("head_sha") != revision
+            or processor_head_sha != revision or not isinstance(roles, dict)
+            or not isinstance(checkpoint, dict) or promotion is None
+        ):
+            raise ValueError("processor generation input revision differs from its exact validated run")
+        run_item = self._stage_input_item("processor", "pipeline_run")
+        if roles.get("pipeline_run") != run_item:
+            raise ValueError("processor generation input is not bound to its exact indexed run")
+        ancestry_id = self._history_request_ids.get("pipeline.validate_stage_run.processor.main_ancestor")
+        if ancestry_id is None:
+            raise ValueError("processor generation input read preceded its exact run ancestry proof")
+        provenance = self._stage_run_provenance("processor", run)
+        tracked = caller_frame.f_locals.get("tracked")
+        expected_tracked = getattr(promotion, "PROCESSOR_INPUT_PROVENANCE", None)
+        if not isinstance(tracked, dict) or not isinstance(expected_tracked, dict) or tracked != expected_tracked:
+            raise ValueError("processor tracked-source mapping differs from the current producer contract")
+
+        def checkpoint_field_provenance(field: str) -> tuple[dict[str, Any], ...]:
+            generation_inputs = checkpoint.get("generation_inputs")
+            if not isinstance(generation_inputs, dict) or field not in generation_inputs:
+                raise ValueError("processor checkpoint lacks the selected source-input digest")
+            item = self._stage_input_item("processor", "processor_generation_api")
+            return self._item_provenance(
+                item=item,
+                evidence_parent=checkpoint,
+                evidence_field_path=("generation_inputs", field),
+                index_field_path=None,
+                expected_value=generation_inputs[field],
+            )
+
+        loop_field = caller_frame.f_locals.get("field")
+        if isinstance(loop_field, str) and tracked.get(loop_field) == path:
+            callsite = f"processor.generation_inputs.tracked.{loop_field}"
+            return self._history_request(
+                item=run_item,
+                callsite_id=callsite,
+                revision=revision,
+                path=path,
+                provenance=self._merge_provenance(provenance, checkpoint_field_provenance(loop_field)),
+                depends_on=(ancestry_id,),
+            )
+
+        if path == "scripts/upstream_catalogue_handoff.py" and loop_field == "generator_revision":
+            generator_id = self._history_request_ids.get(
+                "processor.generation_inputs.tracked.generator_revision",
+            )
+            if generator_id is None:
+                raise ValueError("processor handoff helper probe preceded its generator-source read")
+            return self._history_request(
+                item=run_item,
+                callsite_id="processor.generation_inputs.generator_handoff.optional",
+                revision=revision,
+                path=path,
+                provenance=self._merge_provenance(provenance, checkpoint_field_provenance("generator_revision")),
+                depends_on=(ancestry_id, generator_id),
+                absence_policy="optional_probe",
+            )
+
+        composition_receipt = caller_frame.f_locals.get("composition_receipt")
+        composition_paths = getattr(promotion, "PROCESSOR_COMPOSITION_INPUTS", None)
+        if isinstance(composition_paths, dict) and isinstance(composition_receipt, dict):
+            matches = [(name, selected_path) for name, selected_path in composition_paths.items() if selected_path == path]
+            if len(matches) == 1:
+                input_name = matches[0][0]
+                input_digests = composition_receipt.get("input_digests")
+                digest_row = input_digests.get(input_name) if isinstance(input_digests, dict) else None
+                if (
+                    not isinstance(digest_row, dict)
+                    or isinstance(digest_row.get("bytes"), bool)
+                    or not isinstance(digest_row.get("bytes"), int)
+                    or not isinstance(digest_row.get("sha256"), str)
+                    or not SHA256_RE.fullmatch(digest_row["sha256"])
+                ):
+                    raise ValueError("processor composition receipt lacks its exact selected input digest row")
+                archive_item = self._stage_input_item("processor", "pipeline_artifact_archive")
+                archive_provenance = (
+                    self._index_field_provenance(
+                        item=archive_item, field_path=("sha256",), expected_value=archive_item["sha256"],
+                    )
+                    + ({
+                        "source_request_id": None,
+                        "path": input_path(archive_item),
+                        "field_path": ("composition-receipt.json", "input_digests", input_name),
+                        "row_sha256": _canonical_history_json_sha256(digest_row),
+                    },)
+                )
+                tracked_ids = tuple(
+                    self._history_request_ids[f"processor.generation_inputs.tracked.{field_name}"]
+                    for field_name in tracked
+                    if f"processor.generation_inputs.tracked.{field_name}" in self._history_request_ids
+                )
+                callsite = f"processor.generation_inputs.composition.{input_name}"
+                return self._history_request(
+                    item=run_item,
+                    callsite_id=callsite,
+                    revision=revision,
+                    path=path,
+                    provenance=self._merge_provenance(provenance, archive_provenance),
+                    depends_on=(ancestry_id, *tracked_ids),
+                )
+
+        compatibility = getattr(promotion, "PROCESSOR_COMPATIBILITY_FILES", None)
+        if isinstance(compatibility, tuple):
+            unique_paths = tuple(dict.fromkeys(compatibility))
+            if path in unique_paths:
+                position = unique_paths.index(path)
+                return self._history_request(
+                    item=run_item,
+                    callsite_id=f"processor.generation_inputs.compatibility.p{position:02d}",
+                    revision=revision,
+                    path=path,
+                    provenance=provenance,
+                    depends_on=(ancestry_id,),
+                    absence_policy="optional_probe",
+                )
+        raise ValueError(f"processor generation input is outside its exact producer mapping: {path}")
+
+    def _health_persister_module(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        """Read the Health transition module only through its existing validator loader."""
+        expected_path = "scripts/persist-upstream-catalogue-health.py"
+        if (
+            root.resolve() != self.root or not check or path != expected_path
+            or caller_frame.f_code.co_name != "import_health_persister_at_revision"
+            or not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("Health persister module read is outside its exact Source loader")
+        source_caller = caller_frame.f_back
+        if source_caller is None:
+            raise ValueError("Health persister module read lacks its current validator caller")
+        if source_caller.f_code.co_name == "validate_health_stage_local":
+            health_frame = source_caller
+            if source_caller.f_locals.get("root") != root:
+                raise ValueError("Health persister loader uses a different validator root")
+        elif source_caller.f_code.co_name == "expected_health_post_state":
+            health_frame = source_caller.f_back
+            if (
+                health_frame is None
+                or health_frame.f_code.co_name != "validate_health_stage_local"
+                or source_caller.f_locals.get("root") != root
+                or source_caller.f_locals.get("workflow_head") != revision
+            ):
+                raise ValueError("Health post-state replay is outside its exact Health validator")
+        else:
+            raise ValueError("Health persister loader is outside Health stage validation")
+        if (
+            health_frame is None
+            or not self._exact_history_caller(
+                health_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("Health persister read lacks its exact current Source stage validator")
+        run = health_frame.f_locals.get("run")
+        roles = health_frame.f_locals.get("roles")
+        if not isinstance(run, dict) or run.get("head_sha") != revision or not isinstance(roles, dict):
+            raise ValueError("Health persister revision differs from its exact selected workflow run")
+        item = self._stage_input_item("health", "pipeline_run")
+        if roles.get("pipeline_run") != item:
+            raise ValueError("Health persister revision is not bound to its exact indexed run row")
+        ancestry_id = self._history_request_ids.get("pipeline.validate_stage_run.health.main_ancestor")
+        if ancestry_id is None:
+            raise ValueError("Health persister module read preceded its exact run ancestry proof")
+        fields = {
+            "kind": "module",
+            "input_id": item["input_id"],
+            "callsite_id": "health.import_persister_at_revision",
+            "provenance": self._stage_run_provenance("health", run),
+            "depends_on": (ancestry_id,),
+            "commit_sha": revision,
+            "path": expected_path,
+            "absence_policy": "required",
+            "loader_id": "health.persist_upstream_catalogue_health",
+            "allowed_functions": (
+                "choose_last_good", "merge_faults", "merge_observations", "receipt_file_name",
+                "seal", "verify_seal", "verified_already_canonical_relation",
+            ),
+        }
+        response = self._request(fields, "read_module")
+        self._history_request_ids[fields["callsite_id"]] = _canonical_history_json_sha256({
+            "schema_version": "datapan.producer-history-request.v1", **fields,
+        })
+        if not response:
+            raise FileNotFoundError("required Health persister module is empty")
+        return response
+
+    def _health_stage_frame(self, *, root: pathlib.Path, revision: str, caller_frame: Any) -> Any:
+        """Resolve the exact Health run frame for its fixed policy/schema reads."""
+        if caller_frame.f_code.co_name == "validate_health_stage_local":
+            health_frame = caller_frame
+        elif caller_frame.f_code.co_name == "expected_health_post_state":
+            health_frame = caller_frame.f_back
+            if caller_frame.f_locals.get("workflow_head") != revision:
+                raise ValueError("Health post-state selector differs from its workflow head")
+        else:
+            raise ValueError("Health history read is outside its exact stage validator")
+        if (
+            health_frame is None or health_frame.f_code.co_name != "validate_health_stage_local"
+            or not self._exact_history_caller(
+                health_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+            or health_frame.f_locals.get("root") != root
+        ):
+            raise ValueError("Health history read lacks its exact current Source stage frame")
+        run = health_frame.f_locals.get("run")
+        roles = health_frame.f_locals.get("roles")
+        if not isinstance(run, dict) or run.get("head_sha") != revision or not isinstance(roles, dict):
+            raise ValueError("Health history read differs from its exact selected workflow run")
+        item = self._stage_input_item("health", "pipeline_run")
+        if roles.get("pipeline_run") != item:
+            raise ValueError("Health history read is outside its exact indexed workflow row")
+        ancestry_id = self._history_request_ids.get("pipeline.validate_stage_run.health.main_ancestor")
+        if ancestry_id is None:
+            raise ValueError("Health history read preceded its exact workflow ancestry proof")
+        return health_frame, run, item, ancestry_id
+
+    def _health_stage_policy_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        expected_path = "policy/upstream-catalogue-health.json"
+        if (
+            root.resolve() != self.root or not check or path != expected_path
+            or caller_frame.f_code.co_name not in {
+                "validate_health_stage_local", "expected_health_post_state",
+            }
+            or not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("Health policy read is outside its exact Source transition")
+        _health_frame, run, item, ancestry_id = self._health_stage_frame(
+            root=root, revision=revision, caller_frame=caller_frame,
+        )
+        callsite = "health.transition.policy"
+        response = self._history_request(
+            item=item,
+            callsite_id=callsite,
+            revision=revision,
+            path=expected_path,
+            provenance=self._stage_run_provenance("health", run),
+            depends_on=(ancestry_id,),
+        )
+        return response
+
+    def _health_stage_schema_blob(
+        self, *, root: pathlib.Path, revision: str, path: str, check: bool,
+        caller_frame: Any,
+    ) -> bytes:
+        expected = {
+            "health receipt": (
+                "schemas/datapan.upstream-catalogue-health.v1.schema.json",
+                "health.schema.receipt",
+            ),
+            "health pre-state": (
+                "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+                "health.schema.pre_state",
+            ),
+            "health archived promotion journal": (
+                "schemas/datapan.canonical-update-promotion-journal.v1.schema.json",
+                "health.schema.archived_promotion_journal",
+            ),
+            "health policy": (
+                "schemas/datapan.upstream-catalogue-health-policy.v1.schema.json",
+                "health.schema.policy",
+            ),
+            "durable Health post-state": (
+                "schemas/datapan.upstream-catalogue-health-state.v1.schema.json",
+                "health.schema.post_state",
+            ),
+        }
+        if (
+            root.resolve() != self.root or not check
+            or caller_frame.f_code.co_name != "validate_schema_at_revision"
+            or not self._exact_history_caller(
+                caller_frame, "scripts/generate-completeness-proof-rollup.py",
+            )
+        ):
+            raise ValueError("Health schema read is outside its exact Source validator")
+        stage_frame = caller_frame.f_back
+        if stage_frame is None or stage_frame.f_code.co_name != "validate_health_stage_local":
+            raise ValueError("Health schema read lacks its exact stage validator caller")
+        label = caller_frame.f_locals.get("label")
+        relative_path = caller_frame.f_locals.get("relative_path")
+        selected = expected.get(label)
+        if selected is None or selected[0] != relative_path or relative_path != path:
+            raise ValueError("Health schema path does not match a registered exact Source label")
+        _health_frame, run, item, ancestry_id = self._health_stage_frame(
+            root=root, revision=revision, caller_frame=stage_frame,
+        )
+        dependencies = {ancestry_id}
+        if label == "health policy":
+            policy_id = self._history_request_ids.get("health.transition.policy")
+            if policy_id is None:
+                raise ValueError("Health policy schema read preceded its authenticated policy bytes")
+            dependencies.add(policy_id)
+        return self._history_request(
+            item=item,
+            callsite_id=selected[1],
+            revision=revision,
+            path=relative_path,
+            provenance=self._stage_run_provenance("health", run),
+            depends_on=tuple(dependencies),
+        )
+
+    def git_read_only(self, root: pathlib.Path, args: list[str], *, check: bool) -> bytes:
+        if root.resolve() != self.root:
+            raise ValueError("producer history Git read uses a different Source root")
+        if args == ["rev-parse", "refs/remotes/origin/main"]:
+            frame = sys._getframe(2)
+            if frame.f_code.co_name != "validate_current_catalog_subject":
+                raise ValueError("trusted current main ref read is outside the exact current catalog validator")
+            return (self.current_main_sha + "\n").encode("ascii")
+        if root.resolve() != self.root or len(args) != 2 or args[0] != "show":
+            raise ValueError("producer history permits only exact selected revision:path blob reads")
+        revision, separator, path = args[1].partition(":")
+        if not separator or not SHA1_RE.fullmatch(revision):
+            raise ValueError("producer history selected a malformed revision:path read")
+        frame = sys._getframe(2)
+        caller = frame.f_code.co_name
+        caller_locals = frame.f_locals
+        if caller == "validate_acknowledgement_local_transition":
+            return self._acknowledgement_journal_schema_blob(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        if caller == "validate_promotion_journal_at_revision":
+            return self._promotion_journal_schema_blob(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        if caller == "canonical_update_pr_contract_at_revision":
+            return self._canonical_update_pr_module(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        if caller in {"validate_historical_import", "validate_committed_release_artifact"}:
+            return self._historical_import_blob(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        if caller in {"validate_native_publication_readback", "validate_pipeline_evidence"}:
+            return self._native_publication_readback_blob(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        if caller == "source_lfs_binding":
+            if revision == self.current_main_sha:
+                return self._current_catalog_lfs_blob(
+                    root=root, revision=revision, path=path, check=check, caller_frame=frame,
+                )
+            parent = frame.f_back
+            if parent is not None and parent.f_code.co_name in {
+                "validate_processor_stage", "validate_promotion_stage", "validate_health_stage",
+            }:
+                return self._stage_source_lfs_blob(
+                    root=root, revision=revision, path=path, check=check, caller_frame=frame,
+                )
+        if caller == "validate_processor_generation_inputs":
+            return self._processor_generation_blob(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        if caller == "import_health_persister_at_revision":
+            return self._health_persister_module(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        if caller in {"validate_health_stage_local", "expected_health_post_state"}:
+            if path == "policy/upstream-catalogue-health.json":
+                return self._health_stage_policy_blob(
+                    root=root, revision=revision, path=path, check=check, caller_frame=frame,
+                )
+        if caller == "validate_schema_at_revision":
+            stage_frame = frame.f_back
+            if stage_frame is not None and stage_frame.f_code.co_name == "validate_health_stage_local":
+                return self._health_stage_schema_blob(
+                    root=root, revision=revision, path=path, check=check, caller_frame=frame,
+                )
+        if revision != self.revision:
+            raise ValueError("source-stage historical read differs from indexed workflow head_sha")
+        if caller == "validate_schema_at_revision":
+            label = caller_locals.get("label")
+            schema_path = self._SCHEMA_PATHS.get(label)
+            if schema_path is None or schema_path != path:
+                raise ValueError("source-stage schema read does not match an existing fixed validator callsite")
+            depends = (self._policy_request_id,) if self._policy_request_id else ()
+            request, data = self._blob_request(
+                path=path,
+                callsite_id=self._SCHEMA_CALLSITES[label],
+                depends_on=tuple(item for item in depends if item),
+            )
+            return data
+        if caller == "validate_source_observation":
+            if path != "policy/source-refresh.json":
+                raise ValueError(f"source-stage history selected an unregistered repository path: {path}")
+            request, data = self._blob_request(
+                path=path,
+                callsite_id="source.validate_source_observation.policy",
+            )
+            self._policy_request_id = request["request_id"]
+            return data
+        if caller == "source_lfs_binding" and path == "manifest.json":
+            request, data = self._blob_request(
+                path=path,
+                callsite_id="source.source_lfs_binding.manifest",
+            )
+            manifest = json.loads(data)
+            artifacts = manifest.get("artifacts")
+            if not isinstance(artifacts, list):
+                raise ValueError("historical source manifest has no artifact rows")
+            selected = [
+                (index, row) for index, row in enumerate(artifacts)
+                if isinstance(row, dict) and row.get("path") == "data/data-go-kr.registry.json"
+            ]
+            if len(selected) != 1:
+                raise ValueError("historical source manifest does not uniquely select the canonical registry")
+            self._manifest_request_id = request["request_id"]
+            self._manifest = manifest
+            self._selected_manifest_row = selected[0][1]
+            self._selected_manifest_index = selected[0][0]
+            return data
+        if caller == "source_lfs_binding" and path == "data/data-go-kr.registry.json":
+            if self._manifest_request_id is None or self._manifest is None:
+                raise ValueError("canonical Registry pointer read preceded its selected historical manifest")
+            row = self._selected_manifest_row
+            provenance = ({
+                "source_request_id": self._manifest_request_id,
+                "path": "manifest.json",
+                "field_path": ("artifacts", self._selected_manifest_index, "path"),
+                "row_sha256": _canonical_history_json_sha256(row),
+            },)
+            request, data = self._blob_request(
+                path=path,
+                callsite_id="source.source_lfs_binding.registry_pointer",
+                provenance=provenance,
+                depends_on=(self._manifest_request_id,),
+            )
+            return data
+        if caller == "source_lfs_binding":
+            return self._stage_source_lfs_blob(
+                root=root, revision=revision, path=path, check=check, caller_frame=frame,
+            )
+        raise ValueError(f"historical source read is outside an extracted validator callsite: {caller}:{path}")
+
+
+def enumerate_historical_dependencies(
+    *,
+    root: pathlib.Path,
+    current_main_sha: str,
+    history_reader: object,
+    current_input_reader: object,
+    source_runtime_reader: object,
+    source_control_reader: object,
+) -> tuple[dict[str, Any], ...]:
+    """Run the fixed historical traversal against one owner-sealed current-M view.
+
+    ``current_input_reader`` is mandatory.  The exact Native owner validates
+    its type, root binding, and sealed M membership before calling this
+    function; this wrapper ensures every current-file helper in the selected
+    Source call chain uses that view for the duration of the traversal.
+    ``source_runtime_reader`` is a separate exact #768 CONTROL capability;
+    its closed ``load_module(name)`` method supplies only the pinned Git
+    helper singletons and is never used to satisfy an M repository read.
+    """
+    resolved_root = pathlib.Path(root)
+    if not resolved_root.is_absolute():
+        raise ValueError("current-M enumeration root must be an absolute owner-view path")
+    session = _CurrentInputReadSession(resolved_root, current_input_reader)
+    if not callable(getattr(source_runtime_reader, "load_module", None)):
+        raise TypeError("source_runtime_reader must expose the exact CONTROL load_module(name) method")
+    if not callable(getattr(source_control_reader, "load_module", None)):
+        raise TypeError("source_control_reader must expose exact load_module(path, *, m_baseline_bytes)")
+    token = _ACTIVE_CURRENT_INPUT_READ_SESSION.set(session)
+    runtime_token = _ACTIVE_SOURCE_RUNTIME_READER.set(source_runtime_reader)
+    control_token = _ACTIVE_SOURCE_CONTROL_READER.set(source_control_reader)
+    try:
+        return _enumerate_historical_dependencies_in_session(
+            root=resolved_root,
+            current_main_sha=current_main_sha,
+            history_reader=history_reader,
+            source_runtime_reader=source_runtime_reader,
+        )
+    finally:
+        _ACTIVE_SOURCE_CONTROL_READER.reset(control_token)
+        _ACTIVE_SOURCE_RUNTIME_READER.reset(runtime_token)
+        _ACTIVE_CURRENT_INPUT_READ_SESSION.reset(token)
+
+
+def _enumerate_historical_dependencies_in_session(
+    *,
+    root: pathlib.Path,
+    current_main_sha: str,
+    history_reader: object,
+    source_runtime_reader: object,
+) -> tuple[dict[str, Any], ...]:
+    """Run the existing indexed source-to-ACK validator walk and record its exact reads.
+
+    Stage, publisher, historical-import, Health, publication, and ACK
+    selectors come from the authenticated current-M index and their existing
+    validators. The traversal accepts no caller-provided revision/path list;
+    every historical request is emitted at its fixed validator callsite.
+    """
+    root = pathlib.Path(root)
+    if not isinstance(current_main_sha, str) or not SHA1_RE.fullmatch(current_main_sha):
+        raise ValueError("current_main_sha must be a full lowercase Git SHA1")
+    scope_registry, _, scope_by_id = load_and_validate_registry(root)
+    index_path = root / INPUT_INDEX_PATH
+    index, checked_inputs, resolved = validate_input_index(
+        root=root,
+        input_root=root,
+        index_path=index_path,
+        scope_by_id=scope_by_id,
+    )
+    source_scopes = [
+        scope for scope in scope_registry["scopes"]
+        if scope.get("source_id") == "data_go_kr"
+        and scope.get("resource_kind") == "api_operation_manifest"
+    ]
+    if len(source_scopes) != 1:
+        raise ValueError("current M must register exactly one data.go.kr API-operation scope")
+    scoped_inputs = [
+        item for item in checked_inputs if item["scope_id"] == source_scopes[0]["scope_id"]
+    ]
+    roles = stage_input_map(scoped_inputs, "source")
+    run_item = roles.get("pipeline_run")
+    if run_item is None:
+        raise ValueError("current indexed source stage lacks its pipeline_run input")
+    run = object_at(resolved[run_item["input_id"]], "source workflow run")
+    indexed_rows = [
+        (position, item) for position, item in enumerate(index["inputs"])
+        if item["input_id"] == run_item["input_id"]
+    ]
+    if len(indexed_rows) != 1:
+        raise ValueError("current input index does not uniquely contain the source run evidence row")
+    index_row_index, index_row = indexed_rows[0]
+    traversal = _SourceStageHistoryTraversal(
+        root=root,
+        current_main_sha=current_main_sha,
+        history_reader=history_reader,
+        input_id=run_item["input_id"],
+        input_path=input_path(run_item),
+        input_index_row_index=index_row_index,
+        input_index_row=index_row,
+        run=run,
+    )
+    traversal.bind_current_inputs(
+        input_index=index,
+        current_inputs=scoped_inputs,
+        resolved_inputs=resolved,
+    )
+    token = _ACTIVE_PRODUCER_HISTORY.set(traversal)
+    try:
+        source_git = _load_canonical_source_git()
+        history_scope = getattr(source_git, "_history_scope", None)
+        if not callable(history_scope):
+            raise RuntimeError("canonical_source_git lacks its exact Source history scope")
+        with history_scope(traversal, source_runtime_reader=source_runtime_reader):
+            validated_run, job, _, _ = validate_stage_run(
+                stage="source",
+                roles=roles,
+                resolved=resolved,
+                evaluation_epoch=index["evaluation_epoch"],
+                root=root,
+            )
+            archive_item = roles.get("pipeline_artifact_archive")
+            if archive_item is None:
+                raise ValueError("current indexed source stage lacks its collector archive")
+            archive = read_bytes(resolved[archive_item["input_id"]])
+            validate_source_observation(
+                root=root,
+                roles=roles,
+                resolved=resolved,
+                run=validated_run,
+                job=job,
+                archive=archive,
+                evaluation_epoch=index["evaluation_epoch"],
+            )
+            publisher_roles = stage_input_map(scoped_inputs, "publisher")
+            if publisher_roles:
+                receipt_item = single_role(scoped_inputs, "publication_receipt", required=False)
+                binding_item = single_role(scoped_inputs, "publication_source_binding", required=False)
+                if (receipt_item is None) != (binding_item is None):
+                    raise ValueError("native publisher receipt and source binding must be supplied together")
+                publisher_run_item = publisher_roles["publication_producer_run"]
+                publisher_run = object_at(
+                    resolved[publisher_run_item["input_id"]], "publisher workflow run",
+                )
+                traversal.set_publisher_run_context(publisher_run)
+                receipt_raw = (
+                    receipt_path_bytes(resolved[receipt_item["input_id"]], receipt_item)
+                    if receipt_item is not None else None
+                )
+                binding_raw = (
+                    receipt_path_bytes(resolved[binding_item["input_id"]], binding_item)
+                    if binding_item is not None else None
+                )
+                if receipt_raw is not None and binding_raw is not None:
+                    receipt_value = json.loads(receipt_raw)
+                    binding_value = json.loads(binding_raw)
+                    if not isinstance(receipt_value, dict) or not isinstance(binding_value, dict):
+                        raise ValueError("native publisher receipt and source binding must be JSON objects")
+                    traversal.set_publisher_context(
+                        run=publisher_run, receipt=receipt_value, binding=binding_value,
+                    )
+                publisher_run, _publisher_job, _, _ = validate_stage_run(
+                    stage="publisher",
+                    roles=publisher_roles,
+                    resolved=resolved,
+                    evaluation_epoch=index["evaluation_epoch"],
+                    root=root,
+                )
+                if receipt_item is not None and binding_item is not None:
+                    artifact_item = publisher_roles["publication_output_artifact"]
+                    archive_item = publisher_roles["publication_artifact_archive"]
+                    publisher_jobs_item = publisher_roles["publication_producer_jobs"]
+                    validate_native_publisher_attempt(
+                        root=root,
+                        run=publisher_run,
+                        jobs=object_at(
+                            resolved[publisher_jobs_item["input_id"]], "publisher jobs API response",
+                        ),
+                        artifact_response=object_at(
+                            resolved[artifact_item["input_id"]], "publisher artifact API response",
+                        ),
+                        archive=receipt_path_bytes(resolved[archive_item["input_id"]], archive_item),
+                        receipt_raw=receipt_raw,
+                        binding_raw=binding_raw,
+                        evaluation_epoch=index["evaluation_epoch"],
+                    )
+            # The production rollup calls the historical import adapter for
+            # each registered scope before it validates the data.go.kr
+            # pipeline facet. Traverse that same existing branch so the
+            # descriptor stream includes its selected Git reads rather than
+            # learning them from a failed broker request.
+            for scope in scope_registry.get("scopes", []):
+                if not isinstance(scope, dict):
+                    raise ValueError("current scope registry contains a malformed scope row")
+                scope_inputs = [item for item in checked_inputs if item["scope_id"] == scope["scope_id"]]
+                traversal.bind_current_inputs(
+                    input_index=index, current_inputs=scope_inputs, resolved_inputs=resolved,
+                )
+                validate_historical_import(
+                    root=root, inputs=scope_inputs, resolved=resolved, scope=scope,
+                )
+            traversal.bind_current_inputs(
+                input_index=index, current_inputs=scoped_inputs, resolved_inputs=resolved,
+            )
+            validate_pipeline_evidence(
+                root=root,
+                operation_inputs=scoped_inputs,
+                all_inputs=checked_inputs,
+                resolved=resolved,
+                evaluation_epoch=index["evaluation_epoch"],
+                scope_registry=scope_registry,
+            )
+            return tuple(traversal.requests)
+    finally:
+        _ACTIVE_PRODUCER_HISTORY.reset(token)
+
+
+def _load_canonical_source_git() -> Any:
+    return _source_runtime_module("canonical_source_git")
 
 def registered_scope_source_path(scope: dict[str, Any]) -> str | None:
     """Return the scope's declared immutable source path, if one is registered."""
@@ -1104,6 +4025,13 @@ def validate_scope_publication_subject(
                 registry_path = root / registry_member["path"]
                 if retained_registry_payload_bytes is not None:
                     registry_bytes = retained_registry_payload_bytes
+                elif _current_input_read_session() is not None:
+                    try:
+                        registry_bytes = read_bytes(registry_path)
+                    except FileNotFoundError as exc:
+                        raise ValueError("published Registry payload is not locally available at its exact native identity") from exc
+                elif _native_current_input_is_required():
+                    raise RuntimeError("Native publication validation requires its exact current-M reader")
                 elif registry_path.is_file():
                     registry_bytes = registry_path.read_bytes()
                 else:
@@ -1151,7 +4079,7 @@ def validate_scope_publication_subject(
         and publication_path == "data/data-go-kr.registry.json"
         and release_member.get("path") == publication_path
     ):
-        registry_bytes = (root / publication_path).read_bytes()
+        registry_bytes = read_bytes(root / publication_path)
         if (
             len(registry_bytes) != release_member.get("bytes")
             or sha256_bytes(registry_bytes) != release_member.get("sha256")
@@ -1214,22 +4142,25 @@ def project_registered_data_go_operation_manifest(
     if not isinstance(registry, list):
         raise ValueError("published Registry payload has an unsupported #605 source shape")
 
-    with tempfile.TemporaryDirectory(prefix="completeness-605-projection-") as directory:
-        projection_root = pathlib.Path(directory)
-        script_path = projection_root / "scripts/generate-data-go-kr-operation-manifest.py"
-        script_path.parent.mkdir(parents=True)
-        script_path.write_bytes(source_bytes["scripts/generate-data-go-kr-operation-manifest.py"])
-        registry_path = projection_root / "data/data-go-kr.registry.json"
-        registry_path.parent.mkdir(parents=True)
-        registry_path.write_bytes(registry_bytes)
-        module = import_module("pinned_data_go_operation_projection", script_path)
-        previous_registry = module.REGISTRY
-        module.REGISTRY = registry_path
-        try:
-            projected = module.build(registry)
-            rendered = module.render(projected)
-        finally:
-            module.REGISTRY = previous_registry
+    script_bytes = source_bytes["scripts/generate-data-go-kr-operation-manifest.py"]
+    projection_name = f"pinned_data_go_operation_projection_{sha256_bytes(script_bytes)[:12]}"
+    module = _module_from_source_bytes(
+        projection_name,
+        root / "scripts/generate-data-go-kr-operation-manifest.py",
+        script_bytes,
+    )
+
+    class _ExactRegistryBytes:
+        def read_bytes(self) -> bytes:
+            return registry_bytes
+
+    previous_registry = module.REGISTRY
+    module.REGISTRY = _ExactRegistryBytes()
+    try:
+        projected = module.build(registry)
+        rendered = module.render(projected)
+    finally:
+        module.REGISTRY = previous_registry
 
     schema = json.loads(source_bytes["schemas/datapan.data-go-kr-operation-manifest.v1.schema.json"])
     expectation_raw = git_read_only(
@@ -1436,9 +4367,20 @@ def validate_historical_import(
     attestation = object_at(attestation_path, "historical import attestation")
     module = import_module("runtime_import_attestation", root / "scripts/attest-runtime-freshness-import.py")
     module.validate_admission_contract(admission)
-    module.validate_schema(admission, root / "schemas/datapan.runtime-freshness-import-admission.v1.schema.json")
-    module.validate_schema(receipt, root / "schemas/datapan.runtime-freshness-import-receipt.v1.schema.json")
-    module.validate_schema(attestation, root / "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json")
+    current_reader = _current_input_read_session()
+    reader_argument = current_reader.reader if current_reader is not None else None
+    module.validate_schema(
+        admission, root / "schemas/datapan.runtime-freshness-import-admission.v1.schema.json",
+        current_input_reader=reader_argument,
+    )
+    module.validate_schema(
+        receipt, root / "schemas/datapan.runtime-freshness-import-receipt.v1.schema.json",
+        current_input_reader=reader_argument,
+    )
+    module.validate_schema(
+        attestation, root / "schemas/datapan.runtime-freshness-import-attestation.v1.schema.json",
+        current_input_reader=reader_argument,
+    )
 
     run_id = admission.get("run_id")
     if not isinstance(run_id, str) or receipt.get("run_id") != run_id or attestation.get("run_id") != run_id:
@@ -1474,7 +4416,7 @@ def validate_historical_import(
     assert_main_ancestor(root, merge_commit, "historical import merge commit")
     admission_git_path = normalize_relative_path(admission_item["path"], "historical admission path").as_posix()
     merged_admission = git_read_only(root, ["show", f"{merge_commit}:{admission_git_path}"])
-    if merged_admission != admission_path.read_bytes():
+    if merged_admission != read_bytes(admission_path):
         raise ValueError("historical merge commit does not contain the admitted bytes")
     import_git_path = normalize_relative_path(import_item["path"], "historical import receipt path").as_posix()
     merged_receipt = git_read_only(root, ["show", f"{merge_commit}:{import_git_path}"])
@@ -1553,7 +4495,7 @@ def validate_historical_import(
 
 
 def receipt_path_bytes(path: pathlib.Path, item: dict[str, Any]) -> bytes:
-    value = path.read_bytes()
+    value = read_bytes(path)
     if len(value) != item["bytes"] or sha256_bytes(value) != item["sha256"]:
         raise ValueError("receipt bytes changed after input-index validation")
     return value
@@ -2105,14 +5047,25 @@ def validate_source_observation(
 def assert_main_ancestor(root: pathlib.Path, revision: str, label: str) -> str:
     if not isinstance(revision, str) or not re.fullmatch(r"[a-f0-9]{40}", revision):
         raise ValueError(f"{label} is not a full Git commit SHA")
-    main_sha = git_read_only(root, ["rev-parse", "refs/remotes/origin/main"]).decode("ascii").strip()
+    history = _ACTIVE_PRODUCER_HISTORY.get()
+    if history is not None:
+        return history.assert_main_ancestor(
+            root, revision, label, caller_frame=sys._getframe(1),
+        )
+    source_git = _load_canonical_source_git()
+    try:
+        with _source_runtime_call_scope(source_git):
+            main_sha = source_git.trusted_origin_main(root)
+    except (RuntimeError, subprocess.CalledProcessError) as exc:
+        raise ValueError("local git evidence check failed: git rev-parse refs/remotes/origin/main") from exc
     if not re.fullmatch(r"[a-f0-9]{40}", main_sha):
         raise ValueError("selected trusted origin/main ref is not a full Git commit SHA")
-    result = subprocess.run(
-        ["git", "merge-base", "--is-ancestor", revision, main_sha], cwd=root,
-        check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-    )
-    if result.returncode != 0:
+    try:
+        with _source_runtime_call_scope(source_git):
+            is_ancestor = source_git.is_ancestor(root, revision, main_sha)
+    except (RuntimeError, subprocess.CalledProcessError) as exc:
+        raise ValueError(f"local git evidence check failed: git merge-base --is-ancestor {revision} {main_sha}") from exc
+    if not is_ancestor:
         raise ValueError(f"{label} is not reachable from the selected trusted origin/main history")
     return main_sha
 
@@ -2141,8 +5094,9 @@ def validate_current_catalog_subject(
         if item["root"] != "repository":
             raise ValueError("current catalog evidence must use the repository inventory in repository mode")
         path = resolved[item["input_id"]]
-        current_bytes = path.stat().st_size
-        current_sha = sha256_file(path)
+        current_raw = read_bytes(path)
+        current_bytes = len(current_raw)
+        current_sha = sha256_bytes(current_raw)
         if (current_bytes, current_sha) != (item["bytes"], item["sha256"]):
             raise ValueError("current materialized registry differs from its registered inventory input")
         source_revision = item.get("subject", {}).get("source_revision")
@@ -2155,7 +5109,7 @@ def validate_current_catalog_subject(
             "release_manifest_sha256": manifest_sha,
             "main_ancestry_verified": True,
         }
-        evidence = [artifact(input_path(item), path.read_bytes())]
+        evidence = [artifact(input_path(item), current_raw)]
     else:
         main_sha = candidate_context["baseline_main_sha"]
         assert_main_ancestor(root, main_sha, "candidate historical main subject")
@@ -2285,7 +5239,7 @@ def validate_processor_generation_inputs(
     for path in dict.fromkeys(promotion.PROCESSOR_COMPATIBILITY_FILES):
         try:
             historical = git_read_only(root, ["show", f"{processor_head_sha}:{path}"])
-            current = (root / path).read_bytes()
+            current = read_bytes(root / path)
         except (OSError, ValueError):
             changed.append(path)
             continue
@@ -2427,8 +5381,13 @@ def validate_processor_stage(
     promotion = import_module("completeness_processor_contract", root / "scripts/run-canonical-update-promotion.py")
     promotion.ROOT = root
     schema_path = root / "schemas/datapan.upstream-catalogue-checkpoint.v1.schema.json"
+    current_input_reader = _processor_current_input_reader_argument()
     try:
-        promotion.verify_processor_checkpoint(checkpoint, schema_path)
+        promotion.verify_processor_checkpoint(
+            checkpoint,
+            schema_path,
+            current_input_reader=current_input_reader,
+        )
         promotion.validate_generation_identity(checkpoint)
     except Exception as exc:
         raise ValueError("processor checkpoint schema or immutable generation identity is invalid") from exc
@@ -2478,12 +5437,18 @@ def validate_processor_stage(
             max_archive_bytes=promotion.MAX_PROCESSOR_ARCHIVE_BYTES,
             max_expanded_bytes=promotion.MAX_PROCESSOR_BUNDLE_BYTES,
         )
-        composition_helper = promotion.load_canonical_update_pr(root)
+        composition_helper = promotion.load_canonical_update_pr(
+            root, current_input_reader=current_input_reader,
+            source_control_reader=_ACTIVE_SOURCE_CONTROL_READER.get(),
+        )
         composition_schema = object_at(root / "schemas/datapan.catalogue-composition-receipt.v1.schema.json", "composition schema")
         try:
             bundle = promotion.validate_processor_bundle(
                 checkpoint, output_dir, composition_schema, composition_helper,
                 root=root, producer_head_sha=str(run["head_sha"]), defer_seoul_declaration=True,
+                current_input_reader=current_input_reader,
+                source_control_reader=_ACTIVE_SOURCE_CONTROL_READER.get(),
+                history_git_reader=git_read_only,
             )
             current_input_contract_compatible, changed_input_paths = validate_processor_generation_inputs(
                 root=root, promotion=promotion, checkpoint=checkpoint,
@@ -2597,10 +5562,10 @@ def canonical_update_pr_contract_at_revision(*, root: pathlib.Path, revision: st
         helper_source = git_read_only(root, ["show", f"{revision}:{relative}"])
     except ValueError as exc:
         raise ValueError("promotion journal validator is unavailable at its authenticated execution revision") from exc
-    with tempfile.TemporaryDirectory(prefix="completeness-journal-contract-") as temporary:
-        helper_path = pathlib.Path(temporary) / "canonical_update_pr.py"
-        helper_path.write_bytes(helper_source)
-        return import_module("completeness_journal_contract", helper_path)
+    helper_path = pathlib.Path("/__datapan_historical_source__") / revision / relative
+    return _module_from_source_bytes(
+        f"completeness_journal_contract_{revision[:12]}", helper_path, helper_source,
+    )
 
 
 def validate_promotion_journal_at_revision(
@@ -3502,6 +6467,8 @@ def validate_native_publisher_attempt(
 ) -> dict[str, Any]:
     """Validate the current native publisher contract with #716 pure checks."""
     validator = import_module("native_publication_ack_validator", root / "scripts/recover-canonical-publication-ack.py")
+    current_reader = _current_input_read_session()
+    reader_argument = current_reader.reader if current_reader is not None else None
     contract = PIPELINE_WORKFLOWS["publisher"]
     try:
         run_id, attempt, head_sha = validator.validate_workflow_run(
@@ -3563,7 +6530,7 @@ def validate_native_publisher_attempt(
             raise validator.RecoveryError("publication_archive_indexed_members_mismatch")
         receipt_ids = validator.verify_receipt(
             receipt_raw, binding_raw, repository="StatPan/datapan-registry",
-            workflow_head_sha=head_sha, root=root,
+            workflow_head_sha=head_sha, root=root, current_input_reader=reader_argument,
         )
     except (KeyError, TypeError, ValueError, validator.RecoveryError) as exc:
         raise ValueError(f"native publisher evidence failed the #716 contract: {exc}") from exc
@@ -5416,7 +8383,12 @@ def proof_for_scope(
     module.POLICY = root / POLICY_PATH
     module.POLICY_SCHEMA = root / "schemas/datapan.completeness-proof-policy.v1.schema.json"
     module.PROOF_SCHEMA = root / "schemas/datapan.completeness-proof.v1.schema.json"
-    module.validate_proof(proof, policy)
+    current_reader = _current_input_read_session()
+    module.validate_proof(
+        proof,
+        policy,
+        current_input_reader=current_reader.reader if current_reader is not None else None,
+    )
     registered = proof["scope"]
     if registered["scope_id"] != scope["scope_id"] or registered["source_id"] != scope["source_id"]:
         raise ValueError(f"supplied proof scope identity does not match {scope['scope_id']}")
@@ -5769,6 +8741,12 @@ def validate_pipeline_evidence(
             expected_registry_bytes=current_registry["bytes"],
             repo_root=root,
             evaluation_epoch=evaluation_epoch,
+            current_input_reader=(
+                _current_input_read_session().reader
+                if _current_input_read_session() is not None else None
+            ),
+            source_control_reader=_ACTIVE_SOURCE_CONTROL_READER.get(),
+            source_runtime_reader=_ACTIVE_SOURCE_RUNTIME_READER.get(),
         )
         if publication.get("status") != "verified":
             raise ValueError("retained publication and acknowledgement packet is not authenticated")
@@ -6756,11 +9734,19 @@ def main(argv: list[str] | None = None) -> int:
             atomic_write(markdown_output, markdown_bytes)
             print(f"ok completeness proof rollup ({report['summary']['registered_scopes']} scopes)")
         else:
-            mismatches = [
-                path.as_posix()
-                for path, expected in ((json_output, json_bytes), (markdown_output, markdown_bytes))
-                if not path.is_file() or path.read_bytes() != expected
-            ]
+            mismatches: list[str] = []
+            for path, expected in ((json_output, json_bytes), (markdown_output, markdown_bytes)):
+                try:
+                    actual = read_bytes(path)
+                except FileNotFoundError:
+                    # A missing generated artifact is ordinary drift. All
+                    # other owner errors (identity, deadline, permission, or
+                    # membership failures) remain terminal and are not
+                    # converted into a missing-output result.
+                    mismatches.append(path.as_posix())
+                    continue
+                if actual != expected:
+                    mismatches.append(path.as_posix())
             if mismatches:
                 raise ValueError("generated output drift: " + ", ".join(mismatches))
             print(f"ok completeness proof rollup check ({report['summary']['registered_scopes']} scopes)")
