@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.sustainable-coverage.v1",
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-25T23:21:48.878327Z",
   "policy": {
     "path": "policy/sustainable-coverage.json",
     "policy_id": "datapan-registry-supported-sources",
@@ -27,7 +27,7 @@
     "unknown_timestamp_records": 0,
     "stale_records": 0,
     "expired_records": 0,
-    "unbound_evidence_records": 8778,
+    "unbound_evidence_records": 9578,
     "contract_changed_evidence_records": 0,
     "ambiguous_evidence_records": 3,
     "historical_evidence_records": 0,
@@ -126,7 +126,7 @@
     }
   ],
   "freshness": {
-    "as_of": "2026-10-18T23:12:32.540022Z",
+    "as_of": "2026-10-25T23:21:48.878327Z",
     "fresh_days": 30,
     "expire_days": 90,
     "fresh": 0,
@@ -136,11 +136,11 @@
     "fresh_verified": 0
   },
   "failure_recovery": {
-    "active": 2896,
-    "persistent": 837,
+    "active": 3424,
+    "persistent": 1056,
     "recovered": 6,
     "unowned": 0,
-    "overdue": 2,
+    "overdue": 411,
     "durable_work_items": 1
   },
   "source_status": [
@@ -151,7 +151,7 @@
       "call_capability": true,
       "reviewed_runtime_receipt": true,
       "runtime_evidence": 0,
-      "active_recovery_failures": 2896,
+      "active_recovery_failures": 3424,
       "recovered_failures": 1
     },
     {

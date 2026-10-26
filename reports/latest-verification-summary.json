@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-25T23:21:48.878327Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3791,
+    "failed": 1005,
+    "skipped": 4785,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4785,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3791,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1005,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2366,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1306,
         "reason": "approval_required"
       },
       {
@@ -292,6 +292,11 @@
         "reason": "lh_ebid_service_key_not_registered"
       },
       {
+        "key": "HTTP 400",
+        "count": 4,
+        "reason": "HTTP 400"
+      },
+      {
         "key": "HTTP 403",
         "count": 4,
         "reason": "HTTP 403"
@@ -362,11 +367,6 @@
         "reason": "ulsan_service_key_not_registered"
       },
       {
-        "key": "HTTP 400",
-        "count": 2,
-        "reason": "HTTP 400"
-      },
-      {
         "key": "daejeon_http_404",
         "count": 2,
         "reason": "daejeon_http_404"
@@ -425,6 +425,11 @@
         "key": "Get \"http://apis.data.go.kr/1360000/AwsYearlyInfoService/getNote?dataType=json&numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"http://apis.data.go.kr/1360000/AwsYearlyInfoService/getNote?dataType=json&numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1390803/AgriFood/PhenolElement/V2/getKoreanFoodPhenolSampleList?Page_No=1&Page_Size=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1390803/AgriFood/PhenolElement/V2/getKoreanFoodPhenolSampleList?Page_No=1&Page_Size=1&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "Get \"http://apis.data.go.kr/1613000/ArvlInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
@@ -587,14 +592,69 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1390802/FarmFchSafeMovie/farmFchSafeMovieList?Page_No=1&Page_Size=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1390802/FarmFchSafeMovie/farmFchSafeMovieList?Page_No=1&Page_Size=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/1400119/InsectService/insectPrtctList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1400119/InsectService/insectPrtctList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BsCultHs1918CenterService/getBsCultHs1918Center?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BsCultHs1918CenterService/getBsCultHs1918Center?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BsCultHs1918EduService/getBsCultHs1918Edu?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BsCultHs1918EduService/getBsCultHs1918Edu?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/BsCultHs1918EventService/getBsCultHs1918Event?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/BsCultHs1918EventService/getBsCultHs1918Event?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/6260000/ClubInfoService/getClubInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/ClubInfoService/getClubInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/CultFndBidService/getCultFndBid?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/CultFndBidService/getCultFndBid?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/Hp2019AcdmyService/getHp2019Acdmy?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/Hp2019AcdmyService/getHp2019Acdmy?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/PsgudInfoService/getpsgudInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/PsgudInfoService/getpsgudInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/PublicArt/getPublicArtInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/PublicArt/getPublicArtInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/RegenHappyVilService/getRegenHappyVil?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/RegenHappyVilService/getRegenHappyVil?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/6260000/RegenNewVilService/getRegenNewVil?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/6260000/RegenNewVilService/getRegenNewVil?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "Get \"https://apis.data.go.kr/6260000/TownWaterQualityService/getGugunDong?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
@@ -630,6 +690,41 @@
         "key": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552584/gbveiss/getCtcqEginRepmt?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552584/gbveiss/getCtcqEginRepmt?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552584/gbveiss/getDslVhclOrditmRunLmt?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552584/gbveiss/getDslVhclOrditmRunLmt?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552584/gbveiss/getEmgnReducActn?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552584/gbveiss/getEmgnReducActn?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552584/gbveiss/getEnlfVhclElpdsrc?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552584/gbveiss/getEnlfVhclElpdsrc?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552584/gbveiss/getGreenTrfcRgn?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552584/gbveiss/getGreenTrfcRgn?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552584/gbveiss/getRunLmtSeasonMng?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552584/gbveiss/getRunLmtSeasonMng?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B552584/gbveiss/getSmoRdcdvcExtrns?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B552584/gbveiss/getSmoRdcdvcExtrns?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "car365_http_400",
@@ -705,7 +800,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4076,
         "provider": "data.go.kr"
       },
       {
@@ -752,6 +847,11 @@
         "key": "q-net",
         "count": 147,
         "provider": "q-net"
+      },
+      {
+        "key": "safetydata",
+        "count": 132,
+        "provider": "safetydata"
       },
       {
         "key": "daejeon",
@@ -1069,11 +1169,6 @@
         "provider": "safemap"
       },
       {
-        "key": "safetydata",
-        "count": 10,
-        "provider": "safetydata"
-      },
-      {
         "key": "seoul-bus",
         "count": 10,
         "provider": "seoul-bus"
@@ -1372,7 +1467,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 3952,
         "host": "apis.data.go.kr"
       },
       {
@@ -1414,6 +1509,11 @@
         "key": "data.seoul.go.kr",
         "count": 136,
         "host": "data.seoul.go.kr"
+      },
+      {
+        "key": "www.safetydata.go.kr",
+        "count": 132,
+        "host": "www.safetydata.go.kr"
       },
       {
         "key": "bigdata.daejeon.go.kr",
@@ -1759,11 +1859,6 @@
         "key": "www.safemap.go.kr",
         "count": 10,
         "host": "www.safemap.go.kr"
-      },
-      {
-        "key": "www.safetydata.go.kr",
-        "count": 10,
-        "host": "www.safetydata.go.kr"
       },
       {
         "key": "data.floodmap.go.kr",
@@ -2239,12 +2334,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5390,
+        "count": 5512,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 3955,
         "kind": "data_go_kr_gateway"
       },
       {
