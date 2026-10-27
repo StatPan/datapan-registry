@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-27T00:28:52.681566Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3693,
+    "failed": 1002,
+    "skipped": 4886,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4886,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3693,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1002,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2601,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1172,
         "reason": "approval_required"
       },
       {
@@ -180,6 +180,11 @@
         "key": "naqs_mutation_endpoint",
         "count": 16,
         "reason": "naqs_mutation_endpoint"
+      },
+      {
+        "key": "OK",
+        "count": 15,
+        "reason": "OK"
       },
       {
         "key": "malformed_endpoint",
@@ -365,6 +370,11 @@
         "key": "HTTP 400",
         "count": 2,
         "reason": "HTTP 400"
+      },
+      {
+        "key": "INVALID_REQUEST_PARAMETER_ERROR - [crtrYm is required.]",
+        "count": 2,
+        "reason": "INVALID_REQUEST_PARAMETER_ERROR - [crtrYm is required.]"
       },
       {
         "key": "daejeon_http_404",
@@ -587,6 +597,11 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1384000/idis/IdolbomMonitoringPerformanceService/getMonitorResultStatisticsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1384000/idis/IdolbomMonitoringPerformanceService/getMonitorResultStatisticsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
@@ -705,7 +720,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4143,
         "provider": "data.go.kr"
       },
       {
@@ -812,6 +827,11 @@
         "key": "ecvam",
         "count": 65,
         "provider": "ecvam"
+      },
+      {
+        "key": "safetydata",
+        "count": 65,
+        "provider": "safetydata"
       },
       {
         "key": "vworld",
@@ -1067,11 +1087,6 @@
         "key": "safemap",
         "count": 10,
         "provider": "safemap"
-      },
-      {
-        "key": "safetydata",
-        "count": 10,
-        "provider": "safetydata"
       },
       {
         "key": "seoul-bus",
@@ -1372,7 +1387,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4019,
         "host": "apis.data.go.kr"
       },
       {
@@ -1464,6 +1479,11 @@
         "key": "ecvam.neins.go.kr",
         "count": 65,
         "host": "ecvam.neins.go.kr"
+      },
+      {
+        "key": "www.safetydata.go.kr",
+        "count": 65,
+        "host": "www.safetydata.go.kr"
       },
       {
         "key": "www.vworld.kr",
@@ -1759,11 +1779,6 @@
         "key": "www.safemap.go.kr",
         "count": 10,
         "host": "www.safemap.go.kr"
-      },
-      {
-        "key": "www.safetydata.go.kr",
-        "count": 10,
-        "host": "www.safetydata.go.kr"
       },
       {
         "key": "data.floodmap.go.kr",
@@ -2239,12 +2254,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5390,
+        "count": 5445,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4022,
         "kind": "data_go_kr_gateway"
       },
       {
