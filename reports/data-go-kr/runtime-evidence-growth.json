@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-evidence-growth.v1",
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-28T00:35:48.305352Z",
   "datapan_version": "0.1.0-dev",
   "provider": "data.go.kr",
   "source_id": "data_go_kr",
@@ -417,15 +417,15 @@
     }
   ],
   "historical_evidence": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3723,
+    "failed": 995,
+    "skipped": 4863,
     "unknown": 0,
     "by_kind": [
       {
         "key": "data_go_kr_gateway",
-        "count": 3277
+        "count": 4077
       },
       {
         "key": "external_endpoint",
@@ -446,7 +446,7 @@
     ]
   },
   "evidence_dispositions": {
-    "unbound": 8778,
+    "unbound": 9578,
     "contract_changed": 0,
     "ambiguous": 3,
     "historical": 0
