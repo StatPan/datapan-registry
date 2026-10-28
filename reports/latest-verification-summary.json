@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-10-28T00:35:48.305352Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3723,
+    "failed": 995,
+    "skipped": 4863,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4863,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3723,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 995,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2691,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1059,
         "reason": "approval_required"
       },
       {
@@ -290,6 +290,11 @@
         "key": "lh_ebid_service_key_not_registered",
         "count": 5,
         "reason": "lh_ebid_service_key_not_registered"
+      },
+      {
+        "key": "정상",
+        "count": 5,
+        "reason": "정상"
       },
       {
         "key": "HTTP 403",
@@ -632,6 +637,36 @@
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/B553774/AnmalLocation/getAnmalLocationQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B553774/AnmalLocation/getAnmalLocationQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B553774/ContractCharge/getContractChargeQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B553774/ContractCharge/getContractChargeQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B553774/EnterCount/getEnterCountQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B553774/EnterCount/getEnterCountQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B553774/Publicgarage/getPublicgarageQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B553774/Publicgarage/getPublicgarageQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B553774/RegionFuneral/getRegionFuneralQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B553774/RegionFuneral/getRegionFuneralQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/B553774/UnderShopLocation/getUnderShopLocationQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/B553774/UnderShopLocation/getUnderShopLocationQry?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "car365_http_400",
         "count": 1,
         "reason": "car365_http_400"
@@ -705,7 +740,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1407,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2279,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
