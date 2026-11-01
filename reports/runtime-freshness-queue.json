@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.runtime-freshness-queue.v1",
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-01T00:11:31.231630Z",
   "inputs": {
     "canonical_registry": "data/data-go-kr.registry.json",
     "operation_denominator_rollup": "reports/operation-denominator-rollup.json",
@@ -9,7 +9,7 @@
     "coverage_policy": "policy/sustainable-coverage.json"
   },
   "freshness": {
-    "as_of": "2026-10-18T23:12:32.540022Z",
+    "as_of": "2026-11-01T00:11:31.231630Z",
     "fresh_days": 30,
     "expire_days": 90
   },
@@ -21494,8 +21494,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "failed",
-      "last_verified_at": "2026-09-30T00:24:39Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21507,7 +21507,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:11:31Z"
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21519,7 +21519,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:11:31Z"
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21531,7 +21531,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:11:31Z"
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21626,8 +21626,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "failed",
-      "last_verified_at": "2026-09-30T00:54:06Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21651,7 +21651,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-07-03T23:14:46Z"
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21686,8 +21686,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "failed",
-      "last_verified_at": "2026-09-30T00:54:06Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21698,8 +21698,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "failed",
-      "last_verified_at": "2026-09-30T00:54:06Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -21722,8 +21722,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "failed",
-      "last_verified_at": "2026-09-30T00:54:06Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -22179,7 +22179,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-09-30T00:54:48Z"
+      "last_verified_at": "2026-11-01T00:06:08Z"
     },
     {
       "source_id": "data_go_kr",
@@ -23967,7 +23967,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-09-30T01:12:00Z"
+      "last_verified_at": "2026-11-01T00:07:02Z"
     },
     {
       "source_id": "data_go_kr",
@@ -25886,8 +25886,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "verified",
-      "last_verified_at": "2026-10-17T11:29:57Z"
+      "last_status": "failed",
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -25946,8 +25946,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "verified",
-      "last_verified_at": "2026-10-17T11:29:57Z"
+      "last_status": "failed",
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -25982,8 +25982,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "verified",
-      "last_verified_at": "2026-10-17T11:29:57Z"
+      "last_status": "failed",
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -25994,8 +25994,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "verified",
-      "last_verified_at": "2026-10-17T11:29:57Z"
+      "last_status": "failed",
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26030,8 +26030,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "verified",
-      "last_verified_at": "2026-10-17T11:29:57Z"
+      "last_status": "failed",
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26079,7 +26079,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26091,7 +26091,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26103,7 +26103,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26115,7 +26115,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26127,7 +26127,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26139,7 +26139,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26151,7 +26151,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26163,7 +26163,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:11:31Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26175,7 +26175,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26187,7 +26187,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26199,7 +26199,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26211,7 +26211,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26223,7 +26223,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26235,7 +26235,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_verified_at": "2026-11-01T00:07:26Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26246,8 +26246,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26258,8 +26258,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26270,8 +26270,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26282,8 +26282,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26294,8 +26294,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26306,8 +26306,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26318,8 +26318,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26330,8 +26330,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26342,8 +26342,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26354,8 +26354,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26366,8 +26366,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26378,8 +26378,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26390,8 +26390,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26402,8 +26402,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "failed",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26414,8 +26414,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26427,7 +26427,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-25T01:22:21Z"
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26439,7 +26439,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-25T01:22:21Z"
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26450,8 +26450,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26462,8 +26462,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26474,8 +26474,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26487,7 +26487,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T14:19:37Z"
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26498,8 +26498,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T13:47:19Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26511,7 +26511,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26522,8 +26522,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26534,8 +26534,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T13:47:19Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26546,8 +26546,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T13:47:19Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26558,8 +26558,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26570,8 +26570,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-06-29T09:39:29Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26582,8 +26582,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-07-04T00:05:20Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26594,8 +26594,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "skipped",
-      "last_verified_at": "2026-07-04T00:05:20Z"
+      "last_status": "verified",
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -26607,7 +26607,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "skipped",
-      "last_verified_at": "2026-06-25T04:14:20Z"
+      "last_verified_at": "2026-11-01T00:08:07Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28347,7 +28347,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28359,7 +28359,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28371,7 +28371,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28383,7 +28383,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28395,7 +28395,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28407,7 +28407,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28419,7 +28419,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28431,7 +28431,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28443,7 +28443,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28455,7 +28455,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28467,7 +28467,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28479,7 +28479,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -28491,7 +28491,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:08:57Z"
+      "last_verified_at": "2026-11-01T00:09:23Z"
     },
     {
       "source_id": "data_go_kr",
@@ -29055,7 +29055,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:09:48Z"
+      "last_verified_at": "2026-11-01T00:10:17Z"
     },
     {
       "source_id": "data_go_kr",
@@ -29079,7 +29079,7 @@
       "priority": 1,
       "action": "collect_current_contract_evidence",
       "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:09:48Z"
+      "last_verified_at": "2026-11-01T00:10:17Z"
     },
     {
       "source_id": "data_go_kr",
@@ -30782,8 +30782,8 @@
       "classification": "unbound",
       "priority": 1,
       "action": "collect_current_contract_evidence",
-      "last_status": "verified",
-      "last_verified_at": "2026-10-18T23:10:03Z"
+      "last_status": "failed",
+      "last_verified_at": "2026-11-01T00:10:26Z"
     },
     {
       "source_id": "data_go_kr",
