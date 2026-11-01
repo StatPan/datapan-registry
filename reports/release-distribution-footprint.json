@@ -11,7 +11,7 @@
   "summary": {
     "artifact_count": 648,
     "schema_artifacts": 129,
-    "manifest_bound_bytes_excluding_self": 313250026,
+    "manifest_bound_bytes_excluding_self": 314767327,
     "canonical_registry_path": "data/data-go-kr.registry.json",
     "canonical_registry_bytes": 139155499,
     "large_monolith_threshold_bytes": 100000000,
@@ -37,8 +37,8 @@
     {
       "path": "reports/current-runtime-evidence-projection.json",
       "kind": "current_runtime_evidence_projection",
-      "bytes": 30202966,
-      "sha256": "519cd0c2d7b14e7fcbf522168d01789fe3a5a7bf661eed0ae0a7f51c38c29e7b"
+      "bytes": 30712027,
+      "sha256": "6ae9e9ebc9f0cbacfd002efe592204e50293099253d0e5d87a773fb47bec30b9"
     },
     {
       "path": "reports/data-go-kr/operation-manifest.json",
@@ -55,8 +55,8 @@
     {
       "path": "reports/runtime-freshness-queue.json",
       "kind": "runtime_freshness_queue",
-      "bytes": 10773826,
-      "sha256": "394645ef20f03aa5948ce69d211374ed45618a0bb8c373682fccd5e8620d0e55"
+      "bytes": 10773848,
+      "sha256": "e7bba30b266eb33bcd1fda1568a042a1d24921bb98a89e558fc109696d35d72c"
     }
   ]
 }
