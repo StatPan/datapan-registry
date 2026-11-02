@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-02T00:44:00.977955Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3681,
+    "failed": 987,
+    "skipped": 4913,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4913,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3681,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 987,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2432,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1365,
         "reason": "approval_required"
       },
       {
@@ -107,14 +107,14 @@
         "reason": "open-assembly_http_400"
       },
       {
+        "key": "qnet_separate_service_key_required",
+        "count": 30,
+        "reason": "qnet_separate_service_key_required"
+      },
+      {
         "key": "ulsan_missing_required_params",
         "count": 29,
         "reason": "ulsan_missing_required_params"
-      },
-      {
-        "key": "qnet_separate_service_key_required",
-        "count": 28,
-        "reason": "qnet_separate_service_key_required"
       },
       {
         "key": "ekape_missing_required_params",
@@ -152,6 +152,11 @@
         "reason": "lofin365_request_timeout"
       },
       {
+        "key": "qnet_missing_required_params",
+        "count": 20,
+        "reason": "qnet_missing_required_params"
+      },
+      {
         "key": "sisul_wadl_metadata_only",
         "count": 20,
         "reason": "sisul_wadl_metadata_only"
@@ -165,11 +170,6 @@
         "key": "chungnam_http_403",
         "count": 19,
         "reason": "chungnam_http_403"
-      },
-      {
-        "key": "qnet_missing_required_params",
-        "count": 19,
-        "reason": "qnet_missing_required_params"
       },
       {
         "key": "tour_service_root_missing_operation_path",
@@ -317,6 +317,11 @@
         "reason": "seoul_bus_service_key_not_registered"
       },
       {
+        "key": "HTTP 400",
+        "count": 3,
+        "reason": "HTTP 400"
+      },
+      {
         "key": "HTTP 에러",
         "count": 3,
         "reason": "HTTP 에러"
@@ -360,11 +365,6 @@
         "key": "ulsan_service_key_not_registered",
         "count": 3,
         "reason": "ulsan_service_key_not_registered"
-      },
-      {
-        "key": "HTTP 400",
-        "count": 2,
-        "reason": "HTTP 400"
       },
       {
         "key": "daejeon_http_404",
@@ -425,6 +425,11 @@
         "key": "Get \"http://apis.data.go.kr/1360000/AwsYearlyInfoService/getNote?dataType=json&numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"http://apis.data.go.kr/1360000/AwsYearlyInfoService/getNote?dataType=json&numOfRows=1&pageNo=1&year=2024&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"http://apis.data.go.kr/1383000/stis/srvyGndrEqltTblDataService/getServeyGenderEqualityYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"http://apis.data.go.kr/1383000/stis/srvyGndrEqltTblDataService/getServeyGenderEqualityYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
         "key": "Get \"http://apis.data.go.kr/1613000/ArvlInfoInqireService/getCtyCodeList?_type=json&[redacted credential assignment] context deadline exceeded",
@@ -587,6 +592,11 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1383000/stis/srvyMltCltrFmlyTblDataService/getServeyMulticulturalFamliyYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1383000/stis/srvyMltCltrFmlyTblDataService/getServeyMulticulturalFamliyYearList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
@@ -705,7 +715,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4175,
         "provider": "data.go.kr"
       },
       {
@@ -739,6 +749,11 @@
         "provider": "culture"
       },
       {
+        "key": "q-net",
+        "count": 169,
+        "provider": "q-net"
+      },
+      {
         "key": "calspia",
         "count": 168,
         "provider": "calspia"
@@ -747,11 +762,6 @@
         "key": "seoul-open-data",
         "count": 163,
         "provider": "seoul-open-data"
-      },
-      {
-        "key": "q-net",
-        "count": 147,
-        "provider": "q-net"
       },
       {
         "key": "daejeon",
@@ -984,6 +994,11 @@
         "provider": "mnd-open-data"
       },
       {
+        "key": "korad",
+        "count": 19,
+        "provider": "korad"
+      },
+      {
         "key": "andong",
         "count": 18,
         "provider": "andong"
@@ -992,11 +1007,6 @@
         "key": "iwest",
         "count": 18,
         "provider": "iwest"
-      },
-      {
-        "key": "korad",
-        "count": 18,
-        "provider": "korad"
       },
       {
         "key": "naqs",
@@ -1372,7 +1382,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4051,
         "host": "apis.data.go.kr"
       },
       {
@@ -1416,6 +1426,11 @@
         "host": "data.seoul.go.kr"
       },
       {
+        "key": "openapi.q-net.or.kr",
+        "count": 122,
+        "host": "openapi.q-net.or.kr"
+      },
+      {
         "key": "bigdata.daejeon.go.kr",
         "count": 112,
         "host": "bigdata.daejeon.go.kr"
@@ -1429,11 +1444,6 @@
         "key": "openapi.jeonju.go.kr",
         "count": 105,
         "host": "openapi.jeonju.go.kr"
-      },
-      {
-        "key": "openapi.q-net.or.kr",
-        "count": 104,
-        "host": "openapi.q-net.or.kr"
       },
       {
         "key": "www.work24.go.kr",
@@ -1526,6 +1536,11 @@
         "host": "data.ekape.or.kr"
       },
       {
+        "key": "c.q-net.or.kr",
+        "count": 46,
+        "host": "c.q-net.or.kr"
+      },
+      {
         "key": "www.foodsafetykorea.go.kr",
         "count": 46,
         "host": "www.foodsafetykorea.go.kr"
@@ -1544,11 +1559,6 @@
         "key": "openapi.epost.go.kr:80",
         "count": 44,
         "host": "openapi.epost.go.kr:80"
-      },
-      {
-        "key": "c.q-net.or.kr",
-        "count": 42,
-        "host": "c.q-net.or.kr"
       },
       {
         "key": "data.sisul.or.kr",
@@ -1651,6 +1661,11 @@
         "host": "opendata.mnd.go.kr"
       },
       {
+        "key": "www.korad.or.kr",
+        "count": 19,
+        "host": "www.korad.or.kr"
+      },
+      {
         "key": "www.xn--6-6v7en42by2es7i6jc.com",
         "count": 19,
         "host": "www.xn--6-6v7en42by2es7i6jc.com"
@@ -1669,11 +1684,6 @@
         "key": "www.iwest.co.kr",
         "count": 18,
         "host": "www.iwest.co.kr"
-      },
-      {
-        "key": "www.korad.or.kr",
-        "count": 18,
-        "host": "www.korad.or.kr"
       },
       {
         "key": "www.nihc.go.kr",
@@ -2239,12 +2249,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5390,
+        "count": 5413,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4054,
         "kind": "data_go_kr_gateway"
       },
       {
