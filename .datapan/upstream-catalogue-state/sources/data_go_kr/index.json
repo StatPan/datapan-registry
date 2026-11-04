@@ -2,23 +2,6 @@
   "collector_handoff": {
     "admitted_observations": [
       {
-        "admission_id": "d4fc20da79fbf1dd1dbb07f52b2bf1fde9233a6a32070bbd7b69c8e8a5f763de",
-        "admitted_at": "2026-10-04T17:34:19Z",
-        "artifact_digest_sha256": "39aef6af5140c1e213952ee307f16c9280d06d8fa6eebd6f9969e1b95a6a6de7",
-        "artifact_expires_at": "2026-10-29T23:47:49Z",
-        "artifact_id": "11068634862",
-        "artifact_name": "upstream-catalog-refresh-36646768289",
-        "artifact_size_bytes": 9753118,
-        "candidate_sha256": "90bc22e0ad61dd3672b09b7c52e4898be5afb535f87a8d7fa9e5e5c983e6e3b5",
-        "generation_id": "694cf97f842ef4beab214a8dbfb66bec061f2f153e2f8bb26ca2578e6f2ec5c7",
-        "head_sha": "4321df1868754045ff3705b5c133c9fad2abde6e",
-        "observed_at": "2026-09-29T23:44:39Z",
-        "producer_run_id": "36646768289",
-        "refresh_evidence_sha256": "5b940ae0ffc71826a7aefe2de3a1453d6c28c67de9cd506c06be073d936e6197",
-        "run_attempt": 1,
-        "run_started_at": "2026-09-29T23:44:12Z"
-      },
-      {
         "admission_id": "de87ff47bbb8b31008a748a6edbdf20644e230b07982b3b80fe16865606528dc",
         "admitted_at": "2026-10-20T10:01:58Z",
         "artifact_digest_sha256": "2f0853f7ca7dceb185208d179efdea0b51ca3a61eb8fefe62ae117caff855be1",
@@ -85,6 +68,23 @@
         "refresh_evidence_sha256": "2a083d7d4feab66aaa81742958b0f6085845a27538df1094f309e082b5eb0166",
         "run_attempt": 1,
         "run_started_at": "2026-10-27T23:47:00Z"
+      },
+      {
+        "admission_id": "d712eaab5fd6edc68123e72e52d152e1d488394f30a80650df42acc9a7eaa2a4",
+        "admitted_at": "2026-11-04T14:28:10Z",
+        "artifact_digest_sha256": "d5cfbf6f6413f8d7cc9ab53d39608dfde5effddc98d3ee6fec67c0b2644d5127",
+        "artifact_expires_at": "2026-12-04T00:42:16Z",
+        "artifact_id": "13284662583",
+        "artifact_name": "upstream-catalog-refresh-41748189702",
+        "artifact_size_bytes": 9894834,
+        "candidate_sha256": "ffebd1504dc8b604c45c64f2a12531873e5fa9b8f998d679f4d3fb0cfa5f3840",
+        "generation_id": "3c42a42c63f97128ca2e0c96564c788490915457417b9cbb2bd20ddd7e5688d2",
+        "head_sha": "151da89679e34e3d7c034077c3a45a7c648b9de5",
+        "observed_at": "2026-11-04T00:38:11Z",
+        "producer_run_id": "41748189702",
+        "refresh_evidence_sha256": "a75c71c072891818fb6742a3cb3b11b932fac5aae886fddfdd36f739a6aa04da",
+        "run_attempt": 1,
+        "run_started_at": "2026-11-04T00:37:18Z"
       }
     ],
     "legacy_discovery_floor": {
@@ -97,14 +97,8 @@
     },
     "schema_version": "datapan.upstream-catalogue-handoff-ledger.v1"
   },
-  "detail_queue_cursor": 264,
+  "detail_queue_cursor": 272,
   "detail_retry_state": {
-    "15003164": {
-      "attempts": 1,
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-03T02:58:33Z",
-      "source_sha256": "dda2735ede849da6259256b9c39907b61c607bdda2dfb4932ea45db7c6695e17"
-    },
     "15005257": {
       "attempts": 1,
       "guide_sha256": null,
@@ -230,12 +224,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-03T02:58:33Z",
       "source_sha256": "559eb2f5e0eceaccfe7d0314853eada5f72debbf01feb1bbfd1ca55c29c6b287"
-    },
-    "15028101": {
-      "attempts": 1,
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-03T02:58:33Z",
-      "source_sha256": "476ec418f29e5d5a691cb29fb8485a78eb12eb49fac824d06e5115a37fda9bcd"
     },
     "15029122": {
       "attempts": 1,
@@ -1233,15 +1221,6 @@
       "last_attempt_at": "2026-10-04T00:36:43Z",
       "source_sha256": "91697611cf6ffd6322ddca394ef571d8dc8f4a121e22dbfa52572c76ebd60487"
     },
-    "15034324": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T00:36:43Z",
-      "source_sha256": "60345e12d888c1109eacf29564d51f9526ff0a7b9c8462039fd93dc99eb84bf5"
-    },
     "15037980": {
       "attempts": 1,
       "failure_diagnostic": {
@@ -1584,24 +1563,6 @@
       "last_attempt_at": "2026-10-04T06:50:38Z",
       "source_sha256": "f9f6eaaeb86ae85f7a1ab4a49bc3d6275fd5ba0d00ecdda846f71fee4dc87b9b"
     },
-    "15045335": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T06:50:38Z",
-      "source_sha256": "f64171653e3746abc18d2ef6618a9e4ba2aae31a176575516b5697754459100c"
-    },
-    "15045467": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": "21fb1f4e1c2e33d45ec6aa66de57ecfc7b851b778ef2ab39cd13cfc801d8b65a",
-      "last_attempt_at": "2026-10-04T06:50:38Z",
-      "source_sha256": "b6fb9a52a00f67d558f4d8c75e5d1ca203a56d98080d421bfcd66cabd425ad3a"
-    },
     "15047488": {
       "attempts": 1,
       "failure_diagnostic": {
@@ -1629,24 +1590,6 @@
       "last_attempt_at": "2026-10-04T13:11:08Z",
       "source_sha256": "5dd5f59695fadb5648ac1282003ad13bea0162e442f906ebe3cdb2a7622ad29e"
     },
-    "15056017": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "369521cbcb91121ecba42ee1ccb345ee543572b4ee26fa4d26df008328cd29d8"
-    },
-    "15056424": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "65eba40131291fd1e3d95e521e35148545d51ff0b0674c0d8bef82c89ff1793c"
-    },
     "15056513": {
       "attempts": 1,
       "failure_diagnostic": {
@@ -1664,15 +1607,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-04T13:11:08Z",
       "source_sha256": "65032b70dac71e0c3588a7a25aab9f3d7eb39f8e20c5d416003ceeeef9934a65"
-    },
-    "15056566": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": "5733c5774b6cc969d1215edb3b7f308fa7b099ea2f07e862e589552b146775f2",
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "82f7f5cd415e177a057941722aa2a24abbb654d47348e36314efe271f0c46b9f"
     },
     "15056568": {
       "attempts": 1,
@@ -1710,15 +1644,6 @@
       "last_attempt_at": "2026-10-04T13:11:08Z",
       "source_sha256": "c3b902e17f2f34f98ad7b7dd8254002de4842e1619523164ac1b96d15f772163"
     },
-    "15056636": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "a24d654e62129c96d3dab2ecb296f3e5afcebbacd89e7b48c0ff5a84f6e6f025"
-    },
     "15056647": {
       "attempts": 1,
       "failure_diagnostic": {
@@ -1727,15 +1652,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-04T13:11:08Z",
       "source_sha256": "6d142ba9ec9d4446fb9eda92cf2327b5c9273bbc5a34c11dd698f009fedc3598"
-    },
-    "15056648": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": "dd5788a50b38c57735f3a463252150d176a3f32e642b2cb67e22fd2684ce64c4",
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "dacd066ba41941f6f1a7d7948adc7ddcb4dde391969c5f12d4f30093229663fc"
     },
     "15056663": {
       "attempts": 1,
@@ -1754,24 +1670,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-04T13:11:08Z",
       "source_sha256": "67ead86dcd3d4e29fcbaf521faf0a8a81d1ef95ce6edc32dd55e211dc951a8ac"
-    },
-    "15056777": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "53fb45fb8f55cdf6fc6ef409ead40ce049b3b9fbb9e2ca942514ea4f5d7c39b9"
-    },
-    "15056784": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "6bca284cb113964c3617817ef4fc749be552f5c0119739c659e9bba993ca54b8"
     },
     "15056797": {
       "attempts": 1,
@@ -1800,15 +1698,6 @@
       "last_attempt_at": "2026-10-04T13:11:08Z",
       "source_sha256": "8dad0193ec766f9e8c474264b257861c05fe2205c9c852ccd2c5c3c020260b06"
     },
-    "15056816": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "d39b60f968cd4e77f7c9322d52d55f893cfd698a57bff23617bfc1acb6245808"
-    },
     "15056821": {
       "attempts": 1,
       "failure_diagnostic": {
@@ -1817,42 +1706,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-04T13:11:08Z",
       "source_sha256": "02ca73dc4141f977b116deffc6377fa2dd183101e7e9b5f7e87ef9388502a79e"
-    },
-    "15056834": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T13:11:08Z",
-      "source_sha256": "9b525223b718231e453649e9efb9082b4c8fa6af28fc125ea882a54f0949469c"
-    },
-    "15056854": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "7bc2d5c7346d8ae54d217b3bbeac5aad1c4d5f0a4dfc4173b950bb0976e67bb9"
-    },
-    "15056858": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "a2476f8aeabf178482fab59d3a7b896daf56bec8b51b5ef1cd2725497ff7bff4"
-    },
-    "15056865": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "c006218636ad7047026f7a8b89c1e16fdcc4da2bb4e191a9ec719102bce4318d"
     },
     "15056883": {
       "attempts": 1,
@@ -1881,15 +1734,6 @@
       "last_attempt_at": "2026-10-04T17:34:21Z",
       "source_sha256": "5ab08a9a04ac12708ecdda233029ed1892dae4b85d72a58db47f56fbb3630cde"
     },
-    "15056931": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "97cdb5de63b746cc5970e58177de8220aba5d4c0ff5dcb5adca297fe2b975e7d"
-    },
     "15056986": {
       "attempts": 1,
       "failure_diagnostic": {
@@ -1907,15 +1751,6 @@
       "guide_sha256": "44a45d4841be71c4b69e10e935916a5d209c047af788f072bc86694a7275bca6",
       "last_attempt_at": "2026-10-04T17:34:21Z",
       "source_sha256": "f000592d02c2ef514aa98ce1bfc5860ae1d3ef50ebfc853742457e6aebfc85bd"
-    },
-    "15057008": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "ff6df779d98436ff182278faf8414231cb95e2381fbf7c7daef18c47661034f2"
     },
     "15057017": {
       "attempts": 1,
@@ -1944,15 +1779,6 @@
       "last_attempt_at": "2026-10-04T17:34:21Z",
       "source_sha256": "4ef4f520a3c8e10b29f705f49d7534fa086e823d82b7540e63236478c3920235"
     },
-    "15057031": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "5876098329fb339fb375cb0175d0cfb3098c9aeed01e4b554f61359d903a8f51"
-    },
     "15057038": {
       "attempts": 1,
       "failure_diagnostic": {
@@ -1961,15 +1787,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-04T17:34:21Z",
       "source_sha256": "81cf022fb1a2db53d108cb7ad1aeb2fba2bbf98d8e9a44d24f3a5050e7bfeb4b"
-    },
-    "15057039": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": "7c486c6329f139f2c02a447bfb08562c312c11b8d2a185e4bf9c56a5c3a5d8f5",
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "1dc5331af5e12ea07090bc06ae0fd424a656ddea8adbcb61cd40bc03a2cbeac9"
     },
     "15057041": {
       "attempts": 1,
@@ -2016,33 +1833,6 @@
       "last_attempt_at": "2026-10-04T17:34:21Z",
       "source_sha256": "0c0c23d5b141bbbd0e13d48d14e8217d682b81e9c201813e6f07a925f2acfcc1"
     },
-    "15057134": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "27e1cfd55e72cd4654cb76bfb1aa0516bc4f4b3aa58461212d576022ba205e59"
-    },
-    "15057144": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "69f781e80e5f1d16e750c4352530574f546dd30cd42eac18134c504d342d212a"
-    },
-    "15057146": {
-      "attempts": 1,
-      "failure_diagnostic": {
-        "code": "missing_link_detail_operations"
-      },
-      "guide_sha256": "f3f84853c88a278794f567e1eab165d1d00780fe6895160205563e28f4250b53",
-      "last_attempt_at": "2026-10-04T17:34:21Z",
-      "source_sha256": "0e68eb3a3434e735873cc2f94cf2dbc64de6919801cb19f67d9d027418eb3888"
-    },
     "15057150": {
       "attempts": 3,
       "failure_diagnostic": {
@@ -2051,15 +1841,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-04T21:22:02Z",
       "source_sha256": "94e5ef130e4afb6eafb90200ff3d31802ff860431fe5c73cc86f7628dd18b02c"
-    },
-    "15057156": {
-      "attempts": 3,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T21:22:02Z",
-      "source_sha256": "ed257d089eb6766d512d146d024fbefb18646be031c57ec364763e39bf32a9fd"
     },
     "15057160": {
       "attempts": 3,
@@ -2078,24 +1859,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-04T21:22:02Z",
       "source_sha256": "5f9065ac043ada38186f42568e326aedb3ead340b17e92560065a2c57beb8a5f"
-    },
-    "15057226": {
-      "attempts": 3,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T21:22:02Z",
-      "source_sha256": "5ea26a3c3a62a432ba54d26243286363ca2548fe4cfb6ea2f232c11ec24e5374"
-    },
-    "15057248": {
-      "attempts": 3,
-      "failure_diagnostic": {
-        "code": "timeout"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-04T21:22:02Z",
-      "source_sha256": "6132a2e6525ce97a12a122067563d5540b748eef124e41f67e743c67872340e9"
     },
     "15057261": {
       "attempts": 3,
@@ -2124,16 +1887,6 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "49c1b30a3a56b7badb1d7884b180df2846b7b8b2f49f759338da2f768ee4a64c"
-    },
-    "15057370": {
-      "attempts": 3,
-      "failure_diagnostic": {
-        "code": "timeout",
-        "phase": "page"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-05T00:55:05Z",
-      "source_sha256": "6f4f5f97ff353d2646ff8f239d873350d85d283bec6a55acf55348846a23bb37"
     },
     "15057413": {
       "attempts": 3,
@@ -2175,26 +1928,6 @@
       "last_attempt_at": "2026-10-05T00:55:05Z",
       "source_sha256": "2c2b83f402552a0f163cd8952482f41f6484659a5172150a46b71abeec16ef3c"
     },
-    "15057476": {
-      "attempts": 3,
-      "failure_diagnostic": {
-        "code": "timeout",
-        "phase": "page"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-05T00:55:05Z",
-      "source_sha256": "0f4e3985f0a5f4594de1fcfc49e3da3e11abfd36e49c1bc99f3f1d7aa18fe51d"
-    },
-    "15057477": {
-      "attempts": 3,
-      "failure_diagnostic": {
-        "code": "timeout",
-        "phase": "page"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-05T00:55:05Z",
-      "source_sha256": "09b6a86af1d8af42733ca7e7dc2a96014b575d5a98f5007f2ad61db9d9c5199c"
-    },
     "15057491": {
       "attempts": 2,
       "failure_diagnostic": {
@@ -2235,16 +1968,6 @@
       "last_attempt_at": "2026-10-05T07:01:15Z",
       "source_sha256": "59173a725b99022687e202acd09c41ee9ce6d81584b4463f68dce32e91df7837"
     },
-    "15057515": {
-      "attempts": 2,
-      "failure_diagnostic": {
-        "code": "resolved_link_operation_contract_unproven",
-        "phase": "resolver"
-      },
-      "guide_sha256": null,
-      "last_attempt_at": "2026-10-05T07:01:15Z",
-      "source_sha256": "37d282d35ac3f4a74689ce17c6e574e864fb7f4e38bfaab75a3c90872e04465c"
-    },
     "15057523": {
       "attempts": 2,
       "failure_diagnostic": {
@@ -2274,6 +1997,54 @@
       "guide_sha256": null,
       "last_attempt_at": "2026-10-05T07:01:15Z",
       "source_sha256": "d252dfa88cebe5b950db670a03917cd54ea8011cf6dd568dfe86a7d5104e5aff"
+    },
+    "15058192": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "49142dc6db30a3e2eee58af11cab3739dc020ecaa81e54d385757d82151ac9af"
+    },
+    "15058240": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "ac641990973d1dfbcaafeb86cc06f1544d2f7be04b69125b60ffbcbb7cffda5c"
+    },
+    "15058298": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "a0d0d29e242939464c1682c34682be1e1581bfff7f64dadb81a9b5f87e0921bb"
+    },
+    "15058300": {
+      "attempts": 3,
+      "guide_sha256": "6f55f1dafa733e49232783e72090f65d7ea50b5ed354cae22a30c55f9878dc81",
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "6506639807d0e56803cd56bdc813aea3f3d669c08b1e8a8e617a7d385f8d583a"
+    },
+    "15058375": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "16fa80c19218b84d0a4e6054292be2dce7d57fdf6ce5b95e6d70819637169c02"
+    },
+    "15058404": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "08ff64a93a1000915f063fd90e45518b0f48e5856ff3ae4d2ffceb24387b7be7"
+    },
+    "15058412": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "45e93adbc8eed0a5dc83a668289524d98bb499a760758a31b0130ee36133467d"
+    },
+    "15058422": {
+      "attempts": 3,
+      "guide_sha256": null,
+      "last_attempt_at": "2026-11-04T14:28:13Z",
+      "source_sha256": "407036768b3774b271b0fbb6b102b91761f16feeaf34f8fe0b6bbe76df28ab1e"
     }
   },
   "generations": [
@@ -2374,6 +2145,13 @@
       "generation_id": "6ef7eeb25cea3ba121107d23511becd887214bf99c28b3172866df6929d92c9d",
       "status": "quarantined",
       "updated_at": "2026-10-28T05:37:11Z"
+    },
+    {
+      "candidate_sha256": "ffebd1504dc8b604c45c64f2a12531873e5fa9b8f998d679f4d3fb0cfa5f3840",
+      "checkpoint": "3c42a42c63f97128ca2e0c96564c788490915457417b9cbb2bd20ddd7e5688d2.json",
+      "generation_id": "3c42a42c63f97128ca2e0c96564c788490915457417b9cbb2bd20ddd7e5688d2",
+      "status": "enriching",
+      "updated_at": "2026-11-04T14:28:13Z"
     }
   ],
   "schema_version": "datapan.upstream-catalogue-checkpoint.v1"
