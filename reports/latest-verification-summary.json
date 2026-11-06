@@ -1,50 +1,55 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-06T01:38:45.616743Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3696,
+    "failed": 1266,
+    "skipped": 4619,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4619,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3696,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1266,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2377,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1129,
         "reason": "approval_required"
       },
       {
         "key": "missing_auth",
         "count": 583,
         "reason": "missing_auth"
+      },
+      {
+        "key": "HTTP 에러",
+        "count": 277,
+        "reason": "HTTP 에러"
       },
       {
         "key": "data_gg_request_timeout",
@@ -68,7 +73,7 @@
       },
       {
         "key": "NORMAL SERVICE",
-        "count": 74,
+        "count": 76,
         "reason": "NORMAL SERVICE"
       },
       {
@@ -317,11 +322,6 @@
         "reason": "seoul_bus_service_key_not_registered"
       },
       {
-        "key": "HTTP 에러",
-        "count": 3,
-        "reason": "HTTP 에러"
-      },
-      {
         "key": "airport_missing_required_params",
         "count": 3,
         "reason": "airport_missing_required_params"
@@ -390,6 +390,11 @@
         "key": "jeju_missing_required_params",
         "count": 2,
         "reason": "jeju_missing_required_params"
+      },
+      {
+        "key": "provider returned resultCode OK",
+        "count": 2,
+        "reason": "provider returned resultCode OK"
       },
       {
         "key": "seoul_bus_missing_required_params",
@@ -587,6 +592,16 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/3190000/CrossWalkService/getCrossWalkList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/3190000/CrossWalkService/getCrossWalkList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "Get \"https://apis.data.go.kr/3190000/TrafficLightService/getTrafficLightList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/3190000/TrafficLightService/getTrafficLightList?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
@@ -630,6 +645,11 @@
         "key": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "OK",
+        "count": 1,
+        "reason": "OK"
       },
       {
         "key": "car365_http_400",
@@ -692,6 +712,11 @@
         "reason": "oneclick_missing_required_params"
       },
       {
+        "key": "provider returned resultCode 200",
+        "count": 1,
+        "reason": "provider returned resultCode 200"
+      },
+      {
         "key": "psis_request_timeout",
         "count": 1,
         "reason": "psis_request_timeout"
@@ -705,7 +730,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1397,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2269,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
