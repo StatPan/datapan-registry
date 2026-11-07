@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-07T00:57:50.555076Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3681,
+    "failed": 1021,
+    "skipped": 4879,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4879,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3681,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1021,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2449,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1315,
         "reason": "approval_required"
       },
       {
@@ -62,14 +62,14 @@
         "reason": "jeonju_missing_required_params"
       },
       {
+        "key": "NORMAL SERVICE",
+        "count": 86,
+        "reason": "NORMAL SERVICE"
+      },
+      {
         "key": "missing_endpoint",
         "count": 81,
         "reason": "missing_endpoint"
-      },
-      {
-        "key": "NORMAL SERVICE",
-        "count": 74,
-        "reason": "NORMAL SERVICE"
       },
       {
         "key": "chungnam_http_404",
@@ -227,6 +227,11 @@
         "reason": "qnet_wadl_metadata_only"
       },
       {
+        "key": "success",
+        "count": 9,
+        "reason": "success"
+      },
+      {
         "key": "epost_missing_required_params",
         "count": 8,
         "reason": "epost_missing_required_params"
@@ -235,6 +240,16 @@
         "key": "pqis_service_key_not_registered",
         "count": 8,
         "reason": "pqis_service_key_not_registered"
+      },
+      {
+        "key": "HTTP 503",
+        "count": 7,
+        "reason": "HTTP 503"
+      },
+      {
+        "key": "HTTP 에러",
+        "count": 7,
+        "reason": "HTTP 에러"
       },
       {
         "key": "andong_missing_required_params",
@@ -250,6 +265,11 @@
         "key": "tour_service_key_not_registered",
         "count": 7,
         "reason": "tour_service_key_not_registered"
+      },
+      {
+        "key": "HTTP 400",
+        "count": 6,
+        "reason": "HTTP 400"
       },
       {
         "key": "context deadline exceeded",
@@ -317,11 +337,6 @@
         "reason": "seoul_bus_service_key_not_registered"
       },
       {
-        "key": "HTTP 에러",
-        "count": 3,
-        "reason": "HTTP 에러"
-      },
-      {
         "key": "airport_missing_required_params",
         "count": 3,
         "reason": "airport_missing_required_params"
@@ -362,11 +377,6 @@
         "reason": "ulsan_service_key_not_registered"
       },
       {
-        "key": "HTTP 400",
-        "count": 2,
-        "reason": "HTTP 400"
-      },
-      {
         "key": "daejeon_http_404",
         "count": 2,
         "reason": "daejeon_http_404"
@@ -395,6 +405,11 @@
         "key": "seoul_bus_missing_required_params",
         "count": 2,
         "reason": "seoul_bus_missing_required_params"
+      },
+      {
+        "key": "unsupported_protocol_wms",
+        "count": 2,
+        "reason": "unsupported_protocol_wms"
       },
       {
         "key": "Get \"http://apis.data.go.kr/1360000/AmmIwxxmService/getAirmet?dataType=json&numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
@@ -632,6 +647,11 @@
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "SUCCESS",
+        "count": 1,
+        "reason": "SUCCESS"
+      },
+      {
         "key": "car365_http_400",
         "count": 1,
         "reason": "car365_http_400"
@@ -705,7 +725,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1392,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2264,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4075,
         "kind": "data_go_kr_gateway"
       },
       {
@@ -2261,6 +2281,11 @@
         "key": "malformed_endpoint",
         "count": 14,
         "kind": "malformed_endpoint"
+      },
+      {
+        "key": "wms",
+        "count": 2,
+        "kind": "wms"
       }
     ]
   }
