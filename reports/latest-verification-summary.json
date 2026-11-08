@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-08T00:37:09.058524Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3753,
+    "failed": 985,
+    "skipped": 4843,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4843,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3753,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 985,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2428,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1298,
         "reason": "approval_required"
       },
       {
@@ -315,6 +315,11 @@
         "key": "seoul_bus_service_key_not_registered",
         "count": 4,
         "reason": "seoul_bus_service_key_not_registered"
+      },
+      {
+        "key": "unsupported_protocol_wms",
+        "count": 4,
+        "reason": "unsupported_protocol_wms"
       },
       {
         "key": "HTTP 에러",
@@ -700,12 +705,17 @@
         "key": "qnet_connection_validation_failed",
         "count": 1,
         "reason": "qnet_connection_validation_failed"
+      },
+      {
+        "key": "정상",
+        "count": 1,
+        "reason": "정상"
       }
     ],
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1382,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2254,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4073,
         "kind": "data_go_kr_gateway"
       },
       {
@@ -2261,6 +2271,11 @@
         "key": "malformed_endpoint",
         "count": 14,
         "kind": "malformed_endpoint"
+      },
+      {
+        "key": "wms",
+        "count": 4,
+        "kind": "wms"
       }
     ]
   }
