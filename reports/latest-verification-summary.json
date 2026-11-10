@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-10T03:36:03.854301Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3708,
+    "failed": 997,
+    "skipped": 4876,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4876,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3708,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 997,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2449,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1314,
         "reason": "approval_required"
       },
       {
@@ -277,6 +277,11 @@
         "reason": "uiryeong_service_key_not_registered"
       },
       {
+        "key": "HTTP 400",
+        "count": 5,
+        "reason": "HTTP 400"
+      },
+      {
         "key": "airport_service_key_not_registered",
         "count": 5,
         "reason": "airport_service_key_not_registered"
@@ -297,6 +302,11 @@
         "reason": "HTTP 403"
       },
       {
+        "key": "SUCCESS",
+        "count": 4,
+        "reason": "SUCCESS"
+      },
+      {
         "key": "ekape_service_key_not_registered",
         "count": 4,
         "reason": "ekape_service_key_not_registered"
@@ -315,6 +325,11 @@
         "key": "seoul_bus_service_key_not_registered",
         "count": 4,
         "reason": "seoul_bus_service_key_not_registered"
+      },
+      {
+        "key": "HTTP 503",
+        "count": 3,
+        "reason": "HTTP 503"
       },
       {
         "key": "HTTP 에러",
@@ -362,9 +377,9 @@
         "reason": "ulsan_service_key_not_registered"
       },
       {
-        "key": "HTTP 400",
-        "count": 2,
-        "reason": "HTTP 400"
+        "key": "정상조회",
+        "count": 3,
+        "reason": "정상조회"
       },
       {
         "key": "daejeon_http_404",
@@ -705,7 +720,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1387,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2259,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
