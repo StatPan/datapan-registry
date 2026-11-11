@@ -1,27 +1,27 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-11T01:18:27.091015Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
+    "total": 9581,
+    "verified": 3792,
     "failed": 984,
-    "skipped": 4135,
+    "skipped": 4805,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4805,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3792,
         "status": "verified"
       },
       {
@@ -33,12 +33,12 @@
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2400,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1292,
         "reason": "approval_required"
       },
       {
@@ -705,7 +705,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4021,
         "provider": "data.go.kr"
       },
       {
@@ -732,6 +732,11 @@
         "key": "opendart",
         "count": 245,
         "provider": "opendart"
+      },
+      {
+        "key": "safetydata",
+        "count": 187,
+        "provider": "safetydata"
       },
       {
         "key": "culture",
@@ -1069,11 +1074,6 @@
         "provider": "safemap"
       },
       {
-        "key": "safetydata",
-        "count": 10,
-        "provider": "safetydata"
-      },
-      {
         "key": "seoul-bus",
         "count": 10,
         "provider": "seoul-bus"
@@ -1372,7 +1372,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 3897,
         "host": "apis.data.go.kr"
       },
       {
@@ -1399,6 +1399,11 @@
         "key": "opendart.fss.or.kr",
         "count": 245,
         "host": "opendart.fss.or.kr"
+      },
+      {
+        "key": "www.safetydata.go.kr",
+        "count": 187,
+        "host": "www.safetydata.go.kr"
       },
       {
         "key": "www.culture.go.kr",
@@ -1759,11 +1764,6 @@
         "key": "www.safemap.go.kr",
         "count": 10,
         "host": "www.safemap.go.kr"
-      },
-      {
-        "key": "www.safetydata.go.kr",
-        "count": 10,
-        "host": "www.safetydata.go.kr"
       },
       {
         "key": "data.floodmap.go.kr",
@@ -2239,12 +2239,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5390,
+        "count": 5567,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 3900,
         "kind": "data_go_kr_gateway"
       },
       {
