@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-12T02:19:24.978676Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3711,
+    "failed": 1007,
+    "skipped": 4863,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4863,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3711,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 1007,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2604,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1146,
         "reason": "approval_required"
       },
       {
@@ -182,6 +182,11 @@
         "reason": "naqs_mutation_endpoint"
       },
       {
+        "key": "OK",
+        "count": 15,
+        "reason": "OK"
+      },
+      {
         "key": "malformed_endpoint",
         "count": 14,
         "reason": "malformed_endpoint"
@@ -292,6 +297,11 @@
         "reason": "lh_ebid_service_key_not_registered"
       },
       {
+        "key": "정상",
+        "count": 5,
+        "reason": "정상"
+      },
+      {
         "key": "HTTP 403",
         "count": 4,
         "reason": "HTTP 403"
@@ -365,6 +375,11 @@
         "key": "HTTP 400",
         "count": 2,
         "reason": "HTTP 400"
+      },
+      {
+        "key": "INVALID_REQUEST_PARAMETER_ERROR - [crtrYm is required.]",
+        "count": 2,
+        "reason": "INVALID_REQUEST_PARAMETER_ERROR - [crtrYm is required.]"
       },
       {
         "key": "daejeon_http_404",
@@ -587,6 +602,11 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1384000/idis/IdolbomMonitoringPerformanceService/getMonitorResultStatisticsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1384000/idis/IdolbomMonitoringPerformanceService/getMonitorResultStatisticsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
@@ -705,7 +725,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1392,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2264,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
