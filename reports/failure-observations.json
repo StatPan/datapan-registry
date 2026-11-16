@@ -1,6 +1,6 @@
 {
   "schema_version": "datapan.failure-observations.v1",
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-16T01:04:30.370025Z",
   "observations": [
     {
       "observed_at": "2026-07-04T06:39:24Z",
@@ -23265,6 +23265,5470 @@
       "subject_id": "operation:59abb9504e5b3f18",
       "healthy": false,
       "evidence": "reports/runtime-freshness-imports/39175226004.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:db0bcb2049978f64",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:58b248becbe3e037",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:d453b591e25bad80",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ce4ba2d761402cc3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c246bd0e48dac2e4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:55c463fffcb1cdf3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2d755fadb7c58829",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:78518886da7f5fbf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:635e5bf535d1b9da",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2efc20e70d643179",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a8f3c64cf45098bf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e09647d43286beff",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:437ff6372ee2bc1b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3498c6432ed13ad8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2b6f8da1e1e5f829",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b510ec43215a70d0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fdcdd11edeeebd83",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f06f859035c117e5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bf365ba6fbd74f53",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ebbb2a2d43d86a3f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6cfc56be8ae7af3b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:73c357b8bff49bcc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e466687ee2ea26da",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d137e88e64b6b06f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5116b1a5fa1ff832",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:b2da79b8cfd70515",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:489825b574b1a0b2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:29e9655e027be78d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ceea72b0cd38b8d6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0bd9961a2b883c88",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a8c0cc2a8ecfb447",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:eb2796e1400d9e85",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0b23279424fca7fb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:df584979ae6c7fcb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8605ebec0c95a587",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0b3f9790f93d6d5a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8003b9c8bc1e544a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:39758c413183564d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b96309320eefcdf9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d46e7d52cd8ec232",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cbd3a41208849756",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:798bd9484dbc98ec",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:36fd2a396e605224",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0df0db82658a7d57",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0b14089ddd207d89",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f3f10dea287fd9fa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2916d1bd3c19c548",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5c3eb403258b9601",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1d10e545b5bc0819",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:70645fea82b2460b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:6720c4abca9914d4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9c2c8c3761a7b081",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6635d15209183124",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ec6c15edbc60805f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:67a733d77b677f9c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5664c77491fbe455",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:821b229125cf6639",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e5944d9b3b3d2dd6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f3dfaf606501b2a5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:43d8b09bc5b91de7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9d45d7eb87854054",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4537eb656c463176",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:219cd82ee4246184",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:15e7cdc99b9afb41",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:521ef0617bcca233",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:991a18d4ba482753",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0a0809b3f9b9ad0d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ee8bdfa9d569a199",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:43710fa71ca6ef9c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:648f3b5636067909",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6f734a655372c3bb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3dde561af2563401",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b21740210223da03",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:70c1ebcd6373e783",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6491206ddabfd067",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:157232cb137582c3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bee52e3454d6edbe",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:0af5c644a927df71",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:7bfa346e59fc5467",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aef9e23cb216e03b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0dec935248ed1abd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f9561f2a02995608",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1b37f3affcb54851",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4dfc7d6b833d2aab",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c6726053aadce1ac",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8bf6c5dca5a8a0cc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:dea8b9d97e7f1f2d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:374bd330b9bb2541",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c159cf3ea608a46b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0044c3f0c2df01d8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aab6ff49bd69557a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8e40e60a11b2f648",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:30a562f0ebadffbc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b267833af30a9622",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:975adf2c0131c7a9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:77d7d8a80067f7dd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:162b371f8eebe1e6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f0fcc08da6d21f52",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:9d7c98e161d61251",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:54e33dfbb88ef423",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:319a85c7e7a2997d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:32e4f5e7b0dca3c1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:40cb9b9732b6c7fe",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1f9279f901dece74",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6cc0e7cd13f57faa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e156920f7ae250b7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cacf21cdd114e05a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:679dc86d36597e0a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d2fc3381b18620f4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:eafda6f73c7c0ff1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:de4754e3f06dcd93",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b3aa75b8951544b6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:78616aee5d820fe5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ec7ac1c7a1faa705",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:575898aee9883329",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:a8d97f3a91598bc5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:de2053d5e1000039",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0e71a0ac6aa3a903",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:648aeca6fa06a55f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:92f5d4ffb96f7f2f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f75d9c8c9d65d3cc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f52614e82d39950e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b1e6a37dfaa74d12",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:04c8d875ed0a0387",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:add074a070a8c051",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b2791f1cbbc9d768",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fd9e1ee608b71631",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f2fb3a78b2bfbc97",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4859f147c266c599",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3da2794704bdabe3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c3c3908c44e4e29c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fa5c31e771666faf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e606cb9f003a72da",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f1836668e2b0ffd6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:980e94a9a2bb0177",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:dd1f5e6de1ad9e63",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5d7fd632075fec7f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a2e0333e1790c627",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:10eef50a3424c809",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6ae2e7d7bc9e900f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d74576e68f78ab11",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T00:59:21Z",
+      "source_id": "data_go_kr",
+      "failure_class": "upstream",
+      "subject_id": "operation:1a9414f7af3cf64f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:de6d32d3db75a0b9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:875940bb8804e9d4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b7de0b80d87a8e51",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a04878b56db5900a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c512e9b7adb4124f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ee6167a5b32d2edb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:865d6d83691af729",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:99a6deebf200660d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:3d5cdca49c632a37",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6f851104897b575a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:b18522219c76974b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d384422e213da11d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d93405e733f7cf24",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8fe0ebdd0e57b531",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a6f72adb9bf01567",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:44ceb9c88e685c51",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b32055a3d9c32ab3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:481b9a713a3f83a5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3232c7fb5ebe6938",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d0764429d6f0a992",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f88a04d283976a2c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a72e763ae65b5b4d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:11e117cfbd884c7f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0116b742b3e1fa3a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ebdabfaa9a5fa3eb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ea5927d65abc0eca",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:01658b0720df4559",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2276ac3fad34e58a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:765be3b62cf0d981",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4234270d0a022b9d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4957b171dbfb32ee",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:db35bfc1b68cd71b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:25827d976e4804d0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:482f829f81e81107",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:68651cd15d6cb0c0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:46f3be34907b6df4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:22e83ebba1457750",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:7f6ad04c5e280a63",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:b41c9b86316100e2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:56c753160aba0397",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:54f0ac0608f5d650",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9810625b4ab5c6ed",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3bd6f692890325c8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:91dfbc5b82ca4ecf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:13e986e42f317904",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bc725ccc479bd7ba",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:946222a71cf11626",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1bde1da1063a0133",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4771103f99dc65aa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6815d1649140029a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:df60c0dafaa91534",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b520336a2a8253a3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ab3c1fea58e38551",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:8fdc59444da8db12",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:e7705cee6ac9e078",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:675afa7d6af58fde",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:75ea25af2387d095",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:53ec867baffa3acc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:80b5acf11e641a67",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cd46c8e2a4c27140",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:88f164e9a150f0ef",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:84875509ecdf2b6a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2b3ca339f63fdcb3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ec65b098635aace7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d3be75b2258f165c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:290f54f719353e61",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:80a0df258afe3781",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:35b8ac691939d0c6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:325c309ea8113a21",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:800430bb800d49e3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:392f44cb98a7aafd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:44f18998d7a3ccc4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:4b76987cd570db7b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:05a9717c1f1d8897",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:71b296bd640bca72",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:ebf968539b67f288",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:987a5c262b7ceea1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:8d8b78eed84fa20e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:526ecbd2efe4f067",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1c1a138b795bbfd0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4ca8ec78ceba2e4b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f0980237a5ec9253",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f1fed54b20093bf9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9dbbdfe6a568005f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f05a14cc5f75e099",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:130b3d8ce84334d8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:97e722dced8d18c7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e60fa2619c793bbd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0a7ce055ecb0514d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9c2db657d9e3dd0c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:352b0573006103b1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:537e493a53c606bd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:68d2d791f42f807c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7c42453bc4443042",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:78b5a8ef6f1e5c38",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:621531649f9a4112",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a6ce5c1c95758e1f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aedf24a47f2e5a27",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6fb89632609ff739",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fb34a7dfcc13edd5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:453e0c0c82625876",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:467d73a8aa0b89c7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:791353271c441297",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f1cbaf53ae26520c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:13239f27bf8e76fe",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:96683ac4d886096c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e9576477562953db",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e2478d4a516f05c3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bb137150ea43e40f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ac942208b7b4148c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:857d61adc85dbe8d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5667c7e0621a368d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:60c75e5445fced35",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e630db2e71918342",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8696bd42464c3699",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:058e4086f6576f02",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1543e0b8df363749",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7920fc5a32685eb5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6bf19aab9e8eb603",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b702f67a2b2b9e3e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2f7a9bbc264d98bc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:291b52ba1ec06c72",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e035d7ed86850bb6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6f7cd0f393d284a5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0cc8e9af8b528f97",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:735354b969392b87",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:d7519899b5b7a5a4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:462a479ba4360e2d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b303eb639a352de4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:88f810f6a927e6ba",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0915b732f155a84c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:915eb591ca5fbd1c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c930c052a9ce5689",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aafff3ede028fc2d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9667fb3158e9d28e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f050d4b0d7f06466",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a34115e0de74d4a5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0f6583f32df33b37",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:215955649e456c17",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:450ffb50b3f1d448",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d398c61a0bed493f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7399796470281496",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3569a34860585c6b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:eaf8d247bf9e851b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e60906753b6571db",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:70fcfd22a42fe6d5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1b58720eddfbe79f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e3afd7f6b8684d13",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:751cdb11de439339",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b5a34c947077ffd1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9613461ad8c90f51",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2215d94e79175153",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:abd78bf872dcd753",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:49879e5677fe2110",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:731a3757d16d5db2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cb461d2e85b37a57",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:890536b8e07481fb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d1bec90cb54cdfba",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0805baea21fec1fa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ca0f5a35b5259726",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:69e87352cbe74b7f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:13e4b467873d3094",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cbfad5a12c3ebbc1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8dcf1bcff96cb09f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6524a741bfb9358a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1ae67c56f46ed7e8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c0673f492cc5bc03",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2882d22a0719b7ff",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0bc9e7fe87ddc12e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:57d3e8f5a76cb855",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8f30f9d9f5371dd3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2f44b8e8c1cc2d85",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7a387d85ef645170",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5f2dfb7530169bb4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:15a2262d9925b82b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c6ad60c9b9622746",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:5f1d32bbc61369cd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:a9afbb50e77a8e08",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d72052ce6443a037",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f4c33728f03e140b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:28cf6c61729012d9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:eab9619ea1274d40",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:28c74e29524593a2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2aadbf3c72ae90d0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6e82ecca448688bb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d3aec655f25a2927",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a25610419262f50a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3ba985103f69442e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a677b98b10aa87bf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:73a06f131081e374",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:88da7b28bdbe2e6a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e33b86cddd9b29d9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c9a216dceac74946",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:65e8ac86dd795794",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:34d64df2312214aa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6ffb4da19f6375bf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:00ee26e5c41f307e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a1e74690e12e71c6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:76c03ec2eabbe2fd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:a28950ed06f24e42",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:277fe261bf374d0a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:9c36083343634023",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:ad20c0fd6b50882e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:e297afa52e01f9eb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:d5674f0c0d430649",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:3f26251671ab307b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:c8158bc018de5981",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:e63921aab39d7999",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:5152bc9faf8aafbe",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5d1ed6c78fe0fa70",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b6ef00b3e6a76c3a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7065baae99b5ea0f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:97562f233bb38d70",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e0f6e23439808969",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:70afac5891bc23b0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a45ff9f88407cc0b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c19fbf2e0befed2b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1d6797da1401c308",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:921f5712403b5f03",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:03a0ae05cd32ee83",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:72612d50dd72343a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:35b754b92946d583",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3adc8aa45f7872d8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:89ea9e690e2f62ca",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:752fc938880f7816",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:20adbb73dd05883f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:01f0cd898fc6a648",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5d17cb262f6da7fc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:141306716d65115a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cb1cf0b9c23eee01",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:ff1e926162465add",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f1a1deb20574797f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:46ac6112682dc212",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3185fb19537562bd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c0aeec001ad035a3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:761a8489f23589b7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1ddc90f03735ce7a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f492ad824b390cf0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0f0c275250c79469",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fe491c845d980f7c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2473da0327da4a77",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7295594724b02e5d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:53e15670065a0042",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4a03cb98cbec39d2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:46dfe6c31ff917ae",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:40a76c97f5033d85",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e7e2c5343926a131",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cb6067b9ec93eb3f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c1053d4de2e170e6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cc759ac8515e2245",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:45baad96642ef85a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b1d511e71e866de8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9aa93deee09aeb79",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9e138fb67e6e3042",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7dc15bd33324cd10",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:30a906dd8ef59273",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:918431fce83b1400",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d98f9d91e8e24192",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e7b46712b4664931",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7bf46706db2bf6bf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:42457fc2a4255112",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:51c5221746bfadd7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9c44f989491d599b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fb7017fe782cd56b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f1e7acb4fa89e7cb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:264c040ca024fece",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:885ad0ef29fdc4f1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:70e8bb225e7d421a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ca1f8040cf52c042",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:12e282f22ecfaf4e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0c93817f663533d0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2ebc7424e820a816",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a37f5309cd6b69e0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:578f3f85ca6363cd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:14e4838c2cc64a20",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:dd72a5c22469d173",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:54f124cd631938cc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:149efb5538592e7f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:83a42a9482692e33",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:09e50aae3d9e129c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a26aaba390889932",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f49daa2fb779c287",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bb61be147e4b39dc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f383c99c20bcde3e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:097a5163fef2ef9c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6e6c71e1700d397c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:88f21417314b03d4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9d2a5a4304812b93",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2d735024c6d75e28",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:946d38fbfe21f3aa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:32135eb1ba2b0396",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:462a7edc12a363b7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9bdc40662d01bafd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:705b381527bedffa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3ebaad125bcbb6f4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:4ac75a00c7906ef9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:08ed300a8918a5e9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3f5c5ce616245586",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:60d55cba5b134821",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7761f332f8a857f8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f30dd794914d6553",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:91cc2ee3d8714512",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fdfc495d49f9fa72",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:31f049eb58df4bf4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c2e2cad830accb22",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1ec8c461fd19cc02",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e54e6fb96e1b9cc0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:72aeb9a03f254eaa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4121f2d737e44c31",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a7dea0544678a284",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d0970553d03118eb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0279da85d350dad1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e692c591da68fdcb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:950731c647fd54f4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e038331c60b0051b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:518cd9e858783070",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:da6a321a6554bdd9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:da5793ad28e2add2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d0d56cf1ff7f903c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:75289ea96295b367",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f887b466da81a3d4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:77518e1de6a8d658",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7ee621e5edb916ea",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b5a7305e6da7d232",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4e39fd9082a2fa49",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f35ae238827e4b2b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e733d727098d28a9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7a89c746ddefc353",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9fd5ab7692528040",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c2cf6540b1009530",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d4f73a35dff52bc2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:24c20e64a250c2ab",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5350d811cacc5c7c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9933e7ab17a81ae0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d93751be46539f8d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4544981b19d912a8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:375a482866deac23",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:da567786894c6726",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5a0bb20247ffbf65",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fbeebf3f64cf1da0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f31f192fc1f297b5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ba34131d52282a43",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aa4c64d352f11eaf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:67cddd786d2a94a4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f8b5718fcc948c3a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c84efaa20d3c8fda",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:312bf58d14637d40",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6992517485f0fe6b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6e86735bc2cf00cf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7f895ca8fe26c6cd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6c103da48d91cfc5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fec8ea72705bd4d8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f70d053f4b3b6d31",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8650d179cf5920ff",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:24f301bf22618141",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:f0c634072092d196",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:77456dc1d50f2cf1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0a2e0d752a445095",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e6820431a90aae10",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:61fbbcebccc0b598",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2c058d9fd06fe7a9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:99df2db7cddaf9a5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9ebe861b918d5038",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ce268274694afaba",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2ac406b1bc7c1ee3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7e59ad8ce58b9b25",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:313a523de2e6e3b7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bf4e548852409e25",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:99c864b401983e5d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6177bcc39707a247",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:daa134249b140d37",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:32f0e443256daef2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3ee4db38ce6b4b7d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:8008be49eb1e989a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fe3b25957638a00e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9acea341b7db4fdb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0ce4c9c0bd6448c2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4fc03e42ec50324e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4813c37ef2114211",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:80a951a2ad349d80",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:21a249fb903295e5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ac2fd0cceea2b748",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:af572e040cbdabd0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c3478e5793bbc5ab",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7968a756617bb511",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:151c70753abf3cba",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c712e807ba3a934d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4fa44cef6d3630f7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2b34248ff0a8d96f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b44565c75abc4e74",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2025ed3d24feefcd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aea96e68e3837b24",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:36cdda0c2d9123ea",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fc3cecdd8e5d0751",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3ddbcde8dbf479bd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:13c2571dc3177d1d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e555b5b18f0156fa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bb8b9f77fecca365",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:19b808ce1ae759cc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9ff21749072fa83d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a9a3c49d10fd94a4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4b73fffb8f4a8717",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:be0f93413d02181c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:54e476f3a1e57d5f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:7e6a8b945428a26f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:67728275adda5077",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:64440546b99fd709",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cb5fee8fffc1fd74",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a2c340bcc7a8c4df",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:77a6419df39ca35c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:24e18f749bfbe10f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:addb45e74231e0b3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fc5ade04f04b2816",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e75031a297a34ec1",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0de6fb543eddfaa8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1553514edf7bf238",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b20fd14d6c8234f0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:63b41bd1d28e1341",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2fbc4ecd4413dc4a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5cd97a48201fe2d2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3d0e7b2b95b6842f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1a9bcd9ce20e9e87",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6897e85123ca2c6c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6f9ada6e70a04a17",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b907c4771296447e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4c3e9bacd46444b9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:a3eecded6d00a950",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:fabf7e012f4d7376",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:326bf310d88dbd89",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:f9f08b5fa4328b16",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:930c3bbbb7771d88",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:60c8976be40fa970",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:a5a638280bb9a55a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d8857ce1d44e9fbb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aaf163a12e4162ce",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d95c41783d5749bb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2ae8ac6f1d6c6184",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:36670ed9e25941f9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:12550e2ee5aebcbb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:316831ddfa85f946",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d8e0a84511a6e3b3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2c5dadbe8efdf9aa",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5c3ce81f1a00bde7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cc595685578cc4f0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0bd200565db95f4a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a5b2c8ac07bdd520",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:9f577d1c9f42690f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:526956591a724a27",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4f895480e1ee4ece",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:74963e2d1ad74873",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:4510a2dc8ab0951d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a43a970ee43c680f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:378230b47d5a0efe",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6f26d05c0d34e8d8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:aaa6f3bf56bb14cb",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9a6a5a5874d3a555",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0096062bc63fffca",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6504eb2faf72509f",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9834698624ff322b",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2c0758593d2e0fa6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:de8c5d5b4fc84657",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4a74fdf0fd18c1e9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:b2909811d5874373",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bcf4b215fc933e59",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:dc170a314e0b79cc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:8648cf48bddf4ed3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:f87d50563bad7b0d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:59c3489f1008fdc3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:605919e5c3a73f82",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:a095666a6432a886",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:36493a3ba567481d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:0be766237305bcb3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:3284833691ea4d2c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:5770ebb6c8232e24",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:1f1c83e13db09a7c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:0313a60f24fbdfd9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:cb30976ef3a1b014",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:bb491b7f614f5d73",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:2f3e8de3e7be14a8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:07712416e3d50b3e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:6271438fad132170",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:3ab01ef93933577d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c0d4db6880f753d2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0f31fa732a453996",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:192d08e6f55b3362",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cb6838de215d9536",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ed2f3e40fda2c5de",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:653882b9cef6c1f9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:8b1529074dd734c2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:ddf5a768aae43003",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:ee297da91ecfb7ee",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:9fa9f75e89508847",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:83bc24451d3cae5c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:1ef539e06d8cbd99",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:0dc016008899854d",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:80c7be6b4960ea15",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:144f07b3c6ea65c4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:76fa81c4da57a2ce",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:61a3a669d38b8e4c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:2d900a8f951f03df",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "credential",
+      "subject_id": "operation:f0ee3cb5b5b5714e",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3b7685d4d9a03fb6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:4a94cd5fbaa5a9ff",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a77938f5482ea414",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1a3dc04ad7472254",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:09da840c446f8869",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:73494fc94e490841",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2aa89bb004c56c60",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6849cbc65c6e7780",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2947e0246b25e032",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ecd76f57ebb606c3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c19e36ecc51f91c9",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d85b79a999075fc0",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:41028e18e3a502f3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:19447e8ed1bbf416",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1f38d7e22704bb14",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:3b14f9dbb9064b7a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:2e48bd3c9fc79d14",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:86a75f5a06e4edd7",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:9cbe8375dac6c599",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:d0233c6a59253364",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:daa216693adfb320",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:0927c4f445860f26",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:6e669edfdda39a37",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:1a2c4db9d74f29f3",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c9ef83294c4610e6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:5a298bb70bfb4a60",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:e71694603a0b31e5",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ddffbae61d860fbd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:81ca4f3272a230d4",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:c3b85d32263148a6",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:cfd3c70e03b3ecb8",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ec8b2f33394b6e2c",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:243c7ac6c849dcfc",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:78fbe12f719647c2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:08eb63fa2b170acd",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:ff4c199f21741fe2",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:18f9e8341b236112",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:bd09d791d5f954bf",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:34a63e7f1cad964a",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
+    },
+    {
+      "observed_at": "2026-11-16T01:04:30.370025Z",
+      "source_id": "data_go_kr",
+      "failure_class": "parameter",
+      "subject_id": "operation:a524f3d123c2ffff",
+      "healthy": false,
+      "evidence": "reports/runtime-freshness-imports/43783498506.json"
     }
   ]
 }
