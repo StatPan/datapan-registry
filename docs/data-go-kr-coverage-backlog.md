@@ -12,7 +12,7 @@ This backlog is generated from the checked-in registry, dependency report, and c
 - Runtime verified operations: `0`
 - Runtime failed operations: `0`
 - Runtime skipped operations: `0`
-- Historical rows unbound to a current operation contract: `8778`
+- Historical rows unbound to a current operation contract: `9578`
 - Historical rows with changed contracts: `0`
 - Ambiguous historical rows: `3`
 - Historical rows with no current operation: `0`
