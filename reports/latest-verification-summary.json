@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-25T04:13:05.884505Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3707,
+    "failed": 993,
+    "skipped": 4881,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4881,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3707,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 993,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2461,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1307,
         "reason": "approval_required"
       },
       {
@@ -317,6 +317,11 @@
         "reason": "seoul_bus_service_key_not_registered"
       },
       {
+        "key": "HTTP 503",
+        "count": 3,
+        "reason": "HTTP 503"
+      },
+      {
         "key": "HTTP 에러",
         "count": 3,
         "reason": "HTTP 에러"
@@ -360,6 +365,11 @@
         "key": "ulsan_service_key_not_registered",
         "count": 3,
         "reason": "ulsan_service_key_not_registered"
+      },
+      {
+        "key": "정상조회",
+        "count": 3,
+        "reason": "정상조회"
       },
       {
         "key": "HTTP 400",
@@ -587,6 +597,11 @@
         "reason": "Get \"https://apis.data.go.kr/1383000/mogefNew/nwRpdSelectList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
       },
       {
+        "key": "Get \"https://apis.data.go.kr/1383000/yhis/YouthSurveyTotalService/getYouthSurveyTotalPartcpStatsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded",
+        "count": 1,
+        "reason": "Get \"https://apis.data.go.kr/1383000/yhis/YouthSurveyTotalService/getYouthSurveyTotalPartcpStatsList?numOfRows=1&pageNo=1&type=json&[redacted credential assignment] context deadline exceeded"
+      },
+      {
         "key": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/6260000/BusanWtrtrFcltsInfoService/getWtrtrFcltsInfo?numOfRows=1&pageNo=1&resultType=json&[redacted credential assignment] context deadline exceeded"
@@ -630,6 +645,16 @@
         "key": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded",
         "count": 1,
         "reason": "Get \"https://apis.data.go.kr/B551971/openlist/tbcl/tbcl1?numOfRows=1&pageNo=1&[redacted credential assignment] context deadline exceeded"
+      },
+      {
+        "key": "NO_DATA",
+        "count": 1,
+        "reason": "NO_DATA"
+      },
+      {
+        "key": "Success",
+        "count": 1,
+        "reason": "Success"
       },
       {
         "key": "car365_http_400",
@@ -705,7 +730,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4198,
         "provider": "data.go.kr"
       },
       {
@@ -1372,7 +1397,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4074,
         "host": "apis.data.go.kr"
       },
       {
@@ -2244,7 +2269,7 @@
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4077,
         "kind": "data_go_kr_gateway"
       },
       {
