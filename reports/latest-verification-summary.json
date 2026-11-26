@@ -1,44 +1,44 @@
 {
-  "generated_at": "2026-10-18T23:12:32.540022Z",
+  "generated_at": "2026-11-26T03:35:34.794168Z",
   "source": "reports/latest-verification.json",
   "provider": "data.go.kr",
   "registry": "data/data-go-kr.registry.json",
   "limit": 0,
   "truncated": false,
   "summary": {
-    "total": 8781,
-    "verified": 3662,
-    "failed": 984,
-    "skipped": 4135,
+    "total": 9581,
+    "verified": 3812,
+    "failed": 992,
+    "skipped": 4777,
     "unknown": 0
   },
   "groups": {
     "by_status": [
       {
         "key": "skipped",
-        "count": 4135,
+        "count": 4777,
         "status": "skipped"
       },
       {
         "key": "verified",
-        "count": 3662,
+        "count": 3812,
         "status": "verified"
       },
       {
         "key": "failed",
-        "count": 984,
+        "count": 992,
         "status": "failed"
       }
     ],
     "by_reason": [
       {
         "key": "missing_required_params",
-        "count": 2057,
+        "count": 2466,
         "reason": "missing_required_params"
       },
       {
         "key": "approval_required",
-        "count": 965,
+        "count": 1198,
         "reason": "approval_required"
       },
       {
@@ -252,6 +252,11 @@
         "reason": "tour_service_key_not_registered"
       },
       {
+        "key": "HTTP 400",
+        "count": 6,
+        "reason": "HTTP 400"
+      },
+      {
         "key": "context deadline exceeded",
         "count": 6,
         "reason": "context deadline exceeded"
@@ -295,6 +300,11 @@
         "key": "HTTP 403",
         "count": 4,
         "reason": "HTTP 403"
+      },
+      {
+        "key": "SUCCESS",
+        "count": 4,
+        "reason": "SUCCESS"
       },
       {
         "key": "ekape_service_key_not_registered",
@@ -360,11 +370,6 @@
         "key": "ulsan_service_key_not_registered",
         "count": 3,
         "reason": "ulsan_service_key_not_registered"
-      },
-      {
-        "key": "HTTP 400",
-        "count": 2,
-        "reason": "HTTP 400"
       },
       {
         "key": "daejeon_http_404",
@@ -705,7 +710,7 @@
     "by_provider": [
       {
         "key": "data.go.kr",
-        "count": 3398,
+        "count": 4196,
         "provider": "data.go.kr"
       },
       {
@@ -1044,6 +1049,11 @@
         "provider": "pqis"
       },
       {
+        "key": "safetydata",
+        "count": 12,
+        "provider": "safetydata"
+      },
+      {
         "key": "utic",
         "count": 12,
         "provider": "utic"
@@ -1067,11 +1077,6 @@
         "key": "safemap",
         "count": 10,
         "provider": "safemap"
-      },
-      {
-        "key": "safetydata",
-        "count": 10,
-        "provider": "safetydata"
       },
       {
         "key": "seoul-bus",
@@ -1372,7 +1377,7 @@
     "by_endpoint_host": [
       {
         "key": "apis.data.go.kr",
-        "count": 3274,
+        "count": 4072,
         "host": "apis.data.go.kr"
       },
       {
@@ -1726,6 +1731,11 @@
         "host": "openapi.pqis.go.kr"
       },
       {
+        "key": "www.safetydata.go.kr",
+        "count": 12,
+        "host": "www.safetydata.go.kr"
+      },
+      {
         "key": "www.utic.go.kr",
         "count": 12,
         "host": "www.utic.go.kr"
@@ -1759,11 +1769,6 @@
         "key": "www.safemap.go.kr",
         "count": 10,
         "host": "www.safemap.go.kr"
-      },
-      {
-        "key": "www.safetydata.go.kr",
-        "count": 10,
-        "host": "www.safetydata.go.kr"
       },
       {
         "key": "data.floodmap.go.kr",
@@ -2239,12 +2244,12 @@
     "by_kind": [
       {
         "key": "external_endpoint",
-        "count": 5390,
+        "count": 5392,
         "kind": "external_endpoint"
       },
       {
         "key": "data_go_kr_gateway",
-        "count": 3277,
+        "count": 4075,
         "kind": "data_go_kr_gateway"
       },
       {
