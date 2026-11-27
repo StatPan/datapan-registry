@@ -5,7 +5,7 @@
 - APIs: `12282`
 - Operations: `21533`
 - Runtime evidence: `0` (`0.0%`)
-- Historical rows unbound to a current operation contract: `8778`
+- Historical rows unbound to a current operation contract: `9578`
 - Historical rows with changed contracts: `0`
 - Ambiguous historical rows: `3`
 - Historical rows with no current operation: `0`
